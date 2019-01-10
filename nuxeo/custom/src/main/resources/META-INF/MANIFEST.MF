@@ -1,0 +1,7 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 1
+Bundle-Name: Osivia specifics documents 
+Bundle-SymbolicName: org.osivia.nuxeo.custom;singleton:=true
+Bundle-Localization: plugin
+Bundle-Category: stateful
+Nuxeo-Component: OSGI-INF/extensions/userworksapce-contrib.xml,

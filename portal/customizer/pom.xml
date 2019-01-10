@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    
+	<parent>
+    	<groupId>fr.index.cloud.ens.portal</groupId>
+    	<artifactId>index-cloud-ens-portal-parent</artifactId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>index-cloud-ens-portal-customizer</artifactId>
+    <packaging>war</packaging>
+
+    <name>Cloud enseignant - Customizer Portail</name>
+
+
+    <properties>
+        <!-- JBoss -->
+        <jboss-portal.version>2.7.2</jboss-portal.version>
+        <!-- <jboss.version>4.2.3.GA</jboss.version> -->
+    </properties>
+
+
+    <dependencies>
+
+        <!-- JBoss -->
+        <dependency>
+            <groupId>org.jboss.portal</groupId>
+            <artifactId>portal-core-lib</artifactId>
+            <version>${jboss-portal.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.jboss.portal</groupId>
+            <artifactId>portal-common-lib</artifactId>
+            <version>${jboss-portal.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <!-- <dependency>
+            <groupId>org.jboss.portal</groupId>
+            <artifactId>portal-server-lib</artifactId>
+            <version>${jboss-portal.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.jboss.portal</groupId>
+            <artifactId>portal-jems-lib</artifactId>
+            <version>${jboss-portal.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>jboss</groupId>
+            <artifactId>jboss-system</artifactId>
+            <version>${jboss.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>jboss</groupId>
+            <artifactId>jboss-jmx</artifactId>
+            <version>${jboss.version}</version>
+            <scope>provided</scope>
+        </dependency> -->
+        
+        <!-- Directory -->
+        <dependency>
+            <groupId>org.osivia.services.directory.socle</groupId>
+            <artifactId>osivia-services-directory-socle-interfaces</artifactId>
+        </dependency>
+        
+        <dependency>
+            <groupId>commons-fileupload</groupId>
+            <artifactId>commons-fileupload</artifactId>
+            <version>1.3.1</version>
+        </dependency>
+        
+    </dependencies>
+
+</project>

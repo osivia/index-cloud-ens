@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+	<parent>
+        <groupId>fr.index.cloud.ens</groupId>
+        <artifactId>index-cloud-ens-parent</artifactId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+	
+    <groupId>fr.index.cloud.ens.portal</groupId>
+    <artifactId>index-cloud-ens-portal-parent</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <packaging>pom</packaging>
+    
+    <name>Cloud enseignant - Portail</name>
+    
+    
+    <properties>
+        
+        <!-- Toutatice -->
+        <toutatice.version>4.7.7</toutatice.version>
+        
+        <!-- Directory -->
+        <directory.version>4.7.2</directory.version>
+        
+        <!-- Collaboration -->
+        <collaboration.version>4.7.3</collaboration.version>
+        
+        <!-- Other services -->
+        <tasks.version>4.7</tasks.version>
+        <procedure.version>4.7.3</procedure.version>
+        <cgu.version>4.7</cgu.version>
+		<document-creation.version>4.7.1</document-creation.version>
+		<onlyoffice.version>4.7</onlyoffice.version>        
+        
+        <!-- Identity SSO -->
+        <identity-sso.version>3.0.9</identity-sso.version>
+ 
+        <!-- Java Melody -->
+        <java-melody.version>1.2</java-melody.version>
+        
+        <!-- Spring framework LDAP -->
+        <springframework-ldap.version>2.1.0.RELEASE</springframework-ldap.version>
+        
+    </properties>
+    
+    
+    <dependencyManagement>
+        <dependencies>
+        
+            <!-- Directory -->
+            <dependency>
+                <groupId>org.osivia.services.directory.socle</groupId>
+                <artifactId>osivia-services-directory-socle-interfaces</artifactId>
+                <version>${directory.version}</version>
+                <scope>provided</scope>
+            </dependency>
+            
+            <!-- Spring framework LDAP -->
+            <dependency>
+                <groupId>org.springframework.ldap</groupId>
+                <artifactId>spring-ldap-core</artifactId>
+                <version>${springframework-ldap.version}</version>
+                <scope>provided</scope>
+            </dependency>
+            
+        </dependencies>
+    </dependencyManagement>
+
+
+	<modules>
+		<module>charte</module>
+		<module>customizer</module>
+		<module>directory</module>
+		<module>initializer</module>
+		<module>distribution</module>
+	</modules>
+    
+    
+    <dependencies>
+    
+        <!-- Toutatice -->
+        <dependency>
+            <groupId>toutatice-portail.cms</groupId>
+            <artifactId>toutatice-portail-cms-nuxeo-dependencies</artifactId>
+            <version>${toutatice.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>toutatice-portail.cms</groupId>
+            <artifactId>toutatice-portail-cms-nuxeo-dependencies-test</artifactId>
+            <version>${toutatice.version}</version>
+            <scope>test</scope>
+        </dependency>
+        
+    </dependencies>
+    
+    
+    <build>
+        <pluginManagement>
+            <plugins>
+            
+                <!-- Compiler -->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>3.3</version>
+                    <configuration>
+                        <encoding>UTF-8</encoding>
+                        <source>1.7</source>
+                        <target>1.7</target>
+                    </configuration>
+                </plugin>
+                
+                <!-- Resources -->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-resources-plugin</artifactId>
+                    <version>2.7</version>
+                    <configuration>
+                        <encoding>UTF-8</encoding>
+                    </configuration>
+                </plugin>
+            
+                <!-- WAR -->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-war-plugin</artifactId>
+                    <version>2.6</version>
+                    <configuration>
+                        <archive>
+                            <manifest>
+                                <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+                            </manifest>
+                        </archive>
+                    </configuration>
+                </plugin>
+                
+                <!-- EAR -->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-ear-plugin</artifactId>
+                    <version>2.10.1</version>
+                    <configuration>
+                        <archive>
+                            <manifest>
+                                <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+                            </manifest>
+                        </archive>
+                    </configuration>
+                </plugin>
+                
+                <!-- Less -->
+                <plugin>
+                    <groupId>org.lesscss</groupId>
+                    <artifactId>lesscss-maven-plugin</artifactId>
+                    <version>1.7.0.1.1</version>
+                    <configuration>
+                        <sourceDirectory>${project.basedir}/src/main/less</sourceDirectory>
+                        <outputDirectory>${project.basedir}/src/main/webapp/css</outputDirectory>
+                        <compress>true</compress>
+                        <includes>
+                            <include>*.less</include>
+                        </includes>
+                        <outputFileFormat>{fileName}.min.css</outputFileFormat>
+                    </configuration>
+                    <executions>
+                        <execution>
+                            <goals>
+                                <goal>compile</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+            
+                <!-- AntRun -->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-antrun-plugin</artifactId>
+                    <version>1.8</version>
+                </plugin>
+                
+                <!-- Dependency -->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-dependency-plugin</artifactId>
+                    <version>2.10</version>
+                </plugin>
+                
+                <!-- Assembly -->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-assembly-plugin</artifactId>
+                    <version>2.6</version>
+                </plugin>
+                
+                <!-- Release -->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-release-plugin</artifactId>
+                    <version>2.2.1</version>
+                    <configuration>
+                        <releaseProfiles>unpack,pack</releaseProfiles>
+                        <preparationGoals>clean install</preparationGoals>
+                        <goals>deploy</goals>
+                        <arguments>-Prelease</arguments>
+                    </configuration>
+                </plugin>
+                
+                <!-- Eclipse -->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-eclipse-plugin</artifactId>
+                    <version>2.10</version>
+                    <configuration>
+                        <downloadJavadocs>true</downloadJavadocs>
+                        <downloadSources>true</downloadSources>
+                        <wtpversion>2.0</wtpversion>
+                    </configuration>
+                </plugin>
+            
+            </plugins>
+        </pluginManagement>
+    </build>
+    
+
+    
+</project>

@@ -1,0 +1,102 @@
+//
+// Charte Demo - Tabs component
+// -----------------------------------------------------
+
+
+@border-color: darken(@brand-secondary, 3%);
+
+
+.tabs-default {
+    margin-top: floor(@line-height-computed / 2);
+    margin-bottom: -1px;
+    
+    .primary-tabs {
+        border-color: @border-color;
+        
+        margin: 0 floor(@grid-gutter-width / -2);
+        padding: 0 floor(@grid-gutter-width / 2);
+        
+        .box-shadow(@shadow: 0 -2px 2px -2px fade(@black, 5%) inset);
+        
+        ul {
+            li {
+                &.active {
+                    > a {
+                        border-color: @border-color @border-color transparent;
+                    }
+                }
+                
+                &:not(.active) {
+                    > a {
+                        color: @gray-100;
+                        
+                        &:hover, &:focus {
+                            color: @white;
+                        }
+                    }
+                }   
+            }
+            
+            &.home {
+                body.home & {
+                    display: none;
+                }
+            }
+            
+            &.groups {
+                > li {
+                    &.current {
+                        border-color: @border-color @border-color transparent;
+                        
+                        li:not(.active) {
+                            > a {
+                                color: @gray-700;
+                                
+                                &:hover, &:focus {
+                                    color: @gray-900;
+                                }
+                            }
+                        }
+                    }
+                    
+                    &:not(.current) {
+                        border-color: transparent;    
+                    }
+                }
+            }
+        }
+        
+        
+        .fixed-tabs-container {
+            > ul {
+                display: flex;
+                flex-direction: row;
+                flex-wrap: nowrap;
+                justify-content: flex-start;
+                
+                > li {
+                    display: flex;
+                    flex-direction: row;
+                    flex-wrap: nowrap;
+                    
+                    flex-shrink: 2;
+                    overflow: hidden;
+                    
+                    &.active {
+                        flex-shrink: 1;
+                    }
+                    
+                    > a {
+                        overflow: hidden;
+                        white-space: nowrap;
+                        text-overflow: ellipsis;
+                    }
+                }
+            }
+        }
+    }
+    
+    .secondary-tabs {
+        margin: 0 floor(@grid-gutter-width / -2);
+    }
+}

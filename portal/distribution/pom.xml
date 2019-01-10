@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    
+	<parent>
+    	<groupId>fr.index.cloud.ens.portal</groupId>
+    	<artifactId>index-cloud-ens-portal-parent</artifactId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+
+    
+    <artifactId>index-cloud-ens-portal-distribution</artifactId>
+
+    <name>Cloud enseignant - Distribution portail</name>
+    
+    
+    <properties>
+        <src-env>prod</src-env>
+        <dest-env>prod</dest-env>
+    </properties>
+    
+    
+    <dependencies>
+        
+        <!-- index -->
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>index-cloud-ens-portal-charte</artifactId>
+            <version>${project.version}</version>
+            <type>war</type>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>index-cloud-ens-portal-customizer</artifactId>
+            <version>${project.version}</version>
+            <type>war</type>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}.directory</groupId>
+            <artifactId>index-cloud-ens-portal-directory-interfaces</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}.directory</groupId>
+            <artifactId>index-cloud-ens-portal-directory-ear</artifactId>
+            <version>${project.version}</version>
+            <type>ear</type>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>index-cloud-ens-portal-initializer</artifactId>
+            <version>${project.version}</version>
+            <type>war</type>
+        </dependency>        
+        
+        <!-- Toutatice CMS -->
+        <dependency>
+            <groupId>toutatice-portail.cms</groupId>
+            <artifactId>toutatice-portail-cms-nuxeo-web</artifactId>
+            <version>${toutatice.version}</version>
+            <type>war</type>
+        </dependency>
+        
+        <!-- Directory -->
+        <dependency>
+            <groupId>org.osivia.services.directory.socle</groupId>
+            <artifactId>osivia-services-directory-socle-interfaces</artifactId>
+            <scope>compile</scope>
+        </dependency>
+
+        <!-- Collaboration -->        
+        <dependency>
+            <groupId>org.osivia.services</groupId>
+            <artifactId>osivia-services-collaboration-ear</artifactId>
+            <version>${collaboration.version}</version>
+            <type>ear</type>
+        </dependency>
+        
+        <!-- Other services -->
+        <dependency>
+            <groupId>org.osivia.services</groupId>
+            <artifactId>osivia-services-tasks</artifactId>
+            <version>${tasks.version}</version>
+            <type>war</type>
+        </dependency>
+        <dependency>
+            <groupId>org.osivia.services</groupId>
+            <artifactId>osivia-services-procedure</artifactId>
+            <version>${procedure.version}</version>
+            <type>war</type>
+        </dependency>
+        <dependency>
+            <groupId>org.osivia.services.cgu</groupId>
+            <artifactId>osivia-services-cgu-portail</artifactId>
+            <version>${cgu.version}</version>
+            <type>war</type>
+        </dependency>
+        
+        <dependency>
+        	<groupId>org.osivia.services</groupId>
+			<artifactId>osivia-services-onlyoffice</artifactId>
+			<version>${onlyoffice.version}</version>
+			<type>war</type>
+		</dependency>   
+		
+		<dependency>
+        	<groupId>org.osivia.services</groupId>
+			<artifactId>osivia-services-document-creation</artifactId>
+			<version>${document-creation.version}</version>
+			<type>war</type>
+		</dependency>      
+        
+        <!-- Identity SSO -->
+        <dependency>
+            <groupId>org.osivia.portal.identity</groupId>
+            <artifactId>osivia-portal-identity-sso-lib</artifactId>
+            <version>${identity-sso.version}</version>
+        </dependency>
+
+        <!-- Java Melody -->
+        <dependency>
+            <groupId>org.osivia.services</groupId>
+            <artifactId>osivia-services-java-melody-integration</artifactId>
+            <version>${java-melody.version}</version>
+        </dependency>
+       
+    </dependencies>
+   
+    
+    <profiles>
+    
+        <!-- Development environment -->
+        <profile>
+            <activation>
+                <property>
+                    <name>env</name>
+                    <value>dev</value>
+                </property>
+            </activation>
+            <properties>
+                <dest-env>dev</dest-env>
+                <src-env>dev</src-env>
+            </properties>
+        </profile>
+    
+        <!-- Unpack -->
+        <profile>
+            <id>unpack</id>
+            <dependencies>
+                <dependency>
+                    <groupId>toutatice-portail.cms</groupId>
+                    <artifactId>toutatice-portail-cms-nuxeo-distribution</artifactId>
+                    <version>${toutatice.version}</version>
+                    <type>zip</type>
+                </dependency>
+            </dependencies>
+            <build>
+                <defaultGoal>package</defaultGoal>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-dependency-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>unpack</id>
+                                <phase>generate-resources</phase>
+                                <goals>
+                                    <goal>unpack</goal>
+                                </goals>
+                                <configuration>
+                                    <artifactItems>
+                                        <artifactItem>
+                                            <groupId>toutatice-portail.cms</groupId>
+                                            <artifactId>toutatice-portail-cms-nuxeo-distribution</artifactId>
+                                            <version>${toutatice.version}</version>
+                                            <type>zip</type>
+                                            <overWrite>true</overWrite>
+                                            <outputDirectory>${project.build.directory}/toutatice-distribution</outputDirectory>
+                                        </artifactItem>
+                                    </artifactItems>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        
+        <!-- Pack -->
+        <profile>
+            <id>pack</id>
+            <build>
+                <defaultGoal>package</defaultGoal>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-assembly-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>zip</id>
+                                <phase>process-resources</phase>
+                                <configuration>
+                                    <descriptors>
+                                        <descriptor>src/main/assembly/assembly.xml</descriptor>
+                                    </descriptors>
+                                    <finalName>${project.artifactId}</finalName>
+                                    <appendAssemblyId>false</appendAssemblyId>
+                                    <attach>true</attach>
+                                </configuration>
+                                <goals>
+                                    <goal>single</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        
+    </profiles>
+    
+</project>

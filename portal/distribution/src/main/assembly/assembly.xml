@@ -1,0 +1,113 @@
+<assembly xmlns="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.2"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.2 http://maven.apache.org/xsd/assembly-1.1.2.xsd">
+
+    <id>bin</id>
+    <formats>
+        <format>zip</format>
+    </formats>
+    <includeBaseDirectory>false</includeBaseDirectory>
+
+
+    <dependencySets>
+        <dependencySet>
+            <outputDirectory>${artifactId}-${dest-env}-${project.version}/custom/deploy</outputDirectory>
+            <unpack>false</unpack>
+            <scope>runtime</scope>
+            <includes>
+                <!-- index education -->
+                <include>${project.groupId}:index-cloud-ens-portal-charte:war:${project.version}</include>
+                 <include>${project.groupId}:index-cloud-ens-portal-customizer:war:${project.version}</include>
+                <include>${project.groupId}.directory:index-cloud-ens-portal-directory-ear:ear:${project.version}</include>
+                <include>${project.groupId}:index-cloud-ens-portal-initializer:war:${project.version}</include>                
+                 <!-- Toutatice CMS -->
+                <include>toutatice-portail.cms:toutatice-portail-cms-nuxeo-web:war:${toutatice.version}</include>
+                <!-- Collaboration -->
+                <include>org.osivia.services:osivia-services-collaboration-ear:ear:${collaboration.version}</include>
+                <!-- Other services -->
+                <include>org.osivia.services:osivia-services-tasks:war:${tasks.version}</include>
+                <include>org.osivia.services:osivia-services-procedure:war:${procedure.version}</include>
+                <include>org.osivia.services.cgu:osivia-services-cgu-portail:war:${cgu.version}</include>     
+				<include>org.osivia.services:osivia-services-onlyoffice:war:${onlyoffice.version}</include>    
+				<include>org.osivia.services:osivia-services-document-creation:war:${document-creation.version}</include>    
+			                       
+            </includes>
+        </dependencySet>
+        
+        <dependencySet>
+            <outputDirectory>${artifactId}-${dest-env}-${project.version}/jboss-as/server/production/lib</outputDirectory>
+            <unpack>false</unpack>
+            <scope>runtime</scope>
+            <includes>
+                <!-- Directory -->
+                <include>${project.groupId}.directory:index-cloud-ens-portal-directory-interfaces:jar:${project.version}</include>
+                <include>org.osivia.services.directory.socle:osivia-services-directory-socle-interfaces:jar:${directory.version}</include>
+                <!-- Identity SSO -->
+                <include>org.osivia.portal.identity:osivia-portal-identity-sso-lib:jar:${identity-sso.version}</include>
+                <!-- Java Melody -->
+                <include>org.osivia.services:osivia-services-java-melody-integration:jar:${java-melody.version}</include>
+            </includes>
+        </dependencySet>
+    </dependencySets>
+
+
+    <fileSets>
+        <!-- Socle -->
+        <fileSet>
+            <outputDirectory>${artifactId}-${dest-env}-${project.version}</outputDirectory>
+            <directory>target/toutatice-distribution</directory>
+            <includes>
+                <include>jboss-as/**</include>
+                <include>custom/**</include>
+            </includes>
+            
+            <excludes>
+                <!-- Exclude distribution environment specific files -->
+                <exclude>custom/params/environnement_portail.properties.*</exclude>
+                <exclude>jboss-as/server/production/run.conf.*</exclude>
+                <exclude>jboss-as/server/production/conf/jboss-log4j.*</exclude>
+                <exclude>jboss-as/server/production/deploy/jboss-portal-ha.sar/conf/data/default-object.xml</exclude>
+                <exclude>jboss-as/server/production/deploy/jboss-portal-ha.sar/conf/identity/ldap_identity-config.xml</exclude>
+                <exclude>jboss-as/server/production/deploy/jboss-portal-ha.sar/conf/identity/profile-config.xml</exclude>
+                <exclude>jboss-as/server/production/deploy/jboss-portal-ha.sar/portal-server.war/WEB-INF/context.xml</exclude>
+                <exclude>jboss-as/server/production/deploy/jboss-portal-ha.sar/portal-server.war/WEB-INF/web.xml</exclude>
+            </excludes>
+        </fileSet>
+
+        <fileSet>
+            <outputDirectory>${artifactId}-${dest-env}-${project.version}</outputDirectory>
+            <directory>src/main/resources</directory>
+            <excludes>
+                <exclude>custom/params/environnement_portail.properties.*</exclude>
+                <exclude>jboss-as/server/production/conf/jboss-log4j.*</exclude>
+            </excludes>
+        </fileSet>
+    </fileSets>
+
+
+    <!-- Copy local environment specific files -->
+    <files>
+        <file>
+            <source>src/main/resources/custom/params/environnement_portail.properties</source>
+            <outputDirectory>${artifactId}-${dest-env}-${project.version}/custom/params</outputDirectory>
+            <destName>environnement_portail.properties</destName>
+        </file>
+        <file>
+            <source>src/main/resources/custom/params/ldap-portlets.properties</source>
+            <outputDirectory>${project.artifactId}-${dest-env}-${project.version}/custom/params</outputDirectory>
+            <destName>ldap-portlets.properties</destName>
+        </file>
+        <file>
+            <source>src/main/resources/jboss-as/server/production/deploy/jboss-portal-ha.sar/conf/identity/ldap_identity-config.xml</source>
+            <outputDirectory>${project.artifactId}-${dest-env}-${project.version}/jboss-as/server/production/deploy/jboss-portal-ha.sar/conf/identity</outputDirectory>
+            <destName>ldap_identity-config.xml</destName>
+        </file>
+        
+        <file>
+            <source>target/toutatice-distribution/jboss-as/server/production/conf/jboss-log4j.xml.${src-env}</source>
+            <outputDirectory>${artifactId}-${dest-env}-${project.version}/jboss-as/server/production/conf</outputDirectory>
+            <destName>jboss-log4j.xml</destName>
+        </file>
+    </files>
+
+</assembly>

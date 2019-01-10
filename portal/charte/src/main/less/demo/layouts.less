@@ -1,0 +1,48 @@
+//
+// Charte Demo - Layouts
+// -----------------------------------------------------
+
+
+header {
+    color: #fff;
+    background-color: @brand-secondary;
+    
+    body.editorial & {
+        border-bottom-style: solid;
+        border-width: 1px;
+        border-color: darken(@brand-secondary, 3%);
+    }
+    
+    .jumbotron {
+        margin-bottom: 0;
+        
+        background-color: unset;
+        
+        img {
+            max-height: 120px;
+        }
+        
+        ~ .tabs-default {
+            margin-top: 0;
+        }
+    }
+}
+
+
+main {
+    margin-top: 20px;
+    
+    background-image: url("../img/background.png");
+    background-repeat: no-repeat;
+    background-position: 125px 60px;
+}
+
+
+footer {
+    position: relative;
+    
+    color: #fff;
+    background-color: @brand-secondary;
+    
+    .box-shadow(@shadow: 0 -1px 1px fade(#000, 5%));
+}
