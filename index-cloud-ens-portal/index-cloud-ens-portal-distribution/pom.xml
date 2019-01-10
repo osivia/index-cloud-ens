@@ -203,7 +203,7 @@
                                     <descriptors>
                                         <descriptor>src/main/assembly/assembly.xml</descriptor>
                                     </descriptors>
-                                    <finalName>${project.artifactId}</finalName>
+                                    <finalName>${project.artifactId}-prod-${project.version}</finalName>
                                     <appendAssemblyId>false</appendAssemblyId>
                                     <attach>true</attach>
                                 </configuration>
