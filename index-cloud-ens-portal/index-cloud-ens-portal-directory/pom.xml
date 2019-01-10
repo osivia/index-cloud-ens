@@ -16,8 +16,8 @@
 
 
     <modules>
-        <module>socle</module>
-        <module>ear</module>
+        <module>index-cloud-ens-portal-directory-socle</module>
+        <module>index-cloud-ens-portal-directory-ear</module>
     </modules>
 
 </project> 

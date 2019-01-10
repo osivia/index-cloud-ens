@@ -70,11 +70,11 @@
 
 
 	<modules>
-		<module>charte</module>
-		<module>customizer</module>
-		<module>directory</module>
-		<module>initializer</module>
-		<module>distribution</module>
+		<module>index-cloud-ens-portal-charte</module>
+		<module>index-cloud-ens-portal-customizer</module>
+		<module>index-cloud-ens-portal-directory</module>
+		<module>index-cloud-ens-portal-initializer</module>
+		<module>index-cloud-ens-portal-distribution</module>
 	</modules>
     
     

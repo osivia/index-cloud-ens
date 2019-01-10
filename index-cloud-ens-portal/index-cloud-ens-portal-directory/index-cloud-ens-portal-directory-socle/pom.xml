@@ -15,9 +15,9 @@
 
 
     <modules>
-        <module>interfaces</module>
-        <module>implementations</module>
-        <module>packaging</module>
+        <module>index-cloud-ens-portal-directory-interfaces</module>
+        <module>index-cloud-ens-portal-directory-implementations</module>
+        <module>index-cloud-ens-portal-directory-packaging</module>
     </modules>
 
 
