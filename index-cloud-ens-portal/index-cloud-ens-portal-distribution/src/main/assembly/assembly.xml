@@ -20,6 +20,9 @@
                  <include>${project.groupId}:index-cloud-ens-portal-customizer:war:${project.version}</include>
                 <include>${project.groupId}.directory:index-cloud-ens-portal-directory-ear:ear:${project.version}</include>
                 <include>${project.groupId}:index-cloud-ens-portal-initializer:war:${project.version}</include>                
+                <include>${project.groupId}:index-cloud-ens-portal-ws:war:${project.version}</include>     
+
+
                  <!-- Toutatice CMS -->
                 <include>toutatice-portail.cms:toutatice-portail-cms-nuxeo-web:war:${toutatice.version}</include>
                 <!-- Collaboration -->
@@ -46,6 +49,11 @@
                 <include>org.osivia.portal.identity:osivia-portal-identity-sso-lib:jar:${identity-sso.version}</include>
                 <!-- Java Melody -->
                 <include>org.osivia.services:osivia-services-java-melody-integration:jar:${java-melody.version}</include>
+                 <!-- Rest services -->               
+                <include>com.fasterxml.jackson.core:jackson-core:jar:${jackson.version}</include>     
+                <include>com.fasterxml.jackson.core:jackson-databind:jar:${jackson.version}</include>                    
+                <include>com.fasterxml.jackson.core:jackson-annotations:jar:${jackson.version}</include>                    
+
             </includes>
         </dependencySet>
     </dependencySets>

@@ -101,28 +101,10 @@ public class RegionsCustomizer extends GenericPortlet implements ICustomizationM
             // Toolbar
             renderedRegion.customizeRenderedRegion("toolbar", "/regions/toolbar.jsp");
             // Tabs
-            renderedRegion.customizeRenderedRegion("tabs", "/regions/tabs.jsp");
-            // Remove footer
-            renderedRegion.removeRenderedRegion("footer");
-        } else if (CHARTE_WEB_CONTEXT_PATH.equals(contextPath)) {
-            // Toolbar
-            renderedRegion.customizeRenderedRegion("toolbar", "/regions/toolbar.jsp", CHARTE_CONTEXT_PATH);
-            // Remove drawer toolbar
-            renderedRegion.removeRenderedRegion("drawer-toolbar");
-            // Tabs
-            renderedRegion.customizeRenderedRegion("tabs", "/regions/tabs.jsp", CHARTE_CONTEXT_PATH);
-            // Remove footer
-            renderedRegion.removeRenderedRegion("footer");
-        } else if (CHARTE_EXTRANET_CONTEXT_PATH.equals(contextPath)) {
-            // Toolbar
-            renderedRegion.customizeRenderedRegion("toolbar", "/regions/toolbar.jsp");
-            // Remove drawer toolbar
-            renderedRegion.removeRenderedRegion("drawer-toolbar");
-            // Remove tabs
             renderedRegion.removeRenderedRegion("tabs");
             // Remove footer
             renderedRegion.removeRenderedRegion("footer");
-        }
+        } 
     }
 
 }

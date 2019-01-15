@@ -140,10 +140,6 @@
                     <value>anonymous-home</value>
                 </property>
                 <property>
-                    <name>osivia.unprofiled_home_page</name>
-                    <value>connected-home</value>
-                </property>
-                <property>
                     <name>osivia.profils</name>
                     <value>&lt;profils&gt;&lt;profil&gt;&lt;roleName&gt;Administrators&lt;/roleName&gt;&lt;name&gt;Administrateur&lt;/name&gt;&lt;nuxeoVirtualUser&gt;&lt;/nuxeoVirtualUser&gt;&lt;defaultPageName&gt;&lt;/defaultPageName&gt;&lt;/profil&gt;&lt;profil&gt;&lt;roleName&gt;Authenticated&lt;/roleName&gt;&lt;name&gt;Utilisateur-connecte&lt;/name&gt;&lt;nuxeoVirtualUser&gt;&lt;/nuxeoVirtualUser&gt;&lt;defaultPageName&gt;&lt;/defaultPageName&gt;&lt;/profil&gt;&lt;/profils&gt;</value>
                 </property>
@@ -2222,46 +2218,6 @@ return nuxeoRequest.toString();</value>
                         <height>0</height>
                     </window>
                     
-                    <window>
-                        <window-name>toutatice-portail-cms-nuxeo-viewFragmentPortletInstance_1512386717503</window-name>
-                        <instance-ref>toutatice-portail-cms-nuxeo-viewFragmentPortletInstance</instance-ref>
-                        <region>cols-top</region>
-                        <properties>
-                            <property>
-                                <name>osivia.title</name>
-                                <value>Note d'accueil</value>
-                            </property>
-                            <property>
-                                <name>osivia.propertyName</name>
-                                <value>note:note</value>
-                            </property>
-                            <property>
-                                <name>osivia.fragmentTypeId</name>
-                                <value>html_property</value>
-                            </property>
-                            <property>
-                                <name>osivia.cms.uri</name>
-                                <value>user-workspace-home-message</value>
-                            </property>
-                            <property>
-                                <name>portal.windowContentType</name>
-                                <value>portlet</value>
-                            </property>
-                            <property>
-                                <name>osivia.hideEmptyPortlet</name>
-                                <value>1</value>
-                            </property>
-                            <property>
-                                <name>theme.order</name>
-                                <value>0</value>
-                            </property>
-                            <property>
-                                <name>osivia.hideTitle</name>
-                                <value>1</value>
-                            </property>
-                        </properties>
-                        <height>0</height>
-                    </window>
                     
                     <window>
                         <window-name>toutatice-portail-cms-nuxeo-viewListPortletInstance_1510140033760</window-name>

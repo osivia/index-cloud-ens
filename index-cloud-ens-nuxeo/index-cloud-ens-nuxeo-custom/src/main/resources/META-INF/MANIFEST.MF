@@ -5,3 +5,5 @@ Bundle-SymbolicName: org.osivia.nuxeo.custom;singleton:=true
 Bundle-Localization: plugin
 Bundle-Category: stateful
 Nuxeo-Component: OSGI-INF/extensions/userworksapce-contrib.xml,
+ OSGI-INF/extensions/index-cloud-schemas-contrib.xml,
+ OSGI-INF/extensions/index-cloud-core-types-contrib.xml

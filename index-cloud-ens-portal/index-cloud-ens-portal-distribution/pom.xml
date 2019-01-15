@@ -52,6 +52,12 @@
             <version>${project.version}</version>
             <type>war</type>
         </dependency>        
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>index-cloud-ens-portal-ws</artifactId>
+            <version>${project.version}</version>
+            <type>war</type>
+        </dependency>          
         
         <!-- Toutatice CMS -->
         <dependency>
@@ -123,6 +129,24 @@
             <artifactId>osivia-services-java-melody-integration</artifactId>
             <version>${java-melody.version}</version>
         </dependency>
+        
+        
+         <!-- REST -->       	
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-core</artifactId>
+			<version>${jackson.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-databind</artifactId>
+			<version>${jackson.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-annotations</artifactId>
+			<version>${jackson.version}</version>
+		</dependency>		
        
     </dependencies>
    

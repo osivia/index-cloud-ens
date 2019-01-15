@@ -11,10 +11,5 @@
         <div class="${editorial ? 'jumbotron' : 'sr-only'}">
             <h1 class="text-center"><op:translate key="PORTAL_TITLE" /></h1>
         </div>
-    
-        <!-- Tabs -->
-        <div class="tabs tabs-default">
-            <p:region regionName="tabs" />
-        </div>
     </div>
 </header>

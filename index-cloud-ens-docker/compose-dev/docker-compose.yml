@@ -17,7 +17,7 @@ services:
         - NUXEO_HOST=cloud-ens-nuxeo
         - 'PORTAL_HOSTS=cloud-ens-portal-1'
         - OO_HOST=onlyoffice        
-      image: 'osivia/httpd:certif'
+      image: 'osivia/cloud-index-ens-httpd:dev'
       depends_on:
         - cloud-ens-cas
         - cloud-ens-nuxeo

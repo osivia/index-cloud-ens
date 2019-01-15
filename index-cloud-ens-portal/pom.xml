@@ -19,7 +19,7 @@
     <properties>
         
         <!-- Toutatice -->
-        <toutatice.version>4.7.7</toutatice.version>
+        <toutatice.version>4.9-SNAPSHOT</toutatice.version>
         
         <!-- Directory -->
         <directory.version>4.7.2</directory.version>
@@ -42,6 +42,9 @@
         
         <!-- Spring framework LDAP -->
         <springframework-ldap.version>2.1.0.RELEASE</springframework-ldap.version>
+
+        <!-- REST -->        
+        <jackson.version>2.7.3</jackson.version>
         
     </properties>
     
@@ -75,6 +78,7 @@
 		<module>index-cloud-ens-portal-directory</module>
 		<module>index-cloud-ens-portal-initializer</module>
 		<module>index-cloud-ens-portal-distribution</module>
+		<module>index-cloud-ens-portal-ws</module>		
 	</modules>
     
     
