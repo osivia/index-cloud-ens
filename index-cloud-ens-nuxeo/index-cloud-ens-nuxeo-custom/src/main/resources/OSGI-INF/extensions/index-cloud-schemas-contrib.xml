@@ -10,12 +10,12 @@
 
         <schema
             name="index-sharing"
-            prefix="idx-sh"
+            prefix="idxsh"
             src="schemas/index-sharing.xsd" />
 
         <schema
             name="index-classifiers"
-            prefix="idx-cl"
+            prefix="idxcl"
             src="schemas/index-classifiers.xsd" />
 
     </extension>

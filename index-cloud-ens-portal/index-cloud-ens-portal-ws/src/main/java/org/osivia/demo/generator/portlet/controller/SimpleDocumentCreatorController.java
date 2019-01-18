@@ -27,6 +27,7 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.portlet.bind.annotation.ActionMapping;
 import org.springframework.web.portlet.bind.annotation.RenderMapping;
 
+import fr.index.cloud.ens.ws.CloudRestController;
 import fr.toutatice.portail.cms.nuxeo.api.CMSPortlet;
 
 /**
@@ -54,9 +55,12 @@ public class SimpleDocumentCreatorController extends CMSPortlet {
 
     /** Creation form validator. */
     @Autowired
+    private CloudRestController restControler;
+
+    @Autowired
     private CreationFormValidator formValidator;
 
-
+    
     /**
      * Constructor.
      */
@@ -73,6 +77,8 @@ public class SimpleDocumentCreatorController extends CMSPortlet {
     @PostConstruct
     public void postConstruct() throws PortletException {
         super.init(this.portletConfig);
+        
+        CloudRestController.portletContext = this.portletContext;
     }
 
 

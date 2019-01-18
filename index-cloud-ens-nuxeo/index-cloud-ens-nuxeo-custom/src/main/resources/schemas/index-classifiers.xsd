@@ -1,7 +1,7 @@
 <xs:schema
-    targetNamespace="http://www.nuxeo.org/ecm/schemas/sharing/"
+    targetNamespace="http://www.nuxeo.org/ecm/schemas/index/classifiers/"
     xmlns:xs="http://www.w3.org/2001/XMLSchema"
-    xmlns:nxs="http://www.nuxeo.org/ecm/schemas/sharing/">
+    xmlns:nxs="http://www.nuxeo.org/ecm/schemas/index/classifiers/">
 
  
     <xs:element name="level" type="xs:string" />
