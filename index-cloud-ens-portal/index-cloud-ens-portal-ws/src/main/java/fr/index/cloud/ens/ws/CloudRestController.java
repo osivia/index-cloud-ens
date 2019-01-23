@@ -2,6 +2,8 @@ package fr.index.cloud.ens.ws;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import javax.portlet.PortletContext;
 import javax.servlet.http.HttpServletRequest;
@@ -32,12 +34,13 @@ import fr.toutatice.portail.cms.nuxeo.api.NuxeoController;
 import fr.toutatice.portail.cms.nuxeo.api.services.NuxeoCommandContext;
 
 
-
 @RestController
 public class CloudRestController {
 
     // TODO : HOW TO INJECT FROM SimpleDocumentCreatorController
     public static PortletContext portletContext;
+
+    Map<String, String> levelQualifier = null;
 
     /**
      * Get a nuxeoController associated to the current user
@@ -69,7 +72,7 @@ public class CloudRestController {
     @ResponseStatus(HttpStatus.OK)
 
     public DriveBaseBean getContent(HttpServletRequest request, @RequestParam(value = "id", required = false) String id) {
-        
+
 
         NuxeoController nuxeoController = getNuxeocontroller(request);
 
@@ -133,7 +136,8 @@ public class CloudRestController {
     @RequestMapping(value = "/Drive.upload", method = RequestMethod.POST, consumes = {"multipart/form-data"})
     @ResponseStatus(HttpStatus.OK)
     public void handleFileUpload(@RequestParam("file") MultipartFile file, @RequestParam("folderId") String parentWebId,
-            @RequestParam("extraField") String extraField, @RequestParam("pronoteQualifiers") String qualifiersParam,HttpServletRequest request, HttpServletResponse response) throws Exception {
+            @RequestParam("extraField") String extraField, @RequestParam("pronoteQualifiers") String qualifiersParam, HttpServletRequest request,
+            HttpServletResponse response) throws Exception {
 
         PronoteQualifiers qualifiers = new ObjectMapper().readValue(qualifiersParam, PronoteQualifiers.class);
         NuxeoController nuxeoController = getNuxeocontroller(request);
@@ -143,16 +147,42 @@ public class CloudRestController {
 
         // set qualifiers
         PropertyMap properties = new PropertyMap();
-        if( qualifiers.getLevel() != null)
-            properties.set("idxcl:level", qualifiers.getLevel());
-         
-       
+        String standardLevel = convertLevelQualifier(  qualifiers.getLevel());
+        if (standardLevel != null)
+            properties.set("idxcl:level", standardLevel);
+
+
         // Execute import
         INuxeoCommand command = new UploadFileCommand(parentDoc.getId(), file, properties);
         nuxeoController.executeNuxeoCommand(command);
-     }
+    }
 
 
+    /**
+     * Convert the local qualifier to the standard one
+     * 
+     * @param pronoteQualifier
+     * @return the supported qualifier, or null
+     */
+    private String convertLevelQualifier(String pronoteQualifier) {
+
+        if (levelQualifier == null) {
+            levelQualifier = new ConcurrentHashMap<>();
+            levelQualifier.put("LT", "T");
+            levelQualifier.put("L1", "1");
+            levelQualifier.put("L2", "2");
+            levelQualifier.put("L3", "3");
+            levelQualifier.put("L4", "4");
+            levelQualifier.put("L5", "5");
+            levelQualifier.put("L6", "6");
+        }
+
+        return levelQualifier.get(pronoteQualifier);
+    }
+
+    /**
+     * @return
+     */
     @Bean(name = "multipartResolver")
     public CommonsMultipartResolver createMultipartResolver() {
         CommonsMultipartResolver resolver = new CommonsMultipartResolver();

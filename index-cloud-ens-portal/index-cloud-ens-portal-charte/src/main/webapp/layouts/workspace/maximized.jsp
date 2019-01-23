@@ -19,9 +19,6 @@
     
     <main>
         <div class="container-fluid flexbox">
-            <!-- Content navbar -->
-            <jsp:include page="../includes/content-navbar.jsp" />
-        
             <div class="row flexbox">
                 <op:resizable enabled="${not navigationPanelClosed}" linkedToTasks="true" cssClass="col-auto flexbox" minWidth="200">
                     <div class="row flexbox">
@@ -44,6 +41,9 @@
                 
                 <div class="col-offset-auto col-auto flexbox">
                     <div class="scrollbox">
+                    	<!-- Content navbar -->
+            			<jsp:include page="../includes/content-navbar.jsp" />
+                    
                         <p:region regionName="maximized" />
                     </div>
                 </div>

@@ -28,15 +28,31 @@ header {
     }
 }
 
+.navigation-panel	{
+	&.panel {
+		border-style: none;
+		background-color: @navbar-default-bg;
 
-main {
-    margin-top: 20px;
-    
-    background-image: url("../img/background.png");
-    background-repeat: no-repeat;
-    background-position: 125px 60px;
+		padding-top: 9px;
+		
+		> .panel-body {
+			padding: 0;
+		}
+		
+		 .portlet-filler.hidden-scrollbar {
+			background-image: unset;
+		}
+	}
 }
 
+main {
+    margin-top: @line-height-computed;
+}
+
+
+#maximized > .page-header {
+    display:none;
+}
 
 footer {
     position: relative;

@@ -3,17 +3,32 @@
 // -----------------------------------------------------
 
 
-@brand-image-overtaking: 5px;
-
-
 .toolbar {
     .navbar {
+    
+     	.box-shadow(@shadow: none);
+     	
         .navbar-brand {
+ 			background-color: @white;
+			border-radius: @border-radius-base;
+			padding: @padding-small-vertical @padding-small-horizontal;
+			height: @input-height-base;
+			margin-left: 0;   
+			
+			.navbar-vertical-align (@input-height-base);
+			     
             img {
-                height: @line-height-computed + 2 * @brand-image-overtaking;
-                
-                margin-top: -@brand-image-overtaking;
+                height: @input-height-base - 2 * @padding-small-vertical;
             }
         }
+        .navbar-referentiel {
+ 			background-color: @brand-warning;
+			border-radius: @border-radius-base;
+			padding: @padding-small-vertical @padding-small-horizontal;
+			height: @input-height-base;
+			margin-left: 100px;   
+			margin-right: 50px; 
+			.navbar-vertical-align (@input-height-base);
+       }
     }    
 }

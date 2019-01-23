@@ -14,7 +14,7 @@
 
 
 <div class="toolbar">
-    <nav class="navbar navbar-default navbar-fixed-top">
+    <nav class="navbar navbar-inverse navbar-fixed-top">
         <h2 class="sr-only">
             <op:translate key="TOOLBAR_TITLE" />
         </h2>
@@ -58,7 +58,7 @@
 
                 <!-- Brand -->
                 <a href="${requestScope['osivia.home.url']}" class="navbar-brand hidden-xs">
-                    <img alt="${requestScope['osivia.header.application.name']}" src="${contextPath}/img/favicon.png">
+                    <img alt="${requestScope['osivia.header.application.name']}" src="${contextPath}/img/logo-index.png">
                 </a>
             </div>
 
@@ -183,6 +183,16 @@
                     </c:otherwise>
                 </c:choose>
                 
+                <ul class="nav navbar-right">
+                    <!-- Search -->
+                    <li>
+                         <a href="${requestScope['osivia.home.url']}/publications" class="navbar-referentiel btn-warning hidden-xs">
+                   			 Publications
+                		</a>
+                    </li>
+                </ul>
+                                
+                
                 <ul class="nav navbar-nav navbar-right">
                     <!-- Search -->
                     <c:set var="title"><op:translate key="SEARCH_TITLE" /></c:set>
@@ -205,6 +215,9 @@
                         </form>
                     </li>
                 </ul>
+                
+
+                
             </div>
         </div>
     </nav>

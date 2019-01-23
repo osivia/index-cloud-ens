@@ -15,9 +15,6 @@
     
     <main>
         <div class="container-fluid flexbox">
-            <!-- Content navbar -->
-            <jsp:include page="../includes/content-navbar.jsp" />
-        
             <div class="row flexbox">
                 <!-- Drawer -->
                 <div id="drawer" class="col-auto flexbox">
@@ -30,16 +27,19 @@
                 
                 <div class="col-offset-auto col-auto flexbox">
                     <div class="scrollbox">
+                    	<!-- Content navbar -->
+           				<jsp:include page="../includes/content-navbar.jsp" />
+                    
                         <p:region regionName="cols-top" />
                         
                         <div class="row">
-                            <div class="col-sm-6">
+                            <div class="col-sm-3">
                                 <div class="scrollbox">
                                     <p:region regionName="col-2" />
                                 </div>
                             </div>
                             
-                            <div class="col-sm-6">
+                            <div class="col-sm-9">
                                 <div class="scrollbox">
                                     <p:region regionName="col-3" />
                                 </div>

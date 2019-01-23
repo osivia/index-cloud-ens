@@ -3,11 +3,27 @@
 // -----------------------------------------------------
 
 
-.content-navbar, .taskbar {
+.content-navbar {
+    color: @navbar-default-color;
+    background-color: white;
+    border-style: none;
+    margin-bottom: 0;
+    
+    .box-shadow(@shadow: none);
+    
+    .content-navbar-breadcrumb {
+    	.breadcrumb {
+    		padding-left: 0;
+    	}
+    }
+}
+
+.taskbar {
     color: @navbar-default-color;
     background-color: @navbar-default-bg;
     border-color: @navbar-default-border;
 }
+
 
 @media screen and (max-width: @screen-xs-max) {
     .content-navbar {

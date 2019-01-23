@@ -78,7 +78,7 @@
 		<module>index-cloud-ens-portal-directory</module>
 		<module>index-cloud-ens-portal-initializer</module>
 		<module>index-cloud-ens-portal-distribution</module>
-		<module>index-cloud-ens-portal-ws</module>		
+		<module>index-cloud-ens-portal-ws</module>
 	</modules>
     
     

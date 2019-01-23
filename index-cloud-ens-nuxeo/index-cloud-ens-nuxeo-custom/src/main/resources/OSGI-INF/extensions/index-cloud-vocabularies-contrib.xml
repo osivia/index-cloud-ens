@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<component name="fr.index.vocabularies">
+	<require>org.nuxeo.ecm.platform.forms.layouts.webapp</require>
+    <require>org.nuxeo.ecm.directory.sql.SQLDirectoryFactory</require>
+    <require>org.nuxeo.ecm.directory.ui.DirectoryUIManager</require>
+    
+   
+    <extension target="org.nuxeo.ecm.directory.sql.SQLDirectoryFactory" point="directories">
+
+        <!-- Thèmes des actualités -->
+        <directory name="idx_level">
+            <schema>xvocabulary</schema> 
+            <dataSource>java:/nxsqldirectory</dataSource>
+            <table>vocabulary_index_level</table>
+            <idField>id</idField>
+            <autoincrementIdField>false</autoincrementIdField>
+            <createTablePolicy>on_missing_columns</createTablePolicy> 
+            <dataFile>vocabularies/level.csv</dataFile>
+            <cacheTimeout>3600</cacheTimeout>
+            <cacheMaxSize>1000</cacheMaxSize>
+        </directory>
+
+    </extension>
+    
+
+</component>

@@ -1,26 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  ~ JBoss, a division of Red Hat                                              ~
-  ~ Copyright 2006, Red Hat Middleware, LLC, and individual                   ~
-  ~ contributors as indicated by the @authors tag. See the                    ~
-  ~ copyright.txt in the distribution for a full listing of                   ~
-  ~ individual contributors.                                                  ~
-  ~                                                                           ~
-  ~ This is free software; you can redistribute it and/or modify it           ~
-  ~ under the terms of the GNU Lesser General Public License as               ~
-  ~ published by the Free Software Foundation; either version 2.1 of          ~
-  ~ the License, or (at your option) any later version.                       ~
-  ~                                                                           ~
-  ~ This software is distributed in the hope that it will be useful,          ~
-  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of            ~
-  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU          ~
-  ~ Lesser General Public License for more details.                           ~
-  ~                                                                           ~
-  ~ You should have received a copy of the GNU Lesser General Public          ~
-  ~ License along with this software; if not, write to the Free               ~
-  ~ Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA        ~
-  ~ 02110-1301 USA, or see the FSF site: http://www.fsf.org.                  ~
-  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
+
 
 <!DOCTYPE deployments PUBLIC
    "-//JBoss Portal//DTD Portal Object 2.6//EN"
@@ -994,6 +973,58 @@ return nuxeoRequest.toString();</value>
                 </window>
             </page>
             
+            
+			<page>
+			      <page-name>Tests</page-name>
+			      <display-name xml:lang="fr">Tests</display-name>
+			      <properties/>
+			      <security-constraint>
+			        <policy-permission>
+			          <action-name>view</action-name>
+			          <role-name>Administrators</role-name>
+			        </policy-permission>
+			        <policy-permission>
+			          <action-name>view</action-name>
+			          <role-name>Authenticated</role-name>
+			        </policy-permission>
+			        <policy-permission>
+			          <action-name>view</action-name>
+			          <unchecked/>
+			        </policy-permission>
+			      </security-constraint>
+			      <window>
+			        <window-name>index-cloud-portal-ens-ws-instance_1547630498157</window-name>
+			        <instance-ref>index-cloud-portal-ens-ws-instance</instance-ref>
+			        <region>cols-top</region>
+			        <properties>
+			          <property>
+			            <name>osivia.title</name>
+			            <value>Test Web Services</value>
+			          </property>
+			          <property>
+			            <name>theme.order</name>
+			            <value>0</value>
+			          </property>
+			          <property>
+			            <name>osivia.maximized.cms.url</name>
+			            <value>false</value>
+			          </property>
+			          <property>
+			            <name>osivia.bootstrapPanelStyle</name>
+			            <value>false</value>
+			          </property>
+			          <property>
+			            <name>portal.windowContentType</name>
+			            <value>portlet</value>
+			          </property>
+			          <property>
+			            <name>osivia.mobileCollapse</name>
+			            <value>false</value>
+			          </property>
+			        </properties>
+			        <height>0</height>
+			      </window>
+		    </page>            
             <page>
                 <page-name>templates</page-name>
                 <properties />
@@ -1601,162 +1632,249 @@ return nuxeoRequest.toString();</value>
                         <height>0</height>
                     </window>
                     
-                    <page>
-                        <page-name>search</page-name>
-                        <display-name xml:lang="fr">Recherche</display-name>
-                        
-                        <properties>
-                            <property>
-                                <name>order</name>
-                                <value>1</value>
-                            </property>
-                        </properties>
-                        
-                        <security-constraint />
-                        
-                        <window>
-                            <window-name>osivia-services-taskbar-instance_1509112417291</window-name>
-                            <instance-ref>osivia-services-taskbar-instance</instance-ref>
-                            <region>col-1</region>
-                            <properties>
-                                <property>
-                                    <name>osivia.title</name>
-                                    <value>Barre des tâches</value>
-                                </property>
-                                <property>
-                                    <name>osivia.taskbar.view</name>
-                                    <value>compact</value>
-                                </property>
-                                <property>
-                                    <name>portal.windowContentType</name>
-                                    <value>portlet</value>
-                                </property>
-                                <property>
-                                    <name>osivia.taskbar.order</name>
-                                    <value>HOME|SEARCH|CMS_NAVIGATION</value>
-                                </property>
-                                <property>
-                                    <name>theme.order</name>
-                                    <value>1</value>
-                                </property>
-                                <property>
-                                    <name>osivia.hideDecorators</name>
-                                    <value>1</value>
-                                </property>
-                                <property>
-                                    <name>osivia.hideTitle</name>
-                                    <value>1</value>
-                                </property>
-                            </properties>
-                            <height>0</height>
-                        </window>
-                        
-                        <window>
-                            <window-name>toutatice-portail-cms-nuxeo-keywordsSelectorPortletInstance_1509639056150</window-name>
-                            <instance-ref>toutatice-portail-cms-nuxeo-keywordsSelectorPortletInstance</instance-ref>
-                            <region>cols-top</region>
-                            <properties>
-                                <property>
-                                    <name>osivia.title</name>
-                                    <value>Recherche</value>
-                                </property>
-                                <property>
-                                    <name>osivia.keywordMonoValued</name>
-                                    <value>2</value>
-                                </property>
-                                <property>
-                                    <name>portal.windowContentType</name>
-                                    <value>portlet</value>
-                                </property>
-                                <property>
-                                    <name>theme.dyna.partial_refresh_enabled</name>
-                                    <value>true</value>
-                                </property>
-                                <property>
-                                    <name>osivia.selectorId</name>
-                                    <value>search</value>
-                                </property>
-                                <property>
-                                    <name>osivia.ajax.preventRefresh</name>
-                                    <value>true</value>
-                                </property>
-                                <property>
-                                    <name>theme.order</name>
-                                    <value>0</value>
-                                </property>
-                                <property>
-                                    <name>osivia.ajaxLink</name>
-                                    <value>1</value>
-                                </property>
-                                <property>
-                                    <name>osivia.hideDecorators</name>
-                                    <value>1</value>
-                                </property>
-                            </properties>
-                            <height>0</height>
-                        </window>
-                        
-                        <window>
-                            <window-name>toutatice-portail-cms-nuxeo-viewListPortletInstance_1509639087197</window-name>
-                            <instance-ref>toutatice-portail-cms-nuxeo-viewListPortletInstance</instance-ref>
-                            <region>cols-top</region>
-                            <properties>
-                                <property>
-                                    <name>osivia.title</name>
-                                    <value>Résultats de la recherche</value>
-                                </property>
-                                <property>
-                                    <name>osivia.cms.displayLiveVersion</name>
-                                    <value>1</value>
-                                </property>
-                                <property>
-                                    <name>portal.windowContentType</name>
-                                    <value>portlet</value>
-                                </property>
-                                <property>
-                                    <name>theme.dyna.partial_refresh_enabled</name>
-                                    <value>true</value>
-                                </property>
-                                <property>
-                                    <name>osivia.cms.style</name>
-                                    <value>editorial</value>
-                                </property>
-                                <property>
-                                    <name>osivia.beanShell</name>
-                                    <value>on</value>
-                                </property>
-                                <property>
-                                    <name>osivia.cms.pageSize</name>
-                                    <value>15</value>
-                                </property>
-                                <property>
-                                    <name>theme.order</name>
-                                    <value>1</value>
-                                </property>
-                                <property>
-                                    <name>osivia.nuxeoRequest</name>
-                                    <value>StringBuilder request = new StringBuilder();&#13;
-request.append("ecm:path STARTSWITH '").append(basePath).append("' ");&#13;
-request.append("AND ecm:primaryType &lt;&gt; 'Staple' ");&#13;
-&#13;
-if (params.get("search") != null) {&#13;
-request.append("AND ").append(NXQLFormater.formatAdvancedSearch(params.get("search"))).append(" "); &#13;
-}&#13;
-&#13;
-return request.toString();</value>
-                                </property>
-                                <property>
-                                    <name>osivia.ajaxLink</name>
-                                    <value>1</value>
-                                </property>
-                                <property>
-                                    <name>osivia.hideDecorators</name>
-                                    <value>1</value>
-                                </property>
-                            </properties>
-                            <height>0</height>
-                        </window>
-                    </page>
+                
+                 <page>
+				      <page-name>search</page-name>
+				      <display-name xml:lang="fr">Recherche</display-name>
+				      <properties>
+				        <property>
+				          <name>layout.id</name>
+				          <value>demo-workspace</value>
+				        </property>
+				        <property>
+				          <name>order</name>
+				          <value>1</value>
+				        </property>
+				      </properties>
+				      <security-constraint/>
+				      <window>
+				        <window-name>osivia-services-taskbar-instance_1509112417291</window-name>
+				        <instance-ref>osivia-services-taskbar-instance</instance-ref>
+				        <region>col-1</region>
+				        <properties>
+				          <property>
+				            <name>osivia.title</name>
+				            <value>Barre des tâches</value>
+				          </property>
+				          <property>
+				            <name>osivia.taskbar.order</name>
+				            <value>HOME|SEARCH|CMS_NAVIGATION</value>
+				          </property>
+				          <property>
+				            <name>theme.order</name>
+				            <value>0</value>
+				          </property>
+				          <property>
+				            <name>osivia.taskbar.view</name>
+				            <value>compact</value>
+				          </property>
+				          <property>
+				            <name>portal.windowContentType</name>
+				            <value>portlet</value>
+				          </property>
+				          <property>
+				            <name>osivia.hideDecorators</name>
+				            <value>1</value>
+				          </property>
+				          <property>
+				            <name>osivia.hideTitle</name>
+				            <value>1</value>
+				          </property>
+				        </properties>
+				        <height>0</height>
+				      </window>
+				      <window>
+				        <window-name>toutatice-portail-cms-nuxeo-keywordsSelectorPortletInstance_1509639056150</window-name>
+				        <instance-ref>toutatice-portail-cms-nuxeo-keywordsSelectorPortletInstance</instance-ref>
+				        <region>cols-top</region>
+				        <properties>
+				          <property>
+				            <name>osivia.title</name>
+				            <value>Recherche</value>
+				          </property>
+				          <property>
+				            <name>osivia.keywordMonoValued</name>
+				            <value>2</value>
+				          </property>
+				          <property>
+				            <name>portal.windowContentType</name>
+				            <value>portlet</value>
+				          </property>
+				          <property>
+				            <name>theme.dyna.partial_refresh_enabled</name>
+				            <value>true</value>
+				          </property>
+				          <property>
+				            <name>osivia.selectorId</name>
+				            <value>search</value>
+				          </property>
+				          <property>
+				            <name>osivia.ajax.preventRefresh</name>
+				            <value>true</value>
+				          </property>
+				          <property>
+				            <name>theme.order</name>
+				            <value>0</value>
+				          </property>
+				          <property>
+				            <name>osivia.ajaxLink</name>
+				            <value>1</value>
+				          </property>
+				          <property>
+				            <name>osivia.hideDecorators</name>
+				            <value>1</value>
+				          </property>
+				        </properties>
+				        <height>0</height>
+				      </window>
+				      <window>
+				        <window-name>toutatice-portail-cms-nuxeo-viewListPortletInstance_1509639087197</window-name>
+				        <instance-ref>toutatice-portail-cms-nuxeo-viewListPortletInstance</instance-ref>
+				        <region>col-3</region>
+				        <properties>
+				          <property>
+				            <name>osivia.title</name>
+				            <value>Résultats de la recherche</value>
+				          </property>
+				          <property>
+				            <name>osivia.cms.displayLiveVersion</name>
+				            <value>1</value>
+				          </property>
+				          <property>
+				            <name>osivia.bootstrapPanelStyle</name>
+				            <value>false</value>
+				          </property>
+				          <property>
+				            <name>portal.windowContentType</name>
+				            <value>portlet</value>
+				          </property>
+				          <property>
+				            <name>theme.dyna.partial_refresh_enabled</name>
+				            <value>true</value>
+				          </property>
+				          <property>
+				            <name>osivia.cms.style</name>
+				            <value>editorial</value>
+				          </property>
+				          <property>
+				            <name>osivia.beanShell</name>
+				            <value>on</value>
+				          </property>
+				          <property>
+				            <name>osivia.cms.pageSize</name>
+				            <value>15</value>
+				          </property>
+				          <property>
+				            <name>theme.order</name>
+				            <value>0</value>
+				          </property>
+				          <property>
+				            <name>osivia.maximized.cms.url</name>
+				            <value>false</value>
+				          </property>
+				          <property>
+				            <name>osivia.nuxeoRequest</name>
+				            <value>StringBuilder request = new StringBuilder();&#13;
+				request.append("ecm:path STARTSWITH '").append(basePath).append("' ");&#13;
+				request.append("AND ecm:primaryType &lt;&gt; 'Staple' ");&#13;
+				request.append("AND ecm:mixinType &lt;&gt; 'Folderish' ");&#13;
+				&#13;
+				if (params.get("search") != null) {&#13;
+				request.append("AND ").append(NXQLFormater.formatAdvancedSearch(params.get("search"))).append(" "); &#13;
+				}&#13;
+				&#13;
+				&#13;
+				// Format search by level&#13;
+				    if (params.get("level") != null) {&#13;
+				&#13;
+				        String s = NXQLFormater.formatVocabularySearch("idxcl:level", params.get("level"));&#13;
+				&#13;
+				       s = s.replaceAll("idxcl:level STARTSWITH '([A-Za-z0-9]*)/([A-Za-z0-9]*)'", "idxcl:level STARTSWITH '$2'");&#13;
+				        request.append("AND ").append( s).append(" ");&#13;
+				    }&#13;
+				&#13;
+				return request.toString();</value>
+				          </property>
+				          <property>
+				            <name>osivia.ajaxLink</name>
+				            <value>1</value>
+				          </property>
+				          <property>
+				            <name>osivia.hideDecorators</name>
+				            <value>1</value>
+				          </property>
+				          <property>
+				            <name>osivia.mobileCollapse</name>
+				            <value>false</value>
+				          </property>
+				          <property>
+				            <name>osivia.hideTitle</name>
+				            <value>1</value>
+				          </property>
+				        </properties>
+				        <height>0</height>
+				      </window>
+				      <window>
+				        <window-name>toutatice-portail-cms-nuxeo-vocabulary-select2-instance_1548262571162</window-name>
+				        <instance-ref>toutatice-portail-cms-nuxeo-vocabulary-select2-instance</instance-ref>
+				        <region>col-2</region>
+				        <properties>
+				          <property>
+				            <name>osivia.selector.monoValued</name>
+				            <value>true</value>
+				          </property>
+				          <property>
+				            <name>osivia.selector.vocabulary</name>
+				            <value>idx_level</value>
+				          </property>
+				          <property>
+				            <name>osivia.bootstrapPanelStyle</name>
+				            <value>false</value>
+				          </property>
+				          <property>
+				            <name>portal.windowContentType</name>
+				            <value>portlet</value>
+				          </property>
+				          <property>
+				            <name>theme.dyna.partial_refresh_enabled</name>
+				            <value>true</value>
+				          </property>
+				          <property>
+				            <name>theme.order</name>
+				            <value>0</value>
+				          </property>
+				          <property>
+				            <name>osivia.maximized.cms.url</name>
+				            <value>false</value>
+				          </property>
+				          <property>
+				            <name>osivia.ajaxLink</name>
+				            <value>1</value>
+				          </property>
+				          <property>
+				            <name>osivia.selector.id</name>
+				            <value>level</value>
+				          </property>
+				          <property>
+				            <name>osivia.hideDecorators</name>
+				            <value>1</value>
+				          </property>
+				          <property>
+				            <name>osivia.selector.label</name>
+				            <value>Niveau</value>
+				          </property>
+				          <property>
+				            <name>osivia.mobileCollapse</name>
+				            <value>false</value>
+				          </property>
+				          <property>
+				            <name>osivia.hideTitle</name>
+				            <value>1</value>
+				          </property>
+				        </properties>
+				        <height>0</height>
+				      </window>
+				    </page>
                     
                     <page>
                         <page-name>statistics</page-name>

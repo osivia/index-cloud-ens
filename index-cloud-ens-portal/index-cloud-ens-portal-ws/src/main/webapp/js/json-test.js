@@ -50,7 +50,7 @@ $JQry(function() {
 			// If you want to add an extra field for the FormData
 	        // data.append("CustomField", "This is some extra data, testing");
 
-	        data.append("pronoteQualifiers", "{\"level\": \"3\"}");
+	        data.append("pronoteQualifiers", "{\"level\": \"L3\"}");
 	        
 	        $JQry.ajax({
 	            type: "POST",
