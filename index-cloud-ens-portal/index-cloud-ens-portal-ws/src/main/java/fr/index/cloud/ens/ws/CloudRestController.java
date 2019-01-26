@@ -16,10 +16,12 @@ import org.nuxeo.ecm.automation.client.model.Documents;
 import org.nuxeo.ecm.automation.client.model.PropertyList;
 import org.nuxeo.ecm.automation.client.model.PropertyMap;
 import org.osivia.portal.api.cache.services.CacheInfo;
+import org.osivia.portal.api.cms.DocumentContext;
 import org.osivia.portal.core.web.IWebIdService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -31,6 +33,7 @@ import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 
 import fr.toutatice.portail.cms.nuxeo.api.INuxeoCommand;
 import fr.toutatice.portail.cms.nuxeo.api.NuxeoController;
+import fr.toutatice.portail.cms.nuxeo.api.cms.NuxeoDocumentContext;
 import fr.toutatice.portail.cms.nuxeo.api.services.NuxeoCommandContext;
 
 
@@ -73,7 +76,6 @@ public class CloudRestController {
 
     public DriveBaseBean getContent(HttpServletRequest request, @RequestParam(value = "id", required = false) String id) {
 
-
         NuxeoController nuxeoController = getNuxeocontroller(request);
 
         DriveBaseBean result = null;
@@ -100,8 +102,7 @@ public class CloudRestController {
         // Facets
         PropertyList facets = currentDoc.getFacets();
         if (!facets.list().contains("Folderish")) {
-
-            result = new FileBean(currentDoc.getProperties().getString("ttc:webid"), currentDoc.getTitle(), parentId);
+            result = new FileBean(currentDoc.getProperties().getString("ttc:webid"), currentDoc.getTitle(), parentId, currentDoc.getProperties().getString("rshr:linkId"));
         } else {
             // Add childrens
             Documents children = (Documents) nuxeoController.executeNuxeoCommand(new FolderGetChildrenCommand(currentDoc));
@@ -135,21 +136,18 @@ public class CloudRestController {
     @CrossOrigin
     @RequestMapping(value = "/Drive.upload", method = RequestMethod.POST, consumes = {"multipart/form-data"})
     @ResponseStatus(HttpStatus.OK)
-    public void handleFileUpload(@RequestParam("file") MultipartFile file, @RequestParam("folderId") String parentWebId,
-            @RequestParam("extraField") String extraField, @RequestParam("pronoteQualifiers") String qualifiersParam, HttpServletRequest request,
+    public void handleFileUpload(@RequestParam("file") MultipartFile file, @RequestParam("uploadInfos") String fileUpload ,HttpServletRequest request,
             HttpServletResponse response) throws Exception {
 
-        PronoteQualifiers qualifiers = new ObjectMapper().readValue(qualifiersParam, PronoteQualifiers.class);
         NuxeoController nuxeoController = getNuxeocontroller(request);
+        
+        UploadBean uploadBean = new ObjectMapper().readValue(fileUpload, UploadBean.class);
 
         // Get parent doc
-        Document parentDoc = nuxeoController.getDocumentContext(IWebIdService.FETCH_PATH_PREFIX + parentWebId).getDocument();
-
+        Document parentDoc = nuxeoController.getDocumentContext(IWebIdService.FETCH_PATH_PREFIX + uploadBean.getParentId()).getDocument();
+        
         // set qualifiers
-        PropertyMap properties = new PropertyMap();
-        String standardLevel = convertLevelQualifier(  qualifiers.getLevel());
-        if (standardLevel != null)
-            properties.set("idxcl:level", standardLevel);
+        PropertyMap properties = parseProperties(uploadBean.getProperties());
 
 
         // Execute import
@@ -158,6 +156,57 @@ public class CloudRestController {
     }
 
 
+    
+    /**
+     * Upload a file to the current folder
+     * 
+     * @param file
+     * @param parentWebId
+     * @param extraField
+     * @param request
+     * @param response
+     * @throws Exception
+     */
+    @CrossOrigin
+    @RequestMapping(value = "/Drive.publish", method = RequestMethod.POST)
+    @ResponseStatus(HttpStatus.OK)
+    public String publish(  @RequestBody PublishBean publishBean, HttpServletRequest request,
+            HttpServletResponse response) throws Exception {
+
+        NuxeoController nuxeoController = getNuxeocontroller(request);
+        
+        NuxeoDocumentContext ctx = nuxeoController.getDocumentContext(IWebIdService.FETCH_PATH_PREFIX + publishBean.getContentId());
+
+        // Get parent doc
+        Document currentDoc = ctx.getDocument();
+
+        // set qualifiers
+        PropertyMap properties = parseProperties(publishBean.getProperties());
+        
+
+        // Execute import
+        INuxeoCommand command = new PublishCommand(currentDoc.getId(), properties);
+        String shareLink = (String) nuxeoController.executeNuxeoCommand(command);
+        
+        // Force cache initialisation
+        ctx.reload();
+
+        
+        return shareLink;
+    }
+     
+    
+    
+    private PropertyMap parseProperties( Map<String, String> requestProperties) {
+        // set qualifiers
+        PropertyMap properties = new PropertyMap();
+        String standardLevel = convertLevelQualifier(  requestProperties.get("level"));
+        if (standardLevel != null)
+            properties.set("idxcl:level", standardLevel);
+        
+        return properties;
+    }
+    
     /**
      * Convert the local qualifier to the standard one
      * 

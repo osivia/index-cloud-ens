@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 
-<component name="fr.toutatice.acrennes.sites.interactik.core-types">
+<component name="fr.index.cloud.ens.core-types">
 
     <require>org.nuxeo.ecm.core.schema.TypeService</require>
 
@@ -8,8 +8,13 @@
         point="doctype">
 
         <doctype name="File" append="true">
-            <schema name="index-classifiers" />
-            <schema name="index-sharing" />
+            <schema name="indexClassifiers" />
+            <schema name="resourceSharing" />
+        </doctype>
+        
+        <doctype name="Picture" append="true">
+            <schema name="indexClassifiers" />
+            <schema name="resourceSharing" />
         </doctype>
 
 

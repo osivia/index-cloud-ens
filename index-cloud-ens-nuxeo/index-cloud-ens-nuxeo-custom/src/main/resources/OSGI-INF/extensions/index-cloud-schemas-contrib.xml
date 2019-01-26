@@ -9,12 +9,12 @@
         point="schema">
 
         <schema
-            name="index-sharing"
-            prefix="idxsh"
-            src="schemas/index-sharing.xsd" />
+            name="resourceSharing"
+            prefix="rshr"
+            src="schemas/resource-sharing.xsd" />
 
         <schema
-            name="index-classifiers"
+            name="indexClassifiers"
             prefix="idxcl"
             src="schemas/index-classifiers.xsd" />
 
