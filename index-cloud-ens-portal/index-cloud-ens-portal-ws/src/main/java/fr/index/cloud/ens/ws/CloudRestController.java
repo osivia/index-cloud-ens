@@ -1,5 +1,6 @@
 package fr.index.cloud.ens.ws;
 
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -31,6 +32,11 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.JWTVerifier;
+import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.interfaces.DecodedJWT;
+
 import fr.toutatice.portail.cms.nuxeo.api.INuxeoCommand;
 import fr.toutatice.portail.cms.nuxeo.api.NuxeoController;
 import fr.toutatice.portail.cms.nuxeo.api.cms.NuxeoDocumentContext;
@@ -42,6 +48,8 @@ public class CloudRestController {
 
     // TODO : HOW TO INJECT FROM SimpleDocumentCreatorController
     public static PortletContext portletContext;
+    private static String TOKEN_PREFIX = "Bearer ";
+    private static String USERWORKSPACES_DOMAIN = "/default-domain/UserWorkspaces";
 
     Map<String, String> levelQualifier = null;
 
@@ -49,17 +57,35 @@ public class CloudRestController {
      * Get a nuxeoController associated to the current user
      * 
      * @return
+     * @throws Exception 
      */
-    private NuxeoController getNuxeocontroller(HttpServletRequest request) {
+    private NuxeoController getNuxeocontroller(HttpServletRequest request) throws Exception {
 
-        NuxeoController nuxeoController = new NuxeoController(portletContext);
-        nuxeoController.setServletRequest(request);
-        nuxeoController.setAuthType(NuxeoCommandContext.AUTH_TYPE_USER);
-        nuxeoController.setCacheType(CacheInfo.CACHE_SCOPE_NONE);
+  
+        String token = request.getHeader("Authorization");
+        if( StringUtils.isNotEmpty(token))  {
+            if( token.startsWith(TOKEN_PREFIX)) {
+                Algorithm algorithm = Algorithm.HMAC256("??PRONOTESECRET??");
+                JWTVerifier verifier = JWT.require(algorithm)
+                    .withIssuer("pronote")
+                    .build(); //Reusable verifier instance
+                DecodedJWT jwt = verifier.verify(token.substring(TOKEN_PREFIX.length()));
+                String userId = jwt.getSubject();
+                
+                NuxeoController nuxeoController = new NuxeoController(portletContext);
+                nuxeoController.setServletRequest(request);
+                nuxeoController.setAuthType(NuxeoCommandContext.AUTH_TYPE_USER);
+                nuxeoController.setCacheType(CacheInfo.CACHE_SCOPE_NONE);
 
-        request.setAttribute("osivia.delegation.userName", "admin");
+                request.setAttribute("osivia.delegation.userName", userId);
 
-        return nuxeoController;
+                return nuxeoController;                
+            }
+        }
+        
+       throw new Exception("Invalid token");
+
+    
     }
 
     /**
@@ -68,13 +94,15 @@ public class CloudRestController {
      * @param request
      * @param id
      * @return
+     * @throws Exception 
      */
+    
 
     @CrossOrigin
     @RequestMapping(value = "/Drive.content", method = RequestMethod.GET)
     @ResponseStatus(HttpStatus.OK)
 
-    public DriveBaseBean getContent(HttpServletRequest request, @RequestParam(value = "id", required = false) String id) {
+    public DriveBaseBean getContent(HttpServletRequest request, @RequestParam(value = "id", required = false) String id) throws Exception {
 
         NuxeoController nuxeoController = getNuxeocontroller(request);
 
@@ -82,7 +110,8 @@ public class CloudRestController {
 
         // TOD get real user workspace
         // see demo project customizer
-        String path = "/default-domain/UserWorkspaces/admin/documents";
+        String path = USERWORKSPACES_DOMAIN + "/"+ request.getAttribute("osivia.delegation.userName")
+        +"/documents";
 
         if (id != null)
             path = IWebIdService.FETCH_PATH_PREFIX + id;
@@ -95,9 +124,7 @@ public class CloudRestController {
         Document parentDoc = nuxeoController.getDocumentContext(parentPath).getDocument();
         String parentId = parentDoc.getProperties().getString("ttc:webid");
 
-        // Get grandparent
-        String grandParentPath = parentPath.substring(0, parentPath.lastIndexOf('/'));
-        Document grandParentDoc = nuxeoController.getDocumentContext(grandParentPath).getDocument();
+ 
 
         // Facets
         PropertyList facets = currentDoc.getFacets();
@@ -113,7 +140,10 @@ public class CloudRestController {
                         parentDoc.getProperties().getString("ttc:webid")));
             }
 
-            if (grandParentDoc.getType().equals("UserWorkspacesRoot"))
+            // Get grandparent
+            String grandParentPath = parentPath.substring(0, parentPath.lastIndexOf('/'));
+
+            if (grandParentPath.equals(USERWORKSPACES_DOMAIN))
                 result = new DriveBean(currentDoc.getProperties().getString("ttc:webid"), currentDoc.getTitle(), contentChildren);
             else
                 // Folder

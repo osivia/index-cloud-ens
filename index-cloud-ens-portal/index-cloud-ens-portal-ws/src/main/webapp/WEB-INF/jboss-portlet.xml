@@ -11,6 +11,9 @@
         
         <header-content>
             <script type="text/javascript" src="/js/json-test.js"></script>
+			<script type="text/javascript" src="/js/crypto-js-3.1.2-hmac-sha256.min.js"></script>
+			<script type="text/javascript" src="/js/crypto-js-3.1.2-enc-base64-min.js"></script>  
+     
         </header-content>        
     </portlet>
 

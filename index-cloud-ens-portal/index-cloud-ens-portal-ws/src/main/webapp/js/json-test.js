@@ -1,13 +1,62 @@
-function drive( id) {
-	var xmlhttp = new XMLHttpRequest();
-	xmlhttp.onreadystatechange = function() {
-		if (this.readyState == 4 && this.status == 200) {
+function base64url(source) {
+	// Encode in classical base64
+	encodedSource = CryptoJS.enc.Base64.stringify(source);
 
-			var text = this.responseText;
+	// Remove padding equal characters
+	encodedSource = encodedSource.replace(/=+$/, '');
+
+	// Replace characters according to base64url specifications
+	encodedSource = encodedSource.replace(/\+/g, '-');
+	encodedSource = encodedSource.replace(/\//g, '_');
+
+	return encodedSource;
+}
+
+function authToken( )	{
+	// Defining our token parts
+	var header = {
+		"alg" : "HS256",
+		"typ" : "JWT"
+	};
+
+	var data = {	};
+	data.sub = $JQry('#authUserId').val();
+	data.iss = "pronote";
+
+	var secret = "??PRONOTESECRET??";
+
+	var stringifiedHeader = CryptoJS.enc.Utf8.parse(JSON.stringify(header));
+	var encodedHeader = base64url(stringifiedHeader);
+
+	var stringifiedData = CryptoJS.enc.Utf8.parse(JSON.stringify(data));
+	var encodedData = base64url(stringifiedData);
+
+	var signature = encodedHeader + "." + encodedData;
+	signature = CryptoJS.HmacSHA256(signature, secret);
+	signature = base64url(signature);
+
+	$JQry('#authToken').val( encodedHeader+"."+ encodedData+"."+signature);
+}
+
+
+
+function drive( id) {
+	var url = "https://cloud-ens-ws.osivia.org/index-cloud-portal-ens-ws/rest/Drive.content";
+	if (typeof id !== 'undefined')	{
+		url = url + "?id=" + id;
+	}
+	
+	$JQry.ajax({
+	    type: "GET",
+	    url: url,
+	    headers: {'Content-Type': undefined, "Authorization" : "Bearer "+ $JQry('#authToken').val()},
+	    contentType: false,
+	    cache: false,
+	    timeout: 600000,
+	    success: function (jsonData) {
+
 			var list = '';
 			var detail = '';			
-			
-			var jsonData = JSON.parse(text);
 			
 			if (jsonData.type == 'file')	{
 				$JQry('#detail').show();
@@ -28,19 +77,14 @@ function drive( id) {
 		        $JQry('#folderId').val(jsonData.id);
 		        $JQry('#files').html( list);				
 			}
-		}
-	};
-	
-	var url = "https://cloud-ens-ws.osivia.org/index-cloud-portal-ens-ws/rest/Drive.content";
-	if (typeof id !== 'undefined')	{
-		url = url + "?id=" + id;
-	}
-	
-	xmlhttp.open("GET",url,true);
-	
-	xmlhttp.send();
+	    },
+	    error: function (e) {
+	        console.log("ERROR : ", e);
+	    }
+	});
 
 }
+
 
 
 $JQry(function() {
@@ -66,7 +110,7 @@ $JQry(function() {
 	        $JQry.ajax({
 	            type: "POST",
 	            url: "https://cloud-ens-ws.osivia.org/index-cloud-portal-ens-ws/rest/Drive.upload",
-	            headers: {'Content-Type': undefined},
+	    	    headers: {'Content-Type': undefined, "Authorization" : "Bearer "+ $JQry('#authToken').val()},
 	            data: data,
 	            processData: false,
 	            contentType: false,
@@ -85,7 +129,7 @@ $JQry(function() {
 
 	
 	
-$JQry("#btnPubSubmit").each(function(index, element) {
+	$JQry("#btnPubSubmit").each(function(index, element) {
 		
 		var $element = $JQry(element);
 		$element.click(function() {
@@ -97,6 +141,7 @@ $JQry("#btnPubSubmit").each(function(index, element) {
 	        $JQry.ajax({
 	            type: "POST",
 	            url: "https://cloud-ens-ws.osivia.org/index-cloud-portal-ens-ws/rest/Drive.publish",
+	    	    headers: {"Authorization" : "Bearer "+ $JQry('#authToken').val()},	            
 	            dataType: 'json',
 	            contentType: 'application/json',
 	            data: JSON.stringify(params),
@@ -110,6 +155,25 @@ $JQry("#btnPubSubmit").each(function(index, element) {
 
 		});
 	});
+
+$JQry("#btnAuthTokenSubmit").each(function(index, element) {
+	
+	var $element = $JQry(element);
+	$element.click(function() {
+
+		authToken();
+
+	});
+});
+
+$JQry("#btnGotoDrive").each(function(index, element) {
+	
+	var $element = $JQry(element);
+	$element.click(function() {
+		
+		drive();
+	});
+});
 	
 });
 

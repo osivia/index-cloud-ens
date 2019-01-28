@@ -183,39 +183,42 @@
                     </c:otherwise>
                 </c:choose>
                 
-                <ul class="nav navbar-right">
-                    <!-- Search -->
-                    <li>
-                         <a href="${requestScope['osivia.home.url']}/publications" class="navbar-referentiel btn-warning hidden-xs">
-                   			 Publications
-                		</a>
-                    </li>
-                </ul>
-                                
                 
-                <ul class="nav navbar-nav navbar-right">
-                    <!-- Search -->
-                    <c:set var="title"><op:translate key="SEARCH_TITLE" /></c:set>
-                    <c:set var="placeholder"><op:translate key="SEARCH_PLACEHOLDER" /></c:set>
-                    <li>
-                        <form action="${requestScope['osivia.search.url']}" method="get" class="navbar-form" role="search">
-                            <input type="hidden" name="action" value="advancedSearch">
-                        
-                            <div class="form-group">
-                                <label class="sr-only" for="search-input"><op:translate key="SEARCH" /></label>
-                                <div class="input-group">
-                                    <input id="search-input" type="text" name="search" class="form-control" placeholder="${placeholder}">
-                                    <span class="input-group-btn">
-                                        <button type="submit" class="btn btn-default" title="${title}" data-toggle="tooltip" data-placement="bottom">
-                                            <i class="halflings halflings-search"></i>
-                                        </button>
-                                    </span>
-                                </div>
-                            </div>
-                        </form>
-                    </li>
-                </ul>
+              	<c:if test="${not empty requestScope['osivia.toolbar.principal']}">
                 
+	                <ul class="nav navbar-right">
+	                    <!-- Search -->
+	                    <li>
+	                         <a href="${requestScope['osivia.home.url']}/publications" class="navbar-referentiel btn-warning hidden-xs">
+	                   			 Publications
+	                		</a>
+	                    </li>
+	                </ul>
+             
+
+	                <ul class="nav navbar-nav navbar-right">
+	                    <!-- Search -->
+	                    <c:set var="title"><op:translate key="SEARCH_TITLE" /></c:set>
+	                    <c:set var="placeholder"><op:translate key="SEARCH_PLACEHOLDER" /></c:set>
+	                    <li>
+	                        <form action="${requestScope['osivia.search.url']}" method="get" class="navbar-form" role="search">
+	                            <input type="hidden" name="action" value="advancedSearch">
+	                        
+	                            <div class="form-group">
+	                                <label class="sr-only" for="search-input"><op:translate key="SEARCH" /></label>
+	                                <div class="input-group">
+	                                    <input id="search-input" type="text" name="search" class="form-control" placeholder="${placeholder}">
+	                                    <span class="input-group-btn">
+	                                        <button type="submit" class="btn btn-default" title="${title}" data-toggle="tooltip" data-placement="bottom">
+	                                            <i class="halflings halflings-search"></i>
+	                                        </button>
+	                                    </span>
+	                                </div>
+	                            </div>
+	                        </form>
+	                    </li>
+	                </ul>
+                </c:if>
 
                 
             </div>
