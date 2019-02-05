@@ -1,11 +1,11 @@
-package fr.index.cloud.ens.ws;
+package fr.index.cloud.ens.ws.beans;
 
 /**
- * Represents a file
+ * Represents the base for drive content
  * 
  * @author Jean-Sébastien
  */
-public class DriveBaseBean {
+public class DriveBaseBean extends BaseBean {
 
     private final String title;
     private final String id;

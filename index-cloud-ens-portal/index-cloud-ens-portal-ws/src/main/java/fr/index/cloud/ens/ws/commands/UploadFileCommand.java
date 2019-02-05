@@ -1,4 +1,4 @@
-package fr.index.cloud.ens.ws;
+package fr.index.cloud.ens.ws.commands;
 
 import java.io.IOException;
 import java.util.List;

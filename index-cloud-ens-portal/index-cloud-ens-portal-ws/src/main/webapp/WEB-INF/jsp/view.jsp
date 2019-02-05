@@ -34,7 +34,7 @@
 		</div>
 	</div>
 	
-	<div class="col-lg-2">
+	<div class="col-lg-4">
 		<h3>Drive.content</h3>
 		<div id="files"></div>
 	</div>

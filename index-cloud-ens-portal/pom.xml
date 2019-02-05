@@ -25,7 +25,7 @@
         <directory.version>4.7.2</directory.version>
         
         <!-- Collaboration -->
-        <collaboration.version>4.7.3</collaboration.version>
+        <collaboration.version>4.7.8</collaboration.version>
         
         <!-- Other services -->
         <tasks.version>4.7</tasks.version>

@@ -1,4 +1,4 @@
-package fr.index.cloud.ens.ws;
+package fr.index.cloud.ens.ws.beans;
 
 import java.util.Map;
 

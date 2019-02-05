@@ -14,7 +14,7 @@
  *
  *    
  */
-package fr.index.cloud.ens.ws;
+package fr.index.cloud.ens.ws.commands;
 
 import org.nuxeo.ecm.automation.client.Constants;
 import org.nuxeo.ecm.automation.client.Session;

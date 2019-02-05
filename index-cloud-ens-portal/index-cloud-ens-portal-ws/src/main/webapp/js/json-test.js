@@ -12,6 +12,23 @@ function base64url(source) {
 	return encodedSource;
 }
 
+function humanFileSize(bytes, si) {
+    var thresh = si ? 1000 : 1024;
+    if(Math.abs(bytes) < thresh) {
+        return bytes + ' B';
+    }
+    var units = si
+        ? ['kB','MB','GB','TB','PB','EB','ZB','YB']
+        : ['KiB','MiB','GiB','TiB','PiB','EiB','ZiB','YiB'];
+    var u = -1;
+    do {
+        bytes /= thresh;
+        ++u;
+    } while(Math.abs(bytes) >= thresh && u < units.length - 1);
+    return bytes.toFixed(1)+' '+units[u];
+}
+
+
 function authToken( )	{
 	// Defining our token parts
 	var header = {
@@ -44,6 +61,7 @@ function drive( id) {
 	var url = "https://cloud-ens-ws.osivia.org/index-cloud-portal-ens-ws/rest/Drive.content";
 	if (typeof id !== 'undefined')	{
 		url = url + "?id=" + id;
+//		url = url + "?id=XXXXXX" ;		
 	}
 	
 	$JQry.ajax({
@@ -54,29 +72,51 @@ function drive( id) {
 	    cache: false,
 	    timeout: 600000,
 	    success: function (jsonData) {
-
-			var list = '';
-			var detail = '';			
-			
-			if (jsonData.type == 'file')	{
-				$JQry('#detail').show();
-				$JQry('#contentId').val(jsonData.id);
-				$JQry('#pubShare').val( jsonData.shareLink);
-			}	else	{
-				$JQry('#detail').hide();	
+	    	if( jsonData.returnCode != 0)
+	    		alert("erreur" + returnCode);
+	    	else	{
+				var list = '';
+				var detail = '';			
 				
-				if (jsonData.type !== 'root')
-					list = list + '<a  href="javascript:drive(\''+jsonData.parentId+'\')" >..</a><br/>';
-
-				if( jsonData.childrens !== undefined){
-					for (var i = 0; i < jsonData.childrens.length; i++) {
-						var file = jsonData.childrens[i];
-						list = list + '<a  href="javascript:drive(\''+file.id+'\')" >' + file.title + "</a><br/>";
+				if (jsonData.type == 'file')	{
+					$JQry('#detail').show();
+					$JQry('#contentId').val(jsonData.id);
+					$JQry('#pubShare').val( jsonData.shareLink);
+				}	else	{
+					$JQry('#detail').hide();	
+					
+					if (jsonData.type !== 'root')	{
+						// Breadcrumb
+						for (var i = 0; i < jsonData.parents.length; i++) {
+							list = list + '<a  href="javascript:drive(\''+jsonData.parents[i].id+'\')" >'+jsonData.parents[i].title+'</a> > ';
+						}
+						
+						list += jsonData.title + "<br/>";
+						
+						// upper level
+						var parentId = jsonData.parents[jsonData.parents.length -1].id;
+						list = list + '<a  href="javascript:drive(\''+parentId+'\')" >..</a><br/>';
 					}
-				}			
-		        $JQry('#folderId').val(jsonData.id);
-		        $JQry('#files').html( list);				
-			}
+					
+	
+					if( jsonData.childrens !== undefined){
+						for (var i = 0; i < jsonData.childrens.length; i++) {
+							list = list + "<div class=\"row\">";
+							var file = jsonData.childrens[i];
+							list = list + '<div class="col-lg-6"> <a  href="javascript:drive(\''+file.id+'\')" >' + file.title + "</a></div>";
+							if( file.size !== undefined) {
+								list = list + '<div class="col-lg-3">' + humanFileSize(file.size, true) + "</div>";
+								list = list + '<div class="col-lg-3">' + new Date(file.lastModified).toLocaleString() + "</div>";
+								//list = list + '<div class="col-lg-3">' + new Date('July 22, 2018 07:22:13 +0700').toLocaleString() + "</div>";
+								//new Date('July 22, 2018 07:22:13 +0700')
+							}
+							list = list + "</div>";
+						}
+					}			
+			        $JQry('#folderId').val(jsonData.id);
+			        $JQry('#files').html( list);				
+				}
+	    	}
 	    },
 	    error: function (e) {
 	        console.log("ERROR : ", e);

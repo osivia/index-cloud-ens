@@ -1,4 +1,4 @@
-package fr.index.cloud.ens.ws;
+package fr.index.cloud.ens.ws.commands;
 
 import org.apache.commons.lang.StringUtils;
 import org.nuxeo.ecm.automation.client.Session;
