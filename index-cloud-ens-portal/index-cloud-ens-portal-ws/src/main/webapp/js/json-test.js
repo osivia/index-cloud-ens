@@ -102,14 +102,12 @@ function drive( id) {
 					if( jsonData.childrens !== undefined){
 						for (var i = 0; i < jsonData.childrens.length; i++) {
 							list = list + "<div class=\"row\">";
-							var file = jsonData.childrens[i];
-							list = list + '<div class="col-lg-6"> <a  href="javascript:drive(\''+file.id+'\')" >' + file.title + "</a></div>";
-							if( file.size !== undefined) {
-								list = list + '<div class="col-lg-3">' + humanFileSize(file.size, true) + "</div>";
-								list = list + '<div class="col-lg-3">' + new Date(file.lastModified).toLocaleString() + "</div>";
-								//list = list + '<div class="col-lg-3">' + new Date('July 22, 2018 07:22:13 +0700').toLocaleString() + "</div>";
-								//new Date('July 22, 2018 07:22:13 +0700')
+							var child = jsonData.childrens[i];
+							list = list + '<div class="col-lg-6"> <a  href="javascript:drive(\''+child.id+'\')" >' + child.title + "</a></div>";
+							if( child.fileSize !== undefined) {
+								list = list + '<div class="col-lg-3">' + humanFileSize(child.fileSize, true) + "</div>";
 							}
+							list = list + '<div class="col-lg-3">' + new Date(child.lastModified).toLocaleString() + "</div>";							
 							list = list + "</div>";
 						}
 					}			

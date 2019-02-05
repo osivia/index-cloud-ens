@@ -1,9 +1,9 @@
 package fr.index.cloud.ens.ws;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -21,7 +21,6 @@ import org.nuxeo.ecm.automation.client.model.Documents;
 import org.nuxeo.ecm.automation.client.model.PropertyList;
 import org.nuxeo.ecm.automation.client.model.PropertyMap;
 import org.osivia.portal.api.cache.services.CacheInfo;
-import org.osivia.portal.core.error.GlobalErrorHandler;
 import org.osivia.portal.core.web.IWebIdService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpStatus;
@@ -40,13 +39,6 @@ import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
 
-import fr.index.cloud.ens.ws.beans.BaseBean;
-import fr.index.cloud.ens.ws.beans.ChildBean;
-import fr.index.cloud.ens.ws.beans.DriveParentBean;
-import fr.index.cloud.ens.ws.beans.DriveRootBean;
-import fr.index.cloud.ens.ws.beans.FileBean;
-import fr.index.cloud.ens.ws.beans.FileChildBean;
-import fr.index.cloud.ens.ws.beans.FolderBean;
 import fr.index.cloud.ens.ws.beans.PublishBean;
 import fr.index.cloud.ens.ws.beans.UploadBean;
 import fr.index.cloud.ens.ws.commands.FolderGetChildrenCommand;
@@ -114,23 +106,26 @@ public class CloudRestController {
      * @param e
      * @return
      */
-    private BaseBean handleDefaultExceptions(Exception e) {
-        BaseBean returnBean = null;
+    private Map<String, Object> handleDefaultExceptions(Exception e) {
+        
+        Map<String, Object> response = new LinkedHashMap<>();
+
 
         if (e instanceof NuxeoException) {
             NuxeoException nxe = (NuxeoException) e;
 
             if (nxe.getErrorCode() == NuxeoException.ERROR_NOTFOUND)
-                returnBean = new BaseBean(GenericErrors.ERR_NOT_FOUND);
+                response.put("returnCode",GenericErrors.ERR_NOT_FOUND);
             else if (nxe.getErrorCode() == NuxeoException.ERROR_FORBIDDEN)
-                returnBean = new BaseBean(GenericErrors.ERR_FORBIDDEN);
+                response.put("returnCode",GenericErrors.ERR_FORBIDDEN);
+
         } else {
             // TODO use the log API (look at BinaryServlet)
             e.printStackTrace();
-            returnBean = new BaseBean(GenericErrors.ERR_UNKNOWN);
+            response.put("returnCode",GenericErrors.ERR_NOT_FOUND);
         }
+        return response;
 
-        return returnBean;
     }
 
 
@@ -144,18 +139,52 @@ public class CloudRestController {
      * @return
      * @throws Exception
      */
+    
+    private Map <String, Object> initContent(Document doc, String type, boolean mainObject){
+        
+        Map<String, Object> contents = new LinkedHashMap<>();
 
+        if( mainObject)
+            contents.put("returnCode", 0);       
+        
+        contents.put("type", type);
+        contents.put("id", doc.getProperties().getString(PROP_TTC_WEBID));
+        contents.put("title", doc.getTitle());
+
+        if (doc.getProperties().get("common:size") != null)  {
+            long size = doc.getProperties().getLong("common:size");
+            contents.put("fileSize", size);
+        }
+
+        String shareLink = doc.getProperties().getString(PROP_SHARE_LINK);
+        if (shareLink != null)
+            contents.put("shareLink", shareLink);
+
+        if (doc.getProperties().get("dc:modified") != null) {
+            Date lastModifiedDate = doc.getProperties().getDate("dc:modified");
+            contents.put("lastModified", lastModifiedDate.getTime());
+        }
+
+        return contents;
+    }
+
+    
+    private Map <String, Object> initContent(Document doc, String type){
+        return  initContent( doc,  type,  false);
+    }
+    
 
     @CrossOrigin
-    @RequestMapping(value = "/Drive.content1", method = RequestMethod.GET)
+    @RequestMapping(value = "/Drive.content", method = RequestMethod.GET)
     @ResponseStatus(HttpStatus.OK)
 
-    public BaseBean getContent1(HttpServletRequest request, HttpServletResponse response, @RequestParam(value = "id", required = false) String id)
+    public Map<String,Object> getContent(HttpServletRequest request, HttpServletResponse response, @RequestParam(value = "id", required = false) String id)
             throws Exception {
 
         NuxeoController nuxeoController = getNuxeocontroller(request);
 
-        BaseBean result = null;
+        Map<String,Object> returnObject;
+        
         try {
             // TOD get real user workspace
             // see demo project customizer
@@ -169,90 +198,56 @@ public class CloudRestController {
 
             // Get durrent doc
             Document currentDoc = nuxeoController.getDocumentContext(path).getDocument();
-
-            // Get hierarchy
-            boolean isRoot = true;
-
-            List<DriveParentBean> hierarchy = new ArrayList<>();
-            String hierarchyPath = currentDoc.getPath().substring(0, currentDoc.getPath().lastIndexOf('/'));
             
+            boolean isRoot = currentDoc.getPath().equals(rootPath);
+            String type = currentDoc.getPath().equals(rootPath) ? "root" :  currentDoc.getType().toLowerCase();
+            
+            returnObject = initContent(currentDoc, type, true);       
+   
+            // Get hierarchy
 
+            List<Map<String,Object>> hierarchy = new ArrayList<>();
+            String hierarchyPath = currentDoc.getPath().substring(0, currentDoc.getPath().lastIndexOf('/'));
+ 
             while (hierarchyPath.contains(rootPath)) {
-                isRoot = false;
-
                 Document hierarchyDoc = nuxeoController.getDocumentContext(hierarchyPath).getDocument();
-                String type = hierarchyDoc.getType();
+                String hierarchyType = hierarchyDoc.getType();
                 if (hierarchyPath.equals(rootPath))
-                    type = DriveRootBean.TYPE;
-                hierarchy.add(0, new DriveParentBean(type, hierarchyDoc.getProperties().getString(PROP_TTC_WEBID), hierarchyDoc.getTitle()));
+                    hierarchyType = "root";
+                else
+                    hierarchyType = hierarchyDoc.getType().toLowerCase();
+                hierarchy.add(0, initContent(hierarchyDoc, hierarchyType));
 
                 // next parent
                 hierarchyPath = hierarchyPath.substring(0, hierarchyPath.lastIndexOf('/'));
             }
-
-
-            // Facets
+            
+            returnObject.put("parents", hierarchy);
+            
+   
+            List<Map<String,Object>> childrenList = new ArrayList<>();
             PropertyList facets = currentDoc.getFacets();
-            if (!facets.list().contains("Folderish")) {
+            if (facets.list().contains("Folderish")) {
 
-                long size = 0;
-                if (currentDoc.getProperties().get("common:size") != null)
-                    size = currentDoc.getProperties().getLong("common:size");
-                
- 
-                result = new FileBean(currentDoc.getProperties().getString(PROP_TTC_WEBID), currentDoc.getTitle(), hierarchy,
-                        currentDoc.getProperties().getString(PROP_SHARE_LINK), size);
-            } else {
                 // Add childrens
                 Documents children = (Documents) nuxeoController.executeNuxeoCommand(new FolderGetChildrenCommand(currentDoc));
 
-                List<ChildBean> contentChildren = new ArrayList<ChildBean>();
                 for (Document doc : children.list()) {
-
-                    if (doc.getFacets().list().contains("Folderish")) {
-                        contentChildren
-                        .add(new ChildBean(doc.getType().toLowerCase(), doc.getProperties().getString(PROP_TTC_WEBID), doc.getTitle()));
-                    } else {
-                        long size = 0;
-                        if (doc.getProperties().get("common:size") != null)
-                            size = doc.getProperties().getLong("common:size");
-                        
-                        Date lastModifiedDate = doc.getProperties().getDate("dc:modified");
-                        contentChildren
-                                .add(new FileChildBean(doc.getType().toLowerCase(), doc.getProperties().getString(PROP_TTC_WEBID), doc.getTitle(), size, lastModifiedDate.getTime()));
-                    }
+                    childrenList.add(initContent(doc, doc.getType().toLowerCase()));
                 }
 
-                if (isRoot)
-                    result = new DriveRootBean(currentDoc.getProperties().getString(PROP_TTC_WEBID), currentDoc.getTitle(), contentChildren);
-                else
-                    // Folder
-                    result = new FolderBean(currentDoc.getProperties().getString(PROP_TTC_WEBID), currentDoc.getTitle(), contentChildren, hierarchy);
             }
+            returnObject.put("childrens", childrenList);          
+            
         } catch (Exception e) {
-            result = handleDefaultExceptions(e);
+            returnObject = handleDefaultExceptions(e);
         }
-        return result;
+        return returnObject;
 
     }
     
     
-    
-    @CrossOrigin
-    @RequestMapping(value = "/Drive.content", method = RequestMethod.GET)
-    @ResponseStatus(HttpStatus.OK)
 
-    public Map<String, Object> getContent(HttpServletRequest request, HttpServletResponse response, @RequestParam(value = "id", required = false) String id)
-            throws Exception {
-
-  
-        Map<String, Object> result = new HashMap<>();
-        
-        result.put("returnCode", "11111");
-     
-        return result;
-
-    }
     
     
     
