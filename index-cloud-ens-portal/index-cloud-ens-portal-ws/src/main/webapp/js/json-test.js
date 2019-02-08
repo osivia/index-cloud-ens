@@ -101,13 +101,15 @@ function drive( id) {
 	
 					if( jsonData.childrens !== undefined){
 						for (var i = 0; i < jsonData.childrens.length; i++) {
-							list = list + "<div class=\"row\">";
+							list = list + '<div class="row">';
 							var child = jsonData.childrens[i];
-							list = list + '<div class="col-lg-6"> <a  href="javascript:drive(\''+child.id+'\')" >' + child.title + "</a></div>";
+							list = list + '<div class="col-lg-5"> <a  href="javascript:drive(\''+child.id+'\')" >' + child.title + "</a></div>";
+							list = list + '<div class="col-lg-2">';
 							if( child.fileSize !== undefined) {
-								list = list + '<div class="col-lg-3">' + humanFileSize(child.fileSize, true) + "</div>";
+								list = list +  humanFileSize(child.fileSize, true);
 							}
-							list = list + '<div class="col-lg-3">' + new Date(child.lastModified).toLocaleString() + "</div>";							
+							list = list + '</div>';
+							list = list + '<div class="col-lg-4">' + new Date(child.lastModified).toLocaleString() + "</div>";							
 							list = list + "</div>";
 						}
 					}			

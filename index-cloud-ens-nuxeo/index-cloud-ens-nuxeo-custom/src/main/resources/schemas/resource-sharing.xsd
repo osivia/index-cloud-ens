@@ -4,5 +4,24 @@
     xmlns:nxs="http://www.nuxeo.org/ecm/schemas/resourceSharing/">
  
     <xs:element name="linkId" type="xs:string" />
+    <xs:element name="activatedLinked" type="xs:boolean" />
+    <xs:element name="publicLink" type="xs:boolean" />    
+    
+    <xs:element name="targets" type="nxs:shareTargetList" />
+
+	<xs:complexType name="shareTargetList">
+		<xs:sequence>
+			<xs:element name="item" type="nxs:shareTarget"
+				minOccurs="0" maxOccurs="unbounded" />
+		</xs:sequence>
+	</xs:complexType>
+
+
+	<xs:complexType name="shareTarget">
+		<xs:sequence>
+			<xs:element name="id" type="xs:string" />
+			<xs:element name="title" type="xs:string" />
+		</xs:sequence>
+	</xs:complexType>
 
 </xs:schema>
