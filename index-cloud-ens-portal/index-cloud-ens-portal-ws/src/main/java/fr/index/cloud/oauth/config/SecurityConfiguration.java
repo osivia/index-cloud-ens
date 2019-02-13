@@ -18,12 +18,13 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Autowired
     public void globalUserDetails(AuthenticationManagerBuilder auth) throws Exception {
         auth.inMemoryAuthentication().withUser("marissa").password("koala").roles("USER").and().withUser("paul")
-                .password("emu").roles("USER");
+                .password("emu").roles("USER").and().withUser("demo")
+                .password("osivia").roles("USER");
     }
 
     @Override
     public void configure(WebSecurity web) throws Exception {
-        web.ignoring().antMatchers("/webjars/**", "/images/**", "/oauth/uncache_approvals", "/oauth/cache_approvals", "/rest/**",  "/js/**",   "/html/**");
+        web.ignoring().antMatchers("/webjars/**", "/images/**", "/oauth/uncache_approvals", "/oauth/cache_approvals",  "/js/**",   "/html/**");
     }
 
     @Override
@@ -47,6 +48,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             .csrf()
                 .requireCsrfProtectionMatcher(new AntPathRequestMatcher("/oauth/authorize"))
                 .disable()
+             .csrf()
+                .requireCsrfProtectionMatcher(new AntPathRequestMatcher("/oauth/token"))
+                .disable()            
             .logout()
             	.logoutUrl("/logout")
                 .logoutSuccessUrl("/login.jsp")

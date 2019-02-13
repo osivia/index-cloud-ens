@@ -1,5 +1,6 @@
 package fr.index.cloud.ens.ws;
 
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -76,7 +77,9 @@ public class CloudRestController {
      * @return
      * @throws Exception
      */
-    private NuxeoController getNuxeocontroller(HttpServletRequest request) throws Exception {
+    private NuxeoController getNuxeocontroller(HttpServletRequest request, Principal principal) throws Exception {
+       
+        /*
         String token = request.getHeader("Authorization");
         if (StringUtils.isNotEmpty(token)) {
             if (token.startsWith(TOKEN_PREFIX)) {
@@ -90,13 +93,23 @@ public class CloudRestController {
                 nuxeoController.setAuthType(NuxeoCommandContext.AUTH_TYPE_USER);
                 nuxeoController.setCacheType(CacheInfo.CACHE_SCOPE_NONE);
 
-                request.setAttribute("osivia.delegation.userName", userId);
+                request.setAttribute("osivia.delegation.userName", principal.getName());
 
                 return nuxeoController;
             }
         }
+        
 
-        throw new Exception("Invalid token");
+        throw new Exception("Invalid token");*/
+        
+        NuxeoController nuxeoController = new NuxeoController(portletContext);
+        nuxeoController.setServletRequest(request);
+        nuxeoController.setAuthType(NuxeoCommandContext.AUTH_TYPE_USER);
+        nuxeoController.setCacheType(CacheInfo.CACHE_SCOPE_NONE);
+
+        request.setAttribute("osivia.delegation.userName", principal.getName());
+        return nuxeoController;
+        
     }
 
 
@@ -174,14 +187,14 @@ public class CloudRestController {
     }
     
 
-    @CrossOrigin
+
     @RequestMapping(value = "/Drive.content", method = RequestMethod.GET)
     @ResponseStatus(HttpStatus.OK)
 
-    public Map<String,Object> getContent(HttpServletRequest request, HttpServletResponse response, @RequestParam(value = "id", required = false) String id)
+    public Map<String,Object> getContent(HttpServletRequest request, HttpServletResponse response, @RequestParam(value = "id", required = false) String id, Principal principal)
             throws Exception {
 
-        NuxeoController nuxeoController = getNuxeocontroller(request);
+        NuxeoController nuxeoController = getNuxeocontroller(request, principal);
 
         Map<String,Object> returnObject;
         
@@ -265,13 +278,13 @@ public class CloudRestController {
      * @param response
      * @throws Exception
      */
-    @CrossOrigin
+
     @RequestMapping(value = "/Drive.upload", method = RequestMethod.POST, consumes = {"multipart/form-data"})
     @ResponseStatus(HttpStatus.OK)
     public void handleFileUpload(@RequestParam("file") MultipartFile file, @RequestParam("uploadInfos") String fileUpload, HttpServletRequest request,
-            HttpServletResponse response) throws Exception {
+            HttpServletResponse response, Principal principal) throws Exception {
 
-        NuxeoController nuxeoController = getNuxeocontroller(request);
+        NuxeoController nuxeoController = getNuxeocontroller(request, principal);
 
         UploadBean uploadBean = new ObjectMapper().readValue(fileUpload, UploadBean.class);
 
@@ -298,12 +311,12 @@ public class CloudRestController {
      * @param response
      * @throws Exception
      */
-    @CrossOrigin
+
     @RequestMapping(value = "/Drive.publish", method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.OK)
-    public String publish(@RequestBody PublishBean publishBean, HttpServletRequest request, HttpServletResponse response) throws Exception {
+    public String publish(@RequestBody PublishBean publishBean, HttpServletRequest request, HttpServletResponse response,  Principal principal) throws Exception {
 
-        NuxeoController nuxeoController = getNuxeocontroller(request);
+        NuxeoController nuxeoController = getNuxeocontroller(request, principal);
 
         NuxeoDocumentContext ctx = nuxeoController.getDocumentContext(IWebIdService.FETCH_PATH_PREFIX + publishBean.getContentId());
 
