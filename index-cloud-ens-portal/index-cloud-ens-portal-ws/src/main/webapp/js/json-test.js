@@ -1,23 +1,3 @@
-function base64url(source) {
-	// Encode in classical base64
-	encodedSource = CryptoJS.enc.Base64.stringify(source);
-
-	// Remove padding equal characters
-	encodedSource = encodedSource.replace(/=+$/, '');
-
-	// Replace characters according to base64url specifications
-	encodedSource = encodedSource.replace(/\+/g, '-');
-	encodedSource = encodedSource.replace(/\//g, '_');
-
-	return encodedSource;
-}
-
-function base64(source) {
-	// Encode in classical base64
-	encoded = CryptoJS.enc.Base64.stringify(source);
-
-	return encoded;
-}
 
 function humanFileSize(bytes, si) {
 	var thresh = si ? 1000 : 1024;
@@ -67,7 +47,7 @@ var oauth = {
 	/**
 	 * set the token
 	 */
-	authenticate : function(clientId, clientSecretId, scope) {
+	authenticate : function( username, password) {
 		var deferred = jQuery
 				.ajax({
 					url : this.params.accessUrl,
@@ -76,14 +56,14 @@ var oauth = {
 					data : {
 						scope : 'trust',
 						grant_type: 'password',
-						username : 'demo',
-						password: 'osivia'
+						username : username,
+						password: password
 					},
 				
 					headers : {
 						'Accept' : 'application/json, application/x-www-form-urlencoded',
 						'Content-Type' : 'application/x-www-form-urlencoded',
-						'Authorization' : 'Basic '+ btoa( clientId + ":")
+						'Authorization' : 'Basic '+ btoa( this.params.clientId + ":" + this.params.clientSecretId)
 					},
 					complete : function(xhr, data) {
 						console.warn(data);
@@ -91,34 +71,55 @@ var oauth = {
 					}
 				});
 		return deferred.promise();
+	},
+	
+	
+	refresh : function()	{
+		var deferred = jQuery
+		.ajax({
+			url : this.params.accessUrl,
+			method : 'POST',
+			dataType : 'text',
+			data : {
+				grant_type: 'refresh_token',
+				refresh_token: this.params.refreshToken
+			},
+		
+			headers : {
+				'Accept' : 'application/json, application/x-www-form-urlencoded',
+				'Content-Type' : 'application/x-www-form-urlencoded',
+				'Authorization' : 'Basic '+ btoa( this.params.clientId + ":" + this.params.clientSecretId)
+			},
+			complete : function(xhr, data) {
+				console.warn(data);
+				// called when complete
+			}
+		});
+		return deferred.promise();		
 	}
 }
 
-function authToken() {
-	// Defining our token parts
-	var header = {
-		"alg" : "HS256",
-		"typ" : "JWT"
-	};
 
-	var data = {};
-	data.sub = $JQry('#authUserId').val();
-	data.iss = "pronote";
+function refreshToken()	{
+	/* get the authorization token[append to #auth_token] */
+	var auth = oauth.refresh();
 
-	var secret = "??PRONOTESECRET??";
+	auth.done(function(data) {
+		console.warn(data);
 
-	var stringifiedHeader = CryptoJS.enc.Utf8.parse(JSON.stringify(header));
-	var encodedHeader = base64url(stringifiedHeader);
+		data = JSON.parse(data);
+		var token = data.access_token;
+		var refreshToken = data.refresh_token;
 
-	var stringifiedData = CryptoJS.enc.Utf8.parse(JSON.stringify(data));
-	var encodedData = base64url(stringifiedData);
+		console.log("Token: " + token);
+		oauth.params.token = token;
+		oauth.params.refreshToken = refreshToken;
+	});
 
-	var signature = encodedHeader + "." + encodedData;
-	signature = CryptoJS.HmacSHA256(signature, secret);
-	signature = base64url(signature);
+	auth.fail(function() {
+		console.error("Error in client Id or client secret Id");
+	});
 
-	$JQry('#authToken')
-			.val(encodedHeader + "." + encodedData + "." + signature);
 }
 
 function drive(id) {
@@ -135,7 +136,6 @@ function drive(id) {
 				url : url,
 				headers : {
 					'Content-Type' : undefined,
-//					"Authorization" : "Bearer " + $JQry('#authToken').val()
 					"Authorization" : "Bearer " + oauth.getToken()
 				},
 				contentType : false,
@@ -201,8 +201,8 @@ function drive(id) {
 						}
 					}
 				},
-				error : function(e) {
-					console.log("ERROR : ", e);
+				error : function(xhr, status, e) {
+					alert(e);
 				}
 			});
 
@@ -239,10 +239,7 @@ $JQry(function() {
 												url : "https://cloud-ens-ws.osivia.org/index-cloud-portal-ens-ws/rest/Drive.upload",
 												headers : {
 													'Content-Type' : undefined,
-													"Authorization" : "Bearer "
-															+ $JQry(
-																	'#authToken')
-																	.val()
+													"Authorization" : "Bearer " + oauth.getToken()
 												},
 												data : data,
 												processData : false,
@@ -280,10 +277,7 @@ $JQry(function() {
 												type : "POST",
 												url : "https://cloud-ens-ws.osivia.org/index-cloud-portal-ens-ws/rest/Drive.publish",
 												headers : {
-													"Authorization" : "Bearer "
-															+ $JQry(
-																	'#authToken')
-																	.val()
+													"Authorization" : "Bearer " + oauth.getToken()
 												},
 												dataType : 'json',
 												contentType : 'application/json',
@@ -300,51 +294,57 @@ $JQry(function() {
 								});
 					});
 
-	$JQry("#btnAuthTokenSubmit").each(function(index, element) {
+
+
+
+	$JQry("#OAuth2authenticationCredentials").each(function(index, element) {
 
 		var $element = $JQry(element);
 		$element.click(function() {
 
-			authToken();
-
-		});
-	});
-
-	function fetchAuthToken(clientId, clientSecretId) {
-		var auth = oauth.authenticate(clientId, clientSecretId);
-
-		auth.done(function(data) {
-			console.warn(data);
-
-			/* YOUR WORK STARTS HERE */
-			data = JSON.parse(data);
-			var token = data.access_token;
-
-			console.warn("Token: " + token);
-			oauth.params.token = token;
-		});
-
-		auth.fail(function() {
-			console.error("Error in client Id or client secret Id");
-		});
-	}
-
-	$JQry("#OAuth2authentication").each(function(index, element) {
-
-		var $element = $JQry(element);
-		$element.click(function() {
-
-			var clientId =  'my-trusted-client';
-			var clientSecretId = '';
-
-
+			oauth.params.clientId =  $JQry('#authClientId').val();
+			oauth.params.clientSecretId = $JQry('#authClientSecret').val();
+			var username = $JQry('#authUserId').val();
+			var password = $JQry('#authUserPassword').val();
+			
 			/* get the authorization token[append to #auth_token] */
-			fetchAuthToken(clientId, clientSecretId, 'READ');
+			var auth = oauth.authenticate(username, password);
+
+			auth.done(function(data) {
+				console.warn(data);
+
+				data = JSON.parse(data);
+				var token = data.access_token;
+				var refreshToken = data.refresh_token;
+
+				console.log("Token: " + token);
+				oauth.params.token = token;
+				oauth.params.refreshToken = refreshToken;
+			});
+
+			auth.fail(function() {
+				console.error("Error in client Id or client secret Id");
+			});
+
+		});
+	});
+	
+
+	
+	
+	
+	$JQry("#OAuth2refreshToken").each(function(index, element) {
+
+		var $element = $JQry(element);
+		$element.click(function() {
+
+			refreshToken();
+
 
 		});
 	});
 
-	$JQry("#btnGotoDrive").each(function(index, element) {
+	$JQry("#btnRefreshDrive").each(function(index, element) {
 
 		var $element = $JQry(element);
 		$element.click(function() {

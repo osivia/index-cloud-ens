@@ -11,10 +11,16 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
+import fr.index.cloud.oauth.authentication.PortalAuthenticationProvider;
+
 @Configuration
 @EnableWebSecurity
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
+    @Autowired
+    PortalAuthenticationProvider authProvider;
+    
+    
     @Autowired
     public void globalUserDetails(AuthenticationManagerBuilder auth) throws Exception {
         auth.inMemoryAuthentication().withUser("marissa").password("koala").roles("USER").and().withUser("paul")
@@ -33,6 +39,15 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         return super.authenticationManagerBean();
     }
 
+    @Override
+    protected void configure(
+      AuthenticationManagerBuilder auth) throws Exception {
+  
+        // Comment to return to sample users
+        auth.authenticationProvider(authProvider);
+    }
+    
+    
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         // @formatter:off

@@ -143,23 +143,23 @@ public class OAuth2ServerConfig {
 
 		    System.out.println("osivia configuration");
 		    
-		      accessConfirmationController.setClientDetailsService(clientDetailsService);
-		        accessConfirmationController.setApprovalStore(approvalStore);
-		        
-		        
-//		        @Bean
-//		        public AdminController adminController(TokenStore tokenStore,
-//		                @Qualifier("consumerTokenServices") ConsumerTokenServices tokenServices,
-//		                SparklrUserApprovalHandler userApprovalHandler) {
-//		            AdminController adminController = new AdminController();
-		            adminController.setTokenStore(tokenStore);
-		            adminController.setTokenServices(tokenServices);
-		            adminController.setUserApprovalHandler((SparklrUserApprovalHandler)userApprovalHandler);
-//		            return adminController;
-//		        }		        
-		    
-		        photoController.setPhotoService(photoService);
-		        
+            accessConfirmationController.setClientDetailsService(clientDetailsService);
+            accessConfirmationController.setApprovalStore(approvalStore);
+
+
+            // @Bean
+            // public AdminController adminController(TokenStore tokenStore,
+            // @Qualifier("consumerTokenServices") ConsumerTokenServices tokenServices,
+            // SparklrUserApprovalHandler userApprovalHandler) {
+            // AdminController adminController = new AdminController();
+            adminController.setTokenStore(tokenStore);
+            adminController.setTokenServices(tokenServices);
+            adminController.setUserApprovalHandler((SparklrUserApprovalHandler) userApprovalHandler);
+            // return adminController;
+            // }
+
+            photoController.setPhotoService(photoService);
+
 		        
 			// @formatter:off
 			clients.inMemory().withClient("tonr")
@@ -190,11 +190,12 @@ public class OAuth2ServerConfig {
  			            .scopes("read", "write", "trust")
  			            .accessTokenValiditySeconds(60)
 		 		    .and()
-	 		        .withClient("my-trusted-client-with-secret")
+	 		        .withClient("pronote1234")
  			            .authorizedGrantTypes("password", "authorization_code", "refresh_token", "implicit")
  			            .authorities("ROLE_CLIENT", "ROLE_TRUSTED_CLIENT")
  			            .scopes("read", "write", "trust")
- 			            .secret("somesecret")
+ 			            .secret("secret1234")
+ 			           .accessTokenValiditySeconds(10)
 	 		        .and()
  		            .withClient("my-less-trusted-client")
 			            .authorizedGrantTypes("authorization_code", "implicit")

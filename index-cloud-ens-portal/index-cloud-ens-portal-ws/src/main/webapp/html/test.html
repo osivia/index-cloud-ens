@@ -55,25 +55,7 @@
 	href='/osivia-portal-custom-web-assets/css/osivia.min.css'>
 <script
 	src='/osivia-portal-custom-web-assets/components/bootstrap/js/bootstrap.min.js'></script>
-<link rel='stylesheet'
-	href='/osivia-portal-custom-web-assets/components/fancybox/jquery.fancybox.min.css'>
-<script
-	src='/osivia-portal-custom-web-assets/components/fancybox/jquery.fancybox.min.js'></script>
-<script
-	src='/osivia-portal-custom-web-assets/components/fancytree/jquery.fancytree-all-2.8.0.min.js'></script>
-<link rel='stylesheet'
-	href='/osivia-portal-custom-web-assets/components/bxslider/jquery.bxslider.css'>
-<script
-	src='/osivia-portal-custom-web-assets/components/bxslider/jquery.bxslider.min.js'></script>
-<link rel='stylesheet'
-	href='/osivia-portal-custom-web-assets/components/select2/css/select2.min.css'>
-<script
-	src='/osivia-portal-custom-web-assets/components/select2/js/select2.min.js'></script>
-<script type='text/javascript'
-	src='/osivia-portal-custom-web-assets/components/clipboard/clipboard.min.js'></script>
-<script type='text/javascript'
-	src='/osivia-portal-custom-web-assets/components/tinymce-4.7.4/tinymce.min.js'></script>
-<script src='/osivia-portal-custom-web-assets/js/socle.min.js'></script>
+
 <link rel='stylesheet'
 	href='/osivia-portal-custom-web-assets/css/glyphicons.min.css'>
 <link rel='stylesheet'
@@ -119,21 +101,29 @@
 				<h3>Auth</h3>
 				<div id="auth">
 					<form method="POST" enctype="multipart/form-data" id="authForm">
+					
+						<div class="form-group">
+							<label for="authClientId"">App. ID</label> <input name="authClientId"
+								class="form-control" id="authClientId" value="pronote1234"/>
+						</div>
+						<div class="form-group">
+							<label for="authClientSecret">App. Secret</label> <input name="authClientSecret"
+								class="form-control" id="authClientSecret" value="secret1234"/>
+						</div>
+											
 						<div class="form-group">
 							<label for="authUserId"">User ID</label> <input name="authUserId"
-								class="form-control" id="authUserId" />
+								class="form-control" id="authUserId" value="demo"/>
 						</div>
 						<div class="form-group">
-							<label for="authToken">JWT token</label> <input name="authToken"
-								class="form-control" id="authToken" />
+							<label for="authUserPassword">User Password</label> <input name="authUserPassword"
+								class="form-control" id="authUserPassword"  value="osivia"/>
 						</div>
-						<input type="button" class="btn btn-primary" value="Create Token"
-							id="btnAuthTokenSubmit" />
+
 						<input type="button"
-							class="btn btn-primary" value="Refresh drive" id="btnGotoDrive" />
-						<br/>
+							class="btn btn-primary" value="OAuth2 (Credentials)" id="OAuth2authenticationCredentials" />		<br/>				
 						<input type="button"
-							class="btn btn-primary" value="OAuth2" id="OAuth2authentication" />						
+							class="btn btn-primary" value="OAuth2 (Refresh)" id="OAuth2refreshToken" />						
 							
 					</form>
 				</div>
@@ -142,6 +132,8 @@
 			<div class="col-lg-4">
 				<h3>Drive.content</h3>
 				<div id="files"></div>
+						<input type="button"
+							class="btn btn-primary" value="Refresh" id="btnRefreshDrive" />						
 			</div>
 
 
