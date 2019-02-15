@@ -44,6 +44,7 @@ import org.springframework.security.oauth2.provider.token.ConsumerTokenServices;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.InMemoryTokenStore;
 
+import fr.index.cloud.oauth.tokenStore.PortalTokenStore;
 import fr.index.security.oauth.approval.SparklrUserApprovalHandler;
 import fr.index.security.oauth.services.PhotoService;
 import fr.index.security.oauth.services.mvc.AccessConfirmationController;
@@ -212,7 +213,9 @@ public class OAuth2ServerConfig {
 
 		@Bean
 		public TokenStore tokenStore() {
-			return new InMemoryTokenStore();
+			//return new InMemoryTokenStore();
+			
+			return new PortalTokenStore();
 		}
 
 		@Override

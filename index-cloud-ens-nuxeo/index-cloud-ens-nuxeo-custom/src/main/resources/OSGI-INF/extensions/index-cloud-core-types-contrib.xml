@@ -17,7 +17,11 @@
             <schema name="resourceSharing" />
         </doctype>
 
+    	<doctype name="UserProfile" append="true">
+    	       <schema name="oauth2Tokens"/>
+   		 </doctype>
+   		 
+</extension> 
 
-    </extension>
 
 </component>

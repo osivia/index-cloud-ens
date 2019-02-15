@@ -12,6 +12,12 @@
             name="resourceSharing"
             prefix="rshr"
             src="schemas/resource-sharing.xsd" />
+            
+       <schema
+            name="oauth2Tokens"
+            prefix="oatk"
+            src="schemas/oauth2-tokens.xsd" />
+            
 
         <schema
             name="indexClassifiers"
