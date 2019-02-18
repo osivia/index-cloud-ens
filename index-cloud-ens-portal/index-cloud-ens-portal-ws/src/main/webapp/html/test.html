@@ -98,18 +98,14 @@
 		<div class="row">
 
 			<div class="col-lg-2">
-				<h3>Auth</h3>
+				<h3>Autorization </h3>
+				
+						<input type="button"
+							class="btn btn-primary" value="Ask" id="OAuth2Authorize" />					
+			
+				<h3>Credentials</h3>
 				<div id="auth">
 					<form method="POST" enctype="multipart/form-data" id="authForm">
-					
-						<div class="form-group">
-							<label for="authClientId"">App. ID</label> <input name="authClientId"
-								class="form-control" id="authClientId" value="pronote1234"/>
-						</div>
-						<div class="form-group">
-							<label for="authClientSecret">App. Secret</label> <input name="authClientSecret"
-								class="form-control" id="authClientSecret" value="secret1234"/>
-						</div>
 											
 						<div class="form-group">
 							<label for="authUserId"">User ID</label> <input name="authUserId"
@@ -121,19 +117,24 @@
 						</div>
 
 						<input type="button"
-							class="btn btn-primary" value="OAuth2 (Credentials)" id="OAuth2authenticationCredentials" />		<br/>				
-						<input type="button"
-							class="btn btn-primary" value="OAuth2 (Refresh)" id="OAuth2refreshToken" />						
+							class="btn btn-primary" value="Login" id="OAuth2authenticationCredentials" />
+							
+										
 							
 					</form>
 				</div>
+				
+				<h3>Refresh token</h3>		
+						<input type="button"
+							class="btn btn-primary" value="Refresh" id="OAuth2refreshToken" />						
+						
 			</div>
 
 			<div class="col-lg-4">
 				<h3>Drive.content</h3>
 				<div id="files"></div>
 						<input type="button"
-							class="btn btn-primary" value="Refresh" id="btnRefreshDrive" />						
+							class="btn btn-primary" value="Display" id="btnRefreshDrive" />						
 			</div>
 
 
@@ -150,7 +151,7 @@
 								class="form-control" id="pubLevel" />
 						</div>
 						<input type="hidden" name="contentId" id="contentId" /> <input
-							type="button" class="btn btn-primary" value="Publier"
+							type="button" class="btn btn-primary" value="Publish"
 							id="btnPubSubmit" />
 					</form>
 				</div>
@@ -178,6 +179,14 @@
 			</div>
 		</div>
 	</div>
+
+
+      <script type = "text/javascript">
+         <!--
+         init();
+         //-->
+      </script>
+      
 
 </body>
 

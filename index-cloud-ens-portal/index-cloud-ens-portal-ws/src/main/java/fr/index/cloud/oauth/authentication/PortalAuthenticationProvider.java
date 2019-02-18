@@ -13,7 +13,10 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Component;
+import org.springframework.util.Assert;
 
 @Component
 public class PortalAuthenticationProvider implements AuthenticationProvider {
@@ -38,8 +41,11 @@ public class PortalAuthenticationProvider implements AuthenticationProvider {
           }
 //        }
         
+          List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>(1);
+           authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
+
         
-        return new PortalAuthentication(name, password,new ArrayList());
+        return new PortalAuthentication(name, password,authorities);
 
 //        if (shouldAuthenticateAgainstThirdPartySystem()) {
 //

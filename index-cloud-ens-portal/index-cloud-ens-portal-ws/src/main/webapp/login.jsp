@@ -55,11 +55,6 @@
 
 		</div>
 
-		<div class="footer">
-			Sample application for <a
-				href="http://github.com/spring-projects/spring-security-oauth"
-				target="_blank">Spring Security OAuth</a>
-		</div>
 
 	</div>
 

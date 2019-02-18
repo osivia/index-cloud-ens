@@ -7,7 +7,7 @@
     	<xs:list itemType="xs:string"/> 
 	</xs:simpleType> 
  
-	<xs:element name="levels" type="nxs:stringList" />
+	<xs:element name="levels" type="xs:string" />
 	
 	<xs:element name="subjects" type="nxs:stringList" />
 

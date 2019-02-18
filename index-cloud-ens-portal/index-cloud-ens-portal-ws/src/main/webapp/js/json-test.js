@@ -17,9 +17,6 @@ function humanFileSize(bytes, si) {
 /**
  * responsible for calling the appropriate functon to make the OAuth call using
  * AJAX call
- * 
- * @author Sandeep G
- * @since 20160913
  */
 
 var oauth = {
@@ -28,9 +25,8 @@ var oauth = {
 	 * All constants goes here
 	 */
 	params : {
-		accessUrl : 'https://cloud-ens-ws.osivia.org/index-cloud-portal-ens-ws/oauth/token'
+
 			
-	// access url where you would request for token
 	},
 
 	/**
@@ -54,7 +50,7 @@ var oauth = {
 					method : 'POST',
 					dataType : 'text',
 					data : {
-						scope : 'trust',
+						scope : 'drive',
 						grant_type: 'password',
 						username : username,
 						password: password
@@ -82,7 +78,37 @@ var oauth = {
 			dataType : 'text',
 			data : {
 				grant_type: 'refresh_token',
-				refresh_token: this.params.refreshToken
+				refresh_token: this.params.refreshToken,
+	
+			},
+		
+			headers : {
+				'Accept' : 'application/json, application/x-www-form-urlencoded',
+				'Content-Type' : 'application/x-www-form-urlencoded',
+				'Authorization' : 'Basic '+ btoa( this.params.clientId + ":" + this.params.clientSecretId)
+			},
+			complete : function(xhr, data) {
+				console.warn(data);
+				// called when complete
+			}
+		});
+		return deferred.promise();		
+	},
+	
+	
+	grant : function( code)	{
+		
+		console.debug('grant' + code);
+		
+		var deferred = jQuery
+		.ajax({
+			url : this.params.accessUrl,
+			method : 'POST',
+			dataType : 'text',
+			data : {
+				grant_type: 'authorization_code',
+				code: code,
+				redirect_uri: oauth.params.clientUrl					
 			},
 		
 			headers : {
@@ -97,6 +123,7 @@ var oauth = {
 		});
 		return deferred.promise();		
 	}
+	
 }
 
 
@@ -119,15 +146,37 @@ function refreshToken()	{
 	auth.fail(function() {
 		console.error("Error in client Id or client secret Id");
 	});
-
 }
 
+
+function grant( code)	{
+	
+	var auth = oauth.grant( code);
+
+	auth.done(function(data) {
+		console.log(data);
+
+		data = JSON.parse(data);
+		var token = data.access_token;
+		var refreshToken = data.refresh_token;
+
+		console.log("Token: " + token);
+		oauth.params.token = token;
+		oauth.params.refreshToken = refreshToken;
+	});
+
+	auth.fail(function() {
+		console.error("Bad dredentials");
+	});
+}
+
+
+
 function drive(id) {
-	var url = "https://cloud-ens-ws.osivia.org/index-cloud-portal-ens-ws/rest/Drive.content";
-	//var url = "https://cloud-ens.osivia.org/index-cloud-portal-ens-ws/photos/user/message";	
+	var url = oauth.params.resourceUrl+"/Drive.content";
+
 	if (typeof id !== 'undefined') {
 		url = url + "?id=" + id;
-		// url = url + "?id=XXXXXX" ;
 	}
 
 	$JQry
@@ -236,7 +285,7 @@ $JQry(function() {
 									$JQry
 											.ajax({
 												type : "POST",
-												url : "https://cloud-ens-ws.osivia.org/index-cloud-portal-ens-ws/rest/Drive.upload",
+												url : oauth.params.resourceUrl+"/Drive.upload",
 												headers : {
 													'Content-Type' : undefined,
 													"Authorization" : "Bearer " + oauth.getToken()
@@ -275,7 +324,7 @@ $JQry(function() {
 									$JQry
 											.ajax({
 												type : "POST",
-												url : "https://cloud-ens-ws.osivia.org/index-cloud-portal-ens-ws/rest/Drive.publish",
+												url : oauth.params.resourceUrl+"/Drive.publish",
 												headers : {
 													"Authorization" : "Bearer " + oauth.getToken()
 												},
@@ -302,8 +351,7 @@ $JQry(function() {
 		var $element = $JQry(element);
 		$element.click(function() {
 
-			oauth.params.clientId =  $JQry('#authClientId').val();
-			oauth.params.clientSecretId = $JQry('#authClientSecret').val();
+
 			var username = $JQry('#authUserId').val();
 			var password = $JQry('#authUserPassword').val();
 			
@@ -330,7 +378,15 @@ $JQry(function() {
 	});
 	
 
-	
+	$JQry("#OAuth2Authorize").each(function(index, element) {
+
+		var $element = $JQry(element);
+		$element.click(function() {
+
+			var newLocation = oauth.params.authorizeUrl + "?client_id="+oauth.params.clientId+"&redirect_uri="+oauth.params.clientUrl+"&response_type=code&scope="+oauth.params.scope+"&state=Q2FyMc";
+			window.location.href = newLocation;
+		});
+	});
 	
 	
 	$JQry("#OAuth2refreshToken").each(function(index, element) {
@@ -352,5 +408,34 @@ $JQry(function() {
 			drive();
 		});
 	});
+	
+	
+	
+
 
 });
+
+
+
+function init() {
+    var code = null,
+        tmp = [];
+    var items = location.search.substr(1).split("&");
+    for (var index = 0; index < items.length; index++) {
+        tmp = items[index].split("=");
+        if (tmp[0] === 'code') code = decodeURIComponent(tmp[1]);
+    }
+    
+    oauth.params.accessUrl = 'https://cloud-ens-ws.osivia.org/index-cloud-portal-ens-ws/oauth/token';
+    oauth.params.authorizeUrl= 'http://cloud-ens-ws.osivia.org/index-cloud-portal-ens-ws/oauth/authorize';  
+    oauth.params.resourceUrl = 'https://cloud-ens-ws.osivia.org/index-cloud-portal-ens-ws/rest';
+	oauth.params.clientId =  'pronote1234';
+	oauth.params.clientSecretId = 'secret1234';
+	oauth.params.scope = 'drive';
+	oauth.params.clientUrl = 'http://cloud-ens.osivia.org/index-cloud-portal-ens-ws/html/test.html';	
+    
+   if( code != null)	{
+	   grant(code);
+   }
+}
+
