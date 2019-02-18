@@ -2,52 +2,66 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>Sparklr</title>
-<link type="text/css" rel="stylesheet"
-	href="webjars/bootstrap/3.0.3/css/bootstrap.min.css" />
-<script type="text/javascript" src="webjars/jquery/1.9.0/jquery.min.js"></script>
-<script type="text/javascript"
-	src="webjars/bootstrap/3.0.3/js/bootstrap.min.js"></script>
+
+
+<meta charset="UTF-8">
+<title>Cloud Index Education</title>
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+<meta http-equiv="cache-control"	content="no-cache, no-store, must-revalidate">
+<meta http-equiv="pragma" content="no-cache">
+<meta http-equiv="expires" content="0">
+
+<meta name="application-name" content="Cloud Index Education">
+
+
+<meta http-equiv="default-style" content="Demo">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+<script type='text/javascript'
+	src='/osivia-portal-custom-web-assets/components/jquery/jquery-1.12.4.min.js'></script>
+<script type='text/javascript'
+	src='/osivia-portal-custom-web-assets/components/jquery-ui/jquery-ui-1.11.3.min.js'></script>
+<link rel='stylesheet'
+	href='/osivia-portal-custom-web-assets/components/jquery-ui/jquery-ui-1.11.3.min.css'>
+<script type='text/javascript'
+	src='/osivia-portal-custom-web-assets/components/jquery-mobile/jquery.mobile.custom.min.js'></script>
+<link rel='stylesheet'
+	href='/osivia-portal-custom-web-assets/css/bootstrap.min.css'
+	title='Bootstrap'>
+<link rel='stylesheet'
+	href='/osivia-portal-custom-web-assets/css/osivia.min.css'>
+
+
+<link rel="stylesheet" href="/demo-charte/css/demo.min.css" title="Demo" />
+
 </head>
-
 <body>
-
 	<div class="container">
-
-		<h1>Sparklr</h1>
-
 		<c:if test="${not empty param.authentication_error}">
-			<h1>Woops!</h1>
-
-			<p class="error">Your login attempt was not successful.</p>
+			<p class="text-danger">Vos identifiants sont incorrects.</p>
 		</c:if>
 		<c:if test="${not empty param.authorization_error}">
-			<h1>Woops!</h1>
-
-			<p class="error">You are not permitted to access that resource.</p>
+			<p class="text-danger">Vous n'avez pas les droits pour accéder à cette ressource</p>
 		</c:if>
 
 		<div class="form-horizontal">
-			<p>We've got a grand total of 2 users: marissa and paul. Go ahead
-				and log in. Marissa's password is "koala" and Paul's password is
-				"emu".</p>
 			<form action="<c:url value="/login"/>" method="post" role="form">
 				<fieldset>
 					<legend>
 						<h2>Login</h2>
 					</legend>
 					<div class="form-group">
-						<label for="username">Username:</label> <input id="username"
+						<label for="username">Login:</label> <input id="username"
 							class="form-control" type='text' name='username'
-							value="marissa" />
+							 />
 					</div>
 					<div class="form-group">
-						<label for="password">Password:</label> <input id="password"
-							class="form-control" type='text' name='password' value="koala" />
+						<label for="password">Mot de passe:</label> <input id="password"
+							class="form-control" type='text' name='password' />
 					</div>
-					<button class="btn btn-primary" type="submit">Login</button>
+					<button class="btn btn-primary" type="submit">Connexion</button>
 					<input type="hidden" name="${_csrf.parameterName}"
 						value="${_csrf.token}" />
 				</fieldset>

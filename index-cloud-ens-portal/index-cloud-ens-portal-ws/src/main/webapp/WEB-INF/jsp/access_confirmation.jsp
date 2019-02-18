@@ -10,30 +10,56 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>Sparklr</title>
-<link type="text/css" rel="stylesheet"
-	href="../webjars/bootstrap/3.0.3/css/bootstrap.min.css" />
-<script type="text/javascript"
-	src="../webjars/jquery/1.9.0/jquery.min.js"></script>
-<script type="text/javascript"
-	src="../webjars/bootstrap/3.0.3/js/bootstrap.min.js"></script>
-</head>
 
+
+<meta charset="UTF-8">
+<title>Cloud Index Education</title>
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+<meta http-equiv="cache-control"
+	content="no-cache, no-store, must-revalidate">
+<meta http-equiv="pragma" content="no-cache">
+<meta http-equiv="expires" content="0">
+
+<meta name="application-name" content="Cloud Index Education">
+
+
+<meta http-equiv="default-style" content="Demo">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+<script type='text/javascript'
+	src='/osivia-portal-custom-web-assets/components/jquery/jquery-1.12.4.min.js'></script>
+<script type='text/javascript'
+	src='/osivia-portal-custom-web-assets/components/jquery-ui/jquery-ui-1.11.3.min.js'></script>
+<link rel='stylesheet'
+	href='/osivia-portal-custom-web-assets/components/jquery-ui/jquery-ui-1.11.3.min.css'>
+<script type='text/javascript'
+	src='/osivia-portal-custom-web-assets/components/jquery-mobile/jquery.mobile.custom.min.js'></script>
+<link rel='stylesheet'
+	href='/osivia-portal-custom-web-assets/css/bootstrap.min.css'
+	title='Bootstrap'>
+<link rel='stylesheet'
+	href='/osivia-portal-custom-web-assets/css/osivia.min.css'>
+
+
+
+<link rel="icon" type="image/png" href="/demo-charte/img/favicon.png" />
+<link rel="stylesheet" href="/demo-charte/css/demo.min.css" title="Demo" />
+
+</head>
 <body>
 
 	<div class="container">
-		<h1>Sparklr</h1>
-
 
 		<authz:authorize access="hasAnyRole('ROLE_USER')">
-			<h2>Please Confirm</h2>
-
+					<legend>
+						<h2>Confirmation d'autorisations</h2>
+					</legend>
 			<p>
-				You hereby authorize "
+				Vous autorisez
 				<c:out value="${client.clientId}" />
-				" to access your protected resources.
+				 à accéder aux ressources suivantes.
 			</p>
 
 			<form id="confirmationForm" name="confirmationForm"
@@ -47,27 +73,30 @@
 						<c:set var="denied">
 							<c:if test="${!scope.value}"> checked</c:if>
 						</c:set>
+						
+						<c:set var="scopeLabel">
+							<c:choose>
+								<c:when test="${scope.key eq 'scope.drive'}"> Mes fichiers </c:when>
+							<c:otherwise>
+							    ${scope.key}
+							  </c:otherwise>
+							</c:choose>								
+						</c:set>
 						<li>
 							<div class="form-group">
-								${scope.key}: <input type="radio" name="${scope.key}"
-									value="true" ${approved}>Approve</input> <input type="radio"
-									name="${scope.key}" value="false" ${denied}>Deny</input>
+								${scopeLabel}: <input type="radio" name="${scope.key}"
+									value="true" ${approved}>Approuver</input> <input type="radio"
+									name="${scope.key}" value="false" ${denied}>Refuser</input>
 							</div>
 						</li>
 					</c:forEach>
 				</ul>
 				<input type="hidden" name="${_csrf.parameterName}"
 					value="${_csrf.token}" />
-				<button class="btn btn-primary" type="submit">Submit</button>
+				<button class="btn btn-primary" type="submit">Confirmer</button>
 			</form>
 
 		</authz:authorize>
-
-		<div class="footer">
-			Sample application for <a
-				href="http://github.com/spring-projects/spring-security-oauth"
-				target="_blank">Spring Security OAuth</a>
-		</div>
 
 	</div>
 

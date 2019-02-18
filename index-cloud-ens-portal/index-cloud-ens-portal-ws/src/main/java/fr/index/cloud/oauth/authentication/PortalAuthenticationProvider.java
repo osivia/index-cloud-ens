@@ -21,48 +21,39 @@ import org.springframework.util.Assert;
 @Component
 public class PortalAuthenticationProvider implements AuthenticationProvider {
 
-    
+
     @Autowired
     @Qualifier("personUpdateService")
     private PersonUpdateService personUpdateService;
-    
+
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
 
         String name = authentication.getName();
         String password = authentication.getCredentials().toString();
-        
-//        Person searchPerson = personUpdateService.getEmptyPerson();        
-//        searchPerson.setUid(name);
-//        List<Person> persons = personUpdateService.findByCriteria(searchPerson);  
-//        for (Person aPerson:persons) {
-          if(  personUpdateService.verifyPassword(name, password) == false) {
-              throw new BadCredentialsException("Bad user/password !");
-          }
-//        }
-        
-          List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>(1);
-           authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
 
-        
-        return new PortalAuthentication(name, password,authorities);
 
-//        if (shouldAuthenticateAgainstThirdPartySystem()) {
-//
-//            // use the credentials
-//            // and authenticate against the third-party system
-//            return new UsernamePasswordAuthenticationToken(name, password, new ArrayList<>());
-//        } else {
-//            return null;
-//        }
+        boolean found = true;
+        try {
+            found = personUpdateService.verifyPassword(name, password);
+        } catch (Exception e) {
+            found = false;
+        }
+        if (!found)
+            throw new BadCredentialsException("Bad user/password !");
+
+        List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>(1);
+        authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
+
+        return new PortalAuthentication(name, password, authorities);
     }
 
     @Override
     public boolean supports(Class<?> authentication) {
-        if( authentication.equals(UsernamePasswordAuthenticationToken.class))   {
+        if (authentication.equals(UsernamePasswordAuthenticationToken.class)) {
             return true;
         }
-        
+
         return authentication.equals(PortalAuthentication.class);
     }
 }
