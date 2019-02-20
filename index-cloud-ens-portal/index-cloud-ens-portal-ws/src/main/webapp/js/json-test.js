@@ -192,7 +192,7 @@ function drive(id) {
 				timeout : 600000,
 				success : function(jsonData) {
 					if (jsonData.returnCode != 0)
-						alert("erreur" + returnCode);
+						$JQry.notify("Error #"+jsonData.returnCode, "error");
 					else {
 						var list = '';
 						var detail = '';
@@ -315,11 +315,9 @@ $JQry(function() {
 						$element
 								.click(function() {
 									var params = {};
-									params.contentId = $JQry('#contentId')
-											.val();
+									params.contentId = $JQry('#contentId').val();
 									params.properties = {};
-									params.properties.level = $JQry('#pubLevel')
-											.val();
+									params.properties.level = $JQry('#pubLevel').val();
 
 									$JQry
 											.ajax({
@@ -332,8 +330,7 @@ $JQry(function() {
 												contentType : 'application/json',
 												data : JSON.stringify(params),
 												success : function(data) {
-													$JQry('#pubShare')
-															.val(data);
+													$JQry('#pubShare').val(data);
 												},
 												error : function(e) {
 													console.log("ERROR : ", e);
@@ -410,9 +407,43 @@ $JQry(function() {
 	});
 	
 	
-	
+	$JQry("#btnCreateUser").each(function(index, element) {
+
+		var $element = $JQry(element);
+		$element.click(function() {
+			console.log("demande création utilisateur ");			
 
 
+			var params = {};
+			params.firstName = $JQry('#userFirstName').val();
+			params.lastName = $JQry('#userLastName').val();
+			params.mail = $JQry('#userMail').val();
+
+
+			$JQry
+					.ajax({
+						type : "POST",
+						url : oauth.params.resourceUrl+"/Admin.createUser",
+						headers : {
+							"Authorization" : "Bearer " + oauth.getToken()
+						},
+						dataType : 'json',
+						contentType : 'application/json',
+						data : JSON.stringify(params),
+						success : function(jsonData) {
+							if (jsonData.returnCode != 0)
+								$JQry.notify("Error #"+jsonData.returnCode, "error");
+							else
+								$JQry.notify("Utilisateur créé", "success");
+
+						},
+						error : function(e) {
+							$JQry.notify("HTTP Error #"+e.status, "error");
+						}
+					});
+
+			});
+	});
 });
 
 

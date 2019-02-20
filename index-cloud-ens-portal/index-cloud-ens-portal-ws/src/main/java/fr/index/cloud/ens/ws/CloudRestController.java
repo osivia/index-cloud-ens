@@ -21,8 +21,13 @@ import org.nuxeo.ecm.automation.client.model.Document;
 import org.nuxeo.ecm.automation.client.model.Documents;
 import org.nuxeo.ecm.automation.client.model.PropertyList;
 import org.nuxeo.ecm.automation.client.model.PropertyMap;
+import org.osivia.directory.v2.service.PersonUpdateService;
 import org.osivia.portal.api.cache.services.CacheInfo;
+import org.osivia.portal.api.directory.v2.model.Person;
+import org.osivia.portal.core.page.PageProperties;
 import org.osivia.portal.core.web.IWebIdService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -40,9 +45,11 @@ import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
 
+import fr.index.cloud.ens.ws.beans.CreateUserBean;
 import fr.index.cloud.ens.ws.beans.PublishBean;
 import fr.index.cloud.ens.ws.beans.UploadBean;
 import fr.index.cloud.ens.ws.commands.FolderGetChildrenCommand;
+import fr.index.cloud.ens.ws.commands.GetUserProfileCommand;
 import fr.index.cloud.ens.ws.commands.PublishCommand;
 import fr.index.cloud.ens.ws.commands.UploadFileCommand;
 import fr.toutatice.portail.cms.nuxeo.api.INuxeoCommand;
@@ -59,12 +66,17 @@ public class CloudRestController {
     private static final String PROP_SHARE_LINK = "rshr:linkId";
 
 
-    // TODO : HOW TO INJECT FROM SimpleDocumentCreatorController
     public static PortletContext portletContext;
-    private static String TOKEN_PREFIX = "Bearer ";
     private static String USERWORKSPACES_DOMAIN = "/default-domain/UserWorkspaces";
 
     Map<String, String> levelQualifier = null;
+    
+    public static final int ERR_CREATE_USER_MAIL_ALREADYEXIST = 1;
+
+
+    @Autowired
+    @Qualifier("personUpdateService")
+    private PersonUpdateService personUpdateService;
 
 
     /** Logger. */
@@ -78,38 +90,17 @@ public class CloudRestController {
      * @throws Exception
      */
     private NuxeoController getNuxeocontroller(HttpServletRequest request, Principal principal) throws Exception {
-       
-        /*
-        String token = request.getHeader("Authorization");
-        if (StringUtils.isNotEmpty(token)) {
-            if (token.startsWith(TOKEN_PREFIX)) {
-                Algorithm algorithm = Algorithm.HMAC256("??PRONOTESECRET??");
-                JWTVerifier verifier = JWT.require(algorithm).withIssuer("pronote").build(); // Reusable verifier instance
-                DecodedJWT jwt = verifier.verify(token.substring(TOKEN_PREFIX.length()));
-                String userId = jwt.getSubject();
 
-                NuxeoController nuxeoController = new NuxeoController(portletContext);
-                nuxeoController.setServletRequest(request);
-                nuxeoController.setAuthType(NuxeoCommandContext.AUTH_TYPE_USER);
-                nuxeoController.setCacheType(CacheInfo.CACHE_SCOPE_NONE);
 
-                request.setAttribute("osivia.delegation.userName", principal.getName());
-
-                return nuxeoController;
-            }
-        }
-        
-
-        throw new Exception("Invalid token");*/
-        
         NuxeoController nuxeoController = new NuxeoController(portletContext);
         nuxeoController.setServletRequest(request);
         nuxeoController.setAuthType(NuxeoCommandContext.AUTH_TYPE_USER);
         nuxeoController.setCacheType(CacheInfo.CACHE_SCOPE_NONE);
 
         request.setAttribute("osivia.delegation.userName", principal.getName());
+
         return nuxeoController;
-        
+
     }
 
 
@@ -120,7 +111,7 @@ public class CloudRestController {
      * @return
      */
     private Map<String, Object> handleDefaultExceptions(Exception e) {
-        
+
         Map<String, Object> response = new LinkedHashMap<>();
 
 
@@ -128,14 +119,14 @@ public class CloudRestController {
             NuxeoException nxe = (NuxeoException) e;
 
             if (nxe.getErrorCode() == NuxeoException.ERROR_NOTFOUND)
-                response.put("returnCode",GenericErrors.ERR_NOT_FOUND);
+                response.put("returnCode", GenericErrors.ERR_NOT_FOUND);
             else if (nxe.getErrorCode() == NuxeoException.ERROR_FORBIDDEN)
-                response.put("returnCode",GenericErrors.ERR_FORBIDDEN);
+                response.put("returnCode", GenericErrors.ERR_FORBIDDEN);
 
         } else {
             // TODO use the log API (look at BinaryServlet)
             e.printStackTrace();
-            response.put("returnCode",GenericErrors.ERR_NOT_FOUND);
+            response.put("returnCode", GenericErrors.ERR_NOT_FOUND);
         }
         return response;
 
@@ -152,19 +143,19 @@ public class CloudRestController {
      * @return
      * @throws Exception
      */
-    
-    private Map <String, Object> initContent(Document doc, String type, boolean mainObject){
-        
+
+    private Map<String, Object> initContent(Document doc, String type, boolean mainObject) {
+
         Map<String, Object> contents = new LinkedHashMap<>();
 
-        if( mainObject)
-            contents.put("returnCode", 0);       
-        
+        if (mainObject)
+            contents.put("returnCode", GenericErrors.ERR_OK);
+
         contents.put("type", type);
         contents.put("id", doc.getProperties().getString(PROP_TTC_WEBID));
         contents.put("title", doc.getTitle());
 
-        if (doc.getProperties().get("common:size") != null)  {
+        if (doc.getProperties().get("common:size") != null) {
             long size = doc.getProperties().getLong("common:size");
             contents.put("fileSize", size);
         }
@@ -181,27 +172,25 @@ public class CloudRestController {
         return contents;
     }
 
-    
-    private Map <String, Object> initContent(Document doc, String type){
-        return  initContent( doc,  type,  false);
+
+    private Map<String, Object> initContent(Document doc, String type) {
+        return initContent(doc, type, false);
     }
-    
 
 
     @RequestMapping(value = "/Drive.content", method = RequestMethod.GET)
     @ResponseStatus(HttpStatus.OK)
 
-    public Map<String,Object> getContent(HttpServletRequest request, HttpServletResponse response, @RequestParam(value = "id", required = false) String id, Principal principal)
-            throws Exception {
+    public Map<String, Object> getContent(HttpServletRequest request, HttpServletResponse response, @RequestParam(value = "id", required = false) String id,
+            Principal principal) throws Exception {
 
         NuxeoController nuxeoController = getNuxeocontroller(request, principal);
 
-        Map<String,Object> returnObject;
-        
+        Map<String, Object> returnObject;
+
         try {
-            // TOD get real user workspace
-            // see demo project customizer
-            String rootPath = USERWORKSPACES_DOMAIN + "/" + request.getAttribute("osivia.delegation.userName") + "/documents";
+             Document userWorkspace = (Document) nuxeoController.executeNuxeoCommand(new GetUserProfileCommand(principal.getName()));
+             String rootPath = userWorkspace.getPath().substring(0,userWorkspace.getPath().lastIndexOf('/'))+ "/documents";
 
             String path = null;
             if (id != null)
@@ -211,17 +200,17 @@ public class CloudRestController {
 
             // Get durrent doc
             Document currentDoc = nuxeoController.getDocumentContext(path).getDocument();
-            
+
             boolean isRoot = currentDoc.getPath().equals(rootPath);
-            String type = currentDoc.getPath().equals(rootPath) ? "root" :  currentDoc.getType().toLowerCase();
-            
-            returnObject = initContent(currentDoc, type, true);       
-   
+            String type = currentDoc.getPath().equals(rootPath) ? "root" : currentDoc.getType().toLowerCase();
+
+            returnObject = initContent(currentDoc, type, true);
+
             // Get hierarchy
 
-            List<Map<String,Object>> hierarchy = new ArrayList<>();
+            List<Map<String, Object>> hierarchy = new ArrayList<>();
             String hierarchyPath = currentDoc.getPath().substring(0, currentDoc.getPath().lastIndexOf('/'));
- 
+
             while (hierarchyPath.contains(rootPath)) {
                 Document hierarchyDoc = nuxeoController.getDocumentContext(hierarchyPath).getDocument();
                 String hierarchyType = hierarchyDoc.getType();
@@ -234,11 +223,11 @@ public class CloudRestController {
                 // next parent
                 hierarchyPath = hierarchyPath.substring(0, hierarchyPath.lastIndexOf('/'));
             }
-            
+
             returnObject.put("parents", hierarchy);
-            
-   
-            List<Map<String,Object>> childrenList = new ArrayList<>();
+
+
+            List<Map<String, Object>> childrenList = new ArrayList<>();
             PropertyList facets = currentDoc.getFacets();
             if (facets.list().contains("Folderish")) {
 
@@ -250,22 +239,14 @@ public class CloudRestController {
                 }
 
             }
-            returnObject.put("childrens", childrenList);          
-            
+            returnObject.put("childrens", childrenList);
+
         } catch (Exception e) {
             returnObject = handleDefaultExceptions(e);
         }
         return returnObject;
 
     }
-    
-    
-
-    
-    
-    
-    
-    
 
 
     /**
@@ -314,7 +295,8 @@ public class CloudRestController {
 
     @RequestMapping(value = "/Drive.publish", method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.OK)
-    public String publish(@RequestBody PublishBean publishBean, HttpServletRequest request, HttpServletResponse response,  Principal principal) throws Exception {
+    public String publish(@RequestBody PublishBean publishBean, HttpServletRequest request, HttpServletResponse response, Principal principal)
+            throws Exception {
 
         NuxeoController nuxeoController = getNuxeocontroller(request, principal);
 
@@ -337,6 +319,45 @@ public class CloudRestController {
 
         return shareLink;
     }
+
+
+    @RequestMapping(value = "/Admin.createUser", method = RequestMethod.POST)
+    @ResponseStatus(HttpStatus.OK)
+    public Map<String, Object> createUser(@RequestBody CreateUserBean userBean, HttpServletRequest request, HttpServletResponse response, Principal principal)
+            throws Exception {
+        
+        NuxeoController nuxeoController = getNuxeocontroller(request, principal);
+        
+        Map<String, Object> returnObject = new LinkedHashMap<>();
+        returnObject.put("returnCode", GenericErrors.ERR_OK);
+
+        try {
+          
+            Person findPerson = personUpdateService.getEmptyPerson();
+            findPerson.setMail(userBean.getMail());
+            if( personUpdateService.findByCriteria(findPerson).size() > 0) {
+                returnObject.put("returnCode", ERR_CREATE_USER_MAIL_ALREADYEXIST);
+                return returnObject;
+            }
+            
+            // Person
+            Person person = personUpdateService.getEmptyPerson();
+            person.setUid(userBean.getMail());
+            person.setCn(userBean.getMail());
+            person.setSn(userBean.getFirstName()+ " "+userBean.getLastName());
+            person.setGivenName(userBean.getFirstName());
+            person.setDisplayName(userBean.getFirstName()+ " "+userBean.getLastName());
+            person.setMail(userBean.getMail());
+            
+            personUpdateService.create(person);
+            personUpdateService.updatePassword(person, "osivia");        
+ 
+
+        } catch (Exception e) {
+            returnObject = handleDefaultExceptions(e);
+        }
+        return returnObject;
+   }
 
 
     private PropertyMap parseProperties(Map<String, String> requestProperties) {

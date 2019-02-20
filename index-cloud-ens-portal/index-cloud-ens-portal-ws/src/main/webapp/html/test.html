@@ -28,7 +28,7 @@
 <link rel='stylesheet'	href='/osivia-portal-custom-web-assets/css/bootstrap.min.css'	title='Bootstrap'>
 <link rel='stylesheet'	href='/osivia-portal-custom-web-assets/css/osivia.min.css'>
 <script	src='/osivia-portal-custom-web-assets/components/bootstrap/js/bootstrap.min.js'></script>
-
+<script type='text/javascript' src="../js/notify.js"	type="text/javascript"></script>
 <script type='text/javascript' src="../js/json-test.js"	type="text/javascript"></script>
 
 
@@ -44,6 +44,8 @@
 	<div class="container">
 
 		<div class="row">
+
+
 
 			<div class="col-lg-2">
 				<h3>Autorization </h3>
@@ -77,7 +79,32 @@
 							class="btn btn-primary" value="Refresh" id="OAuth2refreshToken" />						
 						
 			</div>
+			
+			
+			<div class="col-lg-2">
+				<h3>Create user </h3>
+				<div id="auth">
+					<form method="POST" enctype="multipart/form-data" id="authForm">
+											
+						<div class="form-group">
+							<label for="userFirstName"">Prénom</label> <input name="userFirstName"
+								class="form-control" id="userFirstName" />
+						</div>
+						<div class="form-group">
+							<label for="userLastName">Nom</label> <input name="userLastName"
+								class="form-control" id="userLastName"  value=""/>
+						</div>
+						<div class="form-group">
+							<label for="userMail">Mail</label> <input name="userMail"
+								class="form-control" id="userMail"  value=""/>
+						</div>						
 
+						<input type="button"
+							class="btn btn-primary" value="Créer" id="btnCreateUser" />
+					</form>
+				</div>				
+			</div>
+			
 			<div class="col-lg-4">
 				<h3>Drive.content</h3>
 				<div id="files"></div>
