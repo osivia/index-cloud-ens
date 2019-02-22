@@ -4,6 +4,7 @@
     xmlns:nxs="http://www.nuxeo.org/ecm/schemas/resourceSharing/">
  
     <xs:element name="linkId" type="xs:string" />
+    <xs:element name="format" type="xs:string" />    
     <xs:element name="activatedLinked" type="xs:boolean" />
     <xs:element name="publicLink" type="xs:boolean" />    
     
@@ -20,7 +21,8 @@
 	<xs:complexType name="shareTarget">
 		<xs:sequence>
 			<xs:element name="pubId" type="xs:string" />
-			<xs:element name="title" type="xs:string" />
+			<xs:element name="pubTitle" type="xs:string" />
+			<xs:element name="pubOrganization" type="xs:string" />			
 		</xs:sequence>
 	</xs:complexType>
 

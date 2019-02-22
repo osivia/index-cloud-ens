@@ -1,18 +1,4 @@
-/*
- * Copyright 2002-2013 the original author or authors.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+
 package fr.index.cloud.oauth.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,14 +39,11 @@ import fr.index.security.oauth.services.mvc.AccessConfirmationController;
 import fr.index.security.oauth.services.mvc.AdminController;
 import fr.index.security.oauth.services.mvc.PhotoController;
 
-/**
- * @author Rob Winch
- * 
- */
+
 @Configuration
 public class OAuth2ServerConfig {
 
-	private static final String SPARKLR_RESOURCE_ID = "sparklr";
+	private static final String CLOUD_RESOURCE_ID = "cloud";
 
 	@Configuration
 	@EnableResourceServer
@@ -68,7 +51,7 @@ public class OAuth2ServerConfig {
 
 		@Override
 		public void configure(ResourceServerSecurityConfigurer resources) {
-			resources.resourceId(SPARKLR_RESOURCE_ID).stateless(false);
+			resources.resourceId(CLOUD_RESOURCE_ID).stateless(false);
 		}
 
 		
@@ -172,14 +155,14 @@ public class OAuth2ServerConfig {
 		        
 			// @formatter:off
 			clients.inMemory().withClient("tonr")
-			 			.resourceIds(SPARKLR_RESOURCE_ID)
+			 			.resourceIds(CLOUD_RESOURCE_ID)
 			 			.authorizedGrantTypes("authorization_code", "implicit")
 			 			.authorities("ROLE_CLIENT")
 			 			.scopes("read", "write")
 			 			.secret("secret")
 			 		.and()
 			 		.withClient("tonr-with-redirect")
-			 			.resourceIds(SPARKLR_RESOURCE_ID)
+			 			.resourceIds(CLOUD_RESOURCE_ID)
 			 			.authorizedGrantTypes("authorization_code", "implicit")
 			 			.authorities("ROLE_CLIENT")
 			 			.scopes("read", "write")
@@ -187,7 +170,7 @@ public class OAuth2ServerConfig {
 			 			.redirectUris(tonrRedirectUri)
 			 		.and()
 		 		    .withClient("my-client-with-registered-redirect")
-	 			        .resourceIds(SPARKLR_RESOURCE_ID)
+	 			        .resourceIds(CLOUD_RESOURCE_ID)
 	 			        .authorizedGrantTypes("authorization_code", "client_credentials")
 	 			        .authorities("ROLE_CLIENT")
 	 			        .scopes("read", "write", "trust")
@@ -235,7 +218,7 @@ public class OAuth2ServerConfig {
 
 		@Override
 		public void configure(AuthorizationServerSecurityConfigurer oauthServer) throws Exception {
-			oauthServer.realm("sparklr2/client");
+			oauthServer.realm("cloud/client");
 		}
 
 	}

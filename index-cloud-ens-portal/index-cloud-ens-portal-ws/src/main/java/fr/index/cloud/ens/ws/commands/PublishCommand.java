@@ -1,6 +1,7 @@
 package fr.index.cloud.ens.ws.commands;
 
 import org.apache.commons.lang.StringUtils;
+import org.nuxeo.ecm.automation.client.OperationRequest;
 import org.nuxeo.ecm.automation.client.Session;
 import org.nuxeo.ecm.automation.client.adapters.DocumentService;
 import org.nuxeo.ecm.automation.client.model.DocRef;
@@ -23,15 +24,23 @@ public class PublishCommand implements INuxeoCommand {
     
     /** meta-datas */
     PropertyMap qualifiers;
+    String format;
+    String pubId;
+    String pubTitle;
+    String pubOrganization;
 
 
     /**
      * Constructor.
      */
-    public PublishCommand(String contentId,  PropertyMap qualifiers) {
+    public PublishCommand(String contentId,  String format, String pubId, String pubTitle, String pubOrganization, PropertyMap qualifiers) {
         super();
         this.contentId = contentId;
+        this.format = format;
         this.qualifiers = qualifiers;
+        this.pubId = pubId;
+        this.pubTitle = pubTitle;
+        this.pubOrganization = pubOrganization;
     }
 
 
@@ -53,10 +62,27 @@ public class PublishCommand implements INuxeoCommand {
             
             //TODO : Controle d'unicité
             documentService.setProperty(docRef, "rshr:linkId", share);
-         }
+        }
 
+        if( StringUtils.isNotEmpty(format))
+            documentService.setProperty(docRef, "rshr:format", format);            
 
         documentService.update(docRef, qualifiers);
+        
+        PropertyMap value = new PropertyMap();
+        value.set("pubId", pubId);
+        value.set("pubTitle", pubTitle);
+        value.set("pubOrganization", pubTitle);
+
+     
+
+        // Operation request
+        OperationRequest request = nuxeoSession.newRequest("Document.AddComplexProperty");
+        request.setInput(docRef);
+        request.set("xpath", "rshr:targets");
+        request.set("value", value);
+        
+        request.execute();        
         
         return share;
     }

@@ -24,6 +24,9 @@ import org.nuxeo.ecm.automation.client.model.PropertyMap;
 import org.osivia.directory.v2.service.PersonUpdateService;
 import org.osivia.portal.api.cache.services.CacheInfo;
 import org.osivia.portal.api.directory.v2.model.Person;
+import org.osivia.portal.api.log.LogContext;
+import org.osivia.portal.core.error.ErrorDescriptor;
+import org.osivia.portal.core.error.GlobalErrorHandler;
 import org.osivia.portal.core.page.PageProperties;
 import org.osivia.portal.core.web.IWebIdService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,11 +50,14 @@ import com.auth0.jwt.interfaces.DecodedJWT;
 
 import fr.index.cloud.ens.ws.beans.CreateUserBean;
 import fr.index.cloud.ens.ws.beans.PublishBean;
+import fr.index.cloud.ens.ws.beans.UnpublishBean;
 import fr.index.cloud.ens.ws.beans.UploadBean;
 import fr.index.cloud.ens.ws.commands.FolderGetChildrenCommand;
 import fr.index.cloud.ens.ws.commands.GetUserProfileCommand;
 import fr.index.cloud.ens.ws.commands.PublishCommand;
+import fr.index.cloud.ens.ws.commands.UnpublishCommand;
 import fr.index.cloud.ens.ws.commands.UploadFileCommand;
+import fr.index.cloud.oauth.commands.RemoveRefreshTokenCommand;
 import fr.toutatice.portail.cms.nuxeo.api.INuxeoCommand;
 import fr.toutatice.portail.cms.nuxeo.api.NuxeoController;
 import fr.toutatice.portail.cms.nuxeo.api.NuxeoException;
@@ -70,7 +76,7 @@ public class CloudRestController {
     private static String USERWORKSPACES_DOMAIN = "/default-domain/UserWorkspaces";
 
     Map<String, String> levelQualifier = null;
-    
+
     public static final int ERR_CREATE_USER_MAIL_ALREADYEXIST = 1;
 
 
@@ -81,7 +87,6 @@ public class CloudRestController {
 
     /** Logger. */
     private static final Log logger = LogFactory.getLog(CloudRestController.class);
-
 
     /**
      * Get a nuxeoController associated to the current user
@@ -110,24 +115,53 @@ public class CloudRestController {
      * @param e
      * @return
      */
-    private Map<String, Object> handleDefaultExceptions(Exception e) {
+    private Map<String, Object> handleDefaultExceptions(Exception e, Principal principal) {
 
         Map<String, Object> response = new LinkedHashMap<>();
 
+        boolean logError = true;
+        int returnCode = GenericErrors.ERR_UNKNOWN;
 
         if (e instanceof NuxeoException) {
             NuxeoException nxe = (NuxeoException) e;
 
-            if (nxe.getErrorCode() == NuxeoException.ERROR_NOTFOUND)
+            if (nxe.getErrorCode() == NuxeoException.ERROR_NOTFOUND) {
                 response.put("returnCode", GenericErrors.ERR_NOT_FOUND);
-            else if (nxe.getErrorCode() == NuxeoException.ERROR_FORBIDDEN)
+                logError = false;
+            } else if (nxe.getErrorCode() == NuxeoException.ERROR_FORBIDDEN) {
                 response.put("returnCode", GenericErrors.ERR_FORBIDDEN);
-
-        } else {
-            // TODO use the log API (look at BinaryServlet)
-            e.printStackTrace();
-            response.put("returnCode", GenericErrors.ERR_NOT_FOUND);
+                logError = false;
+            }
         }
+
+        if (logError) {
+            // Token
+            // TODO : Add context for Web Service
+            // String token = this.logContext.createContext(portalControllerContext, "portal", null);
+
+
+            // User identifier
+            String userId = principal.getName();
+
+            // Error descriptor
+            ErrorDescriptor errorDescriptor = new ErrorDescriptor(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e, null, userId, null);
+            // errorDescriptor.setToken(token);
+
+            // Print stack in server.log
+            if (errorDescriptor.getException() != null) {
+                logger.error("Technical error in web service ", errorDescriptor.getException());
+            }
+
+
+            // Print stack in portal_user_error.log
+            GlobalErrorHandler.getInstance().logError(errorDescriptor);
+
+
+            response.put("returnCode", GenericErrors.ERR_UNKNOWN);
+        }
+
+        response.put("returnCode", returnCode);
+
         return response;
 
     }
@@ -189,8 +223,8 @@ public class CloudRestController {
         Map<String, Object> returnObject;
 
         try {
-             Document userWorkspace = (Document) nuxeoController.executeNuxeoCommand(new GetUserProfileCommand(principal.getName()));
-             String rootPath = userWorkspace.getPath().substring(0,userWorkspace.getPath().lastIndexOf('/'))+ "/documents";
+            Document userWorkspace = (Document) nuxeoController.executeNuxeoCommand(new GetUserProfileCommand(principal.getName()));
+            String rootPath = userWorkspace.getPath().substring(0, userWorkspace.getPath().lastIndexOf('/')) + "/documents";
 
             String path = null;
             if (id != null)
@@ -201,7 +235,6 @@ public class CloudRestController {
             // Get durrent doc
             Document currentDoc = nuxeoController.getDocumentContext(path).getDocument();
 
-            boolean isRoot = currentDoc.getPath().equals(rootPath);
             String type = currentDoc.getPath().equals(rootPath) ? "root" : currentDoc.getType().toLowerCase();
 
             returnObject = initContent(currentDoc, type, true);
@@ -242,7 +275,7 @@ public class CloudRestController {
             returnObject.put("childrens", childrenList);
 
         } catch (Exception e) {
-            returnObject = handleDefaultExceptions(e);
+            returnObject = handleDefaultExceptions(e, principal);
         }
         return returnObject;
 
@@ -262,28 +295,40 @@ public class CloudRestController {
 
     @RequestMapping(value = "/Drive.upload", method = RequestMethod.POST, consumes = {"multipart/form-data"})
     @ResponseStatus(HttpStatus.OK)
-    public void handleFileUpload(@RequestParam("file") MultipartFile file, @RequestParam("uploadInfos") String fileUpload, HttpServletRequest request,
+    public Map<String, Object> handleFileUpload(@RequestParam("file") MultipartFile file, @RequestParam("uploadInfos") String fileUpload, HttpServletRequest request,
             HttpServletResponse response, Principal principal) throws Exception {
 
-        NuxeoController nuxeoController = getNuxeocontroller(request, principal);
+        Map<String, Object> returnObject = new LinkedHashMap<>();
+        returnObject.put("returnCode", GenericErrors.ERR_OK);
 
-        UploadBean uploadBean = new ObjectMapper().readValue(fileUpload, UploadBean.class);
+        try {
 
-        // Get parent doc
-        Document parentDoc = nuxeoController.getDocumentContext(IWebIdService.FETCH_PATH_PREFIX + uploadBean.getParentId()).getDocument();
+            NuxeoController nuxeoController = getNuxeocontroller(request, principal);
 
-        // set qualifiers
-        PropertyMap properties = parseProperties(uploadBean.getProperties());
+            UploadBean uploadBean = new ObjectMapper().readValue(fileUpload, UploadBean.class);
+
+            // Get parent doc
+            Document parentDoc = nuxeoController.getDocumentContext(IWebIdService.FETCH_PATH_PREFIX + uploadBean.getParentId()).getDocument();
+
+            // set qualifiers
+            PropertyMap properties = parseProperties(uploadBean.getProperties());
 
 
-        // Execute import
-        INuxeoCommand command = new UploadFileCommand(parentDoc.getId(), file, properties);
-        nuxeoController.executeNuxeoCommand(command);
+            // Execute import
+            INuxeoCommand command = new UploadFileCommand(parentDoc.getId(), file, properties);
+            nuxeoController.executeNuxeoCommand(command);
+
+        } catch (Exception e) {
+            returnObject = handleDefaultExceptions(e, principal);
+        }
+
+
+        return returnObject;
     }
 
 
     /**
-     * Upload a file to the current folder
+     * Publish a document to the specified target
      * 
      * @param file
      * @param parentWebId
@@ -295,29 +340,99 @@ public class CloudRestController {
 
     @RequestMapping(value = "/Drive.publish", method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.OK)
-    public String publish(@RequestBody PublishBean publishBean, HttpServletRequest request, HttpServletResponse response, Principal principal)
+    public Map<String, Object> publish(@RequestBody PublishBean publishBean, HttpServletRequest request, HttpServletResponse response, Principal principal)
             throws Exception {
+        Map<String, Object> returnObject = new LinkedHashMap<>();
+        returnObject.put("returnCode", GenericErrors.ERR_OK);
+        try {
 
-        NuxeoController nuxeoController = getNuxeocontroller(request, principal);
+            NuxeoController nuxeoController = getNuxeocontroller(request, principal);
 
-        NuxeoDocumentContext ctx = nuxeoController.getDocumentContext(IWebIdService.FETCH_PATH_PREFIX + publishBean.getContentId());
+            NuxeoDocumentContext ctx = nuxeoController.getDocumentContext(IWebIdService.FETCH_PATH_PREFIX + publishBean.getContentId());
 
-        // Get parent doc
-        Document currentDoc = ctx.getDocument();
+            // Get parent doc
+            Document currentDoc = ctx.getDocument();
 
-        // set qualifiers
-        PropertyMap properties = parseProperties(publishBean.getProperties());
-
-
-        // Execute import
-        INuxeoCommand command = new PublishCommand(currentDoc.getId(), properties);
-        String shareLink = (String) nuxeoController.executeNuxeoCommand(command);
-
-        // Force cache initialisation
-        ctx.reload();
+            // set qualifiers
+            PropertyMap properties = parseProperties(publishBean.getProperties());
 
 
-        return shareLink;
+            // Execute import
+            INuxeoCommand command = new PublishCommand(currentDoc.getId(), publishBean.getFormat(), publishBean.getPubId(), publishBean.getPubTitle(),
+                    publishBean.getPubOrganization(), properties);
+            String shareId = (String) nuxeoController.executeNuxeoCommand(command);
+
+            // Force cache initialisation
+            ctx.reload();
+
+            returnObject.put("shareId", shareId);
+
+        } catch (Exception e) {
+            returnObject = handleDefaultExceptions(e, principal);
+        }
+
+
+        return returnObject;
+    }
+
+
+    /**
+     * Publish a document to the specified target
+     * 
+     * @param file
+     * @param parentWebId
+     * @param extraField
+     * @param request
+     * @param response
+     * @throws Exception
+     */
+
+    @RequestMapping(value = "/Drive.unpublish", method = RequestMethod.POST)
+    @ResponseStatus(HttpStatus.OK)
+    public Map<String, Object> unpublish(@RequestBody UnpublishBean unpublishBean, HttpServletRequest request, HttpServletResponse response,
+            Principal principal) throws Exception {
+
+
+        Map<String, Object> returnObject = new LinkedHashMap<>();
+        returnObject.put("returnCode", GenericErrors.ERR_OK);
+
+        try {
+
+            NuxeoController nuxeoController = getNuxeocontroller(request, principal);
+
+            NuxeoDocumentContext ctx = nuxeoController.getDocumentContext(IWebIdService.FETCH_PATH_PREFIX + unpublishBean.getContentId());
+
+            // Get parent doc
+            Document currentDoc = ctx.getDocument();
+
+            int indice = -1;
+
+            PropertyList targets = currentDoc.getProperties().getList("rshr:targets");
+            for (int i = 0; i < targets.size(); i++) {
+                PropertyMap target = targets.getMap(i);
+                String pubId = target.getString("pubId");
+                if (unpublishBean.getPubId().equals(pubId)) {
+                    indice = i;
+                    break;
+                }
+            }
+
+            if (indice != -1) {
+                nuxeoController.executeNuxeoCommand(new UnpublishCommand(currentDoc.getId(), indice));
+                // Force cache initialisation
+                ctx.reload();
+
+            } else {
+                returnObject.put("returnCode", 1);
+            }
+
+
+        } catch (Exception e) {
+            returnObject = handleDefaultExceptions(e, principal);
+        }
+
+
+        return returnObject;
     }
 
 
@@ -325,39 +440,38 @@ public class CloudRestController {
     @ResponseStatus(HttpStatus.OK)
     public Map<String, Object> createUser(@RequestBody CreateUserBean userBean, HttpServletRequest request, HttpServletResponse response, Principal principal)
             throws Exception {
-        
-        NuxeoController nuxeoController = getNuxeocontroller(request, principal);
-        
+
+
         Map<String, Object> returnObject = new LinkedHashMap<>();
         returnObject.put("returnCode", GenericErrors.ERR_OK);
 
         try {
-          
+
             Person findPerson = personUpdateService.getEmptyPerson();
             findPerson.setMail(userBean.getMail());
-            if( personUpdateService.findByCriteria(findPerson).size() > 0) {
+            if (personUpdateService.findByCriteria(findPerson).size() > 0) {
                 returnObject.put("returnCode", ERR_CREATE_USER_MAIL_ALREADYEXIST);
                 return returnObject;
             }
-            
+
             // Person
             Person person = personUpdateService.getEmptyPerson();
             person.setUid(userBean.getMail());
             person.setCn(userBean.getMail());
-            person.setSn(userBean.getFirstName()+ " "+userBean.getLastName());
+            person.setSn(userBean.getFirstName() + " " + userBean.getLastName());
             person.setGivenName(userBean.getFirstName());
-            person.setDisplayName(userBean.getFirstName()+ " "+userBean.getLastName());
+            person.setDisplayName(userBean.getFirstName() + " " + userBean.getLastName());
             person.setMail(userBean.getMail());
-            
+
             personUpdateService.create(person);
-            personUpdateService.updatePassword(person, "osivia");        
- 
+            personUpdateService.updatePassword(person, "osivia");
+
 
         } catch (Exception e) {
-            returnObject = handleDefaultExceptions(e);
+            returnObject = handleDefaultExceptions(e, principal);
         }
         return returnObject;
-   }
+    }
 
 
     private PropertyMap parseProperties(Map<String, String> requestProperties) {

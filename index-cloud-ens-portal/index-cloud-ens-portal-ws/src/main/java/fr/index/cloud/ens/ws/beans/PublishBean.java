@@ -9,7 +9,90 @@ import java.util.Map;
  */
 public class PublishBean {
     private String contentId;
+    private String format;    
+    private String pubId;
+    private String pubTitle;  
+    private String pubOrganization;    
     
+    /**
+     * Getter for format.
+     * @return the format
+     */
+    public String getFormat() {
+        return format;
+    }
+
+    
+    /**
+     * Setter for format.
+     * @param format the format to set
+     */
+    public void setFormat(String format) {
+        this.format = format;
+    }
+    
+    
+    /**
+     * Getter for pubOrganization.
+     * @return the pubOrganization
+     */
+    public String getPubOrganization() {
+        return pubOrganization;
+    }
+
+    
+    /**
+     * Setter for pubOrganization.
+     * @param pubOrganization the pubOrganization to set
+     */
+    public void setPubOrganization(String pubOrganization) {
+        this.pubOrganization = pubOrganization;
+    }
+
+
+
+    /**
+     * Getter for pubId.
+     * @return the pubId
+     */
+    public String getPubId() {
+        return pubId;
+    }
+
+
+
+    
+    /**
+     * Setter for pubId.
+     * @param pubId the pubId to set
+     */
+    public void setPubId(String pubId) {
+        this.pubId = pubId;
+    }
+
+
+
+    
+    
+    /**
+     * Getter for pubTitle.
+     * @return the pubTitle
+     */
+    public String getPubTitle() {
+        return pubTitle;
+    }
+
+
+    
+    /**
+     * Setter for pubTitle.
+     * @param pubTitle the pubTitle to set
+     */
+    public void setPubTitle(String pubTitle) {
+        this.pubTitle = pubTitle;
+    }
+
+
     Map<String,String> properties;
 
     

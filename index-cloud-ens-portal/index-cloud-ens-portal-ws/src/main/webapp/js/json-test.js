@@ -295,13 +295,21 @@ $JQry(function() {
 												contentType : false,
 												cache : false,
 												timeout : 600000,
-												success : function(data) {
-													drive($JQry('#folderId')
-															.val());
+												
+												success : function(jsonData) {
+													if (jsonData.returnCode != 0)
+														$JQry.notify("Error #"+jsonData.returnCode, "error");
+													else {
+														$JQry.notify("Contenu créé", "success");
+														drive($JQry('#folderId').val());														
+													}
+
 												},
 												error : function(e) {
-													console.log("ERROR : ", e);
-												}
+													$JQry.notify("HTTP Error #"+e.status, "error");
+												}												
+												
+												
 											});
 
 								});
@@ -316,6 +324,10 @@ $JQry(function() {
 								.click(function() {
 									var params = {};
 									params.contentId = $JQry('#contentId').val();
+									params.format = $JQry('#pubFormat').val();									
+									params.pubId = $JQry('#pubId').val();
+									params.pubTitle = $JQry('#pubTitle').val();
+									params.pubOrganization = $JQry('#pubOrganization').val();									
 									params.properties = {};
 									params.properties.level = $JQry('#pubLevel').val();
 
@@ -329,17 +341,63 @@ $JQry(function() {
 												dataType : 'json',
 												contentType : 'application/json',
 												data : JSON.stringify(params),
-												success : function(data) {
-													$JQry('#pubShare').val(data);
+												
+												success : function(jsonData) {
+													if (jsonData.returnCode != 0)
+														$JQry.notify("Error #"+jsonData.returnCode, "error");
+													else	{
+														$JQry.notify("Contenu publié", "success");
+														$JQry('#pubShare').val(jsonData.shareId);
+													}
+
 												},
 												error : function(e) {
-													console.log("ERROR : ", e);
+													$JQry.notify("HTTP Error #"+e.status, "error");
 												}
+												
 											});
 
 								});
 					});
 
+	$JQry("#btnUnpubSubmit")
+	.each(
+			function(index, element) {
+
+				var $element = $JQry(element);
+				$element
+						.click(function() {
+							var params = {};
+							params.contentId = $JQry('#contentId').val();
+							params.pubId = $JQry('#unpubId').val();
+
+
+							$JQry
+									.ajax({
+										type : "POST",
+										url : oauth.params.resourceUrl+"/Drive.unpublish",
+										headers : {
+											"Authorization" : "Bearer " + oauth.getToken()
+										},
+										dataType : 'json',
+										contentType : 'application/json',
+										data : JSON.stringify(params),
+										
+										success : function(jsonData) {
+											if (jsonData.returnCode != 0)
+												$JQry.notify("Error #"+jsonData.returnCode, "error");
+											else
+												$JQry.notify("Contenu dépublié", "success");
+
+										},
+										error : function(e) {
+											$JQry.notify("HTTP Error #"+e.status, "error");
+										}
+										
+									});
+
+						});
+			});
 
 
 

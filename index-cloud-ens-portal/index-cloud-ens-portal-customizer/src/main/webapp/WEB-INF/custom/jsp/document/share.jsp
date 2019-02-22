@@ -6,6 +6,7 @@
 <%@ page isELIgnored="false"%>
 
 <c:set var="share" value="${document.properties['rshr:linkId']}" />
+<c:set var="targets" value="${document.properties['rshr:targets']}" />
 
 <div class="share">
     <div class="panel panel-default">
@@ -22,7 +23,17 @@
                             <span><op:translate key="SHARED_DOC" /></span><br/>
                             <a href="/toutatice-portail-cms-nuxeo/binary?linkId=${share}"><op:translate key="SHARED_LINK" /></a>
                          </p>
-                </c:if>
+                 </c:if>
+                
+                <c:if test="${not empty targets}">
+                    <dt><op:translate key="SHARED_TARGET" /></dt>
+                    <c:forEach var="target" items="${targets}">
+	                    <dd>
+	                        	<span>${target.pubTitle}</span>
+	                    </dd>
+                    </c:forEach>
+                </c:if>                
+              
         </div>
     </div>
 </div>
