@@ -218,7 +218,7 @@ public class OAuth2ServerConfig {
 
 		@Override
 		public void configure(AuthorizationServerSecurityConfigurer oauthServer) throws Exception {
-			oauthServer.realm("cloud/client");
+			oauthServer.realm("cloud/client").allowFormAuthenticationForClients();
 		}
 
 	}
