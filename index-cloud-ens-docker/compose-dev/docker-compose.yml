@@ -76,5 +76,8 @@ services:
     onlyoffice:
       image: onlyoffice/documentserver
       volumes:
-        - .\onlyoffice_local.json:/etc/onlyoffice/documentserver/local.json        
+        - .\onlyoffice_local.json:/etc/onlyoffice/documentserver/local.json
+      depends_on:
+        - cloud-ens-portal-1
+
       

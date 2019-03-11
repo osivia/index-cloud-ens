@@ -25,6 +25,7 @@ import org.osivia.directory.v2.service.PersonUpdateService;
 import org.osivia.portal.api.cache.services.CacheInfo;
 import org.osivia.portal.api.directory.v2.model.Person;
 import org.osivia.portal.api.log.LogContext;
+import org.osivia.portal.api.tokens.TokenUtils;
 import org.osivia.portal.core.error.ErrorDescriptor;
 import org.osivia.portal.core.error.GlobalErrorHandler;
 import org.osivia.portal.core.page.PageProperties;
@@ -71,9 +72,7 @@ public class CloudRestController {
     private static final String PROP_TTC_WEBID = "ttc:webid";
     private static final String PROP_SHARE_LINK = "rshr:linkId";
 
-
     public static PortletContext portletContext;
-    private static String USERWORKSPACES_DOMAIN = "/default-domain/UserWorkspaces";
 
     Map<String, String> levelQualifier = null;
 
@@ -212,6 +211,28 @@ public class CloudRestController {
     }
 
 
+    @RequestMapping(value = "/Drive.webUrl", method = RequestMethod.GET)
+    @ResponseStatus(HttpStatus.OK)
+
+    public Map<String, Object> getWebUrl(HttpServletRequest request, HttpServletResponse response, @RequestParam(value = "type", required = false) String type, @RequestParam(value = "id", required = false) String id,
+            Principal principal) throws Exception {
+        
+        Map<String, Object> returnObject = new LinkedHashMap<>();
+        returnObject.put("returnCode", GenericErrors.ERR_OK);
+ 
+
+        try {
+            String webToken = TokenUtils.generateToken(principal.getName());
+            String url = "https://" + request.getServerName() + "/toutatice-portail-cms-nuxeo/binary?id="+id+ "&webToken=" + webToken+"&viewer=true";
+            returnObject.put("url", url);
+
+        } catch (Exception e) {
+            returnObject = handleDefaultExceptions(e, principal);
+        }
+        return returnObject;
+    }
+
+
     @RequestMapping(value = "/Drive.content", method = RequestMethod.GET)
     @ResponseStatus(HttpStatus.OK)
 
@@ -295,8 +316,8 @@ public class CloudRestController {
 
     @RequestMapping(value = "/Drive.upload", method = RequestMethod.POST, consumes = {"multipart/form-data"})
     @ResponseStatus(HttpStatus.OK)
-    public Map<String, Object> handleFileUpload(@RequestParam("file") MultipartFile file, @RequestParam("uploadInfos") String fileUpload, HttpServletRequest request,
-            HttpServletResponse response, Principal principal) throws Exception {
+    public Map<String, Object> handleFileUpload(@RequestParam("file") MultipartFile file, @RequestParam("uploadInfos") String fileUpload,
+            HttpServletRequest request, HttpServletResponse response, Principal principal) throws Exception {
 
         Map<String, Object> returnObject = new LinkedHashMap<>();
         returnObject.put("returnCode", GenericErrors.ERR_OK);
@@ -311,7 +332,7 @@ public class CloudRestController {
             Document parentDoc = nuxeoController.getDocumentContext(IWebIdService.FETCH_PATH_PREFIX + uploadBean.getParentId()).getDocument();
 
             // set qualifiers
-            PropertyMap properties = parseProperties(uploadBean.getProperties());
+            Map<String, String> properties = parseProperties(uploadBean.getProperties());
 
 
             // Execute import
@@ -354,12 +375,13 @@ public class CloudRestController {
             Document currentDoc = ctx.getDocument();
 
             // set qualifiers
-            PropertyMap properties = parseProperties(publishBean.getProperties());
+            Map<String, String> properties = parseProperties(publishBean.getProperties());
 
 
             // Execute import
-            INuxeoCommand command = new PublishCommand(currentDoc.getId(), publishBean.getFormat(), publishBean.getPubId(), publishBean.getPubTitle(),
+            INuxeoCommand command = new PublishCommand(currentDoc, publishBean.getFormat(), publishBean.getPubId(), publishBean.getPubTitle(),
                     publishBean.getPubOrganization(), properties);
+            
             String shareId = (String) nuxeoController.executeNuxeoCommand(command);
 
             // Force cache initialisation
@@ -474,12 +496,15 @@ public class CloudRestController {
     }
 
 
-    private PropertyMap parseProperties(Map<String, String> requestProperties) {
+    private Map<String,String> parseProperties(Map<String, String> requestProperties) {
         // set qualifiers
-        PropertyMap properties = new PropertyMap();
+        Map<String,String> properties = new HashMap<String,String>();
         String standardLevel = convertLevelQualifier(requestProperties.get("level"));
         if (standardLevel != null)
-            properties.set("idxcl:level", standardLevel);
+            properties.put("level", standardLevel);
+        String subject = requestProperties.get("subject");
+        if( subject != null)
+            properties.put("subject", subject);        
 
         return properties;
     }

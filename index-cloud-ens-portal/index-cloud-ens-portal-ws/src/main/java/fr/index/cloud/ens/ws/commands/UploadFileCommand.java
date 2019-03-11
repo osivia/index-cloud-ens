@@ -2,7 +2,7 @@ package fr.index.cloud.ens.ws.commands;
 
 import java.io.IOException;
 import java.util.List;
-
+import java.util.Map;
 
 import org.nuxeo.ecm.automation.client.OperationRequest;
 import org.nuxeo.ecm.automation.client.Session;
@@ -36,13 +36,13 @@ public class UploadFileCommand implements INuxeoCommand {
     public static final String ES_SYNC_FLAG = "nx_es_sync";
     
     /** meta-datas */
-    PropertyMap qualifiers;
+    Map<String,String> qualifiers;
 
 
     /**
      * Constructor.
      */
-    public UploadFileCommand(String parentId, MultipartFile file, PropertyMap qualifiers) {
+    public UploadFileCommand(String parentId, MultipartFile file, Map<String,String> qualifiers) {
         super();
         this.parentId = parentId;
         this.file = file;
@@ -66,7 +66,14 @@ public class UploadFileCommand implements INuxeoCommand {
         Document doc = (Document) operationRequest.execute();
         
         DocumentService documentService = nuxeoSession.getAdapter(DocumentService.class);
-        documentService.update(doc, qualifiers);
+        
+        
+        PropertyMap properties = new PropertyMap();     
+        
+        CommandUtils.addToList(doc, properties,  qualifiers.get("level"), "idxcl:levels");        
+        CommandUtils.addToList(doc, properties,  qualifiers.get("subject"), "idxcl:subjects");       
+        
+        documentService.update(doc, properties);
         
         return doc;
     }

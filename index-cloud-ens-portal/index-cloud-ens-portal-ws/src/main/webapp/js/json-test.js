@@ -108,13 +108,18 @@ var oauth = {
 			data : {
 				grant_type: 'authorization_code',
 				code: code,
+// Comment to enable header authorisation 				
+				client_id: this.params.clientId,
+				client_secret: this.params.clientSecretId,
+// End comment				
 				redirect_uri: oauth.params.clientUrl					
 			},
 		
 			headers : {
 				'Accept' : 'application/json, application/x-www-form-urlencoded',
 				'Content-Type' : 'application/x-www-form-urlencoded',
-				'Authorization' : 'Basic '+ btoa( this.params.clientId + ":" + this.params.clientSecretId)
+// Uncomment to enable header authorisation 
+//				'Authorization' : 'Basic '+ btoa( this.params.clientId + ":" + this.params.clientSecretId)
 			},
 			complete : function(xhr, data) {
 				console.warn(data);
@@ -242,6 +247,9 @@ function drive(id) {
 											+ new Date(child.lastModified)
 													.toLocaleString()
 											+ "</div>";
+									
+
+									
 									list = list + "</div>";
 								}
 							}
@@ -256,6 +264,11 @@ function drive(id) {
 			});
 
 }
+
+
+
+
+
 
 $JQry(function() {
 
@@ -278,7 +291,8 @@ $JQry(function() {
 									params.properties = {};
 									params.properties.level = $JQry(
 											'#uploadMDLevel').val();
-
+									params.properties.subject = $JQry(
+									'#uploadMDSubject').val();
 									data.append("uploadInfos", JSON
 											.stringify(params));
 
@@ -330,7 +344,7 @@ $JQry(function() {
 									params.pubOrganization = $JQry('#pubOrganization').val();									
 									params.properties = {};
 									params.properties.level = $JQry('#pubLevel').val();
-
+									params.properties.subject = $JQry('#pubSubject').val();
 									$JQry
 											.ajax({
 												type : "POST",
@@ -463,6 +477,48 @@ $JQry(function() {
 			drive();
 		});
 	});
+	
+	
+
+	$JQry("#btnPreviewDrive").each(function(index, element) {
+
+		var $element = $JQry(element);
+		$element.click(function() {
+				var contentId = $JQry('#contentId').val();
+				var url = oauth.params.resourceUrl+"/Drive.webUrl";
+
+				url = url + "?id=" + contentId + "&type=viewer";
+
+
+				$JQry
+						.ajax({
+							type : "GET",
+							url : url,
+							headers : {
+								'Content-Type' : undefined,
+								"Authorization" : "Bearer " + oauth.getToken()
+							},
+							contentType : false,
+							cache : false,
+							timeout : 600000,
+							success : function(jsonData) {
+								if (jsonData.returnCode != 0)
+									$JQry.notify("Error #"+jsonData.returnCode, "error");
+								else {
+									window.open(jsonData.url,"preview","menubar=no, status=no, scrollbars=no, menubar=no, width=1000, height=600");
+								
+									}
+								
+							},
+							error : function(xhr, status, e) {
+								alert(e);
+							}
+						});
+	
+		});
+		
+	});
+
 	
 	
 	$JQry("#btnCreateUser").each(function(index, element) {

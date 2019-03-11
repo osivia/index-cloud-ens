@@ -1,11 +1,15 @@
 package fr.index.cloud.ens.ws.commands;
 
+import java.util.Map;
+import java.util.Properties;
+
 import org.apache.commons.lang.StringUtils;
 import org.nuxeo.ecm.automation.client.OperationRequest;
 import org.nuxeo.ecm.automation.client.Session;
 import org.nuxeo.ecm.automation.client.adapters.DocumentService;
 import org.nuxeo.ecm.automation.client.model.DocRef;
 import org.nuxeo.ecm.automation.client.model.Document;
+import org.nuxeo.ecm.automation.client.model.PropertyList;
 import org.nuxeo.ecm.automation.client.model.PropertyMap;
 
 import fr.toutatice.portail.cms.nuxeo.api.INuxeoCommand;
@@ -19,11 +23,11 @@ import fr.toutatice.portail.cms.nuxeo.api.INuxeoCommand;
 public class PublishCommand implements INuxeoCommand {
 
     /** Parent identifier. */
-    private final String contentId;
+    private final Document doc;
 
     
     /** meta-datas */
-    PropertyMap qualifiers;
+    Map<String, String> qualifiers;
     String format;
     String pubId;
     String pubTitle;
@@ -33,9 +37,9 @@ public class PublishCommand implements INuxeoCommand {
     /**
      * Constructor.
      */
-    public PublishCommand(String contentId,  String format, String pubId, String pubTitle, String pubOrganization, PropertyMap qualifiers) {
+    public PublishCommand(Document doc,  String format, String pubId, String pubTitle, String pubOrganization, Map<String, String> qualifiers) {
         super();
-        this.contentId = contentId;
+        this.doc = doc;
         this.format = format;
         this.qualifiers = qualifiers;
         this.pubId = pubId;
@@ -50,10 +54,11 @@ public class PublishCommand implements INuxeoCommand {
     @Override
     public Object execute(Session nuxeoSession) throws Exception {
 
-        DocRef docRef = new DocRef(contentId);
-        
+       
         DocumentService documentService = nuxeoSession.getAdapter(DocumentService.class);
-        Document doc = documentService.getDocument(docRef);        
+    
+        
+        PropertyMap properties = new PropertyMap();        
         
         //
         String share = doc.getProperties().getString("rshr:linkId") ;
@@ -61,13 +66,18 @@ public class PublishCommand implements INuxeoCommand {
             share = ""+ System.currentTimeMillis();
             
             //TODO : Controle d'unicité
-            documentService.setProperty(docRef, "rshr:linkId", share);
+            properties.set( "rshr:linkId", share);
         }
 
         if( StringUtils.isNotEmpty(format))
-            documentService.setProperty(docRef, "rshr:format", format);            
-
-        documentService.update(docRef, qualifiers);
+            properties.set( "rshr:format", format);   
+        
+       
+        CommandUtils.addToList(doc, properties,  qualifiers.get("level"), "idxcl:levels");        
+        CommandUtils.addToList(doc, properties,  qualifiers.get("subject"), "idxcl:subjects");       
+        
+        documentService.update(doc, properties);
+ 
         
         PropertyMap value = new PropertyMap();
         value.set("pubId", pubId);
@@ -78,7 +88,7 @@ public class PublishCommand implements INuxeoCommand {
 
         // Operation request
         OperationRequest request = nuxeoSession.newRequest("Document.AddComplexProperty");
-        request.setInput(docRef);
+        request.setInput(doc);
         request.set("xpath", "rshr:targets");
         request.set("value", value);
         
@@ -86,6 +96,8 @@ public class PublishCommand implements INuxeoCommand {
         
         return share;
     }
+
+
 
 
 
@@ -97,7 +109,7 @@ public class PublishCommand implements INuxeoCommand {
         StringBuilder builder = new StringBuilder();
         builder.append(this.getClass().getSimpleName());
         builder.append(" : ");
-        builder.append(this.contentId);
+        builder.append(this.doc.getPath());
 
         return builder.toString();
     }

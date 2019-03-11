@@ -19,6 +19,19 @@
             <cacheTimeout>3600</cacheTimeout>
             <cacheMaxSize>1000</cacheMaxSize>
         </directory>
+        
+        <!-- Thèmes des actualités -->
+        <directory name="idx_subject">
+            <schema>xvocabulary</schema> 
+            <dataSource>java:/nxsqldirectory</dataSource>
+            <table>vocabulary_index_level</table>
+            <idField>id</idField>
+            <autoincrementIdField>false</autoincrementIdField>
+            <createTablePolicy>on_missing_columns</createTablePolicy> 
+            <dataFile>vocabularies/subject.csv</dataFile>
+            <cacheTimeout>3600</cacheTimeout>
+            <cacheMaxSize>1000</cacheMaxSize>
+        </directory>        
 
     </extension>
     

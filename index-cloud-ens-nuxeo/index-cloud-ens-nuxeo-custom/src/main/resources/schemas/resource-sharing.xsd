@@ -5,7 +5,7 @@
  
     <xs:element name="linkId" type="xs:string" />
     <xs:element name="format" type="xs:string" />    
-    <xs:element name="activatedLinked" type="xs:boolean" />
+    <xs:element name="enabledLink" type="xs:boolean" />
     <xs:element name="publicLink" type="xs:boolean" />    
     
     <xs:element name="targets" type="nxs:shareTargetList" />
