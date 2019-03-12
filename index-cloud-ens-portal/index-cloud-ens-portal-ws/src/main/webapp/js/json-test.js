@@ -571,13 +571,16 @@ function init() {
         if (tmp[0] === 'code') code = decodeURIComponent(tmp[1]);
     }
     
-    oauth.params.accessUrl = 'https://cloud-ens-ws.osivia.org/index-cloud-portal-ens-ws/oauth/token';
-    oauth.params.authorizeUrl= 'http://cloud-ens-ws.osivia.org/index-cloud-portal-ens-ws/oauth/authorize';  
-    oauth.params.resourceUrl = 'https://cloud-ens-ws.osivia.org/index-cloud-portal-ens-ws/rest';
+    var host = "https://"+window.location.hostname;
+    //var host = https://cloud-ens-ws.osivia.org
+    
+    oauth.params.accessUrl = host+'/index-cloud-portal-ens-ws/oauth/token';
+    oauth.params.authorizeUrl= host+'/index-cloud-portal-ens-ws/oauth/authorize';  
+    oauth.params.resourceUrl = host+'/index-cloud-portal-ens-ws/rest';
 	oauth.params.clientId =  'pronote1234';
 	oauth.params.clientSecretId = 'secret1234';
 	oauth.params.scope = 'drive';
-	oauth.params.clientUrl = 'http://cloud-ens.osivia.org/index-cloud-portal-ens-ws/html/test.html';	
+	oauth.params.clientUrl = host+'/index-cloud-portal-ens-ws/html/test.html';	
     
    if( code != null)	{
 	   grant(code);
