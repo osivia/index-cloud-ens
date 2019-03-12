@@ -206,28 +206,11 @@
                     <version>2.2.1</version>
                     <configuration>
                         <releaseProfiles>unpack,pack</releaseProfiles>
-                        <preparationGoals>clean install</preparationGoals>
-                        <goals>deploy</goals>
-                        <arguments>-Prelease</arguments>
-                    </configuration>
-                </plugin>
-                
-                <!-- Eclipse -->
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-eclipse-plugin</artifactId>
-                    <version>2.10</version>
-                    <configuration>
-                        <downloadJavadocs>true</downloadJavadocs>
-                        <downloadSources>true</downloadSources>
-                        <wtpversion>2.0</wtpversion>
                     </configuration>
                 </plugin>
             
             </plugins>
         </pluginManagement>
     </build>
-    
-
     
 </project>
