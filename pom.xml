@@ -20,6 +20,16 @@
     <build>
         <pluginManagement>
             <plugins>
+            
+                <!-- Release -->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-release-plugin</artifactId>
+                    <version>2.2.1</version>
+                    <configuration>
+                        <releaseProfiles>unpack,pack</releaseProfiles>
+                    </configuration>
+                </plugin>
                 
                 <!-- Disable strict javadoc checking since java8 -->
                 <plugin>
