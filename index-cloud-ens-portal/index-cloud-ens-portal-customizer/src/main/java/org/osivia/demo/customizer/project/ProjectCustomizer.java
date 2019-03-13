@@ -199,64 +199,46 @@ public class ProjectCustomizer extends CMSPortlet implements ICustomizationModul
             if ((window == null) || !BooleanUtils.toBoolean(window.getDeclaredProperty(INIT_INDICATOR_PROPERTY))) {
 
                 String reqHost = portalControllerContext.getHttpServletRequest().getServerName();
-                String extranetHost = System.getProperty("demo.extranet.url");
-                String intranetHost = System.getProperty("demo.intranet.url");
 
                 if (flag == null) {
 
-                    if (reqHost.equals(extranetHost)) {
-                        // Initialisation work only on Intranet
-                        configuration.setRedirectionURL("https://" + intranetHost);
-                    } else {
 
-                        // Set intranet hostname
-                        String intranetUrl = System.getProperty("demo.intranet.url");
-                        if (intranet != null && intranet instanceof Portal && intranetUrl != null) {
-                            intranet.setDeclaredProperty("osivia.site.hostName", intranetUrl);
-                            intranet.setDeclaredProperty(PLATFORM_INITIALIZED, "1");
+                    // Set initalization flag
+                    intranet.setDeclaredProperty(PLATFORM_INITIALIZED, "1");
 
-                        }
 
-                        // Set extranet hostname
-                        PortalObject extranet = portal.getParent().getChild("extranet");
-                        String extranetUrl = System.getProperty("demo.extranet.url");
-                        if (extranet != null && extranet instanceof Portal && extranetUrl != null) {
-                            extranet.setDeclaredProperty("osivia.site.hostName", extranetUrl);
-                        }
+                    // HTTP servlet request
+                    HttpServletRequest servletRequest = configuration.getHttpServletRequest();
+                    // HTTP session
+                    HttpSession session = servletRequest.getSession();
+                    session.setAttribute("osivia.platform.init.pathToRedirect", configuration.buildRestorableURL());
 
-                        // HTTP servlet request
-                        HttpServletRequest servletRequest = configuration.getHttpServletRequest();
-                        // HTTP session
-                        HttpSession session = servletRequest.getSession();
-                        session.setAttribute("osivia.platform.init.pathToRedirect", configuration.buildRestorableURL());
+                    // Page display name
+                    String displayName = bundle.getString("PLATFORM_INIT");
 
-                        // Page display name
-                        String displayName = bundle.getString("PLATFORM_INIT");
+                    // Window properties
 
-                        // Window properties
+                    Map<String, String> properties = new HashMap<>();
+                    properties.put(InternalConstants.PROP_WINDOW_TITLE, displayName);
+                    properties.put("osivia.ajaxLink", "1");
+                    properties.put("osivia.hideTitle", "1");
 
-                        Map<String, String> properties = new HashMap<>();
-                        properties.put(InternalConstants.PROP_WINDOW_TITLE, displayName);
-                        properties.put("osivia.ajaxLink", "1");
-                        properties.put("osivia.hideTitle", "1");
+                    if (servletRequest.getParameter("noajax") != null)
+                        properties.put("noajax", "1");
 
-                        if (servletRequest.getParameter("noajax") != null)
-                            properties.put("noajax", "1");
+                    properties.put(DynaRenderOptions.PARTIAL_REFRESH_ENABLED, String.valueOf(true));
+                    properties.put(INIT_INDICATOR_PROPERTY, String.valueOf(true));
 
-                        properties.put(DynaRenderOptions.PARTIAL_REFRESH_ENABLED, String.valueOf(true));
-                        properties.put(INIT_INDICATOR_PROPERTY, String.valueOf(true));
-
-                        // Redirection URL
-                        String redirectionUrl;
-                        try {
-                            redirectionUrl = this.portalUrlFactory.getStartPortletInNewPage(portalControllerContext, "platform-init", displayName,
-                                    "demo-initializer-instance", properties, null);
-                        } catch (PortalException e) {
-                            throw new RuntimeException(e);
-                        }
-
-                        configuration.setRedirectionURL(redirectionUrl);
+                    // Redirection URL
+                    String redirectionUrl;
+                    try {
+                        redirectionUrl = this.portalUrlFactory.getStartPortletInNewPage(portalControllerContext, "platform-init", displayName,
+                                "demo-initializer-instance", properties, null);
+                    } catch (PortalException e) {
+                        throw new RuntimeException(e);
                     }
+
+                    configuration.setRedirectionURL(redirectionUrl);
                 }
             }
         }
