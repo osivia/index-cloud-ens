@@ -143,10 +143,6 @@
                     <value>1</value>
                 </property>
                 <property>
-                    <name>osivia.site.hostName</name>
-                    <value>osivia-demo</value>
-                </property>
-                <property>
                     <name>osivia.site.domains</name>
                     <value>/default-domain</value>
                 </property>
@@ -2728,10 +2724,10 @@ return nuxeoRequest.toString();</value>
                     <name>layout.id</name>
                     <value>demo-extranet-2-cols</value>
                 </property>
-                <property>
+                <!-- <property>
                     <name>osivia.site.hostName</name>
                     <value>extranet.osivia-demo</value>
-                </property>
+                </property> -->
                 <property>
                     <name>osivia.site.domains</name>
                     <value>/extranet</value>
