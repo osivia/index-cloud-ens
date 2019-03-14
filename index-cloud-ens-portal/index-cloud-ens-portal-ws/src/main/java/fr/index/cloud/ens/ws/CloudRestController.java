@@ -140,7 +140,9 @@ public class CloudRestController {
 
 
             // User identifier
-            String userId = principal.getName();
+            String userId = null;
+            if( principal != null)
+                userId = principal.getName();
 
             // Error descriptor
             ErrorDescriptor errorDescriptor = new ErrorDescriptor(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e, null, userId, null);
@@ -539,6 +541,28 @@ public class CloudRestController {
         CommonsMultipartResolver resolver = new CommonsMultipartResolver();
         resolver.setDefaultEncoding("utf-8");
         return resolver;
+    }
+    
+    
+    @RequestMapping(value = "/User.signup", method = RequestMethod.GET)
+    @ResponseStatus(HttpStatus.OK)
+
+    public Map<String, Object> signUp(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        
+        Map<String, Object> returnObject = new LinkedHashMap<>();
+        returnObject.put("returnCode", GenericErrors.ERR_OK);
+ 
+
+        try {
+
+            //String webToken = TokenUtils.generateToken(principal.getName());
+//            String url = "https://" + request.getServerName() + "/toutatice-portail-cms-nuxeo/binary?id="+id+ "&webToken=" + webToken+"&viewer=true";
+//            returnObject.put("url", url);
+
+        } catch (Exception e) {
+            returnObject = handleDefaultExceptions(e, null);
+        }
+        return returnObject;
     }
 
 }
