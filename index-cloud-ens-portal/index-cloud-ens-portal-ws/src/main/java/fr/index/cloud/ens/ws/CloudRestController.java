@@ -228,7 +228,9 @@ public class CloudRestController {
  
 
         try {
-            String webToken = TokenUtils.generateToken(principal.getName());
+            Map<String, String> tokenAttributes = new ConcurrentHashMap<>();
+            tokenAttributes.put("uid", principal.getName());
+            String webToken = TokenUtils.generateToken(tokenAttributes);
             String url = "https://" + request.getServerName() + "/toutatice-portail-cms-nuxeo/binary?id="+id+ "&webToken=" + webToken+"&viewer=true";
             returnObject.put("url", url);
 
