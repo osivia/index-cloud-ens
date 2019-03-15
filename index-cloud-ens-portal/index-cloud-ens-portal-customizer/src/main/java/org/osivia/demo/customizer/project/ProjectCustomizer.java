@@ -15,7 +15,6 @@ import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.jboss.portal.core.controller.ControllerContext;
 import org.jboss.portal.core.model.portal.Page;
 import org.jboss.portal.core.model.portal.Portal;
 import org.jboss.portal.core.model.portal.PortalObject;
@@ -395,38 +394,40 @@ public class ProjectCustomizer extends CMSPortlet implements ICustomizationModul
      */
     private void homeSpaceRedirection(PortalControllerContext portalControllerContext, IProjectCustomizationConfiguration configuration, Principal principal,
             Bundle bundle) {
-        // Page
-        Page page = configuration.getPage();
+        if (!configuration.isAdministrator()) {
+            // Page
+            Page page = configuration.getPage();
 
-        if (page != null) {
-            // Window
-            if (page != null && !"admin".equals(page.getPortal().getName())) {
-                if (page.equals(page.getPortal().getDefaultPage())) {
+            if (page != null) {
+                // Window
+                if (page != null && !"admin".equals(page.getPortal().getName())) {
+                    if (page.equals(page.getPortal().getDefaultPage())) {
 
-                    // CMS service
-                    ICMSService cmsService = this.cmsServiceLocator.getCMSService();
-                    // CMS context
-                    CMSServiceCtx cmsContext = new CMSServiceCtx();
-                    cmsContext.setPortalControllerContext(portalControllerContext);
+                        // CMS service
+                        ICMSService cmsService = this.cmsServiceLocator.getCMSService();
+                        // CMS context
+                        CMSServiceCtx cmsContext = new CMSServiceCtx();
+                        cmsContext.setPortalControllerContext(portalControllerContext);
 
-                    // User workspace
-                    CMSItem userWorkspace = null;
-                    try {
-                        List<CMSItem> userWorkspaces = cmsService.getWorkspaces(cmsContext, true, false);
-                        if ((userWorkspaces != null) && (userWorkspaces.size() == 1)) {
-                            userWorkspace = userWorkspaces.get(0);
+                        // User workspace
+                        CMSItem userWorkspace = null;
+                        try {
+                            List<CMSItem> userWorkspaces = cmsService.getWorkspaces(cmsContext, true, false);
+                            if ((userWorkspaces != null) && (userWorkspaces.size() == 1)) {
+                                userWorkspace = userWorkspaces.get(0);
+                            }
+                        } catch (CMSException e) {
+                            this.log.error("Unable to get user workspaces.", e.fillInStackTrace());
                         }
-                    } catch (CMSException e) {
-                        this.log.error("Unable to get user workspaces.", e.fillInStackTrace());
-                    }
-                    if ((userWorkspace != null) && StringUtils.isNotEmpty(userWorkspace.getPath())) {
-                        // User workspace URL
-                        String userWorkspaceUrl = this.portalUrlFactory.getCMSUrl(portalControllerContext, null, userWorkspace.getPath(), null, null, null,
-                                null, null, null, null);
+                        if ((userWorkspace != null) && StringUtils.isNotEmpty(userWorkspace.getPath())) {
+                            // User workspace URL
+                            String userWorkspaceUrl = this.portalUrlFactory.getCMSUrl(portalControllerContext, null, userWorkspace.getPath(), null, null, null,
+                                    null, null, null, null);
 
-                        configuration.setRedirectionURL(userWorkspaceUrl);
-                    }
+                            configuration.setRedirectionURL(userWorkspaceUrl);
+                        }
 
+                    }
                 }
             }
         }

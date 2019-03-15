@@ -4,7 +4,8 @@ Bundle-Name: Osivia specifics documents
 Bundle-SymbolicName: org.osivia.nuxeo.custom;singleton:=true
 Bundle-Localization: plugin
 Bundle-Category: stateful
-Nuxeo-Component: OSGI-INF/extensions/userworksapce-contrib.xml,
+Nuxeo-Component: OSGI-INF/extensions/index-cloud-core-types-contrib.xml,
+ OSGI-INF/extensions/index-cloud-elasticsearch-contrib.xml,
  OSGI-INF/extensions/index-cloud-schemas-contrib.xml,
- OSGI-INF/extensions/index-cloud-core-types-contrib.xml,
+ OSGI-INF/extensions/index-cloud-userworkspace-contrib.xml,
  OSGI-INF/extensions/index-cloud-vocabularies-contrib.xml
