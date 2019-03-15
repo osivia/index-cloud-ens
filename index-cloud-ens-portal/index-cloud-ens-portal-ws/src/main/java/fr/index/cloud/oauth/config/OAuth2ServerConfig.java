@@ -69,6 +69,7 @@ public class OAuth2ServerConfig {
 				.authorizeRequests()
 				    .antMatchers("/rest/Drive.**").access("#oauth2.hasScope('drive')")
 				    .antMatchers("/rest/Admin.**").access("hasRole('ROLE_ADMIN')")
+				    .antMatchers("/rest/User.signUp").permitAll()
 					.antMatchers("/me").access("#oauth2.hasScope('read')")					
 					.antMatchers("/photos").access("#oauth2.hasScope('read') or (!#oauth2.isOAuth() and hasRole('ROLE_USER'))")                                        
 					.antMatchers("/photos/trusted/**").access("#oauth2.hasScope('trust')")

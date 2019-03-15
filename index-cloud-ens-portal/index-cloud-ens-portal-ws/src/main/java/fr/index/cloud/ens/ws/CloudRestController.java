@@ -69,7 +69,11 @@ import fr.toutatice.portail.cms.nuxeo.api.services.NuxeoCommandContext;
 @RestController
 public class CloudRestController {
 
-    private static final String PROP_TTC_WEBID = "ttc:webid";
+    /**
+	 * 
+	 */
+	private static final String TOKEN_PREFIX = "Bearer ";
+	private static final String PROP_TTC_WEBID = "ttc:webid";
     private static final String PROP_SHARE_LINK = "rshr:linkId";
 
     public static PortletContext portletContext;
@@ -140,7 +144,9 @@ public class CloudRestController {
 
 
             // User identifier
-            String userId = principal.getName();
+            String userId = null;
+            if( principal != null)
+                userId = principal.getName();
 
             // Error descriptor
             ErrorDescriptor errorDescriptor = new ErrorDescriptor(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e, null, userId, null);
@@ -222,7 +228,9 @@ public class CloudRestController {
  
 
         try {
-            String webToken = TokenUtils.generateToken(principal.getName());
+            Map<String, String> tokenAttributes = new ConcurrentHashMap<>();
+            tokenAttributes.put("uid", principal.getName());
+            String webToken = TokenUtils.generateToken(tokenAttributes);
             String url = "https://" + request.getServerName() + "/toutatice-portail-cms-nuxeo/binary?id="+id+ "&webToken=" + webToken+"&viewer=true";
             returnObject.put("url", url);
 
@@ -539,6 +547,50 @@ public class CloudRestController {
         CommonsMultipartResolver resolver = new CommonsMultipartResolver();
         resolver.setDefaultEncoding("utf-8");
         return resolver;
+    }
+    
+    
+    @RequestMapping(value = "/User.signup", method = RequestMethod.GET)
+    @ResponseStatus(HttpStatus.OK)
+
+    public Map<String, Object> signUp(HttpServletRequest request, HttpServletResponse response) throws Exception {
+    	
+        Map<String, Object> returnObject = new LinkedHashMap<>();
+        returnObject.put("returnCode", GenericErrors.ERR_OK);
+ 
+
+        try {
+
+        	String message = "";
+            String token = request.getHeader("Authorization");
+            if( StringUtils.isNotEmpty(token))  {
+                if( token.startsWith(TOKEN_PREFIX)) {
+                    Algorithm algorithm = Algorithm.HMAC256("??PRONOTESECRET??");
+                    JWTVerifier verifier = JWT.require(algorithm)
+                        .withIssuer("pronote")
+                        .build(); //Reusable verifier instance
+                    DecodedJWT jwt = verifier.verify(token.substring(TOKEN_PREFIX.length()));
+                    message = jwt.getClaim("firstName").asString() + " " +jwt.getClaim("lastName").asString(); 
+                    
+         
+
+                    //String webToken = TokenUtils.generateToken(principal.getName());
+                    //String url = "https://" + request.getServerName() + "/toutatice-portail-cms-nuxeo/binary?id="+id+ "&webToken=" + webToken+"&viewer=true";
+                    //returnObject.put("url", url);        
+                    
+                    
+                }
+            }
+            
+//           throw new Exception("Invalid token");
+//        	
+        	
+        	returnObject.put("url", message);
+
+        } catch (Exception e) {
+            returnObject = handleDefaultExceptions(e, null);
+        }
+        return returnObject;
     }
 
 }

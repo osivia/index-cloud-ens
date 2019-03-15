@@ -19,7 +19,7 @@
     <properties>
         
         <!-- Toutatice -->
-        <toutatice.version>4.9-ALPHA-1</toutatice.version>
+        <toutatice.version>4.9-SNAPSHOT</toutatice.version>
         
         <!-- Directory -->
         <directory.version>4.7.2</directory.version>

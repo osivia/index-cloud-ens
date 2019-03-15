@@ -558,9 +558,80 @@ $JQry(function() {
 
 			});
 	});
+	
+	$JQry("#btnSignUp").each(function(index, element) {
+
+		var $element = $JQry(element);
+		$element.click(function() {
+			console.log("signup utilisateur ");			
+
+			$JQry
+					.ajax({
+						type : "GET",
+						url : oauth.params.resourceUrl+"/User.signup",
+						headers : {
+							"Authorization" : "Bearer " + createSignUpToken()
+						},
+						dataType : 'json',
+						contentType : 'application/json',
+						success : function(jsonData) {
+							if (jsonData.returnCode != 0)
+								$JQry.notify("Error #"+jsonData.returnCode, "error");
+							else
+								$JQry.notify("Utilisateur créé", "success");
+
+						},
+						error : function(e) {
+							$JQry.notify("HTTP Error #"+e.status, "error");
+						}
+					});
+
+			});
+	});	
 });
 
+function createSignUpToken( )	{
+	// Defining our token parts
+	var header = {
+		"alg" : "HS256",
+		"typ" : "JWT"
+	};
 
+
+	var data = {	};
+	data.firstName = $JQry('#userFirstName').val();
+	data.lastName = $JQry('#userLastName').val();
+	data.mail = $JQry('#userMail').val();
+	data.iss = "pronote";
+
+	var secret = "??PRONOTESECRET??";
+
+	var stringifiedHeader = CryptoJS.enc.Utf8.parse(JSON.stringify(header));
+	var encodedHeader = base64url(stringifiedHeader);
+
+	var stringifiedData = CryptoJS.enc.Utf8.parse(JSON.stringify(data));
+	var encodedData = base64url(stringifiedData);
+
+	var signature = encodedHeader + "." + encodedData;
+	signature = CryptoJS.HmacSHA256(signature, secret);
+	signature = base64url(signature);
+
+	return encodedHeader+"."+ encodedData+"."+signature;
+}
+
+function base64url(source) {
+	// Encode in classical base64
+	encodedSource = CryptoJS.enc.Base64.stringify(source);
+
+	// Remove padding equal characters
+	encodedSource = encodedSource.replace(/=+$/, '');
+
+	// Replace characters according to base64url specifications
+	encodedSource = encodedSource.replace(/\+/g, '-');
+	encodedSource = encodedSource.replace(/\//g, '_');
+
+	return encodedSource;
+}
 
 function init() {
     var code = null,
