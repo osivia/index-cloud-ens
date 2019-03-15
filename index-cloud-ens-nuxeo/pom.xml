@@ -1,30 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project
+    xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-	<parent>
+    <parent>
         <groupId>fr.index.cloud.ens</groupId>
         <artifactId>index-cloud-ens-parent</artifactId>
         <version>1.0-SNAPSHOT</version>
     </parent>
-	
+
     <groupId>fr.index.cloud.ens.nuxeo</groupId>
     <artifactId>index-cloud-ens-nuxeo-parent</artifactId>
-    <version>1.0-SNAPSHOT</version>
     <packaging>pom</packaging>
-    
+
     <name>Cloud enseignant - Nuxeo</name>
-     
-   
-	<modules>
-		<module>index-cloud-ens-nuxeo-custom</module>
-		<module>index-cloud-ens-nuxeo-distrib</module>
-	</modules>
-    
-   <build>
+
+
+    <modules>
+        <module>index-cloud-ens-nuxeo-custom</module>
+        <module>index-cloud-ens-nuxeo-distrib</module>
+    </modules>
+
+
+    <build>
         <pluginManagement>
             <plugins>
-            
+
                 <!-- Compiler -->
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
@@ -36,7 +39,7 @@
                         <target>1.7</target>
                     </configuration>
                 </plugin>
-                
+
                 <!-- Resources -->
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
@@ -46,10 +49,9 @@
                         <encoding>UTF-8</encoding>
                     </configuration>
                 </plugin>
-            
+
             </plugins>
         </pluginManagement>
     </build>
-    
-    
+
 </project>
