@@ -1,0 +1,125 @@
+.inline-edition {
+    label {
+        margin-bottom: 0;
+    }
+    
+    .form-control {
+        padding-left: 0;
+        padding-right: 0;
+        
+        border-top-color: transparent;
+        border-left-color: transparent;
+        border-right-color: transparent;
+        
+        border-radius: 0;
+        
+        .box-shadow(@shadow: none);
+    }
+}
+
+
+.select2-container {
+    &.select2-container--bootstrap {
+        .select2-selection {
+            &.select2-inline-edition-container {
+                border-top-color: transparent;
+                border-left-color: transparent;
+                border-right-color: transparent;
+                
+                border-radius: 0;
+                
+                .box-shadow(@shadow: none);
+                
+                &.select2-selection--multiple {
+                    .select2-selection__rendered {
+                        &::after {
+                            content: "\E252"; // halflings-triangle-bottom
+                            float: right;
+                            
+                            margin-top: @padding-base-vertical + 2;
+                            
+                            color: @accessible-gray-light;
+                            font-family: "Glyphicons Halflings";
+                            font-style: normal;
+                            font-weight: normal;
+                            font-size: @font-size-base - 2;
+                        }   
+                    }
+                    
+                    .select2-selection__choice {
+                        margin-top: @padding-base-vertical;
+                        margin-left: 0;
+                        padding-left: 0;
+                        
+                        border-style: none;
+                        
+                        cursor: inherit;
+                        
+                        .select2-selection__choice__remove {
+                            display: none;
+                        }
+                        
+                        &:not(:last-child):not(:nth-last-child(2)) {
+                            &::after {
+                                content: ",";
+                            }
+                        }
+                    }
+                    
+                    .select2-search--inline {
+                        .select2-search__field {
+                            padding: 0;
+                        }   
+                    }
+                }
+            }
+        }
+        
+        .select2-dropdown {
+            &.select2-inline-edition-dropdown {
+                border-top-style: solid;
+                border-top-width: 1px;
+                
+                border-radius: 0;
+                
+                .select2-results__option {
+                    background-color: @white;
+                    
+                    &, &.select2-results__option--highlighted {
+                        color: @text-color;
+                        
+                        &[aria-selected="true"] {
+                            color: @brand-primary;
+                        }
+                    }
+                    
+                    &.select2-results__option--highlighted {
+                        background-color: @gray-lighter;
+                    }
+                    
+                    &:not(.select2-results__message) {
+                        &::before {
+                            content: "\E154"; // glyphicons-unckecked
+                            position: initial;
+                            top: 0;
+                            float: none;
+                            
+                            margin-right: floor(@padding-base-horizontal / 2);
+                            
+                            font-family: "Glyphicons Regular";
+                            font-style: normal;
+                            font-weight: normal;
+                            line-height: 1;
+                        }
+                        
+                        &[aria-selected="true"] {
+                            &::before {
+                                content: "\E153"; // glyphicons-check
+                            }   
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
