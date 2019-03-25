@@ -2,12 +2,12 @@ package fr.index.cloud.ens.ws;
 
 import org.osivia.directory.v2.service.PersonUpdateService;
 import org.osivia.portal.api.directory.v2.DirServiceFactory;
-import org.osivia.portal.api.directory.v2.service.PersonService;
 import org.osivia.portal.api.locator.Locator;
 import org.osivia.portal.api.notifications.INotificationsService;
+import org.osivia.portal.api.tokens.ITokenService;
 import org.osivia.portal.api.urls.IPortalUrlFactory;
+import org.osivia.portal.core.cms.ICMSServiceLocator;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 
 
@@ -33,9 +33,6 @@ public class PortalServices   {
     public INotificationsService getNotificationService() {
         return Locator.findMBean(INotificationsService.class, INotificationsService.MBEAN_NAME);
     }
-    
-
-
 
     /**
      * Get portal URL factory.
@@ -57,6 +54,15 @@ public class PortalServices   {
     	return DirServiceFactory.getService(PersonUpdateService.class);
     }
     
+
+    /**
+     * Get token service
+     * @return token service
+     */
+    @Bean
+    public ITokenService getTokenService() {
+        return Locator.findMBean(ITokenService.class, ITokenService.MBEAN_NAME);
+    }
 
 
 }

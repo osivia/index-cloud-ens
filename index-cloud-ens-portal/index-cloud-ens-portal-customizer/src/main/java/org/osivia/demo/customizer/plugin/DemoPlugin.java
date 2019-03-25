@@ -8,6 +8,7 @@ import javax.portlet.PortletContext;
 import javax.portlet.PortletException;
 
 import org.osivia.demo.customizer.plugin.cms.ExtranetNavigationAdapterModule;
+import org.osivia.demo.customizer.plugin.filter.DecodeUserCreationTokenFilter;
 import org.osivia.demo.customizer.plugin.fragment.LaunchSupportPortletModule;
 import org.osivia.demo.customizer.plugin.fragment.ProduitRecordFragmentModule;
 import org.osivia.demo.customizer.plugin.list.AccessoriesListTemplateModule;
@@ -26,6 +27,7 @@ import fr.toutatice.portail.cms.nuxeo.api.domain.AbstractPluginPortlet;
 import fr.toutatice.portail.cms.nuxeo.api.domain.FragmentType;
 import fr.toutatice.portail.cms.nuxeo.api.domain.INavigationAdapterModule;
 import fr.toutatice.portail.cms.nuxeo.api.domain.ListTemplate;
+import fr.toutatice.portail.cms.nuxeo.api.forms.FormFilter;
 import fr.toutatice.portail.cms.nuxeo.api.player.INuxeoPlayerModule;
 
 /**
@@ -106,10 +108,15 @@ public class DemoPlugin extends AbstractPluginPortlet {
         this.customizeFragments(customizationContext);
         // Navigation adapters
         this.customizeNavigationAdapters(customizationContext);
+        // form filters
+        this.customizeFormFilters(customizationContext);
     }
 
 
-    /**
+
+
+
+	/**
      * Customize players.
      * 
      * @param customizationContext customization context
@@ -256,5 +263,17 @@ public class DemoPlugin extends AbstractPluginPortlet {
         INavigationAdapterModule extranet = new ExtranetNavigationAdapterModule(portletContext);
         navigationAdapters.add(extranet);
     }
+    
+    /**
+	 * @param customizationContext
+	 */
+	private void customizeFormFilters(CustomizationContext customizationContext) {
+		
+		Map<String, FormFilter> formFilters = this.getFormFilters(customizationContext);
+		
+		DecodeUserCreationTokenFilter filter = new DecodeUserCreationTokenFilter();
+		formFilters.put(filter.getId(), filter);
+		
+	}
 
 }

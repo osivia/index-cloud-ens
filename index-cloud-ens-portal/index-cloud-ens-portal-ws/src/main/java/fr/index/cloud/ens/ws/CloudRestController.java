@@ -1,5 +1,6 @@
 package fr.index.cloud.ens.ws;
 
+import java.io.UnsupportedEncodingException;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.Date;
@@ -23,18 +24,16 @@ import org.nuxeo.ecm.automation.client.model.PropertyList;
 import org.nuxeo.ecm.automation.client.model.PropertyMap;
 import org.osivia.directory.v2.service.PersonUpdateService;
 import org.osivia.portal.api.cache.services.CacheInfo;
+import org.osivia.portal.api.context.PortalControllerContext;
 import org.osivia.portal.api.directory.v2.model.Person;
-import org.osivia.portal.api.log.LogContext;
-import org.osivia.portal.api.tokens.TokenUtils;
+import org.osivia.portal.api.tokens.ITokenService;
 import org.osivia.portal.core.error.ErrorDescriptor;
 import org.osivia.portal.core.error.GlobalErrorHandler;
-import org.osivia.portal.core.page.PageProperties;
 import org.osivia.portal.core.web.IWebIdService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -58,7 +57,6 @@ import fr.index.cloud.ens.ws.commands.GetUserProfileCommand;
 import fr.index.cloud.ens.ws.commands.PublishCommand;
 import fr.index.cloud.ens.ws.commands.UnpublishCommand;
 import fr.index.cloud.ens.ws.commands.UploadFileCommand;
-import fr.index.cloud.oauth.commands.RemoveRefreshTokenCommand;
 import fr.toutatice.portail.cms.nuxeo.api.INuxeoCommand;
 import fr.toutatice.portail.cms.nuxeo.api.NuxeoController;
 import fr.toutatice.portail.cms.nuxeo.api.NuxeoException;
@@ -86,6 +84,9 @@ public class CloudRestController {
     @Autowired
     @Qualifier("personUpdateService")
     private PersonUpdateService personUpdateService;
+    
+    @Autowired
+    private ITokenService tokenService;
 
 
     /** Logger. */
@@ -105,7 +106,9 @@ public class CloudRestController {
         nuxeoController.setAuthType(NuxeoCommandContext.AUTH_TYPE_USER);
         nuxeoController.setCacheType(CacheInfo.CACHE_SCOPE_NONE);
 
-        request.setAttribute("osivia.delegation.userName", principal.getName());
+        if(principal != null) {
+        	request.setAttribute("osivia.delegation.userName", principal.getName());
+        }
 
         return nuxeoController;
 
@@ -230,7 +233,7 @@ public class CloudRestController {
         try {
             Map<String, String> tokenAttributes = new ConcurrentHashMap<>();
             tokenAttributes.put("uid", principal.getName());
-            String webToken = TokenUtils.generateToken(tokenAttributes);
+            String webToken = tokenService.generateToken(tokenAttributes);
             String url = "https://" + request.getServerName() + "/toutatice-portail-cms-nuxeo/binary?id="+id+ "&webToken=" + webToken+"&viewer=true";
             returnObject.put("url", url);
 
@@ -549,47 +552,123 @@ public class CloudRestController {
         return resolver;
     }
     
-    
+    /**
+     * La création du compte est effectuée depuis un lien ‘Créer un compte’ de PRONOTE.
+     * Authentification du jeton JWT + création du portalToken avec les informations transmises dans le contenu du jeton.
+     * 
+     * @param request
+     * @param response
+     * @return url de création de compte, code d'erreur éventuel.
+     * @throws Exception
+     */
     @RequestMapping(value = "/User.signup", method = RequestMethod.GET)
     @ResponseStatus(HttpStatus.OK)
-
-    public Map<String, Object> signUp(HttpServletRequest request, HttpServletResponse response) throws Exception {
+    public Map<String, Object> signUp(HttpServletRequest request, HttpServletResponse response) {
     	
         Map<String, Object> returnObject = new LinkedHashMap<>();
-        returnObject.put("returnCode", GenericErrors.ERR_OK);
- 
 
-        try {
+    	String url = "";
+        String token = request.getHeader("Authorization");
+        if( StringUtils.isNotEmpty(token))  {
+            if( token.startsWith(TOKEN_PREFIX)) {
+            	
+            	String issuer = System.getProperty("pronote.issuer");
+            	String pronoteSecret = System.getProperty("pronote.secret");
+            	DecodedJWT jwt = null;
 
-        	String message = "";
-            String token = request.getHeader("Authorization");
-            if( StringUtils.isNotEmpty(token))  {
-                if( token.startsWith(TOKEN_PREFIX)) {
-                    Algorithm algorithm = Algorithm.HMAC256("??PRONOTESECRET??");
+				try {
+					Algorithm algorithm = Algorithm.HMAC256(pronoteSecret);
+					
                     JWTVerifier verifier = JWT.require(algorithm)
-                        .withIssuer("pronote")
-                        .build(); //Reusable verifier instance
-                    DecodedJWT jwt = verifier.verify(token.substring(TOKEN_PREFIX.length()));
-                    message = jwt.getClaim("firstName").asString() + " " +jwt.getClaim("lastName").asString(); 
-                    
-         
+                            .withIssuer(issuer)
+                            .build(); //Reusable verifier instance
+                    jwt = verifier.verify(token.substring(TOKEN_PREFIX.length()));
+					
+				} catch (IllegalArgumentException | UnsupportedEncodingException e) {
 
-                    //String webToken = TokenUtils.generateToken(principal.getName());
-                    //String url = "https://" + request.getServerName() + "/toutatice-portail-cms-nuxeo/binary?id="+id+ "&webToken=" + webToken+"&viewer=true";
-                    //returnObject.put("url", url);        
+					returnObject.put("returnCode", GenericErrors.ERR_FORBIDDEN);
+		            logger.error("Erreur d'authentification pronote / cloud",e);
+				}
+				
+				String webToken = null;
+				if(jwt != null) {
+                    String firstName = jwt.getClaim("firstName").asString(); //attributes.put("firstName", );
+                    String lastName = jwt.getClaim("lastName").asString(); //attributes.put("lastName", );
+                    String mail = jwt.getClaim("mail").asString(); //attributes.put("mail", );
                     
-                    
-                }
+                    if(StringUtils.isBlank(firstName) || StringUtils.isBlank(lastName) || StringUtils.isBlank(mail)) {
+                    	
+						returnObject.put("returnCode", GenericErrors.ERR_FORBIDDEN);
+			            logger.error("Mauvais paramètres.");
+                    }
+                    else {
+                    	
+	                    Map<String, String> attributes = new ConcurrentHashMap<String, String>();
+                    	attributes.put("firstname", firstName);
+                    	attributes.put("lastname", lastName);
+                    	attributes.put("mail", mail);
+                    	
+                    	Person searchedPerson = personUpdateService.getEmptyPerson();
+                    	searchedPerson.setMail(mail);
+                    	List<Person> search = personUpdateService.findByCriteria(searchedPerson);
+                    	
+                    	
+                    	if(search.size() > 0 && search.get(0).getLastConnection() != null) {
+                    		
+							returnObject.put("returnCode", GenericErrors.ERR_FORBIDDEN);
+				            logger.error("Un compte actif existe déjà pour cette personne.");
+                    	}
+                    	else {
+
+                    		webToken = tokenService.generateToken(attributes);
+                    	}
+                    }
+				}
+
+				
+				if(webToken != null) {
+					
+					final PortalControllerContext pcc = new PortalControllerContext(portletContext);
+					try {
+						
+						NuxeoController nuxeoController = new NuxeoController(portletContext);
+				        nuxeoController.setServletRequest(request);
+				        nuxeoController.setAuthType(NuxeoCommandContext.AUTH_TYPE_SUPERUSER);
+				        nuxeoController.setCacheType(CacheInfo.CACHE_SCOPE_NONE);
+			            NuxeoDocumentContext ctx = nuxeoController.getDocumentContext(IWebIdService.FETCH_PATH_PREFIX + "procedure_person-creation");
+
+			            // Get parent doc
+			            Document userCreationProcedure = ctx.getDocument();
+						
+//							CMSServiceCtx cmsCtx = new CMSServiceCtx();
+//							cmsCtx.set
+						//String personCreationPath = cmsServiceLocator.getCMSService().adaptWebPathToCms(cmsCtx , );
+			            
+			            
+			            // TODO portalUrlFactory ne marche pas en dehors d'un contexte portlet.
+			            
+						//url = urlFactory.getPermaLink(pcc, null, null, userCreationProcedure.getPath(), IPortalUrlFactory.PERM_LINK_TYPE_TASK);
+						
+			            url = "/portal/cms" +  userCreationProcedure.getPath();
+			            
+						
+					} catch (Exception e) {
+						
+						returnObject.put("returnCode", GenericErrors.ERR_UNKNOWN);
+			            logger.error("Impossible de produire l'url d'inscription.",e);
+					} 
+					
+					if(url != null) {
+	                	String publicHost = System.getProperty("osivia.tasks.host");
+						url  = publicHost + url + "?token="+ webToken;
+	                    returnObject.put("url", url);
+	                    returnObject.put("returnCode", GenericErrors.ERR_OK);
+
+					}
+				}
             }
-            
-//           throw new Exception("Invalid token");
-//        	
-        	
-        	returnObject.put("url", message);
-
-        } catch (Exception e) {
-            returnObject = handleDefaultExceptions(e, null);
         }
+
         return returnObject;
     }
 
