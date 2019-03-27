@@ -15,7 +15,7 @@ import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.security.oauth2.provider.OAuth2Request;
 import org.springframework.security.oauth2.provider.token.store.InMemoryTokenStore;
 
-import fr.index.cloud.ens.ws.CloudRestController;
+import fr.index.cloud.ens.ws.DriveRestController;
 import fr.index.cloud.ens.ws.commands.GetUserProfileCommand;
 import fr.index.cloud.oauth.commands.GetRefreshTokenCommand;
 import fr.index.cloud.oauth.commands.RemoveRefreshTokenCommand;
@@ -42,7 +42,7 @@ public class PortalTokenStore extends InMemoryTokenStore {
      * @return
      */
     private NuxeoController getNuxeoController() {
-        NuxeoController nuxeoController = new NuxeoController(CloudRestController.portletContext);
+        NuxeoController nuxeoController = new NuxeoController(DriveRestController.portletContext);
         nuxeoController.setAuthType(NuxeoCommandContext.AUTH_TYPE_SUPERUSER);
         nuxeoController.setCacheType(CacheInfo.CACHE_SCOPE_NONE);
         return nuxeoController;

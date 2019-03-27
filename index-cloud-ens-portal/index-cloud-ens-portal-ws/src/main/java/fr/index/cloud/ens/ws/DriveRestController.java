@@ -65,7 +65,7 @@ import fr.toutatice.portail.cms.nuxeo.api.services.NuxeoCommandContext;
 
 
 @RestController
-public class CloudRestController {
+public class DriveRestController {
 
     /**
 	 * 
@@ -90,7 +90,7 @@ public class CloudRestController {
 
 
     /** Logger. */
-    private static final Log logger = LogFactory.getLog(CloudRestController.class);
+    private static final Log logger = LogFactory.getLog(DriveRestController.class);
 
     /**
      * Get a nuxeoController associated to the current user
@@ -506,6 +506,31 @@ public class CloudRestController {
         return returnObject;
     }
 
+    
+    
+
+    @RequestMapping(value = "/Drive.error", method = RequestMethod.POST)
+    @ResponseStatus(HttpStatus.OK)
+    public Map<String, Object> error( HttpServletRequest request, HttpServletResponse response, Principal principal)
+            throws Exception {
+
+
+        Map<String, Object> returnObject = new LinkedHashMap<>();
+        returnObject.put("returnCode", GenericErrors.ERR_OK);
+
+        try {
+
+            if (true)   
+                throw new Exception ("message d'erreur");
+            
+
+
+        } catch (Exception e) {
+            returnObject = handleDefaultExceptions(e, principal);
+        }
+        return returnObject;
+    }
+    
 
     private Map<String,String> parseProperties(Map<String, String> requestProperties) {
         // set qualifiers
@@ -552,124 +577,6 @@ public class CloudRestController {
         return resolver;
     }
     
-    /**
-     * La création du compte est effectuée depuis un lien ‘Créer un compte’ de PRONOTE.
-     * Authentification du jeton JWT + création du portalToken avec les informations transmises dans le contenu du jeton.
-     * 
-     * @param request
-     * @param response
-     * @return url de création de compte, code d'erreur éventuel.
-     * @throws Exception
-     */
-    @RequestMapping(value = "/User.signup", method = RequestMethod.GET)
-    @ResponseStatus(HttpStatus.OK)
-    public Map<String, Object> signUp(HttpServletRequest request, HttpServletResponse response) {
-    	
-        Map<String, Object> returnObject = new LinkedHashMap<>();
 
-    	String url = "";
-        String token = request.getHeader("Authorization");
-        if( StringUtils.isNotEmpty(token))  {
-            if( token.startsWith(TOKEN_PREFIX)) {
-            	
-            	String issuer = System.getProperty("pronote.issuer");
-            	String pronoteSecret = System.getProperty("pronote.secret");
-            	DecodedJWT jwt = null;
-
-				try {
-					Algorithm algorithm = Algorithm.HMAC256(pronoteSecret);
-					
-                    JWTVerifier verifier = JWT.require(algorithm)
-                            .withIssuer(issuer)
-                            .build(); //Reusable verifier instance
-                    jwt = verifier.verify(token.substring(TOKEN_PREFIX.length()));
-					
-				} catch (IllegalArgumentException | UnsupportedEncodingException e) {
-
-					returnObject.put("returnCode", GenericErrors.ERR_FORBIDDEN);
-		            logger.error("Erreur d'authentification pronote / cloud",e);
-				}
-				
-				String webToken = null;
-				if(jwt != null) {
-                    String firstName = jwt.getClaim("firstName").asString(); //attributes.put("firstName", );
-                    String lastName = jwt.getClaim("lastName").asString(); //attributes.put("lastName", );
-                    String mail = jwt.getClaim("mail").asString(); //attributes.put("mail", );
-                    
-                    if(StringUtils.isBlank(firstName) || StringUtils.isBlank(lastName) || StringUtils.isBlank(mail)) {
-                    	
-						returnObject.put("returnCode", GenericErrors.ERR_FORBIDDEN);
-			            logger.error("Mauvais paramètres.");
-                    }
-                    else {
-                    	
-	                    Map<String, String> attributes = new ConcurrentHashMap<String, String>();
-                    	attributes.put("firstname", firstName);
-                    	attributes.put("lastname", lastName);
-                    	attributes.put("mail", mail);
-                    	
-                    	Person searchedPerson = personUpdateService.getEmptyPerson();
-                    	searchedPerson.setMail(mail);
-                    	List<Person> search = personUpdateService.findByCriteria(searchedPerson);
-                    	
-                    	
-                    	if(search.size() > 0 && search.get(0).getLastConnection() != null) {
-                    		
-							returnObject.put("returnCode", GenericErrors.ERR_FORBIDDEN);
-				            logger.error("Un compte actif existe déjà pour cette personne.");
-                    	}
-                    	else {
-
-                    		webToken = tokenService.generateToken(attributes);
-                    	}
-                    }
-				}
-
-				
-				if(webToken != null) {
-					
-					final PortalControllerContext pcc = new PortalControllerContext(portletContext);
-					try {
-						
-						NuxeoController nuxeoController = new NuxeoController(portletContext);
-				        nuxeoController.setServletRequest(request);
-				        nuxeoController.setAuthType(NuxeoCommandContext.AUTH_TYPE_SUPERUSER);
-				        nuxeoController.setCacheType(CacheInfo.CACHE_SCOPE_NONE);
-			            NuxeoDocumentContext ctx = nuxeoController.getDocumentContext(IWebIdService.FETCH_PATH_PREFIX + "procedure_person-creation");
-
-			            // Get parent doc
-			            Document userCreationProcedure = ctx.getDocument();
-						
-//							CMSServiceCtx cmsCtx = new CMSServiceCtx();
-//							cmsCtx.set
-						//String personCreationPath = cmsServiceLocator.getCMSService().adaptWebPathToCms(cmsCtx , );
-			            
-			            
-			            // TODO portalUrlFactory ne marche pas en dehors d'un contexte portlet.
-			            
-						//url = urlFactory.getPermaLink(pcc, null, null, userCreationProcedure.getPath(), IPortalUrlFactory.PERM_LINK_TYPE_TASK);
-						
-			            url = "/portal/cms" +  userCreationProcedure.getPath();
-			            
-						
-					} catch (Exception e) {
-						
-						returnObject.put("returnCode", GenericErrors.ERR_UNKNOWN);
-			            logger.error("Impossible de produire l'url d'inscription.",e);
-					} 
-					
-					if(url != null) {
-	                	String publicHost = System.getProperty("osivia.tasks.host");
-						url  = publicHost + url + "?token="+ webToken;
-	                    returnObject.put("url", url);
-	                    returnObject.put("returnCode", GenericErrors.ERR_OK);
-
-					}
-				}
-            }
-        }
-
-        return returnObject;
-    }
 
 }

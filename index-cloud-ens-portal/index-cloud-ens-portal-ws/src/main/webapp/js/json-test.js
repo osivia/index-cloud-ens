@@ -559,6 +559,39 @@ $JQry(function() {
 			});
 	});
 	
+	
+	$JQry("#btnError").each(function(index, element) {
+
+		var $element = $JQry(element);
+		$element.click(function() {
+			console.log("génération d'une erreur ");			
+
+
+			var params = {};
+
+			$JQry
+					.ajax({
+						type : "POST",
+						url : oauth.params.resourceUrl+"/Drive.error",
+						headers : {
+							"Authorization" : "Bearer " + oauth.getToken()
+						},
+						dataType : 'json',
+						contentType : 'application/json',
+						data : JSON.stringify(params),
+						success : function(jsonData) {
+							if (jsonData.returnCode != 0)
+								$JQry.notify("Error #"+jsonData.returnCode, "error");
+						},
+						error : function(e) {
+							$JQry.notify("HTTP Error #"+e.status, "error");
+						}
+					});
+
+			});
+	});
+	
+	
 	$JQry("#btnSignUp").each(function(index, element) {
 
 		var $element = $JQry(element);

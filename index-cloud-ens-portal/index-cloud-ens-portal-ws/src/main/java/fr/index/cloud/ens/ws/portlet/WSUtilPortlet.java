@@ -4,7 +4,8 @@ import javax.portlet.PortletConfig;
 import javax.portlet.PortletContext;
 import javax.portlet.PortletException;
 
-import fr.index.cloud.ens.ws.CloudRestController;
+import fr.index.cloud.ens.ws.DriveRestController;
+import fr.index.cloud.ens.ws.UserRestController;
 import fr.toutatice.portail.cms.nuxeo.api.CMSPortlet;
 
 public class WSUtilPortlet extends CMSPortlet {
@@ -16,6 +17,7 @@ public class WSUtilPortlet extends CMSPortlet {
         // Portlet context
         PortletContext portletContext = getPortletContext();
 
-        CloudRestController.portletContext = portletContext;
+        DriveRestController.portletContext = portletContext;
+        UserRestController.portletContext = portletContext;
     }
 }

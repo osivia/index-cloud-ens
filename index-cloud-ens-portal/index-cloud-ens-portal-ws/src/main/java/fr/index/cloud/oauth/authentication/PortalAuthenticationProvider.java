@@ -20,7 +20,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 
-import fr.index.cloud.ens.ws.CloudRestController;
+import fr.index.cloud.ens.ws.DriveRestController;
 import fr.toutatice.portail.cms.nuxeo.api.NuxeoController;
 
 @Component
