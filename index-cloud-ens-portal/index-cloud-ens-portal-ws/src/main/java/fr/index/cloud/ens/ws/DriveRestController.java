@@ -1,6 +1,5 @@
 package fr.index.cloud.ens.ws;
 
-import java.io.UnsupportedEncodingException;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.Date;
@@ -14,9 +13,6 @@ import javax.portlet.PortletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.lang.StringUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.nuxeo.ecm.automation.client.model.Document;
 import org.nuxeo.ecm.automation.client.model.Documents;
@@ -24,11 +20,8 @@ import org.nuxeo.ecm.automation.client.model.PropertyList;
 import org.nuxeo.ecm.automation.client.model.PropertyMap;
 import org.osivia.directory.v2.service.PersonUpdateService;
 import org.osivia.portal.api.cache.services.CacheInfo;
-import org.osivia.portal.api.context.PortalControllerContext;
 import org.osivia.portal.api.directory.v2.model.Person;
 import org.osivia.portal.api.tokens.ITokenService;
-import org.osivia.portal.core.error.ErrorDescriptor;
-import org.osivia.portal.core.error.GlobalErrorHandler;
 import org.osivia.portal.core.web.IWebIdService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -42,11 +35,6 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
-
-import com.auth0.jwt.JWT;
-import com.auth0.jwt.JWTVerifier;
-import com.auth0.jwt.algorithms.Algorithm;
-import com.auth0.jwt.interfaces.DecodedJWT;
 
 import fr.index.cloud.ens.ws.beans.CreateUserBean;
 import fr.index.cloud.ens.ws.beans.PublishBean;
@@ -64,13 +52,15 @@ import fr.toutatice.portail.cms.nuxeo.api.cms.NuxeoDocumentContext;
 import fr.toutatice.portail.cms.nuxeo.api.services.NuxeoCommandContext;
 
 
+/**
+ * Services Rest associés au Drive
+ * 
+ * @author Jean-Sébastien
+ */
 @RestController
 public class DriveRestController {
 
-    /**
-	 * 
-	 */
-	private static final String TOKEN_PREFIX = "Bearer ";
+
 	private static final String PROP_TTC_WEBID = "ttc:webid";
     private static final String PROP_SHARE_LINK = "rshr:linkId";
 
@@ -87,10 +77,32 @@ public class DriveRestController {
     
     @Autowired
     private ITokenService tokenService;
+ 
 
+    @Autowired
+    private ErrorMgr errorMgr;
 
-    /** Logger. */
-    private static final Log logger = LogFactory.getLog(DriveRestController.class);
+    
+    /**
+     * Wraps the doc. fetching according to the WS error handling
+     * 
+     * (Nuxeo Exception are converted into GenericException with the {id} of the content
+     * added.
+     * 
+     * @param ctl
+     * @param path
+     * @return
+     */
+    public static Document wrapContentFetching(NuxeoController nuxeoController, String path) throws GenericException {
+        Document currentDoc=null;
+        try {
+            currentDoc = nuxeoController.getDocumentContext(path).getDocument();           
+        } catch(NuxeoException e) {
+            throw new GenericException(e, path);
+        }
+        return currentDoc;
+    }
+
 
     /**
      * Get a nuxeoController associated to the current user
@@ -115,65 +127,6 @@ public class DriveRestController {
     }
 
 
-    /**
-     * Conversion des exceptions en erreur JSON
-     * 
-     * @param e
-     * @return
-     */
-    private Map<String, Object> handleDefaultExceptions(Exception e, Principal principal) {
-
-        Map<String, Object> response = new LinkedHashMap<>();
-
-        boolean logError = true;
-        int returnCode = GenericErrors.ERR_UNKNOWN;
-
-        if (e instanceof NuxeoException) {
-            NuxeoException nxe = (NuxeoException) e;
-
-            if (nxe.getErrorCode() == NuxeoException.ERROR_NOTFOUND) {
-                response.put("returnCode", GenericErrors.ERR_NOT_FOUND);
-                logError = false;
-            } else if (nxe.getErrorCode() == NuxeoException.ERROR_FORBIDDEN) {
-                response.put("returnCode", GenericErrors.ERR_FORBIDDEN);
-                logError = false;
-            }
-        }
-
-        if (logError) {
-            // Token
-            // TODO : Add context for Web Service
-            // String token = this.logContext.createContext(portalControllerContext, "portal", null);
-
-
-            // User identifier
-            String userId = null;
-            if( principal != null)
-                userId = principal.getName();
-
-            // Error descriptor
-            ErrorDescriptor errorDescriptor = new ErrorDescriptor(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e, null, userId, null);
-            // errorDescriptor.setToken(token);
-
-            // Print stack in server.log
-            if (errorDescriptor.getException() != null) {
-                logger.error("Technical error in web service ", errorDescriptor.getException());
-            }
-
-
-            // Print stack in portal_user_error.log
-            GlobalErrorHandler.getInstance().logError(errorDescriptor);
-
-
-            response.put("returnCode", GenericErrors.ERR_UNKNOWN);
-        }
-
-        response.put("returnCode", returnCode);
-
-        return response;
-
-    }
-
 
     /**
      * URL to use: /index-cloud-portal-ens-ws/rest/Drive.content
@@ -191,7 +144,7 @@ public class DriveRestController {
         Map<String, Object> contents = new LinkedHashMap<>();
 
         if (mainObject)
-            contents.put("returnCode", GenericErrors.ERR_OK);
+            contents.put("returnCode", ErrorMgr.ERR_OK);
 
         contents.put("type", type);
         contents.put("id", doc.getProperties().getString(PROP_TTC_WEBID));
@@ -227,8 +180,9 @@ public class DriveRestController {
             Principal principal) throws Exception {
         
         Map<String, Object> returnObject = new LinkedHashMap<>();
-        returnObject.put("returnCode", GenericErrors.ERR_OK);
+        returnObject.put("returnCode", ErrorMgr.ERR_OK);
  
+        WSPortalControllerContext ctx = new WSPortalControllerContext(request, response, principal);
 
         try {
             Map<String, String> tokenAttributes = new ConcurrentHashMap<>();
@@ -238,18 +192,31 @@ public class DriveRestController {
             returnObject.put("url", url);
 
         } catch (Exception e) {
-            returnObject = handleDefaultExceptions(e, principal);
+            returnObject = errorMgr.handleDefaultExceptions(ctx, e);
         }
         return returnObject;
     }
 
 
+    /**
+     * Get content datas for the specified id
+     * 
+     * @param request
+     * @param response
+     * @param id
+     * @param principal
+     * @return
+     * @throws Exception
+     */
+    
     @RequestMapping(value = "/Drive.content", method = RequestMethod.GET)
     @ResponseStatus(HttpStatus.OK)
 
     public Map<String, Object> getContent(HttpServletRequest request, HttpServletResponse response, @RequestParam(value = "id", required = false) String id,
             Principal principal) throws Exception {
 
+        
+        WSPortalControllerContext ctx = new WSPortalControllerContext(request, response, principal);
         NuxeoController nuxeoController = getNuxeocontroller(request, principal);
 
         Map<String, Object> returnObject;
@@ -265,7 +232,7 @@ public class DriveRestController {
                 path = rootPath;
 
             // Get durrent doc
-            Document currentDoc = nuxeoController.getDocumentContext(path).getDocument();
+            Document currentDoc = wrapContentFetching(nuxeoController, path);
 
             String type = currentDoc.getPath().equals(rootPath) ? "root" : currentDoc.getType().toLowerCase();
 
@@ -307,7 +274,7 @@ public class DriveRestController {
             returnObject.put("childrens", childrenList);
 
         } catch (Exception e) {
-            returnObject = handleDefaultExceptions(e, principal);
+            returnObject = errorMgr.handleDefaultExceptions(ctx, e);
         }
         return returnObject;
 
@@ -330,8 +297,11 @@ public class DriveRestController {
     public Map<String, Object> handleFileUpload(@RequestParam("file") MultipartFile file, @RequestParam("uploadInfos") String fileUpload,
             HttpServletRequest request, HttpServletResponse response, Principal principal) throws Exception {
 
+        
+        WSPortalControllerContext ctx = new WSPortalControllerContext(request, response, principal);
+        
         Map<String, Object> returnObject = new LinkedHashMap<>();
-        returnObject.put("returnCode", GenericErrors.ERR_OK);
+        returnObject.put("returnCode", ErrorMgr.ERR_OK);
 
         try {
 
@@ -340,8 +310,8 @@ public class DriveRestController {
             UploadBean uploadBean = new ObjectMapper().readValue(fileUpload, UploadBean.class);
 
             // Get parent doc
-            Document parentDoc = nuxeoController.getDocumentContext(IWebIdService.FETCH_PATH_PREFIX + uploadBean.getParentId()).getDocument();
-
+            Document parentDoc =  wrapContentFetching(nuxeoController, IWebIdService.FETCH_PATH_PREFIX + uploadBean.getParentId());
+                    
             // set qualifiers
             Map<String, String> properties = parseProperties(uploadBean.getProperties());
 
@@ -351,7 +321,7 @@ public class DriveRestController {
             nuxeoController.executeNuxeoCommand(command);
 
         } catch (Exception e) {
-            returnObject = handleDefaultExceptions(e, principal);
+            returnObject = errorMgr.handleDefaultExceptions(ctx,  e);
         }
 
 
@@ -374,17 +344,21 @@ public class DriveRestController {
     @ResponseStatus(HttpStatus.OK)
     public Map<String, Object> publish(@RequestBody PublishBean publishBean, HttpServletRequest request, HttpServletResponse response, Principal principal)
             throws Exception {
+        
+        WSPortalControllerContext wsCtx = new WSPortalControllerContext(request, response, principal);
+        
         Map<String, Object> returnObject = new LinkedHashMap<>();
-        returnObject.put("returnCode", GenericErrors.ERR_OK);
+        returnObject.put("returnCode", ErrorMgr.ERR_OK);
         try {
 
             NuxeoController nuxeoController = getNuxeocontroller(request, principal);
 
-            NuxeoDocumentContext ctx = nuxeoController.getDocumentContext(IWebIdService.FETCH_PATH_PREFIX + publishBean.getContentId());
+             
+            String path = IWebIdService.FETCH_PATH_PREFIX + publishBean.getContentId();
+            NuxeoDocumentContext ctx = nuxeoController.getDocumentContext(path);
 
-            // Get parent doc
-            Document currentDoc = ctx.getDocument();
-
+            Document currentDoc = wrapContentFetching(nuxeoController, path);
+            
             // set qualifiers
             Map<String, String> properties = parseProperties(publishBean.getProperties());
 
@@ -401,7 +375,7 @@ public class DriveRestController {
             returnObject.put("shareId", shareId);
 
         } catch (Exception e) {
-            returnObject = handleDefaultExceptions(e, principal);
+            returnObject = errorMgr.handleDefaultExceptions(wsCtx, e);
         }
 
 
@@ -426,17 +400,20 @@ public class DriveRestController {
             Principal principal) throws Exception {
 
 
+        WSPortalControllerContext wsCtx = new WSPortalControllerContext(request, response, principal);
+        
         Map<String, Object> returnObject = new LinkedHashMap<>();
-        returnObject.put("returnCode", GenericErrors.ERR_OK);
+        returnObject.put("returnCode", ErrorMgr.ERR_OK);
 
         try {
 
             NuxeoController nuxeoController = getNuxeocontroller(request, principal);
 
-            NuxeoDocumentContext ctx = nuxeoController.getDocumentContext(IWebIdService.FETCH_PATH_PREFIX + unpublishBean.getContentId());
+            String path = IWebIdService.FETCH_PATH_PREFIX + unpublishBean.getContentId();
+            NuxeoDocumentContext ctx = nuxeoController.getDocumentContext(path);
 
             // Get parent doc
-            Document currentDoc = ctx.getDocument();
+            Document currentDoc = wrapContentFetching(nuxeoController, path);
 
             int indice = -1;
 
@@ -461,7 +438,7 @@ public class DriveRestController {
 
 
         } catch (Exception e) {
-            returnObject = handleDefaultExceptions(e, principal);
+            returnObject = errorMgr.handleDefaultExceptions(wsCtx, e);
         }
 
 
@@ -475,8 +452,10 @@ public class DriveRestController {
             throws Exception {
 
 
+        WSPortalControllerContext wsCtx = new WSPortalControllerContext(request, response, principal);
+        
         Map<String, Object> returnObject = new LinkedHashMap<>();
-        returnObject.put("returnCode", GenericErrors.ERR_OK);
+        returnObject.put("returnCode", ErrorMgr.ERR_OK);
 
         try {
 
@@ -501,32 +480,31 @@ public class DriveRestController {
 
 
         } catch (Exception e) {
-            returnObject = handleDefaultExceptions(e, principal);
+            returnObject = errorMgr.handleDefaultExceptions(wsCtx, e);
         }
         return returnObject;
     }
 
-    
-    
-
-    @RequestMapping(value = "/Drive.error", method = RequestMethod.POST)
+ 
+    @RequestMapping(value = "/Drive.error", method = RequestMethod.GET)
     @ResponseStatus(HttpStatus.OK)
-    public Map<String, Object> error( HttpServletRequest request, HttpServletResponse response, Principal principal)
+    public Map<String, Object> error( HttpServletRequest request, HttpServletResponse response, Principal principal,  @RequestParam(value = "type", required = false) String type)
             throws Exception {
 
-
+        WSPortalControllerContext wsCtx = new WSPortalControllerContext(request, response, principal);
+        
         Map<String, Object> returnObject = new LinkedHashMap<>();
-        returnObject.put("returnCode", GenericErrors.ERR_OK);
+        returnObject.put("returnCode", ErrorMgr.ERR_OK);
 
         try {
-
-            if (true)   
-                throw new Exception ("message d'erreur");
+            if ("exception".equals(type))   
+                throw new Exception ("this is the exception msg");
             
-
-
+            if ("error".equals(type))   
+               returnObject =  errorMgr.getErrorResponse(3, "Erreur de test");   
+            
         } catch (Exception e) {
-            returnObject = handleDefaultExceptions(e, principal);
+            returnObject = errorMgr.handleDefaultExceptions(wsCtx, e);
         }
         return returnObject;
     }

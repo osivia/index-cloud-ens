@@ -3,6 +3,8 @@ package fr.index.cloud.ens.ws;
 import org.osivia.directory.v2.service.PersonUpdateService;
 import org.osivia.portal.api.directory.v2.DirServiceFactory;
 import org.osivia.portal.api.locator.Locator;
+import org.osivia.portal.api.log.LogContext;
+import org.osivia.portal.api.log.LogContextFactory;
 import org.osivia.portal.api.notifications.INotificationsService;
 import org.osivia.portal.api.tokens.ITokenService;
 import org.osivia.portal.api.urls.IPortalUrlFactory;
@@ -64,5 +66,14 @@ public class PortalServices   {
         return Locator.findMBean(ITokenService.class, ITokenService.MBEAN_NAME);
     }
 
+    
+    /**
+     * Get Logger context
+     * @return logger context
+     */
+    @Bean
+    public LogContext getLoggerContext() {
+        return LogContextFactory.getLogContext();
+    }
 
 }

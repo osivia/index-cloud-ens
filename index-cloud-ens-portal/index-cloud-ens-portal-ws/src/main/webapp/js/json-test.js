@@ -566,30 +566,32 @@ $JQry(function() {
 		$element.click(function() {
 			console.log("génération d'une erreur ");			
 
-
-			var params = {};
-
-			$JQry
-					.ajax({
-						type : "POST",
-						url : oauth.params.resourceUrl+"/Drive.error",
-						headers : {
-							"Authorization" : "Bearer " + oauth.getToken()
-						},
-						dataType : 'json',
-						contentType : 'application/json',
-						data : JSON.stringify(params),
-						success : function(jsonData) {
-							if (jsonData.returnCode != 0)
-								$JQry.notify("Error #"+jsonData.returnCode, "error");
-						},
-						error : function(e) {
-							$JQry.notify("HTTP Error #"+e.status, "error");
-						}
-					});
-
+			testError( "error");
 			});
 	});
+	
+	
+	
+	$JQry("#btnException").each(function(index, element) {
+
+		var $element = $JQry(element);
+		$element.click(function() {
+			console.log("génération d'une erreur ");			
+
+			testError( "exception");
+			});
+	});	
+	
+	$JQry("#btnNotFound").each(function(index, element) {
+
+		var $element = $JQry(element);
+		$element.click(function() {
+			console.log("génération d'une erreur ");			
+
+			drive( "????????");
+			});
+	});		
+
 	
 	
 	$JQry("#btnSignUp").each(function(index, element) {
@@ -622,6 +624,28 @@ $JQry(function() {
 			});
 	});	
 });
+
+
+function testError( type) {
+	$JQry
+	.ajax({
+		type : "GET",
+		url : oauth.params.resourceUrl+"/Drive.error?type="+type,
+		headers : {
+			"Authorization" : "Bearer " + oauth.getToken()
+		},
+		dataType : 'json',
+		contentType : 'application/json',
+		success : function(jsonData) {
+			if (jsonData.returnCode != 0)
+				$JQry.notify("Error #"+jsonData.returnCode, "error");
+		},
+		error : function(e) {
+			$JQry.notify("HTTP Error #"+e.status, "error");
+		}
+	});
+	
+}
 
 function createSignUpToken( )	{
 	// Defining our token parts
