@@ -10,6 +10,7 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
@@ -34,6 +35,13 @@ public class SimpleCorsFilter implements Filter {
         if ("OPTIONS".equalsIgnoreCase(request.getMethod())) {
             response.setStatus(HttpServletResponse.SC_OK);
         } else {
+            // Avoid session-fixation hacks
+            if( request.getRequestURI().endsWith("/oauth/token"))    {
+                HttpSession session = ((HttpServletRequest) req).getSession(false);
+                if( session != null)    {
+                    ((HttpServletRequest) req).getSession(false).invalidate();
+                }
+            }
             chain.doFilter(req, res);
         }
     }
