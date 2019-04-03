@@ -1769,8 +1769,8 @@ return nuxeoRequest.toString();</value>
 				            <value>false</value>
 				          </property>
 				          <property>
-				            <name>osivia.nuxeoRequest</name>
-				            <value>StringBuilder request = new StringBuilder();&#13;
+            <name>osivia.nuxeoRequest</name>
+            <value>StringBuilder request = new StringBuilder();&#13;
 				request.append("ecm:path STARTSWITH '").append(basePath).append("' ");&#13;
 				request.append("AND ecm:primaryType &lt;&gt; 'Staple' ");&#13;
 				request.append("AND ecm:mixinType &lt;&gt; 'Folderish' ");&#13;
@@ -1782,15 +1782,13 @@ return nuxeoRequest.toString();</value>
 				&#13;
 				// Format search by level&#13;
 				    if (params.get("level") != null) {&#13;
-				&#13;
-				        String s = NXQLFormater.formatVocabularySearch("idxcl:level", params.get("level"));&#13;
-				&#13;
-				       s = s.replaceAll("idxcl:level STARTSWITH '([A-Za-z0-9]*)/([A-Za-z0-9]*)'", "idxcl:level STARTSWITH '$2'");&#13;
-				        request.append("AND ").append( s).append(" ");&#13;
-				    }&#13;
+request.append("AND ").append(NXQLFormater.formatVocabularySearch("idxcl:levelsTree", params.get("level"))).append(" ");&#13;
+				}				&#13;
+				       &#13;
+				    &#13;
 				&#13;
 				return request.toString();</value>
-				          </property>
+          </property>
 				          <property>
 				            <name>osivia.ajaxLink</name>
 				            <value>1</value>

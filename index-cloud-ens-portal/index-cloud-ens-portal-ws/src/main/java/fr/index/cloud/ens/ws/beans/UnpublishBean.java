@@ -11,12 +11,7 @@ public class UnpublishBean {
     private String contentId;
     private String pubId;
   
-    
-    
-  
-
-
-
+ 
     /**
      * Getter for pubId.
      * @return the pubId

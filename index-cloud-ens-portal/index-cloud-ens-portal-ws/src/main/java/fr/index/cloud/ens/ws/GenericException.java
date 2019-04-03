@@ -2,6 +2,11 @@ package fr.index.cloud.ens.ws;
 
 import org.osivia.portal.core.web.IWebIdService;
 
+/**
+ * Wraps current exception
+ * 
+ * @author Jean-Sébastien
+ */
 public class GenericException extends Exception {
 
     private static final long serialVersionUID = -7558437064829642698L;

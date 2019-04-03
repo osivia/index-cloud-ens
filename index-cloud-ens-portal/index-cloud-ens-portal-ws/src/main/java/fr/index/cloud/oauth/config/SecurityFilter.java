@@ -16,11 +16,19 @@ import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
+/**
+ * Implements web security 
+ * - cors
+ * - session fixation
+ * 
+ * @author Jean-Sébastien
+ */
+
 @Component
 @Order(Ordered.HIGHEST_PRECEDENCE)
-public class SimpleCorsFilter implements Filter {
+public class SecurityFilter implements Filter {
 
-    public SimpleCorsFilter() {
+    public SecurityFilter() {
     }
 
     @Override

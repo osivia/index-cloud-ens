@@ -134,7 +134,7 @@ public class OAuth2ServerConfig {
 		@Override
 		public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
 
-		    System.out.println("osivia configuration");
+//		    System.out.println("osivia configuration");
 		    
             accessConfirmationController.setClientDetailsService(clientDetailsService);
             accessConfirmationController.setApprovalStore(approvalStore);

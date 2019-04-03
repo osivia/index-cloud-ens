@@ -8,6 +8,11 @@ import fr.index.cloud.ens.ws.DriveRestController;
 import fr.index.cloud.ens.ws.UserRestController;
 import fr.toutatice.portail.cms.nuxeo.api.CMSPortlet;
 
+/**
+ * Bootstrap entry point
+ * 
+ * @author Jean-Sébastien
+ */
 public class WSUtilPortlet extends CMSPortlet {
 
     @Override
