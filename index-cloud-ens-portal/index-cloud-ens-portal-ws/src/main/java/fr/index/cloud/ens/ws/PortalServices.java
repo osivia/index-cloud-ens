@@ -8,15 +8,16 @@ import org.osivia.portal.api.log.LogContextFactory;
 import org.osivia.portal.api.notifications.INotificationsService;
 import org.osivia.portal.api.tokens.ITokenService;
 import org.osivia.portal.api.urls.IPortalUrlFactory;
-import org.osivia.portal.core.cms.ICMSServiceLocator;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Scope;
+import org.springframework.context.annotation.ScopedProxyMode;
 
 
 
 /**
  * 
- * Accès aux service du portail
+ * Acces to portal services
  * 
  * @author JS Steux
  *
@@ -52,6 +53,9 @@ public class PortalServices   {
      * @return person service
      */
     @Bean(name = "personUpdateService")
+    // this bean doesn't support reload at application (ie non-portlet) level
+    // -> to support hot deploy of custom-services.sar in non-portlet mode, need Prototype + proxy 
+    @Scope(value="prototype", proxyMode=ScopedProxyMode.TARGET_CLASS)  
     public PersonUpdateService getPersonService() {
     	return DirServiceFactory.getService(PersonUpdateService.class);
     }
