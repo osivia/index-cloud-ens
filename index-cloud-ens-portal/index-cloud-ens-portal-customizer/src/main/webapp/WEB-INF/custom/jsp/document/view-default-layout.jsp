@@ -21,16 +21,9 @@
             <ttc:include page="attachments.jsp" />
         </c:if>
 
-
-        <!-- PRONOTE sharing -->
-        <ttc:include page="share.jsp" />
-
         <!-- Metadata -->
         <c:if test="${metadata}">
             <ttc:include page="metadata.jsp" />
         </c:if>
     </div>
 </div>
-
-<!-- Document comments view -->
-<ttc:comments document="${document}" />

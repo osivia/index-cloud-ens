@@ -72,5 +72,14 @@ $JQry(function() {
 			$element.data("loaded", true);
 		}
 	});
+	
+	
+	$JQry(".inline-edition textarea").change(function(event) {
+		var $target = $JQry(event.target);
+		var $form = $target.closest("form");
+        var $submit = $form.find("button[type=submit], input[type=submit]");
+
+        $submit.click();
+	})
 
 });

@@ -34,9 +34,9 @@
                     .select2-selection__rendered {
                         &::after {
                             content: "\E252"; // halflings-triangle-bottom
-                            float: right;
-                            
-                            margin-top: @padding-base-vertical + 2;
+                            position: absolute;
+                            top: @padding-base-vertical + 2;
+                            right: 0;
                             
                             color: @accessible-gray-light;
                             font-family: "Glyphicons Halflings";
@@ -68,7 +68,9 @@
                     
                     .select2-search--inline {
                         .select2-search__field {
-                            padding: 0;
+                            padding-left: 0;
+                            
+                            color: @brand-primary;
                         }   
                     }
                 }
@@ -90,6 +92,14 @@
                         
                         &[aria-selected="true"] {
                             color: @brand-primary;
+                            
+                            &::before {
+                                display: none;
+                            }
+                        }
+                        
+                        &[aria-disabled="true"] {
+                            color: @accessible-gray-light;
                         }
                     }
                     
@@ -97,25 +107,29 @@
                         background-color: @gray-lighter;
                     }
                     
-                    &:not(.select2-results__message) {
-                        &::before {
-                            content: "\E154"; // glyphicons-unckecked
-                            position: initial;
-                            top: 0;
-                            float: none;
-                            
-                            margin-right: floor(@padding-base-horizontal / 2);
-                            
-                            font-family: "Glyphicons Regular";
-                            font-style: normal;
-                            font-weight: normal;
-                            line-height: 1;
+                    &:not([aria-disabled="true"]) {
+                        .level-1, .level-2, .level-3 {
+                            &::before {
+                                content: "\E154"; // glyphicons-unckecked
+                                position: initial;
+                                top: 0;
+                                float: none;
+                                
+                                margin-right: floor(@padding-base-horizontal / 2);
+                                
+                                font-family: "Glyphicons Regular";
+                                font-style: normal;
+                                font-weight: normal;
+                                line-height: 1;
+                            }
                         }
                         
                         &[aria-selected="true"] {
-                            &::before {
-                                content: "\E153"; // glyphicons-check
-                            }   
+                            .level-1, .level-2, .level-3 {
+                                &::before {
+                                    content: "\E153"; // glyphicons-check
+                                }
+                            }
                         }
                     }
                 }
