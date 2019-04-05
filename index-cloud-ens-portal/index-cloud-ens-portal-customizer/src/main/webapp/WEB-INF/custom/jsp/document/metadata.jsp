@@ -87,7 +87,7 @@
                 <c:if test="${not empty share}">
                     <p>
                         <span><op:translate key="SHARED_DOC" /></span><br/>
-                        <a href="/toutatice-portail-cms-nuxeo/binary?linkId=${share}"><op:translate key="SHARED_LINK" /></a>
+                        <a href="/s/${share}"><op:translate key="SHARED_LINK" /></a>
                      </p>
                  </c:if>
                 

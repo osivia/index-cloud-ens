@@ -8,7 +8,6 @@ import java.util.Map;
  * @author Jean-Sébastien
  */
 public class UnpublishBean {
-    private String contentId;
     private String pubId;
   
  
@@ -31,30 +30,7 @@ public class UnpublishBean {
         this.pubId = pubId;
     }
 
-
-
-    
   
 
-
-    Map<String,String> properties;
-
-    
-    /**
-     * Getter for contentId.
-     * @return the contentId
-     */
-    public String getContentId() {
-        return contentId;
-    }
-
-    
-    /**
-     * Setter for contentId.
-     * @param contentId the contentId to set
-     */
-    public void setContentId(String contentId) {
-        this.contentId = contentId;
-    }
 
 }
