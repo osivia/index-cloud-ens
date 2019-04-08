@@ -74,12 +74,38 @@ $JQry(function() {
 	});
 	
 	
-	$JQry(".inline-edition textarea").change(function(event) {
-		var $target = $JQry(event.target);
-		var $form = $target.closest("form");
-        var $submit = $form.find("button[type=submit], input[type=submit]");
+	$JQry(".inline-edition textarea").each(function(index, element) {
+		var $element = $JQry(element);
+		
+		if (!$element.data("loaded")) {
+			var timer;
+			
+			$element.change(function(event) {
+				// Clear timer
+				clearTimeout(timer);
+				
+				var $target = $JQry(event.target);
+				var $form = $target.closest("form");
+		        var $submit = $form.find("button[type=submit], input[type=submit]");
 
-        $submit.click();
-	})
-
+		        $submit.click();
+			});
+			
+			$element.keyup(function(event) {
+				// Clear timer
+				clearTimeout(timer);
+				
+				timer = setTimeout(function() {
+					var $target = $JQry(event.target);
+					var $form = $target.closest("form");
+			        var $submit = $form.find("button[type=submit], input[type=submit]");
+					
+					$submit.click();
+				}, 3000);
+			});
+			
+			$element.data("loaded", true);
+		}
+	});
+	
 });

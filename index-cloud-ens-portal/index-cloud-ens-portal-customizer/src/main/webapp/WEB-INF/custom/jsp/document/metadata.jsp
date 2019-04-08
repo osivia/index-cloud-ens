@@ -14,6 +14,9 @@
 <c:set var="publicationDate" value="${document.properties['ttc:publicationDate']}" />
 
 
+<portlet:actionURL name="cancel-inline-edition" var="cancelUrl" />
+
+
 <div class="metadata">
     <div class="panel panel-default">
         <div class="panel-body">
@@ -22,6 +25,7 @@
             <c:set var="placeholder"><op:translate key="DOCUMENT_METADATA_LEVEL_PLACEHOLDER" /></c:set>
             <portlet:actionURL name="inline-edition" var="submitUrl">
                 <portlet:param name="property" value="idxcl:levels" />
+                <portlet:param name="cancel-url" value="${cancelUrl}" />
             </portlet:actionURL>
             <portlet:resourceURL id="select2-vocabulary" var="select2Url">
                 <portlet:param name="vocabulary" value="idx_level" />
@@ -46,6 +50,7 @@
             <c:set var="placeholder"><op:translate key="DOCUMENT_METADATA_SUBJECT_PLACEHOLDER" /></c:set>
             <portlet:actionURL name="inline-edition" var="submitUrl">
                 <portlet:param name="property" value="idxcl:subjects" />
+                <portlet:param name="cancel-url" value="${cancelUrl}" />
             </portlet:actionURL>
             <portlet:resourceURL id="select2-vocabulary" var="select2Url">
                 <portlet:param name="vocabulary" value="idx_subject" />
@@ -69,6 +74,7 @@
             <c:set var="placeholder"><op:translate key="DOCUMENT_METADATA_DESCRIPTION_PLACEHOLDER" /></c:set>
             <portlet:actionURL name="inline-edition" var="submitUrl">
                 <portlet:param name="property" value="dc:description" />
+                <portlet:param name="cancel-url" value="${cancelUrl}" />
             </portlet:actionURL>
             <form action="${submitUrl}" method="post">
                 <div class="form-group inline-edition">
@@ -87,7 +93,7 @@
                 <c:if test="${not empty share}">
                     <p>
                         <span><op:translate key="SHARED_DOC" /></span><br/>
-                        <a href="/toutatice-portail-cms-nuxeo/binary?linkId=${share}"><op:translate key="SHARED_LINK" /></a>
+                        <a href="/s/${share}"><op:translate key="SHARED_LINK" /></a>
                      </p>
                  </c:if>
                 
