@@ -339,9 +339,9 @@ $JQry(function() {
 									var params = {};
 									params.contentId = $JQry('#contentId').val();
 									params.format = $JQry('#pubFormat').val();									
-									params.pubId = $JQry('#pubId').val();
-									params.pubTitle = $JQry('#pubTitle').val();
-									params.pubOrganization = $JQry('#pubOrganization').val();									
+									params.pubOrganization = $JQry('#pubOrganization').val();
+									params.pubGroup = $JQry('#pubGroup').val();									
+									params.pubContext = $JQry('#pubContext').val();									
 									params.properties = {};
 									params.properties.level = $JQry('#pubLevel').val();
 									params.properties.subject = $JQry('#pubSubject').val();

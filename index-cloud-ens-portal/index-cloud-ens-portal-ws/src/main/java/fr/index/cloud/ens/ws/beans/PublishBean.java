@@ -10,9 +10,53 @@ import java.util.Map;
 public class PublishBean {
     private String contentId;
     private String format;    
-    private String pubId;
-    private String pubTitle;  
     private String pubOrganization;    
+    private String pubGroup;    
+    private String pubContext;    
+    
+    
+    /**
+     * Getter for pubGroup.
+     * @return the pubGroup
+     */
+    public String getPubGroup() {
+        return pubGroup;
+    }
+
+
+    
+    /**
+     * Setter for pubGroup.
+     * @param pubGroup the pubGroup to set
+     */
+    public void setPubGroup(String pubGroup) {
+        this.pubGroup = pubGroup;
+    }
+
+
+    
+    /**
+     * Getter for pubContext.
+     * @return the pubContext
+     */
+    public String getPubContext() {
+        return pubContext;
+    }
+
+
+    
+    /**
+     * Setter for pubContext.
+     * @param pubContext the pubContext to set
+     */
+    public void setPubContext(String pubContext) {
+        this.pubContext = pubContext;
+    }
+
+
+    // Classifiers
+    Map<String,String> properties;
+    
     
     /**
      * Getter for format.
@@ -49,51 +93,8 @@ public class PublishBean {
         this.pubOrganization = pubOrganization;
     }
 
-
-
-    /**
-     * Getter for pubId.
-     * @return the pubId
-     */
-    public String getPubId() {
-        return pubId;
-    }
-
-
-
     
-    /**
-     * Setter for pubId.
-     * @param pubId the pubId to set
-     */
-    public void setPubId(String pubId) {
-        this.pubId = pubId;
-    }
 
-
-
-    
-    
-    /**
-     * Getter for pubTitle.
-     * @return the pubTitle
-     */
-    public String getPubTitle() {
-        return pubTitle;
-    }
-
-
-    
-    /**
-     * Setter for pubTitle.
-     * @param pubTitle the pubTitle to set
-     */
-    public void setPubTitle(String pubTitle) {
-        this.pubTitle = pubTitle;
-    }
-
-
-    Map<String,String> properties;
 
     
     /**

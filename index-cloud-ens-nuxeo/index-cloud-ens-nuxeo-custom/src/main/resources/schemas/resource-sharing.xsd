@@ -21,7 +21,8 @@
 	<xs:complexType name="shareTarget">
 		<xs:sequence>
 			<xs:element name="pubId" type="xs:string" />
-			<xs:element name="pubTitle" type="xs:string" />
+			<xs:element name="pubGroup" type="xs:string" />
+			<xs:element name="pubContext" type="xs:string" />			
 			<xs:element name="pubOrganization" type="xs:string" />			
 		</xs:sequence>
 	</xs:complexType>
