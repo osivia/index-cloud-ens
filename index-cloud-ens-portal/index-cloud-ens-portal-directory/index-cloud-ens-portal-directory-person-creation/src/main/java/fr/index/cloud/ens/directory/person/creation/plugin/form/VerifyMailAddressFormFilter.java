@@ -1,18 +1,16 @@
 /**
  * 
  */
-package org.osivia.demo.customizer.plugin.filter;
+package fr.index.cloud.ens.directory.person.creation.plugin.form;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.osivia.portal.api.PortalException;
-import org.osivia.portal.api.context.PortalControllerContext;
-import org.osivia.portal.api.locator.Locator;
-import org.osivia.portal.api.tokens.ITokenService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
+import fr.index.cloud.ens.directory.person.creation.plugin.service.PersonCreationPluginService;
 import fr.toutatice.portail.cms.nuxeo.api.forms.FormFilter;
 import fr.toutatice.portail.cms.nuxeo.api.forms.FormFilterContext;
 import fr.toutatice.portail.cms.nuxeo.api.forms.FormFilterException;
@@ -20,25 +18,31 @@ import fr.toutatice.portail.cms.nuxeo.api.forms.FormFilterExecutor;
 import fr.toutatice.portail.cms.nuxeo.api.forms.FormFilterParameterType;
 
 /**
- * 
- * Filter used to decode a token ID (drive the name and e-mail of the user who wants to create ab account).
- * @author Loïc Billon
+ * @author loic
  *
  */
-public class DecodeUserCreationTokenFilter implements FormFilter {
+@Component
+public class VerifyMailAddressFormFilter implements FormFilter {
 
-	private static final String ID = DecodeUserCreationTokenFilter.class.getSimpleName();
+
+    /** Form filter identifier. */
+    public static final String IDENTIFIER = "PERSON_VERIFY_MAIL";	
 	
-	private static final String LABEL_KEY = "DECODE_USER_TOKEN_LABEL";
+    /** Form filter label internationalization key. */
+    private static final String LABEL_INTERNATIONALIZATION_KEY = "PERSON_VERIFY_MAIL_LABEL";
+    /** Form filter description internationalization key. */
+    private static final String DESCRIPTION_INTERNATIONALIZATION_KEY = "PERSON_VERIFY_MAIL_DESCRIPTION";
 
-	private static final String DESCRIPTION_KEY = "DECODE_USER_TOKEN_DESCRIPTION";
-
+    /** Plugin service. */
+    @Autowired
+    private PersonCreationPluginService service;
+    
 	/* (non-Javadoc)
 	 * @see fr.toutatice.portail.cms.nuxeo.api.forms.FormFilter#getId()
 	 */
 	@Override
 	public String getId() {
-		return ID;
+		return IDENTIFIER;
 	}
 
 	/* (non-Javadoc)
@@ -46,7 +50,7 @@ public class DecodeUserCreationTokenFilter implements FormFilter {
 	 */
 	@Override
 	public String getLabelKey() {
-		return LABEL_KEY;
+		return LABEL_INTERNATIONALIZATION_KEY;
 	}
 
 	/* (non-Javadoc)
@@ -54,7 +58,7 @@ public class DecodeUserCreationTokenFilter implements FormFilter {
 	 */
 	@Override
 	public String getDescriptionKey() {
-		return DESCRIPTION_KEY;
+		return DESCRIPTION_INTERNATIONALIZATION_KEY;
 	}
 
 	/* (non-Javadoc)
@@ -62,8 +66,9 @@ public class DecodeUserCreationTokenFilter implements FormFilter {
 	 */
 	@Override
 	public Map<String, FormFilterParameterType> getParameters() {
-		 Map<String, FormFilterParameterType> parameters = new HashMap<String, FormFilterParameterType>();
-		 return parameters;
+
+        Map<String, FormFilterParameterType> parameters = new HashMap<>();
+        return parameters;
 	}
 
 	/* (non-Javadoc)
@@ -71,6 +76,7 @@ public class DecodeUserCreationTokenFilter implements FormFilter {
 	 */
 	@Override
 	public boolean hasChildren() {
+		// TODO Auto-generated method stub
 		return false;
 	}
 
@@ -81,29 +87,8 @@ public class DecodeUserCreationTokenFilter implements FormFilter {
 	public void execute(FormFilterContext context, FormFilterExecutor executor)
 			throws FormFilterException, PortalException {
 		
-
-		PortalControllerContext portalControllerContext = context.getPortalControllerContext();
+		service.verifyMail(context, executor);
 		
-		HttpServletRequest request = portalControllerContext.getHttpServletRequest();
-		if(request != null) {
-			String token = request.getParameter("token");
-			
-			ITokenService tokenService = Locator.findMBean(ITokenService.class, ITokenService.MBEAN_NAME);
-			Map<String, String> validateToken = tokenService.validateToken(token, false);
-			
-			if(validateToken != null) {
-				context.getVariables().putAll(validateToken);
-			}
-			else {
-				throw new FormFilterException("No token found or the token has expired.");
-			}
-			
-			// TODO redirection si erreur
-			
-		}
-		
-		
-
 	}
 
 }

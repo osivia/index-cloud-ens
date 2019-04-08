@@ -1,10 +1,6 @@
 package fr.index.cloud.ens.ws;
 
 import java.io.UnsupportedEncodingException;
-import java.security.Principal;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -17,56 +13,34 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.codehaus.jackson.map.ObjectMapper;
 import org.nuxeo.ecm.automation.client.model.Document;
-import org.nuxeo.ecm.automation.client.model.Documents;
-import org.nuxeo.ecm.automation.client.model.PropertyList;
-import org.nuxeo.ecm.automation.client.model.PropertyMap;
 import org.osivia.directory.v2.service.PersonUpdateService;
+import org.osivia.portal.api.PortalException;
 import org.osivia.portal.api.cache.services.CacheInfo;
-import org.osivia.portal.api.context.PortalControllerContext;
 import org.osivia.portal.api.directory.v2.model.Person;
 import org.osivia.portal.api.tokens.ITokenService;
-import org.osivia.portal.core.error.ErrorDescriptor;
-import org.osivia.portal.core.error.GlobalErrorHandler;
 import org.osivia.portal.core.web.IWebIdService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
 
-import fr.index.cloud.ens.ws.beans.CreateUserBean;
-import fr.index.cloud.ens.ws.beans.PublishBean;
-import fr.index.cloud.ens.ws.beans.UnpublishBean;
-import fr.index.cloud.ens.ws.beans.UploadBean;
-import fr.index.cloud.ens.ws.commands.FolderGetChildrenCommand;
-import fr.index.cloud.ens.ws.commands.GetUserProfileCommand;
-import fr.index.cloud.ens.ws.commands.PublishCommand;
-import fr.index.cloud.ens.ws.commands.UnpublishCommand;
-import fr.index.cloud.ens.ws.commands.UploadFileCommand;
-import fr.toutatice.portail.cms.nuxeo.api.INuxeoCommand;
 import fr.toutatice.portail.cms.nuxeo.api.NuxeoController;
-import fr.toutatice.portail.cms.nuxeo.api.NuxeoException;
 import fr.toutatice.portail.cms.nuxeo.api.cms.NuxeoDocumentContext;
 import fr.toutatice.portail.cms.nuxeo.api.services.NuxeoCommandContext;
 
 
 /**
  * Services rest associés aux users
- * @author Loic
+ * @author Loïc Billon
  */
 @RestController
 public class UserRestController {
@@ -106,106 +80,155 @@ public class UserRestController {
     @ResponseStatus(HttpStatus.OK)
     public Map<String, Object> signUp(HttpServletRequest request, HttpServletResponse response) {
 
-        WSPortalControllerContext wsCtx = new WSPortalControllerContext(request, response);
-
 
         Map<String, Object> returnObject = new LinkedHashMap<>();
+        
+        try {
+        	
+        	// 1 - decode the jwt token, check mandatory fields and initialize a map of attributs.
+            Map<String, String> attributes = decodeRequest(request, returnObject);
+            
+            if(returnObject.isEmpty()) {
+            	
+            	// 2 - check if a user is already registered
+                checkValidAccount(attributes, returnObject); 
+                
+            }
+            
+	        if(returnObject.isEmpty()) {
 
-        String url = "";
+	        	// 3 - Create the portal token
+	        	String webToken = tokenService.generateToken(attributes);
+	
+	        	// 4 - Compute and return a link to start UserCreation procedure
+                computeCreateAccountProcUrl(request, returnObject, webToken);
+                returnObject.put("returnCode", ErrorMgr.ERR_OK);
+	        }
+	        
+	        
+        }
+        catch(Exception e) {
+            WSPortalControllerContext wsCtx = new WSPortalControllerContext(request, response);
+
+            returnObject = errorMgr.handleDefaultExceptions(wsCtx, e);
+        }
+        
+        return returnObject;
+
+    }
+    
+    /**
+     * decode the jwt token, check mandatory fields and initialize a map of attributs. 
+     * 
+     * @param request
+     * @param returnObject
+     * @return
+     * @throws PortalException
+     */
+    protected Map<String, String> decodeRequest(HttpServletRequest request, Map<String, Object> returnObject) throws PortalException {
+
+    	Map<String, String> attributes = new ConcurrentHashMap<String, String>();
+        
         String token = request.getHeader("Authorization");
-        if (StringUtils.isNotEmpty(token)) {
-            if (token.startsWith(TOKEN_PREFIX)) {
+        if (StringUtils.isNotEmpty(token) && (token.startsWith(TOKEN_PREFIX))) {
 
-                String issuer = System.getProperty("pronote.issuer");
-                String pronoteSecret = System.getProperty("pronote.secret");
-                DecodedJWT jwt = null;
+            String issuer = System.getProperty("pronote.issuer");
+            String pronoteSecret = System.getProperty("pronote.secret");
+            DecodedJWT jwt = null;
 
-                try {
-                    Algorithm algorithm = Algorithm.HMAC256(pronoteSecret);
+            try {
+                Algorithm algorithm = Algorithm.HMAC256(pronoteSecret);
 
-                    JWTVerifier verifier = JWT.require(algorithm).withIssuer(issuer).build(); // Reusable verifier instance
-                    jwt = verifier.verify(token.substring(TOKEN_PREFIX.length()));
+                JWTVerifier verifier = JWT.require(algorithm).withIssuer(issuer).build(); // Reusable verifier instance
+                jwt = verifier.verify(token.substring(TOKEN_PREFIX.length()));
 
-                } catch (IllegalArgumentException | UnsupportedEncodingException e) {
+            } catch (IllegalArgumentException | UnsupportedEncodingException e) {
 
-                    returnObject.put("returnCode", ErrorMgr.ERR_FORBIDDEN);
-                    logger.error("Erreur d'authentification pronote / cloud", e);
+            	errorMgr.addErrorResponse(returnObject, 2, "Communication error between client and Cloud-ens, token unreadable.");
+            }
+
+            if (jwt != null) {
+                String firstName = jwt.getClaim("firstName").asString();
+                String lastName = jwt.getClaim("lastName").asString();
+                String mail = jwt.getClaim("mail").asString();
+
+                if (StringUtils.isBlank(firstName) || StringUtils.isBlank(lastName) || StringUtils.isBlank(mail)) {
+
+                	String mandatoryFields = "";
+                	
+                	if(StringUtils.isBlank(firstName)) {
+                		mandatoryFields = "firstname ";
+                	}
+                	if(StringUtils.isBlank(lastName)) {
+                		mandatoryFields = mandatoryFields + "lastName ";
+                	}
+                	if(StringUtils.isBlank(mail)) {
+                		mandatoryFields = mandatoryFields + "mail ";
+                	}
+                	
+                	errorMgr.addErrorResponse(returnObject, 3, "Parameters : " +mandatoryFields + " required");
                 }
-
-                String webToken = null;
-                if (jwt != null) {
-                    String firstName = jwt.getClaim("firstName").asString(); // attributes.put("firstName", );
-                    String lastName = jwt.getClaim("lastName").asString(); // attributes.put("lastName", );
-                    String mail = jwt.getClaim("mail").asString(); // attributes.put("mail", );
-
-                    if (StringUtils.isBlank(firstName) || StringUtils.isBlank(lastName) || StringUtils.isBlank(mail)) {
-
-                        returnObject.put("returnCode", ErrorMgr.ERR_FORBIDDEN);
-                        logger.error("Mauvais paramètres.");
-                    } else {
-
-                        Map<String, String> attributes = new ConcurrentHashMap<String, String>();
-                        attributes.put("firstname", firstName);
-                        attributes.put("lastname", lastName);
-                        attributes.put("mail", mail);
-
-                        Person searchedPerson = personUpdateService.getEmptyPerson();
-                        searchedPerson.setMail(mail);
-                        List<Person> search = personUpdateService.findByCriteria(searchedPerson);
-
-
-                        if (search.size() > 0 && search.get(0).getLastConnection() != null) {
-
-                            returnObject.put("returnCode", ErrorMgr.ERR_FORBIDDEN);
-                            logger.error("Un compte actif existe déjà pour cette personne.");
-                        } else {
-
-                            webToken = tokenService.generateToken(attributes);
-                        }
-                    }
-                }
-
-
-                if (webToken != null) {
-
-                    final PortalControllerContext pcc = new PortalControllerContext(portletContext);
-                    try {
-
-                        NuxeoController nuxeoController = new NuxeoController(portletContext);
-                        nuxeoController.setServletRequest(request);
-                        nuxeoController.setAuthType(NuxeoCommandContext.AUTH_TYPE_SUPERUSER);
-                        nuxeoController.setCacheType(CacheInfo.CACHE_SCOPE_NONE);
-                        NuxeoDocumentContext ctx = nuxeoController.getDocumentContext(IWebIdService.FETCH_PATH_PREFIX + "procedure_person-creation");
-
-                        // Get parent doc
-                        Document userCreationProcedure = ctx.getDocument();
-
-                        // CMSServiceCtx cmsCtx = new CMSServiceCtx();
-                        // cmsCtx.set
-                        // String personCreationPath = cmsServiceLocator.getCMSService().adaptWebPathToCms(cmsCtx , );
-
-
-                        // TODO portalUrlFactory ne marche pas en dehors d'un contexte portlet.
-
-                        // url = urlFactory.getPermaLink(pcc, null, null, userCreationProcedure.getPath(), IPortalUrlFactory.PERM_LINK_TYPE_TASK);
-
-                        url = "/portal/cms" + userCreationProcedure.getPath();
-
-
-                        String publicHost = System.getProperty("osivia.tasks.host");
-                        url = publicHost + url + "?token=" + webToken;
-                        returnObject.put("url", url);
-                        returnObject.put("returnCode", ErrorMgr.ERR_OK);
-
-
-                    } catch (Exception e) {
-                        returnObject = errorMgr.handleDefaultExceptions(wsCtx, e);
-                    }
+                else {
+                    attributes.put("firstname", firstName);
+                    attributes.put("lastname", lastName);
+                    attributes.put("mail", mail);
+                	
                 }
             }
+            else {
+            	throw new PortalException("JWT token is empty.");
+            }
         }
+        else {
+        	errorMgr.addErrorResponse(returnObject, 2, "Token is mandatory and is empty");
 
-        return returnObject;
+        }
+        
+        return attributes;
+        
     }
+    
+    /**
+     * check if a user is already registered
+     * @param attributes
+     * @param returnObject
+     */
+	private void checkValidAccount(Map<String, String> attributes, Map<String, Object> returnObject) {
+		
+		Person searchedPerson = personUpdateService.getEmptyPerson();
+		searchedPerson.setMail(attributes.get("mail"));
+		List<Person> search = personUpdateService.findByCriteria(searchedPerson);
 
+
+		if (search.size() > 0 && search.get(0).getLastConnection() != null) {
+
+			errorMgr.addErrorResponse(returnObject, 1, "A valid user account is registered with this mail.");
+
+		}
+	}
+	
+	/**
+	 * Compute and return a link to start UserCreation procedure
+	 * @param request
+	 * @param returnObject
+	 * @param webToken
+	 */
+	private void computeCreateAccountProcUrl(HttpServletRequest request, Map<String, Object> returnObject, String webToken) {
+		
+		NuxeoController nuxeoController = new NuxeoController(portletContext);
+		nuxeoController.setServletRequest(request);
+		nuxeoController.setAuthType(NuxeoCommandContext.AUTH_TYPE_SUPERUSER);
+		nuxeoController.setCacheType(CacheInfo.CACHE_SCOPE_NONE);
+		NuxeoDocumentContext ctx = nuxeoController.getDocumentContext(IWebIdService.FETCH_PATH_PREFIX + "procedure_person-creation");
+
+		// Get parent doc
+		Document userCreationProcedure = ctx.getDocument();
+
+		String url = "/portal/cms" + userCreationProcedure.getPath();
+
+		String publicHost = System.getProperty("osivia.tasks.host");
+		url = publicHost + url + "?token=" + webToken;
+		returnObject.put("url", url);
+		
+	}	
 }

@@ -8,7 +8,6 @@ import javax.portlet.PortletContext;
 import javax.portlet.PortletException;
 
 import org.osivia.demo.customizer.plugin.cms.ExtranetNavigationAdapterModule;
-import org.osivia.demo.customizer.plugin.filter.DecodeUserCreationTokenFilter;
 import org.osivia.demo.customizer.plugin.fragment.LaunchSupportPortletModule;
 import org.osivia.demo.customizer.plugin.fragment.ProduitRecordFragmentModule;
 import org.osivia.demo.customizer.plugin.list.AccessoriesListTemplateModule;
@@ -23,6 +22,7 @@ import org.osivia.portal.api.menubar.MenubarModule;
 import org.osivia.portal.api.player.IPlayerModule;
 import org.osivia.portal.api.theming.TemplateAdapter;
 
+import fr.index.cloud.ens.directory.person.creation.plugin.form.DecodeUserCreationTokenFilter;
 import fr.toutatice.portail.cms.nuxeo.api.domain.AbstractPluginPortlet;
 import fr.toutatice.portail.cms.nuxeo.api.domain.FragmentType;
 import fr.toutatice.portail.cms.nuxeo.api.domain.INavigationAdapterModule;
@@ -108,8 +108,6 @@ public class DemoPlugin extends AbstractPluginPortlet {
         this.customizeFragments(customizationContext);
         // Navigation adapters
         this.customizeNavigationAdapters(customizationContext);
-        // form filters
-        this.customizeFormFilters(customizationContext);
     }
 
 
@@ -264,16 +262,6 @@ public class DemoPlugin extends AbstractPluginPortlet {
         navigationAdapters.add(extranet);
     }
     
-    /**
-	 * @param customizationContext
-	 */
-	private void customizeFormFilters(CustomizationContext customizationContext) {
-		
-		Map<String, FormFilter> formFilters = this.getFormFilters(customizationContext);
-		
-		DecodeUserCreationTokenFilter filter = new DecodeUserCreationTokenFilter();
-		formFilters.put(filter.getId(), filter);
-		
-	}
+
 
 }

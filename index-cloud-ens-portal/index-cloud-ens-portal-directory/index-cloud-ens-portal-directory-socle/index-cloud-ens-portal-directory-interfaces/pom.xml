@@ -13,16 +13,6 @@
     <packaging>jar</packaging>
     
     <name>Cloud enseignant - Directory interfaces</name>
-    
-    
-    <dependencies>
-    
-        <dependency>
-		    <groupId>org.osivia.services.directory.socle</groupId>
-		    <artifactId>osivia-services-directory-socle-interfaces</artifactId>
-            <scope>compile</scope>
-	    </dependency>
-    
-    </dependencies>
+
 
 </project> 

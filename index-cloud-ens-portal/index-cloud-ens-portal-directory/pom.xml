@@ -17,7 +17,17 @@
 
     <modules>
         <module>index-cloud-ens-portal-directory-socle</module>
+        <module>index-cloud-ens-portal-directory-person-creation</module>
         <module>index-cloud-ens-portal-directory-ear</module>
     </modules>
 
+    <dependencies>
+    
+        <dependency>
+		    <groupId>org.osivia.services.directory.socle</groupId>
+		    <artifactId>osivia-services-directory-socle-interfaces</artifactId>
+            <scope>provided</scope>
+	    </dependency>
+    
+    </dependencies>
 </project> 

@@ -52,9 +52,9 @@
         
         <!-- Person creation -->
         <dependency>
-            <groupId>org.osivia.services.directory.person</groupId>
-            <artifactId>osivia-services-directory-person-creation</artifactId>
-            <version>${directory.version}</version>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>index-cloud-ens-portal-directory-person-creation</artifactId>
+            <version>${project.version}</version>
             <type>war</type>
         </dependency>
          
@@ -129,9 +129,9 @@
                             <contextRoot>/osivia-services-directory-person-management</contextRoot>
                         </webModule>
                         <webModule>
-                            <groupId>org.osivia.services.directory.person</groupId>
-                            <artifactId>osivia-services-directory-person-creation</artifactId>
-                            <contextRoot>/osivia-services-directory-person-creation</contextRoot>
+				            <groupId>${project.groupId}</groupId>
+				            <artifactId>index-cloud-ens-portal-directory-person-creation</artifactId>
+                            <contextRoot>/cloudens-person-creation</contextRoot>
                         </webModule>
                         <webModule>
                             <groupId>org.osivia.services.directory.group</groupId>

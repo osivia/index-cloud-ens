@@ -60,13 +60,24 @@ public class ErrorMgr {
      */
     public Map<String, Object> getErrorResponse(int errorCode, String errorMsg) {
         Map<String, Object> response = new LinkedHashMap<>();
-        response.put("returnCode", errorCode);
-        if (StringUtils.isNotEmpty(errorMsg))
-            response.put("errorMessage", errorMsg);
 
+        addErrorResponse(response, errorCode, errorMsg);
+        
         return response;
     }
 
+    /**
+     * Add an application error to en existing map
+     * 
+     * @param errorCode
+     * @param errorMsg
+     * @return
+     */
+    public void addErrorResponse(Map<String, Object> response, int errorCode, String errorMsg) {
+        response.put("returnCode", errorCode);
+        if (StringUtils.isNotEmpty(errorMsg))
+            response.put("errorMessage", errorMsg);
+    }
 
     /**
      * Handle default portal exceptions
