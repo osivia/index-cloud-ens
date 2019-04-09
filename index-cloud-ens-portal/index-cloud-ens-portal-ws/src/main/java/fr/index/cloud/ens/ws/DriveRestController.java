@@ -36,11 +36,14 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 
+import fr.index.cloud.ens.ws.beans.CreateFolderBean;
 import fr.index.cloud.ens.ws.beans.CreateUserBean;
 import fr.index.cloud.ens.ws.beans.PublishBean;
 import fr.index.cloud.ens.ws.beans.UnpublishBean;
 import fr.index.cloud.ens.ws.beans.UploadBean;
+import fr.index.cloud.ens.ws.commands.CreateFolderCommand;
 import fr.index.cloud.ens.ws.commands.FetchByPubIdCommand;
+import fr.index.cloud.ens.ws.commands.FetchByTitleCommand;
 import fr.index.cloud.ens.ws.commands.FolderGetChildrenCommand;
 import fr.index.cloud.ens.ws.commands.GetUserProfileCommand;
 import fr.index.cloud.ens.ws.commands.PublishCommand;
@@ -65,6 +68,7 @@ public class DriveRestController {
 
     private static final String PROP_TTC_WEBID = "ttc:webid";
     private static final String PROP_SHARE_LINK = "rshr:linkId";
+    private static final String PROP_ENABLE_LINK = "rshr:enabledLink";    
 
     private static final String SHARE_URL_PREFIX = "/s/";
 
@@ -157,7 +161,7 @@ public class DriveRestController {
      * @throws Exception
      */
 
-    private Map<String, Object> initContent(Document doc, String type, boolean mainObject) {
+    private Map<String, Object> initContent(HttpServletRequest request, Document doc, String type, boolean mainObject) {
 
         Map<String, Object> contents = new LinkedHashMap<>();
 
@@ -173,9 +177,15 @@ public class DriveRestController {
             contents.put("fileSize", size);
         }
 
-        String shareLink = doc.getProperties().getString(PROP_SHARE_LINK);
-        if (shareLink != null)
-            contents.put("shareLink", shareLink);
+        if( mainObject) {
+            Boolean enableLink = doc.getProperties().getBoolean(PROP_ENABLE_LINK, false);
+            if( enableLink) {
+                String shareLink = doc.getProperties().getString(PROP_SHARE_LINK);
+                if (shareLink != null)
+                    contents.put("shareUrl", getUrl(request) + SHARE_URL_PREFIX + shareLink);
+            }
+        }
+          
 
         if (doc.getProperties().get("dc:modified") != null) {
             Date lastModifiedDate = doc.getProperties().getDate("dc:modified");
@@ -186,8 +196,8 @@ public class DriveRestController {
     }
 
 
-    private Map<String, Object> initContent(Document doc, String type) {
-        return initContent(doc, type, false);
+    private Map<String, Object> initContent(HttpServletRequest request, Document doc, String type) {
+        return initContent(request, doc, type, false);
     }
 
 
@@ -254,7 +264,7 @@ public class DriveRestController {
 
             String type = currentDoc.getPath().equals(rootPath) ? "root" : currentDoc.getType().toLowerCase();
 
-            returnObject = initContent(currentDoc, type, true);
+            returnObject = initContent(request,currentDoc, type, true);
 
             // Get hierarchy
 
@@ -268,7 +278,7 @@ public class DriveRestController {
                     hierarchyType = "root";
                 else
                     hierarchyType = hierarchyDoc.getType().toLowerCase();
-                hierarchy.add(0, initContent(hierarchyDoc, hierarchyType));
+                hierarchy.add(0, initContent(request, hierarchyDoc, hierarchyType));
 
                 // next parent
                 hierarchyPath = hierarchyPath.substring(0, hierarchyPath.lastIndexOf('/'));
@@ -285,7 +295,7 @@ public class DriveRestController {
                 Documents children = (Documents) nuxeoController.executeNuxeoCommand(new FolderGetChildrenCommand(currentDoc));
 
                 for (Document doc : children.list()) {
-                    childrenList.add(initContent(doc, doc.getType().toLowerCase()));
+                    childrenList.add(initContent(request, doc, doc.getType().toLowerCase()));
                 }
 
             }
@@ -340,6 +350,64 @@ public class DriveRestController {
 
         } catch (Exception e) {
             returnObject = errorMgr.handleDefaultExceptions(ctx, e);
+        }
+
+
+        return returnObject;
+    }
+
+
+    /**
+     * Create a folder
+     * 
+     * @param file
+     * @param parentWebId
+     * @param extraField
+     * @param request
+     * @param response
+     * @throws Exception
+     */
+
+    @RequestMapping(value = "/Drive.createFolder", method = RequestMethod.POST)
+    @ResponseStatus(HttpStatus.OK)
+    public Map<String, Object> createFolder(@RequestBody CreateFolderBean createFolderBean, HttpServletRequest request, HttpServletResponse response,
+            Principal principal) throws Exception {
+
+        WSPortalControllerContext wsCtx = new WSPortalControllerContext(request, response, principal);
+
+        Map<String, Object> returnObject = new LinkedHashMap<>();
+        returnObject.put("returnCode", ErrorMgr.ERR_OK);
+        try {
+
+            NuxeoController nuxeoController = getNuxeocontroller(request, principal);
+
+
+            String path = IWebIdService.FETCH_PATH_PREFIX + createFolderBean.getParentId();
+
+            Document parentDoc = wrapContentFetching(nuxeoController, path);
+            
+
+            // Check if already exist
+            INuxeoCommand checkCmd = new FetchByTitleCommand(parentDoc, createFolderBean.getFolderName());
+            Documents docs = (Documents) nuxeoController.executeNuxeoCommand(checkCmd);
+
+            if (docs.size() > 0) {
+                returnObject = errorMgr.getErrorResponse(1, "This folder already exists");
+            } else {
+
+                // Execute creation
+                INuxeoCommand command = new CreateFolderCommand(parentDoc, createFolderBean.getFolderName());
+
+                @SuppressWarnings("unchecked")
+                Document folder = (Document) nuxeoController.executeNuxeoCommand(command);
+
+
+                returnObject.put("folderId", folder.getProperties().getString(PROP_TTC_WEBID));
+            }
+
+
+        } catch (Exception e) {
+            returnObject = errorMgr.handleDefaultExceptions(wsCtx, e);
         }
 
 
@@ -428,7 +496,7 @@ public class DriveRestController {
         try {
 
             NuxeoController nuxeoController = getNuxeocontroller(request, principal);
-            
+
             // Find doc by pubId
             Documents docs = (Documents) nuxeoController.executeNuxeoCommand(new FetchByPubIdCommand(unpublishBean.getPubId()));
 
@@ -439,10 +507,10 @@ public class DriveRestController {
 
                 Document currentDoc = docs.get(0);
                 NuxeoDocumentContext ctx = nuxeoController.getDocumentContext(currentDoc.getPath());
-                
+
                 // unpublish
                 nuxeoController.executeNuxeoCommand(new UnpublishCommand(currentDoc, unpublishBean.getPubId()));
-                
+
                 // Force cache initialisation
                 ctx.reload();
 

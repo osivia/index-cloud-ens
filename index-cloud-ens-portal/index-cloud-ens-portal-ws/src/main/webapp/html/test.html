@@ -134,7 +134,7 @@
 				
 					<form method="POST" enctype="multipart/form-data" id="publishForm">
 						<div class="form-group">
-							<label for="pubShare"">Share ID</label> <input name="pubShare"
+							<label for="pubShare"">Share URL</label> <input name="pubShare"
 								class="form-control" id="pubShare" readonly />
 						</div>
 						<div class="form-group">
@@ -204,7 +204,26 @@
 					<input type="file" name="file" class="btn" /> <input type="button"
 						class="btn btn-primary" value="Submit" id="btnUploadSubmit" />
 				</form>
+				
+				
 
+				<h3>Create folder </h3>
+				<div id="auth">
+					<form method="POST" enctype="multipart/form-data" id="createFolderForm">
+											
+						<div class="form-group">
+							<label for="folderName"">Nom</label> <input name="folderName"
+								class="form-control" id="folderName" />
+						</div>
+			
+
+						<input type="button"
+							class="btn btn-primary" value="Créer" id="btnCreateFolder" />
+					</form>
+				</div>				
+				
+				
+				
 			</div>
 		</div>
 	</div>

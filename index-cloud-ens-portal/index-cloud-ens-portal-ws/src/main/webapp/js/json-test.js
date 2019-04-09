@@ -205,7 +205,7 @@ function drive(id) {
 						if (jsonData.type == 'file') {
 							$JQry('#detail').show();
 							$JQry('#contentId').val(jsonData.id);
-							$JQry('#pubShare').val(jsonData.shareLink);
+							$JQry('#pubShare').val(jsonData.shareUrl);
 						} else {
 							$JQry('#detail').hide();
 
@@ -329,6 +329,49 @@ $JQry(function() {
 								});
 					});
 
+	$JQry("#btnCreateFolder")
+	.each(
+			function(index, element) {
+
+				var $element = $JQry(element);
+				$element
+						.click(function() {
+							var params = {};
+							params.parentId = $JQry('#folderId').val();							
+							params.folderName = $JQry('#folderName').val();
+							$JQry
+									.ajax({
+										type : "POST",
+										url : oauth.params.resourceUrl+"/Drive.createFolder",
+										headers : {
+											"Authorization" : "Bearer " + oauth.getToken()
+										},
+										dataType : 'json',
+										contentType : 'application/json',
+										data : JSON.stringify(params),
+										
+										success : function(jsonData) {
+											if (jsonData.returnCode != 0)
+												$JQry.notify("Error #"+jsonData.returnCode, "error");
+											else	{
+												$JQry.notify("Dossier créé", "success");
+												drive($JQry('#folderId').val());													
+											}
+
+										},
+										error : function(e) {
+											$JQry.notify("HTTP Error #"+e.status, "error");
+										}
+										
+									});
+
+						});
+			});
+
+	
+	
+	
+	
 	$JQry("#btnPubSubmit")
 			.each(
 					function(index, element) {
@@ -361,7 +404,7 @@ $JQry(function() {
 														$JQry.notify("Error #"+jsonData.returnCode, "error");
 													else	{
 														$JQry.notify("Contenu publié", "success");
-														$JQry('#pubShare').val(jsonData.shareId);
+														$JQry('#pubShare').val(jsonData.shareUrl);
 													}
 
 												},
