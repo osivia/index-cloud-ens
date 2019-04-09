@@ -22,7 +22,6 @@ import org.osivia.portal.api.menubar.MenubarModule;
 import org.osivia.portal.api.player.IPlayerModule;
 import org.osivia.portal.api.theming.TemplateAdapter;
 
-import fr.index.cloud.ens.directory.person.creation.plugin.form.DecodeUserCreationTokenFilter;
 import fr.toutatice.portail.cms.nuxeo.api.domain.AbstractPluginPortlet;
 import fr.toutatice.portail.cms.nuxeo.api.domain.FragmentType;
 import fr.toutatice.portail.cms.nuxeo.api.domain.INavigationAdapterModule;

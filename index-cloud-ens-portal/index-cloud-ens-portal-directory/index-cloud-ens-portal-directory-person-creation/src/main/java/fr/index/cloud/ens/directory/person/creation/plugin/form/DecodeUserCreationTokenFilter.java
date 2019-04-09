@@ -12,6 +12,7 @@ import org.osivia.portal.api.PortalException;
 import org.osivia.portal.api.context.PortalControllerContext;
 import org.osivia.portal.api.locator.Locator;
 import org.osivia.portal.api.tokens.ITokenService;
+import org.springframework.stereotype.Component;
 
 import fr.toutatice.portail.cms.nuxeo.api.forms.FormFilter;
 import fr.toutatice.portail.cms.nuxeo.api.forms.FormFilterContext;
@@ -25,6 +26,7 @@ import fr.toutatice.portail.cms.nuxeo.api.forms.FormFilterParameterType;
  * @author Loïc Billon
  *
  */
+@Component
 public class DecodeUserCreationTokenFilter implements FormFilter {
 
 	public static final String IDENTIFIER = DecodeUserCreationTokenFilter.class.getSimpleName();

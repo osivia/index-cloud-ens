@@ -654,9 +654,11 @@ $JQry(function() {
 						contentType : 'application/json',
 						success : function(jsonData) {
 							if (jsonData.returnCode != 0)
-								$JQry.notify("Error #"+jsonData.returnCode, "error");
-							else
+								$JQry.notify("Error #"+jsonData.returnCode+ " "+ jsonData.errorMessage, "error");
+							else{
 								$JQry.notify("Utilisateur créé", "success");
+								window.open(jsonData.url,"signup","menubar=no, status=no, scrollbars=no, menubar=no, width=1000, height=600");
+							}
 
 						},
 						error : function(e) {
