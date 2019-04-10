@@ -1,6 +1,10 @@
 
 package fr.index.cloud.oauth.config;
 
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
@@ -9,11 +13,12 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
-import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.AuthorizationServerConfigurerAdapter;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
@@ -22,14 +27,17 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.R
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.ResourceServerSecurityConfigurer;
+import org.springframework.security.oauth2.provider.ClientDetails;
 import org.springframework.security.oauth2.provider.ClientDetailsService;
+import org.springframework.security.oauth2.provider.ClientRegistrationException;
+import org.springframework.security.oauth2.provider.NoSuchClientException;
 import org.springframework.security.oauth2.provider.approval.ApprovalStore;
 import org.springframework.security.oauth2.provider.approval.TokenApprovalStore;
 import org.springframework.security.oauth2.provider.approval.UserApprovalHandler;
+import org.springframework.security.oauth2.provider.client.BaseClientDetails;
 import org.springframework.security.oauth2.provider.request.DefaultOAuth2RequestFactory;
 import org.springframework.security.oauth2.provider.token.ConsumerTokenServices;
 import org.springframework.security.oauth2.provider.token.TokenStore;
-import org.springframework.security.oauth2.provider.token.store.InMemoryTokenStore;
 
 import fr.index.cloud.oauth.authentication.PortalUserDetailService;
 import fr.index.cloud.oauth.tokenStore.PortalTokenStore;
@@ -131,10 +139,38 @@ public class OAuth2ServerConfig {
 	        PortalUserDetailService userDetailService; 
 
 
+	        public ClientDetailsService clientDetailsService() {
+	            return new ClientDetailsService() {
+	                @Override
+	                public ClientDetails loadClientByClientId(String clientId) throws ClientRegistrationException {
+	                    
+	                    
+	                    //System.out.println("osivia loadClientByClientId");
+	                    
+	                    if( clientId.startsWith("PRONOTE-"))   {
+    	                    BaseClientDetails details = new BaseClientDetails();
+    	                    details.setClientId(clientId);
+    	                    details.setClientSecret(System.getProperty("pronote.oauth2.client.secret"));
+    	                    details.setAuthorizedGrantTypes(Arrays.asList("password", "authorization_code", "refresh_token", "implicit") );
+    	                    details.setScope(Arrays.asList("drive"));
+    	                    details.setResourceIds(Arrays.asList("cloud"));
+    	                    Set<GrantedAuthority> authorities = new HashSet<GrantedAuthority>();
+    	                    authorities.add(new SimpleGrantedAuthority("ROLE_CLIENT"));
+    	                    authorities.add(new SimpleGrantedAuthority("ROLE_TRUSTED_CLIENT"));
+    	                    details.setAuthorities(authorities);
+    	                    details.setAccessTokenValiditySeconds(600);
+    	                    return details;
+	                    }
+	                    else throw new NoSuchClientException("Client with ID '"+clientId+"' not found");
+	                }
+	            };
+	        }     
+	        
+	        
 		@Override
 		public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
 
-//		    System.out.println("osivia configuration");
+		    System.out.println("osivia configuration 2");
 		    
             accessConfirmationController.setClientDetailsService(clientDetailsService);
             accessConfirmationController.setApprovalStore(approvalStore);
@@ -153,8 +189,12 @@ public class OAuth2ServerConfig {
 
             photoController.setPhotoService(photoService);
 
-		        
+            
+            clients.withClientDetails(clientDetailsService());
+
+
 			// @formatter:off
+            /*
 			clients.inMemory().withClient("tonr")
 			 			.resourceIds(CLOUD_RESOURCE_ID)
 			 			.authorizedGrantTypes("authorization_code", "implicit")
@@ -202,6 +242,8 @@ public class OAuth2ServerConfig {
 		                .scopes("read", "write", "trust")
 		                .autoApprove(true);
 			// @formatter:on
+			 
+			 */
 		}
 
 		@Bean
