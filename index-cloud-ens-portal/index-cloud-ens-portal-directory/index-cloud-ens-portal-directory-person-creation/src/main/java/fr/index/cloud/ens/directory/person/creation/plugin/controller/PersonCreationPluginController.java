@@ -3,6 +3,7 @@
  */
 package fr.index.cloud.ens.directory.person.creation.plugin.controller;
 
+import java.util.List;
 import java.util.Map;
 
 import javax.annotation.PostConstruct;
@@ -19,6 +20,7 @@ import fr.index.cloud.ens.directory.person.creation.plugin.form.DecodeUserCreati
 import fr.index.cloud.ens.directory.person.creation.plugin.form.PersonCreationFormFilter;
 import fr.index.cloud.ens.directory.person.creation.plugin.form.VerifyMailAddressFormFilter;
 import fr.toutatice.portail.cms.nuxeo.api.domain.AbstractPluginPortlet;
+import fr.toutatice.portail.cms.nuxeo.api.domain.FragmentType;
 import fr.toutatice.portail.cms.nuxeo.api.forms.FormFilter;
 
 /**
@@ -85,11 +87,20 @@ public class PersonCreationPluginController extends AbstractPluginPortlet {
 	 */
 	@Override
 	protected void customizeCMSProperties(CustomizationContext context) {
+		
         // Form filters
         Map<String, FormFilter> formFilters = this.getFormFilters(context);
         formFilters.put(PersonCreationFormFilter.IDENTIFIER, this.applicationContext.getBean(PersonCreationFormFilter.class));
         formFilters.put(VerifyMailAddressFormFilter.IDENTIFIER,  this.applicationContext.getBean(VerifyMailAddressFormFilter.class));
 		formFilters.put(DecodeUserCreationTokenFilter.IDENTIFIER, this.applicationContext.getBean(DecodeUserCreationTokenFilter.class));
+		
+		// Fragments
+		List<FragmentType> fragmentTypes = this.getFragmentTypes(context);
+		
+		ConfirmationMailFragmentModule cfm = new ConfirmationMailFragmentModule(getPortletContext());
+		fragmentTypes.add(new FragmentType("confirmation-mail", "Confirmation mail", cfm));
+		
+		
 	}
 
 }

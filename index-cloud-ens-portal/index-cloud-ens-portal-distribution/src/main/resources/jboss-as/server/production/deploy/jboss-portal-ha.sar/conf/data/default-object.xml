@@ -1040,6 +1040,66 @@ return nuxeoRequest.toString();</value>
                     <security-constraint />
                 </page>
 
+			    <page>
+			      <page-name>uncluttered</page-name>
+			      <display-name xml:lang="fr">uncluttered</display-name>
+			      <properties>
+			        <property>
+			          <name>layout.id</name>
+			          <value>demo-1-col-uncluttered</value>
+			        </property>
+			      </properties>
+			      <security-constraint/>
+			      <window>
+			        <window-name>toutatice-portail-cms-nuxeo-viewFragmentPortletInstance_1554979291906</window-name>
+			        <instance-ref>toutatice-portail-cms-nuxeo-viewFragmentPortletInstance</instance-ref>
+			        <region>top</region>
+			        <properties>
+			          <property>
+			            <name>osivia.propertyName</name>
+			            <value>dc:title</value>
+			          </property>
+			          <property>
+			            <name>osivia.fragmentTypeId</name>
+			            <value>text_property</value>
+			          </property>
+			          <property>
+			            <name>osivia.bootstrapPanelStyle</name>
+			            <value>false</value>
+			          </property>
+			          <property>
+			            <name>osivia.cms.uri</name>
+			            <value>${contentPath}</value>
+			          </property>
+			          <property>
+			            <name>portal.windowContentType</name>
+			            <value>portlet</value>
+			          </property>
+			          <property>
+			            <name>theme.order</name>
+			            <value>0</value>
+			          </property>
+			          <property>
+			            <name>osivia.maximized.cms.url</name>
+			            <value>false</value>
+			          </property>
+			          <property>
+			            <name>osivia.hideDecorators</name>
+			            <value>1</value>
+			          </property>
+			          <property>
+			            <name>osivia.mobileCollapse</name>
+			            <value>false</value>
+			          </property>
+			          <property>
+			            <name>osivia.hideTitle</name>
+			            <value>1</value>
+			          </property>
+			        </properties>
+			        <height>0</height>
+			      </window>
+			    </page>
+
                 <page>
                     <page-name>portalSitePublish</page-name>
                     <display-name xml:lang="fr">Site</display-name>

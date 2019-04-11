@@ -227,7 +227,7 @@ public class UserRestController {
 		String url = "/portal/cms" + userCreationProcedure.getPath();
 
 		String publicHost = System.getProperty("osivia.tasks.host");
-		url = publicHost + url + "?token=" + webToken;
+		url = publicHost + url + "?displayContext=uncluttered&token=" + webToken;
 		returnObject.put("url", url);
 		
 	}	

@@ -9,6 +9,17 @@
             <region name="col-1" />
         </regions>
     </layout>
+    
+    <layout>
+        <name>demo-1-col-uncluttered</name>
+        <uri>/layouts/1-col-uncluttered/index.jsp</uri>
+        <uri state="maximized">/layouts/1-col-uncluttered/maximized.jsp</uri>
+        <regions>
+        	<region name="top" />
+            <region name="col-1" />
+        </regions>
+    </layout>
+    
 
     <layout>
         <name>demo-2-cols</name>
