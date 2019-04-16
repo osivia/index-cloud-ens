@@ -1,6 +1,7 @@
 package fr.index.cloud.ens.directory.person.creation.plugin.service;
 
 import java.text.Normalizer;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -122,7 +123,9 @@ public class PersonCreationPluginServiceImpl implements PersonCreationPluginServ
             person.setUid(uid);
             // Person is created with passed current date validity. 
             // It can not be logged in until the mail is checked, which will remove this attribute.
-            person.setValidity(new Date());
+            Calendar cal = Calendar.getInstance();
+            cal.add(Calendar.DAY_OF_YEAR, -1);
+            person.setValidity(new Date(cal.getTimeInMillis()));
         }
 
         person.setGivenName(context.getVariables().get(FIELD_FIRSTNAME).trim());
