@@ -53,26 +53,23 @@
                         </div>
                     </nav>
                 </div>
-            
-                <div class="row">
-                    <!-- Document -->
-                    <div class="col-sm-6 col-md-4">
-                        <a href="${sortTitleUrl}"><op:translate key="DASHBOARD_HEADER_APPLICATION" /></a>
-                        
-                        <c:if test="${sort eq 'title'}">
-                            <small class="text-muted">
-                                <c:choose>
-                                    <c:when test="${alt}"><i class="halflings halflings-sort-by-attributes-alt"></i></c:when>
-                                    <c:otherwise><i class="halflings halflings-sort-by-attributes"></i></c:otherwise>
-                                </c:choose>
-                            </small>
-                        </c:if>
-                    </div>
-                    
-    
-                    
-                   
-                </div>
+           		<c:if test="${not empty dashboardForm.applications}">           
+	                <div class="row">
+	                    <!-- Document -->
+	                    <div class="col-sm-12">
+	                        <a href="${sortTitleUrl}"><op:translate key="DASHBOARD_HEADER_APPLICATION" /></a>
+	                        
+	                        <c:if test="${sort eq 'title'}">
+	                            <small class="text-muted">
+	                                <c:choose>
+	                                    <c:when test="${alt}"><i class="halflings halflings-sort-by-attributes-alt"></i></c:when>
+	                                    <c:otherwise><i class="halflings halflings-sort-by-attributes"></i></c:otherwise>
+	                                </c:choose>
+	                            </small>
+	                        </c:if>
+	                    </div>
+	                </div>
+    			</c:if>                
             </div>
             
             <!-- Body -->
