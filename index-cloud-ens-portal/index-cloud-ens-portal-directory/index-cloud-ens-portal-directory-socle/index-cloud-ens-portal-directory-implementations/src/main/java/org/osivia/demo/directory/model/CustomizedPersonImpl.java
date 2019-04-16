@@ -83,6 +83,10 @@ public final class CustomizedPersonImpl implements CustomizedPerson, Serializabl
     @Attribute(name = "portalPersonValidity")
     private Date validity;
 
+    /** Creation date. */
+    @Attribute(name = "portalPersonCreationDate")
+    private Date creationDate;
+
     /** Last connection date. */
     @Attribute(name = "portalPersonLastConnection")
     private Date lastConnection;
@@ -315,6 +319,24 @@ public final class CustomizedPersonImpl implements CustomizedPerson, Serializabl
     @Override
     public void setValidity(Date validity) {
         this.validity = validity;
+    }
+
+
+    /**
+     * @{inheritDoc}
+     */
+    @Override
+    public Date getCreationDate() {
+        return this.creationDate;
+    }
+
+
+    /**
+     * @{inheritDoc}
+     */
+    @Override
+    public void setCreationDate(Date creationDate) {
+        this.creationDate = creationDate;
     }
 
 
