@@ -17,7 +17,8 @@
 	<xs:complexType name="token">
 		<xs:sequence>
 			<xs:element name="value" type="xs:string" />
-			<xs:element name="authentication" type="xs:string" />			
+ 			<xs:element name="expiration" type="xs:date" />			
+			<xs:element name="authentication" type="xs:string" />		
 		</xs:sequence>
 	</xs:complexType>
 

@@ -1,5 +1,7 @@
 package fr.index.cloud.oauth.commands;
 
+import java.util.Date;
+
 import org.nuxeo.ecm.automation.client.OperationRequest;
 import org.nuxeo.ecm.automation.client.Session;
 import org.nuxeo.ecm.automation.client.model.DocRef;
@@ -19,12 +21,15 @@ public class StoreRefreshTokenCommand implements INuxeoCommand {
     private String docPath;
     private String token;
     private String authentication;
+    private Date expirationDate;
     
-    public StoreRefreshTokenCommand(String docPath, String token, String authentication) {
+    
+    public StoreRefreshTokenCommand(String docPath, String token, Date expirationDate, String authentication) {
         super();
         this.docPath = docPath;
         this.token = token;
         this.authentication = authentication;
+        this.expirationDate = expirationDate;
     }
 
     @Override
@@ -32,6 +37,7 @@ public class StoreRefreshTokenCommand implements INuxeoCommand {
         PropertyMap value = new PropertyMap();
         value.set("value", token);
         value.set("authentication", authentication);
+        value.set("expiration", expirationDate);
 
         // Operation request
         OperationRequest request = nuxeoSession.newRequest("Document.AddComplexProperty");

@@ -14,7 +14,7 @@ import org.springframework.security.oauth2.provider.OAuth2Request;
 
 import fr.index.cloud.oauth.authentication.PortalAuthentication;
 
-public class PortalRefreshTokenDatas  {
+public class PortalRefreshTokenAuthenticationDatas  {
     
  
     private String userName;
@@ -28,7 +28,7 @@ public class PortalRefreshTokenDatas  {
     private Set<String> responseTypes;
     private Map<String, Serializable> extensionProperties;
 
-    public PortalRefreshTokenDatas() {
+    public PortalRefreshTokenAuthenticationDatas() {
 
     }
 
@@ -38,7 +38,7 @@ public class PortalRefreshTokenDatas  {
      * @param value
      * @param authentication
      */
-    public PortalRefreshTokenDatas( OAuth2Authentication authentication) {
+    public PortalRefreshTokenAuthenticationDatas( OAuth2Authentication authentication) {
         super();
 
         userName = (String) authentication.getPrincipal();

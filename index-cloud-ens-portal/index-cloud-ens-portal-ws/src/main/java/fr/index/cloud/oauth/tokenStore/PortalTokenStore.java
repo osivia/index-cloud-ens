@@ -1,7 +1,9 @@
 package fr.index.cloud.oauth.tokenStore;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Date;
+import java.util.List;
 
 import org.codehaus.jackson.map.ObjectMapper;
 import org.nuxeo.ecm.automation.client.model.Document;
@@ -10,6 +12,7 @@ import org.nuxeo.ecm.automation.client.model.PropertyList;
 import org.nuxeo.ecm.automation.client.model.PropertyMap;
 import org.osivia.portal.api.cache.services.CacheInfo;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.oauth2.common.ExpiringOAuth2RefreshToken;
 import org.springframework.security.oauth2.common.OAuth2RefreshToken;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.security.oauth2.provider.OAuth2Request;
@@ -33,7 +36,7 @@ import fr.toutatice.portail.cms.nuxeo.api.services.NuxeoCommandContext;
  * @author Jean-Sébastien Steux
  */
 
-public class PortalTokenStore extends InMemoryTokenStore {
+public class PortalTokenStore extends InMemoryTokenStore implements IPortalTokenStore {
 
 
     /**
@@ -54,13 +57,17 @@ public class PortalTokenStore extends InMemoryTokenStore {
         try {
             NuxeoController nuxeoController = getNuxeoController();
 
-            PortalRefreshTokenDatas datas = new PortalRefreshTokenDatas(authentication);
+            PortalRefreshTokenAuthenticationDatas datas = new PortalRefreshTokenAuthenticationDatas(authentication);
             String jsonData = new ObjectMapper().writeValueAsString(datas);
 
             String userName = (String) authentication.getPrincipal();
             Document userWorkspace = (Document) nuxeoController.executeNuxeoCommand(new GetUserProfileCommand(userName));
+            
+            Date date = null;
+            if( refreshToken instanceof ExpiringOAuth2RefreshToken)
+                date = ((ExpiringOAuth2RefreshToken)refreshToken).getExpiration();
 
-            nuxeoController.executeNuxeoCommand(new StoreRefreshTokenCommand(userWorkspace.getPath(), refreshToken.getValue(), jsonData));
+            nuxeoController.executeNuxeoCommand(new StoreRefreshTokenCommand(userWorkspace.getPath(), refreshToken.getValue(), date, jsonData));
             
 
         } catch (Exception e) {
@@ -89,7 +96,7 @@ public class PortalTokenStore extends InMemoryTokenStore {
                     if (token.equals(value)) {
                         String jsonData = tokenMap.getString("authentication");
                         if (jsonData != null) {
-                            PortalRefreshTokenDatas datas = new ObjectMapper().readValue(jsonData, PortalRefreshTokenDatas.class);
+                            PortalRefreshTokenAuthenticationDatas datas = new ObjectMapper().readValue(jsonData, PortalRefreshTokenAuthenticationDatas.class);
 
                             OAuth2Authentication authAuthentication = datas.getAuthentication();
 
@@ -117,13 +124,25 @@ public class PortalTokenStore extends InMemoryTokenStore {
 
             NuxeoController nuxeoController = getNuxeoController();
             Documents docs = (Documents) nuxeoController.executeNuxeoCommand(new GetRefreshTokenCommand(tokenValue));
-            
+
             if (docs.size() > 1)
                 throw new RuntimeException("more then one token detected");
-            
+
             if (docs.size() == 1) {
-                PortalRefreshToken refreshToken = new PortalRefreshToken(tokenValue);
-                return refreshToken;
+                PropertyList tokens = docs.get(0).getProperties().getList("oatk:tokens");
+                for (int i = 0; i < tokens.size(); i++) {
+                    PropertyMap tokenMap = tokens.getMap(i);
+                    String value = tokenMap.getString("value");
+                    if (tokenValue.equals(value)) {
+                        PortalRefreshToken refreshToken = null;
+                        Date expirationDate = tokenMap.getDate("expirationDate");
+                        if (expirationDate == null)
+                            refreshToken = new PortalRefreshToken(tokenValue);
+                        else
+                            refreshToken = new PortalExpiringRefreshToken(tokenValue, expirationDate);
+                        return refreshToken;
+                    }
+                }
             }
         } catch (Exception e) {
             throw new RuntimeException("can't serialize refresh token", e);
@@ -152,6 +171,38 @@ public class PortalTokenStore extends InMemoryTokenStore {
                 }
             }
         }
+    }
+
+
+    @Override
+    public Collection<AggregateRefreshTokenInfos> findTokensByUserName(String userName)  {
+        List<AggregateRefreshTokenInfos> refreshTokens = new ArrayList<AggregateRefreshTokenInfos>();
+        try {
+
+            NuxeoController nuxeoController = getNuxeoController();
+
+            Document userWorkspace = (Document) nuxeoController.executeNuxeoCommand(new GetUserProfileCommand(userName));
+            if (userWorkspace != null) {
+
+                PropertyList tokens = userWorkspace.getProperties().getList("oatk:tokens");
+                for (int i = 0; i < tokens.size(); i++) {
+                    PropertyMap tokenMap = tokens.getMap(i);
+                    String value = tokenMap.getString("value");
+                    String jsonData = tokenMap.getString("authentication");
+                    Date expirationDate = tokenMap.getDate("expiration");                    
+                    if (jsonData != null) {
+                        PortalRefreshTokenAuthenticationDatas datas = new ObjectMapper().readValue(jsonData, PortalRefreshTokenAuthenticationDatas.class);
+
+                        refreshTokens.add(new AggregateRefreshTokenInfos(datas, value, expirationDate));
+                    }
+                }
+            }
+
+
+        } catch (Exception e) {
+            throw new RuntimeException("can't serialize refresh token", e);
+        }
+        return refreshTokens;
     }
 
 

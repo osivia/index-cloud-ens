@@ -1,6 +1,7 @@
 package fr.index.cloud.oauth.config;
 
 import java.io.IOException;
+import java.util.Enumeration;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -12,9 +13,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.osivia.portal.api.portlet.AnnotationPortletApplicationContext;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
+import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.context.support.WebApplicationContextUtils;
 
 /**
  * Implements web security 
@@ -27,6 +31,8 @@ import org.springframework.stereotype.Component;
 @Component
 @Order(Ordered.HIGHEST_PRECEDENCE)
 public class SecurityFilter implements Filter {
+    FilterConfig filterConfig;
+    
 
     public SecurityFilter() {
     }
@@ -52,7 +58,23 @@ public class SecurityFilter implements Filter {
             }
             chain.doFilter(req, res);
         }
-    }
+        
+        // Spring don't support multiple context (webapp + portlet)
+        // We force the initialization ...
+        WebApplicationContext wac = WebApplicationContextUtils.getWebApplicationContext(filterConfig.getServletContext());
+        if (wac == null) {
+            Enumeration<String> attrNames = filterConfig.getServletContext().getAttributeNames();
+            while (attrNames.hasMoreElements()) {
+                String attrName = attrNames.nextElement();
+                Object attrValue = filterConfig.getServletContext().getAttribute(attrName);
+                if (attrValue instanceof WebApplicationContext) {
+                    if( ! (attrValue instanceof AnnotationPortletApplicationContext))   {
+                        filterConfig.getServletContext().setAttribute(WebApplicationContext.ROOT_WEB_APPLICATION_CONTEXT_ATTRIBUTE, attrValue);
+                    }
+                 }
+            }
+        }
+     }
 
 
     @Override
@@ -62,6 +84,6 @@ public class SecurityFilter implements Filter {
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
 
-        
+        this.filterConfig = filterConfig;
     }
 }

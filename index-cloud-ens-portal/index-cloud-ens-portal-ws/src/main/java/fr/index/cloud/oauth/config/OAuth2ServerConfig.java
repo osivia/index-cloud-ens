@@ -159,6 +159,8 @@ public class OAuth2ServerConfig {
     	                    authorities.add(new SimpleGrantedAuthority("ROLE_TRUSTED_CLIENT"));
     	                    details.setAuthorities(authorities);
     	                    details.setAccessTokenValiditySeconds(600);
+    	                    // TODO : externalize
+    	                    details.setRefreshTokenValiditySeconds(3600);
     	                    return details;
 	                    }
 	                    else throw new NoSuchClientException("Client with ID '"+clientId+"' not found");

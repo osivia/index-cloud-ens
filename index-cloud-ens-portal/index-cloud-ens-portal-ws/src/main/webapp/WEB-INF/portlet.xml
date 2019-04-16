@@ -5,9 +5,9 @@
     xsi:schemaLocation="http://java.sun.com/xml/ns/portlet/portlet-app_2_0.xsd http://java.sun.com/xml/ns/portlet/portlet-app_2_0.xsd"
     version="2.0">
 
-<!-- 
+
 	<portlet>
-        <portlet-name>index-cloud-portal-ens-ws</portlet-name>
+        <portlet-name>index-cloud-portal-ens-ws-dashboardPortlet</portlet-name>
         <portlet-class>org.springframework.web.portlet.DispatcherPortlet</portlet-class>
 
         <init-param>
@@ -16,7 +16,7 @@
         </init-param>
         <init-param>
             <name>contextConfigLocation</name>
-            <value>org.osivia.demo.generator.portlet.configuration.SimpleDocumentCreatorConfiguration</value>
+            <value>fr.index.cloud.ens.dashboard.DashboardPortletConfiguration</value>
         </init-param>
         
         <expiration-cache>180</expiration-cache>
@@ -27,10 +27,10 @@
         </supports>
         
 		<portlet-info>
-			<title>Simple Web Service</title>
+			<title>User dashboard</title>
 		</portlet-info>
 	</portlet>
--->	
+
 
 
 	<portlet>
