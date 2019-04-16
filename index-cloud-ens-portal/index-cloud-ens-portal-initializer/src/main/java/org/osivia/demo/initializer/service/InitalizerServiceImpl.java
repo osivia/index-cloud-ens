@@ -107,7 +107,7 @@ public class InitalizerServiceImpl implements InitializerService {
         searchPerson.setUid("*");
         List<Person> persons = personService.findByCriteria(searchPerson);	
         for (Person aPerson:persons) {
-            aPerson.setMail("demo@osivia.com");
+            aPerson.setMail("demo+"+aPerson.getUid()+"@osivia.com");
             personService.update(aPerson);
         }
    		
