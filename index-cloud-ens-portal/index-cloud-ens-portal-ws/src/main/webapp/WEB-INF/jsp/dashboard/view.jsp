@@ -43,10 +43,8 @@
                 <!-- Header contextual toolbar -->
                 <div class="contextual-toolbar">
                     <nav class="navbar navbar-default">
-                    
                         <div class="container-fluid">
-                            
-                            <!-- Delete selection -->
+                             <!-- Delete selection -->
                             <button type="button" class="btn btn-default navbar-btn" data-toggle="modal" data-target="#${namespace}-delete-selection">
                                 <i class="glyphicons glyphicons-bin"></i>
                                 <span><op:translate key="DASHBOARD_TOOLBAR_DELETE_SELECTION" /></span>
@@ -71,19 +69,7 @@
                         </c:if>
                     </div>
                     
-                    <!-- Date -->
-                    <div class="col-sm-6 col-md-4">
-                        <a href="${sortDateUrl}"><op:translate key="DASHBOARD_HEADER_DATE" /></a>
-                        
-                        <c:if test="${sort eq 'date'}">
-                            <small class="text-muted">
-                                <c:choose>
-                                    <c:when test="${alt}"><i class="halflings halflings-sort-by-attributes-alt"></i></c:when>
-                                    <c:otherwise><i class="halflings halflings-sort-by-attributes"></i></c:otherwise>
-                                </c:choose>
-                            </small>
-                        </c:if>
-                    </div>
+    
                     
                    
                 </div>
@@ -99,21 +85,15 @@
                             
                                 <div class="row">
                                     <!-- Document -->
-                                    <div class="col-sm-6 col-md-4">
+                                    <div class="col-sm-12">
                                         <div class="form-control-static text-overflow">
                                              <span>${application.token.authentication.clientId}</span>
+                                             <br>
+                                             <c:if test="${not empty application.token.expirationDate}">
+                                             	<small><op:translate key="DASHBOARD_EXPIRES_MESSAGE" /><fmt:formatDate value="${application.token.expirationDate}" type="date" dateStyle="medium" /></small>
+                                             </c:if>
                                         </div>
                                     </div>
-                                    
-                                    
-                                    <!-- Date -->
-            						<c:if test="${not empty application.token.expirationDate}">                                    
-	                                    <div class="col-sm-6 col-md-4">
-	                                        <div class="text-overflow">
-	                                            <span><fmt:formatDate value="${application.token.expirationDate}" type="date" dateStyle="medium" /></span>
-	                                        </div>
-	                                    </div>
-                                    </c:if>
                                  </div>
                             </div>
                         </li>
