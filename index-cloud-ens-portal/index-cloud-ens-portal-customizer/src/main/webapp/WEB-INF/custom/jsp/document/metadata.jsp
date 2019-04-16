@@ -1,17 +1,9 @@
 <%@ taglib uri="http://java.sun.com/portlet_2_0" prefix="portlet" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <%@ taglib uri="http://www.osivia.org/jsp/taglib/osivia-portal" prefix="op" %>
 <%@ taglib uri="http://www.toutatice.fr/jsp/taglib/toutatice" prefix="ttc" %>
 
 <%@ page isELIgnored="false"%>
-
-
-<c:set var="author" value="${document.properties['dc:creator']}" />
-<c:set var="lastContributor" value="${document.properties['dc:lastContributor']}" />
-<c:set var="created" value="${document.properties['dc:created']}" />
-<c:set var="modified" value="${document.properties['dc:modified']}" />
-<c:set var="publicationDate" value="${document.properties['ttc:publicationDate']}" />
 
 
 <portlet:actionURL name="cancel-inline-edition" var="cancelUrl" />
