@@ -57,9 +57,8 @@
 						<h2>Confirmation d'autorisations</h2>
 					</legend>
 			<p>
-				Vous autorisez
-				<c:out value="${client.clientId}" />
-				 à accéder aux ressources suivantes.
+				Vous autorisez 	l'application <b><c:out value="${clientName}" /> </b>
+				 à 
 			</p>
 
 			<form id="confirmationForm" name="confirmationForm"
@@ -76,7 +75,7 @@
 						
 						<c:set var="scopeLabel">
 							<c:choose>
-								<c:when test="${scope.key eq 'scope.drive'}"> Mes fichiers </c:when>
+								<c:when test="${scope.key eq 'scope.drive'}"> - <b>Accéder à vos fichiers </b></c:when>
 							<c:otherwise>
 							    ${scope.key}
 							  </c:otherwise>

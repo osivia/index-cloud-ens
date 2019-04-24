@@ -3,9 +3,6 @@
  */
 package fr.index.cloud.ens.dashboard;
 
-import java.io.IOException;
-import java.io.PrintWriter;
-
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
 import javax.portlet.PortletConfig;
@@ -13,23 +10,16 @@ import javax.portlet.PortletContext;
 import javax.portlet.PortletException;
 import javax.portlet.PortletRequest;
 import javax.portlet.PortletResponse;
-import javax.portlet.ResourceRequest;
-import javax.portlet.ResourceResponse;
 
-import org.apache.commons.lang.math.NumberUtils;
 import org.osivia.portal.api.context.PortalControllerContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.portlet.bind.annotation.ActionMapping;
 import org.springframework.web.portlet.bind.annotation.RenderMapping;
-import org.springframework.web.portlet.bind.annotation.ResourceMapping;
 import org.springframework.web.portlet.context.PortletConfigAware;
 import org.springframework.web.portlet.context.PortletContextAware;
-
-import net.sf.json.JSONObject;
 
 /**
  * @author JS Steux
@@ -56,7 +46,7 @@ public class DashboardPortletController implements PortletConfigAware, PortletCo
 	
 	
 	 /**
-     * Get trash form model attribute.
+     * Get dashboard form model attribute.
      * 
      * @param request portlet request
      * @param response portlet response

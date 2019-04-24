@@ -10,7 +10,7 @@ import fr.index.cloud.oauth.tokenStore.AggregateRefreshTokenInfos;
 import fr.index.cloud.oauth.tokenStore.PortalRefreshTokenAuthenticationDatas;
 
 /**
- * Trashed document java-bean.
+ * Dashboard datas java-bean.
  * 
  * @author JS Steux
  */
@@ -19,12 +19,37 @@ import fr.index.cloud.oauth.tokenStore.PortalRefreshTokenAuthenticationDatas;
 public class DashboardApplication  {
 
 
+    /** The selected. */
     private boolean selected;
+    
+    /** The token. */
     private AggregateRefreshTokenInfos token;
+    
+    /** The client name. */
+    private String clientName;
+
+    
+
+    /**
+     * Gets the client name.
+     *
+     * @return the client name
+     */
+    public String getClientName() {
+        return clientName;
+    }
 
 
     
-    
+    /**
+     * Setter for clientName.
+     * @param clientName the clientName to set
+     */
+    public void setClientName(String clientName) {
+        this.clientName = clientName;
+    }
+
+
     /**
      * Getter for token.
      * @return the token
@@ -49,8 +74,10 @@ public class DashboardApplication  {
      * 
      * @param path document path
      */
-    public DashboardApplication( AggregateRefreshTokenInfos token) {
+    public DashboardApplication( AggregateRefreshTokenInfos token, String clientName) {
         this.token = token;
+        this.clientName = clientName;
+        
     }
 
 

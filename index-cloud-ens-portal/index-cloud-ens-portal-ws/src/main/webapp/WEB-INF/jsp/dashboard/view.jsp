@@ -84,7 +84,7 @@
                                     <!-- Document -->
                                     <div class="col-sm-12">
                                         <div class="form-control-static text-overflow">
-                                             <span>${application.token.authentication.clientId}</span>
+                                             <span>${application.clientName}</span>
                                              <br>
                                              <c:if test="${not empty application.token.expirationDate}">
                                              	<small><op:translate key="DASHBOARD_EXPIRES_MESSAGE" /><fmt:formatDate value="${application.token.expirationDate}" type="date" dateStyle="medium" /></small>

@@ -16,10 +16,10 @@ public interface DashboardService {
 
 
     /**
-     * Get trash form.
+     * Get dashboard form.
      * 
      * @param portalControllerContext portal controller context
-     * @return trash form
+     * @return dashboard form
      * @throws PortletException
      */
     DashboardForm getDashboardForm(PortalControllerContext portalControllerContext) throws PortletException;

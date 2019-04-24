@@ -1,11 +1,13 @@
 package fr.index.cloud.ens.ws;
 
 import org.osivia.directory.v2.service.PersonUpdateService;
+import org.osivia.portal.api.cache.services.ICacheService;
 import org.osivia.portal.api.directory.v2.DirServiceFactory;
 import org.osivia.portal.api.locator.Locator;
 import org.osivia.portal.api.log.LogContext;
 import org.osivia.portal.api.log.LogContextFactory;
 import org.osivia.portal.api.notifications.INotificationsService;
+import org.osivia.portal.api.status.IStatusService;
 import org.osivia.portal.api.tokens.ITokenService;
 import org.osivia.portal.api.urls.IPortalUrlFactory;
 import org.springframework.context.annotation.Bean;
@@ -79,5 +81,16 @@ public class PortalServices   {
     public LogContext getLoggerContext() {
         return LogContextFactory.getLogContext();
     }
+    
+    
+    @Bean
+    public ICacheService getCacheService() {
+        return Locator.findMBean(ICacheService.class, ICacheService.MBEAN_NAME);
+    }
 
+    
+    @Bean
+    public IStatusService getStatusService() {
+        return Locator.findMBean(IStatusService.class, "osivia:service=StatusServices");
+    }
 }

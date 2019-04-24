@@ -17,15 +17,21 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
 
+import fr.index.cloud.ens.ext.etb.IEtablissementService;
+import fr.index.cloud.oauth.config.OAuth2ServerConfig;
+
 /**
  * Controller for retrieving the model for and displaying the confirmation page for access to a protected resource.
  * 
- * @author Ryan Heaton
+ * @author JS Steux
  */
 @Controller
 @SessionAttributes("authorizationRequest")
 public class AccessConfirmationController {
 
+    @Autowired
+    IEtablissementService etablissementService;
+    
     public AccessConfirmationController()   {
         super();
         System.out.println("AccessConfirmationController");
@@ -40,8 +46,18 @@ public class AccessConfirmationController {
 	public ModelAndView getAccessConfirmation(Map<String, Object> model, Principal principal) throws Exception {
 		AuthorizationRequest clientAuth = (AuthorizationRequest) model.remove("authorizationRequest");
 		ClientDetails client = clientDetailsService.loadClientByClientId(clientAuth.getClientId());
+		
+       
 		model.put("auth_request", clientAuth);
 		model.put("client", client);
+		
+        String clientName =  client.getClientId();
+		if( client.getClientId().startsWith(OAuth2ServerConfig.PRONOTE_CLIENT_PREFIX)) {
+            clientName = etablissementService.getEtablissement(client.getClientId().substring(OAuth2ServerConfig.PRONOTE_CLIENT_PREFIX.length())).getNom();
+        }
+            		
+	    model.put("clientName", clientName);		
+	    
 		Map<String, String> scopes = new LinkedHashMap<String, String>();
 		for (String scope : clientAuth.getScope()) {
 			scopes.put(OAuth2Utils.SCOPE_PREFIX + scope, "false");

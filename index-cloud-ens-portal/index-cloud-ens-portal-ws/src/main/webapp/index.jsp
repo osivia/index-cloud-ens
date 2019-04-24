@@ -17,51 +17,7 @@
 <body>
 
 	<div class="container">
-
-		<h1>Sparklr</h1>
-
-		<h2>Home</h2>
-
-		<p>This is a great site to store and view your photos.
-			Unfortunately, we don't have any services for printing your photos.
-			For that, you'll have to go to Tonr.</p>
-
-		<authz:authorize ifAllGranted="ROLE_USER">
-			<div class="form-horizontal">
-				<form action="<c:url value="/logout"/>" role="form" method="post">
-					<input type="hidden" name="${_csrf.parameterName}"
-						value="${_csrf.token}" />
-					<button class="btn btn-primary" type="submit">Logout</button>
-				</form>
-			</div>
-
-			<h2>Your Photos</h2>
-
-			<p id="photos">
-				<script type='text/javascript'>
-					$
-							.ajax("photos?format=json")
-							.complete(
-									function(response) {
-										data = JSON
-												.parse(response.responseText);
-										for (var i = 0; i < data.photos.length; i++) {
-											var photo = data.photos[i];
-											$("#photos")
-													.append(
-															'<img src="photos/' + photo.id + '" alt="' + photo.name + '">');
-										}
-									});
-				</script>
-			</p>
-		</authz:authorize>
-
-		<div class="footer">
-			Sample application for <a
-				href="http://github.com/spring-projects/spring-security-oauth"
-				target="_blank">Spring Security OAuth</a>
-		</div>
-
+		<h2>Cette application nécessite une authentification</h2>
 	</div>
 
 </body>

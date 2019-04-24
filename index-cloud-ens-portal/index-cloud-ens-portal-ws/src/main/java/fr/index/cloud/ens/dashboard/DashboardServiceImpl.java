@@ -20,6 +20,9 @@ import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 
+import fr.index.cloud.ens.ext.etb.EtablissementService;
+import fr.index.cloud.ens.ext.etb.IEtablissementService;
+import fr.index.cloud.oauth.config.OAuth2ServerConfig;
 import fr.index.cloud.oauth.tokenStore.AggregateRefreshTokenInfos;
 import fr.index.cloud.oauth.tokenStore.IPortalTokenStore;
 import fr.index.cloud.oauth.tokenStore.PortalRefreshToken;
@@ -52,6 +55,9 @@ public class DashboardServiceImpl implements DashboardService, ApplicationContex
     @Autowired
     private IPortalTokenStore tokenStore;
 
+    @Autowired
+    IEtablissementService etablissementService;
+
     
     @Bean
     public IPortalTokenStore tokenStore() {
@@ -82,7 +88,19 @@ public class DashboardServiceImpl implements DashboardService, ApplicationContex
             
             List<DashboardApplication> applications = new ArrayList<>();
             for (AggregateRefreshTokenInfos token : tokens)    {
-                applications.add(new DashboardApplication(token));
+                
+                String clientName = null;
+                String clientId = token.getAuthentication().getClientId();
+                
+                if( token.getAuthentication().getClientId().startsWith(OAuth2ServerConfig.PRONOTE_CLIENT_PREFIX)) {
+                    clientName = etablissementService.getEtablissement(clientId.substring(OAuth2ServerConfig.PRONOTE_CLIENT_PREFIX.length())).getNom();
+                }
+                
+                if( clientName == null)
+                    clientName = clientId;
+                
+                applications.add(new DashboardApplication(token, clientName));
+                
             }
             
             form.setApplications(applications);

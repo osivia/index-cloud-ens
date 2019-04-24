@@ -4,11 +4,13 @@
 package fr.index.cloud.ens.dashboard;
 
 import org.osivia.directory.v2.service.PersonUpdateService;
+import org.osivia.portal.api.cache.services.ICacheService;
 import org.osivia.portal.api.directory.v2.DirServiceFactory;
 import org.osivia.portal.api.internationalization.IBundleFactory;
 import org.osivia.portal.api.internationalization.IInternationalizationService;
 import org.osivia.portal.api.locator.Locator;
 import org.osivia.portal.api.notifications.INotificationsService;
+import org.osivia.portal.api.status.IStatusService;
 import org.osivia.portal.core.cms.ICMSServiceLocator;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -28,7 +30,7 @@ import fr.toutatice.portail.cms.nuxeo.api.services.INuxeoService;
  *
  */
 @Configuration
-@ComponentScan(basePackages = "fr.index.cloud.ens.dashboard")
+@ComponentScan(basePackages = "fr.index.cloud.ens.dashboard,fr.index.cloud.ens.ext")
 public class DashboardPortletConfiguration  extends CMSPortlet {
 
     /**
@@ -103,7 +105,23 @@ public class DashboardPortletConfiguration  extends CMSPortlet {
         return Locator.findMBean(IInternationalizationService.class, IInternationalizationService.MBEAN_NAME);
     }
 
+    /**
+     * Get cache service.
+     * 
+     * @return internationalization service
+     */
+    @Bean
+    public ICacheService getCacheService() {
+        return Locator.findMBean(ICacheService.class, ICacheService.MBEAN_NAME);
+    }
 
+    
+    @Bean
+    public IStatusService getStatusService() {
+        return Locator.findMBean(IStatusService.class, "osivia:service=StatusServices");
+    }
+
+    
     /**
      * Get internationalization bundle factory.
      * 

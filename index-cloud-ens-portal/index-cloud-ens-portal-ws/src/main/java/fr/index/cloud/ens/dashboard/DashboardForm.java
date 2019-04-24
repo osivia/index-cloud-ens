@@ -31,19 +31,21 @@ public class DashboardForm {
     }
 
 
+
     /**
-     * Getter for trashedDocuments.
-     * 
-     * @return the trashedDocuments
+     * Gets the applications.
+     *
+     * @return the applications
      */
     public List<DashboardApplication> getApplications() {
         return applications;
     }
 
+
     /**
-     * Setter for trashedDocuments.
-     * 
-     * @param trashedDocuments the trashedDocuments to set
+     * Sets the applications.
+     *
+     * @param applications the new applications
      */
     public void setApplications(List<DashboardApplication> applications) {
         this.applications = applications;
