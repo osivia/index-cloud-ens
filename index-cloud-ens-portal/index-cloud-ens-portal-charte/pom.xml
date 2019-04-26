@@ -17,11 +17,11 @@
     
     <build>
         <plugins>
-        
-            <!-- LESS -->
+
+            <!-- SASS -->
             <plugin>
-                <groupId>org.lesscss</groupId>
-                <artifactId>lesscss-maven-plugin</artifactId>
+                <groupId>com.github.warmuuh</groupId>
+                <artifactId>libsass-maven-plugin</artifactId>
             </plugin>
 
         </plugins>

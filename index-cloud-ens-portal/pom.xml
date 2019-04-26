@@ -77,9 +77,10 @@
 		<module>index-cloud-ens-portal-customizer</module>
 		<module>index-cloud-ens-portal-directory</module>
 		<module>index-cloud-ens-portal-initializer</module>
-		<module>index-cloud-ens-portal-distribution</module>
+        <module>index-cloud-ens-portal-taskbar</module>
+        <module>index-cloud-ens-portal-distribution</module>
 		<module>index-cloud-ens-portal-ws</module>
-	</modules>
+    </modules>
     
     
     <dependencies>
@@ -177,7 +178,27 @@
                         </execution>
                     </executions>
                 </plugin>
-            
+
+                <!-- SASS -->
+                <plugin>
+                    <groupId>com.github.warmuuh</groupId>
+                    <artifactId>libsass-maven-plugin</artifactId>
+                    <version>0.2.10-libsass_3.5.3</version>
+                    <executions>
+                        <execution>
+                            <phase>generate-resources</phase>
+                            <goals>
+                                <goal>compile</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                    <configuration>
+                        <inputPath>${project.basedir}/src/main/sass/</inputPath>
+                        <outputPath>${project.basedir}/src/main/webapp/css</outputPath>
+                        <outputStyle>compact</outputStyle>
+                    </configuration>
+                </plugin>
+
                 <!-- AntRun -->
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>

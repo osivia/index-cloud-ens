@@ -1,8 +1,6 @@
 <%@ taglib uri="portal-layout" prefix="p" %>
 
 
-
-
 <!-- Notifications -->
 <p:region regionName="notifications" />
 <!-- Page settings -->

@@ -5,7 +5,7 @@
 <html>
 
 <head>
-    <jsp:include page="../includes/head.jsp" />
+    <jsp:include page="../includes/head.jspf" />
 </head>
 
 
@@ -17,12 +17,12 @@
 
             <div class="scrollbox">
             	<p:region regionName="top" />
-                <p:region regionName="col-1" />
+                <p:region regionName="maximized" />
             </div>
         </div>
     </main>
     
-    <jsp:include page="../includes/footer.jsp" />
+    <jsp:include page="../includes/footer.jspf" />
 </body>
 
 </html>

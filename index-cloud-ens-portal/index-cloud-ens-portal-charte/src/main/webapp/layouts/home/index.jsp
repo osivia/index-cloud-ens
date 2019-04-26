@@ -10,12 +10,12 @@
 <html>
 
 <head>
-    <jsp:include page="../includes/head.jsp" />
+    <jsp:include page="../includes/head.jspf" />
 </head>
 
 
 <body class="home editorial">
-    <jsp:include page="../includes/header.jsp" />
+    <jsp:include page="../includes/header.jspf" />
     
     <main>
         <div class="container">
@@ -43,7 +43,7 @@
         </div>
     </main>
     
-    <jsp:include page="../includes/footer.jsp" />
+    <jsp:include page="../includes/footer.jspf" />
 </body>
 
 </html>
