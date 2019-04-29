@@ -33,6 +33,14 @@ public abstract class Task {
     }
 
 
+    /**
+     * Check if task is expandable.
+     *
+     * @return true if task is expandable
+     */
+    public abstract boolean isExpandable();
+
+
     public String getIcon() {
         return icon;
     }

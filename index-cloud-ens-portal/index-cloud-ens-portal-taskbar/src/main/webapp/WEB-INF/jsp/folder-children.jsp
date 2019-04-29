@@ -11,7 +11,7 @@
 <c:if test="${not empty folder.children}">
     <ul>
         <c:forEach var="child" items="${folder.children}">
-            <li ${child.active ? 'class="taskbar-active"' : ''} data-retain="${child.selected}" data-acceptedtypes="${fn:join(child.acceptedTypes, ',')}" data-expanded="${child.selected}" data-folder="${child.folder}" data-lazy="${child.lazy}" data-current="${child.active}" data-id="${child.id}" data-path="${child.path}">
+            <li class="${child.active ? 'text-primary font-weight-bold' : 'text-secondary'}" data-retain="${child.selected}" data-acceptedtypes="${fn:join(child.acceptedTypes, ',')}" data-expanded="${child.selected}" data-folder="${child.folder}" data-lazy="${child.lazy}" data-current="${child.active}" data-id="${child.id}" data-path="${child.path}">
                 <a href="${child.url}" class="no-ajax-link">
                     <span>${child.displayName}</span>
                 </a>

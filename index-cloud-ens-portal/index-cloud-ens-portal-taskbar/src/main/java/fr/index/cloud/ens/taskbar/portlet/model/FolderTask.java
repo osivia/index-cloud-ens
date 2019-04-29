@@ -1,5 +1,6 @@
 package fr.index.cloud.ens.taskbar.portlet.model;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -55,6 +56,12 @@ public class FolderTask extends Task {
     }
 
 
+    @Override
+    public boolean isExpandable() {
+        return CollectionUtils.isNotEmpty(this.children);
+    }
+
+    
     /**
      * Getter for children.
      *

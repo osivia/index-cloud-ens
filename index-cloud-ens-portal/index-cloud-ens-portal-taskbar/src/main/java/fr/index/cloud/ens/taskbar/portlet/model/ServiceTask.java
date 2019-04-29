@@ -18,4 +18,9 @@ public class ServiceTask extends Task {
         super();
     }
 
+
+    @Override
+    public boolean isExpandable() {
+        return false;
+    }
 }

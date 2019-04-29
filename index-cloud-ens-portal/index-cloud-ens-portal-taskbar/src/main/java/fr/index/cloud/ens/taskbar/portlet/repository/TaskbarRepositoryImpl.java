@@ -116,6 +116,16 @@ public class TaskbarRepositoryImpl implements TaskbarRepository {
         NuxeoController nuxeoController = new NuxeoController(portalControllerContext);
 
         this.generateFolderChildren(nuxeoController, folder);
+
+        boolean selected = false;
+        if (CollectionUtils.isNotEmpty(folder.getChildren())) {
+            Iterator<FolderTask> iterator = folder.getChildren().iterator();
+            while (!selected && iterator.hasNext()) {
+                FolderTask child = iterator.next();
+                selected = child.isSelected();
+            }
+        }
+        folder.setSelected(selected);
     }
 
 
