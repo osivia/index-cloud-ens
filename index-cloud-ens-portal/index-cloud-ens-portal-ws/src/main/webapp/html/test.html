@@ -118,11 +118,14 @@
 							class="btn btn-primary" value="RSA" id="btnRSASignUp" />							
 					</form>
 				</div>
-				<h3>Sign in with Pronote </h3>
-				<div id="logWithProNote">
-					<a href="/cas-pronote/login?service=https%3A%2F%2Fcloud-ens.index-education.local%2Findex-cloud-portal-ens-ws%2Fhtml%2Ftest.html%3Fclient_name%3Dcas-pronote"
-					class="btn btn-default"  id="btnLogWithProNote">Go to CAS...</a>	
-				</div>
+				<h3>Auth via CAS Pronote </h3>
+				<ul>
+					<li><a href="/portal/MonEspace?ticket=LB&urlCAS=https%3A%2F%2Fcloud-ens.index-education.local%2Fpronote-ws%2FserviceValidate">Espace lbillon (lien authentifié)</a>
+					</li>
+					<li><a href="/portal/MonEspace?ticket=JS&urlCAS=https%3A%2F%2Fcloud-ens.index-education.local%2Fpronote-ws%2FserviceValidate">Espace jsteux (lien authentifié)</a>
+					</li>
+				</ul>	
+					
 			</div>
 			
 			<div class="col-lg-4">

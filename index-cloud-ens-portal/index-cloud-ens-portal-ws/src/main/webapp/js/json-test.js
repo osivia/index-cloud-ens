@@ -272,18 +272,6 @@ function drive(id) {
 
 
 $JQry(function() {
-	
-	$JQry(document).ready(function() {
-	    console.log( "ready!");
-
-	    var url = new URL(window.location.href); 
-	    var ticket = url.searchParams.get("ticket");
-	    
-	    if (ticket) {
-	    	window.location.href = "/cas/login?client_name=cas-pronote&ticket="+ticket+"&service=https%3A%2F%2Fcloud-ens.index-education.local%2Findex-cloud-portal-ens-ws%2Fhtml%2Ftest.html";
-	    }
-	    
-	});
 
 	$JQry("#btnUploadSubmit")
 			.each(
