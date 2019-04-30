@@ -357,8 +357,14 @@ public class TaskbarServiceImpl implements TaskbarService {
                 object.put("folder", child.isFolder());
                 // Lazy indicator
                 object.put("lazy", child.isLazy());
+                // Identifier
+                object.put("id", child.getId());
                 // Path
                 object.put("path", child.getPath());
+                // Accepted types
+                object.put("acceptedtypes", StringUtils.join(child.getAcceptedTypes(), ","));
+                // Extra classes
+                object.put("extraClasses", "text-secondary");
 
                 array.add(object);
             }

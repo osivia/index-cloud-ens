@@ -19,7 +19,7 @@
             <li>
                 <div class="d-flex align-items-center">
                     <a href="${task.url}"
-                       class="flex-grow-1 py-2 px-3 ${task.active and not task.selected ? 'text-primary font-weight-bold' : 'text-secondary'} text-decoration-none no-ajax-link">
+                       class="btn btn-link flex-grow-1 ${task.active and not (task.expandable and task.selected) ? 'font-weight-bold' : 'text-secondary'} text-left text-decoration-none text-truncate no-ajax-link">
                         <i class="${task.icon}"></i>
                         <span>${task.displayName}</span>
                     </a>
