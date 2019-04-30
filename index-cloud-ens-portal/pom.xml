@@ -31,11 +31,11 @@
         <tasks.version>4.7</tasks.version>
         <procedure.version>4.9-SNAPSHOT</procedure.version>
         <cgu.version>4.7</cgu.version>
-		<document-creation.version>4.7.1</document-creation.version>
+		<document-creation.version>4.7.14-RC2</document-creation.version>
 		<onlyoffice.version>4.7</onlyoffice.version>        
         
         <!-- Identity SSO -->
-        <identity-sso.version>3.0.9</identity-sso.version>
+        <identity-sso.version>3.0.10-SNAPSHOT</identity-sso.version>
  
         <!-- Java Melody -->
         <java-melody.version>1.2</java-melody.version>
