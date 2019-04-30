@@ -35,7 +35,7 @@
 		<onlyoffice.version>4.7</onlyoffice.version>        
         
         <!-- Identity SSO -->
-        <identity-sso.version>3.0.9</identity-sso.version>
+        <identity-sso.version>3.0.10-SNAPSHOT</identity-sso.version>
  
         <!-- Java Melody -->
         <java-melody.version>1.2</java-melody.version>

@@ -3,6 +3,7 @@ package fr.index.cloud.oauth.authentication;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.osivia.directory.v2.service.PersonUpdateService;
 import org.osivia.portal.api.context.PortalControllerContext;
 import org.osivia.portal.api.directory.v2.model.Person;
@@ -41,19 +42,28 @@ public class PortalAuthenticationProvider implements AuthenticationProvider {
         String name = authentication.getName();
         String password = authentication.getCredentials().toString();
 
-
+        String uid = name; 
         boolean found = true;
         try {
-            found = personUpdateService.verifyPassword(name, password);
+            if( name.contains("@")) {
+                Person criteria = personUpdateService.getEmptyPerson();
+                criteria.setMail(name);
+               
+                List<Person> persons = personUpdateService.findByCriteria(criteria);
+                if( persons.size() == 1)
+                    uid = persons.get(0).getUid();
+            }
+            
+            found = personUpdateService.verifyPassword(uid, password);
         } catch (Exception e) {
             found = false;
         }
         if (!found)
             throw new BadCredentialsException("Bad user/password !");
         
-        UserDetails user = userDetailService.loadUserByUsername(name);
+        UserDetails user = userDetailService.loadUserByUsername(uid);
         
-        return new PortalAuthentication(name, password, user.getAuthorities());
+        return new PortalAuthentication(uid, password, user.getAuthorities());
     }
 
     @Override

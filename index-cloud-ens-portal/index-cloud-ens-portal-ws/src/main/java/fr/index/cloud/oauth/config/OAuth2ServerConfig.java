@@ -80,7 +80,7 @@ public class OAuth2ServerConfig {
                     .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED).and().requestMatchers()
                     .antMatchers("/rest/Drive.**", "/rest/Admin.**", "/photos/**", "/oauth/users/**", "/oauth/clients/**", "/me").and().authorizeRequests()
                     .antMatchers("/rest/Drive.**").access("#oauth2.hasScope('drive')").antMatchers("/rest/Admin.**").access("hasRole('ROLE_ADMIN')")
-                    .antMatchers("/rest/User.signUp").permitAll().antMatchers("/me").access("#oauth2.hasScope('read')").antMatchers("/photos")
+                    .antMatchers("/rest/User.signUp").permitAll().antMatchers("/Viewer.fileInfos").permitAll().antMatchers("/me").access("#oauth2.hasScope('read')").antMatchers("/photos")
                     .access("#oauth2.hasScope('read') or (!#oauth2.isOAuth() and hasRole('ROLE_USER'))").antMatchers("/photos/trusted/**")
                     .access("#oauth2.hasScope('trust')").antMatchers("/photos/user/**").access("#oauth2.hasScope('trust')")
 

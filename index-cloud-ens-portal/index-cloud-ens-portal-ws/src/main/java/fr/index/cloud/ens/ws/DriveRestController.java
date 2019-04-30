@@ -70,7 +70,8 @@ public class DriveRestController {
     private static final String PROP_SHARE_LINK = "rshr:linkId";
     private static final String PROP_ENABLE_LINK = "rshr:enabledLink";    
 
-    private static final String SHARE_URL_PREFIX = "/s/";
+    public static final String SHARE_URL_PREFIX = "/s/";
+    private static final String SHARE_URL_VIEWER = "/cloud-viewer";    
 
     public static PortletContext portletContext;
 
@@ -127,13 +128,18 @@ public class DriveRestController {
     }
 
 
+    public static String getSharedUrl(HttpServletRequest request, String shareLink) {    
+        return getUrl(request) + SHARE_URL_PREFIX + shareLink;
+    }
+
+    
     /**
      * Get a nuxeoController associated to the current user
      * 
      * @return
      * @throws Exception
      */
-    private NuxeoController getNuxeocontroller(HttpServletRequest request, Principal principal) throws Exception {
+    public static NuxeoController getNuxeocontroller(HttpServletRequest request, Principal principal) throws Exception {
 
 
         NuxeoController nuxeoController = new NuxeoController(portletContext);
@@ -181,8 +187,10 @@ public class DriveRestController {
             Boolean enableLink = doc.getProperties().getBoolean(PROP_ENABLE_LINK, false);
             if( enableLink) {
                 String shareLink = doc.getProperties().getString(PROP_SHARE_LINK);
-                if (shareLink != null)
-                    contents.put("shareUrl", getUrl(request) + SHARE_URL_PREFIX + shareLink);
+                if (shareLink != null)  {
+                    contents.put("shareUrl", getSharedUrl(request,shareLink));
+                    contents.put("viewerUrl", getUrl(request) + SHARE_URL_VIEWER + SHARE_URL_PREFIX + shareLink);                    
+                }
             }
         }
           
