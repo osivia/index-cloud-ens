@@ -4,7 +4,7 @@
 
 <h1 class="text-center">
 	<span><i class="halflings halflings-ok"></i> </span>
-	<op:translate key="CREATION_CONFIRED" />
+	<op:translate key="CREATION_CONFIRMED" />
 </h1>
 
 <p class="text-center">

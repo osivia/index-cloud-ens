@@ -97,8 +97,10 @@ public class PersonCreationPluginController extends AbstractPluginPortlet {
 		// Fragments
 		List<FragmentType> fragmentTypes = this.getFragmentTypes(context);
 		
-		ConfirmationMailFragmentModule cfm = new ConfirmationMailFragmentModule(getPortletContext());
-		fragmentTypes.add(new FragmentType("confirmation-mail", "Confirmation mail", cfm));
+		SimpleJspFragmentModule cfm = new SimpleJspFragmentModule(getPortletContext(),"information-mail" );
+		fragmentTypes.add(new FragmentType("information-mail", "information mail", cfm));
+		SimpleJspFragmentModule cfm2 = new SimpleJspFragmentModule(getPortletContext(),"confirmation-mail" );
+		fragmentTypes.add(new FragmentType("confirmation-mail", "Confirmation mail", cfm2));
 		
 		
 	}

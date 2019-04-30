@@ -219,7 +219,7 @@ public class UserRestController {
 		nuxeoController.setServletRequest(request);
 		nuxeoController.setAuthType(NuxeoCommandContext.AUTH_TYPE_SUPERUSER);
 		nuxeoController.setCacheType(CacheInfo.CACHE_SCOPE_NONE);
-		NuxeoDocumentContext ctx = nuxeoController.getDocumentContext(IWebIdService.FETCH_PATH_PREFIX + "procedure_person-creation");
+		NuxeoDocumentContext ctx = nuxeoController.getDocumentContext(IWebIdService.FETCH_PATH_PREFIX + "procedure_person-creation-pronote");
 
 		// Get parent doc
 		Document userCreationProcedure = ctx.getDocument();
