@@ -112,14 +112,20 @@
 						<input type="button"
 							class="btn btn-primary" value="Créer" id="btnCreateUser" />
 						<input type="button"
-							class="btn btn-primary" value="Sign up" id="btnSignUp" />							
+							class="btn btn-primary" value="Sign up" id="btnSignUp" />
+							
+						<input type="button"
+							class="btn btn-primary" value="RSA" id="btnRSASignUp" />							
 					</form>
 				</div>
-				<h3>Sign in with Pronote </h3>
-				<div id="logWithProNote">
-					<a href="/cas-pronote/login?service=https%3A%2F%2Fcloud-ens.index-education.local%2Findex-cloud-portal-ens-ws%2Fhtml%2Ftest.html%3Fclient_name%3Dcas-pronote"
-					class="btn btn-default"  id="btnLogWithProNote">Go to CAS...</a>	
-				</div>
+				<h3>Auth via CAS Pronote </h3>
+				<ul>
+					<li><a href="/portal/MonEspace?ticket=LB&urlCAS=https%3A%2F%2Fcloud-ens.index-education.local%2Fpronote-ws%2FserviceValidate">Espace lbillon (lien authentifié)</a>
+					</li>
+					<li><a href="/portal/MonEspace?ticket=JS&urlCAS=https%3A%2F%2Fcloud-ens.index-education.local%2Fpronote-ws%2FserviceValidate">Espace jsteux (lien authentifié)</a>
+					</li>
+				</ul>	
+					
 			</div>
 			
 			<div class="col-lg-4">
@@ -139,8 +145,8 @@
 				
 					<form method="POST" enctype="multipart/form-data" id="publishForm">
 						<div class="form-group">
-							<label for="pubShare"">Share URL</label> <input name="pubShare"
-								class="form-control" id="pubShare" readonly />
+							<a id="pubShare" target="_blank">Download url</a> <br/>
+							<a id="pubViewer" target="_blank">Viewer url</a>
 						</div>
 						<div class="form-group">
 							<label for="level">pubFormat</label> <input name="pubFormat"
