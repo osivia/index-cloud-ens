@@ -1,6 +1,17 @@
 package fr.index.cloud.ens.ws;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
+import java.security.KeyFactory;
+import java.security.NoSuchAlgorithmException;
+import java.security.PublicKey;
+import java.security.interfaces.RSAKey;
+import java.security.spec.InvalidKeySpecException;
+import java.security.spec.X509EncodedKeySpec;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -13,6 +24,8 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.bouncycastle.util.io.pem.PemObject;
+import org.bouncycastle.util.io.pem.PemReader;
 import org.nuxeo.ecm.automation.client.model.Document;
 import org.osivia.directory.v2.service.PersonUpdateService;
 import org.osivia.portal.api.PortalException;
@@ -31,6 +44,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.exceptions.AlgorithmMismatchException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 
 import fr.toutatice.portail.cms.nuxeo.api.NuxeoController;
@@ -117,6 +131,8 @@ public class UserRestController {
 
     }
     
+
+    
     /**
      * decode the jwt token, check mandatory fields and initialize a map of attributs. 
      * 
@@ -131,20 +147,52 @@ public class UserRestController {
         
         String token = request.getHeader("Authorization");
         if (StringUtils.isNotEmpty(token) && (token.startsWith(TOKEN_PREFIX))) {
-
+   
             String issuer = System.getProperty("pronote.issuer");
-            String pronoteSecret = System.getProperty("pronote.secret");
+            String pronoteSecret = System.getProperty("pronote.oauth2.jwt.secret");            
+           
             DecodedJWT jwt = null;
+            
 
             try {
-                Algorithm algorithm = Algorithm.HMAC256(pronoteSecret);
+                String publickeyPath = System.getProperty("pronote.oauth2.jwt.publicKey.path");
 
-                JWTVerifier verifier = JWT.require(algorithm).withIssuer(issuer).build(); // Reusable verifier instance
-                jwt = verifier.verify(token.substring(TOKEN_PREFIX.length()));
+                if (StringUtils.isNotEmpty(publickeyPath)) {
+                    File file = new File(publickeyPath);
+                    if (file.exists()) {
+                        PemReader pemReader = new PemReader(new InputStreamReader(new FileInputStream(publickeyPath)));
+                        PemObject pemObject = pemReader.readPemObject();
+                        pemReader.close();
 
-            } catch (IllegalArgumentException | UnsupportedEncodingException e) {
+                        byte[] content = pemObject.getContent();
+                        X509EncodedKeySpec pubKeySpec = new X509EncodedKeySpec(content);
 
-            	errorMgr.addErrorResponse(returnObject, 2, "Communication error between client and Cloud-ens, token unreadable.");
+                        KeyFactory factory = KeyFactory.getInstance("RSA");
+                        RSAKey key = (RSAKey) factory.generatePublic(pubKeySpec);
+
+                        jwt = JWT.require(Algorithm.RSA256(key)).build().verify(token.substring(TOKEN_PREFIX.length()));
+                   }
+                }
+            } catch (NoSuchAlgorithmException | IOException | InvalidKeySpecException e) {
+                errorMgr.addErrorResponse(returnObject, 2, "Error during RSA based verification, token cannot be verified : " + e.getMessage());
+            } catch (AlgorithmMismatchException e) {
+                if (StringUtils.isNotEmpty(pronoteSecret)) {
+                    errorMgr.addErrorResponse(returnObject, 2, "Error during RSA based verification : " + e.getMessage());
+                }
+            }
+            
+            if (jwt == null) {
+                // try secret Key
+                if (StringUtils.isNotEmpty(pronoteSecret)) {
+                    try {
+                        Algorithm algorithm = Algorithm.HMAC256(pronoteSecret);
+
+                        JWTVerifier verifier = JWT.require(algorithm).withIssuer(issuer).build(); // Reusable verifier instance
+                        jwt = verifier.verify(token.substring(TOKEN_PREFIX.length()));
+                    } catch (Exception e) {
+                        errorMgr.addErrorResponse(returnObject, 2, "Error during HMAC256 based verification : : " + e.getMessage());
+                    }
+                }
             }
 
             if (jwt != null) {
@@ -219,7 +267,7 @@ public class UserRestController {
 		nuxeoController.setServletRequest(request);
 		nuxeoController.setAuthType(NuxeoCommandContext.AUTH_TYPE_SUPERUSER);
 		nuxeoController.setCacheType(CacheInfo.CACHE_SCOPE_NONE);
-		NuxeoDocumentContext ctx = nuxeoController.getDocumentContext(IWebIdService.FETCH_PATH_PREFIX + "procedure_person-creation");
+		NuxeoDocumentContext ctx = nuxeoController.getDocumentContext(IWebIdService.FETCH_PATH_PREFIX + "procedure_person-creation-pronote");
 
 		// Get parent doc
 		Document userCreationProcedure = ctx.getDocument();
