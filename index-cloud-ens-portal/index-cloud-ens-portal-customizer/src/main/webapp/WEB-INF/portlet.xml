@@ -7,8 +7,8 @@
 
     <!-- Plugin -->
     <portlet>
-        <portlet-name>demo-plugin</portlet-name>
-        <portlet-class>org.osivia.demo.customizer.plugin.DemoPlugin</portlet-class>
+        <portlet-name>cloud-ens-plugin</portlet-name>
+        <portlet-class>fr.index.cloud.ens.customizer.plugin.CloudEnsPlugin</portlet-class>
 
         <supports>
             <mime-type>text/html</mime-type>
@@ -22,8 +22,8 @@
     
     <!-- Regions customizer -->
     <portlet>
-        <portlet-name>demo-regions-customizer</portlet-name>
-        <portlet-class>org.osivia.demo.customizer.regions.RegionsCustomizer</portlet-class>
+        <portlet-name>cloud-ens-regions-customizer</portlet-name>
+        <portlet-class>fr.index.cloud.ens.customizer.regions.RegionsCustomizer</portlet-class>
 
         <supports>
             <mime-type>text/html</mime-type>
@@ -37,8 +37,8 @@
     
     <!-- Attributes bundle customizer -->
     <portlet>
-        <portlet-name>demo-attributes-customizer</portlet-name>
-        <portlet-class>org.osivia.demo.customizer.attributes.AttributesCustomizer</portlet-class>
+        <portlet-name>cloud-ens-attributes-customizer</portlet-name>
+        <portlet-class>fr.index.cloud.ens.customizer.attributes.AttributesCustomizer</portlet-class>
 
         <supports>
             <mime-type>text/html</mime-type>
@@ -52,8 +52,8 @@
     
     <!-- Internationalization customizer -->
     <portlet>
-        <portlet-name>demo-internationalization-customizer</portlet-name>
-        <portlet-class>org.osivia.demo.customizer.internationalization.InternationalizationCustomizer</portlet-class>
+        <portlet-name>cloud-ens-internationalization-customizer</portlet-name>
+        <portlet-class>fr.index.cloud.ens.customizer.internationalization.InternationalizationCustomizer</portlet-class>
 
         <supports>
             <mime-type>text/html</mime-type>
@@ -67,8 +67,8 @@
     
     <!-- Feeder customizer -->
     <portlet>
-        <portlet-name>demo-feeder-customizer</portlet-name>
-        <portlet-class>org.osivia.demo.customizer.feeder.FeederCustomizer</portlet-class>
+        <portlet-name>cloud-ens-feeder-customizer</portlet-name>
+        <portlet-class>fr.index.cloud.ens.customizer.feeder.FeederCustomizer</portlet-class>
 
         <supports>
             <mime-type>text/html</mime-type>
@@ -82,8 +82,8 @@
     
     <!-- Project customizer -->
     <portlet>
-        <portlet-name>demo-project-customizer</portlet-name>
-        <portlet-class>org.osivia.demo.customizer.project.ProjectCustomizer</portlet-class>
+        <portlet-name>cloud-ens-project-customizer</portlet-name>
+        <portlet-class>fr.index.cloud.ens.customizer.project.ProjectCustomizer</portlet-class>
 
         <supports>
             <mime-type>text/html</mime-type>

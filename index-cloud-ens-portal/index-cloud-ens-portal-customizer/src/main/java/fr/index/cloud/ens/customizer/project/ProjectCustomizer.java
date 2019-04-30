@@ -1,4 +1,4 @@
-package org.osivia.demo.customizer.project;
+package fr.index.cloud.ens.customizer.project;
 
 import java.security.Principal;
 import java.util.Arrays;
@@ -166,8 +166,6 @@ public class ProjectCustomizer extends CMSPortlet implements ICustomizationModul
                 } else
                     this.homeSpaceRedirection(portalControllerContext, configuration, principal, bundle);
 
-            } else {
-                this.homeSiteRedirection(portalControllerContext, configuration, principal, bundle);
             }
         }
     }
@@ -419,9 +417,9 @@ public class ProjectCustomizer extends CMSPortlet implements ICustomizationModul
                         } catch (CMSException e) {
                             this.log.error("Unable to get user workspaces.", e.fillInStackTrace());
                         }
-                        if ((userWorkspace != null) && StringUtils.isNotEmpty(userWorkspace.getPath())) {
+                        if ((userWorkspace != null) && StringUtils.isNotEmpty(userWorkspace.getCmsPath())) {
                             // User workspace URL
-                            String userWorkspaceUrl = this.portalUrlFactory.getCMSUrl(portalControllerContext, null, userWorkspace.getPath(), null, null, null,
+                            String userWorkspaceUrl = this.portalUrlFactory.getCMSUrl(portalControllerContext, null, userWorkspace.getCmsPath(), null, null, null,
                                     null, null, null, null);
 
                             configuration.setRedirectionURL(userWorkspaceUrl);
@@ -431,32 +429,6 @@ public class ProjectCustomizer extends CMSPortlet implements ICustomizationModul
                 }
             }
         }
-    }
-
-    /**
-     * Welcome page for web site
-     *
-     * @param portalControllerContext
-     *            portal controller context
-     * @param configuration
-     *            project customization configuration
-     * @param principal
-     *            user principal
-     * @param bundle
-     *            internationalization bundle
-     */
-    private void homeSiteRedirection(PortalControllerContext portalControllerContext, IProjectCustomizationConfiguration configuration, Principal principal,
-            Bundle bundle) {
-        HttpServletRequest servlet = portalControllerContext.getHttpServletRequest();
-
-        String reqHost = portalControllerContext.getHttpServletRequest().getServerName();
-        String extranetHost = System.getProperty("demo.extranet.url");
-
-        if (reqHost.equals(extranetHost) && (principal == null) && (servlet.getRequestURI().equals("/portal/web"))) {
-            // Initialisation work only on Intranet
-            configuration.setRedirectionURL("https://" + extranetHost + "/portal/web/welcome");
-        }
-
     }
 
 }

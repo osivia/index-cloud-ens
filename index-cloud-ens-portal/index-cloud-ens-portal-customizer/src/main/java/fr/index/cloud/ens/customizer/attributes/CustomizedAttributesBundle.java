@@ -1,4 +1,4 @@
-package org.osivia.demo.customizer.attributes;
+package fr.index.cloud.ens.customizer.attributes;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -120,9 +120,9 @@ public class CustomizedAttributesBundle implements IAttributesBundle {
         } catch (CMSException e) {
             this.log.error("Unable to get user workspaces.", e.fillInStackTrace());
         }
-        if ((userWorkspace != null) && StringUtils.isNotEmpty(userWorkspace.getPath())) {
+        if ((userWorkspace != null) && StringUtils.isNotEmpty(userWorkspace.getCmsPath())) {
             // User workspace URL
-            String userWorkspaceUrl = this.portalUrlFactory.getCMSUrl(portalControllerContext, null, userWorkspace.getPath(), null, null, null, null, null,
+            String userWorkspaceUrl = this.portalUrlFactory.getCMSUrl(portalControllerContext, null, userWorkspace.getCmsPath(), null, null, null, null, null,
                     null, null);
             attributes.put(USER_WORKSPACE_URL, userWorkspaceUrl);
         }

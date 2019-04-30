@@ -1,37 +1,36 @@
-package org.osivia.demo.customizer.regions;
+package fr.index.cloud.ens.customizer.internationalization;
 
 import java.util.Arrays;
+import java.util.Locale;
 import java.util.Map;
+import java.util.MissingResourceException;
+import java.util.ResourceBundle;
 
 import javax.portlet.GenericPortlet;
 import javax.portlet.PortletException;
 
+import org.apache.commons.lang.StringUtils;
 import org.osivia.portal.api.customization.CustomizationContext;
 import org.osivia.portal.api.customization.CustomizationModuleMetadatas;
 import org.osivia.portal.api.customization.ICustomizationModule;
 import org.osivia.portal.api.customization.ICustomizationModulesRepository;
-import org.osivia.portal.api.theming.IRenderedRegions;
+import org.osivia.portal.api.internationalization.IInternationalizationService;
 
 /**
- * Regions customizer.
+ * Internationalization customizer.
  *
  * @author Cédric Krommenhoek
  * @see GenericPortlet
  * @see ICustomizationModule
  */
-public class RegionsCustomizer extends GenericPortlet implements ICustomizationModule {
+public class InternationalizationCustomizer extends GenericPortlet implements ICustomizationModule {
 
     /** Customizer name. */
-    private static final String CUSTOMIZER_NAME = "demo.customizer.regions";
+    private static final String CUSTOMIZER_NAME = "cloud-ens.customizer.internationalization";
     /** Customization modules repository attribute name. */
     private static final String ATTRIBUTE_CUSTOMIZATION_MODULES_REPOSITORY = "CustomizationModulesRepository";
-
-    /** Charte context path. */
-    private static final String CHARTE_CONTEXT_PATH = "/demo-charte";
-    /** Charte Web context path. */
-    private static final String CHARTE_WEB_CONTEXT_PATH = "/demo-charte-web";
-    /** Charte extranet context path. */
-    private static final String CHARTE_EXTRANET_CONTEXT_PATH = "/demo-charte-extranet";
+    /** Custom resource bundle name. */
+    private static final String RESOURCE_BUNDLE_NAME = "Resource";
 
 
     /** Customization module metadatas. */
@@ -45,7 +44,7 @@ public class RegionsCustomizer extends GenericPortlet implements ICustomizationM
     /**
      * Constructor.
      */
-    public RegionsCustomizer() {
+    public InternationalizationCustomizer() {
         super();
         this.metadatas = this.generateMetadatas();
     }
@@ -56,11 +55,11 @@ public class RegionsCustomizer extends GenericPortlet implements ICustomizationM
      *
      * @return metadatas
      */
-    private CustomizationModuleMetadatas generateMetadatas() {
+    private final CustomizationModuleMetadatas generateMetadatas() {
         CustomizationModuleMetadatas metadatas = new CustomizationModuleMetadatas();
         metadatas.setName(CUSTOMIZER_NAME);
         metadatas.setModule(this);
-        metadatas.setCustomizationIDs(Arrays.asList(IRenderedRegions.CUSTOMIZER_ID));
+        metadatas.setCustomizationIDs(Arrays.asList(IInternationalizationService.CUSTOMIZER_ID));
         return metadatas;
     }
 
@@ -92,19 +91,18 @@ public class RegionsCustomizer extends GenericPortlet implements ICustomizationM
     @Override
     public void customize(CustomizationContext customizationContext) {
         Map<String, Object> attributes = customizationContext.getAttributes();
-        IRenderedRegions renderedRegion = (IRenderedRegions) attributes.get(IRenderedRegions.CUSTOMIZER_ATTRIBUTE_RENDERED_REGIONS);
+        String key = (String) attributes.get(IInternationalizationService.CUSTOMIZER_ATTRIBUTE_KEY);
+        Locale locale = (Locale) attributes.get(IInternationalizationService.CUSTOMIZER_ATTRIBUTE_LOCALE);
 
-        // Context path
-        String contextPath = (String) attributes.get(IRenderedRegions.CUSTOMIZER_ATTRIBUTE_THEME_CONTEXT_PATH);
-
-        if (CHARTE_CONTEXT_PATH.equals(contextPath)) {
-            // Toolbar
-            renderedRegion.customizeRenderedRegion("toolbar", "/regions/toolbar.jsp");
-            // Tabs
-            renderedRegion.removeRenderedRegion("tabs");
-            // Remove footer
-            renderedRegion.removeRenderedRegion("footer");
-        } 
+        if (StringUtils.isNotBlank(key) && (locale != null)) {
+            try {
+                ResourceBundle resourceBundle = ResourceBundle.getBundle(RESOURCE_BUNDLE_NAME, locale);
+                String result = resourceBundle.getString(key);
+                attributes.put(IInternationalizationService.CUSTOMIZER_ATTRIBUTE_RESULT, result);
+            } catch (MissingResourceException e) {
+                // Do nothing
+            }
+        }
     }
 
 }

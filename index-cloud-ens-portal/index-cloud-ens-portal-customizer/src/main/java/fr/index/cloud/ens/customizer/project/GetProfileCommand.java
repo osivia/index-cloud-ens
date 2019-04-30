@@ -1,4 +1,4 @@
-package org.osivia.demo.customizer.project;
+package fr.index.cloud.ens.customizer.project;
 
 import org.nuxeo.ecm.automation.client.Constants;
 import org.nuxeo.ecm.automation.client.OperationRequest;

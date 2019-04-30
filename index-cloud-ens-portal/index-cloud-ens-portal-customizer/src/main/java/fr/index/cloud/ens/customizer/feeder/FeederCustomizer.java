@@ -1,7 +1,7 @@
 /*
  *
  */
-package org.osivia.demo.customizer.feeder;
+package fr.index.cloud.ens.customizer.feeder;
 
 import java.io.StringReader;
 import java.util.Arrays;
@@ -38,7 +38,7 @@ import org.xml.sax.InputSource;
 public class FeederCustomizer extends GenericPortlet implements ICustomizationModule {
 
     /** Customizer name. */
-    private static final String CUSTOMIZER_NAME = "demo.customizer.feeder";
+    private static final String CUSTOMIZER_NAME = "cloud-ens.customizer.feeder";
     /** Customization modules repository attribute name. */
     private static final String ATTRIBUTE_CUSTOMIZATION_MODULES_REPOSITORY = "CustomizationModulesRepository";
 

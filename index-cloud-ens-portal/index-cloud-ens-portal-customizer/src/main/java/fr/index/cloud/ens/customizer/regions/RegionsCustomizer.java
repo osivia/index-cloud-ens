@@ -1,8 +1,6 @@
-package org.osivia.demo.customizer.attributes;
+package fr.index.cloud.ens.customizer.regions;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Map;
 
 import javax.portlet.GenericPortlet;
@@ -12,27 +10,25 @@ import org.osivia.portal.api.customization.CustomizationContext;
 import org.osivia.portal.api.customization.CustomizationModuleMetadatas;
 import org.osivia.portal.api.customization.ICustomizationModule;
 import org.osivia.portal.api.customization.ICustomizationModulesRepository;
-import org.osivia.portal.api.theming.IAttributesBundle;
+import org.osivia.portal.api.theming.IRenderedRegions;
 
 /**
- * Attributes customizer.
+ * Regions customizer.
  *
  * @author Cédric Krommenhoek
  * @see GenericPortlet
  * @see ICustomizationModule
  */
-public class AttributesCustomizer extends GenericPortlet implements ICustomizationModule {
+public class RegionsCustomizer extends GenericPortlet implements ICustomizationModule {
 
     /** Customizer name. */
-    private static final String CUSTOMIZER_NAME = "demo.customizer.attributes";
+    private static final String CUSTOMIZER_NAME = "cloud-ens.customizer.regions";
     /** Customization modules repository attribute name. */
     private static final String ATTRIBUTE_CUSTOMIZATION_MODULES_REPOSITORY = "CustomizationModulesRepository";
 
 
     /** Customization module metadatas. */
     private final CustomizationModuleMetadatas metadatas;
-    /** Customized bundles. */
-    private final List<IAttributesBundle> bundles;
 
 
     /** Customization modules repository. */
@@ -42,12 +38,9 @@ public class AttributesCustomizer extends GenericPortlet implements ICustomizati
     /**
      * Constructor.
      */
-    public AttributesCustomizer() {
+    public RegionsCustomizer() {
         super();
         this.metadatas = this.generateMetadatas();
-
-        this.bundles = new ArrayList<IAttributesBundle>();
-        this.bundles.add(CustomizedAttributesBundle.getInstance());
     }
 
 
@@ -56,11 +49,11 @@ public class AttributesCustomizer extends GenericPortlet implements ICustomizati
      *
      * @return metadatas
      */
-    private final CustomizationModuleMetadatas generateMetadatas() {
+    private CustomizationModuleMetadatas generateMetadatas() {
         CustomizationModuleMetadatas metadatas = new CustomizationModuleMetadatas();
         metadatas.setName(CUSTOMIZER_NAME);
         metadatas.setModule(this);
-        metadatas.setCustomizationIDs(Arrays.asList(IAttributesBundle.CUSTOMIZER_ID));
+        metadatas.setCustomizationIDs(Arrays.asList(IRenderedRegions.CUSTOMIZER_ID));
         return metadatas;
     }
 
@@ -92,14 +85,17 @@ public class AttributesCustomizer extends GenericPortlet implements ICustomizati
     @Override
     public void customize(CustomizationContext customizationContext) {
         Map<String, Object> attributes = customizationContext.getAttributes();
-        String name = (String) attributes.get(IAttributesBundle.CUSTOMIZER_ATTRIBUTE_NAME);
+        IRenderedRegions renderedRegion = (IRenderedRegions) attributes.get(IRenderedRegions.CUSTOMIZER_ATTRIBUTE_RENDERED_REGIONS);
 
-        for (IAttributesBundle bundle : this.bundles) {
-            if (bundle.getAttributeNames().contains(name)) {
-                attributes.put(IAttributesBundle.CUSTOMIZER_ATTRIBUTE_RESULT, bundle);
-                break;
-            }
-        }
+        // Context path
+        String contextPath = (String) attributes.get(IRenderedRegions.CUSTOMIZER_ATTRIBUTE_THEME_CONTEXT_PATH);
+
+        // Toolbar
+        renderedRegion.customizeRenderedRegion("toolbar", "/regions/toolbar.jsp");
+        // Tabs
+        renderedRegion.removeRenderedRegion("tabs");
+        // Remove footer
+        renderedRegion.removeRenderedRegion("footer");
     }
 
 }

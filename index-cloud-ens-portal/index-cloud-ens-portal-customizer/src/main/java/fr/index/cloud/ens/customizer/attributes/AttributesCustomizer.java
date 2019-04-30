@@ -1,40 +1,38 @@
-package org.osivia.demo.customizer.internationalization;
+package fr.index.cloud.ens.customizer.attributes;
 
+import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Locale;
+import java.util.List;
 import java.util.Map;
-import java.util.MissingResourceException;
-import java.util.ResourceBundle;
 
 import javax.portlet.GenericPortlet;
 import javax.portlet.PortletException;
 
-import org.apache.commons.lang.StringUtils;
 import org.osivia.portal.api.customization.CustomizationContext;
 import org.osivia.portal.api.customization.CustomizationModuleMetadatas;
 import org.osivia.portal.api.customization.ICustomizationModule;
 import org.osivia.portal.api.customization.ICustomizationModulesRepository;
-import org.osivia.portal.api.internationalization.IInternationalizationService;
+import org.osivia.portal.api.theming.IAttributesBundle;
 
 /**
- * Internationalization customizer.
+ * Attributes customizer.
  *
  * @author Cédric Krommenhoek
  * @see GenericPortlet
  * @see ICustomizationModule
  */
-public class InternationalizationCustomizer extends GenericPortlet implements ICustomizationModule {
+public class AttributesCustomizer extends GenericPortlet implements ICustomizationModule {
 
     /** Customizer name. */
-    private static final String CUSTOMIZER_NAME = "demo.customizer.internationalization";
+    private static final String CUSTOMIZER_NAME = "cloud-ens.customizer.attributes";
     /** Customization modules repository attribute name. */
     private static final String ATTRIBUTE_CUSTOMIZATION_MODULES_REPOSITORY = "CustomizationModulesRepository";
-    /** Custom resource bundle name. */
-    private static final String RESOURCE_BUNDLE_NAME = "Resource";
 
 
     /** Customization module metadatas. */
     private final CustomizationModuleMetadatas metadatas;
+    /** Customized bundles. */
+    private final List<IAttributesBundle> bundles;
 
 
     /** Customization modules repository. */
@@ -44,9 +42,12 @@ public class InternationalizationCustomizer extends GenericPortlet implements IC
     /**
      * Constructor.
      */
-    public InternationalizationCustomizer() {
+    public AttributesCustomizer() {
         super();
         this.metadatas = this.generateMetadatas();
+
+        this.bundles = new ArrayList<IAttributesBundle>();
+        this.bundles.add(CustomizedAttributesBundle.getInstance());
     }
 
 
@@ -59,7 +60,7 @@ public class InternationalizationCustomizer extends GenericPortlet implements IC
         CustomizationModuleMetadatas metadatas = new CustomizationModuleMetadatas();
         metadatas.setName(CUSTOMIZER_NAME);
         metadatas.setModule(this);
-        metadatas.setCustomizationIDs(Arrays.asList(IInternationalizationService.CUSTOMIZER_ID));
+        metadatas.setCustomizationIDs(Arrays.asList(IAttributesBundle.CUSTOMIZER_ID));
         return metadatas;
     }
 
@@ -91,16 +92,12 @@ public class InternationalizationCustomizer extends GenericPortlet implements IC
     @Override
     public void customize(CustomizationContext customizationContext) {
         Map<String, Object> attributes = customizationContext.getAttributes();
-        String key = (String) attributes.get(IInternationalizationService.CUSTOMIZER_ATTRIBUTE_KEY);
-        Locale locale = (Locale) attributes.get(IInternationalizationService.CUSTOMIZER_ATTRIBUTE_LOCALE);
+        String name = (String) attributes.get(IAttributesBundle.CUSTOMIZER_ATTRIBUTE_NAME);
 
-        if (StringUtils.isNotBlank(key) && (locale != null)) {
-            try {
-                ResourceBundle resourceBundle = ResourceBundle.getBundle(RESOURCE_BUNDLE_NAME, locale);
-                String result = resourceBundle.getString(key);
-                attributes.put(IInternationalizationService.CUSTOMIZER_ATTRIBUTE_RESULT, result);
-            } catch (MissingResourceException e) {
-                // Do nothing
+        for (IAttributesBundle bundle : this.bundles) {
+            if (bundle.getAttributeNames().contains(name)) {
+                attributes.put(IAttributesBundle.CUSTOMIZER_ATTRIBUTE_RESULT, bundle);
+                break;
             }
         }
     }
