@@ -98,28 +98,28 @@ public class UserRestController {
         Map<String, Object> returnObject = new LinkedHashMap<>();
         
         try {
-        	
-        	// 1 - decode the jwt token, check mandatory fields and initialize a map of attributs.
+            
+            // 1 - decode the jwt token, check mandatory fields and initialize a map of attributs.
             Map<String, String> attributes = decodeRequest(request, returnObject);
             
             if(returnObject.isEmpty()) {
-            	
-            	// 2 - check if a user is already registered
+                
+                // 2 - check if a user is already registered
                 checkValidAccount(attributes, returnObject); 
                 
             }
             
-	        if(returnObject.isEmpty()) {
+            if(returnObject.isEmpty()) {
 
-	        	// 3 - Create the portal token
-	        	String webToken = tokenService.generateToken(attributes);
-	
-	        	// 4 - Compute and return a link to start UserCreation procedure
+                // 3 - Create the portal token
+                String webToken = tokenService.generateToken(attributes);
+    
+                // 4 - Compute and return a link to start UserCreation procedure
                 computeCreateAccountProcUrl(request, returnObject, webToken);
                 returnObject.put("returnCode", ErrorMgr.ERR_OK);
-	        }
-	        
-	        
+            }
+            
+            
         }
         catch(Exception e) {
             WSPortalControllerContext wsCtx = new WSPortalControllerContext(request, response);
@@ -143,7 +143,7 @@ public class UserRestController {
      */
     protected Map<String, String> decodeRequest(HttpServletRequest request, Map<String, Object> returnObject) throws PortalException {
 
-    	Map<String, String> attributes = new ConcurrentHashMap<String, String>();
+        Map<String, String> attributes = new ConcurrentHashMap<String, String>();
         
         String token = request.getHeader("Authorization");
         if (StringUtils.isNotEmpty(token) && (token.startsWith(TOKEN_PREFIX))) {
@@ -202,33 +202,33 @@ public class UserRestController {
 
                 if (StringUtils.isBlank(firstName) || StringUtils.isBlank(lastName) || StringUtils.isBlank(mail)) {
 
-                	String mandatoryFields = "";
-                	
-                	if(StringUtils.isBlank(firstName)) {
-                		mandatoryFields = "firstname ";
-                	}
-                	if(StringUtils.isBlank(lastName)) {
-                		mandatoryFields = mandatoryFields + "lastName ";
-                	}
-                	if(StringUtils.isBlank(mail)) {
-                		mandatoryFields = mandatoryFields + "mail ";
-                	}
-                	
-                	errorMgr.addErrorResponse(returnObject, 3, "Parameters : " +mandatoryFields + " required");
+                    String mandatoryFields = "";
+                    
+                    if(StringUtils.isBlank(firstName)) {
+                        mandatoryFields = "firstname ";
+                    }
+                    if(StringUtils.isBlank(lastName)) {
+                        mandatoryFields = mandatoryFields + "lastName ";
+                    }
+                    if(StringUtils.isBlank(mail)) {
+                        mandatoryFields = mandatoryFields + "mail ";
+                    }
+                    
+                    errorMgr.addErrorResponse(returnObject, 3, "Parameters : " +mandatoryFields + " required");
                 }
                 else {
                     attributes.put("firstname", firstName);
                     attributes.put("lastname", lastName);
                     attributes.put("mail", mail);
-                	
+                    
                 }
             }
             else {
-            	throw new PortalException("JWT token is empty.");
+                throw new PortalException("JWT token is empty.");
             }
         }
         else {
-        	errorMgr.addErrorResponse(returnObject, 2, "Token is mandatory and is empty");
+            errorMgr.addErrorResponse(returnObject, 2, "Token is mandatory and is empty");
 
         }
         
@@ -241,42 +241,42 @@ public class UserRestController {
      * @param attributes
      * @param returnObject
      */
-	private void checkValidAccount(Map<String, String> attributes, Map<String, Object> returnObject) {
-		
-		Person searchedPerson = personUpdateService.getEmptyPerson();
-		searchedPerson.setMail(attributes.get("mail"));
-		List<Person> search = personUpdateService.findByCriteria(searchedPerson);
+    private void checkValidAccount(Map<String, String> attributes, Map<String, Object> returnObject) {
+        
+        Person searchedPerson = personUpdateService.getEmptyPerson();
+        searchedPerson.setMail(attributes.get("mail"));
+        List<Person> search = personUpdateService.findByCriteria(searchedPerson);
 
 
-		if (search.size() > 0 && search.get(0).getLastConnection() != null) {
+        if (search.size() > 0 && search.get(0).getLastConnection() != null) {
 
-			errorMgr.addErrorResponse(returnObject, 1, "A valid user account is registered with this mail.");
+            errorMgr.addErrorResponse(returnObject, 1, "A valid user account is registered with this mail.");
 
-		}
-	}
-	
-	/**
-	 * Compute and return a link to start UserCreation procedure
-	 * @param request
-	 * @param returnObject
-	 * @param webToken
-	 */
-	private void computeCreateAccountProcUrl(HttpServletRequest request, Map<String, Object> returnObject, String webToken) {
-		
-		NuxeoController nuxeoController = new NuxeoController(portletContext);
-		nuxeoController.setServletRequest(request);
-		nuxeoController.setAuthType(NuxeoCommandContext.AUTH_TYPE_SUPERUSER);
-		nuxeoController.setCacheType(CacheInfo.CACHE_SCOPE_NONE);
-		NuxeoDocumentContext ctx = nuxeoController.getDocumentContext(IWebIdService.FETCH_PATH_PREFIX + "procedure_person-creation-pronote");
+        }
+    }
+    
+    /**
+     * Compute and return a link to start UserCreation procedure
+     * @param request
+     * @param returnObject
+     * @param webToken
+     */
+    private void computeCreateAccountProcUrl(HttpServletRequest request, Map<String, Object> returnObject, String webToken) {
+        
+        NuxeoController nuxeoController = new NuxeoController(portletContext);
+        nuxeoController.setServletRequest(request);
+        nuxeoController.setAuthType(NuxeoCommandContext.AUTH_TYPE_SUPERUSER);
+        nuxeoController.setCacheType(CacheInfo.CACHE_SCOPE_NONE);
+        NuxeoDocumentContext ctx = nuxeoController.getDocumentContext(IWebIdService.FETCH_PATH_PREFIX + "procedure_person-creation");
 
-		// Get parent doc
-		Document userCreationProcedure = ctx.getDocument();
+        // Get parent doc
+        Document userCreationProcedure = ctx.getDocument();
 
-		String url = "/portal/cms" + userCreationProcedure.getPath();
+        String url = "/portal/cms" + userCreationProcedure.getPath();
 
-		String publicHost = System.getProperty("osivia.tasks.host");
-		url = publicHost + url + "?displayContext=uncluttered&token=" + webToken;
-		returnObject.put("url", url);
-		
-	}	
+        String publicHost = System.getProperty("osivia.tasks.host");
+        url = publicHost + url + "?displayContext=uncluttered&token=" + webToken;
+        returnObject.put("url", url);
+        
+    }   
 }

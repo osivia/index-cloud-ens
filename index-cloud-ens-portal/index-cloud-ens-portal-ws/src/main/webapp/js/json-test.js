@@ -205,7 +205,8 @@ function drive(id) {
 						if (jsonData.type == 'file') {
 							$JQry('#detail').show();
 							$JQry('#contentId').val(jsonData.id);
-							$JQry('#pubShare').val(jsonData.shareUrl);
+							$JQry('#pubShare').attr("href",jsonData.shareUrl);
+							$JQry('#pubViewer').attr("href",jsonData.viewerUrl);
 						} else {
 							$JQry('#detail').hide();
 
@@ -416,7 +417,8 @@ $JQry(function() {
 														$JQry.notify("Error #"+jsonData.returnCode, "error");
 													else	{
 														$JQry.notify("Contenu publié", "success");
-														$JQry('#pubShare').val(jsonData.shareUrl);
+														$JQry('#pubShare').attr("href",jsonData.shareUrl);
+														$JQry('#pubViewer').attr("href",jsonData.viewerUrl);														
 													}
 
 												},
@@ -661,6 +663,43 @@ $JQry(function() {
 						url : oauth.params.resourceUrl+"/User.signup",
 						headers : {
 							"Authorization" : "Bearer " + createSignUpToken()
+						},
+						dataType : 'json',
+						contentType : 'application/json',
+						success : function(jsonData) {
+							if (jsonData.returnCode != 0)
+								$JQry.notify("Error #"+jsonData.returnCode+ " "+ jsonData.errorMessage, "error");
+							else{
+								$JQry.notify("Utilisateur créé", "success");
+								window.open(jsonData.url,"signup","menubar=no, status=no, scrollbars=no, menubar=no, width=1000, height=600");
+							}
+
+						},
+						error : function(e) {
+							$JQry.notify("HTTP Error #"+e.status, "error");
+						}
+					});
+
+			});
+	});	
+	
+	
+	
+	$JQry("#btnRSASignUp").each(function(index, element) {
+
+		var $element = $JQry(element);
+		var token = "eyJ0eXAiOiJKV1QiLA0KICJhbGciOiJSUzI1NiJ9.eyJmaXJzdE5hbWUiOiJQUk9GRVNTRVVSIiwNCiJsYXN0TmFtZSI6Ik1heGltZSIsDQoibWFpbCI6Im1heGltZS5wcm9mZXNzZXVyQGZvdXJuaXNzZXVyLmZyIiwNCiJpc3MiOiJwcm9ub3RlIiwNCiJpYXQiOiIxNTU2MjIxODcyIn0.gj0OzffC7ARHZTJ02N10lKXHKDNafqe7RkfG1Y0PoDhv3Dq9V_a0mbJDNg6BUWh3cNUGC7rIjEBfOXEs3vRd9iq9AR5mucf9CrLX6CeztAftBewbcWN_9fC4dnoDOAkYLBaC8Hc7-asRPuGN2mY_V_wImTgnrRhj7kUnvAj1TvWH7x3UNG63IlTHrkRIBzQdK63cPWFl4cpvHIsbrSa5d4dKwhqNvs5VaBC1bwnKu4Au5LK5T5neLnEW3dYS5qxfENp2YeFzUBINPQZu_oFBK2O3gJzXQ3CJqyqd8OdDKHkxxmYmeaZ_U_1qd8meuS4hoIbbk_zWGoXjrsTk-9AXsQ"
+		
+		
+		$element.click(function() {
+			console.log("signup RSA ");			
+
+			$JQry
+					.ajax({
+						type : "GET",
+						url : oauth.params.resourceUrl+"/User.signup",
+						headers : {
+							"Authorization" : "Bearer " + token
 						},
 						dataType : 'json',
 						contentType : 'application/json',

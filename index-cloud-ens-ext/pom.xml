@@ -32,6 +32,7 @@
 
 	<modules>
 		<module>index-cloud-ens-ext-ws</module>
+		<module>index-cloud-ens-ext-viewer</module>		
 		<module>pronote-cas</module>
 	</modules>
     

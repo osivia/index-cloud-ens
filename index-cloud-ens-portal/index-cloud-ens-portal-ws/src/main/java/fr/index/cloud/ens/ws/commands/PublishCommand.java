@@ -24,7 +24,7 @@ import fr.toutatice.portail.cms.nuxeo.api.INuxeoCommand;
  */
 public class PublishCommand implements INuxeoCommand {
     
-    private final static String NATIVE_FORMAT = "native";
+    private final static String DEFAULT_FORMAT = "default";
     
 
     /** Parent identifier. */
@@ -79,7 +79,7 @@ public class PublishCommand implements INuxeoCommand {
      
         
 
-        if( StringUtils.isNotEmpty(format) && !NATIVE_FORMAT.equals(format))
+        if( StringUtils.isNotEmpty(format))
             properties.set( "rshr:format", format);   
        
         CommandUtils.addToList(doc, properties,  qualifiers.get("level"), "idxcl:levels");        
@@ -88,7 +88,7 @@ public class PublishCommand implements INuxeoCommand {
         documentService.update(doc, properties);
         
         
-        if(NATIVE_FORMAT.equals(format))    {
+        if(DEFAULT_FORMAT.equals(format))    {
             documentService.removeProperty(doc, "rshr:format");           
         }
         

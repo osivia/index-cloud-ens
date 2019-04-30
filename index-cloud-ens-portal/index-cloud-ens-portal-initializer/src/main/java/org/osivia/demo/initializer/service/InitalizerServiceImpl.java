@@ -82,6 +82,7 @@ public class InitalizerServiceImpl implements InitializerService {
         nuxeoController.setCacheType(CacheInfo.CACHE_SCOPE_PORTLET_CONTEXT);
         nuxeoController.setAsynchronousCommand(false);
         
+        /*
         String cn = "sav";
 		PortalGroup portalGroup = this.service.create(cn);
 		portalGroup.setDisplayName("Service après-vente");
@@ -118,6 +119,9 @@ public class InitalizerServiceImpl implements InitializerService {
    		listName.add(person.getDn());
 		portalGroup.setMembers(listName);
         this.service.update(portalGroup);		
+   		*/
+   		
+   		
    		
         // Containers
         Document modelsContainer = (Document) nuxeoController.executeNuxeoCommand(new CreateProcedureContainerCommand());

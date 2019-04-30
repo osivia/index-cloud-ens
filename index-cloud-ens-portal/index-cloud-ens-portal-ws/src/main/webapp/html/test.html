@@ -112,7 +112,10 @@
 						<input type="button"
 							class="btn btn-primary" value="Créer" id="btnCreateUser" />
 						<input type="button"
-							class="btn btn-primary" value="Sign up" id="btnSignUp" />							
+							class="btn btn-primary" value="Sign up" id="btnSignUp" />
+							
+						<input type="button"
+							class="btn btn-primary" value="RSA" id="btnRSASignUp" />							
 					</form>
 				</div>
 				<h3>Sign in with Pronote </h3>
@@ -139,8 +142,8 @@
 				
 					<form method="POST" enctype="multipart/form-data" id="publishForm">
 						<div class="form-group">
-							<label for="pubShare"">Share URL</label> <input name="pubShare"
-								class="form-control" id="pubShare" readonly />
+							<a id="pubShare" target="_blank">Download url</a> <br/>
+							<a id="pubViewer" target="_blank">Viewer url</a>
 						</div>
 						<div class="form-group">
 							<label for="level">pubFormat</label> <input name="pubFormat"

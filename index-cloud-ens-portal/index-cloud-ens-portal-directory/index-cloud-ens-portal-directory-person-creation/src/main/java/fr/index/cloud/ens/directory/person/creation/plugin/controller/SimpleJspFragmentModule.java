@@ -13,13 +13,16 @@ import fr.toutatice.portail.cms.nuxeo.api.fragment.IFragmentModule;
  * @author Loïc Billon
  *
  */
-public class ConfirmationMailFragmentModule extends FragmentModule {
+public class SimpleJspFragmentModule extends FragmentModule {
 
+	private final String viewJspName;
+	
 	/**
 	 * @param portletContext
 	 */
-	public ConfirmationMailFragmentModule(PortletContext portletContext) {
+	public SimpleJspFragmentModule(PortletContext portletContext, String jspName) {
 		super(portletContext);
+		this.viewJspName = jspName;
 	}
 
 	/* (non-Javadoc)
@@ -27,7 +30,7 @@ public class ConfirmationMailFragmentModule extends FragmentModule {
 	 */
 	@Override
 	public String getViewJSPName() {
-		return "confirmation-mail";
+		return viewJspName;
 	}
 	
 	/* (non-Javadoc)
@@ -37,5 +40,6 @@ public class ConfirmationMailFragmentModule extends FragmentModule {
 	public boolean isDisplayedInAdmin() {
 		return false;
 	}
+	
 
 }
