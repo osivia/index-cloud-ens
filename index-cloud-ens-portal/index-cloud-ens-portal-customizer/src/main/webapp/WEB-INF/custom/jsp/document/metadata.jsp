@@ -77,33 +77,59 @@
                 <input type="submit" class="hidden">
             </form>
             
-            
-            <!-- Pronote share & targets -->
-            <c:set var="share" value="${document.properties['rshr:linkId']}" />
-            <c:set var="targets" value="${document.properties['rshr:targets']}" />
-            <c:if test="${not empty share and not empty targets}">
-                <c:if test="${not empty share}">
+       </div>
+	</div>
+     <!-- Pronote share & targets -->
+     <c:set var="share" value="${document.properties['rshr:linkId']}" />
+     <c:set var="targets" value="${document.properties['rshr:targets']}" />	
+	 <c:if test="${not empty share}">	
+		<div class="panel panel-default">
+	        <div class="panel-body">	     
                     <p>
-                        <span><op:translate key="SHARED_DOC" /></span><br/>
-                        <a href="/s/${share}"><op:translate key="SHARED_LINK" /></a>
+                        <strong><op:translate key="SHARED_LINK" /></strong><br/>
+                        <a id="${namespace}-link-url" class="btn btn-link  text-overflow" href="/s/${share}">https://${pageContext.request.serverName}/s/${share}</a>
                      </p>
-                 </c:if>
-                
-                <c:if test="${not empty targets}">
-                    <dt><op:translate key="SHARED_TARGET" /></dt>
-                    <c:forEach var="target" items="${targets}">
-                        <dd>
-                            <span>${target.pubTitle}</span>
-                        </dd>
-                    </c:forEach>
-                </c:if>
-            </c:if>
-        
-        
-            <!-- Remote publication spaces -->
-            <dl class="no-margin">
-                <ttc:include page="metadata-remote-sections.jsp" />
-            </dl>
-        </div>
-    </div>
+					<!-- Format -->
+		            <portlet:actionURL name="inline-edition" var="submitUrl">
+		                <portlet:param name="property" value="rshr:format" />
+		                <portlet:param name="cancel-url" value="${cancelUrl}" />
+		            </portlet:actionURL>
+		            <form action="${submitUrl}" method="post">
+		                <div class="form-group inline-edition">
+		                    <label class="control-label"><op:translate key="DOCUMENT_METADATA_FORMAT_LABEL" /></label>
+							<div class="radio">
+								<label> <input type="radio" name="inline-values"
+									value="pdf" ${empty document.properties['rshr:format'] or document.properties['rshr:format'] eq 'pdf' ? 'checked' : ''}> Pdf
+								</label>
+							</div>
+							<div class="radio">
+								<label> <input type="radio" name="inline-values"
+									value="native" ${document.properties['rshr:format'] eq 'native' ? 'checked' : ''}> Format natif
+								</label>
+							</div>
+						</div>
+		                
+		                <input type="submit" class="hidden">
+		            </form>                 
+	                
+	                <c:if test="${not empty targets}">
+	                    <dt><op:translate key="SHARED_TARGET" /></dt>
+	                    <c:forEach var="target" items="${targets}">
+	                        <dd>
+	                            <span>${target.pubOrganization}</span>
+	                            /<span>${target.pubGroup}</span>
+	                            /<span>${target.pubContext}</span>
+	                        </dd>
+	                    </c:forEach>
+	                </c:if>
+	            
+	        
+	        
+	            <!-- Remote publication spaces -->
+	            <dl class="no-margin">
+	                <ttc:include page="metadata-remote-sections.jsp" />
+	            </dl>
+	        </div>
+	    </div>
+    </c:if>
 </div>

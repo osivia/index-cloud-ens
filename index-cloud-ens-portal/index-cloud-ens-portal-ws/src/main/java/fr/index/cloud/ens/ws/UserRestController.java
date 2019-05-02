@@ -176,7 +176,7 @@ public class UserRestController {
             } catch (NoSuchAlgorithmException | IOException | InvalidKeySpecException e) {
                 errorMgr.addErrorResponse(returnObject, 2, "Error during RSA based verification, token cannot be verified : " + e.getMessage());
             } catch (AlgorithmMismatchException e) {
-                if (StringUtils.isNotEmpty(pronoteSecret)) {
+                if (StringUtils.isEmpty(pronoteSecret)) {
                     errorMgr.addErrorResponse(returnObject, 2, "Error during RSA based verification : " + e.getMessage());
                 }
             }
@@ -267,7 +267,7 @@ public class UserRestController {
         nuxeoController.setServletRequest(request);
         nuxeoController.setAuthType(NuxeoCommandContext.AUTH_TYPE_SUPERUSER);
         nuxeoController.setCacheType(CacheInfo.CACHE_SCOPE_NONE);
-        NuxeoDocumentContext ctx = nuxeoController.getDocumentContext(IWebIdService.FETCH_PATH_PREFIX + "procedure_person-creation");
+        NuxeoDocumentContext ctx = nuxeoController.getDocumentContext(IWebIdService.FETCH_PATH_PREFIX + "procedure_person-creation-pronote");
 
         // Get parent doc
         Document userCreationProcedure = ctx.getDocument();

@@ -50,16 +50,16 @@
 			<form action="<c:url value="/login"/>" method="post" role="form">
 				<fieldset>
 					<legend>
-						<h2>Login</h2>
+						<h2>Authentification</h2>
 					</legend>
 					<div class="form-group">
-						<label for="username">Login:</label> <input id="username"
+						<label for="username">Mail:</label> <input id="username"
 							class="form-control" type='text' name='username'
 							 />
 					</div>
 					<div class="form-group">
 						<label for="password">Mot de passe:</label> <input id="password"
-							class="form-control" type='text' name='password' />
+							class="form-control" type='password' name='password' />
 					</div>
 					<button class="btn btn-primary" type="submit">Connexion</button>
 					<input type="hidden" name="${_csrf.parameterName}"

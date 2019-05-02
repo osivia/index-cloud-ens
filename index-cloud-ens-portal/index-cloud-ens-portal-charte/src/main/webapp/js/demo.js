@@ -74,7 +74,7 @@ $JQry(function() {
 	});
 	
 	
-	$JQry(".inline-edition textarea").each(function(index, element) {
+	$JQry(".inline-edition textarea, .inline-edition input").each(function(index, element) {
 		var $element = $JQry(element);
 		
 		if (!$element.data("loaded")) {

@@ -27,7 +27,8 @@ public class EtablissementInvoker implements IServiceInvoker {
     public Object invoke() throws PortalException {
 
         RestTemplate restTemplate = new RestTemplate();
-        EtablissementResponse etablissement = restTemplate.getForObject(pronoteUrl + etablissementCode, EtablissementResponse.class);
+        String url = pronoteUrl.replaceAll("\\{idEtb\\}",etablissementCode);
+        EtablissementResponse etablissement = restTemplate.getForObject(url, EtablissementResponse.class);
 
         return new EtablissementBean(etablissementCode, etablissement.getNom());
     }
