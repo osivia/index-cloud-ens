@@ -81,6 +81,8 @@ public class CloudEnsPlugin extends AbstractPluginPortlet {
     protected void customizeCMSProperties(CustomizationContext customizationContext) {
         // List templates
         this.customizeListTemplates(customizationContext);
+        // Template adapters
+        this.customizeTemplateAdapters(customizationContext);
     }
 
 
