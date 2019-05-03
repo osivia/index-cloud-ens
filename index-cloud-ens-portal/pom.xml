@@ -5,12 +5,12 @@
 	<parent>
         <groupId>fr.index.cloud.ens</groupId>
         <artifactId>index-cloud-ens-parent</artifactId>
-        <version>4.9-SNAPSHOT</version>
+        <version>1.0-SNAPSHOT</version>
     </parent>
 	
     <groupId>fr.index.cloud.ens.portal</groupId>
     <artifactId>index-cloud-ens-portal-parent</artifactId>
-    <version>4.9-SNAPSHOT</version>
+    <version>1.0-SNAPSHOT</version>
     <packaging>pom</packaging>
     
     <name>Cloud enseignant - Portail</name>
@@ -19,13 +19,13 @@
     <properties>
         
         <!-- Toutatice -->
-        <toutatice.version>4.9-ALPHA-2</toutatice.version>
+        <toutatice.version>4.9-SNAPSHOT</toutatice.version>
         
         <!-- Directory -->
         <directory.version>4.7.2</directory.version>
         
         <!-- Collaboration -->
-        <collaboration.version>4.9-ALPHA-2</collaboration.version>
+        <collaboration.version>4.9-SNAPSHOT</collaboration.version>
         
         <!-- Other services -->
         <tasks.version>4.7</tasks.version>
@@ -79,9 +79,10 @@
 		<module>index-cloud-ens-portal-customizer</module>
 		<module>index-cloud-ens-portal-directory</module>
 		<module>index-cloud-ens-portal-initializer</module>
-		<module>index-cloud-ens-portal-distribution</module>
+        <module>index-cloud-ens-portal-taskbar</module>
+        <module>index-cloud-ens-portal-distribution</module>
 		<module>index-cloud-ens-portal-ws</module>
-	</modules>
+    </modules>
     
     
     <dependencies>
@@ -179,7 +180,28 @@
                         </execution>
                     </executions>
                 </plugin>
-            
+
+                <!-- SASS -->
+                <plugin>
+                    <groupId>com.github.warmuuh</groupId>
+                    <artifactId>libsass-maven-plugin</artifactId>
+                    <version>0.2.10-libsass_3.5.3</version>
+                    <executions>
+                        <execution>
+                            <phase>generate-resources</phase>
+                            <goals>
+                                <goal>compile</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                    <configuration>
+                        <inputPath>${project.basedir}/src/main/sass/</inputPath>
+                        <outputPath>${project.basedir}/src/main/webapp/css</outputPath>
+                        <outputStyle>compressed</outputStyle>
+                        <sourceMapOutputPath>${project.basedir}/src/main/webapp/css</sourceMapOutputPath>
+                    </configuration>
+                </plugin>
+
                 <!-- AntRun -->
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>

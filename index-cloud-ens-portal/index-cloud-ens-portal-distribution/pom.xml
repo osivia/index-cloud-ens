@@ -5,7 +5,7 @@
 	<parent>
     	<groupId>fr.index.cloud.ens.portal</groupId>
     	<artifactId>index-cloud-ens-portal-parent</artifactId>
-        <version>4.9-SNAPSHOT</version>
+        <version>1.0-SNAPSHOT</version>
     </parent>
 
     
@@ -57,7 +57,13 @@
             <artifactId>index-cloud-ens-portal-ws</artifactId>
             <version>${project.version}</version>
             <type>war</type>
-        </dependency>          
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>index-cloud-ens-portal-taskbar</artifactId>
+            <version>${project.version}</version>
+            <type>war</type>
+        </dependency>
         
         <!-- Toutatice CMS -->
         <dependency>

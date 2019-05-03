@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <themes>
     <theme>
-        <name>demo-charte</name>
+        <name>cloud-ens-charte</name>
         
         <!-- Favicon -->
         <link rel="icon" type="image/png" href="/img/favicon.png" />
         
         <!-- CSS -->
-        <link rel="stylesheet" href="/css/demo.min.css" title="Demo" />
+        <link rel="stylesheet" href="/css/cloud-ens.css" title="Cloud-ens" />
         
         <!-- JavaScript -->
-        <script type="text/javascript" src="/js/demo.js"></script>
+        <script type="text/javascript" src="/js/cloud-ens.js"></script>
     </theme>
 </themes>

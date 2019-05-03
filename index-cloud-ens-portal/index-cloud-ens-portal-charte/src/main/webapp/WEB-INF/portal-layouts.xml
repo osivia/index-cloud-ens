@@ -2,71 +2,15 @@
 <layouts>
 
     <layout>
-        <name>demo-1-col</name>
-        <uri>/layouts/1-col/index.jsp</uri>
-        <uri state="maximized">/layouts/1-col/maximized.jsp</uri>
+        <name>cloud-ens-default</name>
+        <uri>/layouts/default/index.jsp</uri>
+        <uri state="maximized">/layouts/default/maximized.jsp</uri>
         <regions>
-            <region name="col-1" />
-        </regions>
-    </layout>
-    
-    <layout>
-        <name>demo-1-col-uncluttered</name>
-        <uri>/layouts/1-col-uncluttered/index.jsp</uri>
-        <uri state="maximized">/layouts/1-col-uncluttered/maximized.jsp</uri>
-        <regions>
-        	<region name="top" />
-            <region name="col-1" />
-        </regions>
-    </layout>
-    
-
-    <layout>
-        <name>demo-2-cols</name>
-        <uri>/layouts/2-cols/index.jsp</uri>
-        <uri state="maximized">/layouts/2-cols/maximized.jsp</uri>
-        <regions>
-            <region name="cols-top" />
+            <region name="nav" />
+            <region name="nav-bottom" />
+            <region name="top" />
             <region name="col-1" />
             <region name="col-2" />
-            <region name="cols-bottom" />
-        </regions>
-    </layout>
-    
-    <layout>
-        <name>demo-home</name>
-        <uri>/layouts/home/index.jsp</uri>
-        <uri state="maximized">/layouts/home/maximized.jsp</uri>
-        <regions>
-            <region name="cols-top" />
-            <region name="col-1" />
-            <region name="col-2" />
-            <region name="cols-bottom" />
-        </regions>
-    </layout>
-    
-    <layout>
-        <name>demo-workspace</name>
-        <uri>/layouts/workspace/index.jsp</uri>
-        <uri state="maximized">/layouts/workspace/maximized.jsp</uri>
-        <regions>
-            <region name="col-1" />
-            <region name="cols-top" />
-            <region name="col-2" />
-            <region name="col-3" />
-            <region name="cols-bottom" />
-        </regions>
-    </layout>
-    
-    <layout>
-        <name>demo-site</name>
-        <uri>/layouts/site/index.jsp</uri>
-        <uri state="maximized">/layouts/site/maximized.jsp</uri>
-        <regions>
-            <region name="cols-top" />
-            <region name="col-1" />
-            <region name="col-2" />
-            <region name="cols-bottom" />
         </regions>
     </layout>
 
