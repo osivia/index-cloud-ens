@@ -1,5 +1,6 @@
 package fr.index.cloud.ens.customizer.plugin;
 
+import fr.index.cloud.ens.customizer.plugin.theming.CloudEnsTemplateAdapter;
 import fr.toutatice.portail.cms.nuxeo.api.domain.AbstractPluginPortlet;
 import fr.toutatice.portail.cms.nuxeo.api.domain.ListTemplate;
 import org.osivia.portal.api.customization.CustomizationContext;
@@ -7,8 +8,10 @@ import org.osivia.portal.api.internationalization.Bundle;
 import org.osivia.portal.api.internationalization.IBundleFactory;
 import org.osivia.portal.api.internationalization.IInternationalizationService;
 import org.osivia.portal.api.locator.Locator;
+import org.osivia.portal.api.theming.TemplateAdapter;
 
 import javax.portlet.PortletException;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -96,6 +99,21 @@ public class CloudEnsPlugin extends AbstractPluginPortlet {
         // Quick access
         ListTemplate quickAccessList = new ListTemplate("quick-access", bundle.getString("LIST_TEMPLATE_QUICK_ACCESS"), "*");
         templates.put(quickAccessList.getKey(), quickAccessList);
+    }
+
+
+    /**
+     * Customize template adapters.
+     *
+     * @param customizationContext customization context
+     */
+    private void customizeTemplateAdapters(CustomizationContext customizationContext) {
+        // Template adapters
+        List<TemplateAdapter> adapters = this.getTemplateAdapters(customizationContext);
+
+        // Template adapter
+        TemplateAdapter adapter = new CloudEnsTemplateAdapter();
+        adapters.add(adapter);
     }
 
 }
