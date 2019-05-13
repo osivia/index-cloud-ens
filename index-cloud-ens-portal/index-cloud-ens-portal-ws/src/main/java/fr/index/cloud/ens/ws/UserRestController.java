@@ -8,6 +8,7 @@ import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.security.KeyFactory;
 import java.security.NoSuchAlgorithmException;
+import java.security.Principal;
 import java.security.PublicKey;
 import java.security.interfaces.RSAKey;
 import java.security.spec.InvalidKeySpecException;
@@ -38,6 +39,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -196,32 +198,25 @@ public class UserRestController {
             }
 
             if (jwt != null) {
-                String firstName = jwt.getClaim("firstName").asString();
-                String lastName = jwt.getClaim("lastName").asString();
-                String mail = jwt.getClaim("mail").asString();
+            	
+				// Accept blank / absent values
+				String firstName = jwt.getClaim("firstName").asString();
+				String lastName = jwt.getClaim("lastName").asString();
+				String mail = jwt.getClaim("mail").asString();
 
-                if (StringUtils.isBlank(firstName) || StringUtils.isBlank(lastName) || StringUtils.isBlank(mail)) {
+				if (StringUtils.isEmpty(firstName))
+					firstName = "";
 
-                    String mandatoryFields = "";
-                    
-                    if(StringUtils.isBlank(firstName)) {
-                        mandatoryFields = "firstname ";
-                    }
-                    if(StringUtils.isBlank(lastName)) {
-                        mandatoryFields = mandatoryFields + "lastName ";
-                    }
-                    if(StringUtils.isBlank(mail)) {
-                        mandatoryFields = mandatoryFields + "mail ";
-                    }
-                    
-                    errorMgr.addErrorResponse(returnObject, 3, "Parameters : " +mandatoryFields + " required");
-                }
-                else {
-                    attributes.put("firstname", firstName);
-                    attributes.put("lastname", lastName);
-                    attributes.put("mail", mail);
-                    
-                }
+				if (StringUtils.isEmpty(lastName))
+					lastName = "";
+
+				if (StringUtils.isEmpty(mail))
+					mail = "";
+
+				attributes.put("firstname", firstName);
+				attributes.put("lastname", lastName);
+				attributes.put("mail", mail);
+
             }
             else {
                 throw new PortalException("JWT token is empty.");
@@ -279,4 +274,47 @@ public class UserRestController {
         returnObject.put("url", url);
         
     }   
+    
+    
+    /**
+     * Gets the user profile
+     *
+     * @param request the request
+     * @param response the response
+     * @param principal the principal
+     * @return the web url
+     * @throws Exception the exception
+     */
+    
+    @RequestMapping(value = "/User.getProfile", method = RequestMethod.GET)
+    @ResponseStatus(HttpStatus.OK)
+
+    public Map<String, Object> getUserProfile(HttpServletRequest request, HttpServletResponse response, 
+            Principal principal) throws Exception {
+
+        Map<String, Object> returnObject = new LinkedHashMap<>();
+        returnObject.put("returnCode", ErrorMgr.ERR_OK);
+
+        WSPortalControllerContext ctx = new WSPortalControllerContext(request, response, principal);
+
+        try {
+            Person findPerson = personUpdateService.getEmptyPerson();
+            findPerson.setUid(principal.getName());
+            List<Person> users = personUpdateService.findByCriteria(findPerson);
+            if (users.size() != 1) {
+                throw new Exception("User not found : " + users.size());
+            }
+            Person user = users.get(0);
+        	
+             returnObject.put("id", user.getUid());
+             returnObject.put("mail", user.getMail());
+             returnObject.put("firstName", user.getGivenName());
+             returnObject.put("lastName", user.getSn());             
+ 
+        } catch (Exception e) {
+            returnObject = errorMgr.handleDefaultExceptions(ctx, e);
+        }
+        return returnObject;
+    }
+
 }

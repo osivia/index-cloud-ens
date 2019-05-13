@@ -566,6 +566,43 @@ $JQry(function() {
 
 	
 	
+	$JQry("#btnUserProfile").each(function(index, element) {
+
+		var $element = $JQry(element);
+		$element.click(function() {
+				var url = oauth.params.resourceUrl+"/User.getProfile";
+
+
+
+				$JQry
+						.ajax({
+							type : "GET",
+							url : url,
+							headers : {
+								'Content-Type' : undefined,
+								"Authorization" : "Bearer " + oauth.getToken()
+							},
+							contentType : false,
+							cache : false,
+							timeout : 600000,
+							success : function(jsonData) {
+								if (jsonData.returnCode != 0)
+									$JQry.notify("Error #"+jsonData.returnCode, "error");
+								else {
+										$JQry.notify("profile id:"+jsonData.id, "success");									
+									}
+							},
+							error : function(xhr, status, e) {
+								alert(e);
+							}
+						});
+	
+		});
+		
+	});
+	
+	
+	
 	$JQry("#btnCreateUser").each(function(index, element) {
 
 		var $element = $JQry(element);
