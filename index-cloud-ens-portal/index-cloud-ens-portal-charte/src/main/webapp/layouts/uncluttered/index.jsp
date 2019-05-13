@@ -1,28 +1,28 @@
 <!DOCTYPE html>
-<%@ taglib uri="portal-layout" prefix="p" %>
+<%@ taglib prefix="p" uri="portal-layout" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="op" uri="http://www.osivia.org/jsp/taglib/osivia-portal" %>
 
 
 <html>
 
 <head>
-    <jsp:include page="../includes/head.jspf" />
+    <%@include file="../includes/head.jspf" %>
 </head>
 
 
-<body class="fixed-layout">
-     <jsp:include page="../includes/simple-logo.jsp" />
-    
-    <main>
-        <div class="container-fluid flexbox">
+<body class="vh-100 overflow-hidden d-flex flex-column">
 
-            <div class="scrollbox">
-            	<p:region regionName="top" />
-                <p:region regionName="col-1" />
-            </div>
-        </div>
-    </main>
-    
-    <jsp:include page="../includes/footer.jspf" />
+<%@include file="../includes/header.jspf" %>
+
+<main class="d-flex flex-column flex-grow-1 overflow-auto">
+    <div class="container-fluid d-flex flex-column flex-grow-1 overflow-auto">
+        <p:region regionName="col-1"/>
+    </div>
+</main>
+
+<%@include file="../includes/footer.jspf" %>
+
 </body>
 
 </html>

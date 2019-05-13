@@ -14,4 +14,13 @@
         </regions>
     </layout>
 
+    <layout>
+        <name>cloud-ens-uncluttered</name>
+        <uri>/layouts/uncluttered/index.jsp</uri>
+        <uri state="maximized">/layouts/uncluttered/maximized.jsp</uri>
+        <regions>
+            <region name="col-1" />
+        </regions>
+    </layout>
+
 </layouts>
