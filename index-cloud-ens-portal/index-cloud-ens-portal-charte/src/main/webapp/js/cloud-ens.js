@@ -9,7 +9,7 @@ $JQry(function() {
 				closeOnSelect : false,
 				containerCssClass : "select2-inline-edition-container",
 				dropdownCssClass : "select2-inline-edition-dropdown",
-				theme : "bootstrap",
+				theme : "bootstrap4",
 				width : "100%"
 			};
 			
@@ -101,9 +101,36 @@ $JQry(function() {
 			        var $submit = $form.find("button[type=submit], input[type=submit]");
 					
 					$submit.click();
-				}, 3000);
+				}, 500);
 			});
 			
+			$element.data("loaded", true);
+		}
+	});
+
+
+	$JQry("[contenteditable=true]").each(function(index, element) {
+		var $element = $JQry(element);
+
+		if (!$element.data("loaded")) {
+			var timer;
+
+			$element.keyup(function(event) {
+				// Clear timer
+				clearTimeout(timer);
+
+				timer = setTimeout(function() {
+					var $target = $JQry(event.target);
+					var $form = $target.closest("form");
+					var $input = $form.find("input[type=hidden][name='inline-values']");
+					var $submit = $form.find("input[type=submit]");
+
+					$input.val($target.get(0).innerText);
+					$submit.click();
+				}, 500);
+			});
+
+
 			$element.data("loaded", true);
 		}
 	});

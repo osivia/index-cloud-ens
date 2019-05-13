@@ -1,5 +1,6 @@
 package fr.index.cloud.ens.customizer.plugin;
 
+import fr.index.cloud.ens.customizer.plugin.menubar.CloudEnsMenubarModule;
 import fr.index.cloud.ens.customizer.plugin.theming.CloudEnsTemplateAdapter;
 import fr.toutatice.portail.cms.nuxeo.api.domain.AbstractPluginPortlet;
 import fr.toutatice.portail.cms.nuxeo.api.domain.ListTemplate;
@@ -8,6 +9,7 @@ import org.osivia.portal.api.internationalization.Bundle;
 import org.osivia.portal.api.internationalization.IBundleFactory;
 import org.osivia.portal.api.internationalization.IInternationalizationService;
 import org.osivia.portal.api.locator.Locator;
+import org.osivia.portal.api.menubar.MenubarModule;
 import org.osivia.portal.api.theming.TemplateAdapter;
 
 import javax.portlet.PortletException;
@@ -79,10 +81,26 @@ public class CloudEnsPlugin extends AbstractPluginPortlet {
      */
     @Override
     protected void customizeCMSProperties(CustomizationContext customizationContext) {
+        // Menubar modules
+        this.customizeMenubarModules(customizationContext);
         // List templates
         this.customizeListTemplates(customizationContext);
         // Template adapters
         this.customizeTemplateAdapters(customizationContext);
+    }
+
+
+    /**
+     * Customize menubar modules.
+     * @param customizationContext customization context
+     */
+    private void customizeMenubarModules(CustomizationContext customizationContext) {
+        // Menubar modules
+        List<MenubarModule> modules = this.getMenubarModules(customizationContext);
+
+        // Menubar module
+        MenubarModule module = new CloudEnsMenubarModule();
+        modules.add(module);
     }
 
 

@@ -1,0 +1,9 @@
+#maximized {
+  > .page-header {
+    display: none !important;
+  }
+
+  .portlet-container {
+    margin-bottom: 0;
+  }
+}

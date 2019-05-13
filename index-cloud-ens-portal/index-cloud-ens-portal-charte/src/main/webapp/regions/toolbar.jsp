@@ -35,11 +35,11 @@
     <c:set var="placeholder"><op:translate key="TOOLBAR_SEARCH_PLACEHOLDER"/></c:set>
     <div class="ml-auto">
         <form class="form-inline mx-md-4">
-                <input type="search" class="form-control mr-2" placeholder="${placeholder}">
-                <button type="submit" title="${title}" class="btn btn-outline-light" data-toggle="tooltip"
-                        data-placement="bottom">
-                    <i class="glyphicons glyphicons-basic-search"></i>
-                </button>
+            <input type="search" class="form-control mr-2" placeholder="${placeholder}">
+            <button type="submit" title="${title}" class="btn btn-outline-light" data-toggle="tooltip"
+                    data-placement="bottom">
+                <i class="glyphicons glyphicons-basic-search"></i>
+            </button>
         </form>
     </div>
 
@@ -60,7 +60,7 @@
                 <%--Tasks--%>
                 <c:if test="${not empty requestScope['osivia.toolbar.tasks.url']}">
                     <c:set var="title"><op:translate key="NOTIFICATION_TASKS"/></c:set>
-                    <li>
+                    <li class="nav-item mr-2">
                         <a href="javascript:"
                            class="nav-link ${requestScope['osivia.toolbar.tasks.count'] gt 0 ? 'text-warning' : ''}"
                            data-target="#osivia-modal" data-load-url="${requestScope['osivia.toolbar.tasks.url']}"

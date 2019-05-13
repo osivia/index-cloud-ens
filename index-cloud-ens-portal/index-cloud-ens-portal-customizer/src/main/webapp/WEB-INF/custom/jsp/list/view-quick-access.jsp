@@ -5,43 +5,65 @@
 <%@ page isELIgnored="false" %>
 
 
-<div class="row">
-    <c:forEach var="document" items="${documents}" varStatus="status">
-        <div class="col-6 col-md-4 col-lg-3 col-xl-2">
-            <div class="card border-light">
-                <div class="card-body">
-                    <%--Title--%>
-                    <div><ttc:title document="${document}" /></div>
+<div class="list-quick-access">
+    <div class="card-deck">
+        <c:forEach var="document" items="${documents}" varStatus="status">
+            <c:choose>
+                <c:when test="${status.count < 2}"><c:set var="display" value="d-flex"/></c:when>
+                <c:when test="${status.count < 3}"><c:set var="display" value="d-none d-sm-flex"/></c:when>
+                <c:when test="${status.count < 4}"><c:set var="display" value="d-none d-md-flex"/></c:when>
+                <c:when test="${status.count < 5}"><c:set var="display" value="d-none d-lg-flex"/></c:when>
+                <c:when test="${status.count < 6}"><c:set var="display" value="d-none d-xl-flex"/></c:when>
+                <c:otherwise><c:set var="display" value="d-none"/></c:otherwise>
+            </c:choose>
+
+            <div class="card ${display}">
+                    <%--Image--%>
+                <c:set var="vignetteUrl"><ttc:pictureLink document="${document}" property="ttc:vignette"/></c:set>
+                <div class="embed-responsive embed-responsive-16by9">
+                    <c:choose>
+                        <c:when test="${not empty vignetteUrl}">
+                            <img src="${vignetteUrl}" alt="" class="card-img-top embed-responsive-item">
+                        </c:when>
+
+                        <c:when test="${document.type.name eq 'Picture'}">
+                            <c:set var="url"><ttc:documentLink document="${document}" picture="true"
+                                                               displayContext="Small"/></c:set>
+                            <img src="${url}" alt="" class="card-img-top embed-responsive-item">
+                        </c:when>
+
+                        <c:otherwise>
+                            <div class="card-img-top embed-responsive-item d-flex align-items-center justify-content-center text-white bg-light">
+                                <i class="glyphicons glyphicons-basic-file"></i>
+                            </div>
+                        </c:otherwise>
+                    </c:choose>
+                </div>
+
+                    <%--Body--%>
+                <div class="card-body p-3">
+                    <div class="text-truncate">
+                            <%--Icon--%>
+                        <span><ttc:icon document="${document}"/></span>
+
+                            <%--Title--%>
+                        <c:set var="url"><ttc:documentLink document="${document}"/></c:set>
+                        <a href="${url}" class="stretched-link no-ajax-link">
+                            <span><ttc:title document="${document}" linkable="false"/></span>
+                        </a>
+                    </div>
 
                     <c:if test="${not empty document.properties['dc:modified']}">
-                        <div>
+                        <div class="text-truncate">
                             <small class="text-muted">
-                                <span><op:translate key=""/></span>
-                                <span><op:formatRelativeDate value="${document.properties['dc:modified']}" tooltip="false" /></span>
+                                <span><op:translate key="LIST_TEMPLATE_QUICK_ACCESS_MODIFIED_ON"/></span>
+                                <span><op:formatRelativeDate value="${document.properties['dc:modified']}"
+                                                             tooltip="false"/></span>
                             </small>
                         </div>
                     </c:if>
                 </div>
             </div>
-
-            <%--Columns break--%>
-            <c:choose>
-                <c:when test="${status.index % 12 eq 0}">
-                    <div class="w-100"></div>
-                </c:when>
-                <c:when test="${status.index % 6 eq 0}">
-                    <div class="w-100 d-lg-none d-xl-block"></div>
-                </c:when>
-                <c:when test="${status.index % 4 eq 0}">
-                    <div class="w-100 d-md-none d-lg-block d-xl-none"></div>
-                </c:when>
-                <c:when test="${status.index % 3 eq 0}">
-                    <div class="w-100 d-none d-md-block d-lg-none"></div>
-                </c:when>
-                <c:when test="${status.index % 2 eq 0}">
-                    <div class="w-100 d-md-none"></div>
-                </c:when>
-            </c:choose>
-        </div>
-    </c:forEach>
+        </c:forEach>
+    </div>
 </div>

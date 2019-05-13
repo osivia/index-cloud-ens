@@ -18,8 +18,8 @@
 <main class="d-flex flex-column flex-grow-1 overflow-auto">
     <div class="container-fluid d-flex flex-column flex-grow-1 overflow-hidden">
         <div class="row flex-grow-1 overflow-hidden">
-            <op:resizable cssClass="col-sm-auto d-flex flex-column mh-100 pl-0 border-right border-light"
-                          minWidth="200">
+            <op:resizable cssClass="col-sm-auto d-none d-md-flex flex-column mh-100 pl-0 border-right border-light"
+                          minWidth="120">
                 <div class="mt-4 flex-grow-1 overflow-auto">
                     <p:region regionName="nav"/>
                 </div>
@@ -28,7 +28,8 @@
                     <div class="col pr-0">
                         <div class="position-relative p-3">
                             <div class="progress">
-                                <div class="progress-bar" role="progressbar" style="width: 25%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                                <div class="progress-bar" role="progressbar" style="width: 25%" aria-valuenow="25"
+                                     aria-valuemin="0" aria-valuemax="100"></div>
                             </div>
                             <div>
                                 <small class="text-muted">
@@ -44,13 +45,11 @@
                 </div>
             </op:resizable>
 
-            <div class="col-sm d-flex flex-column mh-100 overflow-auto">
+            <div class="col-md d-flex flex-column mh-100">
                 <%@include file="../includes/breadcrumb.jspf" %>
 
-                <div class="mb-2 d-flex flex-column flex-grow-1">
-                    <div class="mb-2">
-                        <p:region regionName="top"/>
-                    </div>
+                <div class="d-flex flex-column flex-grow-1 overflow-x-hidden overflow-y-auto">
+                    <p:region regionName="top"/>
 
                     <div class="row">
                         <div class="col-md d-flex flex-column">
