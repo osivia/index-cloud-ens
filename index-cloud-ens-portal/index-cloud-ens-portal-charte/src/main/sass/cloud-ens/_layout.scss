@@ -1,5 +1,14 @@
+.drawer-toggle-button {
+  body:not([data-drawer="true"]) & {
+    display: none;
+  }
+}
+
+
 #maximized {
   .portlet-container {
     margin-bottom: 0;
   }
 }
+
+

@@ -9,9 +9,9 @@
 
 <nav class="navbar navbar-expand navbar-dark bg-primary">
     <%--Drawer toggle button--%>
-    <ul class="navbar-nav d-md-none">
+    <ul class="navbar-nav d-md-none ml-n1 mr-3 drawer-toggle-button">
         <li class="nav-item">
-            <a href="javascript:" data-toggle="drawer" class="nav-link">
+            <a href="javascript:toggleDrawer()" data-toggle="drawer" class="nav-link">
                 <i class="glyphicons glyphicons-basic-menu"></i>
             </a>
         </li>
@@ -34,8 +34,12 @@
     <c:set var="title"><op:translate key="TOOLBAR_SEARCH_TITLE"/></c:set>
     <c:set var="placeholder"><op:translate key="TOOLBAR_SEARCH_PLACEHOLDER"/></c:set>
     <div class="ml-auto">
-        <form class="form-inline mx-md-4">
-            <input type="search" class="form-control mr-2" placeholder="${placeholder}">
+        <form action="${requestScope['osivia.search.url']}" method="get" class="form-inline flex-nowrap w-auto mr-3 mx-md-4">
+            <input type="hidden" name="action" value="advancedSearch">
+
+            <label for="search" class="sr-only">${title}</label>
+            <input id="search" type="search" name="search" class="form-control overflow-hidden mr-2" placeholder="${placeholder}">
+
             <button type="submit" title="${title}" class="btn btn-outline-light" data-toggle="tooltip"
                     data-placement="bottom">
                 <i class="glyphicons glyphicons-basic-search"></i>
@@ -44,7 +48,7 @@
     </div>
 
 
-    <ul class="navbar-nav d-none d-md-flex">
+    <ul class="navbar-nav">
         <c:choose>
             <c:when test="${empty requestScope['osivia.toolbar.principal']}">
                 <%--Login--%>
@@ -60,7 +64,7 @@
                 <%--Tasks--%>
                 <c:if test="${not empty requestScope['osivia.toolbar.tasks.url']}">
                     <c:set var="title"><op:translate key="NOTIFICATION_TASKS"/></c:set>
-                    <li class="nav-item mr-2">
+                    <li class="nav-item mr-2 d-none d-md-block">
                         <a href="javascript:"
                            class="nav-link ${requestScope['osivia.toolbar.tasks.count'] gt 0 ? 'text-warning' : ''}"
                            data-target="#osivia-modal" data-load-url="${requestScope['osivia.toolbar.tasks.url']}"

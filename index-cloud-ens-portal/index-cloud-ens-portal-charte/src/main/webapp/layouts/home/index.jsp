@@ -2,6 +2,8 @@
 <%@ taglib prefix="p" uri="portal-layout" %>
 <%@ taglib prefix="op" uri="http://www.osivia.org/jsp/taglib/osivia-portal" %>
 
+<%@ page contentType="text/html" isELIgnored="false" %>
+
 
 <html>
 

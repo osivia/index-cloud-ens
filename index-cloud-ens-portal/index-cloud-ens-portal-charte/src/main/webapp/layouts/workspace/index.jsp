@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <%@ taglib prefix="p" uri="portal-layout" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="op" uri="http://www.osivia.org/jsp/taglib/osivia-portal" %>
+
+<%@ page contentType="text/html" isELIgnored="false" %>
 
 
 <html>
@@ -11,36 +12,43 @@
 </head>
 
 
-<body class="vh-100 overflow-hidden d-flex flex-column">
+<body class="vh-100 overflow-hidden d-flex flex-column" data-drawer="true">
 
 <%@include file="../includes/header.jspf" %>
 
 <main class="d-flex flex-column flex-grow-1 overflow-auto">
     <div class="container-fluid d-flex flex-column flex-grow-1 overflow-hidden">
         <div class="row flex-grow-1 overflow-hidden">
-            <op:resizable cssClass="col-sm-auto d-none d-md-flex flex-column mh-100 pl-0 border-right border-light"
+            <op:resizable cssClass="col-sm-auto d-flex flex-column mh-100 border-right border-light"
                           minWidth="120">
-                <div class="mt-4 flex-grow-1 overflow-auto">
-                    <p:region regionName="nav"/>
-                </div>
+                <div class="row flex-grow-1 overflow-hidden">
+                    <%--Drawer--%>
+                    <div id="drawer" class="col d-flex flex-column mh-100 pl-0">
+                        <p:region regionName="drawer-header" />
 
-                <div class="row my-4 border-top border-light">
-                    <div class="col pr-0">
-                        <div class="position-relative p-3">
-                            <div class="progress">
-                                <div class="progress-bar" role="progressbar" style="width: 25%" aria-valuenow="25"
-                                     aria-valuemin="0" aria-valuemax="100"></div>
-                            </div>
-                            <div>
-                                <small class="text-muted">
-                                    <span>2,5 Go utilis&eacute;s sur 10 Go</span>
-                                    <br>
-                                    <a href="#" class="stretched-link">Obtenir plus d'espace</a>
-                                </small>
-                            </div>
+                        <div class="mt-4 flex-grow-1 overflow-auto">
+                            <p:region regionName="nav"/>
                         </div>
 
-                        <p:region regionName="nav-bottom"/>
+                        <div class="row my-4 border-top border-light">
+                            <div class="col pr-0">
+                                <div class="position-relative p-3">
+                                    <div class="progress">
+                                        <div class="progress-bar" role="progressbar" style="width: 25%" aria-valuenow="25"
+                                             aria-valuemin="0" aria-valuemax="100"></div>
+                                    </div>
+                                    <div>
+                                        <small class="text-muted">
+                                            <span>2,5 Go utilis&eacute;s sur 10 Go</span>
+                                            <br>
+                                            <a href="#" class="stretched-link">Obtenir plus d'espace</a>
+                                        </small>
+                                    </div>
+                                </div>
+
+                                <p:region regionName="nav-bottom"/>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </op:resizable>
@@ -114,7 +122,7 @@
 
 
                                 <%--Nouveaut&eacute;s--%>
-                                <div class="card">
+                                <div class="card mb-3">
                                     <div class="card-body">
                                         <h3 class="h5 card-title">Nouveaut&eacute;s</h3>
                                         <ul class="list-unstyled card-text">

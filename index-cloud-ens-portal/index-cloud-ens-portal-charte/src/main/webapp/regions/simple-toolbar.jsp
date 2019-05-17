@@ -7,15 +7,6 @@
 
 
 <nav class="navbar navbar-expand navbar-dark bg-primary">
-    <%--Drawer toggle button--%>
-    <ul class="navbar-nav d-md-none">
-        <li class="nav-item">
-            <a href="javascript:" data-toggle="drawer" class="nav-link">
-                <i class="glyphicons glyphicons-basic-menu"></i>
-            </a>
-        </li>
-    </ul>
-
     <%--Brand--%>
     <a class="navbar-brand d-none d-md-inline-block py-0" href="${requestScope['osivia.home.url']}">
         <img alt="${requestScope['osivia.header.application.name']}" src="${contextPath}/img/logo-index.png"

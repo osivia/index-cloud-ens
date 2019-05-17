@@ -94,6 +94,8 @@ public class RegionsCustomizer extends GenericPortlet implements ICustomizationM
         renderedRegion.customizeRenderedRegion("toolbar", "/regions/toolbar.jsp");
         // Simple toolbar
         renderedRegion.customizeRenderedRegion("simple-toolbar", "/regions/simple-toolbar.jsp");
+        // Drawer header
+        renderedRegion.customizeRenderedRegion("drawer-header", "/regions/drawer-header.jsp");
         // Tabs
         renderedRegion.removeRenderedRegion("tabs");
         // Remove footer

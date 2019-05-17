@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <%@ taglib prefix="p" uri="portal-layout" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="op" uri="http://www.osivia.org/jsp/taglib/osivia-portal" %>
+
+<%@ page contentType="text/html" isELIgnored="false" %>
 
 
 <html>
@@ -11,7 +12,7 @@
 </head>
 
 
-<body class="vh-100 overflow-hidden d-flex flex-column">
+<body class="vh-100 overflow-hidden d-flex flex-column" data-drawer="true">
 
 <%@include file="../includes/header.jspf" %>
 

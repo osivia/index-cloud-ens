@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <%@ taglib prefix="p" uri="portal-layout" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="op" uri="http://www.osivia.org/jsp/taglib/osivia-portal" %>
+
+<%@ page contentType="text/html" isELIgnored="false" %>
 
 
 <html>
