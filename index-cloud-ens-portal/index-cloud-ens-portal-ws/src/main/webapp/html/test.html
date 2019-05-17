@@ -1,251 +1,228 @@
 <!DOCTYPE html>
 
 
-
-
-
 <html>
 
 <head>
+    <meta charset="UTF-8">
+    <meta name="application-name" content="Cloud Index Education">
+    <meta http-equiv="cache-control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="pragma" content="no-cache">
+    <meta http-equiv="expires" content="0">
 
+    <meta name="application-name" content="Cloud Index Education">
 
+    <script type='text/javascript'
+            src='/osivia-portal-custom-web-assets/components/jquery/jquery-1.12.4.min.js'></script>
+    <script type='text/javascript' src='/osivia-portal-custom-web-assets/js/jquery-integration.min.js'></script>
+    <script type='text/javascript'
+            src='/osivia-portal-custom-web-assets/components/jquery-ui/jquery-ui-1.11.3.min.js'></script>
+    <link rel='stylesheet' href='/osivia-portal-custom-web-assets/components/jquery-ui/jquery-ui-1.11.3.min.css'>
+    <script type='text/javascript'
+            src='/osivia-portal-custom-web-assets/components/jquery-mobile/jquery.mobile.custom.min.js'></script>
+    <link rel="stylesheet" href="/index-cloud-ens-charte/css/cloud-ens.css"/>
+    <script src='/osivia-portal-custom-web-assets/components/bootstrap/js/bootstrap.bundle.min.js'></script>
 
+    <script type='text/javascript' src="../js/notify.js"></script>
+    <script type='text/javascript' src="../js/crypto-js-3.1.2-hmac-sha256.min.js"></script>
 
-
-<meta charset="UTF-8">
-<meta name="application-name" content="Cloud Index Education">
-<meta http-equiv="cache-control" content="no-cache, no-store, must-revalidate">
-<meta http-equiv="pragma" content="no-cache">
-<meta http-equiv="expires" content="0">
-
-<meta name="application-name" content="Cloud Index Education">
-<meta http-equiv="default-style" content="Demo">
-
-<script type='text/javascript'	src='/osivia-portal-custom-web-assets/components/jquery/jquery-1.12.4.min.js'></script>
-<script type='text/javascript'	src='/osivia-portal-custom-web-assets/js/jquery-integration.min.js'></script>
-<script type='text/javascript'	src='/osivia-portal-custom-web-assets/components/jquery-ui/jquery-ui-1.11.3.min.js'></script>
-<link rel='stylesheet'	href='/osivia-portal-custom-web-assets/components/jquery-ui/jquery-ui-1.11.3.min.css'>
-<link rel='stylesheet'	href='/osivia-portal-custom-web-assets/css/bootstrap.min.css'	title='Bootstrap'>
-<link rel='stylesheet'	href='/osivia-portal-custom-web-assets/css/osivia.min.css'>
-<script	src='/osivia-portal-custom-web-assets/components/bootstrap/js/bootstrap.min.js'></script>
-<script type='text/javascript' src="../js/notify.js"></script>
-<script type='text/javascript' src="../js/crypto-js-3.1.2-hmac-sha256.min.js"></script>
-
-<script type='text/javascript' src="../js/crypto-js-3.1.2-enc-base64-min.js"></script>
-<script type='text/javascript' src="../js/json-test.js"></script>
-
-<link rel="stylesheet" href="/demo-charte/css/demo.min.css" title="Demo" />
-
-
+    <script type='text/javascript' src="../js/crypto-js-3.1.2-enc-base64-min.js"></script>
+    <script type='text/javascript' src="../js/json-test.js"></script>
 </head>
 
 
 <body class="home editorial">
+<div class="container">
+    <div class="row">
+        <div class="col-lg-2">
+            <h3>Autorization </h3>
+            <input type="button" class="btn btn-primary" value="Ask" id="OAuth2Authorize"/>
+            <h3>Credentials</h3>
+            <div id="auth">
+                <form method="POST" enctype="multipart/form-data" id="authForm">
+                    <div class="form-group">
+                        <label for="authUserId"">User ID</label> <input name="authUserId"
+                                                                        class="form-control" id="authUserId"
+                                                                        value="admin"/>
+                    </div>
+                    <div class="form-group">
+                        <label for="authUserPassword">User Password</label> <input name="authUserPassword"
+                                                                                   class="form-control" type="password"
+                                                                                   id="authUserPassword"
+                                                                                   value="osivia"/>
+                    </div>
+
+                    <input type="button"
+                           class="btn btn-primary" value="Login" id="OAuth2authenticationCredentials"/>
+                </form>
+            </div>
+
+            <h3>Refresh token</h3>
+            <input type="button"
+                   class="btn btn-primary" value="Refresh" id="OAuth2refreshToken"/>
+
+            <h3>Error</h3>
+            <input type="button"
+                   class="btn btn-danger" value="Exception" id="btnException"/>
+            <input type="button"
+                   class="btn btn-danger" value="App." id="btnError"/>
+            <input type="button"
+                   class="btn btn-danger" value="404" id="btnNotFound"/>
+        </div>
+
+        <div class="col-lg-2">
+            <h3>Create user </h3>
+            <div id="auth">
+                <form method="POST" enctype="multipart/form-data" id="authForm">
+
+                    <div class="form-group">
+                        <label for="userFirstName"">Prénom</label> <input name="userFirstName"
+                                                                          class="form-control" id="userFirstName"/>
+                    </div>
+                    <div class="form-group">
+                        <label for="userLastName">Nom</label> <input name="userLastName"
+                                                                     class="form-control" id="userLastName" value=""/>
+                    </div>
+                    <div class="form-group">
+                        <label for="userMail">Mail</label> <input name="userMail"
+                                                                  class="form-control" id="userMail" value=""/>
+                    </div>
+
+                    <input type="button"
+                           class="btn btn-primary" value="Créer" id="btnCreateUser"/>
+                    <input type="button"
+                           class="btn btn-primary" value="Sign up" id="btnSignUp"/>
+
+                    <input type="button"
+                           class="btn btn-primary" value="RSA" id="btnRSASignUp"/>
+                </form>
+            </div>
+            <h3>Auth via CAS Pronote </h3>
+            <ul>
+                <li>
+                    <a href="/portal/MonEspace?ticket=LB&urlCAS=https%3A%2F%2Fcloud-ens.index-education.local%2Fpronote-ws%2FserviceValidate">Espace
+                        lbillon (lien authentifié)</a>
+                </li>
+                <li>
+                    <a href="/portal/MonEspace?ticket=JSS&urlCAS=https%3A%2F%2Fcloud-ens.index-education.local%2Fpronote-ws%2FserviceValidate">Espace
+                        jsteux (lien authentifié)</a>
+                </li>
+            </ul>
+        </div>
+
+        <div class="col-lg-4">
+            <h3>Drive.content</h3>
+            <div id="files"></div>
+            <input type="button"
+                   class="btn btn-primary" value="Display" id="btnRefreshDrive"/>
+            <input type="button"
+                   class="btn btn-primary" value="Preview" id="btnPreviewDrive"/>
+        </div>
 
 
-	<div class="container">
+        <div class="col-lg-2">
+            <div id="detail">
+                <h3>Drive.publish</h3>
 
-		<div class="row">
+                <form method="POST" enctype="multipart/form-data" id="publishForm">
+                    <div class="form-group">
+                        <a id="pubShare" target="_blank">Download url</a> <br/>
+                        <a id="pubViewer" target="_blank">Viewer url</a>
+                    </div>
+                    <div class="form-group">
+                        <label for="level">pubFormat</label> <input name="pubFormat"
+                                                                    class="form-control" id="pubFormat"/>
+                    </div>
 
-
-
-			<div class="col-lg-2">
-				<h3>Autorization </h3>
-				
-						<input type="button"
-							class="btn btn-primary" value="Ask" id="OAuth2Authorize" />					
-			
-				<h3>Credentials</h3>
-				<div id="auth">
-					<form method="POST" enctype="multipart/form-data" id="authForm">
-											
-						<div class="form-group">
-							<label for="authUserId"">User ID</label> <input name="authUserId"
-								class="form-control" id="authUserId" value="admin"/>
-						</div>
-						<div class="form-group">
-							<label for="authUserPassword">User Password</label> <input name="authUserPassword"
-								class="form-control" type="password" id="authUserPassword"  value="osivia"/>
-						</div>
-
-						<input type="button"
-							class="btn btn-primary" value="Login" id="OAuth2authenticationCredentials" />
-							
-										
-							
-					</form>
-				</div>
-				
-				<h3>Refresh token</h3>		
-						<input type="button"
-							class="btn btn-primary" value="Refresh" id="OAuth2refreshToken" />		
-							
-				<h3>Error</h3>		
-						<input type="button"
-							class="btn btn-danger" value="Exception" id="btnException" />	
-						<input type="button"
-							class="btn btn-danger" value="App." id="btnError" />
-						<input type="button"
-							class="btn btn-danger" value="404" id="btnNotFound" />							
-					
-			</div>
-			
-			
-			<div class="col-lg-2">
-				<h3>Create user </h3>
-				<div id="auth">
-					<form method="POST" enctype="multipart/form-data" id="authForm">
-											
-						<div class="form-group">
-							<label for="userFirstName"">Prénom</label> <input name="userFirstName"
-								class="form-control" id="userFirstName" />
-						</div>
-						<div class="form-group">
-							<label for="userLastName">Nom</label> <input name="userLastName"
-								class="form-control" id="userLastName"  value=""/>
-						</div>
-						<div class="form-group">
-							<label for="userMail">Mail</label> <input name="userMail"
-								class="form-control" id="userMail"  value=""/>
-						</div>						
-
-						<input type="button"
-							class="btn btn-primary" value="Créer" id="btnCreateUser" />
-						<input type="button"
-							class="btn btn-primary" value="Sign up" id="btnSignUp" />
-							
-						<input type="button"
-							class="btn btn-primary" value="RSA" id="btnRSASignUp" />							
-					</form>
-				</div>
-				<h3>Auth via CAS Pronote </h3>
-				<ul>
-					<li><a href="/portal/MonEspace?ticket=LB&urlCAS=https%3A%2F%2Fcloud-ens.index-education.local%2Fpronote-ws%2FserviceValidate">Espace lbillon (lien authentifié)</a>
-					</li>
-					<li><a href="/portal/MonEspace?ticket=JSS&urlCAS=https%3A%2F%2Fcloud-ens.index-education.local%2Fpronote-ws%2FserviceValidate">Espace jsteux (lien authentifié)</a>
-					</li>
-				</ul>	
-					
-			</div>
-			
-			<div class="col-lg-4">
-				<h3>Drive.content</h3>
-				<div id="files"></div>
-						<input type="button"
-							class="btn btn-primary" value="Display" id="btnRefreshDrive" />		
-											<input type="button"
-							class="btn btn-primary" value="Preview" id="btnPreviewDrive" />
-							
-			</div>
+                    <div class="form-group">
+                        <label for="level">pubOrganization</label> <input name="pubOrganization"
+                                                                          class="form-control" id="pubOrganization"/>
+                    </div>
+                    <div class="form-group">
+                        <label for="level">pubGroup</label> <input name="pubGroup"
+                                                                   class="form-control" id="pubGroup"/>
+                    </div>
+                    <div class="form-group">
+                        <label for="level">pubContext</label> <input name="pubContext"
+                                                                     class="form-control" id="pubContext"/>
+                    </div>
+                    <div class="form-group">
+                        <label for="level">Niveau</label> <input name="level"
+                                                                 class="form-control" id="pubLevel"/>
+                    </div>
+                    <div class="form-group">
+                        <label for="level">Matière</label> <input name="subject"
+                                                                  class="form-control" id="pubSubject"/>
+                    </div>
+                    <input type="hidden" name="contentId" id="contentId"/> <input
+                        type="button" class="btn btn-primary" value="Publish"
+                        id="btnPubSubmit"/>
+                </form>
 
 
-			<div class="col-lg-2">
-				<div id="detail">			
-				<h3>Drive.publish</h3>
-				
-					<form method="POST" enctype="multipart/form-data" id="publishForm">
-						<div class="form-group">
-							<a id="pubShare" target="_blank">Download url</a> <br/>
-							<a id="pubViewer" target="_blank">Viewer url</a>
-						</div>
-						<div class="form-group">
-							<label for="level">pubFormat</label> <input name="pubFormat"
-								class="form-control" id="pubFormat" />
-						</div>							
+                <h3>Drive.unpublish</h3>
 
-						<div class="form-group">
-							<label for="level">pubOrganization</label> <input name="pubOrganization"
-								class="form-control" id="pubOrganization" />
-						</div>
-						<div class="form-group">
-							<label for="level">pubGroup</label> <input name="pubGroup"
-								class="form-control" id="pubGroup" />
-						</div>	
-						<div class="form-group">
-							<label for="level">pubContext</label> <input name="pubContext"
-								class="form-control" id="pubContext" />
-						</div>							
-						<div class="form-group">
-							<label for="level">Niveau</label> <input name="level"
-								class="form-control" id="pubLevel" />
-						</div>
-						<div class="form-group">
-							<label for="level">Matière</label> <input name="subject"
-								class="form-control" id="pubSubject" />
-						</div>						
-						<input type="hidden" name="contentId" id="contentId" /> <input
-							type="button" class="btn btn-primary" value="Publish"
-							id="btnPubSubmit" />
-					</form>
+                <form method="POST" enctype="multipart/form-data" id="unpublishForm">
+                    <div class="form-group">
+                        <label for="level">unpubId</label> <input name="unpubId"
+                                                                  class="form-control" id="unpubId"/>
+                    </div>
+                    <input
+                            type="button" class="btn btn-primary" value="Unpublish"
+                            id="btnUnpubSubmit"/>
+                </form>
+            </div>
+        </div>
 
-				
-				<h3>Drive.unpublish</h3>
+        <div class="col-lg-2">
+            <h3>Drive.upload</h3>
 
-					<form method="POST" enctype="multipart/form-data" id="unpublishForm">
-						<div class="form-group">
-							<label for="level">unpubId</label> <input name="unpubId"
-								class="form-control" id="unpubId" />
-						</div>	
-						<input
-							type="button" class="btn btn-primary" value="Unpublish"
-							id="btnUnpubSubmit" />
-					</form>
-				</div>				
-			</div>
+            <form method="POST" enctype="multipart/form-data"
+                  id="fileUploadMetadataForm">
+                <div class="form-group">
+                    <label for="level">Niveau</label> <input name="level"
+                                                             class="form-control" id="uploadMDLevel"/>
+                </div>
+                <div class="form-group">
+                    <label for="level">Matière</label> <input name="subject"
+                                                              class="form-control" id="uploadMDSubject"/>
+                </div>
+                <input type="hidden" name="folderId" id="folderId"/>
+            </form>
 
-			<div class="col-lg-2">
-				<h3>Drive.upload</h3>
+            <form method="POST" enctype="multipart/form-data"
+                  id="fileUploadForm">
 
-				<form method="POST" enctype="multipart/form-data"
-					id="fileUploadMetadataForm">
-					<div class="form-group">
-						<label for="level">Niveau</label> <input name="level"
-							class="form-control" id="uploadMDLevel" />
-					</div>
-					<div class="form-group">
-						<label for="level">Matière</label> <input name="subject"
-							class="form-control" id="uploadMDSubject" />
-					</div>					
-					<input type="hidden" name="folderId" id="folderId" />
-				</form>
+                <input type="file" name="file" class="btn"/> <input type="button"
+                                                                    class="btn btn-primary" value="Submit"
+                                                                    id="btnUploadSubmit"/>
+            </form>
 
-				<form method="POST" enctype="multipart/form-data"
-					id="fileUploadForm">
+            <h3>Create folder </h3>
+            <div id="auth">
+                <form method="POST" enctype="multipart/form-data" id="createFolderForm">
 
-					<input type="file" name="file" class="btn" /> <input type="button"
-						class="btn btn-primary" value="Submit" id="btnUploadSubmit" />
-				</form>
-				
-				
-
-				<h3>Create folder </h3>
-				<div id="auth">
-					<form method="POST" enctype="multipart/form-data" id="createFolderForm">
-											
-						<div class="form-group">
-							<label for="folderName"">Nom</label> <input name="folderName"
-								class="form-control" id="folderName" />
-						</div>
-			
-
-						<input type="button"
-							class="btn btn-primary" value="Créer" id="btnCreateFolder" />
-					</form>
-				</div>				
-				
-				
-				
-			</div>
-		</div>
-	</div>
+                    <div class="form-group">
+                        <label for="folderName"">Nom</label> <input name="folderName"
+                                                                    class="form-control" id="folderName"/>
+                    </div>
 
 
-      <script type = "text/javascript">
-         <!--
-         init();
-         //-->
-      </script>
-      
+                    <input type="button"
+                           class="btn btn-primary" value="Créer" id="btnCreateFolder"/>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script type="text/javascript">
+    <!--
+    init();
+    //-->
+</script>
+
 
 </body>
 
