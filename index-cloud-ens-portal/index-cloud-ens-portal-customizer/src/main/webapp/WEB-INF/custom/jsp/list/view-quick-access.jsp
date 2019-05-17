@@ -5,7 +5,7 @@
 <%@ page isELIgnored="false" %>
 
 
-<div class="list-quick-access">
+<div class="list-quick-access mb-5">
     <div class="card-deck">
         <c:forEach var="document" items="${documents}" varStatus="status">
             <c:choose>
