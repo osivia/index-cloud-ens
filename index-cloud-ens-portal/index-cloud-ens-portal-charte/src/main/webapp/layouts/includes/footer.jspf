@@ -1,11 +1,11 @@
 <%@ taglib uri="portal-layout" prefix="p" %>
 
 
-<!-- Notifications -->
+<%--Notifications--%>
 <p:region regionName="notifications" />
-<!-- Page settings -->
+<%--Page settings--%>
 <p:region regionName="pageSettings" />
-<!-- AJAX scripts -->
+<%--AJAX scripts--%>
 <p:region regionName="AJAXScripts" />
-<!-- AJAX footer -->
+<%--AJAX footer--%>
 <p:region regionName="AJAXFooter" />    

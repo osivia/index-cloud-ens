@@ -13,14 +13,15 @@
 
 <body class="vh-100 overflow-hidden d-flex flex-column">
 
-<header>
-    <%--Simple toolbar--%>
-    <p:region regionName="simple-toolbar" />
-</header>
+<%@include file="../includes/header.jspf" %>
 
 <main class="d-flex flex-column flex-grow-1 overflow-auto">
-    <div class="container-fluid d-flex flex-column flex-grow-1 overflow-auto">
-        <p:region regionName="col-1"/>
+    <div class="container-fluid d-flex flex-column flex-grow-1 overflow-hidden">
+        <%@include file="../includes/breadcrumb.jspf" %>
+
+        <div class="d-flex flex-column flex-grow-1 overflow-x-hidden overflow-y-auto">
+            <p:region regionName="maximized"/>
+        </div>
     </div>
 </main>
 

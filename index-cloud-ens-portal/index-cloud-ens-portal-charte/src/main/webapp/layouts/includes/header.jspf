@@ -2,6 +2,6 @@
 
 
 <header>
-    <!-- Toolbar -->
+    <%--Toolbar--%>
     <p:region regionName="toolbar" />
 </header>

@@ -1,11 +1,11 @@
-<div class="row align-items-center border-bottom border-light mb-3">
+<div class="row align-items-center border-bottom border-light mb-4">
     <div class="col">
-        <!-- Breadcrumb -->
+        <%--Breadcrumb--%>
         <p:region regionName="breadcrumb" />
     </div>
 
     <div class="col-auto">
-        <!-- Menubar -->
+        <%--Menubar--%>
         <p:region regionName="menubar" />
     </div>
 </div>

@@ -2,9 +2,42 @@
 <layouts>
 
     <layout>
-        <name>cloud-ens-default</name>
-        <uri>/layouts/default/index.jsp</uri>
-        <uri state="maximized">/layouts/default/maximized.jsp</uri>
+        <name>cloud-ens-with-nav</name>
+        <uri>/layouts/with-nav/index.jsp</uri>
+        <uri state="maximized">/layouts/with-nav/maximized.jsp</uri>
+        <regions>
+            <region name="nav" />
+            <region name="nav-bottom" />
+            <region name="top" />
+            <region name="col-1" />
+            <region name="col-2" />
+        </regions>
+    </layout>
+
+    <layout>
+        <name>cloud-ens-without-nav</name>
+        <uri>/layouts/without-nav/index.jsp</uri>
+        <uri state="maximized">/layouts/without-nav/maximized.jsp</uri>
+        <regions>
+            <region name="top" />
+            <region name="col-1" />
+            <region name="col-2" />
+        </regions>
+    </layout>
+
+    <layout>
+        <name>cloud-ens-home</name>
+        <uri>/layouts/home/index.jsp</uri>
+        <uri state="maximized">/layouts/without-nav/maximized.jsp</uri>
+        <regions>
+            <region name="col-1" />
+        </regions>
+    </layout>
+
+    <layout>
+        <name>cloud-ens-workspace</name>
+        <uri>/layouts/workspace/index.jsp</uri>
+        <uri state="maximized">/layouts/with-nav/maximized.jsp</uri>
         <regions>
             <region name="nav" />
             <region name="nav-bottom" />

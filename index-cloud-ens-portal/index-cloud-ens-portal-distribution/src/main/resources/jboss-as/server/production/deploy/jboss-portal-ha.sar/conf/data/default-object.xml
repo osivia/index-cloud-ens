@@ -108,7 +108,7 @@
                 </property>
                 <property>
                     <name>layout.id</name>
-                    <value>cloud-ens-default</value>
+                    <value>cloud-ens-without-nav</value>
                 </property>
                 <property>
                     <name>coordination.event.implicit_mode</name>
@@ -162,22 +162,65 @@
             <page>
                 <page-name>home</page-name>
                 <display-name xml:lang="fr">Accueil</display-name>
-                <properties/>
+
+                <properties>
+                    <property>
+                        <name>order</name>
+                        <value>0</value>
+                    </property>
+                    <property>
+                        <name>layout.id</name>
+                        <value>cloud-ens-home</value>
+                    </property>
+                </properties>
 
                 <security-constraint>
                     <policy-permission>
                         <action-name>view</action-name>
                         <unchecked/>
                     </policy-permission>
-                    <policy-permission>
-                        <action-name>view</action-name>
-                        <role-name>Administrators</role-name>
-                    </policy-permission>
-                    <policy-permission>
-                        <action-name>view</action-name>
-                        <role-name>Authenticated</role-name>
-                    </policy-permission>
                 </security-constraint>
+
+                <window>
+                    <window-name>toutatice-portail-cms-nuxeo-viewFragmentPortletInstance_1510733841224</window-name>
+                    <instance-ref>toutatice-portail-cms-nuxeo-viewFragmentPortletInstance</instance-ref>
+                    <region>col-1</region>
+                    <properties>
+                        <property>
+                            <name>osivia.title</name>
+                            <value>Note d'accueil</value>
+                        </property>
+                        <property>
+                            <name>osivia.propertyName</name>
+                            <value>note:note</value>
+                        </property>
+                        <property>
+                            <name>osivia.fragmentTypeId</name>
+                            <value>html_property</value>
+                        </property>
+                        <property>
+                            <name>osivia.cms.uri</name>
+                            <value>home-message</value>
+                        </property>
+                        <property>
+                            <name>portal.windowContentType</name>
+                            <value>portlet</value>
+                        </property>
+                        <property>
+                            <name>osivia.hideEmptyPortlet</name>
+                            <value>1</value>
+                        </property>
+                        <property>
+                            <name>theme.order</name>
+                            <value>0</value>
+                        </property>
+                        <property>
+                            <name>osivia.hideTitle</name>
+                            <value>1</value>
+                        </property>
+                    </properties>
+                    <height>0</height>
+                </window>
             </page>
 
             <page>
@@ -722,6 +765,7 @@ return nuxeoRequest.toString();</value>
                 <page>
                     <page-name>uncluttered</page-name>
                     <display-name xml:lang="fr">uncluttered</display-name>
+
                     <properties>
                         <property>
                             <name>layout.id</name>
@@ -778,7 +822,12 @@ return nuxeoRequest.toString();</value>
                 <page>
                     <page-name>workspace</page-name>
                     <display-name xml:lang="fr">Espace collaboratif</display-name>
-                    <properties/>
+
+                    <property>
+                        <name>layout.id</name>
+                        <value>cloud-ens-with-nav</value>
+                    </property>
+
                     <security-constraint/>
 
                     <page>
@@ -792,7 +841,14 @@ return nuxeoRequest.toString();</value>
                 <page>
                     <page-name>user-workspace</page-name>
                     <display-name xml:lang="fr">Espace personnel</display-name>
-                    <properties/>
+
+                    <properties>
+                        <property>
+                            <name>layout.id</name>
+                            <value>cloud-ens-workspace</value>
+                        </property>
+                    </properties>
+
                     <security-constraint/>
 
                     <window>
@@ -897,7 +953,14 @@ return nuxeoRequest.toString();</value>
                 <page>
                     <page-name>folder</page-name>
                     <display-name xml:lang="fr">Dossier</display-name>
-                    <properties/>
+
+                    <properties>
+                        <property>
+                            <name>layout.id</name>
+                            <value>cloud-ens-with-nav</value>
+                        </property>
+                    </properties>
+
                     <security-constraint/>
 
                     <window>

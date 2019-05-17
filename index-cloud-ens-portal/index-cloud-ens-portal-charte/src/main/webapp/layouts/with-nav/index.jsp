@@ -26,20 +26,6 @@
 
                 <div class="row my-4 border-top border-light">
                     <div class="col pr-0">
-                        <div class="position-relative p-3">
-                            <div class="progress">
-                                <div class="progress-bar" role="progressbar" style="width: 25%" aria-valuenow="25"
-                                     aria-valuemin="0" aria-valuemax="100"></div>
-                            </div>
-                            <div>
-                                <small class="text-muted">
-                                    <span>2,5 Go utilis&eacute;s sur 10 Go</span>
-                                    <br>
-                                    <a href="#" class="stretched-link">Obtenir plus d'espace</a>
-                                </small>
-                            </div>
-                        </div>
-
                         <p:region regionName="nav-bottom"/>
                     </div>
                 </div>

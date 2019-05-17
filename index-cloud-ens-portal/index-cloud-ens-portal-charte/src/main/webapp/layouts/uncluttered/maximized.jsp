@@ -13,7 +13,10 @@
 
 <body class="vh-100 overflow-hidden d-flex flex-column">
 
-<%@include file="../includes/header.jspf" %>
+<header>
+    <%--Simple toolbar--%>
+    <p:region regionName="simple-toolbar" />
+</header>
 
 <main class="d-flex flex-column flex-grow-1 overflow-auto">
     <div class="container-fluid d-flex flex-column flex-grow-1 overflow-auto">
