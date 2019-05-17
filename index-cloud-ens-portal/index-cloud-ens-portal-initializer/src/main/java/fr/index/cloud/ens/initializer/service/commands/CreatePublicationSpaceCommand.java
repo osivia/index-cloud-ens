@@ -1,0 +1,76 @@
+package fr.index.cloud.ens.initializer.service.commands;
+
+import fr.toutatice.portail.cms.nuxeo.api.INuxeoCommand;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.nuxeo.ecm.automation.client.OperationRequest;
+import org.nuxeo.ecm.automation.client.Session;
+import org.nuxeo.ecm.automation.client.adapters.DocumentService;
+import org.nuxeo.ecm.automation.client.model.*;
+
+import java.io.File;
+import java.net.URL;
+
+/**
+ * Create publication space Nuxeo command.
+ *
+ * @author Cédric Krommenhoek
+ * @see INuxeoCommand
+ */
+public class CreatePublicationSpaceCommand implements INuxeoCommand {
+
+    /**
+     * Log.
+     */
+    private final Log log;
+
+
+    /**
+     * Constructor.
+     */
+    public CreatePublicationSpaceCommand() {
+        super();
+
+        // Log
+        this.log = LogFactory.getLog(CreatePublicationSpaceCommand.class);
+    }
+
+
+    @Override
+    public Object execute(Session nuxeoSession) throws Exception {
+        // Document service
+        DocumentService documentService = nuxeoSession.getAdapter(DocumentService.class);
+
+        // Domain
+        Document domain = documentService.getDocument(new PathRef("/default-domain"));
+
+        // Publication space
+        URL publicationSpaceUrl = this.getClass().getResource("/docs/publication-space/export-publication-space.zip");
+        File publicationSpaceFile = new File(publicationSpaceUrl.getFile());
+        Blob publicationSpaceBlob = new FileBlob(publicationSpaceFile);
+
+        OperationRequest operationRequest = nuxeoSession.newRequest("FileManager.Import").setInput(publicationSpaceBlob);
+        operationRequest.setContextProperty("currentDocument", domain);
+        operationRequest.set("overwite", String.valueOf(true));
+        operationRequest.execute();
+
+
+        // Mass publication
+        Documents documents = documentService.query("SELECT * FROM Document WHERE ecm:path STARTSWITH '/default-domain/publication-space'");
+        for (Document document : documents) {
+            this.log.info("Publish document : " + document.getPath());
+
+            operationRequest = nuxeoSession.newRequest("Document.SetOnLineOperation").setInput(document);
+            operationRequest.execute();
+        }
+
+        return null;
+    }
+
+
+    @Override
+    public String getId() {
+        return this.getClass().getSimpleName();
+    }
+
+}

@@ -51,29 +51,17 @@
                         </goals>
                     </execution>
                     <execution>
-                        <id>nuxeo-exports-extranet</id>
+                        <id>nuxeo-exports-publication-space</id>
                         <phase>process-resources</phase>
                         <configuration>
-                            <descriptorSourceDirectory>src/main/assembly/extranet</descriptorSourceDirectory>
+                            <descriptorSourceDirectory>src/main/assembly/publication-space</descriptorSourceDirectory>
                             <finalName>export</finalName>
-                          	<outputDirectory>${project.build.directory}/${project.artifactId}-${project.version}/docs/extranet</outputDirectory>
+                          	<outputDirectory>${project.build.directory}/${project.artifactId}-${project.version}/docs/publication-space</outputDirectory>
                         </configuration>
                         <goals>
                             <goal>single</goal>
                         </goals>
                     </execution>
-                    <execution>
-                        <id>nuxeo-exports-records</id>
-                        <phase>process-resources</phase>
-                        <configuration>
-                            <descriptorSourceDirectory>src/main/assembly/records</descriptorSourceDirectory>
-                            <finalName>export</finalName>
-                          	<outputDirectory>${project.build.directory}/${project.artifactId}-${project.version}/docs/records</outputDirectory>
-                        </configuration>
-                        <goals>
-                            <goal>single</goal>
-                        </goals>
-                    </execution>     
                 </executions>
             </plugin>
         </plugins>

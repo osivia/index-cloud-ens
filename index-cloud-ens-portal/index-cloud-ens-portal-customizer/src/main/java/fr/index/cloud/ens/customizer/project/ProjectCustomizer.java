@@ -230,7 +230,7 @@ public class ProjectCustomizer extends CMSPortlet implements ICustomizationModul
                     String redirectionUrl;
                     try {
                         redirectionUrl = this.portalUrlFactory.getStartPortletInNewPage(portalControllerContext, "platform-init", displayName,
-                                "demo-initializer-instance", properties, null);
+                                "index-cloud-ens-initializer-instance", properties, null);
                     } catch (PortalException e) {
                         throw new RuntimeException(e);
                     }

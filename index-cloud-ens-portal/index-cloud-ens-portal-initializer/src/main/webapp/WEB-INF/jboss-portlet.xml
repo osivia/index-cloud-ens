@@ -4,7 +4,7 @@
 <portlet-app>
 
     <portlet>
-        <portlet-name>demo-initializer</portlet-name>
+        <portlet-name>index-cloud-ens-initializer</portlet-name>
 
         <transaction>
             <trans-attribute>Required</trans-attribute>
