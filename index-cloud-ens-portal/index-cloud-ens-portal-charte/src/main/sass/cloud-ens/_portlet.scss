@@ -2,7 +2,8 @@
 
 
 .portlet-titlebar-title {
-  color: $text-muted;
-
-  font-size: $font-size-base;
+  &:not(.card-title) {
+    color: $text-muted;
+    font-size: $font-size-base;
+  }
 }
