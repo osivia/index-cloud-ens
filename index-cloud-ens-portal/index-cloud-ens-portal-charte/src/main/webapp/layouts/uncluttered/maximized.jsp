@@ -12,7 +12,7 @@
 </head>
 
 
-<body class="vh-100 overflow-hidden d-flex flex-column">
+<body class="vh-100 overflow-hidden d-flex flex-column" data-page-header="true">
 
 <header>
     <%--Simple toolbar--%>

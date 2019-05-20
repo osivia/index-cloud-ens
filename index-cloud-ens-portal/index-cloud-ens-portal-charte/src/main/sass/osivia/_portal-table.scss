@@ -163,7 +163,7 @@
 .portal-table-toolbar-container {
   display: flex;
 
-  //min-height: $input-btn-line-height-sm + $input-btn-padding-x-sm;
+  min-height: $input-btn-line-height-sm + $input-btn-padding-x-sm + map_get($spacers, 2);
 
   margin-bottom: -#{map_get($spacers, 2)};
 

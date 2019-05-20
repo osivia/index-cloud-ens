@@ -1,11 +1,17 @@
 .drawer-toggle-button {
   body:not([data-drawer="true"]) & {
-    display: none;
+    display: none !important;
   }
 }
 
 
 #maximized {
+  > .page-header {
+    body:not([data-page-header="true"]) & {
+      display: none !important;
+    }
+  }
+
   .portlet-container {
     margin-bottom: 0;
   }
