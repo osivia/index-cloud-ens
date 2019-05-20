@@ -35,6 +35,17 @@
     </layout>
 
     <layout>
+        <name>cloud-ens-search</name>
+        <uri>/layouts/search/index.jsp</uri>
+        <uri state="maximized">/layouts/without-nav/maximized.jsp</uri>
+        <regions>
+            <region name="top" />
+            <region name="col-1" />
+            <region name="col-2" />
+        </regions>
+    </layout>
+
+    <layout>
         <name>cloud-ens-workspace</name>
         <uri>/layouts/workspace/index.jsp</uri>
         <uri state="maximized">/layouts/with-nav/maximized.jsp</uri>

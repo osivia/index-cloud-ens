@@ -94,8 +94,7 @@
                             </c:when>
 
                             <c:otherwise>
-                                <img class="avatar" src="${requestScope['osivia.toolbar.person'].avatar.url}"
-                                     alt="${requestScope['osivia.toolbar.person'].displayName}">
+                                <img class="avatar" src="${requestScope['osivia.toolbar.person'].avatar.url}" alt="">
                                 <span class="d-none d-lg-inline">${requestScope['osivia.toolbar.person'].displayName}</span>
                             </c:otherwise>
                         </c:choose>
@@ -104,7 +103,7 @@
                     <div class="dropdown-menu dropdown-menu-right">
                         <div class="dropdown-header d-lg-none">${empty requestScope['osivia.toolbar.person'] ? requestScope['osivia.toolbar.principal'] : requestScope['osivia.toolbar.person'].displayName}</div>
 
-                            <%--User profile--%>
+                        <%--User profile--%>
                         <c:set var="url" value="${requestScope['osivia.toolbar.myprofile']}"/>
                         <c:if test="${not empty url}">
                             <a href="${url}" class="dropdown-item">
@@ -113,16 +112,16 @@
                             </a>
                         </c:if>
 
-                            <%--User settings--%>
-                        <c:set var="url" value="${requestScope['osivia.toolbar.userSettings.url']}"/>
+                        <%--User settings--%>
+                        <%--<c:set var="url" value="${requestScope['osivia.toolbar.userSettings.url']}"/>
                         <c:if test="${not empty url}">
                             <a href="${url}" class="dropdown-item">
                                 <i class="glyphicons glyphicons-basic-adjust"></i>
                                 <span><op:translate key="TOOLBAR_USER_SETTINGS"/></span>
                             </a>
-                        </c:if>
+                        </c:if>--%>
 
-                            <%--User workspace--%>
+                        <%--User workspace--%>
                         <c:set var="url" value="${requestScope['osivia.userWorkspace.url']}"/>
                         <c:if test="${not empty url}">
                             <a href="${url}" class="dropdown-item">
@@ -131,10 +130,10 @@
                             </a>
                         </c:if>
 
-                            <%--Divider--%>
+                        <%--Divider--%>
                         <div class="dropdown-divider"></div>
 
-                            <%--Logout--%>
+                        <%--Logout--%>
                         <a href="javascript:" onclick="logout()" class="dropdown-item">
                             <i class="glyphicons glyphicons-basic-log-out"></i>
                             <span><op:translate key="TOOLBAR_LOGOUT"/></span>

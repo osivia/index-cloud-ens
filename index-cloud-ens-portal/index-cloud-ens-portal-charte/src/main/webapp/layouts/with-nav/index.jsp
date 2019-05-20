@@ -22,18 +22,20 @@
             <op:resizable cssClass="col-sm-auto d-flex flex-column mh-100 border-right border-light"
                           minWidth="120">
                 <div class="row flex-grow-1 overflow-hidden">
-                        <%--Drawer--%>
-                    <div id="drawer" class="col d-flex flex-column mh-100 pl-0">
+                    <%--Drawer--%>
+                    <div id="drawer" class="col d-flex flex-column mh-100">
                         <p:region regionName="drawer-header" />
 
-                        <div class="mt-4 flex-grow-1 overflow-auto">
-                            <p:region regionName="nav"/>
+                        <div class="row flex-grow-1 overflow-hidden">
+                            <div class="col pl-0 d-flex flex-column mh-100">
+                                <div class="py-4 flex-grow-1 overflow-auto">
+                                    <p:region regionName="nav"/>
+                                </div>
+                            </div>
                         </div>
 
-                        <div class="row my-4 border-top border-light">
-                            <div class="col pr-0">
-                                <p:region regionName="nav-bottom"/>
-                            </div>
+                        <div class="border-top border-light">
+                            <p:region regionName="nav-bottom"/>
                         </div>
                     </div>
                 </div>

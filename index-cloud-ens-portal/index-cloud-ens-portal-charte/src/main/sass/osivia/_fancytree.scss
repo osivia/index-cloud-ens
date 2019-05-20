@@ -8,6 +8,13 @@ $fancytree-icon-size: 1.25rem;
 .fancytree {
   user-select: none;
 
+  &.fixed-height {
+    > ul.fancytree-container {
+      height: 300px;
+      overflow: auto;
+    }
+  }
+
   ul {
     padding-left: 0;
 
