@@ -396,6 +396,12 @@ return nuxeoRequest.toString();</value>
                         <name>order</name>
                         <value>2</value>
                     </property>
+                    <properties>
+                        <property>
+                            <name>layout.id</name>
+                            <value>cloud-ens-search</value>
+                        </property>
+                    </properties>
                 </properties>
 
                 <security-constraint>
@@ -1041,8 +1047,16 @@ return nuxeoRequest.toString();</value>
                 <page>
                     <page-name>search</page-name>
                     <display-name xml:lang="fr">Recherche</display-name>
-                    <properties/>
+
+                    <properties>
+                        <property>
+                            <name>layout.id</name>
+                            <value>cloud-ens-search</value>
+                        </property>
+                    </properties>
+
                     <security-constraint/>
+
                     <window>
                         <window-name>toutatice-portail-cms-nuxeo-keywordsSelectorPortletInstance_1558086599254</window-name>
                         <instance-ref>toutatice-portail-cms-nuxeo-keywordsSelectorPortletInstance</instance-ref>
@@ -1091,7 +1105,7 @@ return nuxeoRequest.toString();</value>
                     <window>
                         <window-name>toutatice-portail-cms-nuxeo-viewListPortletInstance_1558086658938</window-name>
                         <instance-ref>toutatice-portail-cms-nuxeo-viewListPortletInstance</instance-ref>
-                        <region>top</region>
+                        <region>col-2</region>
                         <properties>
                             <property>
                                 <name>portal.windowContentType</name>
@@ -1100,10 +1114,6 @@ return nuxeoRequest.toString();</value>
                             <property>
                                 <name>osivia.cms.displayLiveVersion</name>
                                 <value>1</value>
-                            </property>
-                            <property>
-                                <name>osivia.bootstrapPanelStyle</name>
-                                <value>false</value>
                             </property>
                             <property>
                                 <name>osivia.title</name>
@@ -1115,7 +1125,7 @@ return nuxeoRequest.toString();</value>
                             </property>
                             <property>
                                 <name>theme.order</name>
-                                <value>1</value>
+                                <value>0</value>
                             </property>
                             <property>
                                 <name>osivia.cms.pageSize</name>
@@ -1132,14 +1142,19 @@ return nuxeoRequest.toString();</value>
                             <property>
                                 <name>osivia.nuxeoRequest</name>
                                 <value>StringBuilder nuxeoRequest = new StringBuilder();&#13;
-    nuxeoRequest.append("ecm:primaryType IN ('File', 'Picture', 'Audio', 'Video', 'Note', 'Folder') ");&#13;
-    &#13;
-    // Search&#13;
-    if (params.get("search") != null) {&#13;
-    nuxeoRequest.append("AND ").append(NXQLFormater.formatAdvancedSearch(params.get("search"))).append(" ");&#13;
-    }&#13;
-    &#13;
-    return nuxeoRequest.toString();</value>
+nuxeoRequest.append("ecm:primaryType IN ('File', 'Picture', 'Audio', 'Video', 'Note', 'Folder') ");&#13;
+&#13;
+// Search&#13;
+if (params.get("search") != null) {&#13;
+nuxeoRequest.append("AND ").append(NXQLFormater.formatAdvancedSearch(params.get("search"))).append(" ");&#13;
+}&#13;
+&#13;
+// Format search by level&#13;
+if (params.get("level") != null) {&#13;
+nuxeoRequest.append("AND ").append(NXQLFormater.formatVocabularySearch("idxcl:levelsTree", params.get("level"))).append(" ");&#13;
+}&#13;
+&#13;
+return nuxeoRequest.toString();</value>
                             </property>
                             <property>
                                 <name>osivia.cms.style</name>
@@ -1152,6 +1167,63 @@ return nuxeoRequest.toString();</value>
                             <property>
                                 <name>osivia.beanShell</name>
                                 <value>on</value>
+                            </property>
+                        </properties>
+                        <height>0</height>
+                    </window>
+
+                    <window>
+                        <window-name>toutatice-portail-cms-nuxeo-vocabulary-select2-instance_1558372638298</window-name>
+                        <instance-ref>toutatice-portail-cms-nuxeo-vocabulary-select2-instance</instance-ref>
+                        <region>col-1</region>
+                        <properties>
+                            <property>
+                                <name>osivia.selector.id</name>
+                                <value>level</value>
+                            </property>
+                            <property>
+                                <name>portal.windowContentType</name>
+                                <value>portlet</value>
+                            </property>
+                            <property>
+                                <name>osivia.bootstrapPanelStyle</name>
+                                <value>false</value>
+                            </property>
+                            <property>
+                                <name>osivia.title</name>
+                                <value>Niveau</value>
+                            </property>
+                            <property>
+                                <name>osivia.selector.monoValued</name>
+                                <value>true</value>
+                            </property>
+                            <property>
+                                <name>osivia.hideTitle</name>
+                                <value>1</value>
+                            </property>
+                            <property>
+                                <name>theme.order</name>
+                                <value>0</value>
+                            </property>
+                            <property>
+                                <name>osivia.selector.vocabulary</name>
+                                <value>idx_level</value>
+                            </property>
+                            <property>
+                                <name>osivia.ajaxLink</name>
+                                <value>1</value>
+                            </property>
+                            <property>
+                                <name>osivia.hideDecorators</name>
+                                <value>1</value>
+                            </property>
+                            <property>
+                                <name>theme.dyna.partial_refresh_enabled</name>
+                                <value>true</value>
+                            </property>
+                            <property>
+                                <name>osivia.selector.label</name>
+                                <value>Niveau</value>
                             </property>
                         </properties>
                         <height>0</height>
