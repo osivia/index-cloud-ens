@@ -62,9 +62,9 @@
                     <div class="row">
                         <div class="col-md d-flex flex-column">
                             <div class="flex-grow-1">
-                                <p:region regionName="col-1"/>
-
                                 <h2 class="h6 text-muted">Ma s&eacute;curit&eacute;</h2>
+
+                                <p:region regionName="col-1"/>
 
                                 <%--Mes donn&eacute;es--%>
                                 <div class="card mb-3">
@@ -93,9 +93,9 @@
 
                         <div class="col-md d-flex flex-column">
                             <div class="flex-grow-1">
-                                <p:region regionName="col-2"/>
-
                                 <h2 class="h6 text-muted">Espace communautaire</h2>
+
+                                <p:region regionName="col-2"/>
 
                                 <%--Mes publications--%>
                                 <div class="card mb-3">
