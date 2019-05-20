@@ -6,8 +6,8 @@
     <deployment>
         <if-exists>overwrite</if-exists>
         <instance>
-            <display-name xml:lang="en">Index Education - initializer</display-name>
-            <display-name xml:lang="fr">Index Éducation - initializer</display-name>
+            <display-name xml:lang="en">Cloud Ens - Initializer</display-name>
+            <display-name xml:lang="fr">Cloud Ens - Initializer</display-name>
             <instance-id>index-cloud-ens-initializer-instance</instance-id>
             <portlet-ref>index-cloud-ens-initializer</portlet-ref>
             <security-constraint>

@@ -107,7 +107,7 @@
     border-color: darken($primary, 5%);
 
     &, a:not(.btn), [class^="text"], .text-muted {
-      color: $white;
+      color: $white !important;
     }
   }
 }

@@ -13,11 +13,9 @@
 
     <name>Cloud enseignant - Web Services Portail</name>
 
+
     <dependencies>
-        
 
-
-	
         <dependency>
             <groupId>com.auth0</groupId>
             <artifactId>java-jwt</artifactId>
@@ -95,7 +93,18 @@
         </dependency>		
 		
     </dependencies>
-    
 
+
+	<build>
+		<plugins>
+
+			<!-- LESS -->
+			<plugin>
+				<groupId>org.lesscss</groupId>
+				<artifactId>lesscss-maven-plugin</artifactId>
+			</plugin>
+
+		</plugins>
+	</build>
 
 </project>

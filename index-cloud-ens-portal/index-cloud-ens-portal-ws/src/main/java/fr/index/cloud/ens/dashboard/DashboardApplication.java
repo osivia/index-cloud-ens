@@ -18,86 +18,47 @@ import fr.index.cloud.oauth.tokenStore.PortalRefreshTokenAuthenticationDatas;
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class DashboardApplication  {
 
-
-    /** The selected. */
-    private boolean selected;
-    
     /** The token. */
     private AggregateRefreshTokenInfos token;
-    
+
+    /** Client identifier. */
+    private String clientId;
+
     /** The client name. */
     private String clientName;
-
-    
-
-    /**
-     * Gets the client name.
-     *
-     * @return the client name
-     */
-    public String getClientName() {
-        return clientName;
-    }
-
-
-    
-    /**
-     * Setter for clientName.
-     * @param clientName the clientName to set
-     */
-    public void setClientName(String clientName) {
-        this.clientName = clientName;
-    }
-
-
-    /**
-     * Getter for token.
-     * @return the token
-     */
-    public AggregateRefreshTokenInfos getToken() {
-        return token;
-    }
-
-    
-    /**
-     * Setter for token.
-     * @param token the token to set
-     */
-    public void setToken(AggregateRefreshTokenInfos token) {
-        this.token = token;
-    }
-
 
 
     /**
      * Constructor.
      * 
-     * @param path document path
      */
-    public DashboardApplication( AggregateRefreshTokenInfos token, String clientName) {
+    public DashboardApplication() {
+        super();
+    }
+
+
+    public AggregateRefreshTokenInfos getToken() {
+        return token;
+    }
+
+    public void setToken(AggregateRefreshTokenInfos token) {
         this.token = token;
+    }
+
+    public String getClientId() {
+        return clientId;
+    }
+
+    public void setClientId(String clientId) {
+        this.clientId = clientId;
+    }
+
+    public String getClientName() {
+        return clientName;
+    }
+
+    public void setClientName(String clientName) {
         this.clientName = clientName;
-        
-    }
-
-
-  
-    /**
-     * Getter for selected.
-     * 
-     * @return the selected
-     */
-    public boolean isSelected() {
-        return selected;
-    }
-
-    /**
-     * Setter for selected.
-     * 
-     * @param selected the selected to set
-     */
-    public void setSelected(boolean selected) {
-        this.selected = selected;
     }
 
 }

@@ -19,6 +19,10 @@ public class DashboardForm {
 
     /** Trashed documents. */
     private List<DashboardApplication> applications;
+    /** Sort property. */
+    private DashboardSort sort;
+    /** Alternative sort indicator. */
+    private boolean alt;
     /** Loaded indicator. */
     private boolean loaded;
 
@@ -41,7 +45,6 @@ public class DashboardForm {
         return applications;
     }
 
-
     /**
      * Sets the applications.
      *
@@ -49,6 +52,22 @@ public class DashboardForm {
      */
     public void setApplications(List<DashboardApplication> applications) {
         this.applications = applications;
+    }
+
+    public DashboardSort getSort() {
+        return sort;
+    }
+
+    public void setSort(DashboardSort sort) {
+        this.sort = sort;
+    }
+
+    public boolean isAlt() {
+        return alt;
+    }
+
+    public void setAlt(boolean alt) {
+        this.alt = alt;
     }
 
     /**

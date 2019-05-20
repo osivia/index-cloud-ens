@@ -6,8 +6,8 @@
     <deployment>
         <if-exists>overwrite</if-exists>
         <instance>
-            <display-name xml:lang="en">Index Education - Taskbar</display-name>
-            <display-name xml:lang="fr">Index Éducation - Barre des tâches</display-name>
+            <display-name xml:lang="en">Cloud Ens - Taskbar</display-name>
+            <display-name xml:lang="fr">Cloud Ens - Barre des tâches</display-name>
             <instance-id>index-cloud-ens-taskbar-instance</instance-id>
             <portlet-ref>index-cloud-ens-taskbar</portlet-ref>
             <security-constraint>
