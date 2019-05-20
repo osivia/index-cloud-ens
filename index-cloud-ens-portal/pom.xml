@@ -22,18 +22,18 @@
         <toutatice.version>4.9-SNAPSHOT</toutatice.version>
         
         <!-- Directory -->
-        <directory.version>4.7.2</directory.version>
+        <directory.version>4.9-SNAPSHOT</directory.version>
         
         <!-- Collaboration -->
         <collaboration.version>4.9-SNAPSHOT</collaboration.version>
         
         <!-- Other services -->
         <tasks.version>4.7</tasks.version>
-        <procedure.version>4.9-ALPHA-2</procedure.version>
+        <procedure.version>4.9-SNAPSHOT</procedure.version>
         <cgu.version>4.7</cgu.version>
 
 		<document-creation.version>4.7.14-RC2</document-creation.version>
-		<onlyoffice.version>4.7</onlyoffice.version>        
+		<onlyoffice.version>4.7.14-RC2</onlyoffice.version>        
 
         
         <!-- Identity SSO -->
