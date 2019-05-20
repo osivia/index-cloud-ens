@@ -104,9 +104,9 @@ $JQry(function() {
                 checkboxSelected: "glyphicons glyphicons-halflings-square-selected",
                 checkboxUnknown: "glyphicons glyphicons-halflings-square-indeterminate",
                 error: "glyphicons glyphicons-halflings-square-alert",
-                expanderClosed: "glyphicons glyphicons-halflings-square-triangle-right",
-                expanderLazy: "glyphicons glyphicons-halflings-square-triangle-right",
-                expanderOpen: "glyphicons glyphicons-halflings-square-triangle-down",
+                expanderClosed: "glyphicons glyphicons-halflings-set-down",
+                expanderLazy: "glyphicons glyphicons-halflings-set-down",
+                expanderOpen: "glyphicons glyphicons-halflings-set-down",
                 folder: "glyphicons glyphicons-halflings-folder",
                 folderOpen: "glyphicons glyphicons-halflings-folder-open",
                 loading: "glyphicons glyphicons-halflings-hourglass text-info"

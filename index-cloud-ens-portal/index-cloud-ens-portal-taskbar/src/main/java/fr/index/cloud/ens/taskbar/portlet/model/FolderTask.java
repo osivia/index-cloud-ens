@@ -57,8 +57,8 @@ public class FolderTask extends Task {
 
 
     @Override
-    public boolean isExpandable() {
-        return CollectionUtils.isNotEmpty(this.children);
+    public boolean isFancytree() {
+        return true;
     }
 
     

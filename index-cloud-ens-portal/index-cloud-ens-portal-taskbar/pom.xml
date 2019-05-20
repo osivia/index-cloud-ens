@@ -14,4 +14,17 @@
 
     <name>Cloud enseignant - Taskbar</name>
 
+
+    <build>
+        <plugins>
+
+            <!-- SASS -->
+            <plugin>
+                <groupId>com.github.warmuuh</groupId>
+                <artifactId>libsass-maven-plugin</artifactId>
+            </plugin>
+
+        </plugins>
+    </build>
+
 </project>

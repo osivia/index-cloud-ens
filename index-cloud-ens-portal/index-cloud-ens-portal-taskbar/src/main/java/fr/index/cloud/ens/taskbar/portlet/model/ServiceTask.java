@@ -20,7 +20,7 @@ public class ServiceTask extends Task {
 
 
     @Override
-    public boolean isExpandable() {
+    public boolean isFancytree() {
         return false;
     }
 }

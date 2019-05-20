@@ -1,6 +1,7 @@
 package fr.index.cloud.ens.taskbar.portlet.repository;
 
 import fr.index.cloud.ens.taskbar.portlet.model.FolderTask;
+import fr.index.cloud.ens.taskbar.portlet.model.Task;
 import org.osivia.portal.api.context.PortalControllerContext;
 import org.osivia.portal.api.taskbar.TaskbarTask;
 
@@ -28,9 +29,9 @@ public interface TaskbarRepository {
      * Generate folder tree.
      *
      * @param portalControllerContext portal controller context
-     * @param folder                  folder
+     * @param path                    task path
      */
-    void generateFolderNavigationTree(PortalControllerContext portalControllerContext, FolderTask folder) throws PortletException;
+    Task generateFolderTask(PortalControllerContext portalControllerContext, String path) throws PortletException;
 
 
     /**

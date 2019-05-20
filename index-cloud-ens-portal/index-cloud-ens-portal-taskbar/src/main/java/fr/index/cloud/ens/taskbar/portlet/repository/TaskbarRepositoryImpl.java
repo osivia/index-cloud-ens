@@ -1,6 +1,7 @@
 package fr.index.cloud.ens.taskbar.portlet.repository;
 
 import fr.index.cloud.ens.taskbar.portlet.model.FolderTask;
+import fr.index.cloud.ens.taskbar.portlet.model.Task;
 import fr.index.cloud.ens.taskbar.portlet.model.comparator.FolderTaskComparator;
 import fr.index.cloud.ens.taskbar.portlet.repository.command.MoveDocumentsCommand;
 import fr.toutatice.portail.cms.nuxeo.api.INuxeoCommand;
@@ -107,25 +108,94 @@ public class TaskbarRepositoryImpl implements TaskbarRepository {
     }
 
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
-    public void generateFolderNavigationTree(PortalControllerContext portalControllerContext, FolderTask folder) throws PortletException {
+    public Task generateFolderTask(PortalControllerContext portalControllerContext, String path) throws PortletException {
         // Nuxeo controller
         NuxeoController nuxeoController = new NuxeoController(portalControllerContext);
 
-        this.generateFolderChildren(nuxeoController, folder);
+        // CMS service
+        ICMSService cmsService = this.cmsServiceLocator.getCMSService();
+        // CMS context
+        CMSServiceCtx cmsContext = new CMSServiceCtx();
+        cmsContext.setPortalControllerContext(portalControllerContext);
 
-        boolean selected = false;
-        if (CollectionUtils.isNotEmpty(folder.getChildren())) {
-            Iterator<FolderTask> iterator = folder.getChildren().iterator();
-            while (!selected && iterator.hasNext()) {
-                FolderTask child = iterator.next();
-                selected = child.isSelected();
-            }
+        // Base path
+        String basePath = nuxeoController.getBasePath();
+        // Current navigation path
+        String currentNavigationPath = nuxeoController.getNavigationPath();
+
+
+        // Navigation item
+        CMSItem navigationItem;
+        try {
+            navigationItem = cmsService.getPortalNavigationItem(cmsContext, basePath, path);
+        } catch (CMSException e) {
+            throw new PortletException(e);
         }
-        folder.setSelected(selected);
+
+        // Folder task
+        FolderTask task = this.getFolderTask(portalControllerContext, currentNavigationPath, navigationItem);
+
+        // Children
+        this.generateFolderChildren(nuxeoController, task);
+
+        return task;
+    }
+
+
+    /**
+     * Get folder task.
+     * @param portalControllerContext portal controller context
+     * @param currentNavigationPath current navigation path
+     * @param navigationItem navigation item
+     * @return task
+     */
+    private FolderTask getFolderTask(PortalControllerContext portalControllerContext, String currentNavigationPath, CMSItem navigationItem) {
+        FolderTask task = this.applicationContext.getBean(FolderTask.class);
+
+        // Document type
+        DocumentType documentType = navigationItem.getType();
+        // Fetched children indicator
+        Boolean unfetchedChildren = BooleanUtils.toBooleanObject(navigationItem.getProperties().get("unfetchedChildren"));
+        // Nuxeo document
+        Document document = (Document) navigationItem.getNativeItem();
+
+        // Identifier
+        String id = document.getId();
+        task.setId(id);
+
+        // Path
+        String path = navigationItem.getCmsPath();
+        task.setPath(path);
+
+        // Display name
+        String displayName = document.getTitle();
+        task.setDisplayName(displayName);
+
+        // URL
+        String url = this.portalUrlFactory.getCMSUrl(portalControllerContext, null, path, null, null, "menu", null, null, "1", null);
+        task.setUrl(url);
+
+        // Active indicator
+        boolean active = StringUtils.equals(currentNavigationPath, path);
+        task.setActive(active);
+
+        // Selected indicator
+        boolean selected = this.isSelected(path, currentNavigationPath);
+        task.setSelected(selected);
+
+        // Folder indicator
+        boolean folder = (documentType != null) && documentType.isFolderish();
+        task.setFolder(folder);
+
+        // Lazy indicator
+        boolean lazy = (documentType != null) && documentType.isBrowsable() && !selected && BooleanUtils.isNotFalse(unfetchedChildren);
+        task.setLazy(lazy);
+
+        // Accepted types
+        String[] acceptedTypes = this.getAcceptedTypes(navigationItem);
+        task.setAcceptedTypes(acceptedTypes);
+        return task;
     }
 
 
@@ -203,50 +273,7 @@ public class TaskbarRepositoryImpl implements TaskbarRepository {
             children = new TreeSet<>(this.folderTaskComparator);
 
             for (CMSItem navigationItem : navigationItems) {
-                FolderTask child = this.applicationContext.getBean(FolderTask.class);
-
-                // Document type
-                DocumentType documentType = navigationItem.getType();
-                // Fetched children indicator
-                Boolean unfetchedChildren = BooleanUtils.toBooleanObject(navigationItem.getProperties().get("unfetchedChildren"));
-                // Nuxeo document
-                Document document = (Document) navigationItem.getNativeItem();
-
-                // Identifier
-                String id = document.getId();
-                child.setId(id);
-
-                // Path
-                String path = navigationItem.getCmsPath();
-                child.setPath(path);
-
-                // Display name
-                String displayName = document.getTitle();
-                child.setDisplayName(displayName);
-
-                // URL
-                String url = this.portalUrlFactory.getCMSUrl(portalControllerContext, null, path, null, null, "menu", null, null, "1", null);
-                child.setUrl(url);
-
-                // Active indicator
-                boolean active = StringUtils.equals(currentNavigationPath, path);
-                child.setActive(active);
-
-                // Selected indicator
-                boolean selected = this.isSelected(path, currentNavigationPath);
-                child.setSelected(selected);
-
-                // Folder indicator
-                boolean folder = (documentType != null) && documentType.isFolderish();
-                child.setFolder(folder);
-
-                // Lazy indicator
-                boolean lazy = (documentType != null) && documentType.isBrowsable() && !selected && BooleanUtils.isNotFalse(unfetchedChildren);
-                child.setLazy(lazy);
-
-                // Accepted types
-                String[] acceptedTypes = this.getAcceptedTypes(navigationItem);
-                child.setAcceptedTypes(acceptedTypes);
+                FolderTask child = getFolderTask(portalControllerContext, currentNavigationPath, navigationItem);
 
                 children.add(child);
             }
@@ -254,6 +281,9 @@ public class TaskbarRepositoryImpl implements TaskbarRepository {
 
         return children;
     }
+
+
+
 
 
     /**
@@ -312,7 +342,7 @@ public class TaskbarRepositoryImpl implements TaskbarRepository {
 
 
     @Override
-    public String getBasePath(PortalControllerContext portalControllerContext) throws PortletException {
+    public String getBasePath(PortalControllerContext portalControllerContext) {
         // Nuxeo controller
         NuxeoController nuxeoController = new NuxeoController(portalControllerContext);
 

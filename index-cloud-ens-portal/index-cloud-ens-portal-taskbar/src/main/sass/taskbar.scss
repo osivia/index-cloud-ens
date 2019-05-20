@@ -1,0 +1,22 @@
+@import "../../../../index-cloud-ens-portal-charte/src/main/sass/osivia/variables";
+
+.taskbar {
+  > ul > li {
+    margin-bottom: map_get($spacers, 2);
+
+    > a {
+      padding: {
+        top: .1rem;
+        bottom: .1rem;
+        left: 1.45rem;
+        right: .1rem;
+      }
+
+      @include border-radius;
+
+      &:hover {
+        background-color: $light;
+      }
+    }
+  }
+}

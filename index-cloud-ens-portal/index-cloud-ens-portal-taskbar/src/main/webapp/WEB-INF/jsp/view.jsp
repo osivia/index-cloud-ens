@@ -1,14 +1,15 @@
 <%@ taglib prefix="portlet" uri="http://java.sun.com/portlet_2_0" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <%@ taglib prefix="op" uri="http://www.osivia.org/jsp/taglib/osivia-portal" %>
+<%@ taglib uri="http://www.toutatice.fr/jsp/taglib/toutatice" prefix="ttc" %>
 
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 
+<portlet:actionURL name="drop" var="dropUrl"/>
 
-<portlet:actionURL name="drop" var="dropUrl" />
-
-<portlet:resourceURL id="lazy-loading" var="lazyLoadingUrl" />
+<portlet:resourceURL id="lazy-loading" var="lazyLoadingUrl"/>
 
 <c:set var="namespace"><portlet:namespace/></c:set>
 
@@ -17,31 +18,36 @@
     <ul class="list-unstyled">
         <c:forEach var="task" items="${taskbar.tasks}" varStatus="status">
             <li>
-                <div class="d-flex align-items-center">
-                    <a href="${task.url}"
-                       class="btn btn-link flex-grow-1 ${task.active and not (task.expandable and task.selected) ? 'font-weight-bold' : 'text-secondary'} text-left text-decoration-none text-truncate no-ajax-link">
-                        <i class="${task.icon}"></i>
-                        <span>${task.displayName}</span>
-                    </a>
+                <c:choose>
+                    <c:when test="${task.fancytree}">
+                        <div class="fancytree overflow-hidden">
+                            <ul>
+                                <li class="${task.active ? 'current' : ''}"
+                                    data-retain="${task.selected}"
+                                    data-acceptedtypes="${fn:join(task.acceptedTypes, ',')}"
+                                    data-expanded="${task.selected}" data-folder="${task.folder}"
+                                    data-lazy="${task.lazy}" data-current="${task.active}" data-id="${task.id}"
+                                    data-path="${task.path}">
+                                    <a href="${task.url}" class="no-ajax-link">
+                                        <span>${task.displayName}</span>
+                                    </a>
 
-                    <c:if test="${task.expandable}">
-                        <small>
-                            <a href="#${namespace}-folders-${status.index}"
-                               class="d-block text-secondary text-decoration-none no-ajax-link" data-toggle="collapse">
-                                <i class="glyphicons glyphicons-halflings-more-vertical"></i>
-                            </a>
-                        </small>
-                    </c:if>
-                </div>
-
-                <c:if test="${task.expandable}">
-                    <div id="${namespace}-folders-${status.index}" class="collapse ${task.active ? 'show' : ''}">
-                        <div class="fancytree mb-3 pl-3">
-                            <c:set var="parent" value="${task}" scope="request"/>
-                            <jsp:include page="folder-children.jsp"/>
+                                    <!-- Children -->
+                                    <c:set var="parent" value="${task}" scope="request"/>
+                                    <ttc:include page="folder-children.jsp"/>
+                                </li>
+                            </ul>
                         </div>
-                    </div>
-                </c:if>
+                    </c:when>
+
+                    <c:otherwise>
+                        <a href="${task.url}"
+                           class="d-block ${task.active ? 'text-primary font-weight-bold' : 'text-secondary'} text-decoration-none text-truncate no-ajax-link">
+                            <i class="${task.icon}"></i>
+                            <span>${task.displayName}</span>
+                        </a>
+                    </c:otherwise>
+                </c:choose>
             </li>
         </c:forEach>
     </ul>

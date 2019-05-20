@@ -34,11 +34,11 @@ public abstract class Task {
 
 
     /**
-     * Check if task is expandable.
+     * Check if task is fancytree.
      *
-     * @return true if task is expandable
+     * @return true if task is fancytree
      */
-    public abstract boolean isExpandable();
+    public abstract boolean isFancytree();
 
 
     public String getIcon() {
