@@ -4,37 +4,24 @@
 <head>
 
 
-<meta charset="UTF-8">
-<title>Cloud Index Education</title>
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
+ <meta charset="UTF-8">
+    <meta name="application-name" content="Cloud Index Education">
+    <meta http-equiv="cache-control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="pragma" content="no-cache">
+    <meta http-equiv="expires" content="0">
 
-<meta http-equiv="cache-control"	content="no-cache, no-store, must-revalidate">
-<meta http-equiv="pragma" content="no-cache">
-<meta http-equiv="expires" content="0">
+    <meta name="application-name" content="Cloud Index Education">
 
-<meta name="application-name" content="Cloud Index Education">
-
-
-<meta http-equiv="default-style" content="Demo">
-<meta name="viewport"
-	content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-
-<script type='text/javascript'
-	src='/osivia-portal-custom-web-assets/components/jquery/jquery-1.12.4.min.js'></script>
-<script type='text/javascript'
-	src='/osivia-portal-custom-web-assets/components/jquery-ui/jquery-ui-1.11.3.min.js'></script>
-<link rel='stylesheet'
-	href='/osivia-portal-custom-web-assets/components/jquery-ui/jquery-ui-1.11.3.min.css'>
-<script type='text/javascript'
-	src='/osivia-portal-custom-web-assets/components/jquery-mobile/jquery.mobile.custom.min.js'></script>
-<link rel='stylesheet'
-	href='/osivia-portal-custom-web-assets/css/bootstrap.min.css'
-	title='Bootstrap'>
-<link rel='stylesheet'
-	href='/osivia-portal-custom-web-assets/css/osivia.min.css'>
-
-
-<link rel="stylesheet" href="/demo-charte/css/demo.min.css" title="Demo" />
+    <script type='text/javascript'
+            src='/osivia-portal-custom-web-assets/components/jquery/jquery-1.12.4.min.js'></script>
+    <script type='text/javascript' src='/osivia-portal-custom-web-assets/js/jquery-integration.min.js'></script>
+    <script type='text/javascript'
+            src='/osivia-portal-custom-web-assets/components/jquery-ui/jquery-ui-1.11.3.min.js'></script>
+    <link rel='stylesheet' href='/osivia-portal-custom-web-assets/components/jquery-ui/jquery-ui-1.11.3.min.css'>
+    <script type='text/javascript'
+            src='/osivia-portal-custom-web-assets/components/jquery-mobile/jquery.mobile.custom.min.js'></script>
+    <link rel="stylesheet" href="/index-cloud-ens-charte/css/cloud-ens.css"/>
+    <script src='/osivia-portal-custom-web-assets/components/bootstrap/js/bootstrap.bundle.min.js'></script>
 
 </head>
 <body>
@@ -53,7 +40,7 @@
 						<h2>Authentification</h2>
 					</legend>
 					<div class="form-group">
-						<label for="username">Mail:</label> <input id="username"
+						<label for="username">Adresse mail:</label> <input id="username"
 							class="form-control" type='text' name='username'
 							 />
 					</div>
