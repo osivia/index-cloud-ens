@@ -100,7 +100,7 @@
                                 <p:region regionName="col-2"/>
 
                                 <%--Mes publications--%>
-                                <div class="card mb-3">
+                                <div class="card mb-3 bg-light">
                                     <div class="card-body">
                                         <h3 class="h5 card-title">Mes publications</h3>
 

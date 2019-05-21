@@ -396,12 +396,10 @@ return nuxeoRequest.toString();</value>
                         <name>order</name>
                         <value>2</value>
                     </property>
-                    <properties>
-                        <property>
-                            <name>layout.id</name>
-                            <value>cloud-ens-search</value>
-                        </property>
-                    </properties>
+                    <property>
+                         <name>layout.id</name>
+                         <value>cloud-ens-search</value>
+                    </property>
                 </properties>
 
                 <security-constraint>
