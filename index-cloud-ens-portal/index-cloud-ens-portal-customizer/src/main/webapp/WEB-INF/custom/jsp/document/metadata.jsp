@@ -13,7 +13,11 @@
 
 <div class="metadata">
     <div class="card mb-3">
+ 
         <div class="card-body">
+			<h3 class="h5 card-title text-overflow">
+	            <span><op:translate key="DOCUMENT_METADATA_CLASSIFYING"/></span>
+	        </h3>           
             <!-- Levels -->
             <c:set var="levels" value="${document.properties['idxcl:levels']}"/>
             <c:set var="placeholder"><op:translate key="DOCUMENT_METADATA_LEVEL_PLACEHOLDER"/></c:set>
@@ -97,8 +101,12 @@
     <c:if test="${not empty share}">
         <div class="card mb-3">
             <div class="card-body">
+            
+				<h3 class="h5 card-title text-overflow">
+		            <span><op:translate key="DOCUMENT_METADATA_CONSULT"/></span>
+		        </h3>              
                 <p class="card-text">
-                    <strong><op:translate key="SHARED_LINK"/></strong><br/>
+                    <op:translate key="SHARED_LINK"/><br/>
                     <a id="${namespace}-link-url" class="btn btn-link text-overflow"
                        href="/s/${share}">https://${pageContext.request.serverName}/s/${share}</a>
                 </p>
@@ -129,14 +137,16 @@
                 </form>
 
                 <c:if test="${not empty targets}">
-                    <dt><op:translate key="SHARED_TARGET"/></dt>
-                    <c:forEach var="target" items="${targets}">
-                        <dd>
-                            <span>${target.pubOrganization}</span>
-                            /<span>${target.pubGroup}</span>
-                            /<span>${target.pubContext}</span>
-                        </dd>
-                    </c:forEach>
+                    <op:translate key="SHARED_TARGET"/>
+                    <ul class="list-unstyled">
+	                    <c:forEach var="target" items="${targets}">
+	                        <li>
+	                            <span>${target.pubOrganization}</span>
+	                            /<span>${target.pubGroup}</span>
+	                            /<span>${target.pubContext}</span>
+	                        </li>
+	                    </c:forEach>
+                    </ul>
                 </c:if>
 
                 <!-- Remote publication spaces -->
