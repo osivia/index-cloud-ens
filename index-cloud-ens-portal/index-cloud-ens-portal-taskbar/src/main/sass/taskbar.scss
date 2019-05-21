@@ -19,4 +19,14 @@
       }
     }
   }
+
+  .fancytree-node {
+    &:not(.current) {
+      color: $secondary;
+
+      &:hover {
+        color: darken($secondary, $emphasized-link-hover-darken-percentage);
+      }
+    }
+  }
 }

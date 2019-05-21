@@ -38,14 +38,14 @@ $fancytree-icon-size: 1.25rem;
 
   padding: .1rem;
 
-  color: $secondary;
+  color: $dark;
   cursor: pointer;
 
   @include text-truncate;
   @include border-radius($thumbnail-border-radius);
 
   &:hover {
-    color: darken($secondary, $emphasized-link-hover-darken-percentage);
+    color: darken($dark, $emphasized-link-hover-darken-percentage);
     background-color: $light;
   }
 
@@ -61,6 +61,17 @@ $fancytree-icon-size: 1.25rem;
   &.not-allowed {
     > :not(.fancytree-expander) {
       cursor: not-allowed;
+    }
+  }
+
+  &.fancytree-active {
+    .fancytree-selector & {
+      color: $white;
+      background-color: $primary;
+
+      &:hover {
+        background-color: darken($primary, 5%);
+      }
     }
   }
 }
