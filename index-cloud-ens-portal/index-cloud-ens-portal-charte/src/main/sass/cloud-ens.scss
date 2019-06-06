@@ -4,6 +4,7 @@ $breadcrumb-bg: transparent;
 $breadcrumb-divider: quote(">");
 
 @import "bootstrap/bootstrap";
+@import "bootstrap3-compatibility/compatibility";
 @import "osivia/osivia";
 
 @import "cloud-ens/layout";
