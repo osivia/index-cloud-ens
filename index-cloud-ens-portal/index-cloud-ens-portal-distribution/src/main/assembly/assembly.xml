@@ -17,11 +17,12 @@
             <includes>
                 <!-- index education -->
                 <include>${project.groupId}:index-cloud-ens-portal-charte:war:${project.version}</include>
-                 <include>${project.groupId}:index-cloud-ens-portal-customizer:war:${project.version}</include>
+                <include>${project.groupId}:index-cloud-ens-portal-customizer:war:${project.version}</include>
                 <include>${project.groupId}.directory:index-cloud-ens-portal-directory-ear:ear:${project.version}</include>
                 <include>${project.groupId}:index-cloud-ens-portal-initializer:war:${project.version}</include>                
                 <include>${project.groupId}:index-cloud-ens-portal-ws:war:${project.version}</include>     
                 <include>${project.groupId}:index-cloud-ens-portal-taskbar:war:${project.version}</include>
+                <include>${project.groupId}:index-cloud-ens-portal-file-browser-filter:war:${project.version}</include>
 
                  <!-- Toutatice CMS -->
                 <include>toutatice-portail.cms:toutatice-portail-cms-nuxeo-web:war:${toutatice.version}</include>

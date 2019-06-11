@@ -1,0 +1,43 @@
+@import "../../../../index-cloud-ens-portal-charte/src/main/sass/cloud-ens/variables";
+
+
+.file-browser-filter {
+  .select2-container--bootstrap4 {
+    .select2-selection {
+      height: auto;
+
+      padding: 0;
+
+      border: {
+        style: none;
+
+        radius: 0;
+      }
+      @include font-size($input-font-size-sm);
+      line-height: $input-line-height-sm;
+    }
+
+    &.select2-container--focus {
+      .select2-selection {
+        box-shadow: none;
+      }
+    }
+
+    .select2-selection__rendered {
+      color: $primary;
+      font-weight: $font-weight-bold;
+
+      .select2-selection__placeholder {
+        @include caret;
+        color: $secondary;
+        font-weight: $font-weight-normal;
+      }
+    }
+  }
+
+  &.select2-dropdown {
+    .select2-container--bootstrap4 & {
+      min-width: 200px;
+    }
+  }
+}
