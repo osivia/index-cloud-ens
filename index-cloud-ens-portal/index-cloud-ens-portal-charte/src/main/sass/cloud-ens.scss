@@ -1,7 +1,4 @@
-$primary: #11795d;
-
-$breadcrumb-bg: transparent;
-$breadcrumb-divider: quote(">");
+@import "cloud-ens/variables";
 
 @import "bootstrap/bootstrap";
 @import "bootstrap3-compatibility/compatibility";

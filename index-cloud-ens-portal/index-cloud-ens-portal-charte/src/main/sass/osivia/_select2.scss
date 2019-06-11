@@ -77,6 +77,7 @@
 
     margin-bottom: 0 !important;
     padding-left: 0 !important;
+    padding-right: 0 !important;
 
     list-style: none;
   }
@@ -136,6 +137,7 @@
 
   .select2-results__option {
     padding: $input-padding-y $input-padding-x;
+    @include text-truncate;
 
     &.select2-results__option--highlighted {
       background-color: $gray-300;
