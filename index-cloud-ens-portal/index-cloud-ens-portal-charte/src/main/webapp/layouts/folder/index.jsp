@@ -48,11 +48,21 @@
                     <div class="row">
                         <div class="col-auto">
                             <p class="text-muted">
-                                <small>Filtrer par&nbsp;:</small>
+                                <small><op:translate key="FILTERS_REGION_LABEL"/></small>
                             </p>
                         </div>
 
-                        <p:region regionName="filters"/>
+                        <div class="col-auto">
+                            <p:region regionName="filter-1"/>
+                        </div>
+
+                        <div class="col-auto">
+                            <p:region regionName="filter-2"/>
+                        </div>
+
+                        <div class="col-auto">
+                            <p:region regionName="filter-3"/>
+                        </div>
                     </div>
 
                     <p:region regionName="top"/>
