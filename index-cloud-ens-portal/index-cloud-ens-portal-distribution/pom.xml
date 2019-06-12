@@ -70,6 +70,12 @@
             <version>${project.version}</version>
             <type>war</type>
         </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>index-cloud-ens-portal-highest-levels</artifactId>
+            <version>${project.version}</version>
+            <type>war</type>
+        </dependency>
         
         <!-- Toutatice CMS -->
         <dependency>

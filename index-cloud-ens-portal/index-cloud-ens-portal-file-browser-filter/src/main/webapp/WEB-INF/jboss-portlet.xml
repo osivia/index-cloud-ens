@@ -15,4 +15,13 @@
         </header-content>
     </portlet>
 
+
+    <portlet>
+        <portlet-name>index-cloud-ens-file-browser-filter-eraser</portlet-name>
+
+        <transaction>
+            <trans-attribute>Required</trans-attribute>
+        </transaction>
+    </portlet>
+
 </portlet-app>

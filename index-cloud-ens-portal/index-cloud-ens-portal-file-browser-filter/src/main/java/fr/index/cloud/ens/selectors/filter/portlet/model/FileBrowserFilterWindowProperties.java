@@ -1,4 +1,4 @@
-package fr.index.cloud.ens.selectors.portlet.model;
+package fr.index.cloud.ens.selectors.filter.portlet.model;
 
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;

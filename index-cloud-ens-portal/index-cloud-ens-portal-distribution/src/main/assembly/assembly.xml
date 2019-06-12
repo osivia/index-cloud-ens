@@ -23,6 +23,7 @@
                 <include>${project.groupId}:index-cloud-ens-portal-ws:war:${project.version}</include>     
                 <include>${project.groupId}:index-cloud-ens-portal-taskbar:war:${project.version}</include>
                 <include>${project.groupId}:index-cloud-ens-portal-file-browser-filter:war:${project.version}</include>
+                <include>${project.groupId}:index-cloud-ens-portal-highest-levels:war:${project.version}</include>
 
                  <!-- Toutatice CMS -->
                 <include>toutatice-portail.cms:toutatice-portail-cms-nuxeo-web:war:${toutatice.version}</include>

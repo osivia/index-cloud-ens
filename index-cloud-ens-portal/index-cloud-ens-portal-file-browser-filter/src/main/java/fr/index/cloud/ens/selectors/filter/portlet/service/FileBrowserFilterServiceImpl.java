@@ -1,10 +1,10 @@
-package fr.index.cloud.ens.selectors.portlet.service;
+package fr.index.cloud.ens.selectors.filter.portlet.service;
 
-import fr.index.cloud.ens.selectors.portlet.model.FileBrowserFilterForm;
-import fr.index.cloud.ens.selectors.portlet.model.FileBrowserFilterVocabularyItem;
-import fr.index.cloud.ens.selectors.portlet.model.FileBrowserFilterWindowProperties;
-import fr.index.cloud.ens.selectors.portlet.repository.FileBrowserFilterRepository;
-import fr.toutatice.portail.cms.nuxeo.api.PageSelectors;
+import fr.index.cloud.ens.selectors.common.portlet.service.AbstractFileBrowserFilterServiceImpl;
+import fr.index.cloud.ens.selectors.filter.portlet.model.FileBrowserFilterForm;
+import fr.index.cloud.ens.selectors.filter.portlet.model.FileBrowserFilterVocabularyItem;
+import fr.index.cloud.ens.selectors.filter.portlet.model.FileBrowserFilterWindowProperties;
+import fr.index.cloud.ens.selectors.filter.portlet.repository.FileBrowserFilterRepository;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import org.apache.commons.collections.CollectionUtils;
@@ -19,10 +19,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
 
-import javax.portlet.ActionResponse;
 import javax.portlet.PortletException;
 import javax.portlet.PortletRequest;
-import javax.portlet.PortletResponse;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
@@ -33,15 +31,12 @@ import java.util.*;
  * File browser filter portlet service implementation.
  *
  * @author Cédric Krommenhoek
+ * @see AbstractFileBrowserFilterServiceImpl
  * @see FileBrowserFilterService
  */
 @Service
-public class FileBrowserFilterServiceImpl implements FileBrowserFilterService {
+public class FileBrowserFilterServiceImpl extends AbstractFileBrowserFilterServiceImpl implements FileBrowserFilterService {
 
-    /**
-     * Selectors parameter.
-     */
-    private static final String SELECTORS_PARAMETER = "selectors";
     /**
      * Selector clear parameter.
      */
@@ -181,43 +176,6 @@ public class FileBrowserFilterServiceImpl implements FileBrowserFilterService {
         }
 
         this.setSelectors(portalControllerContext, selectors);
-    }
-
-
-    /**
-     * Get selectors.
-     *
-     * @param portalControllerContext portal controller context
-     * @return selectors
-     */
-    private Map<String, List<String>> getSelectors(PortalControllerContext portalControllerContext) {
-        // Portlet request
-        PortletRequest request = portalControllerContext.getRequest();
-
-        return PageSelectors.decodeProperties(request.getParameter(SELECTORS_PARAMETER));
-    }
-
-
-    /**
-     * Set selectors.
-     *
-     * @param portalControllerContext portal controller context
-     * @param selectors               selectors
-     */
-    private void setSelectors(PortalControllerContext portalControllerContext, Map<String, List<String>> selectors) {
-        // Portlet response
-        PortletResponse response = portalControllerContext.getResponse();
-        // Action response
-        ActionResponse actionResponse;
-        if (response instanceof ActionResponse) {
-            actionResponse = (ActionResponse) response;
-        } else {
-            actionResponse = null;
-        }
-
-        if (actionResponse != null) {
-            actionResponse.setRenderParameter(SELECTORS_PARAMETER, PageSelectors.encodeProperties(selectors));
-        }
     }
 
 

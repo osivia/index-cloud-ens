@@ -1,7 +1,7 @@
-package fr.index.cloud.ens.selectors.portlet.controller;
+package fr.index.cloud.ens.selectors.filter.portlet.controller;
 
-import fr.index.cloud.ens.selectors.portlet.model.FileBrowserFilterForm;
-import fr.index.cloud.ens.selectors.portlet.service.FileBrowserFilterService;
+import fr.index.cloud.ens.selectors.filter.portlet.model.FileBrowserFilterForm;
+import fr.index.cloud.ens.selectors.filter.portlet.service.FileBrowserFilterService;
 import net.sf.json.JSONArray;
 import org.osivia.portal.api.context.PortalControllerContext;
 import org.springframework.beans.factory.annotation.Autowired;

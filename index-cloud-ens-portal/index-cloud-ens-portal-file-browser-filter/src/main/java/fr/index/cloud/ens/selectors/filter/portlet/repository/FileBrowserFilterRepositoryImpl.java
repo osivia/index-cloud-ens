@@ -1,6 +1,6 @@
-package fr.index.cloud.ens.selectors.portlet.repository;
+package fr.index.cloud.ens.selectors.filter.portlet.repository;
 
-import fr.index.cloud.ens.selectors.portlet.repository.command.LoadVocabularyCommand;
+import fr.index.cloud.ens.selectors.filter.portlet.repository.command.LoadVocabularyCommand;
 import fr.toutatice.portail.cms.nuxeo.api.INuxeoCommand;
 import fr.toutatice.portail.cms.nuxeo.api.NuxeoController;
 import fr.toutatice.portail.cms.nuxeo.api.VocabularyHelper;

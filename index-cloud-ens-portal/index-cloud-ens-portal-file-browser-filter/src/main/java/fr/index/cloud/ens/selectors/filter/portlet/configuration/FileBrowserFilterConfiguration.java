@@ -1,4 +1,4 @@
-package fr.index.cloud.ens.selectors.portlet.configuration;
+package fr.index.cloud.ens.selectors.filter.portlet.configuration;
 
 import fr.toutatice.portail.cms.nuxeo.api.CMSPortlet;
 import org.osivia.portal.api.internationalization.IBundleFactory;
@@ -26,7 +26,7 @@ import javax.portlet.PortletException;
  * @see PortletConfigAware
  */
 @Configuration
-@ComponentScan(basePackages = "fr.index.cloud.ens.selectors.portlet")
+@ComponentScan(basePackages = "fr.index.cloud.ens.selectors.filter.portlet")
 public class FileBrowserFilterConfiguration extends CMSPortlet implements PortletConfigAware {
 
     /**
@@ -70,7 +70,7 @@ public class FileBrowserFilterConfiguration extends CMSPortlet implements Portle
         InternalResourceViewResolver viewResolver = new InternalResourceViewResolver();
         viewResolver.setCache(true);
         viewResolver.setViewClass(JstlView.class);
-        viewResolver.setPrefix("/WEB-INF/jsp/");
+        viewResolver.setPrefix("/WEB-INF/jsp/filter/");
         viewResolver.setSuffix(".jsp");
         return viewResolver;
     }

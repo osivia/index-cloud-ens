@@ -81,6 +81,7 @@
 		<module>index-cloud-ens-portal-initializer</module>
         <module>index-cloud-ens-portal-taskbar</module>
         <module>index-cloud-ens-portal-file-browser-filter</module>
+        <module>index-cloud-ens-portal-highest-levels</module>
         <module>index-cloud-ens-portal-distribution</module>
 		<module>index-cloud-ens-portal-ws</module>
 		<module>index-cloud-ens-portal-generator</module>

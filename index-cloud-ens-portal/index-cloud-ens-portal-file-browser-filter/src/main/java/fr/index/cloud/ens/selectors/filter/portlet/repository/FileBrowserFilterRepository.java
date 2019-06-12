@@ -1,4 +1,4 @@
-package fr.index.cloud.ens.selectors.portlet.repository;
+package fr.index.cloud.ens.selectors.filter.portlet.repository;
 
 import net.sf.json.JSONArray;
 import org.osivia.portal.api.context.PortalControllerContext;
