@@ -2,19 +2,23 @@ package fr.index.cloud.ens.customizer.plugin.menubar;
 
 import fr.toutatice.portail.cms.nuxeo.api.NuxeoController;
 import org.apache.commons.lang.StringUtils;
+import org.jboss.portal.theme.impl.render.dynamic.DynaRenderOptions;
 import org.osivia.portal.api.PortalException;
 import org.osivia.portal.api.cms.DocumentContext;
 import org.osivia.portal.api.cms.DocumentType;
 import org.osivia.portal.api.context.PortalControllerContext;
+import org.osivia.portal.api.internationalization.Bundle;
+import org.osivia.portal.api.internationalization.IBundleFactory;
+import org.osivia.portal.api.internationalization.IInternationalizationService;
+import org.osivia.portal.api.locator.Locator;
 import org.osivia.portal.api.menubar.MenubarContainer;
 import org.osivia.portal.api.menubar.MenubarDropdown;
 import org.osivia.portal.api.menubar.MenubarItem;
 import org.osivia.portal.api.menubar.MenubarModule;
+import org.osivia.portal.api.urls.IPortalUrlFactory;
+import org.osivia.portal.api.urls.PortalUrlType;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 /**
  * Menubar module.
@@ -23,8 +27,38 @@ import java.util.List;
  */
 public class CloudEnsMenubarModule implements MenubarModule {
 
+    /**
+     * Document edition portlet instance.
+     */
+    private static final String DOCUMENT_EDITION_PORTLET_INSTANCE = "osivia-services-document-edition-instance";
+
+
+    /**
+     * Portal URL factory.
+     */
+    private final IPortalUrlFactory portalUrlFactory;
+    /**
+     * Internationalization bundle factory.
+     */
+    private final IBundleFactory bundleFactory;
+
+
+    /**
+     * Constructor.
+     */
+    public CloudEnsMenubarModule() {
+        super();
+
+        // Portal URL factory
+        this.portalUrlFactory = Locator.findMBean(IPortalUrlFactory.class, IPortalUrlFactory.MBEAN_NAME);
+        // Internationalization bundle factory
+        IInternationalizationService internationalizationService = Locator.findMBean(IInternationalizationService.class, IInternationalizationService.MBEAN_NAME);
+        this.bundleFactory = internationalizationService.getBundleFactory(this.getClass().getClassLoader());
+    }
+
+
     @Override
-    public void customizeSpace(PortalControllerContext portalControllerContext, List<MenubarItem> menubar, DocumentContext spaceDocumentContext) throws PortalException {
+    public void customizeSpace(PortalControllerContext portalControllerContext, List<MenubarItem> menubar, DocumentContext spaceDocumentContext) {
         // Base path
         String basePath;
         if (spaceDocumentContext == null) {
@@ -41,7 +75,7 @@ public class CloudEnsMenubarModule implements MenubarModule {
                 MenubarItem item = iterator.next();
                 MenubarContainer parent = item.getParent();
 
-                if ((parent != null) && (parent instanceof MenubarDropdown)) {
+                if (parent instanceof MenubarDropdown) {
                     MenubarDropdown dropdown = (MenubarDropdown) parent;
                     if (StringUtils.equals("CONFIGURATION", dropdown.getId())) {
                         iterator.remove();
@@ -54,6 +88,10 @@ public class CloudEnsMenubarModule implements MenubarModule {
 
     @Override
     public void customizeDocument(PortalControllerContext portalControllerContext, List<MenubarItem> menubar, DocumentContext documentContext) throws PortalException {
+        // Internationalization bundle
+        Bundle bundle = this.bundleFactory.getBundle(portalControllerContext.getHttpServletRequest().getLocale());
+
+
         // Path
         String path;
         if (documentContext == null) {
@@ -62,7 +100,7 @@ public class CloudEnsMenubarModule implements MenubarModule {
             path = documentContext.getCmsPath();
         }
 
-        if (StringUtils.startsWith(path, "/default-domain/UserWorkspaces/")) {
+        if ((documentContext != null) && StringUtils.startsWith(path, "/default-domain/UserWorkspaces/")) {
             // Inside user workspace
             NuxeoController nuxeoController = new NuxeoController(portalControllerContext);
 
@@ -70,7 +108,7 @@ public class CloudEnsMenubarModule implements MenubarModule {
             DocumentType documentType = documentContext.getDocumentType();
 
             // Removed menubar item identifiers
-            List<String> itemIdentifiers = new ArrayList<>(Arrays.asList(new String[]{"WORKSPACE_ACL_MANAGEMENT", "SUBSCRIBE_URL"}));
+            List<String> itemIdentifiers = new ArrayList<>(Arrays.asList("WORKSPACE_ACL_MANAGEMENT", "SUBSCRIBE_URL"));
             // Removed menubar dropdown menu identifiers
             List<String> dropdownIdentifiers = new ArrayList<>();
 
@@ -97,7 +135,21 @@ public class CloudEnsMenubarModule implements MenubarModule {
 
                 if (itemIdentifiers.contains(item.getId())) {
                     iterator.remove();
-                } else if ((parent != null) && (parent instanceof MenubarDropdown)) {
+                } else if ((documentType != null) && StringUtils.equals(item.getId(), "EDIT")) {
+                    DocumentEditionType documentEditionType = DocumentEditionType.fromName(documentType.getName());
+                    if ((documentEditionType != null) && documentEditionType.isEdition()) {
+                        this.updateDocumentEditionMenubarItem(portalControllerContext, path, documentType.getName(), item, false, bundle);
+                    } else {
+                        item.setVisible(false);
+                    }
+                } else if (StringUtils.startsWith(item.getId(), "ADD_")) {
+                    DocumentEditionType documentEditionType = DocumentEditionType.fromAddId(item.getId());
+                    if ((documentEditionType != null) && documentEditionType.isCreation()) {
+                        this.updateDocumentEditionMenubarItem(portalControllerContext, path, documentEditionType.getName(), item, true, bundle);
+                    } else {
+                        item.setVisible(false);
+                    }
+                } else if (parent instanceof MenubarDropdown) {
                     MenubarDropdown dropdown = (MenubarDropdown) parent;
                     if (dropdownIdentifiers.contains(dropdown.getId())) {
                         iterator.remove();
@@ -105,6 +157,52 @@ public class CloudEnsMenubarModule implements MenubarModule {
                 }
             }
         }
+    }
+
+
+    /**
+     * Update document edition menubar item.
+     *
+     * @param portalControllerContext portal controller context
+     * @param path                    document path
+     * @param type                    document type
+     * @param item                    menubar item
+     * @param creation                creation indicator
+     * @param bundle                  internationalization bundle
+     */
+    private void updateDocumentEditionMenubarItem(PortalControllerContext portalControllerContext, String path, String type, MenubarItem item, boolean creation, Bundle bundle) throws PortalException {
+        // Window properties
+        Map<String, String> properties = new HashMap<>();
+        if (creation) {
+            properties.put("osivia.document.edition.parent-path", path);
+            properties.put("osivia.document.edition.document-type", type);
+        } else {
+            properties.put("osivia.document.edition.path", path);
+        }
+        properties.put(DynaRenderOptions.PARTIAL_REFRESH_ENABLED, String.valueOf(true));
+        properties.put("osivia.ajaxLink", "1");
+
+        // URL
+        String url = this.portalUrlFactory.getStartPortletUrl(portalControllerContext, DOCUMENT_EDITION_PORTLET_INSTANCE, properties, PortalUrlType.MODAL);
+
+        // Title
+        StringBuilder key = new StringBuilder();
+        key.append("DOCUMENT_");
+        if (creation) {
+            key.append("CREATION_");
+        } else {
+            key.append("EDITION_");
+        }
+        key.append(StringUtils.upperCase(type));
+        String title = bundle.getString(key.toString());
+
+        // Update menubar item
+        item.setUrl("javascript:");
+        item.setOnclick(null);
+        item.setHtmlClasses(null);
+        item.getData().put("target", "#osivia-modal");
+        item.getData().put("load-url", url);
+        item.getData().put("title", title);
     }
 
 }
