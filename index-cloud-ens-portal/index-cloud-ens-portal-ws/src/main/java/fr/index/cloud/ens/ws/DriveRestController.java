@@ -38,13 +38,16 @@ import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 
 import fr.index.cloud.ens.ws.beans.CreateFolderBean;
 import fr.index.cloud.ens.ws.beans.CreateUserBean;
+import fr.index.cloud.ens.ws.beans.GetSharedUrlBean;
 import fr.index.cloud.ens.ws.beans.PublishBean;
 import fr.index.cloud.ens.ws.beans.UnpublishBean;
 import fr.index.cloud.ens.ws.beans.UploadBean;
 import fr.index.cloud.ens.ws.commands.CreateFolderCommand;
 import fr.index.cloud.ens.ws.commands.FetchByPubIdCommand;
+import fr.index.cloud.ens.ws.commands.FetchByShareLinkCommand;
 import fr.index.cloud.ens.ws.commands.FetchByTitleCommand;
 import fr.index.cloud.ens.ws.commands.FolderGetChildrenCommand;
+import fr.index.cloud.ens.ws.commands.GetSharedUrlCommand;
 import fr.index.cloud.ens.ws.commands.GetUserProfileCommand;
 import fr.index.cloud.ens.ws.commands.PublishCommand;
 import fr.index.cloud.ens.ws.commands.UnpublishCommand;
@@ -422,6 +425,61 @@ public class DriveRestController {
         return returnObject;
     }
 
+    
+    /**
+     * Publish a document to the specified target
+     * 
+     * @param file
+     * @param parentWebId
+     * @param extraField
+     * @param request
+     * @param response
+     * @throws Exception
+     */
+
+    @RequestMapping(value = "/Drive.getShareUrl", method = RequestMethod.POST)
+    @ResponseStatus(HttpStatus.OK)
+    public Map<String, Object> getSharedUrl(@RequestBody GetSharedUrlBean sharedUrlBean, HttpServletRequest request, HttpServletResponse response, Principal principal)
+            throws Exception {
+
+        WSPortalControllerContext wsCtx = new WSPortalControllerContext(request, response, principal);
+
+        Map<String, Object> returnObject = new LinkedHashMap<>();
+        returnObject.put("returnCode", ErrorMgr.ERR_OK);
+        try {
+
+            NuxeoController nuxeoController = getNuxeocontroller(request, principal);
+
+  
+            String path = IWebIdService.FETCH_PATH_PREFIX + sharedUrlBean.getContentId();
+            NuxeoDocumentContext ctx = nuxeoController.getDocumentContext(path);
+
+            Document currentDoc = wrapContentFetching(nuxeoController, path);
+
+
+            // Execute publish
+            INuxeoCommand command = new GetSharedUrlCommand(currentDoc, sharedUrlBean.getFormat());
+
+            @SuppressWarnings("unchecked")
+            Map<String, String> returnMap = (Map<String, String>) nuxeoController.executeNuxeoCommand(command);
+
+            // Prepare results
+            returnObject.put("shareUrl", getUrl(request) + SHARE_URL_PREFIX + returnMap.get("shareId"));
+            returnMap.remove("shareId");
+
+
+            // Force cache initialisation
+            ctx.reload();
+
+        } catch (Exception e) {
+            returnObject = errorMgr.handleDefaultExceptions(wsCtx, e);
+        }
+
+
+        return returnObject;
+    }
+
+    
 
     /**
      * Publish a document to the specified target
@@ -447,15 +505,32 @@ public class DriveRestController {
 
             NuxeoController nuxeoController = getNuxeocontroller(request, principal);
 
+            String url = publishBean.getShareUrl();
+            String path = null;
+            int iName = url.lastIndexOf('/');
+            if( iName != -1)	{
+                //TODO : call fetchShare with a new param
+            	
+                // Execute publish
+                INuxeoCommand command = new FetchByShareLinkCommand(url.substring(iName+1));
 
-            String path = IWebIdService.FETCH_PATH_PREFIX + publishBean.getContentId();
+                @SuppressWarnings("unchecked")
+                Documents docs= (Documents) nuxeoController.executeNuxeoCommand(command);
+                if( docs.size() != 1)
+                	throw new NuxeoException(NuxeoException.ERROR_NOTFOUND);
+            	//Document doc = nuxeoController.fetchSharedDocument(url.substring(iName+1));
+            	
+            	
+                path = docs.get(0).getPath();
+            }
+            
+
             NuxeoDocumentContext ctx = nuxeoController.getDocumentContext(path);
 
             Document currentDoc = wrapContentFetching(nuxeoController, path);
 
             // set qualifiers
             Map<String, String> properties = parseProperties(publishBean.getProperties());
-
 
             // Execute publish
             INuxeoCommand command = new PublishCommand(currentDoc, publishBean.getFormat(), publishBean.getPubOrganization(), publishBean.getPubGroup(),
@@ -465,8 +540,7 @@ public class DriveRestController {
             Map<String, String> returnMap = (Map<String, String>) nuxeoController.executeNuxeoCommand(command);
 
             // Prepare results
-            returnObject.put("shareUrl", getUrl(request) + SHARE_URL_PREFIX + returnMap.get("shareId"));
-            returnObject.put("pudId", returnMap.get("pudId"));
+            returnObject.put("pubId", returnMap.get("pubId"));
 
             // Force cache initialisation
             ctx.reload();

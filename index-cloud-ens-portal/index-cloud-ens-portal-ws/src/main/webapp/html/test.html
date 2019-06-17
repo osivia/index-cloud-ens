@@ -108,6 +108,10 @@
                         jsteux (lien authentifié)</a>
                 </li>
             </ul>
+            
+				<input type="button"
+							class="btn btn-primary" value="User profile" id="btnUserProfile" />	
+            
         </div>
 
         <div class="col-lg-4">
@@ -122,55 +126,74 @@
 
         <div class="col-lg-2">
             <div id="detail">
-                <h3>Drive.publish</h3>
+                <input type="hidden" 
+				name="contentId" id="contentId" />
+					
+				<h3>Drive.getSharedUrl</h3>
+					<form method="POST" enctype="multipart/form-data" id="publishForm">
+	
+						<div class="form-group">
+							<label for="level">sharedFormat</label> <input name="sharedFormat"
+								class="form-control" id="sharedFormat" />
+						</div>
 
-                <form method="POST" enctype="multipart/form-data" id="publishForm">
-                    <div class="form-group">
-                        <a id="pubShare" target="_blank">Download url</a> <br/>
-                        <a id="pubViewer" target="_blank">Viewer url</a>
-                    </div>
-                    <div class="form-group">
-                        <label for="level">pubFormat</label> <input name="pubFormat"
-                                                                    class="form-control" id="pubFormat"/>
-                    </div>
+						<div class="form-group">
+							<label for="level">shareUrl</label> <input readonly name="shareUrl"
+								class="form-control" id="shareUrl" />
+						</div>	
+						
+						<input
+							type="button" class="btn btn-primary" value="get"
+							id="btnGetSharedUrl" />
+					</form>				
+				
+					
+				<h3>Drive.publish</h3>
+					<form method="POST" enctype="multipart/form-data" id="publishForm">
+						<div class="form-group">
+							<a id="pubShare" target="_blank">Download url</a> <br/>
+							<a id="pubViewer" target="_blank">Viewer url</a>
+						</div>
+				
 
-                    <div class="form-group">
-                        <label for="level">pubOrganization</label> <input name="pubOrganization"
-                                                                          class="form-control" id="pubOrganization"/>
-                    </div>
-                    <div class="form-group">
-                        <label for="level">pubGroup</label> <input name="pubGroup"
-                                                                   class="form-control" id="pubGroup"/>
-                    </div>
-                    <div class="form-group">
-                        <label for="level">pubContext</label> <input name="pubContext"
-                                                                     class="form-control" id="pubContext"/>
-                    </div>
-                    <div class="form-group">
-                        <label for="level">Niveau</label> <input name="level"
-                                                                 class="form-control" id="pubLevel"/>
-                    </div>
-                    <div class="form-group">
-                        <label for="level">Matière</label> <input name="subject"
-                                                                  class="form-control" id="pubSubject"/>
-                    </div>
-                    <input type="hidden" name="contentId" id="contentId"/> <input
-                        type="button" class="btn btn-primary" value="Publish"
-                        id="btnPubSubmit"/>
-                </form>
+						<div class="form-group">
+							<label for="level">pubOrganization</label> <input name="pubOrganization"
+								class="form-control" id="pubOrganization" />
+						</div>
+						<div class="form-group">
+							<label for="level">pubGroup</label> <input name="pubGroup"
+								class="form-control" id="pubGroup" />
+						</div>	
+						<div class="form-group">
+							<label for="level">pubContext</label> <input name="pubContext"
+								class="form-control" id="pubContext" />
+						</div>							
+						<div class="form-group">
+							<label for="level">Niveau</label> <input name="level"
+								class="form-control" id="pubLevel" />
+						</div>
+						<div class="form-group">
+							<label for="level">Matière</label> <input name="subject"
+								class="form-control" id="pubSubject" />
+						</div>						
 
+						<input
+							type="button" class="btn btn-primary" value="Publish"
+							id="btnPubSubmit" />
+					</form>
 
-                <h3>Drive.unpublish</h3>
+				
+				<h3>Drive.unpublish</h3>
 
-                <form method="POST" enctype="multipart/form-data" id="unpublishForm">
-                    <div class="form-group">
-                        <label for="level">unpubId</label> <input name="unpubId"
-                                                                  class="form-control" id="unpubId"/>
-                    </div>
-                    <input
-                            type="button" class="btn btn-primary" value="Unpublish"
-                            id="btnUnpubSubmit"/>
-                </form>
+					<form method="POST" enctype="multipart/form-data" id="unpublishForm">
+						<div class="form-group">
+							<label for="level">unpubId</label> <input name="unpubId"
+								class="form-control" id="unpubId" />
+						</div>	
+						<input
+							type="button" class="btn btn-primary" value="Unpublish"
+							id="btnUnpubSubmit" />
+					</form>
             </div>
         </div>
 
