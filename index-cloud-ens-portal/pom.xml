@@ -37,7 +37,7 @@
 
         
         <!-- Identity SSO -->
-        <identity-sso.version>3.0.10</identity-sso.version>
+        <identity-sso.version>3.0.11</identity-sso.version>
  
         <!-- Java Melody -->
         <java-melody.version>1.2</java-melody.version>
@@ -199,9 +199,9 @@
                     </executions>
                     <configuration>
                         <inputPath>${project.basedir}/src/main/sass/</inputPath>
-                        <outputPath>${project.basedir}/src/main/webapp/css</outputPath>
+                        <outputPath>${project.build.directory}/${project.artifactId}-${project.version}/css</outputPath>
                         <outputStyle>compressed</outputStyle>
-                        <sourceMapOutputPath>${project.basedir}/src/main/webapp/css</sourceMapOutputPath>
+                        <sourceMapOutputPath>${project.build.directory}/${project.artifactId}-${project.version}/css</sourceMapOutputPath>
                     </configuration>
                 </plugin>
 
