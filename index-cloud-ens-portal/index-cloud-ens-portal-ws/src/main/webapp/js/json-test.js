@@ -369,6 +369,44 @@ $JQry(function() {
 						});
 			});
 
+	$JQry("#btnGetSharedUrl")
+	.each(
+			function(index, element) {
+
+				var $element = $JQry(element);
+				$element
+						.click(function() {
+							var params = {};
+							params.contentId = $JQry('#contentId').val();
+							params.format = $JQry('#sharedFormat').val();									
+							$JQry
+									.ajax({
+										type : "POST",
+										url : oauth.params.resourceUrl+"/Drive.getShareUrl",
+										headers : {
+											"Authorization" : "Bearer " + oauth.getToken()
+										},
+										dataType : 'json',
+										contentType : 'application/json',
+										data : JSON.stringify(params),
+										
+										success : function(jsonData) {
+											if (jsonData.returnCode != 0)
+												$JQry.notify("Error #"+jsonData.returnCode, "error");
+											else	{
+												$JQry.notify("Get Share Url", "success");
+												$JQry('#shareUrl').val(jsonData.shareUrl);
+											}
+
+										},
+										error : function(e) {
+											$JQry.notify("HTTP Error #"+e.status, "error");
+										}
+										
+									});
+
+						});
+			});
 	
 	
 	
@@ -381,8 +419,7 @@ $JQry(function() {
 						$element
 								.click(function() {
 									var params = {};
-									params.contentId = $JQry('#contentId').val();
-									params.format = $JQry('#pubFormat').val();									
+									params.shareUrl = $JQry('#shareUrl').val();
 									params.pubOrganization = $JQry('#pubOrganization').val();
 									params.pubGroup = $JQry('#pubGroup').val();									
 									params.pubContext = $JQry('#pubContext').val();									
@@ -405,8 +442,9 @@ $JQry(function() {
 														$JQry.notify("Error #"+jsonData.returnCode, "error");
 													else	{
 														$JQry.notify("Contenu publié", "success");
-														$JQry('#pubShare').attr("href",jsonData.shareUrl);
-														$JQry('#pubViewer').attr("href",jsonData.viewerUrl);														
+														$JQry('#pubShare').attr("href",$JQry('#shareUrl').val());
+														$JQry('#pubViewer').attr("href",jsonData.viewerUrl);
+														$JQry('#unpubId').val(jsonData.pubId);
 													}
 
 												},
@@ -427,7 +465,6 @@ $JQry(function() {
 				$element
 						.click(function() {
 							var params = {};
-							params.contentId = $JQry('#contentId').val();
 							params.pubId = $JQry('#unpubId').val();
 
 
@@ -564,6 +601,43 @@ $JQry(function() {
 		
 	});
 
+	
+	
+	$JQry("#btnUserProfile").each(function(index, element) {
+
+		var $element = $JQry(element);
+		$element.click(function() {
+				var url = oauth.params.resourceUrl+"/User.getProfile";
+
+
+
+				$JQry
+						.ajax({
+							type : "GET",
+							url : url,
+							headers : {
+								'Content-Type' : undefined,
+								"Authorization" : "Bearer " + oauth.getToken()
+							},
+							contentType : false,
+							cache : false,
+							timeout : 600000,
+							success : function(jsonData) {
+								if (jsonData.returnCode != 0)
+									$JQry.notify("Error #"+jsonData.returnCode, "error");
+								else {
+										$JQry.notify("profile id:"+jsonData.id, "success");									
+									}
+							},
+							error : function(xhr, status, e) {
+								alert(e);
+							}
+						});
+	
+		});
+		
+	});
+	
 	
 	
 	$JQry("#btnCreateUser").each(function(index, element) {

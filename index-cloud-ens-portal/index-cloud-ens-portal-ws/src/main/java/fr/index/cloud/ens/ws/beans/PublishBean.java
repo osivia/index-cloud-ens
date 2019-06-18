@@ -8,12 +8,47 @@ import java.util.Map;
  * @author Jean-Sébastien
  */
 public class PublishBean {
-    private String contentId;
-    private String format;    
+    
+    /** The share url. */
+    private String shareUrl;
+    
+ 
+
+	/** The format. */
+	private String format;    
+    
+    /** The pub organization. */
     private String pubOrganization;    
+    
+    /** The pub group. */
     private String pubGroup;    
+    
+    /** The pub context. */
     private String pubContext;    
     
+    
+    
+    
+    /**
+     * Gets the share url.
+     *
+     * @return the share url
+     */
+    public String getShareUrl() {
+		return shareUrl;
+	}
+
+
+
+	/**
+	 * Sets the share url.
+	 *
+	 * @param shareUrl the new share url
+	 */
+	public void setShareUrl(String shareUrl) {
+		this.shareUrl = shareUrl;
+	}
+
     
     /**
      * Getter for pubGroup.
@@ -54,6 +89,7 @@ public class PublishBean {
     }
 
 
+    /** The properties. */
     // Classifiers
     Map<String,String> properties;
     
@@ -95,24 +131,6 @@ public class PublishBean {
 
     
 
-
-    
-    /**
-     * Getter for contentId.
-     * @return the contentId
-     */
-    public String getContentId() {
-        return contentId;
-    }
-
-    
-    /**
-     * Setter for contentId.
-     * @param contentId the contentId to set
-     */
-    public void setContentId(String contentId) {
-        this.contentId = contentId;
-    }
 
     
     /**

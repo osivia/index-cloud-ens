@@ -78,8 +78,10 @@ public class OAuth2ServerConfig {
                     // Since we want the protected resources to be accessible in the UI as well we need
                     // session creation to be allowed (it's disabled by default in 2.0.6)
                     .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED).and().requestMatchers()
-                    .antMatchers("/rest/Drive.**", "/rest/Admin.**", "/photos/**", "/oauth/users/**", "/oauth/clients/**", "/me").and().authorizeRequests()
-                    .antMatchers("/rest/Drive.**").access("#oauth2.hasScope('drive')").antMatchers("/rest/Admin.**").access("hasRole('ROLE_ADMIN')")
+                    .antMatchers("/rest/Drive.**", "/rest/Admin.**", "/rest/User.getProfile", "/oauth/users/**", "/oauth/clients/**", "/me").and().authorizeRequests()
+                    .antMatchers("/rest/User.getProfile").access("#oauth2.hasScope('drive')")
+                    .antMatchers("/rest/Drive.**").access("#oauth2.hasScope('drive')")
+                    .antMatchers("/rest/Admin.**").access("hasRole('ROLE_ADMIN')")
                     .antMatchers("/rest/User.signUp").permitAll().antMatchers("/Viewer.fileInfos").permitAll().antMatchers("/me").access("#oauth2.hasScope('read')").antMatchers("/photos")
                     .access("#oauth2.hasScope('read') or (!#oauth2.isOAuth() and hasRole('ROLE_USER'))").antMatchers("/photos/trusted/**")
                     .access("#oauth2.hasScope('trust')").antMatchers("/photos/user/**").access("#oauth2.hasScope('trust')")

@@ -17,12 +17,12 @@ import org.nuxeo.ecm.automation.client.model.PropertyMap;
 import fr.toutatice.portail.cms.nuxeo.api.INuxeoCommand;
 
 /**
- * Publish command.
+ * Get shared url command.
  *
  * @author Jean-Sébastien Steux
  * @see INuxeoCommand
  */
-public class PublishCommand implements INuxeoCommand {
+public class GetSharedUrlCommand implements INuxeoCommand {
     
     private final static String DEFAULT_FORMAT = "default";
     
@@ -30,31 +30,19 @@ public class PublishCommand implements INuxeoCommand {
     /** Parent identifier. */
     private final Document doc;
 
-    
-    /** meta-datas */
-    Map<String, String> qualifiers;
-    
+
     /** publication format */    
     String format;
 
 
-    /** publication target */    
-    String pubOrganization;
-    String pubGroup;
-    String pubContext;
     
     /**
      * Constructor.
      */
-    public PublishCommand(Document doc,  String format,  String pubOrganization, String pubGroup, String pubContext, Map<String, String> qualifiers) {
+    public GetSharedUrlCommand(Document doc,  String format) {
         super();
         this.doc = doc;
         this.format = format;
-        this.qualifiers = qualifiers;
-
-        this.pubOrganization = pubOrganization;
-        this.pubGroup = pubGroup;       
-        this.pubContext = pubContext;      
     }
 
 
@@ -67,37 +55,26 @@ public class PublishCommand implements INuxeoCommand {
          
         PropertyMap properties = new PropertyMap();        
         
-
-        Boolean enabledLink = doc.getProperties().getBoolean("rshr:enabledLink", false) ;
-        if( !enabledLink)
-            properties.set( "rshr:enabledLink", true);
-          
-        CommandUtils.addToList(doc, properties,  qualifiers.get("level"), "idxcl:levels");        
-        CommandUtils.addToList(doc, properties,  qualifiers.get("subject"), "idxcl:subjects");       
+        String shareId = doc.getProperties().getString("rshr:linkId") ;
+        if( StringUtils.isEmpty(shareId)) {
+            shareId = IDGenerator.generateId();
+            properties.set( "rshr:linkId", shareId);
+        }
+        
+ 
+        if( StringUtils.isNotEmpty(format))
+            properties.set( "rshr:format", format);   
         
         documentService.update(doc, properties);
         
-
         
-        PropertyMap value = new PropertyMap();
-        String pubId = IDGenerator.generateId();
-        value.set("pubId", pubId);
-        value.set("pubOrganization", pubOrganization);
-        value.set("pubGroup", pubGroup);   
-        value.set("pubContext", pubContext);   
-        
-        // Operation request
-        OperationRequest request = nuxeoSession.newRequest("Document.AddComplexProperty");
-        request.setInput(doc);
-        request.set("xpath", "rshr:targets");
-        request.set("value", value);
-        
-        request.execute();        
+        if(DEFAULT_FORMAT.equals(format))    {
+            documentService.removeProperty(doc, "rshr:format");           
+        }
         
         // Return 
         Map<String, String> returnMap = new HashMap<>();
-        returnMap.put("pubId",pubId);
-     
+        returnMap.put("shareId",shareId);       
         return returnMap;
     }
 
