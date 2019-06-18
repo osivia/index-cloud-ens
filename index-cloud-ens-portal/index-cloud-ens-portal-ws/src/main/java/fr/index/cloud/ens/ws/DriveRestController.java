@@ -13,6 +13,7 @@ import javax.portlet.PortletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang.StringUtils;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.nuxeo.ecm.automation.client.model.Document;
 import org.nuxeo.ecm.automation.client.model.Documents;
@@ -27,6 +28,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpStatus;
+
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -57,7 +59,9 @@ import fr.toutatice.portail.cms.nuxeo.api.INuxeoCommand;
 import fr.toutatice.portail.cms.nuxeo.api.NuxeoController;
 import fr.toutatice.portail.cms.nuxeo.api.NuxeoException;
 import fr.toutatice.portail.cms.nuxeo.api.cms.NuxeoDocumentContext;
+import fr.toutatice.portail.cms.nuxeo.api.services.INuxeoService;
 import fr.toutatice.portail.cms.nuxeo.api.services.NuxeoCommandContext;
+import fr.toutatice.portail.cms.nuxeo.api.services.dao.DocumentDAO;
 
 
 /**
@@ -71,10 +75,10 @@ public class DriveRestController {
 
     private static final String PROP_TTC_WEBID = "ttc:webid";
     private static final String PROP_SHARE_LINK = "rshr:linkId";
-    private static final String PROP_ENABLE_LINK = "rshr:enabledLink";    
+    private static final String PROP_ENABLE_LINK = "rshr:enabledLink";
 
     public static final String SHARE_URL_PREFIX = "/s/";
-    private static final String SHARE_URL_VIEWER = "/cloud-viewer";    
+    private static final String SHARE_URL_VIEWER = "/cloud-viewer";
 
     public static PortletContext portletContext;
 
@@ -82,6 +86,9 @@ public class DriveRestController {
 
     public static final int ERR_CREATE_USER_MAIL_ALREADYEXIST = 1;
 
+    public final static String DEFAULT_FORMAT = "default";
+    public final static String NATIVE_FORMAT = "native";
+    public final static String PDF_FORMAT = "pdf";
 
     @Autowired
     @Qualifier("personUpdateService")
@@ -94,6 +101,11 @@ public class DriveRestController {
     @Autowired
     private ErrorMgr errorMgr;
 
+    /**
+     * Document DAO.
+     */
+    @Autowired
+    private DocumentDAO documentDao;
 
     /**
      * Wraps the doc. fetching according to the WS error handling
@@ -131,11 +143,11 @@ public class DriveRestController {
     }
 
 
-    public static String getSharedUrl(HttpServletRequest request, String shareLink) {    
+    public static String getSharedUrl(HttpServletRequest request, String shareLink) {
         return getUrl(request) + SHARE_URL_PREFIX + shareLink;
     }
 
-    
+
     /**
      * Get a nuxeoController associated to the current user
      * 
@@ -187,13 +199,31 @@ public class DriveRestController {
         }
 
         if( mainObject) {
+            /* link */
             Boolean enableLink = doc.getProperties().getBoolean(PROP_ENABLE_LINK, false);
-            if( enableLink) {
+            if (enableLink) {
                 String shareLink = doc.getProperties().getString(PROP_SHARE_LINK);
-                if (shareLink != null)  {
-                    contents.put("shareUrl", getSharedUrl(request,shareLink));
-                    contents.put("viewerUrl", getUrl(request) + SHARE_URL_VIEWER + SHARE_URL_PREFIX + shareLink);                    
+                if (shareLink != null) {
+                    contents.put("shareUrl", getSharedUrl(request, shareLink));
+                    contents.put("viewerUrl", getUrl(request) + SHARE_URL_VIEWER + SHARE_URL_PREFIX + shareLink);
                 }
+            }
+
+            boolean pdfConvertible = ispdfConvertible(doc);
+            contents.put("pdfConvertible", pdfConvertible);
+            
+            /* format */
+            String format = doc.getProperties().getString("rshr:format");
+            if( StringUtils.isEmpty(format))    {
+                format = DEFAULT_FORMAT;
+             }
+             contents.put("pubFormat", format);
+            
+            
+            // Digest
+            PropertyMap fileContent = doc.getProperties().getMap("file:content");
+            if (fileContent != null) {
+                contents.put("hash", fileContent.getString("digest"));   
             }
         }
           
@@ -204,6 +234,35 @@ public class DriveRestController {
         }
 
         return contents;
+    }
+
+
+    /**
+     * Checks if is pdf convertible.
+     *
+     * @param doc the doc
+     * @return true, if is pdf convertible
+     */
+
+    private boolean ispdfConvertible(Document doc) {
+        /* pdf */
+        boolean pdfConvertible;
+
+        // File content
+        PropertyMap fileContent = doc.getProperties().getMap("file:content");
+
+
+        if (fileContent == null) {
+            pdfConvertible = false;
+        } else {
+            // Mime type
+            String mimeType = fileContent.getString("mime-type");
+
+            pdfConvertible = documentDao.isPdfConvertible(mimeType);
+        }
+
+
+        return pdfConvertible;
     }
 
 
@@ -275,7 +334,7 @@ public class DriveRestController {
 
             String type = currentDoc.getPath().equals(rootPath) ? "root" : currentDoc.getType().toLowerCase();
 
-            returnObject = initContent(request,currentDoc, type, true);
+            returnObject = initContent(request, currentDoc, type, true);
 
             // Get hierarchy
 
@@ -396,7 +455,7 @@ public class DriveRestController {
             String path = IWebIdService.FETCH_PATH_PREFIX + createFolderBean.getParentId();
 
             Document parentDoc = wrapContentFetching(nuxeoController, path);
-            
+
 
             // Check if already exist
             INuxeoCommand checkCmd = new FetchByTitleCommand(parentDoc, createFolderBean.getFolderName());
@@ -425,7 +484,7 @@ public class DriveRestController {
         return returnObject;
     }
 
-    
+
     /**
      * Publish a document to the specified target
      * 
@@ -439,8 +498,8 @@ public class DriveRestController {
 
     @RequestMapping(value = "/Drive.getShareUrl", method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.OK)
-    public Map<String, Object> getSharedUrl(@RequestBody GetSharedUrlBean sharedUrlBean, HttpServletRequest request, HttpServletResponse response, Principal principal)
-            throws Exception {
+    public Map<String, Object> getSharedUrl(@RequestBody GetSharedUrlBean sharedUrlBean, HttpServletRequest request, HttpServletResponse response,
+            Principal principal) throws Exception {
 
         WSPortalControllerContext wsCtx = new WSPortalControllerContext(request, response, principal);
 
@@ -450,26 +509,46 @@ public class DriveRestController {
 
             NuxeoController nuxeoController = getNuxeocontroller(request, principal);
 
-  
+
             String path = IWebIdService.FETCH_PATH_PREFIX + sharedUrlBean.getContentId();
             NuxeoDocumentContext ctx = nuxeoController.getDocumentContext(path);
 
             Document currentDoc = wrapContentFetching(nuxeoController, path);
 
 
-            // Execute publish
-            INuxeoCommand command = new GetSharedUrlCommand(currentDoc, sharedUrlBean.getFormat());
+            // Check format
+            boolean checkFormat = false;
+            if (StringUtils.isNotEmpty(sharedUrlBean.getFormat())) {
+                if (DEFAULT_FORMAT.equals(sharedUrlBean.getFormat())) {
+                    checkFormat = true;
+                } else if (NATIVE_FORMAT.equals(sharedUrlBean.getFormat())) {
+                    checkFormat = true;
+                } else if (PDF_FORMAT.equals(sharedUrlBean.getFormat())) {
+                    if (ispdfConvertible(currentDoc))
+                        checkFormat = true;
+                }
+            } else {
+                checkFormat = true;
+            }
 
-            @SuppressWarnings("unchecked")
-            Map<String, String> returnMap = (Map<String, String>) nuxeoController.executeNuxeoCommand(command);
+            if (!checkFormat) {
+                returnObject = errorMgr.getErrorResponse(1, "Format not supported");
+            } else {
 
-            // Prepare results
-            returnObject.put("shareUrl", getUrl(request) + SHARE_URL_PREFIX + returnMap.get("shareId"));
-            returnMap.remove("shareId");
+                // Execute publish
+                INuxeoCommand command = new GetSharedUrlCommand(currentDoc, sharedUrlBean.getFormat());
+
+                @SuppressWarnings("unchecked")
+                Map<String, String> returnMap = (Map<String, String>) nuxeoController.executeNuxeoCommand(command);
+
+                // Prepare results
+                returnObject.put("shareUrl", getUrl(request) + SHARE_URL_PREFIX + returnMap.get("shareId"));
+                returnMap.remove("shareId");
 
 
-            // Force cache initialisation
-            ctx.reload();
+                // Force cache initialisation
+                ctx.reload();
+            }
 
         } catch (Exception e) {
             returnObject = errorMgr.handleDefaultExceptions(wsCtx, e);
@@ -479,7 +558,6 @@ public class DriveRestController {
         return returnObject;
     }
 
-    
 
     /**
      * Publish a document to the specified target
@@ -508,22 +586,22 @@ public class DriveRestController {
             String url = publishBean.getShareUrl();
             String path = null;
             int iName = url.lastIndexOf('/');
-            if( iName != -1)	{
-                //TODO : call fetchShare with a new param
-            	
+            if (iName != -1) {
+                // TODO : call fetchShare with a new param
+
                 // Execute publish
-                INuxeoCommand command = new FetchByShareLinkCommand(url.substring(iName+1));
+                INuxeoCommand command = new FetchByShareLinkCommand(url.substring(iName + 1));
 
                 @SuppressWarnings("unchecked")
-                Documents docs= (Documents) nuxeoController.executeNuxeoCommand(command);
-                if( docs.size() != 1)
-                	throw new NuxeoException(NuxeoException.ERROR_NOTFOUND);
-            	//Document doc = nuxeoController.fetchSharedDocument(url.substring(iName+1));
-            	
-            	
+                Documents docs = (Documents) nuxeoController.executeNuxeoCommand(command);
+                if (docs.size() != 1)
+                    throw new NuxeoException(NuxeoException.ERROR_NOTFOUND);
+                // Document doc = nuxeoController.fetchSharedDocument(url.substring(iName+1));
+
+
                 path = docs.get(0).getPath();
             }
-            
+
 
             NuxeoDocumentContext ctx = nuxeoController.getDocumentContext(path);
 

@@ -14,6 +14,7 @@ import org.nuxeo.ecm.automation.client.model.Document;
 import org.nuxeo.ecm.automation.client.model.PropertyList;
 import org.nuxeo.ecm.automation.client.model.PropertyMap;
 
+import fr.index.cloud.ens.ws.DriveRestController;
 import fr.toutatice.portail.cms.nuxeo.api.INuxeoCommand;
 
 /**
@@ -24,7 +25,7 @@ import fr.toutatice.portail.cms.nuxeo.api.INuxeoCommand;
  */
 public class GetSharedUrlCommand implements INuxeoCommand {
     
-    private final static String DEFAULT_FORMAT = "default";
+
     
 
     /** Parent identifier. */
@@ -68,7 +69,7 @@ public class GetSharedUrlCommand implements INuxeoCommand {
         documentService.update(doc, properties);
         
         
-        if(DEFAULT_FORMAT.equals(format))    {
+        if(DriveRestController.DEFAULT_FORMAT.equals(format))    {
             documentService.removeProperty(doc, "rshr:format");           
         }
         
