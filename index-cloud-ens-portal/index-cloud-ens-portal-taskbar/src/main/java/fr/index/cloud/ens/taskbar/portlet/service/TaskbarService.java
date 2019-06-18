@@ -1,6 +1,7 @@
 package fr.index.cloud.ens.taskbar.portlet.service;
 
 import fr.index.cloud.ens.taskbar.portlet.model.Taskbar;
+import fr.index.cloud.ens.taskbar.portlet.model.TaskbarWindowProperties;
 import net.sf.json.JSONArray;
 import org.osivia.portal.api.context.PortalControllerContext;
 
@@ -13,6 +14,30 @@ import java.util.List;
  * @author Cédric Krommenhoek
  */
 public interface TaskbarService {
+
+    /**
+     * Parent document path window property.
+     */
+    String PATH_WINDOW_PROPERTY = "osivia.taskbar.path";
+
+
+    /**
+     * Get window properties.
+     *
+     * @param portalControllerContext portal controller context
+     * @return window properties
+     */
+    TaskbarWindowProperties getWindowProperties(PortalControllerContext portalControllerContext) throws PortletException;
+
+
+    /**
+     * Set window properties.
+     *
+     * @param portalControllerContext portal controller context
+     * @param windowProperties        window properties
+     */
+    void setWindowProperties(PortalControllerContext portalControllerContext, TaskbarWindowProperties windowProperties) throws PortletException;
+
 
     /**
      * Get taskbar.

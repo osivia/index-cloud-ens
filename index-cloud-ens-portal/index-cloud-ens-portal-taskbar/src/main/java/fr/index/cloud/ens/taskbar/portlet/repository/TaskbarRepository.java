@@ -2,6 +2,7 @@ package fr.index.cloud.ens.taskbar.portlet.repository;
 
 import fr.index.cloud.ens.taskbar.portlet.model.FolderTask;
 import fr.index.cloud.ens.taskbar.portlet.model.Task;
+import fr.index.cloud.ens.taskbar.portlet.model.TaskbarWindowProperties;
 import org.osivia.portal.api.context.PortalControllerContext;
 import org.osivia.portal.api.taskbar.TaskbarTask;
 
@@ -17,31 +18,44 @@ import java.util.SortedSet;
 public interface TaskbarRepository {
 
     /**
+     * Get base path.
+     *
+     * @param portalControllerContext portal controller context
+     * @param windowProperties        window properties
+     * @return path
+     */
+    String getBasePath(PortalControllerContext portalControllerContext, TaskbarWindowProperties windowProperties) throws PortletException;
+
+
+    /**
      * Get navigation tasks.
      *
      * @param portalControllerContext portal controller context
+     * @param basePath                base path
      * @return tasks
      */
-    List<TaskbarTask> getNavigationTasks(PortalControllerContext portalControllerContext) throws PortletException;
+    List<TaskbarTask> getNavigationTasks(PortalControllerContext portalControllerContext, String basePath) throws PortletException;
 
 
     /**
      * Generate folder tree.
      *
      * @param portalControllerContext portal controller context
+     * @param basePath                base path
      * @param path                    task path
      */
-    Task generateFolderTask(PortalControllerContext portalControllerContext, String path) throws PortletException;
+    Task generateFolderTask(PortalControllerContext portalControllerContext, String basePath, String path) throws PortletException;
 
 
     /**
      * Get folder children.
      *
      * @param portalControllerContext portal controller context
+     * @param basePath                base path
      * @param path                    folder path
      * @return folder children
      */
-    SortedSet<FolderTask> getFolderChildren(PortalControllerContext portalControllerContext, String path) throws PortletException;
+    SortedSet<FolderTask> getFolderChildren(PortalControllerContext portalControllerContext, String basePath, String path) throws PortletException;
 
 
     /**
@@ -52,14 +66,5 @@ public interface TaskbarRepository {
      * @param targetId                target identifier
      */
     void moveDocuments(PortalControllerContext portalControllerContext, List<String> sourceIds, String targetId) throws PortletException;
-
-
-    /**
-     * Get base path.
-     *
-     * @param portalControllerContext portal controller context
-     * @return path
-     */
-    String getBasePath(PortalControllerContext portalControllerContext) throws PortletException;
 
 }

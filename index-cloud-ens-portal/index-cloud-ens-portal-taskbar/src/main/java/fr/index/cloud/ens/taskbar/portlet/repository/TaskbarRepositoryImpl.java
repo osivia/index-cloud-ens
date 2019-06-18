@@ -2,21 +2,18 @@ package fr.index.cloud.ens.taskbar.portlet.repository;
 
 import fr.index.cloud.ens.taskbar.portlet.model.FolderTask;
 import fr.index.cloud.ens.taskbar.portlet.model.Task;
+import fr.index.cloud.ens.taskbar.portlet.model.TaskbarWindowProperties;
 import fr.index.cloud.ens.taskbar.portlet.model.comparator.FolderTaskComparator;
 import fr.index.cloud.ens.taskbar.portlet.repository.command.MoveDocumentsCommand;
 import fr.toutatice.portail.cms.nuxeo.api.INuxeoCommand;
 import fr.toutatice.portail.cms.nuxeo.api.NuxeoController;
-import fr.toutatice.portail.cms.nuxeo.api.cms.NuxeoDocumentContext;
-import fr.toutatice.portail.cms.nuxeo.api.cms.NuxeoPermissions;
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang.BooleanUtils;
 import org.apache.commons.lang.StringUtils;
 import org.nuxeo.ecm.automation.client.model.Document;
 import org.osivia.portal.api.PortalException;
 import org.osivia.portal.api.cms.DocumentType;
 import org.osivia.portal.api.context.PortalControllerContext;
-import org.osivia.portal.api.menubar.*;
 import org.osivia.portal.api.taskbar.ITaskbarService;
 import org.osivia.portal.api.taskbar.TaskbarTask;
 import org.osivia.portal.api.urls.IPortalUrlFactory;
@@ -26,7 +23,10 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Repository;
 
 import javax.portlet.PortletException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 /**
  * Taskbar portlet repository implementation.
@@ -56,12 +56,6 @@ public class TaskbarRepositoryImpl implements TaskbarRepository {
     private ITaskbarService taskbarService;
 
     /**
-     * Menubar service.
-     */
-    @Autowired
-    private IMenubarService menubarService;
-
-    /**
      * CMS service locator.
      */
     @Autowired
@@ -82,16 +76,30 @@ public class TaskbarRepositoryImpl implements TaskbarRepository {
     }
 
 
+    @Override
+    public String getBasePath(PortalControllerContext portalControllerContext, TaskbarWindowProperties windowProperties) {
+        // Nuxeo controller
+        NuxeoController nuxeoController = new NuxeoController(portalControllerContext);
+
+        // Path window property, may be null
+        String path = windowProperties.getPath();
+
+        // Base path
+        String basePath;
+        if (StringUtils.isEmpty(path)) {
+            basePath = nuxeoController.getBasePath();
+        } else {
+            basePath = nuxeoController.getComputedPath(path);
+        }
+
+        return basePath;
+    }
+
     /**
      * {@inheritDoc}
      */
     @Override
-    public List<TaskbarTask> getNavigationTasks(PortalControllerContext portalControllerContext) throws PortletException {
-        // Nuxeo controller
-        NuxeoController nuxeoController = new NuxeoController(portalControllerContext);
-        // Base path
-        String basePath = nuxeoController.getBasePath();
-
+    public List<TaskbarTask> getNavigationTasks(PortalControllerContext portalControllerContext, String basePath) throws PortletException {
         // Navigation tasks
         List<TaskbarTask> navigationTasks;
         if (StringUtils.isEmpty(basePath)) {
@@ -109,7 +117,7 @@ public class TaskbarRepositoryImpl implements TaskbarRepository {
 
 
     @Override
-    public Task generateFolderTask(PortalControllerContext portalControllerContext, String path) throws PortletException {
+    public Task generateFolderTask(PortalControllerContext portalControllerContext, String basePath, String path) throws PortletException {
         // Nuxeo controller
         NuxeoController nuxeoController = new NuxeoController(portalControllerContext);
 
@@ -119,8 +127,6 @@ public class TaskbarRepositoryImpl implements TaskbarRepository {
         CMSServiceCtx cmsContext = new CMSServiceCtx();
         cmsContext.setPortalControllerContext(portalControllerContext);
 
-        // Base path
-        String basePath = nuxeoController.getBasePath();
         // Current navigation path
         String currentNavigationPath = nuxeoController.getNavigationPath();
 
@@ -137,7 +143,7 @@ public class TaskbarRepositoryImpl implements TaskbarRepository {
         FolderTask task = this.getFolderTask(portalControllerContext, currentNavigationPath, navigationItem);
 
         // Children
-        this.generateFolderChildren(nuxeoController, task);
+        this.generateFolderChildren(nuxeoController, basePath, task);
 
         return task;
     }
@@ -145,9 +151,10 @@ public class TaskbarRepositoryImpl implements TaskbarRepository {
 
     /**
      * Get folder task.
+     *
      * @param portalControllerContext portal controller context
-     * @param currentNavigationPath current navigation path
-     * @param navigationItem navigation item
+     * @param currentNavigationPath   current navigation path
+     * @param navigationItem          navigation item
      * @return task
      */
     private FolderTask getFolderTask(PortalControllerContext portalControllerContext, String currentNavigationPath, CMSItem navigationItem) {
@@ -203,18 +210,19 @@ public class TaskbarRepositoryImpl implements TaskbarRepository {
      * Generate folder children.
      *
      * @param nuxeoController Nuxeo controller
+     * @param basePath        base path
      * @param parent          parent folder
      */
-    private void generateFolderChildren(NuxeoController nuxeoController, FolderTask parent) throws PortletException {
+    private void generateFolderChildren(NuxeoController nuxeoController, String basePath, FolderTask parent) throws PortletException {
         // Children
-        SortedSet<FolderTask> children = this.getFolderChildren(nuxeoController, parent.getPath());
+        SortedSet<FolderTask> children = this.getFolderChildren(nuxeoController, basePath, parent.getPath());
         parent.setChildren(children);
 
         if (CollectionUtils.isNotEmpty(children)) {
             for (FolderTask child : children) {
                 // Children
                 if (child.isSelected() || !child.isLazy()) {
-                    this.generateFolderChildren(nuxeoController, child);
+                    this.generateFolderChildren(nuxeoController, basePath, child);
                 }
             }
         }
@@ -225,11 +233,11 @@ public class TaskbarRepositoryImpl implements TaskbarRepository {
      * {@inheritDoc}
      */
     @Override
-    public SortedSet<FolderTask> getFolderChildren(PortalControllerContext portalControllerContext, String path) throws PortletException {
+    public SortedSet<FolderTask> getFolderChildren(PortalControllerContext portalControllerContext, String basePath, String path) throws PortletException {
         // Nuxeo controller
         NuxeoController nuxeoController = new NuxeoController(portalControllerContext);
 
-        return this.getFolderChildren(nuxeoController, path);
+        return this.getFolderChildren(nuxeoController, basePath, path);
     }
 
 
@@ -237,10 +245,11 @@ public class TaskbarRepositoryImpl implements TaskbarRepository {
      * Get folder children.
      *
      * @param nuxeoController Nuxeo controller
+     * @param basePath        base path
      * @param folderPath      folder path
      * @return folder children
      */
-    private SortedSet<FolderTask> getFolderChildren(NuxeoController nuxeoController, String folderPath) throws PortletException {
+    private SortedSet<FolderTask> getFolderChildren(NuxeoController nuxeoController, String basePath, String folderPath) throws PortletException {
         // Portal controller context
         PortalControllerContext portalControllerContext = nuxeoController.getPortalCtx();
 
@@ -250,8 +259,6 @@ public class TaskbarRepositoryImpl implements TaskbarRepository {
         CMSServiceCtx cmsContext = new CMSServiceCtx();
         cmsContext.setPortalControllerContext(portalControllerContext);
 
-        // Base path
-        String basePath = nuxeoController.getBasePath();
         // Current navigation path
         String currentNavigationPath = nuxeoController.getNavigationPath();
 
@@ -281,9 +288,6 @@ public class TaskbarRepositoryImpl implements TaskbarRepository {
 
         return children;
     }
-
-
-
 
 
     /**
@@ -338,15 +342,6 @@ public class TaskbarRepositoryImpl implements TaskbarRepository {
         // Nuxeo command
         INuxeoCommand command = this.applicationContext.getBean(MoveDocumentsCommand.class, sourceIds, targetId);
         nuxeoController.executeNuxeoCommand(command);
-    }
-
-
-    @Override
-    public String getBasePath(PortalControllerContext portalControllerContext) {
-        // Nuxeo controller
-        NuxeoController nuxeoController = new NuxeoController(portalControllerContext);
-
-        return nuxeoController.getBasePath();
     }
 
 }
