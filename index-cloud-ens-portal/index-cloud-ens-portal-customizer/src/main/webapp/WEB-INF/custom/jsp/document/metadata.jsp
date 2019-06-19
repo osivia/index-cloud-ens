@@ -2,7 +2,8 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://www.osivia.org/jsp/taglib/osivia-portal" prefix="op" %>
 <%@ taglib uri="http://www.toutatice.fr/jsp/taglib/toutatice" prefix="ttc" %>
-
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ page isELIgnored="false" %>
 
 
@@ -128,13 +129,13 @@
 	                        <div class="radio">
 	                            <label> <input type="radio" name="inline-values"
 	                                           value="pdf" ${empty document.properties['rshr:format'] or document.properties['rshr:format'] eq 'pdf' ? 'checked' : ''}>
-	                                Pdf
+	                                <op:translate key="SHARED_FORMAT_PDF"/>
 	                            </label>
 	                        </div>
 	                        <div class="radio">
 	                            <label> <input type="radio" name="inline-values"
 	                                           value="native" ${document.properties['rshr:format'] eq 'native' ? 'checked' : ''}>
-	                                Format natif
+	                                <op:translate key="SHARED_FORMAT_NATIVE"/>
 	                            </label>
 	                        </div>
 	                    </div>
@@ -144,16 +145,65 @@
                 </c:if>
 
                 <c:if test="${not empty targets}">
-                    <op:translate key="SHARED_TARGET"/>
-                    <ul class="list-unstyled">
-	                    <c:forEach var="target" items="${targets}">
-	                        <li>
-	                            <span>${target.pubOrganization}</span>
-	                            /<span>${target.pubGroup}</span>
-	                            /<span>${target.pubContext}</span>
-	                        </li>
-	                    </c:forEach>
-                    </ul>
+                	<span>
+	                    ${fn:length(targets)}
+						<a href="#" class="no-ajax-link "data-toggle="modal" data-target="#${namespace}-targets">
+						  <op:translate key="SHARED_TARGET_REFERENCES"/>
+						</a>
+						<op:translate key="SHARED_TARGET_REFERENCES_END"/>
+					</span>
+                    
+			  	   <!-- Target modal -->
+				    <div id="${namespace}-targets" class="modal fade" tabindex="-1" role="dialog">
+				        <div class="modal-dialog" role="document">
+				            <div class="modal-content">
+				                <div class="modal-header">
+				                    <h5 class="modal-title">
+				                        <span><op:translate key="SHARED_TARGET_TITLE"/></span>
+				                    </h5>
+				
+				                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+				                        <span aria-hidden="true">&times;</span>
+				                    </button>
+				                </div>
+
+								<div class="modal-body">
+									<table class="table">
+										<thead class="thead-light">
+											<tr>
+												<th scope="col"><op:translate key="SHARED_TARGET_REFERENCES_DATE"/></th>
+												<th scope="col"><op:translate key="SHARED_TARGET_REFERENCES_GROUP"/></th>
+												<th scope="col"><op:translate key="SHARED_TARGET_REFERENCES_CONTEXT"/></th>
+											</tr>
+										</thead>
+										<tbody>
+											<c:forEach var="target" items="${targets}">
+												<c:set var="pubDate" value="${target.pubDate}" />
+												<c:set var="pubGroup" value="${target.pubGroup}" />
+												<c:set var="pubContext" value="${target.pubContext}" />
+
+												<tr>
+													<td><c:if test="${not empty pubDate}">
+															<fmt:formatDate value="${pubDate}" type="date" dateStyle="long" />
+														</c:if></td>
+													<td><c:if test="${not empty pubGroup}">
+								                            	${target.pubGroup}
+								                            </c:if></td>
+													<td><c:if test="${not empty pubContext}">
+								                            	${target.pubContext}
+								                            </c:if></td>
+												</tr>
+											</c:forEach>
+										</tbody>
+									</table>
+
+								</div>
+							</div>
+				        </div>
+				    </div>                     
+                    
+                    
+                    
                 </c:if>
 
                 <!-- Remote publication spaces -->
@@ -162,5 +212,7 @@
                 </dl>
             </div>
         </div>
+        
+     
     </c:if>
 </div>

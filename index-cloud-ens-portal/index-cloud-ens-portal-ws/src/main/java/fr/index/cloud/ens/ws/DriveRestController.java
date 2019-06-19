@@ -59,6 +59,7 @@ import fr.toutatice.portail.cms.nuxeo.api.INuxeoCommand;
 import fr.toutatice.portail.cms.nuxeo.api.NuxeoController;
 import fr.toutatice.portail.cms.nuxeo.api.NuxeoException;
 import fr.toutatice.portail.cms.nuxeo.api.cms.NuxeoDocumentContext;
+import fr.toutatice.portail.cms.nuxeo.api.domain.DocumentDTO;
 import fr.toutatice.portail.cms.nuxeo.api.services.INuxeoService;
 import fr.toutatice.portail.cms.nuxeo.api.services.NuxeoCommandContext;
 import fr.toutatice.portail.cms.nuxeo.api.services.dao.DocumentDAO;
@@ -78,7 +79,7 @@ public class DriveRestController {
     private static final String PROP_ENABLE_LINK = "rshr:enabledLink";
 
     public static final String SHARE_URL_PREFIX = "/s/";
-    private static final String SHARE_URL_VIEWER = "/cloud-viewer";
+
 
     public static PortletContext portletContext;
 
@@ -205,7 +206,6 @@ public class DriveRestController {
                 String shareLink = doc.getProperties().getString(PROP_SHARE_LINK);
                 if (shareLink != null) {
                     contents.put("shareUrl", getSharedUrl(request, shareLink));
-                    contents.put("viewerUrl", getUrl(request) + SHARE_URL_VIEWER + SHARE_URL_PREFIX + shareLink);
                 }
             }
 
@@ -245,25 +245,10 @@ public class DriveRestController {
      */
 
     private boolean ispdfConvertible(Document doc) {
-        /* pdf */
-        boolean pdfConvertible;
-
-        // File content
-        PropertyMap fileContent = doc.getProperties().getMap("file:content");
-
-
-        if (fileContent == null) {
-            pdfConvertible = false;
-        } else {
-            // Mime type
-            String mimeType = fileContent.getString("mime-type");
-
-            pdfConvertible = documentDao.isPdfConvertible(mimeType);
-        }
-
-
-        return pdfConvertible;
-    }
+        
+        DocumentDTO dto = DocumentDAO.getInstance().toDTO(doc);
+        return dto.isPdfConvertible();
+     }
 
 
     private Map<String, Object> initContent(HttpServletRequest request, Document doc, String type) {
@@ -611,8 +596,7 @@ public class DriveRestController {
             Map<String, String> properties = parseProperties(publishBean.getProperties());
 
             // Execute publish
-            INuxeoCommand command = new PublishCommand(currentDoc, publishBean.getFormat(), publishBean.getPubOrganization(), publishBean.getPubGroup(),
-                    publishBean.getPubContext(), properties);
+            INuxeoCommand command = new PublishCommand(currentDoc, publishBean, properties);
 
             @SuppressWarnings("unchecked")
             Map<String, String> returnMap = (Map<String, String>) nuxeoController.executeNuxeoCommand(command);
@@ -757,10 +741,10 @@ public class DriveRestController {
     private Map<String, String> parseProperties(Map<String, String> requestProperties) {
         // set qualifiers
         Map<String, String> properties = new HashMap<String, String>();
-        String standardLevel = convertLevelQualifier(requestProperties.get("level"));
+        String standardLevel = convertLevelQualifier(requestProperties.get("levelCode"));
         if (standardLevel != null)
             properties.put("level", standardLevel);
-        String subject = requestProperties.get("subject");
+        String subject = requestProperties.get("subjectCode");
         if (subject != null)
             properties.put("subject", subject);
 

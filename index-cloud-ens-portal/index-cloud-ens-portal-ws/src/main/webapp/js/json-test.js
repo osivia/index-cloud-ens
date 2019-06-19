@@ -206,7 +206,6 @@ function drive(id) {
 							$JQry('#detail').show();
 							$JQry('#contentId').val(jsonData.id);
 							$JQry('#pubShare').attr("href",jsonData.shareUrl);
-							$JQry('#pubViewer').attr("href",jsonData.viewerUrl);
 						} else {
 							$JQry('#detail').hide();
 
@@ -290,10 +289,11 @@ $JQry(function() {
 									var params = {};
 									params.parentId = $JQry('#folderId').val();
 									params.properties = {};
-									params.properties.level = $JQry(
-											'#uploadMDLevel').val();
-									params.properties.subject = $JQry(
-									'#uploadMDSubject').val();
+									params.properties.levelCode = $JQry('#uploadMDLevelCode').val();
+									params.properties.levelName = $JQry('#uploadMDLevelName').val();
+									params.properties.subjectCode = $JQry('#uploadMDSubjectCode').val();
+									params.properties.subjectName = $JQry('#uploadMDSubjectName').val();									
+
 									data.append("uploadInfos", JSON
 											.stringify(params));
 
@@ -420,12 +420,14 @@ $JQry(function() {
 								.click(function() {
 									var params = {};
 									params.shareUrl = $JQry('#shareUrl').val();
-									params.pubOrganization = $JQry('#pubOrganization').val();
+									params.schoolYear = $JQry('#schoolYear').val();
 									params.pubGroup = $JQry('#pubGroup').val();									
 									params.pubContext = $JQry('#pubContext').val();									
 									params.properties = {};
-									params.properties.level = $JQry('#pubLevel').val();
-									params.properties.subject = $JQry('#pubSubject').val();
+									params.properties.levelCode = $JQry('#pubLevelCode').val();
+									params.properties.levelName = $JQry('#pubLevelName').val();									
+									params.properties.subjectCode = $JQry('#pubSubjectCode').val();
+									params.properties.subjectCode = $JQry('#pubSubjectCode').val();									
 									$JQry
 											.ajax({
 												type : "POST",
@@ -443,7 +445,6 @@ $JQry(function() {
 													else	{
 														$JQry.notify("Contenu publié", "success");
 														$JQry('#pubShare').attr("href",$JQry('#shareUrl').val());
-														$JQry('#pubViewer').attr("href",jsonData.viewerUrl);
 														$JQry('#unpubId').val(jsonData.pubId);
 													}
 
@@ -562,44 +563,6 @@ $JQry(function() {
 	
 	
 
-	$JQry("#btnPreviewDrive").each(function(index, element) {
-
-		var $element = $JQry(element);
-		$element.click(function() {
-				var contentId = $JQry('#contentId').val();
-				var url = oauth.params.resourceUrl+"/Drive.webUrl";
-
-				url = url + "?id=" + contentId + "&type=viewer";
-
-
-				$JQry
-						.ajax({
-							type : "GET",
-							url : url,
-							headers : {
-								'Content-Type' : undefined,
-								"Authorization" : "Bearer " + oauth.getToken()
-							},
-							contentType : false,
-							cache : false,
-							timeout : 600000,
-							success : function(jsonData) {
-								if (jsonData.returnCode != 0)
-									$JQry.notify("Error #"+jsonData.returnCode, "error");
-								else {
-									window.open(jsonData.url,"preview","menubar=no, status=no, scrollbars=no, menubar=no, width=1000, height=600");
-								
-									}
-								
-							},
-							error : function(xhr, status, e) {
-								alert(e);
-							}
-						});
-	
-		});
-		
-	});
 
 	
 	

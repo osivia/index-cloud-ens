@@ -119,8 +119,6 @@
             <div id="files"></div>
             <input type="button"
                    class="btn btn-primary" value="Display" id="btnRefreshDrive"/>
-            <input type="button"
-                   class="btn btn-primary" value="Preview" id="btnPreviewDrive"/>
         </div>
 
 
@@ -152,13 +150,13 @@
 					<form method="POST" enctype="multipart/form-data" id="publishForm">
 						<div class="form-group">
 							<a id="pubShare" target="_blank">Download url</a> <br/>
-							<a id="pubViewer" target="_blank">Viewer url</a>
+
 						</div>
 				
 
 						<div class="form-group">
-							<label for="level">pubOrganization</label> <input name="pubOrganization"
-								class="form-control" id="pubOrganization" />
+							<label for="level">schoolYear</label> <input name="schoolYear"
+								class="form-control" id="schoolYear" />
 						</div>
 						<div class="form-group">
 							<label for="level">pubGroup</label> <input name="pubGroup"
@@ -169,12 +167,14 @@
 								class="form-control" id="pubContext" />
 						</div>							
 						<div class="form-group">
-							<label for="level">Niveau</label> <input name="level"
-								class="form-control" id="pubLevel" />
+							<label for="level">Niveau</label> <input name="levelCode"
+								class="form-control" id="pubLevelCode" /><input name="levelName"
+								class="form-control" id="pubLevelName" />
 						</div>
 						<div class="form-group">
-							<label for="level">Matière</label> <input name="subject"
-								class="form-control" id="pubSubject" />
+							<label for="level">Matière</label> <input name="subjectCode"
+								class="form-control" id="pubSubjectCode" /><input name="subjectName"
+								class="form-control" id="pubSubjectName" />
 						</div>						
 
 						<input
@@ -203,12 +203,14 @@
             <form method="POST" enctype="multipart/form-data"
                   id="fileUploadMetadataForm">
                 <div class="form-group">
-                    <label for="level">Niveau</label> <input name="level"
-                                                             class="form-control" id="uploadMDLevel"/>
+                    <label for="level">Niveau</label> 
+                    <input name="levelCode"  class="form-control" id="uploadMDLevelCode"/>
+                    <input name="levelName"  class="form-control" id="uploadMDLevelName"/>
                 </div>
                 <div class="form-group">
-                    <label for="level">Matière</label> <input name="subject"
-                                                              class="form-control" id="uploadMDSubject"/>
+                    <label for="level">Matière</label> 
+                    <input name="subjectCode"  class="form-control" id="uploadMDSubjectCode"/>
+                    <input name="subjectName"  class="form-control" id="uploadMDSubjectName"/>                    
                 </div>
                 <input type="hidden" name="folderId" id="folderId"/>
             </form>
