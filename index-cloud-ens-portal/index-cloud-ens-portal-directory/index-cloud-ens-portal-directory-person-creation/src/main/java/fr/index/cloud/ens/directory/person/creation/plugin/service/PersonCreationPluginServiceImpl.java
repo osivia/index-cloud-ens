@@ -255,6 +255,17 @@ public class PersonCreationPluginServiceImpl implements PersonCreationPluginServ
             String message = bundle.getString("PERSON_CREATION_FORM_FILTER_MESSAGE_ERROR_INVALID_CONFIRMATION_PASSWORD");
             throw new FormFilterException(message);
         }
+        
+        List<String> messages = personService.validatePasswordRules(context.getPortalControllerContext(), password);
+        if(!messages.isEmpty()) {
+        	String messagesConcat = bundle.getString("PASSWORD_VALIDATION");
+        	
+        	messagesConcat = messagesConcat + StringUtils.join(messages, ", ");
+            throw new FormFilterException(messagesConcat);
+
+        }
+        
+        
 	}
 
 	
