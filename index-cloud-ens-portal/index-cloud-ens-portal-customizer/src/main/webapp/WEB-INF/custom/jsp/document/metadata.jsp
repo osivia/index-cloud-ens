@@ -146,12 +146,20 @@
 
                 <c:if test="${not empty targets}">
                 	<span>
-	                    ${fn:length(targets)}
+	                    <span class="badge badge-warning">${fn:length(targets)}</span>
 						<a href="#" class="no-ajax-link "data-toggle="modal" data-target="#${namespace}-targets">
-						  <op:translate key="SHARED_TARGET_REFERENCES"/>
+							<c:choose>
+							  <c:when test="${fn:length(targets) eq 1}">
+							   		<op:translate key="SHARED_TARGET_REFERENCE"/>
+							  </c:when>
+							  <c:otherwise>
+						   			<op:translate key="SHARED_TARGET_REFERENCES"/>
+							  </c:otherwise>
+							</c:choose>						
 						</a>
-						<op:translate key="SHARED_TARGET_REFERENCES_END"/>
 					</span>
+					
+					
                     
 			  	   <!-- Target modal -->
 				    <div id="${namespace}-targets" class="modal fade" tabindex="-1" role="dialog">

@@ -73,23 +73,29 @@ import fr.toutatice.portail.cms.nuxeo.api.services.dao.DocumentDAO;
 @RestController
 public class DriveRestController {
 
-
+    
     private static final String PROP_TTC_WEBID = "ttc:webid";
     private static final String PROP_SHARE_LINK = "rshr:linkId";
     private static final String PROP_ENABLE_LINK = "rshr:enabledLink";
 
     public static final String SHARE_URL_PREFIX = "/s/";
-
-
-    public static PortletContext portletContext;
-
-    Map<String, String> levelQualifier = null;
-
     public static final int ERR_CREATE_USER_MAIL_ALREADYEXIST = 1;
 
     public final static String DEFAULT_FORMAT = "default";
     public final static String NATIVE_FORMAT = "native";
     public final static String PDF_FORMAT = "pdf";
+
+    public static final String DRIVE_TYPE_FILE = "file";
+    public static final String DRIVE_TYPE_FOLDER = "folder";
+    public static final String DRIVE_TYPE_ROOT = "root";
+    
+    
+    public static PortletContext portletContext;
+    
+ 
+    Map<String, String> levelQualifier = null;
+
+
 
     @Autowired
     @Qualifier("personUpdateService")
@@ -316,8 +322,15 @@ public class DriveRestController {
 
             // Get durrent doc
             Document currentDoc = wrapContentFetching(nuxeoController, path);
+            PropertyList facets = currentDoc.getFacets();            
 
-            String type = currentDoc.getPath().equals(rootPath) ? "root" : currentDoc.getType().toLowerCase();
+            String type;
+            if(currentDoc.getPath().equals(rootPath))
+                type =  DRIVE_TYPE_ROOT;
+            else if (facets.list().contains("Folderish"))
+                type =  DRIVE_TYPE_FOLDER;
+            else 
+                type =  DRIVE_TYPE_FILE;              
 
             returnObject = initContent(request, currentDoc, type, true);
 
@@ -330,7 +343,7 @@ public class DriveRestController {
                 Document hierarchyDoc = nuxeoController.getDocumentContext(hierarchyPath).getDocument();
                 String hierarchyType = hierarchyDoc.getType();
                 if (hierarchyPath.equals(rootPath))
-                    hierarchyType = "root";
+                    hierarchyType = DRIVE_TYPE_ROOT;
                 else
                     hierarchyType = hierarchyDoc.getType().toLowerCase();
                 hierarchy.add(0, initContent(request, hierarchyDoc, hierarchyType));
@@ -343,7 +356,7 @@ public class DriveRestController {
 
 
             List<Map<String, Object>> childrenList = new ArrayList<>();
-            PropertyList facets = currentDoc.getFacets();
+
             if (facets.list().contains("Folderish")) {
 
                 // Add childrens
@@ -377,7 +390,7 @@ public class DriveRestController {
 
     @RequestMapping(value = "/Drive.upload", method = RequestMethod.POST, consumes = {"multipart/form-data"})
     @ResponseStatus(HttpStatus.OK)
-    public Map<String, Object> handleFileUpload(@RequestParam("file") MultipartFile file, @RequestParam("uploadInfos") String fileUpload,
+    public Map<String, Object> handleFileUpload(@RequestParam(DRIVE_TYPE_FILE) MultipartFile file, @RequestParam("uploadInfos") String fileUpload,
             HttpServletRequest request, HttpServletResponse response, Principal principal) throws Exception {
 
 
