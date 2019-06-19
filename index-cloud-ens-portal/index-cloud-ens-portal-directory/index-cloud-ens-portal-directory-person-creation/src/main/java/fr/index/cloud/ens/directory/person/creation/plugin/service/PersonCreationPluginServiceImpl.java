@@ -42,9 +42,6 @@ public class PersonCreationPluginServiceImpl implements PersonCreationPluginServ
 	private static final String FIELD_MAIL = "mail";
 	private static final String FIELD_PWD = "password";
 	private static final String FIELD_PWD_CONFIRM = "confirmpassword";
-	
-	//private static final String REDIRECT_CONFIRMVIEW_URL = "redirectUrl";
-
 
     /** Person service. */
     @Autowired
@@ -90,7 +87,8 @@ public class PersonCreationPluginServiceImpl implements PersonCreationPluginServ
         Bundle bundle = this.bundleFactory.getBundle(servletRequest.getLocale());
     	
         // form controls 
-        controls(context, executor);
+        controlsIdentity(context, executor);
+        controlsPassword(context, executor);
         
         String mail = context.getVariables().get( FIELD_MAIL).trim();
         
@@ -144,28 +142,7 @@ public class PersonCreationPluginServiceImpl implements PersonCreationPluginServ
         
         // Record password
         String password = context.getVariables().get(FIELD_PWD);
-        this.personService.updatePassword(person, password);
-
-        // TODO send a redirection to a confirmation page ?
-        
-//        Map<String, String> windowProperties = new HashMap<String, String>();
-//        windowProperties.put(InternalConstants.PROP_WINDOW_TITLE, bundle.getString("SUCCESS_VALIDATION"));
-//        windowProperties.put("osivia.hideTitle", "1");
-//        windowProperties.put("osivia.ajaxLink", "1");
-//		try {
-//			Map<String, String> params = new HashMap<>();
-//			String startPortletUrl = urlFactory.getStartPortletInNewPage(context.getPortalControllerContext(),
-//					"confirm",bundle.getString("SUCCESS_VALIDATION"),"cloudens-person-creation-portlet-instance", windowProperties, params); 
-//			
-//	        context.getVariables().put(REDIRECT_CONFIRMVIEW_URL, startPortletUrl);
-//
-//			
-//		} catch (PortalException e) {
-//			throw new FormFilterException(e.getMessage());
-//		}
-		
-		
-        
+        this.personService.updatePassword(person, password);      
         
         context.getVariables().put(UID, uid);
     }
@@ -219,7 +196,7 @@ public class PersonCreationPluginServiceImpl implements PersonCreationPluginServ
 	}
 
 
-	private void controls(FormFilterContext context, FormFilterExecutor executor) throws FormFilterException {
+	private void controlsIdentity(FormFilterContext context, FormFilterExecutor executor) throws FormFilterException {
 		
         // HTTP servlet request
         HttpServletRequest servletRequest = context.getPortalControllerContext().getHttpServletRequest();
@@ -230,8 +207,7 @@ public class PersonCreationPluginServiceImpl implements PersonCreationPluginServ
         String firstname = context.getVariables().get(FIELD_FIRSTNAME).trim();
         String lastname = context.getVariables().get( FIELD_LASTNAME).trim();
         String mail = context.getVariables().get(FIELD_MAIL).trim();
-        String password = context.getVariables().get( FIELD_PWD);
-        String confirmpassword = context.getVariables().get(FIELD_PWD_CONFIRM);
+
         
         // Check first and last name syntax
         firstname = removeAccents(firstname);
@@ -255,12 +231,33 @@ public class PersonCreationPluginServiceImpl implements PersonCreationPluginServ
             throw new FormFilterException(message);
         }
                 
+        String password = context.getVariables().get( FIELD_PWD);
+        String confirmpassword = context.getVariables().get(FIELD_PWD_CONFIRM);
+        
         if(password.compareTo(confirmpassword) != 0) {
             String message = bundle.getString("PERSON_CREATION_FORM_FILTER_MESSAGE_ERROR_INVALID_CONFIRMATION_PASSWORD");
             throw new FormFilterException(message);
         }
 	}
 
+
+	private void controlsPassword(FormFilterContext context, FormFilterExecutor executor) throws FormFilterException {
+		
+        // HTTP servlet request
+        HttpServletRequest servletRequest = context.getPortalControllerContext().getHttpServletRequest();
+        // Internationalization bundle
+        Bundle bundle = this.bundleFactory.getBundle(servletRequest.getLocale());
+ 
+        String password = context.getVariables().get( FIELD_PWD);
+        String confirmpassword = context.getVariables().get(FIELD_PWD_CONFIRM);
+        
+        if(password.compareTo(confirmpassword) != 0) {
+            String message = bundle.getString("PERSON_CREATION_FORM_FILTER_MESSAGE_ERROR_INVALID_CONFIRMATION_PASSWORD");
+            throw new FormFilterException(message);
+        }
+	}
+
+	
 	private String removeAccents(String input) {
 		// Suppression d'accents
 		input = Normalizer.normalize(input, Normalizer.Form.NFD);
@@ -283,5 +280,69 @@ public class PersonCreationPluginServiceImpl implements PersonCreationPluginServ
 		personService.update(person);
 		
 		
+	}
+
+
+	/* (non-Javadoc)
+	 * @see fr.index.cloud.ens.directory.person.creation.plugin.service.PersonCreationPluginService#prepareRenewPassword(fr.toutatice.portail.cms.nuxeo.api.forms.FormFilterContext, fr.toutatice.portail.cms.nuxeo.api.forms.FormFilterExecutor)
+	 */
+	@Override
+	public void checkAccountValidity(FormFilterContext context, FormFilterExecutor executor) throws FormFilterException {
+		
+        // HTTP servlet request
+        HttpServletRequest servletRequest = context.getPortalControllerContext().getHttpServletRequest();
+        // Internationalization bundle
+        Bundle bundle = this.bundleFactory.getBundle(servletRequest.getLocale());
+		
+		String mail = context.getVariables().get(FIELD_MAIL).trim();
+		
+        // Check mail syntax
+		Matcher matcher = this.mailPattern.matcher(mail);
+        if (!matcher.matches()) {
+            String message = bundle.getString("PERSON_CREATION_FORM_FILTER_MESSAGE_ERROR_INVALID_MAIL");
+            throw new FormFilterException(message);
+        }
+        
+        Person searchByMail = personService.getEmptyPerson();
+        searchByMail.setMail(mail);
+        List<Person> list = personService.findByCriteria(searchByMail);
+        if(list.size() != 1 ) {
+            String message = bundle.getString("UNKNOWN_MAIL");
+            throw new FormFilterException(message);
+        }
+        else {
+        	Person person = list.get(0);
+        	
+        	// Account expired
+        	if(person.getValidity() != null && person.getValidity().before(new Date())) {
+                String message = bundle.getString("UNKNOWN_MAIL");
+                throw new FormFilterException(message);
+        	}
+        	
+        	context.getVariables().put(UID, person.getUid());
+
+        }
+
+	}
+
+
+	/* (non-Javadoc)
+	 * @see fr.index.cloud.ens.directory.person.creation.plugin.service.PersonCreationPluginService#renewPassword(fr.toutatice.portail.cms.nuxeo.api.forms.FormFilterContext, fr.toutatice.portail.cms.nuxeo.api.forms.FormFilterExecutor)
+	 */
+	@Override
+	public void renewPassword(FormFilterContext context, FormFilterExecutor executor) throws FormFilterException {
+		
+        // form controls 
+        controlsPassword(context, executor);
+		
+		String mail = context.getVariables().get(FIELD_MAIL);
+		Person criteria = personService.getEmptyPerson();
+		criteria.setMail(mail);
+		List<Person> persons = personService.findByCriteria(criteria);
+		Person person = persons.get(0);
+		
+		// Record password
+        String password = context.getVariables().get(FIELD_PWD);
+        this.personService.updatePassword(person, password);   
 	}
 }

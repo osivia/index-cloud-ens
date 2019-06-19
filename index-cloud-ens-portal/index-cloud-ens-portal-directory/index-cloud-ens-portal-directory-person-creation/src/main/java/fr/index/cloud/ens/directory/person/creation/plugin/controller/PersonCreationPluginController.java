@@ -16,8 +16,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Controller;
 
+import fr.index.cloud.ens.directory.person.creation.plugin.form.CheckAccountValidityFormFilter;
 import fr.index.cloud.ens.directory.person.creation.plugin.form.DecodeUserCreationTokenFilter;
 import fr.index.cloud.ens.directory.person.creation.plugin.form.PersonCreationFormFilter;
+import fr.index.cloud.ens.directory.person.creation.plugin.form.RenewPasswordFormFilter;
 import fr.index.cloud.ens.directory.person.creation.plugin.form.VerifyMailAddressFormFilter;
 import fr.toutatice.portail.cms.nuxeo.api.domain.AbstractPluginPortlet;
 import fr.toutatice.portail.cms.nuxeo.api.domain.FragmentType;
@@ -94,6 +96,11 @@ public class PersonCreationPluginController extends AbstractPluginPortlet {
         formFilters.put(VerifyMailAddressFormFilter.IDENTIFIER,  this.applicationContext.getBean(VerifyMailAddressFormFilter.class));
 		formFilters.put(DecodeUserCreationTokenFilter.IDENTIFIER, this.applicationContext.getBean(DecodeUserCreationTokenFilter.class));
 		
+		// TODO : inutilisé, remplacé par la portlet renew-password
+		formFilters.put(CheckAccountValidityFormFilter.IDENTIFIER , this.applicationContext.getBean(CheckAccountValidityFormFilter.class));
+		
+		formFilters.put(RenewPasswordFormFilter.IDENTIFIER , this.applicationContext.getBean(RenewPasswordFormFilter.class));
+
 		// Fragments
 		List<FragmentType> fragmentTypes = this.getFragmentTypes(context);
 		
@@ -101,7 +108,8 @@ public class PersonCreationPluginController extends AbstractPluginPortlet {
 		fragmentTypes.add(new FragmentType("information-mail", "information mail", cfm));
 		SimpleJspFragmentModule cfm2 = new SimpleJspFragmentModule(getPortletContext(),"confirmation-mail" );
 		fragmentTypes.add(new FragmentType("confirmation-mail", "Confirmation mail", cfm2));
-		
+		SimpleJspFragmentModule cfm3 = new SimpleJspFragmentModule(getPortletContext(),"password-renewed" );
+		fragmentTypes.add(new FragmentType("password-renewed", "password-renewed", cfm3));
 		
 	}
 

@@ -30,7 +30,7 @@
     
     
     <portlet>
-        <portlet-name>cloudens-person-creation-portlet</portlet-name>
+        <portlet-name>cloudens-person-renew-pwd-portlet</portlet-name>
         <portlet-class>org.springframework.web.portlet.DispatcherPortlet</portlet-class>
 
         <init-param>
@@ -39,7 +39,7 @@
         </init-param>
         <init-param>
             <name>contextConfigLocation</name>
-            <value>fr.index.cloud.ens.directory.person.creation.portlet.configuration.PersonConfirmCreationPortletCfg</value>
+            <value>fr.index.cloud.ens.directory.person.creation.portlet.configuration.RenewPasswordPortletCfg</value>
         </init-param>
         
         <expiration-cache>180</expiration-cache>
