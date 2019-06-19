@@ -3,20 +3,13 @@
  */
 package fr.index.cloud.ens.directory.person.creation.plugin.form;
 
-import java.util.HashMap;
 import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.osivia.portal.api.PortalException;
-import org.osivia.portal.api.context.PortalControllerContext;
-import org.osivia.portal.api.internationalization.Bundle;
-import org.osivia.portal.api.internationalization.IBundleFactory;
-import org.osivia.portal.api.locator.Locator;
-import org.osivia.portal.api.tokens.ITokenService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import fr.index.cloud.ens.directory.person.creation.plugin.service.PersonCreationPluginService;
 import fr.toutatice.portail.cms.nuxeo.api.forms.FormFilter;
 import fr.toutatice.portail.cms.nuxeo.api.forms.FormFilterContext;
 import fr.toutatice.portail.cms.nuxeo.api.forms.FormFilterException;
@@ -24,24 +17,20 @@ import fr.toutatice.portail.cms.nuxeo.api.forms.FormFilterExecutor;
 import fr.toutatice.portail.cms.nuxeo.api.forms.FormFilterParameterType;
 
 /**
- * 
- * Filter used to decode a token ID (drive the name and e-mail of the user who wants to create ab account).
+ * procedure filter : check if an user account is valid
  * @author Loïc Billon
- *
  */
 @Component
-public class DecodeUserCreationTokenFilter implements FormFilter {
+public class CheckAccountValidityFormFilter implements FormFilter {
 
-	public static final String IDENTIFIER = DecodeUserCreationTokenFilter.class.getSimpleName();
-	
-	private static final String LABEL_KEY = "DECODE_USER_TOKEN_LABEL";
+	public static final String IDENTIFIER = "CHECK_ACCOUNT_VALIDITY";
+	private static final String LABEL_KEY = IDENTIFIER +"_LABEL";
+	private static final String DESCRIPTION_KEY = IDENTIFIER +"_DESCRIPTION";
 
-	private static final String DESCRIPTION_KEY = "DECODE_USER_TOKEN_DESCRIPTION";
-
-    /** Internationalization bundle factory. */
+    /** Plugin service. */
     @Autowired
-    private IBundleFactory bundleFactory;
-	
+    private PersonCreationPluginService service;
+    
 	/* (non-Javadoc)
 	 * @see fr.toutatice.portail.cms.nuxeo.api.forms.FormFilter#getId()
 	 */
@@ -71,8 +60,7 @@ public class DecodeUserCreationTokenFilter implements FormFilter {
 	 */
 	@Override
 	public Map<String, FormFilterParameterType> getParameters() {
-		 Map<String, FormFilterParameterType> parameters = new HashMap<String, FormFilterParameterType>();
-		 return parameters;
+		return null;
 	}
 
 	/* (non-Javadoc)
@@ -90,31 +78,8 @@ public class DecodeUserCreationTokenFilter implements FormFilter {
 	public void execute(FormFilterContext context, FormFilterExecutor executor)
 			throws FormFilterException, PortalException {
 		
-
-		PortalControllerContext portalControllerContext = context.getPortalControllerContext();
+		service.checkAccountValidity(context, executor);
 		
-		HttpServletRequest request = portalControllerContext.getHttpServletRequest();
-		if(request != null) {
-			String token = request.getParameter("token");
-			
-			ITokenService tokenService = Locator.findMBean(ITokenService.class, ITokenService.MBEAN_NAME);
-			Map<String, String> validateToken = tokenService.validateToken(token, false);
-			
-			if(validateToken != null) {
-				context.getVariables().putAll(validateToken);
-			}
-			else {
-		        // Internationalization bundle
-		        Bundle bundle = this.bundleFactory.getBundle(portalControllerContext.getHttpServletRequest().getLocale());
-                String message = bundle.getString("TOKEN_VALIDATION_FAILED");
-				throw new FormFilterException(message);
-			}
-			
-			
-		}
-		
-		
-
 	}
 
 }

@@ -1,9 +1,6 @@
 package fr.index.cloud.ens.taskbar.portlet.service;
 
-import fr.index.cloud.ens.taskbar.portlet.model.FolderTask;
-import fr.index.cloud.ens.taskbar.portlet.model.ServiceTask;
-import fr.index.cloud.ens.taskbar.portlet.model.Task;
-import fr.index.cloud.ens.taskbar.portlet.model.Taskbar;
+import fr.index.cloud.ens.taskbar.portlet.model.*;
 import fr.index.cloud.ens.taskbar.portlet.repository.TaskbarRepository;
 import fr.toutatice.portail.cms.nuxeo.api.NuxeoException;
 import net.sf.json.JSONArray;
@@ -23,6 +20,8 @@ import org.osivia.portal.api.taskbar.TaskbarItem;
 import org.osivia.portal.api.taskbar.TaskbarItemType;
 import org.osivia.portal.api.taskbar.TaskbarTask;
 import org.osivia.portal.api.urls.IPortalUrlFactory;
+import org.osivia.portal.api.windows.PortalWindow;
+import org.osivia.portal.api.windows.WindowFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
@@ -86,6 +85,33 @@ public class TaskbarServiceImpl implements TaskbarService {
     }
 
 
+    @Override
+    public TaskbarWindowProperties getWindowProperties(PortalControllerContext portalControllerContext) {
+        // Window
+        PortalWindow window = WindowFactory.getWindow(portalControllerContext.getRequest());
+
+        // Window properties
+        TaskbarWindowProperties windowProperties = this.applicationContext.getBean(TaskbarWindowProperties.class);
+
+        // Parent document path
+        String path = window.getProperty(PATH_WINDOW_PROPERTY);
+        windowProperties.setPath(path);
+
+        return windowProperties;
+    }
+
+
+    @Override
+    public void setWindowProperties(PortalControllerContext portalControllerContext, TaskbarWindowProperties windowProperties) {
+        // Window
+        PortalWindow window = WindowFactory.getWindow(portalControllerContext.getRequest());
+
+        // Parent document path
+        String path = StringUtils.trimToNull(windowProperties.getPath());
+        window.setProperty(PATH_WINDOW_PROPERTY, path);
+    }
+
+
     /**
      * {@inheritDoc}
      */
@@ -96,9 +122,13 @@ public class TaskbarServiceImpl implements TaskbarService {
         // Internationalization bundle
         Bundle bundle = this.bundleFactory.getBundle(request.getLocale());
 
+        // Window properties
+        TaskbarWindowProperties windowProperties = this.getWindowProperties(portalControllerContext);
 
+        // Base path
+        String basePath = this.repository.getBasePath(portalControllerContext, windowProperties);
         // Navigation tasks
-        List<TaskbarTask> navigationTasks = this.repository.getNavigationTasks(portalControllerContext);
+        List<TaskbarTask> navigationTasks = this.repository.getNavigationTasks(portalControllerContext, basePath);
 
         // Active navigation task identifier
         String activeId;
@@ -123,7 +153,7 @@ public class TaskbarServiceImpl implements TaskbarService {
         // Tasks
         List<TaskbarTask> tasks = new ArrayList<>();
         // Home
-        TaskbarTask home = this.createHomeTaskbarTask(portalControllerContext);
+        TaskbarTask home = this.createHomeTaskbarTask(portalControllerContext, basePath);
         tasks.add(home);
         // Folders
         tasks.addAll(folders);
@@ -135,13 +165,20 @@ public class TaskbarServiceImpl implements TaskbarService {
 
         // Taskbar
         Taskbar taskbar = this.applicationContext.getBean(Taskbar.class);
-        taskbar.setTasks(this.createTasks(portalControllerContext, bundle, activeId, tasks));
+        taskbar.setTasks(this.createTasks(portalControllerContext, basePath, bundle, activeId, tasks));
 
         return taskbar;
     }
 
 
-    private TaskbarTask createHomeTaskbarTask(PortalControllerContext portalControllerContext) throws PortletException {
+    /**
+     * Create home taskbar task.
+     *
+     * @param portalControllerContext portal controller context
+     * @param basePath                base path
+     * @return taskbar task
+     */
+    private TaskbarTask createHomeTaskbarTask(PortalControllerContext portalControllerContext, String basePath) {
         // Locale
         Locale locale = portalControllerContext.getRequest().getLocale();
         // Internationalization bundle
@@ -151,13 +188,17 @@ public class TaskbarServiceImpl implements TaskbarService {
         String title = bundle.getString("TASKBAR_HOME");
         // Icon
         String icon = "glyphicons glyphicons-basic-home";
-        // Path
-        String path = this.repository.getBasePath(portalControllerContext);
 
-        return this.taskbarService.getFactory().createTaskbarTask(ITaskbarService.HOME_TASK_ID, title, icon, path, null, false);
+        return this.taskbarService.getFactory().createTaskbarTask(ITaskbarService.HOME_TASK_ID, title, icon, basePath, null, false);
     }
 
 
+    /**
+     * Create trash taskbar task.
+     *
+     * @param portalControllerContext portal controller context
+     * @return taskbar task
+     */
     private TaskbarTask createTrashTaskbarTask(PortalControllerContext portalControllerContext) throws PortletException {
         // Locale
         Locale locale = portalControllerContext.getRequest().getLocale();
@@ -191,12 +232,13 @@ public class TaskbarServiceImpl implements TaskbarService {
      * Create tasks from navigation tasks.
      *
      * @param portalControllerContext portal controller context
+     * @param basePath                base path
      * @param bundle                  internationalization bundle
      * @param activeId                active navigation task identifier
      * @param navigationTasks         navigation tasks
      * @return tasks
      */
-    private List<Task> createTasks(PortalControllerContext portalControllerContext, Bundle bundle, String activeId,
+    private List<Task> createTasks(PortalControllerContext portalControllerContext, String basePath, Bundle bundle, String activeId,
                                    List<TaskbarTask> navigationTasks) throws PortletException {
         List<Task> tasks;
 
@@ -206,7 +248,7 @@ public class TaskbarServiceImpl implements TaskbarService {
             tasks = new ArrayList<>(navigationTasks.size());
 
             for (TaskbarTask navigationTask : navigationTasks) {
-                Task task = this.createTask(portalControllerContext, bundle, activeId, navigationTask);
+                Task task = this.createTask(portalControllerContext, basePath, bundle, activeId, navigationTask);
                 tasks.add(task);
             }
         }
@@ -219,15 +261,16 @@ public class TaskbarServiceImpl implements TaskbarService {
      * Create task from navigation task.
      *
      * @param portalControllerContext portal controller context
+     * @param basePath                base path
      * @param bundle                  internationalization bundle
      * @param activeId                active navigation task identifier
      * @param navigationTask          navigation task
      * @return task
      */
-    private Task createTask(PortalControllerContext portalControllerContext, Bundle bundle, String activeId, TaskbarTask navigationTask) throws PortletException {
+    private Task createTask(PortalControllerContext portalControllerContext, String basePath, Bundle bundle, String activeId, TaskbarTask navigationTask) throws PortletException {
         Task task;
         if ("Folder".equals(navigationTask.getDocumentType())) {
-            task = this.repository.generateFolderTask(portalControllerContext, navigationTask.getPath());
+            task = this.repository.generateFolderTask(portalControllerContext, basePath, navigationTask.getPath());
         } else {
             task = this.applicationContext.getBean(ServiceTask.class);
 
@@ -325,8 +368,14 @@ public class TaskbarServiceImpl implements TaskbarService {
      */
     @Override
     public JSONArray getFolderChildren(PortalControllerContext portalControllerContext, String path) throws PortletException {
+        // Window properties
+        TaskbarWindowProperties windowProperties = this.getWindowProperties(portalControllerContext);
+
+        // Base path
+        String basePath = this.repository.getBasePath(portalControllerContext, windowProperties);
+
         // Children
-        SortedSet<FolderTask> children = this.repository.getFolderChildren(portalControllerContext, path);
+        SortedSet<FolderTask> children = this.repository.getFolderChildren(portalControllerContext, basePath, path);
 
         // JSON array
         JSONArray array = new JSONArray();

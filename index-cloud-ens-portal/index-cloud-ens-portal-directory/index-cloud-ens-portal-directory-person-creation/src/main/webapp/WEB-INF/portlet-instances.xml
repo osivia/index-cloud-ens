@@ -6,10 +6,10 @@
     <deployment>
         <if-exists>overwrite</if-exists>
         <instance>
-            <display-name xml:lang="en">Cloud-ens - Confirmation inscription</display-name>
-            <display-name xml:lang="fr">Cloud-ens - Confirmation inscription</display-name>
-            <instance-id>cloudens-person-creation-portlet-instance</instance-id>
-            <portlet-ref>cloudens-person-creation-portlet</portlet-ref>
+            <display-name xml:lang="en">Cloud-ens - Renew password</display-name>
+            <display-name xml:lang="fr">Cloud-ens - Renouveler mot de passe</display-name>
+            <instance-id>cloudens-person-renew-pwd-portlet-instance</instance-id>
+            <portlet-ref>cloudens-person-renew-pwd-portlet</portlet-ref>
             <security-constraint>
                 <policy-permission>
                     <action-name>admin</action-name>

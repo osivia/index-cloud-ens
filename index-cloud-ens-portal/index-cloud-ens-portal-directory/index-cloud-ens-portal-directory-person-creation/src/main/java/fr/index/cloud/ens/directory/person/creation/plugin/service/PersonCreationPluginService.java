@@ -11,8 +11,6 @@ import fr.toutatice.portail.cms.nuxeo.api.forms.FormFilterExecutor;
  */
 public interface PersonCreationPluginService {
 
-
-
     /**
      * Create person in directory and send a mail to check validity
      * 
@@ -31,4 +29,25 @@ public interface PersonCreationPluginService {
 	 */
 	void verifyMail(FormFilterContext context, FormFilterExecutor executor);
 
+	/**
+	 * Check if mail is associated with a valid user account
+	 * not used, remplaced by renew-password portlet
+	 * 
+	 * @deprecated
+	 * @param context
+	 * @param executor
+	 * @throws FormFilterException 
+	 */
+	void checkAccountValidity(FormFilterContext context, FormFilterExecutor executor) throws FormFilterException;
+	
+	/**
+	 * Renew the userpassword
+	 * 
+	 * @param context
+	 * @param executor
+	 * @throws FormFilterException 
+	 */
+	void renewPassword(FormFilterContext context, FormFilterExecutor executor) throws FormFilterException;
+	
+	
 }

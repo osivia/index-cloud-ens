@@ -4,11 +4,13 @@
 .form-group {
   &.required {
     label {
-      &::after {
-        content: " *";
+      &:not(.custom-file-label) {
+        &::after {
+          content: " *";
 
-        color: $danger;
-        white-space: nowrap;
+          color: $danger;
+          white-space: nowrap;
+        }
       }
     }
   }
