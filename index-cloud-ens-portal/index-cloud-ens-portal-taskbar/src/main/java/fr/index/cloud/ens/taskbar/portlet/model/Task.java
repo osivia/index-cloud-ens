@@ -38,7 +38,9 @@ public abstract class Task {
      *
      * @return true if task is fancytree
      */
-    public abstract boolean isFancytree();
+    public boolean isFancytree() {
+        return false;
+    }
 
 
     public String getIcon() {

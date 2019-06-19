@@ -1,6 +1,7 @@
 package fr.index.cloud.ens.taskbar.portlet.configuration;
 
 import fr.toutatice.portail.cms.nuxeo.api.CMSPortlet;
+import fr.toutatice.portail.cms.nuxeo.api.services.INuxeoService;
 import org.osivia.portal.api.internationalization.IBundleFactory;
 import org.osivia.portal.api.internationalization.IInternationalizationService;
 import org.osivia.portal.api.locator.Locator;
@@ -156,6 +157,17 @@ public class TaskbarConfiguration extends CMSPortlet implements PortletConfigAwa
     @Bean
     public ICMSServiceLocator getCmsServiceLocator() {
         return Locator.findMBean(ICMSServiceLocator.class, ICMSServiceLocator.MBEAN_NAME);
+    }
+
+
+    /**
+     * Get Nuxeo service.
+     *
+     * @return Nuxeo service
+     */
+    @Bean
+    public INuxeoService getNuxeoService() {
+        return Locator.findMBean(INuxeoService.class, INuxeoService.MBEAN_NAME);
     }
 
 }

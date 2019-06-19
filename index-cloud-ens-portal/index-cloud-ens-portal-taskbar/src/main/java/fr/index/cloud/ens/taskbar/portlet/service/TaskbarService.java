@@ -6,6 +6,7 @@ import net.sf.json.JSONArray;
 import org.osivia.portal.api.context.PortalControllerContext;
 
 import javax.portlet.PortletException;
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -45,7 +46,7 @@ public interface TaskbarService {
      * @param portalControllerContext portal controller context
      * @return taskbar
      */
-    Taskbar getTaskbar(PortalControllerContext portalControllerContext) throws PortletException;
+    Taskbar getTaskbar(PortalControllerContext portalControllerContext) throws PortletException, IOException;
 
 
     /**

@@ -15,6 +15,31 @@
 
 
 <div class="taskbar" data-drop-url="${dropUrl}" data-lazy-loading-url="${lazyLoadingUrl}">
+    <c:if test="${not empty taskbar.addDropdownItems}">
+        <div class="dropdown mb-3 ml-3 px-1">
+            <button class="btn btn-outline-primary btn-block dropdown-toggle text-truncate no-ajax-link" data-toggle="dropdown"
+                    data-boundary="window">
+                <i class="glyphicons glyphicons-basic-plus"></i>
+                <span><op:translate key="TASKBAR_ADD"/></span>
+            </button>
+
+            <div class="dropdown-menu">
+                <c:forEach var="dropdownItem" items="${taskbar.addDropdownItems}">
+                    <a href="javascript:" class="dropdown-item" data-target="#osivia-modal"
+                       data-load-url="${dropdownItem.url}" data-title="${dropdownItem.modalTitle}">
+                        <c:choose>
+                            <c:when test="${empty dropdownItem.customizedIcon}"><i
+                                    class="${dropdownItem.icon}"></i></c:when>
+                            <c:otherwise>${dropdownItem.customizedIcon}</c:otherwise>
+                        </c:choose>
+                        <span>${dropdownItem.displayName}</span>
+                    </a>
+                </c:forEach>
+            </div>
+        </div>
+    </c:if>
+
+
     <ul class="list-unstyled">
         <c:forEach var="task" items="${taskbar.tasks}" varStatus="status">
             <li>

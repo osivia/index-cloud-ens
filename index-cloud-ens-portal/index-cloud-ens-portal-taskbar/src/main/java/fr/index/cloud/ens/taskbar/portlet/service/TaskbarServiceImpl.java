@@ -29,6 +29,7 @@ import org.springframework.stereotype.Service;
 import javax.portlet.ActionResponse;
 import javax.portlet.PortletException;
 import javax.portlet.PortletRequest;
+import java.io.IOException;
 import java.util.*;
 
 /**
@@ -116,7 +117,7 @@ public class TaskbarServiceImpl implements TaskbarService {
      * {@inheritDoc}
      */
     @Override
-    public Taskbar getTaskbar(PortalControllerContext portalControllerContext) throws PortletException {
+    public Taskbar getTaskbar(PortalControllerContext portalControllerContext) throws PortletException, IOException {
         // Portlet request
         PortletRequest request = portalControllerContext.getRequest();
         // Internationalization bundle
@@ -150,6 +151,9 @@ public class TaskbarServiceImpl implements TaskbarService {
         }
 
 
+        // Add dropdown items
+        List<AddDropdownItem> addDropdownItems = this.repository.generateAddDropdownItems(portalControllerContext);
+
         // Tasks
         List<TaskbarTask> tasks = new ArrayList<>();
         // Home
@@ -165,6 +169,7 @@ public class TaskbarServiceImpl implements TaskbarService {
 
         // Taskbar
         Taskbar taskbar = this.applicationContext.getBean(Taskbar.class);
+        taskbar.setAddDropdownItems(addDropdownItems);
         taskbar.setTasks(this.createTasks(portalControllerContext, basePath, bundle, activeId, tasks));
 
         return taskbar;
@@ -249,7 +254,9 @@ public class TaskbarServiceImpl implements TaskbarService {
 
             for (TaskbarTask navigationTask : navigationTasks) {
                 Task task = this.createTask(portalControllerContext, basePath, bundle, activeId, navigationTask);
-                tasks.add(task);
+                if (task != null) {
+                    tasks.add(task);
+                }
             }
         }
 

@@ -69,7 +69,6 @@ public class TaskbarViewController {
      * @param response  action response
      * @param sourceIds source identifiers request parameter
      * @param targetId  target identifier request parameter
-     * @throws PortletException
      */
     @ActionMapping("drop")
     public void drop(ActionRequest request, ActionResponse response, @RequestParam("sourceIds") String sourceIds, @RequestParam("targetId") String targetId)
@@ -87,8 +86,6 @@ public class TaskbarViewController {
      * @param request  resource request
      * @param response resource response
      * @param path     parent folder path request parameter
-     * @throws PortletException
-     * @throws IOException
      */
     @ResourceMapping("lazy-loading")
     public void lazyLoading(ResourceRequest request, ResourceResponse response, @RequestParam("path") String path) throws PortletException, IOException {
@@ -114,10 +111,9 @@ public class TaskbarViewController {
      * @param request  portlet request
      * @param response portlet response
      * @return taskbar
-     * @throws PortletException
      */
     @ModelAttribute("taskbar")
-    public Taskbar getTaskbar(PortletRequest request, PortletResponse response) throws PortletException {
+    public Taskbar getTaskbar(PortletRequest request, PortletResponse response) throws PortletException, IOException {
         // Portal controller context
         PortalControllerContext portalControllerContext = new PortalControllerContext(portletContext, request, response);
 

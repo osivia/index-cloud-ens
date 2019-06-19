@@ -18,9 +18,4 @@ public class ServiceTask extends Task {
         super();
     }
 
-
-    @Override
-    public boolean isFancytree() {
-        return false;
-    }
 }

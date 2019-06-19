@@ -1,5 +1,6 @@
 package fr.index.cloud.ens.taskbar.portlet.repository;
 
+import fr.index.cloud.ens.taskbar.portlet.model.AddDropdownItem;
 import fr.index.cloud.ens.taskbar.portlet.model.FolderTask;
 import fr.index.cloud.ens.taskbar.portlet.model.Task;
 import fr.index.cloud.ens.taskbar.portlet.model.TaskbarWindowProperties;
@@ -7,6 +8,7 @@ import org.osivia.portal.api.context.PortalControllerContext;
 import org.osivia.portal.api.taskbar.TaskbarTask;
 
 import javax.portlet.PortletException;
+import java.io.IOException;
 import java.util.List;
 import java.util.SortedSet;
 
@@ -38,11 +40,21 @@ public interface TaskbarRepository {
 
 
     /**
-     * Generate folder tree.
+     * Generate "add" dropdown items.
+     *
+     * @param portalControllerContext portal controller context
+     * @return dropdown items
+     */
+    List<AddDropdownItem> generateAddDropdownItems(PortalControllerContext portalControllerContext) throws PortletException, IOException;
+
+
+    /**
+     * Generate folder task.
      *
      * @param portalControllerContext portal controller context
      * @param basePath                base path
      * @param path                    task path
+     * @return task
      */
     Task generateFolderTask(PortalControllerContext portalControllerContext, String basePath, String path) throws PortletException;
 
