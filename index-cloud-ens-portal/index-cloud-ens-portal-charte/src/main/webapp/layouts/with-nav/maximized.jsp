@@ -20,7 +20,7 @@
     <div class="container-fluid d-flex flex-column flex-grow-1 overflow-hidden">
         <div class="row flex-grow-1 overflow-hidden">
             <op:resizable cssClass="col-sm-auto d-flex flex-column mh-100 border-right border-light"
-                          minWidth="120">
+                          minWidth="200">
                 <div class="row flex-grow-1 overflow-hidden">
                         <%--Drawer--%>
                     <div id="drawer" class="col d-flex flex-column mh-100 pl-0">
