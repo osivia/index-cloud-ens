@@ -1,18 +1,27 @@
 package fr.index.cloud.ens.customizer.plugin;
 
+import fr.index.cloud.ens.customizer.plugin.cms.CloudEnsNavigationAdapter;
 import fr.index.cloud.ens.customizer.plugin.menubar.CloudEnsMenubarModule;
 import fr.index.cloud.ens.customizer.plugin.theming.CloudEnsTemplateAdapter;
 import fr.toutatice.portail.cms.nuxeo.api.domain.AbstractPluginPortlet;
+import fr.toutatice.portail.cms.nuxeo.api.domain.INavigationAdapterModule;
 import fr.toutatice.portail.cms.nuxeo.api.domain.ListTemplate;
+import org.jboss.portal.theme.impl.render.dynamic.DynaRenderOptions;
 import org.osivia.portal.api.customization.CustomizationContext;
 import org.osivia.portal.api.internationalization.Bundle;
 import org.osivia.portal.api.internationalization.IBundleFactory;
 import org.osivia.portal.api.internationalization.IInternationalizationService;
 import org.osivia.portal.api.locator.Locator;
 import org.osivia.portal.api.menubar.MenubarModule;
+import org.osivia.portal.api.panels.PanelPlayer;
+import org.osivia.portal.api.taskbar.TaskbarFactory;
+import org.osivia.portal.api.taskbar.TaskbarItem;
+import org.osivia.portal.api.taskbar.TaskbarItems;
 import org.osivia.portal.api.theming.TemplateAdapter;
 
+import javax.portlet.PortletContext;
 import javax.portlet.PortletException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -87,11 +96,16 @@ public class CloudEnsPlugin extends AbstractPluginPortlet {
         this.customizeListTemplates(customizationContext);
         // Template adapters
         this.customizeTemplateAdapters(customizationContext);
+        // Taskbar items
+        this.customizeTaskbarItems(customizationContext);
+        // Navigation adapters
+        this.customizeNavigationAdapters(customizationContext);
     }
 
 
     /**
      * Customize menubar modules.
+     *
      * @param customizationContext customization context
      */
     private void customizeMenubarModules(CustomizationContext customizationContext) {
@@ -134,6 +148,59 @@ public class CloudEnsPlugin extends AbstractPluginPortlet {
         // Template adapter
         TemplateAdapter adapter = new CloudEnsTemplateAdapter();
         adapters.add(adapter);
+    }
+
+
+    /**
+     * Customize taskbar items.
+     *
+     * @param customizationContext customization context
+     */
+    private void customizeTaskbarItems(CustomizationContext customizationContext) {
+        // Taskbar items
+        TaskbarItems items = this.getTaskbarItems(customizationContext);
+        // Factory
+        TaskbarFactory factory = this.getTaskbarService().getFactory();
+
+        // Recent items player
+        PanelPlayer player = new PanelPlayer();
+        // Recent items player instance
+        player.setInstance("osivia-services-workspace-file-browser-instance");
+        // Recent items player properties
+        Map<String, String> properties = new HashMap<>();
+        properties.put("osivia.file-browser.base-path", "${userWorkspacePath}");
+        properties.put("osivia.file-browser.nxql", "StringBuilder nuxeoRequest = new StringBuilder();" +
+                "nuxeoRequest.append(\"ecm:primaryType IN ('File', 'Picture', 'Audio', 'Video') \");" +
+                "nuxeoRequest.append(\"AND ecm:path STARTSWITH '\").append(basePath).append(\"' \");" +
+                "nuxeoRequest.append(\"ORDER BY dc:modified DESC\");" +
+                "return nuxeoRequest.toString();");
+        properties.put("osivia.file-browser.beanshell", String.valueOf(true));
+        properties.put("osivia.file-browser.list-mode", String.valueOf(true));
+        properties.put(DynaRenderOptions.PARTIAL_REFRESH_ENABLED, String.valueOf(true));
+        properties.put("osivia.ajaxLink", "1");
+        player.setProperties(properties);
+        // Recent items taskbar item
+        TaskbarItem item = factory.createStapledTaskbarItem("RECENT_ITEMS", "RECENT_ITEMS_TASK", "glyphicons glyphicons-basic-history", player);
+
+        items.add(item);
+    }
+
+
+    /**
+     * Customize navigation adapters.
+     *
+     * @param customizationContext customization context
+     */
+    private void customizeNavigationAdapters(CustomizationContext customizationContext) {
+        // Portlet context
+        PortletContext portletContext = this.getPortletContext();
+
+        // Navigation adapters
+        List<INavigationAdapterModule> navigationAdapters = this.getNavigationAdapters(customizationContext);
+
+        // Customized navigation adapter
+        INavigationAdapterModule navigationAdapter = new CloudEnsNavigationAdapter(portletContext);
+        navigationAdapters.add(navigationAdapter);
     }
 
 }
