@@ -943,10 +943,6 @@ return nuxeoRequest.toString();</value>
                                 <value>Mes niveaux préférés</value>
                             </property>
                             <property>
-                                <name>osivia.hideTitle</name>
-                                <value>1</value>
-                            </property>
-                            <property>
                                 <name>theme.order</name>
                                 <value>0</value>
                             </property>
