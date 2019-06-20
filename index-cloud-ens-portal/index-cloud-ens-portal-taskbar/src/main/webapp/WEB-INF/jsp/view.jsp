@@ -16,8 +16,8 @@
 
 <div class="taskbar" data-drop-url="${dropUrl}" data-lazy-loading-url="${lazyLoadingUrl}">
     <c:if test="${not empty taskbar.addDropdownItems}">
-        <div class="dropdown mb-3 ml-3 px-1">
-            <button class="btn btn-outline-primary btn-block dropdown-toggle text-truncate no-ajax-link" data-toggle="dropdown"
+        <div class="dropdown mb-4 ml-3 px-1">
+            <button class="btn btn-blue-light btn-block dropdown-toggle text-truncate no-ajax-link" data-toggle="dropdown"
                     data-boundary="window">
                 <i class="glyphicons glyphicons-basic-plus"></i>
                 <span><op:translate key="TASKBAR_ADD"/></span>
@@ -42,7 +42,7 @@
 
     <ul class="list-unstyled">
         <c:forEach var="task" items="${taskbar.tasks}" varStatus="status">
-            <li>
+            <li class="mb-3 pb-3 border-bottom">
                 <c:choose>
                     <c:when test="${task.fancytree}">
                         <div class="fancytree overflow-hidden">

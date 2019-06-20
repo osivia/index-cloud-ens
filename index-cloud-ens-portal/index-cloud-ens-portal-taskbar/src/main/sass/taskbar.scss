@@ -2,8 +2,6 @@
 
 .taskbar {
   > ul > li {
-    margin-bottom: map_get($spacers, 2);
-
     > a {
       padding: {
         top: .1rem;

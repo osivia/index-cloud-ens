@@ -166,6 +166,11 @@ public class TaskbarServiceImpl implements TaskbarService {
         if (trash != null) {
             tasks.add(trash);
         }
+        // Recent items
+        TaskbarTask recentItems = this.createRecentItemsTaskbarTask(portalControllerContext);
+        if (recentItems != null) {
+            tasks.add(recentItems);
+        }
 
         // Taskbar
         Taskbar taskbar = this.applicationContext.getBean(Taskbar.class);
@@ -225,6 +230,41 @@ public class TaskbarServiceImpl implements TaskbarService {
         } else {
             // Title
             String title = bundle.getString("TASKBAR_TRASH");
+
+            task = this.taskbarService.getFactory().createTaskbarTask(item, title, null, false);
+        }
+
+        return task;
+    }
+
+
+    /**
+     * Create recent items taskbar task.
+     *
+     * @param portalControllerContext portal controller context
+     * @return taskbar task
+     */
+    private TaskbarTask createRecentItemsTaskbarTask(PortalControllerContext portalControllerContext) throws PortletException {
+        // Locale
+        Locale locale = portalControllerContext.getRequest().getLocale();
+        // Internationalization bundle
+        Bundle bundle = this.bundleFactory.getBundle(locale);
+
+        // Taskbar item
+        TaskbarItem item;
+        try {
+            item = this.taskbarService.getItem(portalControllerContext, "RECENT_ITEMS");
+        } catch (PortalException e) {
+            throw new PortletException(e);
+        }
+
+        // Taskbar task
+        TaskbarTask task;
+        if (item == null) {
+            task = null;
+        } else {
+            // Title
+            String title = bundle.getString("TASKBAR_RECENT_ITEMS");
 
             task = this.taskbarService.getFactory().createTaskbarTask(item, title, null, false);
         }
