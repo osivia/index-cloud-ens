@@ -21,9 +21,9 @@
                         <portlet:param name="id" value="${item.id}"/>
                     </portlet:actionURL>
 
-                    <a href="${url}" class="list-group-item list-group-item-action">
+                    <a href="${url}" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
                         <span>${item.label}</span>
-                        <span class="badge badge-secondary">${item.count}</span>
+                        <span class="badge badge-primary badge-pill">${item.count}</span>
                     </a>
                 </c:forEach>
             </div>
