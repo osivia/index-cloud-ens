@@ -142,7 +142,7 @@ public class CloudEnsMenubarModule implements MenubarModule {
                     } else {
                         item.setVisible(false);
                     }
-                } else if (StringUtils.startsWith(item.getId(), "ADD_") || StringUtils.startsWith(item.getId(), "NEW_")) {
+                } else if (StringUtils.equals(item.getId(), "WORKSPACE_ADD") || StringUtils.startsWith(item.getId(), "ADD_") || StringUtils.startsWith(item.getId(), "NEW_")) {
                     item.setVisible(false);
                 } else if (parent instanceof MenubarDropdown) {
                     MenubarDropdown dropdown = (MenubarDropdown) parent;

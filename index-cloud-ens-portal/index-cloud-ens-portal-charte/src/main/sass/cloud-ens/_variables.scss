@@ -1,7 +1,19 @@
 $primary: #11795d;
+$blue-dark: #242860;
+$blue-light: #76c7a7;
+$blue-lighter: #d8ede5;
+
+$theme-colors: (
+  "blue-dark": $blue-dark,
+  "blue-light": $blue-light,
+  "blue-lighter": $blue-lighter
+);
+
+$font-family-base: "Montserrat", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
 
 $breadcrumb-bg: transparent;
 $breadcrumb-divider: quote(">");
+
 
 @import "../bootstrap/functions";
 @import "../bootstrap/variables";

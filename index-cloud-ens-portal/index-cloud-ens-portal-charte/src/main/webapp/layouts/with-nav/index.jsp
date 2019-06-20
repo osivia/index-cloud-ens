@@ -19,44 +19,26 @@
 <main class="d-flex flex-column flex-grow-1 overflow-auto">
     <div class="container-fluid d-flex flex-column flex-grow-1 overflow-hidden">
         <div class="row flex-grow-1 overflow-hidden">
-            <op:resizable cssClass="col-sm-auto d-flex flex-column mh-100 border-right border-light"
-                          minWidth="200">
-                <div class="row flex-grow-1 overflow-hidden">
-                    <%--Drawer--%>
-                    <div id="drawer" class="col d-flex flex-column mh-100">
-                        <p:region regionName="drawer-header" />
-
-                        <div class="row flex-grow-1 overflow-hidden">
-                            <div class="col pl-0 d-flex flex-column mh-100">
-                                <div class="py-4 flex-grow-1 overflow-auto">
-                                    <p:region regionName="nav"/>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="border-top border-light">
-                            <p:region regionName="nav-bottom"/>
-                        </div>
-                    </div>
-                </div>
-            </op:resizable>
+            <%@include file="../includes/nav.jspf" %>
 
             <div class="col-md d-flex flex-column mh-100">
                 <%@include file="../includes/breadcrumb.jspf" %>
 
-                <div class="d-flex flex-column flex-grow-1 overflow-x-hidden overflow-y-auto">
-                    <p:region regionName="top"/>
+                <div class="row flex-grow-1 pt-4 overflow-auto">
+                    <div class="col">
+                        <p:region regionName="top"/>
 
-                    <div class="row">
-                        <div class="col-md d-flex flex-column">
-                            <div class="flex-grow-1">
-                                <p:region regionName="col-1"/>
+                        <div class="row">
+                            <div class="col-md d-flex flex-column">
+                                <div class="flex-grow-1">
+                                    <p:region regionName="col-1"/>
+                                </div>
                             </div>
-                        </div>
 
-                        <div class="col-md d-flex flex-column">
-                            <div class="flex-grow-1">
-                                <p:region regionName="col-2"/>
+                            <div class="col-md d-flex flex-column">
+                                <div class="flex-grow-1">
+                                    <p:region regionName="col-2"/>
+                                </div>
                             </div>
                         </div>
                     </div>

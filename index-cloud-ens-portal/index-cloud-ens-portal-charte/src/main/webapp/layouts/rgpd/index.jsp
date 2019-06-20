@@ -40,6 +40,28 @@
                     <div class="col-md d-flex flex-column">
                         <div class="flex-grow-1">
                             <p:region regionName="col-2"/>
+
+                            <%--Mes donn&eacute;es--%>
+                            <div class="card mb-3">
+                                <div class="card-body">
+                                    <h3 class="h5 card-title">Mes donn&eacute;es</h3>
+                                    <p class="card-text">Par respect de la transparence vis-&agrave;-vis de la
+                                        protection des donn&eacute;es personnelles, vous pouvez consulter l'ensemble
+                                        de vos donn&eacute;es personnelles conserv&eacute;es sur nos serveurs.</p>
+                                    <a href="#" class="card-link">T&eacute;l&eacute;charger mes donn&eacute;es</a>
+                                </div>
+                            </div>
+
+                            <%--Supprimer mon compte--%>
+                            <div class="card border-danger mb-3">
+                                <div class="card-body text-danger">
+                                    <h3 class="h5 card-title">Suppression de mon compte</h3>
+                                    <p class="card-text">La suppression de votre compte effacera de mani&egrave;re d&eacute;finitive
+                                        l'ensemble de vos donn&eacute;es personnelles conserv&eacute;es sur nos
+                                        serveurs.</p>
+                                    <a href="#" class="btn btn-danger">Supprimer mon compte</a>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>

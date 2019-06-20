@@ -20,8 +20,16 @@
     <div class="container-fluid d-flex flex-column flex-grow-1 overflow-hidden">
         <%@include file="../includes/breadcrumb.jspf" %>
 
-        <div class="d-flex flex-column flex-grow-1 overflow-x-hidden overflow-y-auto">
-            <p:region regionName="maximized"/>
+        <div class="row flex-grow-1 pt-4 overflow-auto">
+            <div id="drawer" class="col d-flex d-md-none flex-column mh-100 overflow-hidden">
+                <div class="row flex-column">
+                    <p:region regionName="drawer-header"/>
+                </div>
+            </div>
+
+            <div class="col">
+                <p:region regionName="maximized"/>
+            </div>
         </div>
     </div>
 </main>

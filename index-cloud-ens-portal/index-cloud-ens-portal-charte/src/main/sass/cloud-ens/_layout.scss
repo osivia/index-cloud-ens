@@ -1,8 +1,8 @@
-.drawer-toggle-button {
-  body:not([data-drawer="true"]) & {
-    display: none !important;
-  }
-}
+//.drawer-toggle-button {
+//  body:not([data-drawer="true"]) & {
+//    display: none !important;
+//  }
+//}
 
 
 #maximized {
@@ -10,10 +10,6 @@
     body:not([data-page-header="true"]) & {
       display: none !important;
     }
-  }
-
-  .portlet-container {
-    margin-bottom: 0;
   }
 }
 

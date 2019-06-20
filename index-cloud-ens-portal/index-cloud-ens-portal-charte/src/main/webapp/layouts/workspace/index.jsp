@@ -19,85 +19,24 @@
 <main class="d-flex flex-column flex-grow-1 overflow-auto">
     <div class="container-fluid d-flex flex-column flex-grow-1 overflow-hidden">
         <div class="row flex-grow-1 overflow-hidden">
-            <op:resizable cssClass="col-auto d-flex flex-column mh-100 border-right border-light"
-                          minWidth="200">
-                <div class="row flex-grow-1 overflow-hidden">
-                    <%--Drawer--%>
-                    <div id="drawer" class="col d-flex flex-column mh-100">
-                        <p:region regionName="drawer-header" />
-
-                        <div class="row flex-grow-1 overflow-hidden">
-                            <div class="col pl-0 d-flex flex-column mh-100">
-                                <div class="py-4 flex-grow-1 overflow-auto">
-                                    <p:region regionName="nav"/>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="border-top border-light">
-                            <div class="position-relative py-3">
-                                <div class="progress">
-                                    <div class="progress-bar" role="progressbar" style="width: 25%" aria-valuenow="25"
-                                         aria-valuemin="0" aria-valuemax="100"></div>
-                                </div>
-                                <div>
-                                    <small class="text-muted">
-                                        <span>2,5 Go utilis&eacute;s sur 10 Go</span>
-                                        <br>
-                                        <a href="#" class="stretched-link">Obtenir plus d'espace</a>
-                                    </small>
-                                </div>
-                            </div>
-
-                            <p:region regionName="nav-bottom"/>
-                        </div>
-                    </div>
-                </div>
-            </op:resizable>
+            <%@include file="../includes/nav.jspf" %>
 
             <div class="col-md d-flex flex-column mh-100">
                 <%@include file="../includes/breadcrumb.jspf" %>
 
-                <div class="d-flex flex-column flex-grow-1 overflow-x-hidden overflow-y-auto">
-                    <p:region regionName="top"/>
+                <div class="row flex-grow-1 pt-4 overflow-auto">
+                    <div class="col">
+                        <p:region regionName="top"/>
 
-                    <div class="row">
-                        <div class="col-md d-flex flex-column">
-                            <div class="flex-grow-1">
-                                <h2 class="h6 text-muted">Ma s&eacute;curit&eacute;</h2>
-
+                        <div class="row">
+                            <div class="col-md">
                                 <p:region regionName="col-1"/>
-
-                                <%--Mes donn&eacute;es--%>
-                                <div class="card mb-3">
-                                    <div class="card-body">
-                                        <h3 class="h5 card-title">Mes donn&eacute;es</h3>
-                                        <p class="card-text">Par respect de la transparence vis-&agrave;-vis de la
-                                            protection des donn&eacute;es personnelles, vous pouvez consulter l'ensemble
-                                            de vos donn&eacute;es personnelles conserv&eacute;es sur nos serveurs.</p>
-                                        <a href="#" class="card-link">T&eacute;l&eacute;charger mes donn&eacute;es</a>
-                                    </div>
-                                </div>
-
-                                <%--Supprimer mon compte--%>
-                                <div class="card border-danger mb-3">
-                                    <div class="card-body text-danger">
-                                        <h3 class="h5 card-title">Suppression de mon compte</h3>
-                                        <p class="card-text">La suppression de votre compte effacera de mani&egrave;re d&eacute;finitive
-                                            l'ensemble de vos donn&eacute;es personnelles conserv&eacute;es sur nos
-                                            serveurs.</p>
-                                        <a href="#" class="btn btn-danger">Supprimer mon compte</a>
-                                    </div>
-                                </div>
-
                             </div>
-                        </div>
 
-                        <div class="col-md d-flex flex-column">
-                            <div class="flex-grow-1">
-                                <h2 class="h6 text-muted">Espace communautaire</h2>
-
+                            <div class="col-md">
                                 <p:region regionName="col-2"/>
+
+                                <h2 class="h6 text-muted">Espace communautaire</h2>
 
                                 <%--Mes publications--%>
                                 <div class="card mb-3 bg-light">

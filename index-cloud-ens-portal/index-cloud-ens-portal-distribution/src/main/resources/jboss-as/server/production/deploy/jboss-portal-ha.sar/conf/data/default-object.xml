@@ -927,7 +927,7 @@ return nuxeoRequest.toString();</value>
                     <window>
                         <window-name>index-cloud-ens-highest-levels-instance_1560328144443</window-name>
                         <instance-ref>index-cloud-ens-highest-levels-instance</instance-ref>
-                        <region>col-2</region>
+                        <region>col-1</region>
                         <properties>
                             <property>
                                 <name>portal.windowContentType</name>
@@ -935,7 +935,7 @@ return nuxeoRequest.toString();</value>
                             </property>
                             <property>
                                 <name>osivia.title</name>
-                                <value>Plus hauts niveaux</value>
+                                <value>Mes niveaux préférés</value>
                             </property>
                             <property>
                                 <name>osivia.hideTitle</name>
@@ -989,35 +989,6 @@ return nuxeoRequest.toString();</value>
                             <property>
                                 <name>theme.dyna.partial_refresh_enabled</name>
                                 <value>true</value>
-                            </property>
-                        </properties>
-                        <height>0</height>
-                    </window>
-
-                    <window>
-                        <window-name>index-cloud-portal-ens-ws-dashboardInstance_1558356840272</window-name>
-                        <instance-ref>index-cloud-portal-ens-ws-dashboardInstance</instance-ref>
-                        <region>col-1</region>
-                        <properties>
-                            <property>
-                                <name>osivia.hideDecorators</name>
-                                <value>1</value>
-                            </property>
-                            <property>
-                                <name>portal.windowContentType</name>
-                                <value>portlet</value>
-                            </property>
-                            <property>
-                                <name>osivia.bootstrapPanelStyle</name>
-                                <value>true</value>
-                            </property>
-                            <property>
-                                <name>osivia.title</name>
-                                <value>Mes autorisations</value>
-                            </property>
-                            <property>
-                                <name>theme.order</name>
-                                <value>0</value>
                             </property>
                         </properties>
                         <height>0</height>
@@ -1542,6 +1513,57 @@ return nuxeoRequest.toString();</value>
                             <property>
                                 <name>osivia.keywordMonoValued</name>
                                 <value>2</value>
+                            </property>
+                            <property>
+                                <name>theme.dyna.partial_refresh_enabled</name>
+                                <value>true</value>
+                            </property>
+                        </properties>
+                        <height>0</height>
+                    </window>
+                </page>
+
+                <page>
+                    <page-name>rgpd</page-name>
+                    <display-name xml:lang="fr">RGPD</display-name>
+
+                    <properties>
+                        <property>
+                            <name>layout.id</name>
+                            <value>cloud-ens-rgpd</value>
+                        </property>
+                    </properties>
+
+                    <security-constraint/>
+
+                    <window>
+                        <window-name>index-cloud-portal-ens-ws-dashboardInstance_1561034204647</window-name>
+                        <instance-ref>index-cloud-portal-ens-ws-dashboardInstance</instance-ref>
+                        <region>col-1</region>
+                        <properties>
+                            <property>
+                                <name>portal.windowContentType</name>
+                                <value>portlet</value>
+                            </property>
+                            <property>
+                                <name>osivia.bootstrapPanelStyle</name>
+                                <value>true</value>
+                            </property>
+                            <property>
+                                <name>osivia.title</name>
+                                <value>Mes établissements</value>
+                            </property>
+                            <property>
+                                <name>theme.order</name>
+                                <value>0</value>
+                            </property>
+                            <property>
+                                <name>osivia.ajaxLink</name>
+                                <value>1</value>
+                            </property>
+                            <property>
+                                <name>osivia.hideDecorators</name>
+                                <value>1</value>
                             </property>
                             <property>
                                 <name>theme.dyna.partial_refresh_enabled</name>

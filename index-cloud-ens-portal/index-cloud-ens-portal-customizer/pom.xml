@@ -36,13 +36,13 @@
             <version>${jboss-portal.version}</version>
             <scope>provided</scope>
         </dependency>
-        <!-- <dependency>
+        <dependency>
             <groupId>org.jboss.portal</groupId>
             <artifactId>portal-server-lib</artifactId>
             <version>${jboss-portal.version}</version>
             <scope>provided</scope>
         </dependency>
-        <dependency>
+        <!-- <dependency>
             <groupId>org.jboss.portal</groupId>
             <artifactId>portal-jems-lib</artifactId>
             <version>${jboss-portal.version}</version>

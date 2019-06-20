@@ -7,8 +7,9 @@
         <link rel="icon" type="image/png" href="/img/favicon.png" />
         
         <!-- CSS -->
-        <link rel="stylesheet" href="/css/cloud-ens.css" title="Cloud-ens" />
-        
+        <!--<link rel="stylesheet" href="/css/cloud-ens.css" title="Cloud-ens" />-->
+        <link rel="stylesheet" href="/css/cloud-ens.css" />
+
         <!-- JavaScript -->
         <script type="text/javascript" src="/js/cloud-ens.js"></script>
     </theme>

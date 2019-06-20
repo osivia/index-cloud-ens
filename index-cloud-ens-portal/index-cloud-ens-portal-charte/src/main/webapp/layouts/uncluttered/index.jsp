@@ -20,7 +20,7 @@
 </header>
 
 <main class="d-flex flex-column flex-grow-1 overflow-auto">
-    <div class="container-fluid d-flex flex-column flex-grow-1 overflow-auto">
+    <div class="container-fluid d-flex flex-column flex-grow-1 pt-4 overflow-auto">
         <p:region regionName="col-1"/>
     </div>
 </main>
