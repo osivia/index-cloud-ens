@@ -8,6 +8,11 @@
 
 <portlet:actionURL name="save" var="saveUrl"/>
 
+<div class="page-heade">
+	<div class="h2 m-0"><op:translate key="renew.form.title" /></div>
+</div>
+
+
 <form:form action="${saveUrl}" method="post" modelAttribute="form" role="form">
 
 	<spring:bind path="mail">
@@ -30,7 +35,6 @@
 			    <div class="col-md-9 offset-md-3 col-lg-10 offset-lg-2">
 			        <!-- Save -->
 			        <button type="submit" name="save" class="btn btn-primary">
-			            <i class="glyphicons glyphicons-floppy-disk"></i>
 			            <span><op:translate key="SAVE" /></span>
 			        </button>
 			    </div>

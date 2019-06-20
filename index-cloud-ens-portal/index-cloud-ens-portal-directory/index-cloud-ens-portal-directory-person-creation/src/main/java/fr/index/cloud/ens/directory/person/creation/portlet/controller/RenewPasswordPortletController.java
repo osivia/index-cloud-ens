@@ -64,7 +64,6 @@ import fr.toutatice.portail.cms.nuxeo.api.services.NuxeoCommandContext;
  */
 @Controller
 @RequestMapping(value = "VIEW")
-@SessionAttributes("form")
 public class RenewPasswordPortletController extends CMSPortlet {
 
     /** Application context. */
@@ -121,7 +120,7 @@ public class RenewPasswordPortletController extends CMSPortlet {
         	sendMail(portalControllerContext, form.getMail(), url);
         	
         	form.setSent(true);
-        	        	
+        	session.setComplete();
         }
 	}
 	

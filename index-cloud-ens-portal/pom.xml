@@ -30,7 +30,7 @@
         <!-- Other services -->
         <tasks.version>4.7</tasks.version>
         <procedure.version>4.9-SNAPSHOT</procedure.version>
-        <cgu.version>4.7</cgu.version>
+        <cgu.version>4.9-SNAPSHOT</cgu.version>
 
 		<document-creation.version>4.7.14-RC2</document-creation.version>
 		<onlyoffice.version>4.7.14-RC2</onlyoffice.version>        

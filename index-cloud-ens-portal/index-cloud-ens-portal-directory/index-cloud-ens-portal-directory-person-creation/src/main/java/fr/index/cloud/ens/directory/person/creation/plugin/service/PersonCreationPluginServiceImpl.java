@@ -258,11 +258,15 @@ public class PersonCreationPluginServiceImpl implements PersonCreationPluginServ
         
         List<String> messages = personService.validatePasswordRules(context.getPortalControllerContext(), password);
         if(!messages.isEmpty()) {
-        	String messagesConcat = bundle.getString("PASSWORD_VALIDATION");
+        	String messagesConcat = bundle.getString("PASSWORD_VALIDATION") + "<ul>";
         	
-        	messagesConcat = messagesConcat + StringUtils.join(messages, ", ");
+        	for(String message : messages) {
+        		messagesConcat = messagesConcat.concat("<li>").concat(message).concat("</li>");
+        	}
+        	messagesConcat.concat("</ul>");
             throw new FormFilterException(messagesConcat);
 
+            
         }
         
         

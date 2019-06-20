@@ -252,28 +252,12 @@
 					<region>col-1</region>
 					<properties>
 						<property>
-							<name>osivia.ajaxLink</name>
-							<value>1</value>
-						</property>
-						<property>
-							<name>osivia.hideDecorators</name>
-							<value>1</value>
-						</property>
-						<property>
-							<name>theme.order</name>
-							<value>0</value>
-						</property>
-						<property>
-							<name>theme.dyna.partial_refresh_enabled</name>
-							<value>true</value>
-						</property>
-						<property>
 							<name>portal.windowContentType</name>
 							<value>portlet</value>
 						</property>
 						<property>
 							<name>osivia.bootstrapPanelStyle</name>
-							<value>true</value>
+							<value>false</value>
 						</property>
 						<property>
 							<name>osivia.title</name>
@@ -284,13 +268,34 @@
 							<value>false</value>
 						</property>
 						<property>
+							<name>osivia.hideTitle</name>
+							<value>1</value>
+						</property>
+						<property>
+							<name>theme.order</name>
+							<value>0</value>
+						</property>
+						<property>
+							<name>osivia.ajaxLink</name>
+							<value>1</value>
+						</property>
+						<property>
+							<name>osivia.hideDecorators</name>
+							<value>1</value>
+						</property>
+						<property>
 							<name>osivia.mobileCollapse</name>
 							<value>false</value>
+						</property>
+						<property>
+							<name>theme.dyna.partial_refresh_enabled</name>
+							<value>true</value>
 						</property>
 					</properties>
 					<height>0</height>
 				</window>
-			</page>            
+			</page>		
+		
 
             <page>
                 <page-name>workspace-management</page-name>
