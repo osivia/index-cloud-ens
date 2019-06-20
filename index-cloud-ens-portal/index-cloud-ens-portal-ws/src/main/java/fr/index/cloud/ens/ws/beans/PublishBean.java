@@ -13,12 +13,6 @@ public class PublishBean {
     private String shareUrl;
     
  
-
-	/** The format. */
-	private String format;    
-    
-    /** The pub organization. */
-    private String pubOrganization;    
     
     /** The pub group. */
     private String pubGroup;    
@@ -26,9 +20,12 @@ public class PublishBean {
     /** The pub context. */
     private String pubContext;    
     
+    /** The pub school yeard. */
+    private String pubSchoolYear;        
     
-    
-    
+
+
+
     /**
      * Gets the share url.
      *
@@ -78,8 +75,7 @@ public class PublishBean {
         return pubContext;
     }
 
-
-    
+   
     /**
      * Setter for pubContext.
      * @param pubContext the pubContext to set
@@ -88,51 +84,32 @@ public class PublishBean {
         this.pubContext = pubContext;
     }
 
+    
+    
+    /**
+     * Getter for pubSchoolYear.
+     * @return the pubSchoolYear
+     */
+    public String getPubSchoolYear() {
+        return pubSchoolYear;
+    }
+
+
+    
+    /**
+     * Setter for pubSchoolYear.
+     * @param pubSchoolYear the pubSchoolYear to set
+     */
+    public void setPubSchoolYear(String pubSchoolYear) {
+        this.pubSchoolYear = pubSchoolYear;
+    }
+
 
     /** The properties. */
     // Classifiers
     Map<String,String> properties;
     
-    
-    /**
-     * Getter for format.
-     * @return the format
-     */
-    public String getFormat() {
-        return format;
-    }
-
-    
-    /**
-     * Setter for format.
-     * @param format the format to set
-     */
-    public void setFormat(String format) {
-        this.format = format;
-    }
-    
-    
-    /**
-     * Getter for pubOrganization.
-     * @return the pubOrganization
-     */
-    public String getPubOrganization() {
-        return pubOrganization;
-    }
-
-    
-    /**
-     * Setter for pubOrganization.
-     * @param pubOrganization the pubOrganization to set
-     */
-    public void setPubOrganization(String pubOrganization) {
-        this.pubOrganization = pubOrganization;
-    }
-
-    
-
-
-    
+   
     /**
      * Getter for properties.
      * @return the properties

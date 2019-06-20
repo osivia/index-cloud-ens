@@ -1,5 +1,6 @@
 package fr.index.cloud.ens.ws.commands;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
@@ -14,6 +15,7 @@ import org.nuxeo.ecm.automation.client.model.Document;
 import org.nuxeo.ecm.automation.client.model.PropertyList;
 import org.nuxeo.ecm.automation.client.model.PropertyMap;
 
+import fr.index.cloud.ens.ws.beans.PublishBean;
 import fr.toutatice.portail.cms.nuxeo.api.INuxeoCommand;
 
 /**
@@ -34,27 +36,21 @@ public class PublishCommand implements INuxeoCommand {
     /** meta-datas */
     Map<String, String> qualifiers;
     
-    /** publication format */    
-    String format;
 
 
     /** publication target */    
-    String pubOrganization;
-    String pubGroup;
-    String pubContext;
+    PublishBean publishBean;
     
     /**
      * Constructor.
      */
-    public PublishCommand(Document doc,  String format,  String pubOrganization, String pubGroup, String pubContext, Map<String, String> qualifiers) {
+    public PublishCommand(Document doc,  PublishBean publishBean, Map<String, String> qualifiers) {
         super();
         this.doc = doc;
-        this.format = format;
+
         this.qualifiers = qualifiers;
 
-        this.pubOrganization = pubOrganization;
-        this.pubGroup = pubGroup;       
-        this.pubContext = pubContext;      
+        this.publishBean = publishBean;
     }
 
 
@@ -82,11 +78,17 @@ public class PublishCommand implements INuxeoCommand {
         PropertyMap value = new PropertyMap();
         String pubId = IDGenerator.generateId();
         value.set("pubId", pubId);
-        value.set("pubOrganization", pubOrganization);
-        value.set("pubGroup", pubGroup);   
-        value.set("pubContext", pubContext);   
         
-        // Operation request
+        // TODO Get AAuth2 token
+        value.set("pubOrganization", "");
+        
+        value.set("pubGroup", publishBean.getPubGroup());   
+        value.set("pubContext",publishBean.getPubContext());
+        value.set("pubSchoolYear",publishBean.getPubSchoolYear());
+        
+        value.set("pubDate", new Date(System.currentTimeMillis()));
+        
+         // Operation request
         OperationRequest request = nuxeoSession.newRequest("Document.AddComplexProperty");
         request.setInput(doc);
         request.set("xpath", "rshr:targets");

@@ -2,7 +2,8 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://www.osivia.org/jsp/taglib/osivia-portal" prefix="op" %>
 <%@ taglib uri="http://www.toutatice.fr/jsp/taglib/toutatice" prefix="ttc" %>
-
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ page isELIgnored="false" %>
 
 
@@ -95,58 +96,122 @@
     </div>
 
 
-    <!-- Pronote share & targets -->
+   
+    
     <c:set var="share" value="${document.properties['rshr:linkId']}"/>
     <c:set var="targets" value="${document.properties['rshr:targets']}"/>
+    
     <c:if test="${not empty share}">
+      
         <div class="card mb-3">
             <div class="card-body">
-            
 				<h3 class="h5 card-title text-overflow">
 		            <span><op:translate key="DOCUMENT_METADATA_CONSULT"/></span>
 		        </h3>              
                 <p class="card-text">
-                    <op:translate key="SHARED_LINK"/><br/>
-                    <a id="${namespace}-link-url" class="btn btn-link text-overflow"
-                       href="/s/${share}">https://${pageContext.request.serverName}/s/${share}</a>
-                </p>
-
+                   <a href="/s/${share}"><op:translate key="SHARED_LINK"/></a>
+                 </p>
+ 
                 <!-- Format -->
-                <portlet:actionURL name="inline-edition" var="submitUrl">
-                    <portlet:param name="property" value="rshr:format"/>
-                    <portlet:param name="cancel-url" value="${cancelUrl}"/>
-                </portlet:actionURL>
-                <form action="${submitUrl}" method="post">
-                    <div class="form-group inline-edition">
-                        <label class="control-label"><op:translate key="DOCUMENT_METADATA_FORMAT_LABEL"/></label>
-                        <div class="radio">
-                            <label> <input type="radio" name="inline-values"
-                                           value="pdf" ${empty document.properties['rshr:format'] or document.properties['rshr:format'] eq 'pdf' ? 'checked' : ''}>
-                                Pdf
-                            </label>
-                        </div>
-                        <div class="radio">
-                            <label> <input type="radio" name="inline-values"
-                                           value="native" ${document.properties['rshr:format'] eq 'native' ? 'checked' : ''}>
-                                Format natif
-                            </label>
-                        </div>
-                    </div>
-
-                    <input type="submit" class="d-none">
-                </form>
+                
+                 <c:if test="${document.pdfConvertible}">
+ 	                <portlet:actionURL name="inline-edition" var="submitUrl">
+	                    <portlet:param name="property" value="rshr:format"/>
+	                    <portlet:param name="cancel-url" value="${cancelUrl}"/>
+	                </portlet:actionURL>
+	                <form action="${submitUrl}" method="post">
+	                	<c:if test="${not empty targets}">
+	                		<input type="hidden" name="warn-message" value="<op:translate key="DOCUMENT_CHANGE_FORMAT_WARN_MESSAGE"/>">
+	                	</c:if>
+	                
+	                    <div class="form-group inline-edition">
+	                        <label class="control-label"><op:translate key="DOCUMENT_METADATA_FORMAT_LABEL"/></label>
+	                        <div class="radio">
+	                            <label> <input type="radio" name="inline-values"
+	                                           value="pdf" ${empty document.properties['rshr:format'] or document.properties['rshr:format'] eq 'pdf' ? 'checked' : ''}>
+	                                <op:translate key="SHARED_FORMAT_PDF"/>
+	                            </label>
+	                        </div>
+	                        <div class="radio">
+	                            <label> <input type="radio" name="inline-values"
+	                                           value="native" ${document.properties['rshr:format'] eq 'native' ? 'checked' : ''}>
+	                                <op:translate key="SHARED_FORMAT_NATIVE"/>
+	                            </label>
+	                        </div>
+	                    </div>
+	
+	                    <input type="submit" class="d-none">
+	                </form>
+                </c:if>
 
                 <c:if test="${not empty targets}">
-                    <op:translate key="SHARED_TARGET"/>
-                    <ul class="list-unstyled">
-	                    <c:forEach var="target" items="${targets}">
-	                        <li>
-	                            <span>${target.pubOrganization}</span>
-	                            /<span>${target.pubGroup}</span>
-	                            /<span>${target.pubContext}</span>
-	                        </li>
-	                    </c:forEach>
-                    </ul>
+                	<span>
+	                    <span class="badge badge-warning">${fn:length(targets)}</span>
+						<a href="#" class="no-ajax-link "data-toggle="modal" data-target="#${namespace}-targets">
+							<c:choose>
+							  <c:when test="${fn:length(targets) eq 1}">
+							   		<op:translate key="SHARED_TARGET_REFERENCE"/>
+							  </c:when>
+							  <c:otherwise>
+						   			<op:translate key="SHARED_TARGET_REFERENCES"/>
+							  </c:otherwise>
+							</c:choose>						
+						</a>
+					</span>
+					
+					
+                    
+			  	   <!-- Target modal -->
+				    <div id="${namespace}-targets" class="modal fade" tabindex="-1" role="dialog">
+				        <div class="modal-dialog" role="document">
+				            <div class="modal-content">
+				                <div class="modal-header">
+				                    <h5 class="modal-title">
+				                        <span><op:translate key="SHARED_TARGET_TITLE"/></span>
+				                    </h5>
+				
+				                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+				                        <span aria-hidden="true">&times;</span>
+				                    </button>
+				                </div>
+
+								<div class="modal-body">
+									<table class="table">
+										<thead class="thead-light">
+											<tr>
+												<th scope="col"><op:translate key="SHARED_TARGET_REFERENCES_DATE"/></th>
+												<th scope="col"><op:translate key="SHARED_TARGET_REFERENCES_GROUP"/></th>
+												<th scope="col"><op:translate key="SHARED_TARGET_REFERENCES_CONTEXT"/></th>
+											</tr>
+										</thead>
+										<tbody>
+											<c:forEach var="target" items="${targets}">
+												<c:set var="pubDate" value="${target.pubDate}" />
+												<c:set var="pubGroup" value="${target.pubGroup}" />
+												<c:set var="pubContext" value="${target.pubContext}" />
+
+												<tr>
+													<td><c:if test="${not empty pubDate}">
+															<fmt:formatDate value="${pubDate}" type="date" dateStyle="long" />
+														</c:if></td>
+													<td><c:if test="${not empty pubGroup}">
+								                            	${target.pubGroup}
+								                            </c:if></td>
+													<td><c:if test="${not empty pubContext}">
+								                            	${target.pubContext}
+								                            </c:if></td>
+												</tr>
+											</c:forEach>
+										</tbody>
+									</table>
+
+								</div>
+							</div>
+				        </div>
+				    </div>                     
+                    
+                    
+                    
                 </c:if>
 
                 <!-- Remote publication spaces -->
@@ -155,5 +220,7 @@
                 </dl>
             </div>
         </div>
+        
+     
     </c:if>
 </div>

@@ -10,8 +10,11 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.osivia.portal.api.PortalException;
 import org.osivia.portal.api.context.PortalControllerContext;
+import org.osivia.portal.api.internationalization.Bundle;
+import org.osivia.portal.api.internationalization.IBundleFactory;
 import org.osivia.portal.api.locator.Locator;
 import org.osivia.portal.api.tokens.ITokenService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import fr.toutatice.portail.cms.nuxeo.api.forms.FormFilter;
@@ -35,6 +38,10 @@ public class DecodeUserCreationTokenFilter implements FormFilter {
 
 	private static final String DESCRIPTION_KEY = "DECODE_USER_TOKEN_DESCRIPTION";
 
+    /** Internationalization bundle factory. */
+    @Autowired
+    private IBundleFactory bundleFactory;
+	
 	/* (non-Javadoc)
 	 * @see fr.toutatice.portail.cms.nuxeo.api.forms.FormFilter#getId()
 	 */
@@ -97,10 +104,12 @@ public class DecodeUserCreationTokenFilter implements FormFilter {
 				context.getVariables().putAll(validateToken);
 			}
 			else {
-				throw new FormFilterException("No token found or the token has expired.");
+		        // Internationalization bundle
+		        Bundle bundle = this.bundleFactory.getBundle(portalControllerContext.getHttpServletRequest().getLocale());
+                String message = bundle.getString("TOKEN_VALIDATION_FAILED");
+				throw new FormFilterException(message);
 			}
 			
-			// TODO redirection si erreur
 			
 		}
 		

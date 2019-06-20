@@ -15,6 +15,9 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 
+import fr.toutatice.portail.cms.nuxeo.api.services.INuxeoService;
+import fr.toutatice.portail.cms.nuxeo.api.services.dao.DocumentDAO;
+
 
 
 /**
@@ -93,4 +96,16 @@ public class PortalServices   {
     public IStatusService getStatusService() {
         return Locator.findMBean(IStatusService.class, "osivia:service=StatusServices");
     }
+    
+    
+    /**
+     * Get document DAO.
+     *
+     * @return document DAO
+     */
+    @Bean
+    public DocumentDAO getDocumentDao() {
+        return DocumentDAO.getInstance();
+    }
+
 }

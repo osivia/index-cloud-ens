@@ -16,6 +16,17 @@
             <schema name="indexClassifiers" />
             <schema name="resourceSharing" />
         </doctype>
+        
+        <doctype name="Video" append="true">
+            <schema name="indexClassifiers" />
+            <schema name="resourceSharing" />
+        </doctype>    
+        
+        <doctype name="Audio" append="true">
+            <schema name="indexClassifiers" />
+            <schema name="resourceSharing" />
+        </doctype>        
+
 
     	<doctype name="UserProfile" append="true">
     	       <schema name="oauth2Tokens"/>
