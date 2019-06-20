@@ -77,10 +77,10 @@ public class GenerateCommand implements INuxeoCommand {
         owner.setMail(uid + "@example.com");
 
         io.codearte.jfairy.producer.person.Person personGen = fairy.person();
-        owner.setSn(personGen.firstName());
-        owner.setGivenName(personGen.lastName());
-        owner.setDisplayName(personGen.firstName() + " " + personGen.lastName());
-        owner.setCn(personGen.lastName() + " " + personGen.firstName());
+        owner.setSn(personGen.getFirstName());
+        owner.setGivenName(personGen.getLastName());
+        owner.setDisplayName(personGen.getFirstName() + " " + personGen.getLastName());
+        owner.setCn(personGen.getLastName() + " " + personGen.getFirstName());
         if (personGen.isMale()) {
             owner.setTitle("M.");
         } else
