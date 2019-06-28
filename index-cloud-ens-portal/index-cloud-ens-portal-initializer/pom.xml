@@ -62,6 +62,18 @@
                             <goal>single</goal>
                         </goals>
                     </execution>
+                    <execution>
+                        <id>nuxeo-exports-configuration-space</id>
+                        <phase>process-resources</phase>
+                        <configuration>
+                            <descriptorSourceDirectory>src/main/assembly/configuration-space</descriptorSourceDirectory>
+                            <finalName>export</finalName>
+                          	<outputDirectory>${project.build.directory}/${project.artifactId}-${project.version}/docs/configuration-space</outputDirectory>
+                        </configuration>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                    </execution>                    
                 </executions>
             </plugin>
         </plugins>

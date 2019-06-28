@@ -7,6 +7,7 @@ import fr.toutatice.portail.cms.nuxeo.api.domain.AbstractPluginPortlet;
 import fr.toutatice.portail.cms.nuxeo.api.domain.INavigationAdapterModule;
 import fr.toutatice.portail.cms.nuxeo.api.domain.ListTemplate;
 import org.jboss.portal.theme.impl.render.dynamic.DynaRenderOptions;
+import org.osivia.portal.api.cms.DocumentType;
 import org.osivia.portal.api.customization.CustomizationContext;
 import org.osivia.portal.api.internationalization.Bundle;
 import org.osivia.portal.api.internationalization.IBundleFactory;
@@ -162,26 +163,8 @@ public class CloudEnsPlugin extends AbstractPluginPortlet {
         // Factory
         TaskbarFactory factory = this.getTaskbarService().getFactory();
 
-        // Recent items player
-        PanelPlayer player = new PanelPlayer();
-        // Recent items player instance
-        player.setInstance("osivia-services-workspace-file-browser-instance");
-        // Recent items player properties
-        Map<String, String> properties = new HashMap<>();
-        properties.put("osivia.file-browser.base-path", "${userWorkspacePath}");
-        properties.put("osivia.file-browser.nxql", "StringBuilder nuxeoRequest = new StringBuilder();" +
-                "nuxeoRequest.append(\"ecm:primaryType IN ('File', 'Picture', 'Audio', 'Video') \");" +
-                "nuxeoRequest.append(\"AND ecm:path STARTSWITH '\").append(basePath).append(\"' \");" +
-                "nuxeoRequest.append(\"ORDER BY dc:modified DESC\");" +
-                "return nuxeoRequest.toString();");
-        properties.put("osivia.file-browser.beanshell", String.valueOf(true));
-        properties.put("osivia.file-browser.list-mode", String.valueOf(true));
-        properties.put(DynaRenderOptions.PARTIAL_REFRESH_ENABLED, String.valueOf(true));
-        properties.put("osivia.ajaxLink", "1");
-        player.setProperties(properties);
-        // Recent items taskbar item
-        TaskbarItem item = factory.createStapledTaskbarItem("RECENT_ITEMS", "RECENT_ITEMS_TASK", "glyphicons glyphicons-basic-history", player);
-
+       
+        TaskbarItem item = factory.createStapledTaskbarItem("RECENT_ITEMS", "RECENT_ITEMS_TASK", "glyphicons glyphicons-basic-history", "\\default\\templates\\recent");
         items.add(item);
     }
 

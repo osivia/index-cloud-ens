@@ -1,5 +1,6 @@
 package fr.index.cloud.ens.initializer.service;
 
+import fr.index.cloud.ens.initializer.service.commands.CreateConfigurationSpaceCommand;
 import fr.index.cloud.ens.initializer.service.commands.CreateProcedureContainerCommand;
 import fr.index.cloud.ens.initializer.service.commands.CreatePublicationSpaceCommand;
 import fr.toutatice.portail.cms.nuxeo.api.NuxeoController;
@@ -44,6 +45,9 @@ public class InitializerServiceImpl implements InitializerService {
 
         // Publication space
         nuxeoController.executeNuxeoCommand(new CreatePublicationSpaceCommand());
+        
+        // Configuration space
+        nuxeoController.executeNuxeoCommand(new CreateConfigurationSpaceCommand());
     }
 
 }

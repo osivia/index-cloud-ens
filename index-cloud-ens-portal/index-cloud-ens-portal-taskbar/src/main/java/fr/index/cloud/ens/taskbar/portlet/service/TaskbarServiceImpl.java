@@ -9,6 +9,7 @@ import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.osivia.portal.api.Constants;
 import org.osivia.portal.api.PortalException;
+import org.osivia.portal.api.cms.VirtualNavigationUtils;
 import org.osivia.portal.api.context.PortalControllerContext;
 import org.osivia.portal.api.internationalization.Bundle;
 import org.osivia.portal.api.internationalization.IBundleFactory;
@@ -139,6 +140,7 @@ public class TaskbarServiceImpl implements TaskbarService {
             throw new PortletException(e);
         }
 
+        
         List<TaskbarTask> folders = new ArrayList<>();
         if (CollectionUtils.isNotEmpty(navigationTasks)) {
             for (TaskbarTask navigationTask : navigationTasks) {
@@ -167,7 +169,7 @@ public class TaskbarServiceImpl implements TaskbarService {
             tasks.add(trash);
         }
         // Recent items
-        TaskbarTask recentItems = this.createRecentItemsTaskbarTask(portalControllerContext);
+        TaskbarTask recentItems = this.createRecentItemsTaskbarTask(portalControllerContext, navigationTasks);
         if (recentItems != null) {
             tasks.add(recentItems);
         }
@@ -244,31 +246,52 @@ public class TaskbarServiceImpl implements TaskbarService {
      * @param portalControllerContext portal controller context
      * @return taskbar task
      */
-    private TaskbarTask createRecentItemsTaskbarTask(PortalControllerContext portalControllerContext) throws PortletException {
-        // Locale
-        Locale locale = portalControllerContext.getRequest().getLocale();
-        // Internationalization bundle
-        Bundle bundle = this.bundleFactory.getBundle(locale);
+    private TaskbarTask createRecentItemsTaskbarTask(PortalControllerContext portalControllerContext, List<TaskbarTask> navigationTasks) throws PortletException {
 
-        // Taskbar item
-        TaskbarItem item;
-        try {
-            item = this.taskbarService.getItem(portalControllerContext, "RECENT_ITEMS");
-        } catch (PortalException e) {
-            throw new PortletException(e);
+        TaskbarTask task = extractVirtualStapple(portalControllerContext, navigationTasks,  "RECENT_ITEMS");
+
+        return task;
+    }
+
+
+    /**
+     * Extract task from virtual navigation.
+     *
+     * @param portalControllerContext the portal controller context
+     * @param navigationTasks the navigation tasks
+     * @param targetTaskbarItemId the target taskbar item id
+     * @return the taskbar task
+     * @throws PortletException the portlet exception
+     */
+    
+    private TaskbarTask extractVirtualStapple(PortalControllerContext portalControllerContext, List<TaskbarTask> navigationTasks, 
+            String targetTaskbarItemId) throws PortletException {
+        
+        TaskbarTask task = null;
+
+        if (CollectionUtils.isNotEmpty(navigationTasks)) {
+            for (TaskbarTask navigationTask : navigationTasks) {
+                if (!navigationTask.isDisabled() && !navigationTask.isHidden()) {
+                    if (TaskbarItemType.CMS.equals(navigationTask.getType())) {
+                        String stappleId = VirtualNavigationUtils.getStappleId(navigationTask.getPath());
+                        if (targetTaskbarItemId.equals(stappleId)) {
+                            try {
+                                // Get Item declaration
+                                TaskbarItem item = this.taskbarService.getItem(portalControllerContext, stappleId);
+                                if (item != null) {
+                                    // Create mixin navigation task (task for path + item for icon)
+                                    task = this.taskbarService.getFactory().createTaskbarTask(navigationTask.getId(), navigationTask.getTitle(), item.getIcon(),
+                                            navigationTask.getPath(), "Staple", false);
+                                }
+                                break;
+                            } catch (PortalException e) {
+                                throw new PortletException(e);
+                            }
+                        }
+                    }
+                }
+            }
         }
-
-        // Taskbar task
-        TaskbarTask task;
-        if (item == null) {
-            task = null;
-        } else {
-            // Title
-            String title = bundle.getString("TASKBAR_RECENT_ITEMS");
-
-            task = this.taskbarService.getFactory().createTaskbarTask(item, title, null, false);
-        }
-
         return task;
     }
 

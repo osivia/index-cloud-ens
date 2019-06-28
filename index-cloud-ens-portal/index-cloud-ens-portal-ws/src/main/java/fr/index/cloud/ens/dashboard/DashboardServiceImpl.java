@@ -172,13 +172,20 @@ public class DashboardServiceImpl implements DashboardService, ApplicationContex
      */
     private List<DashboardApplication> getSelection(DashboardForm form, String[] identifiers) {
         // Application map
-        Map<String, DashboardApplication> applicationMap;
+        Map<String, List<DashboardApplication>> applicationMap;
         if (CollectionUtils.isEmpty(form.getApplications())) {
             applicationMap = null;
         } else {
             applicationMap = new HashMap<>(form.getApplications().size());
             for (DashboardApplication application : form.getApplications()) {
-                applicationMap.put(application.getClientId(), application);
+                
+                List<DashboardApplication> applications = applicationMap.get(application.getClientId());
+                if( applications == null)   {
+                    applications = new ArrayList<>();
+                    applicationMap.put(application.getClientId(), applications);
+                }
+                
+                applications.add( application);
             }
         }
 
@@ -190,9 +197,11 @@ public class DashboardServiceImpl implements DashboardService, ApplicationContex
         } else {
             selection = new ArrayList<>(identifiers.length);
             for (String identifier : identifiers) {
-                DashboardApplication application = applicationMap.get(identifier);
-                if (application != null) {
-                    selection.add(application);
+                List<DashboardApplication> applications = applicationMap.get(identifier);
+                if (applications != null) {
+                    for( DashboardApplication application:applications) {
+                        selection.add(application);
+                    }
                 }
             }
         }
