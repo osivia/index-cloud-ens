@@ -163,15 +163,20 @@ public class TaskbarServiceImpl implements TaskbarService {
         tasks.add(home);
         // Folders
         tasks.addAll(folders);
+        // Search
+        TaskbarTask search = this.extractVirtualStaple(portalControllerContext, navigationTasks, "SEARCH");
+        if (search != null) {
+            tasks.add(search);
+        }
+        // Recent items
+        TaskbarTask recentItems = this.extractVirtualStaple(portalControllerContext, navigationTasks,  "RECENT_ITEMS");
+        if (recentItems != null) {
+            tasks.add(recentItems);
+        }
         // Trash
         TaskbarTask trash = this.createTrashTaskbarTask(portalControllerContext);
         if (trash != null) {
             tasks.add(trash);
-        }
-        // Recent items
-        TaskbarTask recentItems = this.createRecentItemsTaskbarTask(portalControllerContext, navigationTasks);
-        if (recentItems != null) {
-            tasks.add(recentItems);
         }
 
         // Taskbar
@@ -241,20 +246,6 @@ public class TaskbarServiceImpl implements TaskbarService {
 
 
     /**
-     * Create recent items taskbar task.
-     *
-     * @param portalControllerContext portal controller context
-     * @return taskbar task
-     */
-    private TaskbarTask createRecentItemsTaskbarTask(PortalControllerContext portalControllerContext, List<TaskbarTask> navigationTasks) throws PortletException {
-
-        TaskbarTask task = extractVirtualStapple(portalControllerContext, navigationTasks,  "RECENT_ITEMS");
-
-        return task;
-    }
-
-
-    /**
      * Extract task from virtual navigation.
      *
      * @param portalControllerContext the portal controller context
@@ -264,9 +255,8 @@ public class TaskbarServiceImpl implements TaskbarService {
      * @throws PortletException the portlet exception
      */
     
-    private TaskbarTask extractVirtualStapple(PortalControllerContext portalControllerContext, List<TaskbarTask> navigationTasks, 
-            String targetTaskbarItemId) throws PortletException {
-        
+    private TaskbarTask extractVirtualStaple(PortalControllerContext portalControllerContext, List<TaskbarTask> navigationTasks,
+                                             String targetTaskbarItemId) throws PortletException {
         TaskbarTask task = null;
 
         if (CollectionUtils.isNotEmpty(navigationTasks)) {
@@ -292,6 +282,7 @@ public class TaskbarServiceImpl implements TaskbarService {
                 }
             }
         }
+
         return task;
     }
 

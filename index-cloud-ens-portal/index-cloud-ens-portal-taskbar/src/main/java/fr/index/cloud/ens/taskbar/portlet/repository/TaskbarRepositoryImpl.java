@@ -152,57 +152,65 @@ public class TaskbarRepositoryImpl implements TaskbarRepository {
         // Nuxeo controller
         NuxeoController nuxeoController = new NuxeoController(portalControllerContext);
 
-        // Current document context
-        NuxeoDocumentContext documentContext = nuxeoController.getCurrentDocumentContext();
-        // Current document type
-        DocumentType documentType;
-        if (documentContext == null) {
-            documentType = null;
-        } else {
-            documentType = documentContext.getDocumentType();
-        }
-        // Current document permissions
-        NuxeoPermissions permissions;
-        if (documentContext == null) {
-            permissions = null;
-        } else {
-            permissions = documentContext.getPermissions();
-        }
+        // Base path
+        String basePath = nuxeoController.getBasePath();
 
         // Dropdown items
         List<AddDropdownItem> dropdownItems;
 
-        if ((documentType != null) && "Folder".equals(documentType.getName()) && (permissions != null) && permissions.isEditable()) {
-            dropdownItems = new ArrayList<>();
-
-            // Internationalization bundle
-            Bundle bundle = this.bundleFactory.getBundle(portalControllerContext.getRequest().getLocale());
-            // Nuxeo customizer
-            INuxeoCustomizer nuxeoCustomizer = this.nuxeoService.getCMSCustomizer();
-            // Document types
-            Map<String, DocumentType> documentTypes = nuxeoCustomizer.getDocumentTypes();
-
-
-            // Parent path
-            String parentPath = documentContext.getCmsPath();
-
-            for (String type : Arrays.asList("Folder", "File")) {
-                AddDropdownItem dropdownItem = this.generateDocumentTypeDropdownItem(portalControllerContext, bundle, documentTypes, parentPath, type);
-
-                if (dropdownItem != null) {
-                    dropdownItems.add(dropdownItem);
-                }
-            }
-
-            for (String mimeType : Arrays.asList("application/vnd.openxmlformats-officedocument.wordprocessingml.document", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "application/vnd.openxmlformats-officedocument.presentationml.presentation")) {
-                AddDropdownItem dropdownItem = this.generateLiveDocumentDropdownItem(nuxeoController, bundle, parentPath, mimeType);
-
-                if (dropdownItem != null) {
-                    dropdownItems.add(dropdownItem);
-                }
-            }
-        } else {
+        if (StringUtils.isEmpty(basePath)) {
             dropdownItems = null;
+        } else {
+            // Documents path
+            String documentsPath = basePath + "/documents";
+            // Navigation path
+            String navigationPath = nuxeoController.getNavigationPath();
+            // Parent document path
+            String parentPath;
+            if (StringUtils.startsWith(navigationPath, documentsPath)) {
+                parentPath = navigationPath;
+            } else {
+                parentPath = documentsPath;
+            }
+
+            // Document context
+            NuxeoDocumentContext documentContext = nuxeoController.getDocumentContext(parentPath);
+            // Document permissions
+            NuxeoPermissions permissions;
+            if (documentContext == null) {
+                permissions = null;
+            } else {
+                permissions = documentContext.getPermissions();
+            }
+
+            if ((permissions != null) && permissions.isEditable()) {
+                dropdownItems = new ArrayList<>();
+
+                // Internationalization bundle
+                Bundle bundle = this.bundleFactory.getBundle(portalControllerContext.getRequest().getLocale());
+                // Nuxeo customizer
+                INuxeoCustomizer nuxeoCustomizer = this.nuxeoService.getCMSCustomizer();
+                // Document types
+                Map<String, DocumentType> documentTypes = nuxeoCustomizer.getDocumentTypes();
+
+                for (String type : Arrays.asList("Folder", "File")) {
+                    AddDropdownItem dropdownItem = this.generateDocumentTypeDropdownItem(portalControllerContext, bundle, documentTypes, parentPath, type);
+
+                    if (dropdownItem != null) {
+                        dropdownItems.add(dropdownItem);
+                    }
+                }
+
+                for (String mimeType : Arrays.asList("application/vnd.openxmlformats-officedocument.wordprocessingml.document", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "application/vnd.openxmlformats-officedocument.presentationml.presentation")) {
+                    AddDropdownItem dropdownItem = this.generateLiveDocumentDropdownItem(nuxeoController, bundle, parentPath, mimeType);
+
+                    if (dropdownItem != null) {
+                        dropdownItems.add(dropdownItem);
+                    }
+                }
+            } else {
+                dropdownItems = null;
+            }
         }
 
         return dropdownItems;
