@@ -99,65 +99,34 @@
    
     
     <c:set var="share" value="${document.properties['rshr:linkId']}"/>
+    <c:set var="enabled" value="${document.properties['rshr:enabledLink']}"/>    
     <c:set var="targets" value="${document.properties['rshr:targets']}"/>
     
-    <c:if test="${not empty share}">
+
       
         <div class="card mb-3">
             <div class="card-body">
 				<h3 class="h5 card-title text-overflow">
 		            <span><op:translate key="DOCUMENT_METADATA_CONSULT"/></span>
-		        </h3>              
-                <p class="card-text">
-                   <a href="/s/${share}"><op:translate key="SHARED_LINK"/></a>
-                 </p>
- 
-                <!-- Format -->
-                
-                 <c:if test="${document.pdfConvertible}">
- 	                <portlet:actionURL name="inline-edition" var="submitUrl">
-	                    <portlet:param name="property" value="rshr:format"/>
-	                    <portlet:param name="cancel-url" value="${cancelUrl}"/>
-	                </portlet:actionURL>
-	                <form action="${submitUrl}" method="post">
-	                	<c:if test="${not empty targets}">
-	                		<input type="hidden" name="warn-message" value="<op:translate key="DOCUMENT_CHANGE_FORMAT_WARN_MESSAGE"/>">
-	                	</c:if>
-	                
-	                    <div class="form-group inline-edition">
-	                        <label class="control-label"><op:translate key="DOCUMENT_METADATA_FORMAT_LABEL"/></label>
-	                        <div class="radio">
-	                            <label> <input type="radio" name="inline-values"
-	                                           value="pdf" ${empty document.properties['rshr:format'] or document.properties['rshr:format'] eq 'pdf' ? 'checked' : ''}>
-	                                <op:translate key="SHARED_FORMAT_PDF"/>
-	                            </label>
-	                        </div>
-	                        <div class="radio">
-	                            <label> <input type="radio" name="inline-values"
-	                                           value="native" ${document.properties['rshr:format'] eq 'native' ? 'checked' : ''}>
-	                                <op:translate key="SHARED_FORMAT_NATIVE"/>
-	                            </label>
-	                        </div>
-	                    </div>
-	
-	                    <input type="submit" class="d-none">
-	                </form>
-                </c:if>
-
+		        </h3>
+		        
+		        
                 <c:if test="${not empty targets}">
-                	<span>
-	                    <span class="badge badge-warning">${fn:length(targets)}</span>
-						<a href="#" class="no-ajax-link "data-toggle="modal" data-target="#${namespace}-targets">
-							<c:choose>
-							  <c:when test="${fn:length(targets) eq 1}">
-							   		<op:translate key="SHARED_TARGET_REFERENCE"/>
-							  </c:when>
-							  <c:otherwise>
-						   			<op:translate key="SHARED_TARGET_REFERENCES"/>
-							  </c:otherwise>
-							</c:choose>						
-						</a>
-					</span>
+                	<p >
+	                	<span>
+		                    <span class="badge badge-warning">${fn:length(targets)}</span>
+							<a href="#" class="no-ajax-link "data-toggle="modal" data-target="#${namespace}-targets">
+								<c:choose>
+								  <c:when test="${fn:length(targets) eq 1}">
+								   		<op:translate key="SHARED_TARGET_REFERENCE"/>
+								  </c:when>
+								  <c:otherwise>
+							   			<op:translate key="SHARED_TARGET_REFERENCES"/>
+								  </c:otherwise>
+								</c:choose>						
+							</a>
+						</span>
+					</p>
 					
 					
                     
@@ -209,10 +178,89 @@
 							</div>
 				        </div>
 				    </div>                     
-                    
-                    
-                    
-                </c:if>
+                </c:if>		        
+		        
+		        
+		        
+		        <c:if test="${enabled}">	
+	    			
+    			    <div>
+	    			    <span>
+                			<i class="glyphicons glyphicons-link"></i>
+            			</span>		        
+		                <span>
+		                   <a href="/s/${share}"><op:translate key="SHARED_LINK"/></a>
+		                 </span>
+	                 </div>
+	     			
+	     			
+	
+
+	      			
+	                <!-- Format -->
+	                
+	                 <c:if test="${document.pdfConvertible}">
+	 	                <portlet:actionURL name="inline-edition" var="submitUrl">
+		                    <portlet:param name="property" value="rshr:format"/>
+		                    <portlet:param name="cancel-url" value="${cancelUrl}"/>
+		                </portlet:actionURL>
+		                <form action="${submitUrl}" method="post">
+		                	<c:if test="${not empty targets}">
+		                		<input type="hidden" name="warn-message" value="<op:translate key="DOCUMENT_CHANGE_FORMAT_WARN_MESSAGE"/>">
+		                	</c:if>
+		                
+		                    <div class="form-group inline-edition ml-4">
+		                        <label class="control-label"><op:translate key="DOCUMENT_METADATA_FORMAT_LABEL"/></label>
+		                        <div class="radio">
+		                            <label> <input type="radio" name="inline-values"
+		                                           value="pdf" ${empty document.properties['rshr:format'] or document.properties['rshr:format'] eq 'pdf' ? 'checked' : ''}>
+		                                <op:translate key="SHARED_FORMAT_PDF"/>
+		                            </label>
+		                        </div>
+		                        <div class="radio">
+		                            <label> <input type="radio" name="inline-values"
+		                                           value="native" ${document.properties['rshr:format'] eq 'native' ? 'checked' : ''}>
+		                                <op:translate key="SHARED_FORMAT_NATIVE"/>
+		                            </label>
+		                        </div>
+		                    </div>
+		
+		                    <input type="submit" class="d-none">
+		                </form>
+	                </c:if>
+	
+
+	                
+   					<div>
+	 		            <portlet:actionURL name="link-activation" var="deactivationUrl">
+			                <portlet:param name="activate" value="false"/>
+			            </portlet:actionURL>
+	    			    <span>
+                			<i class="glyphicons glyphicons-remove"></i>
+            			</span>		        
+		                <span>
+		                   <a href="${deactivationUrl}"><op:translate key="SHARED_LINK_DEACTIVATE"/>
+		                </span>
+        
+	      			</div>
+	            </c:if>
+	      			
+      			<c:if test="${not enabled}">	    			
+		            <portlet:actionURL name="link-activation" var="activationUrl">
+		                <portlet:param name="activate" value="true"/>
+		            </portlet:actionURL>
+		            
+		            <div>
+		    			    <span>
+	                			<i class="glyphicons glyphicons-link"></i>
+	            			</span>		        
+			                <span>
+			                   <a href="${activationUrl}"><op:translate key="SHARED_LINK_ACTIVATE"/></a>
+			                 </span>
+		             </div>
+	            
+      			</c:if>     			
+	      				            
 
                 <!-- Remote publication spaces -->
                 <dl class="no-margin">
@@ -222,5 +270,5 @@
         </div>
         
      
-    </c:if>
+
 </div>
