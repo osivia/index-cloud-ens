@@ -5,11 +5,13 @@ import fr.index.cloud.ens.levels.portlet.model.HighestLevelsItem;
 import fr.index.cloud.ens.levels.portlet.model.comparator.HighestLevelsItemsComparator;
 import fr.index.cloud.ens.levels.portlet.repository.HighestLevelsRepository;
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang.StringUtils;
 import org.nuxeo.ecm.automation.client.model.Document;
 import org.nuxeo.ecm.automation.client.model.PropertyList;
-import org.osivia.portal.api.PortalException;
 import org.osivia.portal.api.context.PortalControllerContext;
+import org.osivia.portal.api.page.PageParametersEncoder;
 import org.osivia.portal.api.urls.IPortalUrlFactory;
+import org.osivia.portal.core.cms.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
@@ -109,16 +111,27 @@ public class HighestLevelsServiceImpl implements HighestLevelsService {
 
     @Override
     public String getSearchUrl(PortalControllerContext portalControllerContext, String id) throws PortletException {
-        // Selectors
-        Map<String, List<String>> selectors = new HashMap<>();
-        selectors.put("level", Collections.singletonList(id));
+        // Search path
+        String path = this.repository.getSearchPath(portalControllerContext);
 
-        // Level search URL
+        // Search URL
         String url;
-        try {
-            url = this.portalUrlFactory.getAdvancedSearchUrl(portalControllerContext, null, false, selectors);
-        } catch (PortalException e) {
-            throw new PortletException(e);
+        if (StringUtils.isEmpty(path)) {
+            url = null;
+        } else {
+            // Page parameters
+            Map<String, String> parameters = new HashMap<>();
+
+            // Selectors
+            Map<String, List<String>> selectors = new HashMap<>();
+            selectors.put("level", Collections.singletonList(id));
+
+            // Update selectors
+            parameters.put("selectors", PageParametersEncoder.encodeProperties(selectors));
+
+            // CMS URL
+            url = this.portalUrlFactory.getCMSUrl(portalControllerContext, null, path, parameters, null, null, null, null,
+                    null, null);
         }
 
         return url;

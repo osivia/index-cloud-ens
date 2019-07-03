@@ -41,4 +41,13 @@ public interface HighestLevelsRepository {
      */
     String getLabel(PortalControllerContext portalControllerContext, String id) throws PortletException;
 
+
+    /**
+     * Get search path.
+     *
+     * @param portalControllerContext portal controller context
+     * @return path
+     */
+    String getSearchPath(PortalControllerContext portalControllerContext) throws PortletException;
+
 }

@@ -3,6 +3,7 @@ package fr.index.cloud.ens.levels.portlet.controller;
 import fr.index.cloud.ens.levels.portlet.model.HighestLevels;
 import fr.index.cloud.ens.levels.portlet.service.HighestLevelsService;
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang.StringUtils;
 import org.osivia.portal.api.context.PortalControllerContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -78,7 +79,9 @@ public class HighestLevelsController {
         String url = this.service.getSearchUrl(portalControllerContext, id);
 
         // Redirection
-        response.sendRedirect(url);
+        if (StringUtils.isNotEmpty(url)) {
+            response.sendRedirect(url);
+        }
     }
 
 
