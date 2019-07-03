@@ -30,7 +30,9 @@
         <uri>/layouts/home/index.jsp</uri>
         <uri state="maximized">/layouts/without-nav/maximized.jsp</uri>
         <regions>
+            <region name="top" />
             <region name="col-1" />
+            <region name="col-2" />
         </regions>
     </layout>
 
@@ -46,19 +48,6 @@
             <region name="filter-2" />
             <region name="filter-3" />
             <region name="col-1" />
-        </regions>
-    </layout>
-
-    <layout>
-        <name>cloud-ens-workspace</name>
-        <uri>/layouts/workspace/index.jsp</uri>
-        <uri state="maximized">/layouts/with-nav/maximized.jsp</uri>
-        <regions>
-            <region name="nav" />
-            <region name="nav-bottom" />
-            <region name="top" />
-            <region name="col-1" />
-            <region name="col-2" />
         </regions>
     </layout>
 

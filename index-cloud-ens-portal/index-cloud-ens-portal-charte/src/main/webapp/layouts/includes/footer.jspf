@@ -1,7 +1,9 @@
 <%@ taglib uri="portal-layout" prefix="p" %>
 
 
-<p:region regionName="footer" />
+<footer>
+    <p:region regionName="footer" />
+</footer>
 
 
 <%--Notifications--%>

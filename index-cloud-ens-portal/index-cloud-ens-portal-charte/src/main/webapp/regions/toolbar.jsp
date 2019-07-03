@@ -18,7 +18,7 @@
     </ul>
 
     <%--Brand--%>
-    <a class="navbar-brand d-none d-md-inline-block py-0" href="${requestScope['osivia.home.url']}">
+    <a class="navbar-brand py-0" href="${requestScope['osivia.home.url']}">
         <img alt="${requestScope['osivia.header.application.name']}" src="${contextPath}/img/logo-cloud-pronote.png"
              height="40">
     </a>
@@ -30,29 +30,7 @@
         </li>
     </ul>
 
-    <%--Search--%>
-    <c:set var="title"><op:translate key="TOOLBAR_SEARCH_TITLE"/></c:set>
-    <c:set var="placeholder"><op:translate key="TOOLBAR_SEARCH_PLACEHOLDER"/></c:set>
-    <div class="ml-auto">
-        <form action="${requestScope['osivia.search.url']}" method="get"
-              class="form-inline flex-nowrap w-auto mr-3 mx-md-4">
-            <input type="hidden" name="action" value="advancedSearch">
-
-            <label for="search" class="sr-only">${title}</label>
-            <div class="input-group">
-                <input id="search" type="search" name="search" class="form-control overflow-hidden"
-                       placeholder="${placeholder}">
-                <div class="input-group-append">
-                    <button type="submit" title="${title}" class="btn btn-outline-secondary" data-toggle="tooltip"
-                            data-placement="bottom">
-                        <i class="glyphicons glyphicons-basic-search"></i>
-                    </button>
-                </div>
-            </div>
-        </form>
-    </div>
-
-    <ul class="navbar-nav">
+    <ul class="navbar-nav ml-auto">
         <c:choose>
             <c:when test="${empty requestScope['osivia.toolbar.principal']}">
                 <%--Login--%>
@@ -107,37 +85,19 @@
                     <div class="dropdown-menu dropdown-menu-right">
                         <div class="dropdown-header d-lg-none">${empty requestScope['osivia.toolbar.person'] ? requestScope['osivia.toolbar.principal'] : requestScope['osivia.toolbar.person'].displayName}</div>
 
-                            <%--User profile--%>
+                        <%--User profile--%>
                         <c:set var="url" value="${requestScope['osivia.toolbar.myprofile']}"/>
                         <c:if test="${not empty url}">
                             <a href="${url}" class="dropdown-item">
                                 <i class="glyphicons glyphicons-basic-id-badge"></i>
                                 <span><op:translate key="TOOLBAR_USER_PROFILE"/></span>
                             </a>
-                        </c:if>
-
-                            <%--User settings--%>
-                            <%--<c:set var="url" value="${requestScope['osivia.toolbar.userSettings.url']}"/>
-                            <c:if test="${not empty url}">
-                                <a href="${url}" class="dropdown-item">
-                                    <i class="glyphicons glyphicons-basic-adjust"></i>
-                                    <span><op:translate key="TOOLBAR_USER_SETTINGS"/></span>
-                                </a>
-                            </c:if>--%>
-
-                            <%--User workspace--%>
-                        <c:set var="url" value="${requestScope['osivia.userWorkspace.url']}"/>
-                        <c:if test="${not empty url}">
-                            <a href="${url}" class="dropdown-item">
-                                <i class="glyphicons glyphicons-basic-user-rounded"></i>
-                                <span><op:translate key="TOOLBAR_USER_WORKSPACE"/></span>
-                            </a>
-                        </c:if>
 
                             <%--Divider--%>
-                        <div class="dropdown-divider"></div>
+                            <div class="dropdown-divider"></div>
+                        </c:if>
 
-                            <%--Logout--%>
+                        <%--Logout--%>
                         <a href="javascript:" onclick="logout()" class="dropdown-item">
                             <i class="glyphicons glyphicons-basic-log-out"></i>
                             <span><op:translate key="TOOLBAR_LOGOUT"/></span>
@@ -156,7 +116,7 @@
         <ul class="navbar-nav mx-auto">
             <c:forEach var="navItem" items="${requestScope['osivia.nav.items']}" varStatus="status">
                 <li class="nav-item ${navItem.active ? 'active' : ''} ${status.last ? '' : 'mr-4'}">
-                    <a href="${navItem.url}" class="nav-link">
+                    <a href="${navItem.url}" class="nav-link ${empty navItem.url ? 'disabled' : ''}">
                         <i class="${navItem.icon}"></i>
                         <strong><op:translate key="${navItem.key}"/></strong>
                     </a>

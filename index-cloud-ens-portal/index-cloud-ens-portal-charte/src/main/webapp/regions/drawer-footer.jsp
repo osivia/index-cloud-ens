@@ -10,7 +10,7 @@
 <div class="d-md-none">
     <nav class="navbar navbar-expand navbar-light bg-blue-lighter">
         <%--Brand--%>
-        <a class="navbar-brand mr-3 py-0" href="#">
+        <a class="navbar-brand mr-3 py-0" href="${requestScope['index-education.url']}">
             <img alt="Index &Eacute;ducation" src="${contextPath}/img/logo-index.png"
                  height="40">
         </a>

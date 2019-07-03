@@ -4,7 +4,7 @@
         <p:region regionName="breadcrumb" />
     </div>
 
-    <div class="col col-md-auto">
+    <div class="col-auto ml-auto">
         <%--Menubar--%>
         <p:region regionName="menubar" />
     </div>

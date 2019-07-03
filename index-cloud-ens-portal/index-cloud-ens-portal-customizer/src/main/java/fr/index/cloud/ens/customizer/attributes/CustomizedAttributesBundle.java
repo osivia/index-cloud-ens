@@ -22,7 +22,6 @@ import org.osivia.portal.core.cms.ICMSService;
 import org.osivia.portal.core.cms.ICMSServiceLocator;
 
 import fr.toutatice.portail.cms.nuxeo.api.services.NuxeoConnectionProperties;
-import org.osivia.portal.core.portalobjects.PortalObjectUtils;
 
 /**
  * Customized attributes bundle.
@@ -40,6 +39,13 @@ public class CustomizedAttributesBundle implements IAttributesBundle {
     private static final String RGPD_URL = "osivia.rgpd.url";
     /** Nav items. */
     private static final String NAV_ITEMS = "osivia.nav.items";
+    /** Index Éducation URL key. */
+    private static final String INDEX_EDUCATION_URL_KEY = "index-education.url";
+    /** Hide first breadcrumb item indicator. */
+    private static final String HIDE_FIRST_BREADCRUMB_ITEM = "osivia.breadcrumb.hide-first";
+
+    /** Index Éducation URL value. */
+    private static final String INDEX_EDUCATION_URL_VALUE = "https://www.index-education.com";
 
     /** Singleton instance. */
     private static final IAttributesBundle INSTANCE = new CustomizedAttributesBundle();
@@ -72,6 +78,8 @@ public class CustomizedAttributesBundle implements IAttributesBundle {
         this.names.add(USER_WORKSPACE_URL);
         this.names.add(RGPD_URL);
         this.names.add(NAV_ITEMS);
+        this.names.add(INDEX_EDUCATION_URL_KEY);
+        this.names.add(HIDE_FIRST_BREADCRUMB_ITEM);
 
         // SSO applications
         this.applications = new ArrayList<String>();
@@ -122,13 +130,11 @@ public class CustomizedAttributesBundle implements IAttributesBundle {
 
 
         // User workspace
-        CMSItem userWorkspace = null;
+        CMSItem userWorkspace;
         try {
-            List<CMSItem> userWorkspaces = cmsService.getWorkspaces(cmsContext, true, false);
-            if ((userWorkspaces != null) && (userWorkspaces.size() == 1)) {
-                userWorkspace = userWorkspaces.get(0);
-            }
+            userWorkspace = cmsService.getUserWorkspace(cmsContext);
         } catch (CMSException e) {
+            userWorkspace = null;
             this.log.error("Unable to get user workspaces.", e.fillInStackTrace());
         }
         // User workspace URL
@@ -161,9 +167,18 @@ public class CustomizedAttributesBundle implements IAttributesBundle {
         List<NavItem> navItems = new ArrayList<>();
         attributes.put(NAV_ITEMS, navItems);
 
+        // Home
+        String homeUrl = controllerContext.getServerInvocation().getServerContext().getPortalContextPath();
+        NavItem homeNavItem = new NavItem();
+        homeNavItem.setUrl(homeUrl);
+        homeNavItem.setIcon("glyphicons glyphicons-basic-home");
+        homeNavItem.setKey("TOOLBAR_HOME");
+        homeNavItem.setActive(StringUtils.isEmpty(basePath));
+        navItems.add(homeNavItem);
+
         // User workspace nav item
         NavItem userWorkspaceNavItem = new NavItem();
-        userWorkspaceNavItem.setUrl(StringUtils.defaultIfEmpty(userWorkspaceUrl, "#"));
+        userWorkspaceNavItem.setUrl(userWorkspaceUrl);
         userWorkspaceNavItem.setIcon("glyphicons glyphicons-basic-user-rounded");
         userWorkspaceNavItem.setKey("TOOLBAR_USER_WORKSPACE");
         userWorkspaceNavItem.setActive((userWorkspace != null) && StringUtils.equals(basePath, userWorkspace.getCmsPath()));
@@ -171,11 +186,19 @@ public class CustomizedAttributesBundle implements IAttributesBundle {
 
         // Community nav item
         NavItem communityNavItem = new NavItem();
-        communityNavItem.setUrl("#"); // FIXME
+        communityNavItem.setUrl(null); // FIXME
         communityNavItem.setIcon("glyphicons glyphicons-basic-share");
         communityNavItem.setKey("TOOLBAR_COMMUNITY_WORKSPACE");
         communityNavItem.setActive(false); // FIXME
         navItems.add(communityNavItem);
+
+
+        // Index Éducation URL
+        attributes.put(INDEX_EDUCATION_URL_KEY, INDEX_EDUCATION_URL_VALUE);
+
+
+        // Hide first breadcrumb item indicator
+        attributes.put(HIDE_FIRST_BREADCRUMB_ITEM, userWorkspaceNavItem.isActive());
     }
 
 

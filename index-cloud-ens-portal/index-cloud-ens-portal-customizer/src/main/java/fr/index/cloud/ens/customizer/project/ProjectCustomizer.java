@@ -1,15 +1,8 @@
 package fr.index.cloud.ens.customizer.project;
 
-import java.security.Principal;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.portlet.PortletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-
+import fr.toutatice.portail.cms.nuxeo.api.CMSPortlet;
+import fr.toutatice.portail.cms.nuxeo.api.INuxeoCommand;
+import fr.toutatice.portail.cms.nuxeo.api.NuxeoController;
 import org.apache.commons.lang.BooleanUtils;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang.StringUtils;
@@ -23,11 +16,7 @@ import org.jboss.portal.theme.impl.render.dynamic.DynaRenderOptions;
 import org.nuxeo.ecm.automation.client.model.Document;
 import org.osivia.portal.api.PortalException;
 import org.osivia.portal.api.context.PortalControllerContext;
-import org.osivia.portal.api.customization.CustomizationContext;
-import org.osivia.portal.api.customization.CustomizationModuleMetadatas;
-import org.osivia.portal.api.customization.ICustomizationModule;
-import org.osivia.portal.api.customization.ICustomizationModulesRepository;
-import org.osivia.portal.api.customization.IProjectCustomizationConfiguration;
+import org.osivia.portal.api.customization.*;
 import org.osivia.portal.api.directory.v2.DirServiceFactory;
 import org.osivia.portal.api.directory.v2.model.Person;
 import org.osivia.portal.api.directory.v2.service.PersonService;
@@ -35,17 +24,19 @@ import org.osivia.portal.api.internationalization.Bundle;
 import org.osivia.portal.api.internationalization.IBundleFactory;
 import org.osivia.portal.api.internationalization.IInternationalizationService;
 import org.osivia.portal.api.locator.Locator;
+import org.osivia.portal.api.taskbar.ITaskbarService;
 import org.osivia.portal.api.urls.IPortalUrlFactory;
-import org.osivia.portal.core.cms.CMSException;
-import org.osivia.portal.core.cms.CMSItem;
-import org.osivia.portal.core.cms.CMSServiceCtx;
-import org.osivia.portal.core.cms.ICMSService;
-import org.osivia.portal.core.cms.ICMSServiceLocator;
+import org.osivia.portal.core.cms.*;
 import org.osivia.portal.core.constants.InternalConstants;
 
-import fr.toutatice.portail.cms.nuxeo.api.CMSPortlet;
-import fr.toutatice.portail.cms.nuxeo.api.INuxeoCommand;
-import fr.toutatice.portail.cms.nuxeo.api.NuxeoController;
+import javax.portlet.PortletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+import java.security.Principal;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Project customizer.
@@ -56,40 +47,66 @@ import fr.toutatice.portail.cms.nuxeo.api.NuxeoController;
  */
 public class ProjectCustomizer extends CMSPortlet implements ICustomizationModule {
 
-    /** Customizer name. */
+    /**
+     * Customizer name.
+     */
     private static final String CUSTOMIZER_NAME = "demo.customizer.project";
-    /** Customization modules repository attribute name. */
+    /**
+     * Customization modules repository attribute name.
+     */
     private static final String ATTRIBUTE_CUSTOMIZATION_MODULES_REPOSITORY = "CustomizationModulesRepository";
 
-    /** First connection indicator window property name. */
+    /**
+     * First connection indicator window property name.
+     */
     private static final String FIRST_CONNECTION_INDICATOR_PROPERTY = "first-connection";
 
-    /** CGU level attribute. */
+    /**
+     * CGU level attribute.
+     */
     private static final String CGU_LEVEL_ATTRIBUTE = "osivia.services.cgu.level";
-    /** CGU path attribute. */
+    /**
+     * CGU path attribute.
+     */
     private static final String CGU_PATH_ATTRIBUTE = "osivia.services.cgu.path";
 
-    /** Marker for set up the platform (data injection) */
+    /**
+     * Marker for set up the platform (data injection)
+     */
     private static final String PLATFORM_INITIALIZED = "osivia.platform.initialized";
     private static final String INIT_INDICATOR_PROPERTY = "init-indicator";
 
-    /** Portal URL factory. */
+    /**
+     * Portal URL factory.
+     */
     private final IPortalUrlFactory portalUrlFactory;
-    /** CMS service locator. */
+    /**
+     * CMS service locator.
+     */
     private final ICMSServiceLocator cmsServiceLocator;
-    /** Person service. */
+    /**
+     * Person service.
+     */
     private final PersonService personService;
-    /** Internationalization bundle factory. */
+    /**
+     * Internationalization bundle factory.
+     */
     private final IBundleFactory bundleFactory;
+    /** Taskbar service. */
+    private final ITaskbarService taskbarService;
 
-    /** Customization module metadatas. */
+    /**
+     * Customization module metadatas.
+     */
     private final CustomizationModuleMetadatas metadatas;
-
-    /** Customization modules repository. */
-    private ICustomizationModulesRepository repository;
-
-    /** Log. */
+    /**
+     * Log.
+     */
     private final Log log;
+    /**
+     * Customization modules repository.
+     */
+    private ICustomizationModulesRepository repository;
 
     /**
      * Constructor.
@@ -107,6 +124,8 @@ public class ProjectCustomizer extends CMSPortlet implements ICustomizationModul
         IInternationalizationService internationalizationService = Locator.findMBean(IInternationalizationService.class,
                 IInternationalizationService.MBEAN_NAME);
         this.bundleFactory = internationalizationService.getBundleFactory(this.getClass().getClassLoader());
+        // Taskbar service
+        this.taskbarService = Locator.findMBean(ITaskbarService.class, ITaskbarService.MBEAN_NAME);
 
         // Logs
         this.log = LogFactory.getLog(this.getClass());
@@ -155,35 +174,32 @@ public class ProjectCustomizer extends CMSPortlet implements ICustomizationModul
         Bundle bundle = this.bundleFactory.getBundle(customizationContext.getLocale());
 
         if (configuration.isBeforeInvocation()) {
-
-            this.preparePlatformRedicrection(portalControllerContext, configuration, bundle);
+            this.preparePlatformRedirection(portalControllerContext, configuration, bundle);
 
             if ((principal != null)) {
                 this.firstConnectionRedirection(portalControllerContext, configuration, principal, bundle);
 
                 if (StringUtils.isNotEmpty(configuration.getCMSPath())) {
+                    this.userWorkspaceHomeRedirection(portalControllerContext, configuration);
                     this.cguRedirection(portalControllerContext, configuration, principal, bundle);
-                } else
-                    this.homeSpaceRedirection(portalControllerContext, configuration, principal, bundle);
-
+                }
             }
         }
     }
 
+
     /**
      * Interceptor used to prepare the platform data
-     * 
+     *
      * @param portalControllerContext
      * @param configuration
      * @param bundle
      */
-    private void preparePlatformRedicrection(PortalControllerContext portalControllerContext, IProjectCustomizationConfiguration configuration, Bundle bundle) {
-
+    private void preparePlatformRedirection(PortalControllerContext portalControllerContext, IProjectCustomizationConfiguration configuration, Bundle bundle) {
         // Page
         Page page = configuration.getPage();
 
         if (page != null && !"admin".equals(page.getPortal().getName())) {
-
             Portal portal = page.getPortal();
 
             PortalObject intranet = portal.getParent().getChild("default");
@@ -194,15 +210,11 @@ public class ProjectCustomizer extends CMSPortlet implements ICustomizationModul
 
             // Prevent loops
             if ((window == null) || !BooleanUtils.toBoolean(window.getDeclaredProperty(INIT_INDICATOR_PROPERTY))) {
-
                 String reqHost = portalControllerContext.getHttpServletRequest().getServerName();
 
                 if (flag == null) {
-
-
-                    // Set initalization flag
+                    // Set initialization flag
                     intranet.setDeclaredProperty(PLATFORM_INITIALIZED, "1");
-
 
                     // HTTP servlet request
                     HttpServletRequest servletRequest = configuration.getHttpServletRequest();
@@ -241,20 +253,17 @@ public class ProjectCustomizer extends CMSPortlet implements ICustomizationModul
         }
     }
 
+
     /**
      * First connection redirection.
      *
-     * @param portalControllerContext
-     *            portal controller context
-     * @param configuration
-     *            project customization configuration
-     * @param principal
-     *            user principal
-     * @param bundle
-     *            internationalization bundle
+     * @param portalControllerContext portal controller context
+     * @param configuration           project customization configuration
+     * @param principal               user principal
+     * @param bundle                  internationalization bundle
      */
     private void firstConnectionRedirection(PortalControllerContext portalControllerContext, IProjectCustomizationConfiguration configuration,
-            Principal principal, Bundle bundle) {
+                                            Principal principal, Bundle bundle) {
         // Person
         Person person = this.personService.getPerson(principal.getName());
 
@@ -296,20 +305,58 @@ public class ProjectCustomizer extends CMSPortlet implements ICustomizationModul
         }
     }
 
+
+    /**
+     * User workspace home redirection.
+     *
+     * @param portalControllerContext portal controller context
+     * @param configuration           project customizer configuration
+     */
+    private void userWorkspaceHomeRedirection(PortalControllerContext portalControllerContext, IProjectCustomizationConfiguration configuration) {
+        // CMS service
+        ICMSService cmsService = this.cmsServiceLocator.getCMSService();
+        // CMS context
+        CMSServiceCtx cmsContext = new CMSServiceCtx();
+        cmsContext.setPortalControllerContext(portalControllerContext);
+
+        // User workspace
+        CMSItem userWorkspace;
+        try {
+            userWorkspace = cmsService.getUserWorkspace(cmsContext);
+        } catch (CMSException e) {
+            userWorkspace = null;
+            this.log.error("Unable to get user workspaces.", e);
+        }
+
+        if (userWorkspace != null && StringUtils.startsWith(configuration.getCMSPath(), userWorkspace.getCmsPath())) {
+            // Active task identifier
+            String activeId;
+            try {
+                activeId = this.taskbarService.getActiveId(portalControllerContext);
+            } catch (PortalException e) {
+                activeId = null;
+                this.log.error("Unable to get active task identifier.", e);
+            }
+
+            if (StringUtils.equals(ITaskbarService.HOME_TASK_ID, activeId)) {
+                String documentsPath = userWorkspace.getCmsPath() + "/documents";
+                String url = this.portalUrlFactory.getCMSUrl(portalControllerContext, null, documentsPath, null, null, null, null, null, null, null);
+                configuration.setRedirectionURL(url);
+            }
+        }
+    }
+
+
     /**
      * CGU redirection.
      *
-     * @param portalControllerContext
-     *            portal controller context
-     * @param configuration
-     *            project customization configuration
-     * @param principal
-     *            user principal
-     * @param bundle
-     *            internationalization bundle
+     * @param portalControllerContext portal controller context
+     * @param configuration           project customization configuration
+     * @param principal               user principal
+     * @param bundle                  internationalization bundle
      */
     private void cguRedirection(PortalControllerContext portalControllerContext, IProjectCustomizationConfiguration configuration, Principal principal,
-            Bundle bundle) {
+                                Bundle bundle) {
         // Page
         Page page = configuration.getPage();
 
@@ -374,59 +421,6 @@ public class ProjectCustomizer extends CMSPortlet implements ICustomizationModul
                 }
 
                 configuration.setRedirectionURL(redirectionUrl);
-            }
-        }
-    }
-
-    /**
-     * Home space redirection.
-     *
-     * @param portalControllerContext
-     *            portal controller context
-     * @param configuration
-     *            project customization configuration
-     * @param principal
-     *            user principal
-     * @param bundle
-     *            internationalization bundle
-     */
-    private void homeSpaceRedirection(PortalControllerContext portalControllerContext, IProjectCustomizationConfiguration configuration, Principal principal,
-            Bundle bundle) {
-        if (!configuration.isAdministrator()) {
-            // Page
-            Page page = configuration.getPage();
-
-            if (page != null) {
-                // Window
-                if (page != null && !"admin".equals(page.getPortal().getName())) {
-                    if (page.equals(page.getPortal().getDefaultPage())) {
-
-                        // CMS service
-                        ICMSService cmsService = this.cmsServiceLocator.getCMSService();
-                        // CMS context
-                        CMSServiceCtx cmsContext = new CMSServiceCtx();
-                        cmsContext.setPortalControllerContext(portalControllerContext);
-
-                        // User workspace
-                        CMSItem userWorkspace = null;
-                        try {
-                            List<CMSItem> userWorkspaces = cmsService.getWorkspaces(cmsContext, true, false);
-                            if ((userWorkspaces != null) && (userWorkspaces.size() == 1)) {
-                                userWorkspace = userWorkspaces.get(0);
-                            }
-                        } catch (CMSException e) {
-                            this.log.error("Unable to get user workspaces.", e.fillInStackTrace());
-                        }
-                        if ((userWorkspace != null) && StringUtils.isNotEmpty(userWorkspace.getCmsPath())) {
-                            // User workspace URL
-                            String userWorkspaceUrl = this.portalUrlFactory.getCMSUrl(portalControllerContext, null, userWorkspace.getCmsPath(), null, null, null,
-                                    null, null, null, null);
-
-                            configuration.setRedirectionURL(userWorkspaceUrl);
-                        }
-
-                    }
-                }
             }
         }
     }

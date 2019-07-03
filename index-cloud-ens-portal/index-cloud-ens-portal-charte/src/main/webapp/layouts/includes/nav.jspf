@@ -1,4 +1,4 @@
-<op:resizable cssClass="col-auto d-flex flex-column mh-100 border-right" minWidth="200">
+<op:resizable cssClass="col-auto d-flex flex-column mh-100 border-right" minWidth="250">
     <div class="row flex-grow-1 overflow-hidden">
         <div id="drawer" class="col d-flex flex-column mh-100 overflow-hidden">
             <div class="row flex-column">

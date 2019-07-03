@@ -124,7 +124,11 @@
                 </property>
                 <property>
                     <name>portal.defaultObjectName</name>
-                    <value>home</value>
+                    <value>home-anonymous</value>
+                </property>
+                <property>
+                    <name>osivia.unprofiled_home_page</name>
+                    <value>home-member</value>
                 </property>
                 <property>
                     <name>theme.renderSetId</name>
@@ -168,7 +172,7 @@
             </security-constraint>
 
             <page>
-                <page-name>home</page-name>
+                <page-name>home-anonymous</page-name>
                 <display-name xml:lang="fr">Accueil</display-name>
 
                 <properties>
@@ -192,7 +196,7 @@
                 <window>
                     <window-name>toutatice-portail-cms-nuxeo-viewFragmentPortletInstance_1510733841224</window-name>
                     <instance-ref>toutatice-portail-cms-nuxeo-viewFragmentPortletInstance</instance-ref>
-                    <region>col-1</region>
+                    <region>top</region>
                     <properties>
                         <property>
                             <name>osivia.title</name>
@@ -230,22 +234,138 @@
                     <height>0</height>
                 </window>
 		    </page>
+
+            <page>
+                <page-name>home-member</page-name>
+                <display-name xml:lang="fr">Accueil</display-name>
+
+                <properties>
+                    <property>
+                        <name>order</name>
+                        <value>0</value>
+                    </property>
+                    <property>
+                        <name>layout.id</name>
+                        <value>cloud-ens-home</value>
+                    </property>
+                </properties>
+
+                <security-constraint>
+                    <policy-permission>
+                        <action-name>view</action-name>
+                        <unchecked/>
+                    </policy-permission>
+                </security-constraint>
+
+                <window>
+                    <window-name>index-cloud-ens-highest-levels-instance_1560328144443</window-name>
+                    <instance-ref>index-cloud-ens-highest-levels-instance</instance-ref>
+                    <region>col-1</region>
+                    <properties>
+                        <property>
+                            <name>portal.windowContentType</name>
+                            <value>portlet</value>
+                        </property>
+                        <property>
+                            <name>osivia.title</name>
+                            <value>Mes niveaux préférés</value>
+                        </property>
+                        <property>
+                            <name>theme.order</name>
+                            <value>0</value>
+                        </property>
+                        <property>
+                            <name>osivia.hideDecorators</name>
+                            <value>1</value>
+                        </property>
+                        <property>
+                            <name>osivia.hideEmptyPortlet</name>
+                            <value>1</value>
+                        </property>
+                    </properties>
+                    <height>0</height>
+                </window>
+
+                <window>
+                    <window-name>toutatice-portail-cms-nuxeo-viewListPortletInstance_1556902653408</window-name>
+                    <instance-ref>toutatice-portail-cms-nuxeo-viewListPortletInstance</instance-ref>
+                    <region>top</region>
+                    <properties>
+                        <property>
+                            <name>portal.windowContentType</name>
+                            <value>portlet</value>
+                        </property>
+                        <property>
+                            <name>osivia.cms.displayLiveVersion</name>
+                            <value>1</value>
+                        </property>
+                        <property>
+                            <name>osivia.title</name>
+                            <value>Accès rapide</value>
+                        </property>
+                        <property>
+                            <name>theme.order</name>
+                            <value>0</value>
+                        </property>
+                        <property>
+                            <name>osivia.ajaxLink</name>
+                            <value>1</value>
+                        </property>
+                        <property>
+                            <name>osivia.hideDecorators</name>
+                            <value>1</value>
+                        </property>
+                        <property>
+                            <name>osivia.hideEmptyPortlet</name>
+                            <value>1</value>
+                        </property>
+                        <property>
+                            <name>osivia.nuxeoRequest</name>
+                            <value>StringBuilder nuxeoRequest = new StringBuilder();&#13;
+nuxeoRequest.append("ecm:path STARTSWITH '").append(navigationPath).append("' ");&#13;
+nuxeoRequest.append("AND ecm:primaryType IN ('File', 'Picture', 'Audio', 'Video', 'Note') ");&#13;
+nuxeoRequest.append("ORDER BY dc:modified DESC");&#13;
+return nuxeoRequest.toString();</value>
+                        </property>
+                        <property>
+                            <name>osivia.cms.style</name>
+                            <value>quick-access</value>
+                        </property>
+                        <property>
+                            <name>theme.dyna.partial_refresh_enabled</name>
+                            <value>true</value>
+                        </property>
+                        <property>
+                            <name>osivia.cms.maxItems</name>
+                            <value>6</value>
+                        </property>
+                        <property>
+                            <name>osivia.beanShell</name>
+                            <value>on</value>
+                        </property>
+                    </properties>
+                    <height>0</height>
+                </window>
+            </page>
 		
 			<page>
 				<page-name>change-password</page-name>
 				<display-name xml:lang="fr">Changer de mot de passe</display-name>
+
 				<properties>
 					<property>
 						<name>layout.id</name>
 						<value>cloud-ens-uncluttered</value>
 					</property>
 				</properties>
+
 				<security-constraint>
 					<policy-permission>
 						<action-name>view</action-name>
 						<unchecked />
 					</policy-permission>
 				</security-constraint>
+
 				<window>
 					<window-name>cloudens-person-renew-pwd-portlet-instance_1560868045408</window-name>
 					<instance-ref>cloudens-person-renew-pwd-portlet-instance</instance-ref>
@@ -256,16 +376,8 @@
 							<value>portlet</value>
 						</property>
 						<property>
-							<name>osivia.bootstrapPanelStyle</name>
-							<value>false</value>
-						</property>
-						<property>
 							<name>osivia.title</name>
 							<value>Changer mon mot de passe</value>
-						</property>
-						<property>
-							<name>osivia.maximized.cms.url</name>
-							<value>false</value>
 						</property>
 						<property>
 							<name>osivia.hideTitle</name>
@@ -284,10 +396,6 @@
 							<value>1</value>
 						</property>
 						<property>
-							<name>osivia.mobileCollapse</name>
-							<value>false</value>
-						</property>
-						<property>
 							<name>theme.dyna.partial_refresh_enabled</name>
 							<value>true</value>
 						</property>
@@ -295,7 +403,6 @@
 					<height>0</height>
 				</window>
 			</page>		
-		
 
             <page>
                 <page-name>workspace-management</page-name>
@@ -923,40 +1030,11 @@ return nuxeoRequest.toString();</value>
                     <properties>
                         <property>
                             <name>layout.id</name>
-                            <value>cloud-ens-workspace</value>
+                            <value>cloud-ens-with-nav</value>
                         </property>
                     </properties>
 
                     <security-constraint/>
-
-                    <window>
-                        <window-name>index-cloud-ens-highest-levels-instance_1560328144443</window-name>
-                        <instance-ref>index-cloud-ens-highest-levels-instance</instance-ref>
-                        <region>col-1</region>
-                        <properties>
-                            <property>
-                                <name>portal.windowContentType</name>
-                                <value>portlet</value>
-                            </property>
-                            <property>
-                                <name>osivia.title</name>
-                                <value>Mes niveaux préférés</value>
-                            </property>
-                            <property>
-                                <name>theme.order</name>
-                                <value>0</value>
-                            </property>
-                            <property>
-                                <name>osivia.hideDecorators</name>
-                                <value>1</value>
-                            </property>
-                            <property>
-                                <name>osivia.hideEmptyPortlet</name>
-                                <value>1</value>
-                            </property>
-                        </properties>
-                        <height>0</height>
-                    </window>
 
                     <window>
                         <window-name>index-cloud-ens-taskbar-instance_1556902638730</window-name>
@@ -990,67 +1068,6 @@ return nuxeoRequest.toString();</value>
                             <property>
                                 <name>theme.dyna.partial_refresh_enabled</name>
                                 <value>true</value>
-                            </property>
-                        </properties>
-                        <height>0</height>
-                    </window>
-
-                    <window>
-                        <window-name>toutatice-portail-cms-nuxeo-viewListPortletInstance_1556902653408</window-name>
-                        <instance-ref>toutatice-portail-cms-nuxeo-viewListPortletInstance</instance-ref>
-                        <region>top</region>
-                        <properties>
-                            <property>
-                                <name>portal.windowContentType</name>
-                                <value>portlet</value>
-                            </property>
-                            <property>
-                                <name>osivia.cms.displayLiveVersion</name>
-                                <value>1</value>
-                            </property>
-                            <property>
-                                <name>osivia.title</name>
-                                <value>Accès rapide</value>
-                            </property>
-                            <property>
-                                <name>theme.order</name>
-                                <value>0</value>
-                            </property>
-                            <property>
-                                <name>osivia.ajaxLink</name>
-                                <value>1</value>
-                            </property>
-                            <property>
-                                <name>osivia.hideDecorators</name>
-                                <value>1</value>
-                            </property>
-                            <property>
-                                <name>osivia.hideEmptyPortlet</name>
-                                <value>1</value>
-                            </property>
-                            <property>
-                                <name>osivia.nuxeoRequest</name>
-                                <value>StringBuilder nuxeoRequest = new StringBuilder();&#13;
-nuxeoRequest.append("ecm:path STARTSWITH '").append(navigationPath).append("' ");&#13;
-nuxeoRequest.append("AND ecm:primaryType IN ('File', 'Picture', 'Audio', 'Video', 'Note') ");&#13;
-nuxeoRequest.append("ORDER BY dc:modified DESC");&#13;
-return nuxeoRequest.toString();</value>
-                            </property>
-                            <property>
-                                <name>osivia.cms.style</name>
-                                <value>quick-access</value>
-                            </property>
-                            <property>
-                                <name>theme.dyna.partial_refresh_enabled</name>
-                                <value>true</value>
-                            </property>
-                            <property>
-                                <name>osivia.cms.maxItems</name>
-                                <value>6</value>
-                            </property>
-                            <property>
-                                <name>osivia.beanShell</name>
-                                <value>on</value>
                             </property>
                         </properties>
                         <height>0</height>
@@ -1408,16 +1425,17 @@ return nuxeoRequest.toString();</value>
                         <properties>
                             <property>
                                 <name>osivia.file-browser.nxql</name>
-                                <value>StringBuilder nuxeoRequest = new StringBuilder();&#13;
+                                <value>import org.apache.commons.lang.StringUtils;&#13;
+&#13;
+StringBuilder nuxeoRequest = new StringBuilder();&#13;
 nuxeoRequest.append("ecm:primaryType IN ('Folder', 'File', 'Picture', 'Audio', 'Video') ");&#13;
 nuxeoRequest.append("AND ecm:path STARTSWITH '/default-domain/UserWorkspaces' ");&#13;
 &#13;
 // Search&#13;
-List searchValues = params.get("search");&#13;
-if (searchValues != null) {&#13;
-for (String searchValue : searchValues) {&#13;
-nuxeoRequest.append("AND (ecm:fulltext = '").append(searchValue).append("' OR dc:title ILIKE '").append(searchValue).append("%') ");&#13;
-}&#13;
+String search = StringUtils.join(params.get("search"), " ");&#13;
+if (StringUtils.isNotEmpty(search)) {&#13;
+nuxeoRequest.append("AND (ecm:fulltext = '").append(search).append("' ");&#13;
+nuxeoRequest.append("OR dc:title ILIKE '").append(search).append("%') ");&#13;
 }&#13;
 &#13;
 // Level&#13;
@@ -1430,6 +1448,10 @@ first ? first = false : nuxeoRequest.append("OR ");&#13;
 nuxeoRequest.append("idxcl:levelsTree STARTSWITH '").append(level).append("' ");&#13;
 }&#13;
 nuxeoRequest.append(") ");&#13;
+}&#13;
+&#13;
+if (StringUtils.isEmpty(search)) {&#13;
+nuxeoRequest.append("ORDER BY dc:modified DESC");&#13;
 }&#13;
 &#13;
 return nuxeoRequest.toString();</value>
@@ -1729,16 +1751,17 @@ return nuxeoRequest.toString();</value>
                         <properties>
                             <property>
                                 <name>osivia.file-browser.nxql</name>
-                                <value>StringBuilder nuxeoRequest = new StringBuilder();&#13;
-nuxeoRequest.append("ecm:primaryType IN ('Folder', 'File', 'Picture', 'Audio', 'Video') ");&#13;
+                                <value>import org.apache.commons.lang.StringUtils;&#13;
+&#13;
+StringBuilder nuxeoRequest = new StringBuilder();&#13;
+nuxeoRequest.append("ecm:primaryType IN ('File', 'Picture', 'Audio', 'Video') ");&#13;
 nuxeoRequest.append("AND ecm:path STARTSWITH '/default-domain/UserWorkspaces' ");&#13;
 &#13;
 // Search&#13;
-List searchValues = params.get("search");&#13;
-if (searchValues != null) {&#13;
-for (String searchValue : searchValues) {&#13;
-nuxeoRequest.append("AND (ecm:fulltext = '").append(searchValue).append("' OR dc:title ILIKE '").append(searchValue).append("%') ");&#13;
-}&#13;
+String search = StringUtils.join(params.get("search"), " ");&#13;
+if (StringUtils.isNotEmpty(search)) {&#13;
+nuxeoRequest.append("AND (ecm:fulltext = '").append(search).append("' ");&#13;
+nuxeoRequest.append("OR dc:title ILIKE '").append(search).append("%') ");&#13;
 }&#13;
 &#13;
 // Level&#13;
@@ -1752,6 +1775,8 @@ nuxeoRequest.append("idxcl:levelsTree STARTSWITH '").append(level).append("' ");
 }&#13;
 nuxeoRequest.append(") ");&#13;
 }&#13;
+&#13;
+nuxeoRequest.append("ORDER BY dc:modified DESC");&#13;
 &#13;
 return nuxeoRequest.toString();</value>
                             </property>

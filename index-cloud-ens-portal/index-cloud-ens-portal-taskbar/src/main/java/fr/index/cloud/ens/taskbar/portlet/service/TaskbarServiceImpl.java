@@ -156,13 +156,8 @@ public class TaskbarServiceImpl implements TaskbarService {
         // Add dropdown items
         List<AddDropdownItem> addDropdownItems = this.repository.generateAddDropdownItems(portalControllerContext);
 
-        // Tasks
-        List<TaskbarTask> tasks = new ArrayList<>();
-        // Home
-        TaskbarTask home = this.createHomeTaskbarTask(portalControllerContext, basePath);
-        tasks.add(home);
-        // Folders
-        tasks.addAll(folders);
+        // Tasks (with folders)
+        List<TaskbarTask> tasks = new ArrayList<>(folders);
         // Search
         TaskbarTask search = this.extractVirtualStaple(portalControllerContext, navigationTasks, "SEARCH");
         if (search != null) {
@@ -185,28 +180,6 @@ public class TaskbarServiceImpl implements TaskbarService {
         taskbar.setTasks(this.createTasks(portalControllerContext, basePath, bundle, activeId, tasks));
 
         return taskbar;
-    }
-
-
-    /**
-     * Create home taskbar task.
-     *
-     * @param portalControllerContext portal controller context
-     * @param basePath                base path
-     * @return taskbar task
-     */
-    private TaskbarTask createHomeTaskbarTask(PortalControllerContext portalControllerContext, String basePath) {
-        // Locale
-        Locale locale = portalControllerContext.getRequest().getLocale();
-        // Internationalization bundle
-        Bundle bundle = this.bundleFactory.getBundle(locale);
-
-        // Title
-        String title = bundle.getString("TASKBAR_HOME");
-        // Icon
-        String icon = "glyphicons glyphicons-basic-home";
-
-        return this.taskbarService.getFactory().createTaskbarTask(ITaskbarService.HOME_TASK_ID, title, icon, basePath, null, false);
     }
 
 
@@ -263,11 +236,11 @@ public class TaskbarServiceImpl implements TaskbarService {
             for (TaskbarTask navigationTask : navigationTasks) {
                 if (!navigationTask.isDisabled() && !navigationTask.isHidden()) {
                     if (TaskbarItemType.CMS.equals(navigationTask.getType())) {
-                        String stappleId = VirtualNavigationUtils.getStappleId(navigationTask.getPath());
-                        if (targetTaskbarItemId.equals(stappleId)) {
+                        String stapleId = VirtualNavigationUtils.getStapleId(navigationTask.getPath());
+                        if (targetTaskbarItemId.equals(stapleId)) {
                             try {
                                 // Get Item declaration
-                                TaskbarItem item = this.taskbarService.getItem(portalControllerContext, stappleId);
+                                TaskbarItem item = this.taskbarService.getItem(portalControllerContext, stapleId);
                                 if (item != null) {
                                     // Create mixin navigation task (task for path + item for icon)
                                     task = this.taskbarService.getFactory().createTaskbarTask(navigationTask.getId(), navigationTask.getTitle(), item.getIcon(),
