@@ -56,6 +56,7 @@
         <uri>/layouts/folder/index.jsp</uri>
         <uri state="maximized">/layouts/with-nav/maximized.jsp</uri>
         <regions>
+            <region name="contextualized-search" />
             <region name="nav" />
             <region name="nav-bottom" />
             <region name="top" />
