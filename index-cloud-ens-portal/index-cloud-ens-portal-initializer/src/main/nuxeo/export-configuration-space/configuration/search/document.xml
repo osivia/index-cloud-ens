@@ -3,7 +3,7 @@
 <document repository="default" id="9bbd9744-8507-4c15-9a57-4fc34a437579">
   <system>
     <type>Staple</type>
-    <path>admin/search</path>
+    <path>search</path>
     <lifecycle-state>project</lifecycle-state>
     <lifecycle-policy>default_toutatice</lifecycle-policy>
     <facet>TTCPortalConfigurable</facet>
@@ -54,7 +54,7 @@
     <ttc:contextualizeInternalContents><![CDATA[false]]></ttc:contextualizeInternalContents>
     <ttc:extensionUrl><![CDATA[]]></ttc:extensionUrl>
     <ttc:isPreloadedOnLogin><![CDATA[false]]></ttc:isPreloadedOnLogin>
-    <ttc:webid><![CDATA[vstapple_SEARCH]]></ttc:webid>
+    <ttc:webid><![CDATA[vstaple_SEARCH]]></ttc:webid>
     <ttc:keywords/>
     <ttc:abstract><![CDATA[]]></ttc:abstract>
     <ttc:explicitUrl><![CDATA[]]></ttc:explicitUrl>

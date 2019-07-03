@@ -3,7 +3,7 @@
 <document repository="default" id="822a9f79-c324-4a56-a77b-b184e2083128">
   <system>
     <type>Workspace</type>
-    <path>admin</path>
+    <path>configuration</path>
     <lifecycle-state>project</lifecycle-state>
     <lifecycle-policy>default</lifecycle-policy>
     <facet>TTCPortalConfigurable</facet>
@@ -13,21 +13,14 @@
     <facet>Folderish</facet>
     <facet>Space</facet>
     <facet>Orderable</facet>
-    <access-control>
-      <acl name="inherited">
-        <entry principal="Administrator" permission="Everything" grant="true"/>
-        <entry principal="members" permission="Read" grant="true"/>
-      </acl>
-    </access-control>
+    <access-control/>
   </system>
   <schema xmlns:dc="http://www.nuxeo.org/ecm/schemas/dublincore/" name="dublincore">
-    <dc:creator><![CDATA[admin]]></dc:creator>
+    <dc:creator/>
     <dc:source/>
     <dc:nature/>
-    <dc:contributors>
-      <item><![CDATA[admin]]></item>
-    </dc:contributors>
-    <dc:created><![CDATA[2019-06-26T14:52:26.58Z]]></dc:created>
+    <dc:contributors/>
+    <dc:created/>
     <dc:description/>
     <dc:rights/>
     <dc:subjects/>
@@ -35,12 +28,12 @@
     <dc:valid/>
     <dc:format/>
     <dc:issued/>
-    <dc:modified><![CDATA[2019-06-28T10:18:22.00Z]]></dc:modified>
+    <dc:modified/>
     <dc:language/>
     <dc:coverage/>
     <dc:expired/>
-    <dc:lastContributor><![CDATA[admin]]></dc:lastContributor>
-    <dc:title><![CDATA[admin]]></dc:title>
+    <dc:lastContributor/>
+    <dc:title><![CDATA[Configuration]]></dc:title>
   </schema>
   <schema xmlns:uid="http://project.nuxeo.com/geide/schemas/uid/" name="uid">
     <uid:uid/>
@@ -111,7 +104,7 @@
     <webc:themePage><![CDATA[workspace]]></webc:themePage>
     <webc:name><![CDATA[admin]]></webc:name>
     <webc:moderationType><![CDATA[aposteriori]]></webc:moderationType>
-    <webc:url><![CDATA[admin_1]]></webc:url>
+    <webc:url><![CDATA[configuration]]></webc:url>
     <webc:email/>
   </schema>
   <schema xmlns:ottcweb="http://www.nuxeo.org/ecm/project/schemas/opentoutatice/webmode" name="ottc_web">
@@ -122,34 +115,10 @@
   </schema>
   <schema xmlns:stats="http://www.nuxeo.org/ecm/schemas/osivia/statistics" name="statistics">
     <stats:months/>
-    <stats:dayVisits>
-      <anonymous><![CDATA[0]]></anonymous>
-      <hits><![CDATA[29]]></hits>
-      <identifiers>
-        <item><![CDATA[demo]]></item>
-      </identifiers>
-    </stats:dayVisits>
-    <stats:monthVisits>
-      <anonymous><![CDATA[0]]></anonymous>
-      <hits><![CDATA[90]]></hits>
-      <identifiers>
-        <item><![CDATA[admin]]></item>
-        <item><![CDATA[demo]]></item>
-      </identifiers>
-    </stats:monthVisits>
-    <stats:lastUpdate><![CDATA[2019-06-28T10:18:22.00Z]]></stats:lastUpdate>
-    <stats:days>
-      <period>
-        <hits><![CDATA[7]]></hits>
-        <uniqueVisitors><![CDATA[2]]></uniqueVisitors>
-        <date><![CDATA[26-06-2019]]></date>
-      </period>
-      <period>
-        <hits><![CDATA[54]]></hits>
-        <uniqueVisitors><![CDATA[2]]></uniqueVisitors>
-        <date><![CDATA[27-06-2019]]></date>
-      </period>
-    </stats:days>
+    <stats:dayVisits/>
+    <stats:monthVisits/>
+    <stats:lastUpdate/>
+    <stats:days/>
   </schema>
   <schema xmlns:publish="http://www.nuxeo.org/ecm/schemas/publishing/" name="publishing">
     <publish:sections/>

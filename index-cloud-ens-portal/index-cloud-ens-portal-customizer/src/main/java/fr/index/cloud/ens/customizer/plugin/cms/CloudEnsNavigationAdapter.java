@@ -76,11 +76,8 @@ public class CloudEnsNavigationAdapter implements INavigationAdapterModule {
 
     @Override
     public Symlinks getSymlinks(PortalControllerContext portalControllerContext) throws CMSException {
-
-
         // Symlinks
         Symlinks symlinks = new Symlinks();
-
 
         // CMS service
         ICMSService cmsService = this.cmsServiceLocator.getCMSService();
@@ -91,15 +88,10 @@ public class CloudEnsNavigationAdapter implements INavigationAdapterModule {
         // User workspace
         CMSItem userWorkspace;
         try {
-            List<CMSItem> userWorkspaces = cmsService.getWorkspaces(cmsContext, true, false);
-            if ((userWorkspaces != null) && (userWorkspaces.size() == 1)) {
-                userWorkspace = userWorkspaces.get(0);
-            } else {
-                userWorkspace = null;
-            }
+            userWorkspace = cmsService.getUserWorkspace(cmsContext);
         } catch (CMSException e) {
             userWorkspace = null;
-            this.log.error("Unable to get user workspaces.", e.fillInStackTrace());
+            this.log.error("Unable to get user workspaces.", e);
         }
 
         if (userWorkspace != null) {
@@ -107,15 +99,14 @@ public class CloudEnsNavigationAdapter implements INavigationAdapterModule {
             List<Symlink> links = new ArrayList<>();
             symlinks.setLinks(links);
             
-            // Virtual stapples
-            Symlink recentItemsSymlink = this.virtualNavigationService.createSymlink(userWorkspace.getCmsPath(), null, "/default-domain/workspaces/admin/recent-items",null);
+            // Virtual staples
+            Symlink recentItemsSymlink = this.virtualNavigationService.createSymlink(userWorkspace.getCmsPath(), null, "/default-domain/workspaces/configuration/recent-items",null);
             symlinks.getLinks().add(recentItemsSymlink);
-            Symlink searchSymlink = this.virtualNavigationService.createSymlink(userWorkspace.getCmsPath(), null, "/default-domain/workspaces/admin/search",null);            
+            Symlink searchSymlink = this.virtualNavigationService.createSymlink(userWorkspace.getCmsPath(), null, "/default-domain/workspaces/configuration/search",null);
             symlinks.getLinks().add(searchSymlink);
         }
 
-
-        symlinks.getPaths().add("/default-domain/workspaces/admin");
+        symlinks.getPaths().add("/default-domain/workspaces/configuration");
 
         return symlinks;
     }
@@ -126,7 +117,7 @@ public class CloudEnsNavigationAdapter implements INavigationAdapterModule {
     @Override
     public void adaptNavigationItem(PortalControllerContext portalControllerContext, CMSItem navigationItem) {
         if ("Workspace".equals(navigationItem.getType().getName()) ) {
-            // Virtual stapples are not implemented in partial loading mode
+            // Virtual staples are not implemented in partial loading mode
             navigationItem.getProperties().put("partialLoading", "0");
         }
     }

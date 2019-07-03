@@ -3,7 +3,7 @@
 <document repository="default" id="1e4fe141-7b42-4b2d-9ae1-65b7ec68df21">
   <system>
     <type>Staple</type>
-    <path>admin/recent-items</path>
+    <path>recent-items</path>
     <lifecycle-state>project</lifecycle-state>
     <lifecycle-policy>default_toutatice</lifecycle-policy>
     <facet>TTCPortalConfigurable</facet>
@@ -54,7 +54,7 @@
     <ttc:contextualizeInternalContents><![CDATA[false]]></ttc:contextualizeInternalContents>
     <ttc:extensionUrl><![CDATA[]]></ttc:extensionUrl>
     <ttc:isPreloadedOnLogin><![CDATA[false]]></ttc:isPreloadedOnLogin>
-    <ttc:webid><![CDATA[vstapple_RECENT_ITEMS]]></ttc:webid>
+    <ttc:webid><![CDATA[vstaple_RECENT_ITEMS]]></ttc:webid>
     <ttc:keywords/>
     <ttc:abstract><![CDATA[]]></ttc:abstract>
     <ttc:explicitUrl><![CDATA[]]></ttc:explicitUrl>
