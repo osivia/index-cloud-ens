@@ -119,14 +119,12 @@ public class HighestLevelsServiceImpl implements HighestLevelsService {
         if (StringUtils.isEmpty(path)) {
             url = null;
         } else {
-            // Page parameters
-            Map<String, String> parameters = new HashMap<>();
-
             // Selectors
             Map<String, List<String>> selectors = new HashMap<>();
             selectors.put("level", Collections.singletonList(id));
 
-            // Update selectors
+            // Page parameters
+            Map<String, String> parameters = new HashMap<>(1);
             parameters.put("selectors", PageParametersEncoder.encodeProperties(selectors));
 
             // CMS URL

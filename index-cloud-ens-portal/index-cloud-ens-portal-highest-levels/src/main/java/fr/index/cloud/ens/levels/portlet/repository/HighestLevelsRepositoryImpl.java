@@ -31,12 +31,6 @@ import java.util.List;
 public class HighestLevelsRepositoryImpl implements HighestLevelsRepository {
 
     /**
-     * Search task identifier.
-     */
-    private static final String SEARCH_TASK_ID = "SEARCH";
-
-
-    /**
      * Application context.
      */
     @Autowired
@@ -153,7 +147,7 @@ public class HighestLevelsRepositoryImpl implements HighestLevelsRepository {
                 // Task staple identifier
                 String stapleId = VirtualNavigationUtils.getStapleId(task.getPath());
 
-                if (StringUtils.equals(SEARCH_TASK_ID, stapleId)) {
+                if (StringUtils.equals(ITaskbarService.SEARCH_TASK_ID, stapleId)) {
                     searchTask = task;
                 }
             }
