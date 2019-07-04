@@ -3,11 +3,14 @@ package fr.index.cloud.ens.search.options.portlet.service;
 import fr.index.cloud.ens.search.options.portlet.model.SearchOptionsForm;
 import fr.index.cloud.ens.search.options.portlet.model.SearchOptionsVocabularyItem;
 import fr.index.cloud.ens.search.options.portlet.repository.SearchOptionsRepository;
+import fr.toutatice.portail.cms.nuxeo.api.PageSelectors;
 import fr.toutatice.portail.cms.nuxeo.api.cms.NuxeoDocumentContext;
 import fr.toutatice.portail.cms.nuxeo.api.domain.DocumentDTO;
 import fr.toutatice.portail.cms.nuxeo.api.services.dao.DocumentDAO;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang.CharEncoding;
 import org.apache.commons.lang.StringUtils;
 import org.osivia.portal.api.context.PortalControllerContext;
@@ -39,6 +42,25 @@ import java.util.*;
 public class SearchOptionsServiceImpl implements SearchOptionsService {
 
     /**
+     * Selectors parameter.
+     */
+    private static final String SELECTORS_PARAMETER = "selectors";
+
+    /**
+     * Location selector identifier.
+     */
+    private static final String LOCATION_SELECTOR_ID = "location";
+    /**
+     * Level selector identifier.
+     */
+    private static final String LEVEL_SELECTOR_ID = "level";
+    /**
+     * Keywords selector identifier.
+     */
+    private static final String KEYWORDS_SELECTOR_ID = "search";
+
+
+    /**
      * Application context.
      */
     @Autowired
@@ -62,7 +84,9 @@ public class SearchOptionsServiceImpl implements SearchOptionsService {
     @Autowired
     private IBundleFactory bundleFactory;
 
-    /** Document DAO. */
+    /**
+     * Document DAO.
+     */
     @Autowired
     private DocumentDAO documentDao;
 
@@ -75,23 +99,57 @@ public class SearchOptionsServiceImpl implements SearchOptionsService {
         // Form
         SearchOptionsForm form = this.applicationContext.getBean(SearchOptionsForm.class);
 
+        // Selectors
+        Map<String, List<String>> selectors = PageSelectors.decodeProperties(window.getProperty(SELECTORS_WINDOW_PROPERTY));
+
         // Location
         String navigationPath = window.getProperty(NAVIGATION_PATH_WINDOW_PROPERTY);
+        if (StringUtils.isEmpty(navigationPath)) {
+            navigationPath = this.getSelectorValue(selectors, LOCATION_SELECTOR_ID);
+        }
         if (StringUtils.isNotEmpty(navigationPath)) {
             NuxeoDocumentContext documentContext = this.repository.getDocumentContext(portalControllerContext, navigationPath);
             DocumentDTO documentDto = this.documentDao.toDTO(documentContext.getDocument());
             form.setLocation(documentDto);
         }
 
+        // Level
+        String level = this.getSelectorValue(selectors, LEVEL_SELECTOR_ID);
+        form.setLevel(level);
+
+        // Keywords
+        String keywords = this.getSelectorValue(selectors, KEYWORDS_SELECTOR_ID);
+        form.setKeywords(keywords);
+
         return form;
+    }
+
+
+    /**
+     * Get selector value.
+     *
+     * @param selectors  selectors
+     * @param selectorId selector identifier
+     * @return value, may be null
+     */
+    private String getSelectorValue(Map<String, List<String>> selectors, String selectorId) {
+        String value;
+        if (MapUtils.isEmpty(selectors)) {
+            value = null;
+        } else {
+            List<String> values = selectors.get(selectorId);
+            if (CollectionUtils.isEmpty(values)) {
+                value = null;
+            } else {
+                value = values.get(0);
+            }
+        }
+        return value;
     }
 
 
     @Override
     public String getSearchRedirectionUrl(PortalControllerContext portalControllerContext, SearchOptionsForm form) throws PortletException {
-        // Window
-        PortalWindow window = WindowFactory.getWindow(portalControllerContext.getRequest());
-
         // Search path
         String path = this.repository.getSearchPath(portalControllerContext);
 
@@ -103,24 +161,24 @@ public class SearchOptionsServiceImpl implements SearchOptionsService {
             // Selectors
             Map<String, List<String>> selectors = new HashMap<>();
             // Location
-            String navigationPath = window.getProperty(NAVIGATION_PATH_WINDOW_PROPERTY);
-            if (StringUtils.isNotEmpty(navigationPath)) {
-                selectors.put("location", Collections.singletonList(navigationPath));
+            DocumentDTO location = form.getLocation();
+            if (location != null) {
+                selectors.put(LOCATION_SELECTOR_ID, Collections.singletonList(location.getPath()));
             }
             // Level
             String level = form.getLevel();
             if (StringUtils.isNotEmpty(level)) {
-                selectors.put("level", Collections.singletonList(level));
+                selectors.put(LEVEL_SELECTOR_ID, Collections.singletonList(level));
             }
             // Keywords
             String keywords = form.getKeywords();
             if (StringUtils.isNotEmpty(keywords)) {
-                selectors.put("search", Collections.singletonList(keywords));
+                selectors.put(KEYWORDS_SELECTOR_ID, Collections.singletonList(keywords));
             }
 
             // Page parameters
             Map<String, String> parameters = new HashMap<>(1);
-            parameters.put("selectors", PageParametersEncoder.encodeProperties(selectors));
+            parameters.put(SELECTORS_PARAMETER, PageParametersEncoder.encodeProperties(selectors));
 
             // CMS URL
             url = this.portalUrlFactory.getCMSUrl(portalControllerContext, null, path, parameters, null, null, null, null,
@@ -128,6 +186,12 @@ public class SearchOptionsServiceImpl implements SearchOptionsService {
         }
 
         return url;
+    }
+
+
+    @Override
+    public void clearLocation(PortalControllerContext portalControllerContext, SearchOptionsForm form) throws PortletException {
+        form.setLocation(null);
     }
 
 

@@ -9,6 +9,10 @@
         <transaction>
             <trans-attribute>Required</trans-attribute>
         </transaction>
+
+        <header-content>
+            <script type="text/javascript" src="/js/search.js"></script>
+        </header-content>
     </portlet>
 
 

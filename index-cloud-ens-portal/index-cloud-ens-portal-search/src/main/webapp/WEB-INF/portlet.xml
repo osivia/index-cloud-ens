@@ -24,11 +24,14 @@
         <supports>
             <mime-type>text/html</mime-type>
             <portlet-mode>view</portlet-mode>
+            <portlet-mode>admin</portlet-mode>
         </supports>
 
         <portlet-info>
             <title>Search</title>
         </portlet-info>
+
+        <supported-public-render-parameter>selectors</supported-public-render-parameter>
     </portlet>
 
 
@@ -56,5 +59,11 @@
             <title>Search options</title>
         </portlet-info>
     </portlet>
+
+
+    <public-render-parameter>
+        <identifier>selectors</identifier>
+        <name>selectors</name>
+    </public-render-parameter>
 
 </portlet-app>

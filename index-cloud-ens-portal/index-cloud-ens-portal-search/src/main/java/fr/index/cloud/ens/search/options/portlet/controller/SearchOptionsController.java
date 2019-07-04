@@ -9,6 +9,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.portlet.bind.annotation.ActionMapping;
 import org.springframework.web.portlet.bind.annotation.RenderMapping;
 import org.springframework.web.portlet.bind.annotation.ResourceMapping;
@@ -24,6 +26,7 @@ import java.io.PrintWriter;
  */
 @Controller
 @RequestMapping("VIEW")
+@SessionAttributes("form")
 public class SearchOptionsController {
 
     /**
@@ -53,19 +56,39 @@ public class SearchOptionsController {
     /**
      * Search action mapping.
      *
-     * @param request  action request
-     * @param response action response
-     * @param form     search options form model attribute
+     * @param request       action request
+     * @param response      action response
+     * @param form          search options form model attribute
+     * @param sessionStatus session status
      */
     @ActionMapping("search")
-    public void search(ActionRequest request, ActionResponse response, @ModelAttribute("form") SearchOptionsForm form) throws PortletException, IOException {
+    public void search(ActionRequest request, ActionResponse response, @ModelAttribute("form") SearchOptionsForm form, SessionStatus sessionStatus) throws PortletException, IOException {
         // Portal Controller context
         PortalControllerContext portalControllerContext = new PortalControllerContext(this.portletContext, request, response);
+
+        // Complete session
+        sessionStatus.setComplete();
 
         // Search redirection URL
         String url = this.service.getSearchRedirectionUrl(portalControllerContext, form);
 
         response.sendRedirect(url);
+    }
+
+
+    /**
+     * Clear location action mapping.
+     *
+     * @param request  action request
+     * @param response action response
+     * @param form     search options form model attribute
+     */
+    @ActionMapping("clear-location")
+    public void clearLocation(ActionRequest request, ActionResponse response, @ModelAttribute("form") SearchOptionsForm form) throws PortletException {
+        // Portal Controller context
+        PortalControllerContext portalControllerContext = new PortalControllerContext(this.portletContext, request, response);
+
+        this.service.clearLocation(portalControllerContext, form);
     }
 
 

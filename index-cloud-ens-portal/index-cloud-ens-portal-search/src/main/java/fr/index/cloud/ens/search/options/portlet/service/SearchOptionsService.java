@@ -23,6 +23,10 @@ public interface SearchOptionsService {
      * Navigation path window property.
      */
     String NAVIGATION_PATH_WINDOW_PROPERTY = "osivia.search.navigation-path";
+    /**
+     * Selectors window property.
+     */
+    String SELECTORS_WINDOW_PROPERTY = "osivia.search.selectors";
 
     /**
      * Levels vocabulary name.
@@ -47,6 +51,15 @@ public interface SearchOptionsService {
      * @return URL
      */
     String getSearchRedirectionUrl(PortalControllerContext portalControllerContext, SearchOptionsForm form) throws PortletException;
+
+
+    /**
+     * Clear location.
+     *
+     * @param portalControllerContext portal controller context
+     * @param form                    search options form
+     */
+    void clearLocation(PortalControllerContext portalControllerContext, SearchOptionsForm form) throws PortletException;
 
 
     /**

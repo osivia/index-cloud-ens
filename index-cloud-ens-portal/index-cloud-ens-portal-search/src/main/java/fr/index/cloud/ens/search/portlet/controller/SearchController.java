@@ -5,8 +5,10 @@ import fr.index.cloud.ens.search.portlet.service.SearchService;
 import org.osivia.portal.api.context.PortalControllerContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.portlet.bind.PortletRequestDataBinder;
 import org.springframework.web.portlet.bind.annotation.ActionMapping;
 import org.springframework.web.portlet.bind.annotation.RenderMapping;
 
@@ -38,11 +40,16 @@ public class SearchController {
     /**
      * View render mapping.
      *
+     * @param request  render request
+     * @param response render response
      * @return view path
      */
     @RenderMapping
-    public String view() {
-        return "view";
+    public String view(RenderRequest request, RenderResponse response) throws PortletException {
+        // Portal Controller context
+        PortalControllerContext portalControllerContext = new PortalControllerContext(this.portletContext, request, response);
+
+        return this.service.getViewPath(portalControllerContext);
     }
 
 
@@ -78,6 +85,17 @@ public class SearchController {
         PortalControllerContext portalControllerContext = new PortalControllerContext(this.portletContext, request, response);
 
         return this.service.getForm(portalControllerContext);
+    }
+
+
+    /**
+     * Form init binder.
+     *
+     * @param binder data binder
+     */
+    @InitBinder("form")
+    public void formInitBinder(PortletRequestDataBinder binder) {
+        binder.setDisallowedFields("view");
     }
 
 

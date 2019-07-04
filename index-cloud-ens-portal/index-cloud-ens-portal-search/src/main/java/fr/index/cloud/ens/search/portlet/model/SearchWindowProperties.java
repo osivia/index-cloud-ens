@@ -5,23 +5,18 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 /**
- * Search form java-bean.
+ * Search window properties.
  *
  * @author Cédric Krommenhoek
  */
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-public class SearchForm {
+public class SearchWindowProperties {
 
     /**
      * Search view.
      */
     private SearchView view;
-
-    /**
-     * Input value.
-     */
-    private String value;
 
 
     public SearchView getView() {
@@ -30,13 +25,5 @@ public class SearchForm {
 
     public void setView(SearchView view) {
         this.view = view;
-    }
-
-    public String getValue() {
-        return value;
-    }
-
-    public void setValue(String value) {
-        this.value = value;
     }
 }

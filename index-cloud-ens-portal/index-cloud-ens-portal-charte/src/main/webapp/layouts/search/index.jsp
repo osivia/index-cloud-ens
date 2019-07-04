@@ -26,7 +26,16 @@
 
                 <div class="row flex-grow-1 pt-4 overflow-auto">
                     <div class="col mh-100">
-                        <p:region regionName="top"/>
+                        <div class="row no-gutters">
+                            <div class="col">
+                                <p:region regionName="top"/>
+                            </div>
+
+                            <div class="col-auto">
+                                <p:region regionName="top-aux"/>
+                            </div>
+                        </div>
+
 
                         <div class="row">
                             <div class="col-auto">

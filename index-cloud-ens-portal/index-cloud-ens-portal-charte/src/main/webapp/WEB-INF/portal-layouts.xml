@@ -44,6 +44,7 @@
             <region name="nav" />
             <region name="nav-bottom" />
             <region name="top" />
+            <region name="top-aux" />
             <region name="filter-1" />
             <region name="filter-2" />
             <region name="filter-3" />
