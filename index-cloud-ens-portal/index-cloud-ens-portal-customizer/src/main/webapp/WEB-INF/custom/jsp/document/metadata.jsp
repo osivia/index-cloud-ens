@@ -184,60 +184,63 @@
 		        
 		        <c:if test="${enabled}">	
 	    			
-    			    <div>
-	    			    <span>
-                			<i class="glyphicons glyphicons-link"></i>
-            			</span>		        
-		                <span>
-		                   <a href="/s/${share}"><op:translate key="SHARED_LINK"/></a>
-		                 </span>
-	                 </div>
-	     			
-	     			
-	
+    			    <div class="d-flex">
+    			    	<div>
+		    			    <span>
+	                			<i class="glyphicons glyphicons-link"></i>
+	            			</span>
+            			</div>
+            			<div>      
+			                <span>
+			                   <a href="/s/${share}"><op:translate key="SHARED_LINK"/></a>
+			                 </span>
+
+		
 
 	      			
-	                <!-- Format -->
-	                
-	                 <c:if test="${document.pdfConvertible}">
-	 	                <portlet:actionURL name="inline-edition" var="submitUrl">
-		                    <portlet:param name="property" value="rshr:format"/>
-		                    <portlet:param name="cancel-url" value="${cancelUrl}"/>
-		                </portlet:actionURL>
-		                <form action="${submitUrl}" method="post">
-		                	<c:if test="${not empty targets}">
-		                		<input type="hidden" name="warn-message" value="<op:translate key="DOCUMENT_CHANGE_FORMAT_WARN_MESSAGE"/>">
-		                	</c:if>
-		                
-		                    <div class="form-group inline-edition ml-4">
-		                        <label class="control-label"><op:translate key="DOCUMENT_METADATA_FORMAT_LABEL"/></label>
-		                        <div class="radio">
-		                            <label> <input type="radio" name="inline-values"
-		                                           value="pdf" ${empty document.properties['rshr:format'] or document.properties['rshr:format'] eq 'pdf' ? 'checked' : ''}>
-		                                <op:translate key="SHARED_FORMAT_PDF"/>
-		                            </label>
-		                        </div>
-		                        <div class="radio">
-		                            <label> <input type="radio" name="inline-values"
-		                                           value="native" ${document.properties['rshr:format'] eq 'native' ? 'checked' : ''}>
-		                                <op:translate key="SHARED_FORMAT_NATIVE"/>
-		                            </label>
-		                        </div>
-		                    </div>
-		
-		                    <input type="submit" class="d-none">
-		                </form>
-	                </c:if>
-	
+			                <!-- Format -->
+			                
+			                 <c:if test="${document.pdfConvertible}">
+			 	                <portlet:actionURL name="inline-edition" var="submitUrl">
+				                    <portlet:param name="property" value="rshr:format"/>
+				                    <portlet:param name="cancel-url" value="${cancelUrl}"/>
+				                </portlet:actionURL>
+				                <form action="${submitUrl}" method="post">
+				                	<c:if test="${not empty targets}">
+				                		<input type="hidden" name="warn-message" value="<op:translate key="DOCUMENT_CHANGE_FORMAT_WARN_MESSAGE"/>">
+				                	</c:if>
+				                
+				                    <div class="form-group inline-edition">
+				                        <label class="control-label"><op:translate key="DOCUMENT_METADATA_FORMAT_LABEL"/></label>
+				                        <div class="radio">
+				                            <label> <input type="radio" name="inline-values"
+				                                           value="pdf" ${empty document.properties['rshr:format'] or document.properties['rshr:format'] eq 'pdf' ? 'checked' : ''}>
+				                                <op:translate key="SHARED_FORMAT_PDF"/>
+				                            </label>
+				                        </div>
+				                        <div class="radio">
+				                            <label> <input type="radio" name="inline-values"
+				                                           value="native" ${document.properties['rshr:format'] eq 'native' ? 'checked' : ''}>
+				                                <op:translate key="SHARED_FORMAT_NATIVE"/>
+				                            </label>
+				                        </div>
+				                    </div>
+				
+				                    <input type="submit" class="d-none">
+				                </form>
+			                </c:if>
+			                
+            			</div>
+            		</div>			
 
 	                
-   					<div>
+   					<div class="d-flex">
 	 		            <portlet:actionURL name="link-activation" var="deactivationUrl">
 			                <portlet:param name="activate" value="false"/>
 			            </portlet:actionURL>
 	    			    <span>
                 			<i class="glyphicons glyphicons-remove"></i>
-            			</span>		        
+                		</span>		        
 		                <span>
 		                   <a href="${deactivationUrl}"><op:translate key="SHARED_LINK_DEACTIVATE"/>
 		                </span>
@@ -250,7 +253,7 @@
 		                <portlet:param name="activate" value="true"/>
 		            </portlet:actionURL>
 		            
-		            <div>
+    			    <div class="d-flex">
 		    			    <span>
 	                			<i class="glyphicons glyphicons-link"></i>
 	            			</span>		        

@@ -6,7 +6,7 @@ $JQry(function() {
         if (!$element.data("loaded")) {
             var url = $element.data("url");
             var options = {
-                closeOnSelect : false,
+                closeOnSelect : true,
                 containerCssClass : "select2-inline-edition-container",
                 dropdownCssClass : "select2-inline-edition-dropdown",
                 theme : "bootstrap4",
@@ -60,7 +60,15 @@ $JQry(function() {
 
             $element.select2(options);
 
+            // Close on unselect
+            
+            $element.on("select2:unselect", function (event) {
+        	  	var $target = $JQry(event.target);
+           		setTimeout(initSelect2, 100, $element);
+            });
+          
 
+            
             $element.change(function(event) {
                 var $form = $element.closest("form");
                 var $submit = $form.find("button[type=submit], input[type=submit]");
@@ -136,3 +144,17 @@ $JQry(function() {
     });
 
 });
+
+
+
+
+
+
+
+function initSelect2( element) {
+    var search = element.siblings().find(".select2-search__field");
+    search.val('');
+    element.select2('close');           
+}
+
+
