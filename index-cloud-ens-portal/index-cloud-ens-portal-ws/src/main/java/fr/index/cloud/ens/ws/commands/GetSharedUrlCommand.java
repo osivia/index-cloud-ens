@@ -13,6 +13,7 @@ import org.nuxeo.ecm.automation.client.model.DocRef;
 import org.nuxeo.ecm.automation.client.model.Document;
 import org.nuxeo.ecm.automation.client.model.PropertyList;
 import org.nuxeo.ecm.automation.client.model.PropertyMap;
+import org.osivia.portal.api.cms.IDGenerator;
 
 import fr.index.cloud.ens.ws.DriveRestController;
 import fr.toutatice.portail.cms.nuxeo.api.INuxeoCommand;

@@ -46,7 +46,6 @@ import fr.index.cloud.ens.ws.beans.UnpublishBean;
 import fr.index.cloud.ens.ws.beans.UploadBean;
 import fr.index.cloud.ens.ws.commands.CreateFolderCommand;
 import fr.index.cloud.ens.ws.commands.FetchByPubIdCommand;
-import fr.index.cloud.ens.ws.commands.FetchByShareLinkCommand;
 import fr.index.cloud.ens.ws.commands.FetchByTitleCommand;
 import fr.index.cloud.ens.ws.commands.FolderGetChildrenCommand;
 import fr.index.cloud.ens.ws.commands.GetSharedUrlCommand;
@@ -54,7 +53,7 @@ import fr.index.cloud.ens.ws.commands.GetUserProfileCommand;
 import fr.index.cloud.ens.ws.commands.PublishCommand;
 import fr.index.cloud.ens.ws.commands.UnpublishCommand;
 import fr.index.cloud.ens.ws.commands.UploadFileCommand;
-import fr.index.cloud.oauth.commands.GetRefreshTokenCommand;
+
 import fr.toutatice.portail.cms.nuxeo.api.INuxeoCommand;
 import fr.toutatice.portail.cms.nuxeo.api.NuxeoController;
 import fr.toutatice.portail.cms.nuxeo.api.NuxeoException;
@@ -581,29 +580,15 @@ public class DriveRestController {
 
             NuxeoController nuxeoController = getNuxeocontroller(request, principal);
 
+            
+            Document currentDoc = null;
+            
+            // Extract share ID
             String url = publishBean.getShareUrl();
-            String path = null;
             int iName = url.lastIndexOf('/');
             if (iName != -1) {
-                // TODO : call fetchShare with a new param
-
-                // Execute publish
-                INuxeoCommand command = new FetchByShareLinkCommand(url.substring(iName + 1));
-
-                @SuppressWarnings("unchecked")
-                Documents docs = (Documents) nuxeoController.executeNuxeoCommand(command);
-                if (docs.size() != 1)
-                    throw new NuxeoException(NuxeoException.ERROR_NOTFOUND);
-                // Document doc = nuxeoController.fetchSharedDocument(url.substring(iName+1));
-
-
-                path = docs.get(0).getPath();
+                currentDoc = nuxeoController.fetchSharedDocument(url.substring(iName + 1), false);
             }
-
-
-            NuxeoDocumentContext ctx = nuxeoController.getDocumentContext(path);
-
-            Document currentDoc = wrapContentFetching(nuxeoController, path);
 
             // set qualifiers
             Map<String, String> properties = parseProperties(publishBean.getProperties());
@@ -618,6 +603,7 @@ public class DriveRestController {
             returnObject.put("pubId", returnMap.get("pubId"));
 
             // Force cache initialisation
+            NuxeoDocumentContext ctx = nuxeoController.getDocumentContext(currentDoc.getPath());            
             ctx.reload();
 
         } catch (Exception e) {
