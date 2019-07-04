@@ -322,7 +322,7 @@
                         <property>
                             <name>osivia.nuxeoRequest</name>
                             <value>StringBuilder nuxeoRequest = new StringBuilder();&#13;
-nuxeoRequest.append("ecm:path STARTSWITH '").append(navigationPath).append("' ");&#13;
+nuxeoRequest.append("ecm:path STARTSWITH '").append(userWorkspacePath).append("' ");&#13;
 nuxeoRequest.append("AND ecm:primaryType IN ('File', 'Picture', 'Audio', 'Video', 'Note') ");&#13;
 nuxeoRequest.append("ORDER BY dc:modified DESC");&#13;
 return nuxeoRequest.toString();</value>
@@ -1004,7 +1004,7 @@ return nuxeoRequest.toString();</value>
                     <security-constraint/>
                 </page>
 
-                <page>
+                <!--<page>
                     <page-name>workspace</page-name>
                     <display-name xml:lang="fr">Espace collaboratif</display-name>
 
@@ -1021,7 +1021,7 @@ return nuxeoRequest.toString();</value>
                         <properties/>
                         <security-constraint/>
                     </page>
-                </page>
+                </page>-->
 
                 <page>
                     <page-name>user-workspace</page-name>
@@ -1086,6 +1086,47 @@ return nuxeoRequest.toString();</value>
                     </properties>
 
                     <security-constraint/>
+
+                    <window>
+                        <window-name>index-cloud-ens-search-instance_1562148578579</window-name>
+                        <instance-ref>index-cloud-ens-search-instance</instance-ref>
+                        <region>contextualized-search</region>
+                        <properties>
+                            <property>
+                                <name>portal.windowContentType</name>
+                                <value>portlet</value>
+                            </property>
+                            <property>
+                                <name>osivia.title</name>
+                                <value>Recherche contextuelle</value>
+                            </property>
+                            <property>
+                                <name>osivia.hideTitle</name>
+                                <value>1</value>
+                            </property>
+                            <property>
+                                <name>theme.order</name>
+                                <value>0</value>
+                            </property>
+                            <property>
+                                <name>osivia.search.view</name>
+                                <value>input</value>
+                            </property>
+                            <property>
+                                <name>osivia.ajaxLink</name>
+                                <value>1</value>
+                            </property>
+                            <property>
+                                <name>osivia.hideDecorators</name>
+                                <value>1</value>
+                            </property>
+                            <property>
+                                <name>theme.dyna.partial_refresh_enabled</name>
+                                <value>true</value>
+                            </property>
+                        </properties>
+                        <height>0</height>
+                    </window>
 
                     <window>
                         <window-name>index-cloud-ens-file-browser-filter-eraser-instance_1560325542241</window-name>
@@ -1387,10 +1428,6 @@ return nuxeoRequest.toString();</value>
                                 <value>Barre des tâches</value>
                             </property>
                             <property>
-                                <name>osivia.maximized.cms.url</name>
-                                <value>false</value>
-                            </property>
-                            <property>
                                 <name>osivia.taskbar.path</name>
                                 <value>${userWorkspacePath}</value>
                             </property>
@@ -1429,7 +1466,17 @@ return nuxeoRequest.toString();</value>
 &#13;
 StringBuilder nuxeoRequest = new StringBuilder();&#13;
 nuxeoRequest.append("ecm:primaryType IN ('Folder', 'File', 'Picture', 'Audio', 'Video') ");&#13;
-nuxeoRequest.append("AND ecm:path STARTSWITH '/default-domain/UserWorkspaces' ");&#13;
+&#13;
+// Location&#13;
+List locations = params.get("location");&#13;
+String location;&#13;
+if ((locations == null) || locations.isEmpty()) {&#13;
+location = userWorkspacePath + "/documents";&#13;
+} else {&#13;
+location = locations.get(0);&#13;
+}&#13;
+nuxeoRequest.append("AND ecm:path STARTSWITH '").append(location).append("' ");&#13;
+nuxeoRequest.append("AND ecm:path &lt;&gt; '").append(location).append("' ");&#13;
 &#13;
 // Search&#13;
 String search = StringUtils.join(params.get("search"), " ");&#13;
@@ -1544,6 +1591,39 @@ return nuxeoRequest.toString();</value>
                         </properties>
                         <height>0</height>
                     </window>
+
+                    <window>
+                        <window-name>index-cloud-ens-search-instance_1562247969609</window-name>
+                        <instance-ref>index-cloud-ens-search-instance</instance-ref>
+                        <region>top-aux</region>
+                        <properties>
+                            <property>
+                                <name>portal.windowContentType</name>
+                                <value>portlet</value>
+                            </property>
+                            <property>
+                                <name>osivia.title</name>
+                                <value>Options de recherche</value>
+                            </property>
+                            <property>
+                                <name>osivia.hideTitle</name>
+                                <value>1</value>
+                            </property>
+                            <property>
+                                <name>theme.order</name>
+                                <value>0</value>
+                            </property>
+                            <property>
+                                <name>osivia.search.view</name>
+                                <value>button</value>
+                            </property>
+                            <property>
+                                <name>osivia.hideDecorators</name>
+                                <value>1</value>
+                            </property>
+                        </properties>
+                        <height>0</height>
+                    </window>
                 </page>
 
                 <page>
@@ -1596,6 +1676,7 @@ return nuxeoRequest.toString();</value>
                         <height>0</height>
                     </window>
                 </page>
+
                 <page>
                     <page-name>recent</page-name>
                     <display-name xml:lang="fr">Récents</display-name>
