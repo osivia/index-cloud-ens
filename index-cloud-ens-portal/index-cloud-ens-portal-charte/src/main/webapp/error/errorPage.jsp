@@ -29,18 +29,18 @@
 <header>
     <nav class="navbar navbar-expand navbar-light">
         <%--Brand--%>
-        <a class="navbar-brand py-0" href="/">
+        <a class="navbar-brand mx-auto py-0" href="/">
             <img alt="${requestScope['osivia.header.application.name']}" src="${contextPath}/img/logo-cloud-pronote.png"
                  height="40">
         </a>
     </nav>
 
     <nav class="navbar navbar-expand navbar-dark bg-blue-light d-none d-md-flex">
-        <ul class="navbar-nav mx-auto">
+        <ul class="navbar-nav">
             <li class="nav-item mr-4">
                 <a href="/" class="nav-link">
                     <i class="glyphicons glyphicons-basic-home"></i>
-                    <strong><op:translate key="TOOLBAR_HOME"/></strong>
+                    <strong class="sr-only"><op:translate key="TOOLBAR_HOME"/></strong>
                 </a>
             </li>
 

@@ -17,12 +17,6 @@
         </li>
     </ul>
 
-    <%--Brand--%>
-    <a class="navbar-brand py-0" href="${requestScope['osivia.home.url']}">
-        <img alt="${requestScope['osivia.header.application.name']}" src="${contextPath}/img/logo-cloud-pronote.png"
-             height="40">
-    </a>
-
     <%--Administration--%>
     <ul class="navbar-nav d-none d-md-flex">
         <li class="nav-item">
@@ -30,7 +24,13 @@
         </li>
     </ul>
 
-    <ul class="navbar-nav ml-auto">
+    <%--Brand--%>
+    <a class="navbar-brand mx-auto py-0" href="${requestScope['osivia.home.url']}">
+        <img alt="${requestScope['osivia.header.application.name']}" src="${contextPath}/img/logo-cloud-pronote.png"
+             height="40">
+    </a>
+
+    <ul class="navbar-nav">
         <c:choose>
             <c:when test="${empty requestScope['osivia.toolbar.principal']}">
                 <%--Login--%>
@@ -85,7 +85,7 @@
                     <div class="dropdown-menu dropdown-menu-right">
                         <div class="dropdown-header d-lg-none">${empty requestScope['osivia.toolbar.person'] ? requestScope['osivia.toolbar.principal'] : requestScope['osivia.toolbar.person'].displayName}</div>
 
-                        <%--User profile--%>
+                            <%--User profile--%>
                         <c:set var="url" value="${requestScope['osivia.toolbar.myprofile']}"/>
                         <c:if test="${not empty url}">
                             <a href="${url}" class="dropdown-item">
@@ -97,7 +97,7 @@
                             <div class="dropdown-divider"></div>
                         </c:if>
 
-                        <%--Logout--%>
+                            <%--Logout--%>
                         <a href="javascript:" onclick="logout()" class="dropdown-item">
                             <i class="glyphicons glyphicons-basic-log-out"></i>
                             <span><op:translate key="TOOLBAR_LOGOUT"/></span>
@@ -113,12 +113,12 @@
 
 <c:if test="${not empty requestScope['osivia.nav.items']}">
     <nav class="navbar navbar-expand navbar-dark bg-blue-light d-none d-md-flex">
-        <ul class="navbar-nav mx-auto">
+        <ul class="navbar-nav">
             <c:forEach var="navItem" items="${requestScope['osivia.nav.items']}" varStatus="status">
-                <li class="nav-item ${navItem.active ? 'active' : ''} ${status.last ? '' : 'mr-4'}">
+                <li class="nav-item ${navItem.active ? 'active dotted-nav-item' : ''} ${status.last ? '' : 'mr-4'}">
                     <a href="${navItem.url}" class="nav-link ${empty navItem.url ? 'disabled' : ''}">
                         <i class="${navItem.icon}"></i>
-                        <strong><op:translate key="${navItem.key}"/></strong>
+                        <strong class="${status.first ? 'sr-only' : ''}"><op:translate key="${navItem.key}"/></strong>
                     </a>
                 </li>
             </c:forEach>
