@@ -73,4 +73,5 @@ public interface SearchService {
      */
     String getSearchRedirectionUrl(PortalControllerContext portalControllerContext, SearchForm form) throws PortletException;
 
+
 }

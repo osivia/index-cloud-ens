@@ -36,27 +36,6 @@
                             </div>
                         </div>
 
-
-                        <div class="row">
-                            <div class="col-auto">
-                                <p class="text-muted">
-                                    <small><op:translate key="FILTERS_REGION_LABEL"/></small>
-                                </p>
-                            </div>
-
-                            <div class="col-auto">
-                                <p:region regionName="filter-1"/>
-                            </div>
-
-                            <div class="col-auto">
-                                <p:region regionName="filter-2"/>
-                            </div>
-
-                            <div class="col-auto">
-                                <p:region regionName="filter-3"/>
-                            </div>
-                        </div>
-
                         <p:region regionName="col-1"/>
                     </div>
                 </div>

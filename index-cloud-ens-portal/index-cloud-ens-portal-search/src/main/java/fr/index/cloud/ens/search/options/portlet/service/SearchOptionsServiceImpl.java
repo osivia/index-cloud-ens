@@ -57,7 +57,7 @@ public class SearchOptionsServiceImpl implements SearchOptionsService {
     /**
      * Keywords selector identifier.
      */
-    private static final String KEYWORDS_SELECTOR_ID = "search";
+    public static final String KEYWORDS_SELECTOR_ID = "search";
 
 
     /**
@@ -132,7 +132,7 @@ public class SearchOptionsServiceImpl implements SearchOptionsService {
      * @param selectorId selector identifier
      * @return value, may be null
      */
-    private String getSelectorValue(Map<String, List<String>> selectors, String selectorId) {
+    public static String getSelectorValue(Map<String, List<String>> selectors, String selectorId) {
         String value;
         if (MapUtils.isEmpty(selectors)) {
             value = null;

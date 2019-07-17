@@ -14,6 +14,15 @@
     </portlet>
 
 
+    <!-- Applications -->
+    <portlet>
+        <portlet-name>index-cloud-portal-ens-application-managementPortlet</portlet-name>
+        <header-content>
+            <script type="text/javascript" src="/js/application-management.js"></script>            
+         </header-content>
+    </portlet>
+
+
 
 
     <!-- Customization modules repository -->

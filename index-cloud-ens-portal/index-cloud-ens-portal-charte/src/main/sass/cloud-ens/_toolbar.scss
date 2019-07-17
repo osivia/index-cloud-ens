@@ -36,3 +36,22 @@
     }
   }
 }
+
+// Dark with white dark unactive links 
+
+
+.navbar-dark-cloud-ens {
+  @extend .navbar-dark;
+  
+  .navbar-nav {
+    .nav-link {
+      color: $navbar-light-color;
+
+
+
+      &.disabled {
+        color: $navbar-light-disabled-color;
+      }
+    }
+  }
+}

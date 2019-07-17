@@ -116,7 +116,7 @@ public class CloudEnsNavigationAdapter implements INavigationAdapterModule {
 
     @Override
     public void adaptNavigationItem(PortalControllerContext portalControllerContext, CMSItem navigationItem) {
-        if ("Workspace".equals(navigationItem.getType().getName()) ) {
+        if (navigationItem.getType() != null && "Workspace".equals(navigationItem.getType().getName()) ) {
             // Virtual staples are not implemented in partial loading mode
             navigationItem.getProperties().put("partialLoading", "0");
         }

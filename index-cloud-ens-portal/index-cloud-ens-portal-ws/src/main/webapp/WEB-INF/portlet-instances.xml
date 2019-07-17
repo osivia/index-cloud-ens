@@ -23,4 +23,25 @@
         </instance>
     </deployment>
 
+
+    <deployment>
+        <if-exists>overwrite</if-exists>
+        <instance>
+            <display-name xml:lang="en">Cloud-ens - Applications</display-name>
+            <display-name xml:lang="fr">Cloud-ens - Applications</display-name>
+            <instance-id>index-cloud-portal-ens-application-managementInstance</instance-id>
+            <portlet-ref>index-cloud-portal-ens-application-managementPortlet</portlet-ref>
+            <security-constraint>
+                <policy-permission>
+                    <action-name>admin</action-name>
+                    <role-name>Administrators</role-name>
+                </policy-permission>
+                <policy-permission>
+                    <action-name>view</action-name>
+                    <unchecked />
+                </policy-permission>
+            </security-constraint>
+        </instance>
+    </deployment>
+
 </deployments>

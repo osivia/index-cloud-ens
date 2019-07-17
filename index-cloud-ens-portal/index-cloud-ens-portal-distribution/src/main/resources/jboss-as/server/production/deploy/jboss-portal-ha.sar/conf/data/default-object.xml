@@ -577,10 +577,6 @@ return nuxeoRequest.toString();</value>
                         <name>order</name>
                         <value>2</value>
                     </property>
-                    <property>
-                        <name>layout.id</name>
-                        <value>cloud-ens-search</value>
-                    </property>
                 </properties>
 
                 <security-constraint>
@@ -787,6 +783,8 @@ return nuxeoRequest.toString();</value>
                 </window>
             </page>
 
+
+
             <page>
                 <page-name>procedures-management</page-name>
                 <display-name xml:lang="fr">Télé-procédures</display-name>
@@ -895,6 +893,54 @@ return nuxeoRequest.toString();</value>
                     <height>0</height>
                 </window>
             </page>
+
+		    <page>
+		      <page-name>application-management</page-name>
+		      <display-name xml:lang="fr">Applications</display-name>
+                <properties>
+                    <property>
+                        <name>order</name>
+                        <value>5</value>
+                    </property>
+                </properties>
+		      <security-constraint/>
+		      <window>
+		        <window-name>index-cloud-portal-ens-application-managementInstance_1563394688147</window-name>
+		        <instance-ref>index-cloud-portal-ens-application-managementInstance</instance-ref>
+		        <region>col-1</region>
+		        <properties>
+		          <property>
+		            <name>osivia.hideDecorators</name>
+		            <value>1</value>
+		          </property>
+		          <property>
+		            <name>portal.windowContentType</name>
+		            <value>portlet</value>
+		          </property>
+		          <property>
+		            <name>osivia.bootstrapPanelStyle</name>
+		            <value>false</value>
+		          </property>
+		          <property>
+		            <name>osivia.maximized.cms.url</name>
+		            <value>false</value>
+		          </property>
+		          <property>
+		            <name>osivia.mobileCollapse</name>
+		            <value>false</value>
+		          </property>
+		          <property>
+		            <name>osivia.hideTitle</name>
+		            <value>1</value>
+		          </property>
+		          <property>
+		            <name>theme.order</name>
+		            <value>0</value>
+		          </property>
+		        </properties>
+		        <height>0</height>
+		      </window>
+		    </page>
 
 
             <page>
@@ -1124,6 +1170,10 @@ return nuxeoRequest.toString();</value>
                                 <name>theme.dyna.partial_refresh_enabled</name>
                                 <value>true</value>
                             </property>
+					        <property>
+					            <name>osivia.hideEmptyPortlet</name>
+					            <value>1</value>
+					        </property>                            
                         </properties>
                         <height>0</height>
                     </window>
@@ -1311,158 +1361,112 @@ return nuxeoRequest.toString();</value>
                     </window>
                 </page>
 
-                <page>
-                    <page-name>search</page-name>
-                    <display-name xml:lang="fr">Recherche</display-name>
-
-                    <properties>
-                        <property>
-                            <name>layout.id</name>
-                            <value>cloud-ens-search</value>
-                        </property>
-                    </properties>
-
-                    <security-constraint/>
-
-                    <window>
-                        <window-name>index-cloud-ens-file-browser-filter-eraser-instance_1560502948619</window-name>
-                        <instance-ref>index-cloud-ens-file-browser-filter-eraser-instance</instance-ref>
-                        <region>filter-2</region>
-                        <properties>
-                            <property>
-                                <name>portal.windowContentType</name>
-                                <value>portlet</value>
-                            </property>
-                            <property>
-                                <name>osivia.title</name>
-                                <value>Effacer les filtres</value>
-                            </property>
-                            <property>
-                                <name>osivia.hideTitle</name>
-                                <value>1</value>
-                            </property>
-                            <property>
-                                <name>theme.order</name>
-                                <value>0</value>
-                            </property>
-                            <property>
-                                <name>osivia.ajaxLink</name>
-                                <value>1</value>
-                            </property>
-                            <property>
-                                <name>osivia.hideDecorators</name>
-                                <value>1</value>
-                            </property>
-                            <property>
-                                <name>osivia.hideEmptyPortlet</name>
-                                <value>1</value>
-                            </property>
-                            <property>
-                                <name>theme.dyna.partial_refresh_enabled</name>
-                                <value>true</value>
-                            </property>
-                        </properties>
-                        <height>0</height>
-                    </window>
-
-                    <window>
-                        <window-name>index-cloud-ens-file-browser-filter-instance_1560502773617</window-name>
-                        <instance-ref>index-cloud-ens-file-browser-filter-instance</instance-ref>
-                        <region>filter-1</region>
-                        <properties>
-                            <property>
-                                <name>portal.windowContentType</name>
-                                <value>portlet</value>
-                            </property>
-                            <property>
-                                <name>osivia.title</name>
-                                <value>Filtre de niveau</value>
-                            </property>
-                            <property>
-                                <name>osivia.file-browser-filter.vocabulary</name>
-                                <value>idx_level</value>
-                            </property>
-                            <property>
-                                <name>osivia.hideTitle</name>
-                                <value>1</value>
-                            </property>
-                            <property>
-                                <name>theme.order</name>
-                                <value>0</value>
-                            </property>
-                            <property>
-                                <name>osivia.file-browser-filter.title</name>
-                                <value>Niveau</value>
-                            </property>
-                            <property>
-                                <name>osivia.file-browser-filter.selector-id</name>
-                                <value>level</value>
-                            </property>
-                            <property>
-                                <name>osivia.ajaxLink</name>
-                                <value>1</value>
-                            </property>
-                            <property>
-                                <name>osivia.hideDecorators</name>
-                                <value>1</value>
-                            </property>
-                            <property>
-                                <name>theme.dyna.partial_refresh_enabled</name>
-                                <value>true</value>
-                            </property>
-                        </properties>
-                        <height>0</height>
-                    </window>
-
-                    <window>
-                        <window-name>index-cloud-ens-taskbar-instance_1560502743858</window-name>
-                        <instance-ref>index-cloud-ens-taskbar-instance</instance-ref>
-                        <region>nav</region>
-                        <properties>
-                            <property>
-                                <name>portal.windowContentType</name>
-                                <value>portlet</value>
-                            </property>
-                            <property>
-                                <name>osivia.title</name>
-                                <value>Barre des tâches</value>
-                            </property>
-                            <property>
-                                <name>osivia.taskbar.path</name>
-                                <value>${userWorkspacePath}</value>
-                            </property>
-                            <property>
-                                <name>osivia.hideTitle</name>
-                                <value>1</value>
-                            </property>
-                            <property>
-                                <name>theme.order</name>
-                                <value>0</value>
-                            </property>
-                            <property>
-                                <name>osivia.ajaxLink</name>
-                                <value>1</value>
-                            </property>
-                            <property>
-                                <name>osivia.hideDecorators</name>
-                                <value>1</value>
-                            </property>
-                            <property>
-                                <name>theme.dyna.partial_refresh_enabled</name>
-                                <value>true</value>
-                            </property>
-                        </properties>
-                        <height>0</height>
-                    </window>
-
-                    <window>
-                        <window-name>osivia-services-workspace-file-browser-instance_1560788589306</window-name>
-                        <instance-ref>osivia-services-workspace-file-browser-instance</instance-ref>
-                        <region>col-1</region>
-                        <properties>
-                            <property>
-                                <name>osivia.file-browser.nxql</name>
-                                <value>import org.apache.commons.lang.StringUtils;&#13;
+				<page>
+				      <page-name>search</page-name>
+				      <display-name xml:lang="fr">Recherche</display-name>
+				      <properties>
+				        <property>
+				          <name>layout.id</name>
+				          <value>cloud-ens-search</value>
+				        </property>
+				      </properties>
+				      <security-constraint/>
+				      <window>
+				        <window-name>index-cloud-ens-search-instance_1562314905380</window-name>
+				        <instance-ref>index-cloud-ens-search-instance</instance-ref>
+				        <region>top</region>
+				        <properties>
+				          <property>
+				            <name>portal.windowContentType</name>
+				            <value>portlet</value>
+				          </property>
+				          <property>
+				            <name>osivia.bootstrapPanelStyle</name>
+				            <value>false</value>
+				          </property>
+				          <property>
+				            <name>osivia.maximized.cms.url</name>
+				            <value>false</value>
+				          </property>
+				          <property>
+				            <name>osivia.hideTitle</name>
+				            <value>1</value>
+				          </property>
+				          <property>
+				            <name>theme.order</name>
+				            <value>0</value>
+				          </property>
+				          <property>
+				            <name>osivia.search.view</name>
+				            <value>autosubmit</value>
+				          </property>
+				          <property>
+				            <name>osivia.ajaxLink</name>
+				            <value>1</value>
+				          </property>
+				          <property>
+				            <name>osivia.hideDecorators</name>
+				            <value>1</value>
+				          </property>
+				          <property>
+				            <name>osivia.mobileCollapse</name>
+				            <value>false</value>
+				          </property>
+				          <property>
+				            <name>theme.dyna.partial_refresh_enabled</name>
+				            <value>true</value>
+				          </property>
+				        </properties>
+				        <height>0</height>
+				      </window>
+				      <window>
+				        <window-name>index-cloud-ens-taskbar-instance_1560502743858</window-name>
+				        <instance-ref>index-cloud-ens-taskbar-instance</instance-ref>
+				        <region>nav</region>
+				        <properties>
+				          <property>
+				            <name>osivia.ajaxLink</name>
+				            <value>1</value>
+				          </property>
+				          <property>
+				            <name>osivia.hideDecorators</name>
+				            <value>1</value>
+				          </property>
+				          <property>
+				            <name>portal.windowContentType</name>
+				            <value>portlet</value>
+				          </property>
+				          <property>
+				            <name>osivia.title</name>
+				            <value>Barre des tâches</value>
+				          </property>
+				          <property>
+				            <name>osivia.taskbar.path</name>
+				            <value>${userWorkspacePath}</value>
+				          </property>
+				          <property>
+				            <name>osivia.hideTitle</name>
+				            <value>1</value>
+				          </property>
+				          <property>
+				            <name>theme.order</name>
+				            <value>0</value>
+				          </property>
+				          <property>
+				            <name>theme.dyna.partial_refresh_enabled</name>
+				            <value>true</value>
+				          </property>
+				        </properties>
+				        <height>0</height>
+				      </window>
+				      <window>
+				        <window-name>osivia-services-workspace-file-browser-instance_1560788589306</window-name>
+				        <instance-ref>osivia-services-workspace-file-browser-instance</instance-ref>
+				        <region>col-1</region>
+				        <properties>
+				          <property>
+				            <name>osivia.file-browser.nxql</name>
+				            <value>import org.apache.commons.lang.StringUtils;&#13;
 &#13;
 StringBuilder nuxeoRequest = new StringBuilder();&#13;
 nuxeoRequest.append("ecm:primaryType IN ('Folder', 'File', 'Picture', 'Audio', 'Video') ");&#13;
@@ -1502,129 +1506,51 @@ nuxeoRequest.append("ORDER BY dc:modified DESC");&#13;
 }&#13;
 &#13;
 return nuxeoRequest.toString();</value>
-                            </property>
-                            <property>
-                                <name>portal.windowContentType</name>
-                                <value>portlet</value>
-                            </property>
-                            <property>
-                                <name>osivia.title</name>
-                                <value>Explorateur de fichiers</value>
-                            </property>
-                            <property>
-                                <name>osivia.hideTitle</name>
-                                <value>1</value>
-                            </property>
-                            <property>
-                                <name>theme.order</name>
-                                <value>0</value>
-                            </property>
-                            <property>
-                                <name>osivia.ajaxLink</name>
-                                <value>1</value>
-                            </property>
-                            <property>
-                                <name>osivia.hideDecorators</name>
-                                <value>1</value>
-                            </property>
-                            <property>
-                                <name>osivia.file-browser.list-mode</name>
-                                <value>true</value>
-                            </property>
-                            <property>
-                                <name>osivia.file-browser.beanshell</name>
-                                <value>true</value>
-                            </property>
-                            <property>
-                                <name>osivia.file-browser.base-path</name>
-                                <value>${userWorkspacePath}</value>
-                            </property>
-                            <property>
-                                <name>theme.dyna.partial_refresh_enabled</name>
-                                <value>true</value>
-                            </property>
-                        </properties>
-                        <height>0</height>
-                    </window>
-
-                    <window>
-                        <window-name>toutatice-portail-cms-nuxeo-keywordsSelectorPortletInstance_1558086599254</window-name>
-                        <instance-ref>toutatice-portail-cms-nuxeo-keywordsSelectorPortletInstance</instance-ref>
-                        <region>top</region>
-                        <properties>
-                            <property>
-                                <name>portal.windowContentType</name>
-                                <value>portlet</value>
-                            </property>
-                            <property>
-                                <name>osivia.title</name>
-                                <value>Recherche</value>
-                            </property>
-                            <property>
-                                <name>osivia.hideTitle</name>
-                                <value>1</value>
-                            </property>
-                            <property>
-                                <name>theme.order</name>
-                                <value>0</value>
-                            </property>
-                            <property>
-                                <name>osivia.selectorId</name>
-                                <value>search</value>
-                            </property>
-                            <property>
-                                <name>osivia.ajaxLink</name>
-                                <value>1</value>
-                            </property>
-                            <property>
-                                <name>osivia.hideDecorators</name>
-                                <value>1</value>
-                            </property>
-                            <property>
-                                <name>osivia.keywordMonoValued</name>
-                                <value>2</value>
-                            </property>
-                            <property>
-                                <name>theme.dyna.partial_refresh_enabled</name>
-                                <value>true</value>
-                            </property>
-                        </properties>
-                        <height>0</height>
-                    </window>
-
-                    <window>
-                        <window-name>index-cloud-ens-search-instance_1562247969609</window-name>
-                        <instance-ref>index-cloud-ens-search-instance</instance-ref>
-                        <region>top-aux</region>
-                        <properties>
-                            <property>
-                                <name>portal.windowContentType</name>
-                                <value>portlet</value>
-                            </property>
-                            <property>
-                                <name>osivia.title</name>
-                                <value>Options de recherche</value>
-                            </property>
-                            <property>
-                                <name>osivia.hideTitle</name>
-                                <value>1</value>
-                            </property>
-                            <property>
-                                <name>theme.order</name>
-                                <value>0</value>
-                            </property>
-                            <property>
-                                <name>osivia.search.view</name>
-                                <value>button</value>
-                            </property>
-                            <property>
-                                <name>osivia.hideDecorators</name>
-                                <value>1</value>
-                            </property>
-                        </properties>
-                        <height>0</height>
-                    </window>
-                </page>
+			          </property>
+			          <property>
+			            <name>portal.windowContentType</name>
+			            <value>portlet</value>
+			          </property>
+			          <property>
+			            <name>osivia.title</name>
+			            <value>Explorateur de fichiers</value>
+			          </property>
+			          <property>
+			            <name>osivia.hideTitle</name>
+			            <value>1</value>
+			          </property>
+			          <property>
+			            <name>theme.order</name>
+			            <value>0</value>
+			          </property>
+			          <property>
+			            <name>osivia.ajaxLink</name>
+			            <value>1</value>
+			          </property>
+			          <property>
+			            <name>osivia.hideDecorators</name>
+			            <value>1</value>
+			          </property>
+			          <property>
+			            <name>osivia.file-browser.list-mode</name>
+			            <value>true</value>
+			          </property>
+			          <property>
+			            <name>osivia.file-browser.beanshell</name>
+			            <value>true</value>
+			          </property>
+			          <property>
+			            <name>osivia.file-browser.base-path</name>
+			            <value>${userWorkspacePath}</value>
+			          </property>
+			          <property>
+			            <name>theme.dyna.partial_refresh_enabled</name>
+			            <value>true</value>
+			          </property>
+			        </properties>
+			        <height>0</height>
+			      </window>
+			    </page>
 
                 <page>
                     <page-name>rgpd</page-name>
@@ -1689,97 +1615,7 @@ return nuxeoRequest.toString();</value>
                     </properties>
 
                     <security-constraint/>
-
-                    <window>
-                        <window-name>index-cloud-ens-file-browser-filter-eraser-instance_1560502948619</window-name>
-                        <instance-ref>index-cloud-ens-file-browser-filter-eraser-instance</instance-ref>
-                        <region>filter-2</region>
-                        <properties>
-                            <property>
-                                <name>portal.windowContentType</name>
-                                <value>portlet</value>
-                            </property>
-                            <property>
-                                <name>osivia.title</name>
-                                <value>Effacer les filtres</value>
-                            </property>
-                            <property>
-                                <name>osivia.hideTitle</name>
-                                <value>1</value>
-                            </property>
-                            <property>
-                                <name>theme.order</name>
-                                <value>0</value>
-                            </property>
-                            <property>
-                                <name>osivia.ajaxLink</name>
-                                <value>1</value>
-                            </property>
-                            <property>
-                                <name>osivia.hideDecorators</name>
-                                <value>1</value>
-                            </property>
-                            <property>
-                                <name>osivia.hideEmptyPortlet</name>
-                                <value>1</value>
-                            </property>
-                            <property>
-                                <name>theme.dyna.partial_refresh_enabled</name>
-                                <value>true</value>
-                            </property>
-                        </properties>
-                        <height>0</height>
-                    </window>
-
-                    <window>
-                        <window-name>index-cloud-ens-file-browser-filter-instance_1560502773617</window-name>
-                        <instance-ref>index-cloud-ens-file-browser-filter-instance</instance-ref>
-                        <region>filter-1</region>
-                        <properties>
-                            <property>
-                                <name>portal.windowContentType</name>
-                                <value>portlet</value>
-                            </property>
-                            <property>
-                                <name>osivia.title</name>
-                                <value>Filtre de niveau</value>
-                            </property>
-                            <property>
-                                <name>osivia.file-browser-filter.vocabulary</name>
-                                <value>idx_level</value>
-                            </property>
-                            <property>
-                                <name>osivia.hideTitle</name>
-                                <value>1</value>
-                            </property>
-                            <property>
-                                <name>theme.order</name>
-                                <value>0</value>
-                            </property>
-                            <property>
-                                <name>osivia.file-browser-filter.title</name>
-                                <value>Niveau</value>
-                            </property>
-                            <property>
-                                <name>osivia.file-browser-filter.selector-id</name>
-                                <value>level</value>
-                            </property>
-                            <property>
-                                <name>osivia.ajaxLink</name>
-                                <value>1</value>
-                            </property>
-                            <property>
-                                <name>osivia.hideDecorators</name>
-                                <value>1</value>
-                            </property>
-                            <property>
-                                <name>theme.dyna.partial_refresh_enabled</name>
-                                <value>true</value>
-                            </property>
-                        </properties>
-                        <height>0</height>
-                    </window>
-
+                  
                     <window>
                         <window-name>index-cloud-ens-taskbar-instance_1560502743858</window-name>
                         <instance-ref>index-cloud-ens-taskbar-instance</instance-ref>
@@ -1896,51 +1732,6 @@ return nuxeoRequest.toString();</value>
                             <property>
                                 <name>osivia.file-browser.base-path</name>
                                 <value>${userWorkspacePath}</value>
-                            </property>
-                            <property>
-                                <name>theme.dyna.partial_refresh_enabled</name>
-                                <value>true</value>
-                            </property>
-                        </properties>
-                        <height>0</height>
-                    </window>
-
-                    <window>
-                        <window-name>toutatice-portail-cms-nuxeo-keywordsSelectorPortletInstance_1558086599254</window-name>
-                        <instance-ref>toutatice-portail-cms-nuxeo-keywordsSelectorPortletInstance</instance-ref>
-                        <region>top</region>
-                        <properties>
-                            <property>
-                                <name>portal.windowContentType</name>
-                                <value>portlet</value>
-                            </property>
-                            <property>
-                                <name>osivia.title</name>
-                                <value>Recherche</value>
-                            </property>
-                            <property>
-                                <name>osivia.hideTitle</name>
-                                <value>1</value>
-                            </property>
-                            <property>
-                                <name>theme.order</name>
-                                <value>0</value>
-                            </property>
-                            <property>
-                                <name>osivia.selectorId</name>
-                                <value>search</value>
-                            </property>
-                            <property>
-                                <name>osivia.ajaxLink</name>
-                                <value>1</value>
-                            </property>
-                            <property>
-                                <name>osivia.hideDecorators</name>
-                                <value>1</value>
-                            </property>
-                            <property>
-                                <name>osivia.keywordMonoValued</name>
-                                <value>2</value>
                             </property>
                             <property>
                                 <name>theme.dyna.partial_refresh_enabled</name>

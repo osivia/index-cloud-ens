@@ -41,13 +41,11 @@
         <uri>/layouts/search/index.jsp</uri>
         <uri state="maximized">/layouts/with-nav/maximized.jsp</uri>
         <regions>
+            <region name="contextualized-search" />        
             <region name="nav" />
             <region name="nav-bottom" />
             <region name="top" />
             <region name="top-aux" />
-            <region name="filter-1" />
-            <region name="filter-2" />
-            <region name="filter-3" />
             <region name="col-1" />
         </regions>
     </layout>

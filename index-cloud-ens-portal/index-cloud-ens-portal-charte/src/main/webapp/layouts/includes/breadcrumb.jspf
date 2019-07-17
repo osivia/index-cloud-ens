@@ -1,11 +1,9 @@
-<div class="row align-items-center border-bottom">
+<div class="row align-items-center border-bottom bg-blue-lighter mt-2">
     <div class="col d-none d-md-block">
-        <div class="d-flex align-items-center">
+        <div class="d-flex align-items-center justify-content-between">
             <%--Breadcrumb--%>
             <p:region regionName="breadcrumb"/>
-
-            <%--Contextualized search--%>
-            <p:region regionName="contextualized-search"/>
+       		<p:region regionName="contextualized-search" />
         </div>
 
     </div>

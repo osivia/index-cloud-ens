@@ -2,6 +2,8 @@ package fr.index.cloud.ens.search.portlet.controller;
 
 import fr.index.cloud.ens.search.portlet.model.SearchForm;
 import fr.index.cloud.ens.search.portlet.service.SearchService;
+
+import org.apache.commons.lang.StringUtils;
 import org.osivia.portal.api.context.PortalControllerContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -45,9 +47,15 @@ public class SearchController {
      * @return view path
      */
     @RenderMapping
-    public String view(RenderRequest request, RenderResponse response) throws PortletException {
+    public String view(RenderRequest request, RenderResponse response, @ModelAttribute("form") SearchForm form) throws PortletException {
         // Portal Controller context
         PortalControllerContext portalControllerContext = new PortalControllerContext(this.portletContext, request, response);
+        
+        if( StringUtils.isEmpty(form.getFolderName()))  {
+            // Empty response indicator
+            request.setAttribute("osivia.emptyResponse", "1");
+          
+        }
 
         return this.service.getViewPath(portalControllerContext);
     }
@@ -64,11 +72,12 @@ public class SearchController {
     public void search(ActionRequest request, ActionResponse response, @ModelAttribute("form") SearchForm form) throws PortletException, IOException {
         // Portal Controller context
         PortalControllerContext portalControllerContext = new PortalControllerContext(this.portletContext, request, response);
-
+        
+ 
         // Search redirection URL
         String url = this.service.getSearchRedirectionUrl(portalControllerContext, form);
-
-        response.sendRedirect(url);
+        if( url != null)
+           response.sendRedirect(url);
     }
 
 

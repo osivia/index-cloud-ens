@@ -16,7 +16,12 @@ public enum SearchView {
     /**
      * Button view.
      */
-    BUTTON;
+    BUTTON,
+    /**
+     * Autosubmit view.
+     */
+    AUTOSUBMIT;
+    
 
 
     /** Default view. */

@@ -22,7 +22,28 @@ public class SearchForm {
      * Input value.
      */
     private String value;
+    
+    /**
+     * folder name.
+     */
+    private String folderName;
 
+   
+    /**
+     * Getter for folderName.
+     * @return the folderName
+     */
+    public String getFolderName() {
+        return folderName;
+    }
+   
+    /**
+     * Setter for folderName.
+     * @param folderName the folderName to set
+     */
+    public void setFolderName(String folderName) {
+        this.folderName = folderName;
+    }
 
     public SearchView getView() {
         return view;
