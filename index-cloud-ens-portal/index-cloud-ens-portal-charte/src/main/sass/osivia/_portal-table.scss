@@ -191,14 +191,14 @@
 // Checkbox
 
 .portal-table-checkbox {
-  $checkbox-size : #{$line-height-base}rem;
+  $checkbox-size : #{$line-height-base}em;
 
   flex-grow: 1;
 
   text-align: right;
 
   a {
-    font-size: 1rem;
+    font-size: 1em;
     outline: 0;
 
     .portal-table-header-group & {
