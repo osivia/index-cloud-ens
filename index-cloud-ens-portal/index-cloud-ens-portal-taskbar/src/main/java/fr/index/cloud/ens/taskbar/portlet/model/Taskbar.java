@@ -16,11 +16,6 @@ import java.util.List;
 public class Taskbar {
 
     /**
-     * Add dropdown items.
-     */
-    private List<AddDropdownItem> addDropdownItems;
-
-    /**
      * Tasks.
      */
     private List<Task> tasks;
@@ -33,14 +28,6 @@ public class Taskbar {
         super();
     }
 
-
-    public List<AddDropdownItem> getAddDropdownItems() {
-        return addDropdownItems;
-    }
-
-    public void setAddDropdownItems(List<AddDropdownItem> addDropdownItems) {
-        this.addDropdownItems = addDropdownItems;
-    }
 
     public List<Task> getTasks() {
         return tasks;
