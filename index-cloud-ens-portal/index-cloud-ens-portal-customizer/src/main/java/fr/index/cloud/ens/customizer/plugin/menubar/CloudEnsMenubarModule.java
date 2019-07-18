@@ -67,19 +67,19 @@ public class CloudEnsMenubarModule implements MenubarModule {
             basePath = spaceDocumentContext.getCmsPath();
         }
 
+        Iterator<MenubarItem> iterator = menubar.iterator();
+        while (iterator.hasNext()) {
+            MenubarItem item = iterator.next();
+            MenubarContainer parent = item.getParent();
 
-        if (StringUtils.startsWith(basePath, "/default-domain/UserWorkspaces/")) {
-            // Inside user workspace
-            Iterator<MenubarItem> iterator = menubar.iterator();
-            while (iterator.hasNext()) {
-                MenubarItem item = iterator.next();
-                MenubarContainer parent = item.getParent();
-
-                if (parent instanceof MenubarDropdown) {
-                    MenubarDropdown dropdown = (MenubarDropdown) parent;
-                    if (StringUtils.equals("CONFIGURATION", dropdown.getId())) {
-                        iterator.remove();
-                    }
+            if ("REFRESH".equals(item.getId())) {
+                // Remove refresh
+                iterator.remove();
+            } else if (StringUtils.startsWith(basePath, "/default-domain/UserWorkspaces/") && (parent instanceof MenubarDropdown)) {
+                // Remove user workspace configuration dropdown
+                MenubarDropdown dropdown = (MenubarDropdown) parent;
+                if (StringUtils.equals("CONFIGURATION", dropdown.getId())) {
+                    iterator.remove();
                 }
             }
         }
