@@ -2,7 +2,7 @@
 @import "glyphicons/mixins";
 
 
-$fancytree-icon-size: 1.25rem;
+$fancytree-icon-size: 1.25em;
 
 
 .fancytree {
@@ -21,7 +21,7 @@ $fancytree-icon-size: 1.25rem;
     list-style: none;
 
     ul {
-      padding-left: $fancytree-icon-size + map_get($spacers, 1);
+      padding-left: calc(#{$fancytree-icon-size} + #{map_get($spacers, 1)});
     }
   }
 }
@@ -36,7 +36,7 @@ $fancytree-icon-size: 1.25rem;
   display: flex;
   align-items: center;
 
-  padding: .1rem;
+  padding: .1em;
 
   color: $dark;
   cursor: pointer;
@@ -152,7 +152,7 @@ $fancytree-icon-size: 1.25rem;
   a {
     @extend .fancytree-node;
 
-    padding-left: $fancytree-icon-size * 2 + $btn-padding-x * 3;
+    padding-left: calc(#{$fancytree-icon-size * 2} + #{$btn-padding-x * 3});
 
     &, &:hover, &:focus {
       color: inherit;
