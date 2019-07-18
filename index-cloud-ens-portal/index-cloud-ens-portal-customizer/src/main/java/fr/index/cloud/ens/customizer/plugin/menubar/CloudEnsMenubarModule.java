@@ -166,8 +166,12 @@ public class CloudEnsMenubarModule implements MenubarModule {
      * @param bundle                  internationalization bundle
      */
     private void updateDocumentEditionMenubarItem(PortalControllerContext portalControllerContext, String path, String type, MenubarItem item, boolean creation, Bundle bundle) throws PortalException {
+        // Nuxeo controller
+        NuxeoController nuxeoController = new NuxeoController(portalControllerContext);
+
         // Window properties
         Map<String, String> properties = new HashMap<>();
+        properties.put("osivia.document.edition.base-path", nuxeoController.getBasePath());
         if (creation) {
             properties.put("osivia.document.edition.parent-path", path);
             properties.put("osivia.document.edition.document-type", type);
