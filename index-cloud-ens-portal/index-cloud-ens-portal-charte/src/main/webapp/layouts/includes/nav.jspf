@@ -31,6 +31,10 @@
                     <p:region regionName="nav-bottom"/>
                 </div>
             </div>
+
+            <div class="row flex-column">
+                <p:region regionName="drawer-footer"/>
+            </div>
         </div>
     </div>
 </op:resizable>

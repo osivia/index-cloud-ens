@@ -1,7 +1,7 @@
 @import "variables";
 
 
-$document-type-flat-size: #{$line-height-base * 2}em;
+$document-type-flat-size: #{$line-height-base * 2}rem;
 
 
 .document-type {
@@ -67,35 +67,27 @@ $document-type-flat-size: #{$line-height-base * 2}em;
     height: $document-type-flat-size;
     width: $document-type-flat-size;
 
-    border-radius: #{$line-height-base}em;
+    border-radius: #{$line-height-base}rem;
 
     .glyphicons {
       &::before {
-        height: 2em;
-        width: 2em;
+        height: 32px;
+        width: 32px;
       }
     }
 
     // Size
     &[data-size="1"] {
-      &::before {
-        font-size: 1.5em;
-      }
+      font-size: 1.5rem;
     }
     &[data-size="2"] {
-      &::before {
-        font-size: 1.25em;
-      }
+      font-size: 1.25em;
     }
     &[data-size="3"] {
-      &::before {
-        font-size: 1em;
-      }
+      font-size: 1rem;
     }
     &[data-size="4"] {
-      &::before {
-        font-size: .8em;
-      }
+      font-size: .8em;
     }
   }
 

@@ -13,7 +13,7 @@
             <ul class="navbar-nav flex-column">
                 <c:forEach var="navItem" items="${requestScope['osivia.nav.items']}">
                     <li class="nav-item ${navItem.active ? 'active' : ''}">
-                        <a href="${navItem.url}" class="nav-link ${empty navItem.url ? 'disabled' : ''}">
+                        <a href="${navItem.url}" class="nav-link small ${empty navItem.url ? 'disabled' : ''}">
                             <i class="${navItem.icon}"></i>
                             <strong><op:translate key="${navItem.key}"/></strong>
                         </a>

@@ -194,7 +194,7 @@ public class TaskbarRepositoryImpl implements TaskbarRepository {
                 Map<String, DocumentType> documentTypes = nuxeoCustomizer.getDocumentTypes();
 
                 for (String type : Arrays.asList("Folder", "File")) {
-                    AddDropdownItem dropdownItem = this.generateDocumentTypeDropdownItem(nuxeoController, bundle, documentTypes, parentPath, type);
+                    AddDropdownItem dropdownItem = this.generateDocumentTypeDropdownItem(portalControllerContext, bundle, documentTypes, parentPath, type);
 
                     if (dropdownItem != null) {
                         dropdownItems.add(dropdownItem);
@@ -220,17 +220,14 @@ public class TaskbarRepositoryImpl implements TaskbarRepository {
     /**
      * Generate document type dropdown item.
      *
-     * @param nuxeoController Nuxeo controller
-     * @param bundle          internationalization bundle
-     * @param documentTypes   document types
-     * @param parentPath      parent document path
-     * @param type            added document type
+     * @param portalControllerContext portal controller context
+     * @param bundle                  internationalization bundle
+     * @param documentTypes           document types
+     * @param parentPath              parent document path
+     * @param type                    added document type
      * @return dropdown item
      */
-    private AddDropdownItem generateDocumentTypeDropdownItem(NuxeoController nuxeoController, Bundle bundle, Map<String, DocumentType> documentTypes, String parentPath, String type) throws PortletException {
-        // Portal controller context
-        PortalControllerContext portalControllerContext = nuxeoController.getPortalCtx();
-
+    private AddDropdownItem generateDocumentTypeDropdownItem(PortalControllerContext portalControllerContext, Bundle bundle, Map<String, DocumentType> documentTypes, String parentPath, String type) throws PortletException {
         // Dropdown item
         AddDropdownItem dropdownItem;
 
@@ -245,7 +242,6 @@ public class TaskbarRepositoryImpl implements TaskbarRepository {
 
             // Window properties
             Map<String, String> properties = new HashMap<>();
-            properties.put("osivia.document.edition.base-path", nuxeoController.getBasePath());
             properties.put("osivia.document.edition.parent-path", parentPath);
             properties.put("osivia.document.edition.document-type", type);
             properties.put(DynaRenderOptions.PARTIAL_REFRESH_ENABLED, String.valueOf(true));

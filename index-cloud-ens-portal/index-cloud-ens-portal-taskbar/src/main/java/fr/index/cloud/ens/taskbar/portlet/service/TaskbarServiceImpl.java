@@ -141,18 +141,6 @@ public class TaskbarServiceImpl implements TaskbarService {
         }
 
         
-
-
-
-
-
-        // Tasks
-        List<Task> tasks = new ArrayList<>();
-        // Add
-        AddTask add = this.applicationContext.getBean(AddTask.class);
-        add.setDropdownItems(this.repository.generateAddDropdownItems(portalControllerContext));
-        tasks.add(add);
-        // Folders
         List<TaskbarTask> folders = new ArrayList<>();
         if (CollectionUtils.isNotEmpty(navigationTasks)) {
             for (TaskbarTask navigationTask : navigationTasks) {
@@ -163,33 +151,33 @@ public class TaskbarServiceImpl implements TaskbarService {
                 }
             }
         }
-        tasks.addAll(this.createTasks(portalControllerContext, basePath, bundle, activeId, folders));
-        // Trash
-        TaskbarTask trash = this.createTrashTaskbarTask(portalControllerContext);
-        if (trash != null) {
-            tasks.add(this.createTask(portalControllerContext, basePath, bundle, activeId, trash));
-        }
-        // Filters title
-        Task filtersTitle = this.applicationContext.getBean(FiltersTitleTask.class);
-        tasks.add(filtersTitle);
+
+
+        // Add dropdown items
+        List<AddDropdownItem> addDropdownItems = this.repository.generateAddDropdownItems(portalControllerContext);
+
+        // Tasks (with folders)
+        List<TaskbarTask> tasks = new ArrayList<>(folders);
         // Search
-        TaskbarTask search = this.extractVirtualStaple(portalControllerContext, navigationTasks,  "SEARCH");
+        TaskbarTask search = this.extractVirtualStaple(portalControllerContext, navigationTasks, "SEARCH");
         if (search != null) {
-            Task task = this.createTask(portalControllerContext, basePath, bundle, activeId, search);
-            SearchTask searchTask = this.applicationContext.getBean(SearchTask.class);
-            searchTask.setUrl(task.getUrl());
-            tasks.add(searchTask);
+            tasks.add(search);
         }
         // Recent items
         TaskbarTask recentItems = this.extractVirtualStaple(portalControllerContext, navigationTasks,  "RECENT_ITEMS");
         if (recentItems != null) {
-            tasks.add(this.createTask(portalControllerContext, basePath, bundle, activeId, recentItems));
+            tasks.add(recentItems);
         }
-
+        // Trash
+        TaskbarTask trash = this.createTrashTaskbarTask(portalControllerContext);
+        if (trash != null) {
+            tasks.add(trash);
+        }
 
         // Taskbar
         Taskbar taskbar = this.applicationContext.getBean(Taskbar.class);
-        taskbar.setTasks(tasks);
+        taskbar.setAddDropdownItems(addDropdownItems);
+        taskbar.setTasks(this.createTasks(portalControllerContext, basePath, bundle, activeId, tasks));
 
         return taskbar;
     }

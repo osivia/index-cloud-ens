@@ -34,41 +34,11 @@ public abstract class Task {
 
 
     /**
-     * Check if task is add button.
-     *
-     * @return true if task is add button
-     */
-    public boolean isAdd() {
-        return false;
-    }
-
-
-    /**
      * Check if task is fancytree.
      *
      * @return true if task is fancytree
      */
     public boolean isFancytree() {
-        return false;
-    }
-
-
-    /**
-     * Check if task is filters title.
-     *
-     * @return true if task is filters title
-     */
-    public boolean isFiltersTitle() {
-        return false;
-    }
-
-
-    /**
-     * Check if task is search.
-     *
-     * @return true if task is search
-     */
-    public boolean isSearch() {
         return false;
     }
 
