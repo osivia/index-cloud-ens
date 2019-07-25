@@ -1,7 +1,7 @@
 $JQry(function() {
 	var timer, xhr;
 	
-	$JQry(".person-management input[name=filter]").keyup(function(event) {
+	$JQry(".application-management input[name=filter]").keyup(function(event) {
 		// Clear timer
 		clearTimeout(timer);
 		// Abort previous Ajax request
@@ -28,28 +28,28 @@ $JQry(function() {
 				success : function(data, status, xhr) {
 					$results.html(data);
 					
-					$JQry(".person-management a").click(selectUser)
+					$JQry(".application-management a").click(selectApplication)
 				}
 			});
 		}, 200);
 	});
 
-	$JQry(".person-management a").click(selectUser);
+	$JQry(".application-management a").click(selectApplication);
 	
 });
 
 
 /**
- * Select user.
+ * Select application.
  * 
  * @param event click event
  */
-function selectUser(event) {
+function selectApplication(event) {
 	var $target = $JQry(event.target),
 		$link = $target.closest("a"),
 		id = $link.data("id"),
 		$form = $target.closest("form"),
-		$selected = $form.find("input[type=hidden][name=selectedUserId]"),
+		$selected = $form.find("input[type=hidden][name=selectedApplicationId]"),
 		$submit = $form.find("input[type=submit]");
 	
 	$selected.val(id);

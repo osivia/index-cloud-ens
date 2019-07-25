@@ -12,16 +12,16 @@
         <tr>
             <th>
                 <c:choose>
-                    <c:when test="${empty form.users}">
-                        <span><op:translate key="PERSON_MANAGEMENT_NO_RESULT" /></span>
+                    <c:when test="${empty applicationForm.applications}">
+                        <span><op:translate key="APPLICATION_MANAGEMENT_NO_RESULT" /></span>
                     </c:when>
 
-                    <c:when test="${fn:length(form.users) eq 1}">
-                        <span><op:translate key="PERSON_MANAGEMENT_ONE_RESULT" /></span>
+                    <c:when test="${fn:length(applicationForm.applications) eq 1}">
+                        <span><op:translate key="APPLICATION_MANAGEMENT_ONE_RESULT" /></span>
                     </c:when>
 
                     <c:otherwise>
-                        <span><op:translate key="PERSON_MANAGEMENT_MULTIPLE_RESULTS" args="${fn:length(form.users)}"/></span>
+                        <span><op:translate key="APPLICATION_MANAGEMENT_MULTIPLE_RESULTS" args="${fn:length(applicationForm.applications)}"/></span>
                     </c:otherwise>
                 </c:choose>
             </th>
@@ -29,35 +29,18 @@
     </thead>
     
     <%--Table body--%>
-    <c:if test="${not empty form.users}">
+    <c:if test="${not empty applicationForm.applications}">
         <tbody>
-            <c:forEach items="${form.users}" var="user">
+            <c:forEach items="${applicationForm.applications}" var="application">
                 <tr>
-                    <td class="position-relative ${user.id eq form.selectedUserId ? 'table-active' : ''}">
+                    <td class="position-relative ${application.id eq applicationForm.selectedApplicationId ? 'table-active' : ''}">
                         <div class="d-flex">
-                            <%--Avatar--%>
-                            <div class="mr-2">
-                                <c:choose>
-                                    <c:when test="${empty user.avatarUrl}">
-                                        <i class="glyphicons glyphicons-basic-user"></i>
-                                    </c:when>
-
-                                    <c:otherwise>
-                                        <img src="${user.avatarUrl}" alt="" class="avatar">
-                                    </c:otherwise>
-                                </c:choose>
-                            </div>
 
                             <div class="d-flex flex-grow-1 flex-column">
                                 <%--Display name--%>
-                                <a href="javascript:" class="stretched-link no-ajax-link" data-id="${user.id}">
-                                    <span>${user.displayName}</span>
+                                <a href="javascript:" class="stretched-link no-ajax-link" data-id="${application.id}">
+                                    <span>${application.title}</span>
                                 </a>
-
-                                <%--Extra--%>
-                                <c:if test="${not empty user.extra}">
-                                    <small class="text-muted">${user.extra}</small>
-                                </c:if>
                             </div>
                         </div>
                     </td>

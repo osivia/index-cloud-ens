@@ -7,7 +7,7 @@ import org.osivia.portal.api.cache.services.IGlobalParameters;
  * 
  * @author Jean-Sébastien
  */
-public class EtablissementResponse implements IGlobalParameters {
+public class EtablissementResponse  {
   
      
     

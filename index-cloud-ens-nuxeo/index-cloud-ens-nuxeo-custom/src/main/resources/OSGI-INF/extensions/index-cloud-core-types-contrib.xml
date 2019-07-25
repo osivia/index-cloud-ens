@@ -32,7 +32,43 @@
     	       <schema name="oauth2Tokens"/>
    		 </doctype>
    		 
-</extension> 
+ 
+		<doctype name="OAuth2Application" extends="Document">
+			<schema name="common" />
+			<schema name="dublincore" />
+		</doctype>
+		
+
+		<doctype name="OAuth2ApplicationFolder" extends="Document">
+			<schema name="common" />
+			<schema name="dublincore" />
+			<facet name="Folderish" />
+		</doctype>
+
+	</extension>
+	
+	<extension target="org.nuxeo.ecm.platform.types.TypeService"
+		point="types">
+		
+		<type id="OAuth2Application">
+			<label>OAuth2Application</label>
+		</type>
+				
+		<type id="OAuth2ApplicationFolder">
+			<label>OAuth2ApplicationFolder</label>
+		
+			<subtypes>
+				<type>OAuth2Application</type>
+			</subtypes>
+		</type>
+		
+
+		<type id="Workspace">
+			<subtypes>
+				<type>OAuth2ApplicationFolder</type>
+			</subtypes>
+		</type>
+	</extension>
 
 
 </component>

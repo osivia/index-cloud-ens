@@ -1,5 +1,6 @@
 package fr.index.cloud.ens.customizer.plugin.cms;
 
+import fr.index.cloud.ens.customizer.constants.CloudEnsConstants;
 import fr.toutatice.portail.cms.nuxeo.api.domain.INavigationAdapterModule;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
@@ -94,7 +95,7 @@ public class CloudEnsNavigationAdapter implements INavigationAdapterModule {
             symlinks.setLinks(links);
 
             // Virtual staples
-/*
+
             Symlink recentItemsSymlink = this.virtualNavigationService.createSymlink(userWorkspace.getCmsPath(), null, CloudEnsConstants.ROOT_WORKSPACE_PATH+"/recent-items",null);
             symlinks.getLinks().add(recentItemsSymlink);
             Symlink searchSymlink = this.virtualNavigationService.createSymlink(userWorkspace.getCmsPath(), null, CloudEnsConstants.ROOT_WORKSPACE_PATH+"/search",null);
@@ -102,14 +103,8 @@ public class CloudEnsNavigationAdapter implements INavigationAdapterModule {
         }
 
         symlinks.getPaths().add(CloudEnsConstants.ROOT_WORKSPACE_PATH);
-*/
-            Symlink recentItemsSymlink = this.virtualNavigationService.createSymlink(userWorkspace.getCmsPath(), null, "/default-domain/workspaces/configuration/recent-items", null);
-            symlinks.getLinks().add(recentItemsSymlink);
-            Symlink searchSymlink = this.virtualNavigationService.createSymlink(userWorkspace.getCmsPath(), null, "/default-domain/workspaces/configuration/search", null);
-            symlinks.getLinks().add(searchSymlink);
-        }
 
-        symlinks.getPaths().add("/default-domain/workspaces/configuration");
+
 
 
         return symlinks;

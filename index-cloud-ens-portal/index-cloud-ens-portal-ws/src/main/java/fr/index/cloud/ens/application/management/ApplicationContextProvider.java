@@ -5,7 +5,7 @@ import org.springframework.context.ApplicationContext;
 /**
  * Application context provider.
  * 
- * @author Cédric Krommenhoek
+ * @author Jean-Sébastien Steux
  */
 public class ApplicationContextProvider {
 

@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
 
-import fr.index.cloud.ens.ext.etb.IEtablissementService;
+import fr.index.cloud.ens.application.api.IApplicationService;
 import fr.index.cloud.oauth.config.OAuth2ServerConfig;
 
 /**
@@ -30,7 +30,7 @@ import fr.index.cloud.oauth.config.OAuth2ServerConfig;
 public class AccessConfirmationController {
 
     @Autowired
-    IEtablissementService etablissementService;
+    IApplicationService applicationService;
     
     public AccessConfirmationController()   {
         super();
@@ -52,9 +52,8 @@ public class AccessConfirmationController {
 		model.put("client", client);
 		
         String clientName =  client.getClientId();
-		if( client.getClientId().startsWith(OAuth2ServerConfig.PRONOTE_CLIENT_PREFIX)) {
-            clientName = etablissementService.getEtablissement(client.getClientId().substring(OAuth2ServerConfig.PRONOTE_CLIENT_PREFIX.length())).getNom();
-        }
+        clientName = applicationService.getApplicationByClientID(client.getClientId()).getTitle();
+
             		
 	    model.put("clientName", clientName);		
 	    

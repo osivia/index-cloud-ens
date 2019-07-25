@@ -11,4 +11,20 @@
 <portlet:resourceURL id="search" var="searchUrl" />
 
 
-HELLO !
+<div class="application-management">
+    <form:form action="${selectUrl}" method="post" modelAttribute="applicationForm" role="form" data-url="${searchUrl}">
+        <form:hidden path="selectedApplicationId" />
+        
+
+        <!-- Filter -->
+        <%@ include file="filter.jspf" %>
+    
+        <!-- Results -->
+        <div class="form-group results">
+            <jsp:include page="results.jsp" />
+        </div>
+        
+        <!-- Submit -->
+        <input type="submit" name="select" class="d-none">
+    </form:form>
+</div>

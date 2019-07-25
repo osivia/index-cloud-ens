@@ -1,6 +1,7 @@
 package fr.index.cloud.ens.dashboard;
 
-import fr.index.cloud.ens.ext.etb.IEtablissementService;
+import fr.index.cloud.ens.application.api.Application;
+import fr.index.cloud.ens.application.api.IApplicationService;
 import fr.index.cloud.oauth.config.OAuth2ServerConfig;
 import fr.index.cloud.oauth.tokenStore.AggregateRefreshTokenInfos;
 import fr.index.cloud.oauth.tokenStore.IPortalTokenStore;
@@ -41,7 +42,7 @@ public class DashboardServiceImpl implements DashboardService, ApplicationContex
 
 
     @Autowired
-    IEtablissementService etablissementService;
+    IApplicationService applicationService;
     /**
      * Internationalization bundle factory.
      */
@@ -88,10 +89,10 @@ public class DashboardServiceImpl implements DashboardService, ApplicationContex
                 String clientName = null;
                 String clientId = token.getAuthentication().getClientId();
 
-                if (token.getAuthentication().getClientId().startsWith(OAuth2ServerConfig.PRONOTE_CLIENT_PREFIX)) {
-                    clientName = etablissementService.getEtablissement(clientId.substring(OAuth2ServerConfig.PRONOTE_CLIENT_PREFIX.length())).getNom();
-                }
-
+                Application oAuth2Application =  applicationService.getApplicationByClientID(clientId);
+                if( oAuth2Application != null)
+                    clientName = oAuth2Application.getTitle();
+ 
                 if (clientName == null) {
                     clientName = clientId;
                 }
