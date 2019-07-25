@@ -16,7 +16,10 @@ import org.osivia.portal.api.internationalization.IInternationalizationService;
 import org.osivia.portal.api.locator.Locator;
 import org.osivia.portal.core.cms.*;
 
+<<<<<<< HEAD
 import fr.index.cloud.ens.customizer.constants.CloudEnsConstants;
+=======
+>>>>>>> branch 'master' of https://github.com/osivia/index-cloud-ens.git
 import javax.portlet.PortletContext;
 import java.util.ArrayList;
 import java.util.List;
@@ -95,6 +98,7 @@ public class CloudEnsNavigationAdapter implements INavigationAdapterModule {
             symlinks.setLinks(links);
 
             // Virtual staples
+<<<<<<< HEAD
             Symlink recentItemsSymlink = this.virtualNavigationService.createSymlink(userWorkspace.getCmsPath(), null, CloudEnsConstants.ROOT_WORKSPACE_PATH+"/recent-items",null);
             symlinks.getLinks().add(recentItemsSymlink);
             Symlink searchSymlink = this.virtualNavigationService.createSymlink(userWorkspace.getCmsPath(), null, CloudEnsConstants.ROOT_WORKSPACE_PATH+"/search",null);
@@ -102,6 +106,15 @@ public class CloudEnsNavigationAdapter implements INavigationAdapterModule {
         }
 
         symlinks.getPaths().add(CloudEnsConstants.ROOT_WORKSPACE_PATH);
+=======
+            Symlink recentItemsSymlink = this.virtualNavigationService.createSymlink(userWorkspace.getCmsPath(), null, "/default-domain/workspaces/configuration/recent-items", null);
+            symlinks.getLinks().add(recentItemsSymlink);
+            Symlink searchSymlink = this.virtualNavigationService.createSymlink(userWorkspace.getCmsPath(), null, "/default-domain/workspaces/configuration/search", null);
+            symlinks.getLinks().add(searchSymlink);
+        }
+
+        symlinks.getPaths().add("/default-domain/workspaces/configuration");
+>>>>>>> branch 'master' of https://github.com/osivia/index-cloud-ens.git
 
         return symlinks;
     }
