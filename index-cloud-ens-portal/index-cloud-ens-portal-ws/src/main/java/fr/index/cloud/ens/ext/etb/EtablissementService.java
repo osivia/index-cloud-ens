@@ -17,18 +17,24 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestClientException;
+import org.springframework.web.client.RestTemplate;
 
+import fr.index.cloud.ens.application.api.Application;
+import fr.index.cloud.ens.application.api.IApplicationService;
 import fr.index.cloud.ens.ws.DriveRestController;
 
 /**
- * Service appelant et mémorisant les étalissements PRONOTE
+ * Service appelant et mémorisant les étalissements PRONOTE dans des applications OAuth2
  * 
  * @author Jean-Sébastien
  */
 
 
 @Service
-public class EtablissementService implements IEtablissementService {
+public class EtablissementService implements IApplicationService {
+
+    public static String APPLICATION_ID_PREFIX = "oauth2app_";
+    public static final String PRONOTE_CLIENT_PREFIX = "PRONOTE-";
 
     @Autowired
     ICacheService cacheService;
@@ -36,31 +42,29 @@ public class EtablissementService implements IEtablissementService {
     @Autowired
     IStatusService statusService;
 
+    @Autowired
+    EtablissementRepository repository;
+
     public static PortletContext portletContext;
 
     /** Logger. */
     private static final Log logger = LogFactory.getLog(EtablissementService.class);
+    public static long CACHE_TIMEOUT = 24 * 3600 * 1000; // One day
 
-    /** Préfixe cache. */
-    private static String CACHE_KEY_PREFIX = "ETB_";
 
-    public static long CACHE_TIMEOUT = 3600 * 1000;
-
-    
     public String pronoteEtablissementCheckUrl;
     public String pronoteEtablissementUrl;
-    public long pronoteCacheTimeout = CACHE_TIMEOUT;
 
- 
-    private static Map<String, EtablissementBean> cacheEtbs = new ConcurrentHashMap<>();
-    
+
+    private static Map<String, Long> lastWSCheck = new ConcurrentHashMap<>();
+
     @PostConstruct
     private void postConstruct() {
         pronoteEtablissementUrl = System.getProperty("pronote.etablissement.url");
-        if( pronoteEtablissementUrl == null)
+        if (pronoteEtablissementUrl == null)
             logger.warn("pronote.etablissement.url is not specified in properties");
         pronoteEtablissementCheckUrl = System.getProperty("pronote.etablissement.checkUrl");
-        if( pronoteEtablissementCheckUrl == null)
+        if (pronoteEtablissementCheckUrl == null)
             logger.warn("pronote.etablissement.checkUrl is not specified in properties");
     }
 
@@ -69,37 +73,91 @@ public class EtablissementService implements IEtablissementService {
      * 
      * @see fr.index.cloud.ens.ext.etb.IEtablissementService#getEtablissement(java.lang.String)
      */
-    
 
-    public EtablissementBean getEtablissement(String code) {
 
-        EtablissementBean etablissement = null;
-        String cacheKey = CACHE_KEY_PREFIX + code;
+    public Application getApplication(String code) {
 
-        CacheInfo cacheInfos = new CacheInfo(cacheKey, CacheInfo.CACHE_SCOPE_PORTLET_CONTEXT, new EtablissementInvoker(pronoteEtablissementUrl, code), null, portletContext, false);
-
-        if (statusService.isReady(pronoteEtablissementCheckUrl)) {
-            try {
-                cacheInfos.setExpirationDelay(CACHE_TIMEOUT);
-                etablissement = (EtablissementBean) cacheService.getCache(cacheInfos);
-            } catch (HttpClientErrorException e) {
-                statusService.notifyError(pronoteEtablissementCheckUrl, new UnavailableServer(e.getStatusText()));
-                logger.error("can't retrieve etablissement #" + code, e);
-            } catch (Exception e) {
-                logger.error("can't retrieve etablissement #" + code, e);
-            }
+        if (code.startsWith(APPLICATION_ID_PREFIX)) {
+            code = code.substring(APPLICATION_ID_PREFIX.length());
         }
 
-        // Applicative cache (if service cache has expired and pronote is unavailable)
-        if (etablissement != null) {
-            EtablissementBean oldEtb = cacheEtbs.get(code);
-            if (oldEtb == null || !etablissement.equals(oldEtb)) {
-                cacheEtbs.put(code, etablissement);
+        return getInternal(code, false);
+    }
+
+    /**
+     * Do the main job
+     * 
+     * if needed, synchronize this the Etablissement WS
+     *
+     * @param clientID the client ID
+     * @param refresh the refresh
+     * @return the internal
+     */
+    private Application getInternal(String clientID, boolean create) {
+
+        if (clientID.startsWith(PRONOTE_CLIENT_PREFIX)) {
+            Long lastCheck = lastWSCheck.get(clientID);
+
+            if (lastCheck == null || lastCheck + CACHE_TIMEOUT < System.currentTimeMillis() || create) {
+                if (statusService.isReady(pronoteEtablissementCheckUrl)) {
+                    try {
+                        // Check etablissement
+
+                        RestTemplate restTemplate = new RestTemplate();
+                        String codeEtablissement = clientID.substring(PRONOTE_CLIENT_PREFIX.length());
+                        String url = pronoteEtablissementUrl.replaceAll("\\{idEtb\\}", codeEtablissement);
+                        EtablissementResponse etablissement = restTemplate.getForObject(url, EtablissementResponse.class);
+
+                        Application application = new Application(EtablissementService.APPLICATION_ID_PREFIX + clientID, etablissement.getNom());
+                        repository.update(application);
+
+                        lastWSCheck.put(clientID, System.currentTimeMillis());
+
+                    } catch (HttpClientErrorException e) {
+                        statusService.notifyError(pronoteEtablissementCheckUrl, new UnavailableServer(e.getStatusText()));
+                        logger.error("can't retrieve etablissement #" + clientID, e);
+                    } catch (Exception e) {
+                        logger.error("can't retrieve etablissement #" + clientID, e);
+                    }
+                }
             }
-        }
-        return cacheEtbs.get(code);
+        }   else    {
+            if( create) {
+                // Not a PRONOTE Application
+                Application application = repository.getApplication(EtablissementService.APPLICATION_ID_PREFIX + clientID);
+                if( application == null)    {
+                    // Create with default name
+                    application = new Application(EtablissementService.APPLICATION_ID_PREFIX + clientID, "Application "+ clientID);
+                    repository.update(application);
+                }
+            }
+         }
+
+        // Get from repository
+        Application application = repository.getApplication(EtablissementService.APPLICATION_ID_PREFIX + clientID);
+        return application;
+    }
+
+    @Override
+    public Application createByClientID(String code) {
+        return getInternal(code, true);
+    }
+
+    @Override
+    public void update(Application etablissement) {
+        repository.update(etablissement);
+    }
+
+    @Override
+    public Application getApplicationByClientID(String clientID) {
+        return getInternal(clientID, false);
 
     }
+
+    @Override
+    public void deleteApplication(String code) {
+        repository.delete(code);
+     }
 
 
 }

@@ -38,6 +38,8 @@ import org.springframework.security.oauth2.provider.request.DefaultOAuth2Request
 import org.springframework.security.oauth2.provider.token.ConsumerTokenServices;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 
+import fr.index.cloud.ens.application.api.Application;
+import fr.index.cloud.ens.application.api.IApplicationService;
 import fr.index.cloud.oauth.authentication.PortalUserDetailService;
 import fr.index.cloud.oauth.tokenStore.PortalTokenStore;
 import fr.index.security.oauth.approval.PronoteApprovalHandler;
@@ -59,7 +61,6 @@ public class OAuth2ServerConfig {
 
     private static final String CLOUD_RESOURCE_ID = "cloud";
 
-    public static final String PRONOTE_CLIENT_PREFIX = "PRONOTE-";
 
     @Configuration
     @EnableResourceServer
@@ -129,6 +130,9 @@ public class OAuth2ServerConfig {
 
         @Autowired
         PortalUserDetailService userDetailService;
+        
+        @Autowired
+        IApplicationService applicationService;
 
 
         public ClientDetailsService clientDetailsService() {
@@ -139,8 +143,9 @@ public class OAuth2ServerConfig {
 
 
                     // System.out.println("osivia loadClientByClientId");
-
-                    if (clientId.startsWith(PRONOTE_CLIENT_PREFIX)) {
+                    Application application = applicationService.getApplicationByClientID(clientId);
+                    
+                    if (application != null) {
                         BaseClientDetails details = new BaseClientDetails();
                         details.setClientId(clientId);
                         details.setClientSecret(System.getProperty("pronote.oauth2.client.secret"));
@@ -164,14 +169,10 @@ public class OAuth2ServerConfig {
 
         @Override
         public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
-
-  
             accessConfirmationController.setClientDetailsService(clientDetailsService);
             accessConfirmationController.setApprovalStore(approvalStore);
-
             clients.withClientDetails(clientDetailsService());
-
-       }
+      }
 
         @Bean
         public TokenStore tokenStore() {

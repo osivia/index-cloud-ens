@@ -43,5 +43,32 @@
             </security-constraint>
         </instance>
     </deployment>
+    
+    
+    <deployment>
+        <if-exists>overwrite</if-exists>
+        <instance>
+            <display-name xml:lang="en">Cloud-ens - Application detail</display-name>
+            <display-name xml:lang="fr">Cloud-ens - Détail application</display-name>
+            <instance-id>index-cloud-portal-ens-application-cardInstance</instance-id>
+            <portlet-ref>index-cloud-portal-ens-application-cardPortlet</portlet-ref>
+            <security-constraint>
+                <policy-permission>
+                    <action-name>admin</action-name>
+                    <role-name>Administrators</role-name>
+                </policy-permission>
+                <policy-permission>
+                    <action-name>view</action-name>
+                    <unchecked />
+                </policy-permission>
+            </security-constraint>
+            <preferences>
+                <preference>
+                    <name>hide</name>
+                    <value>true</value>
+                </preference>
+            </preferences>            
+        </instance>
+    </deployment>
 
 </deployments>

@@ -3,11 +3,11 @@
 <%@ taglib uri="http://www.osivia.org/jsp/taglib/osivia-portal" prefix="op" %>
 
 
-<c:set var="filterPlaceholder"><op:translate key="PERSON_MANAGEMENT_FILTER_PLACEHOLDER" /></c:set>
+<c:set var="filterPlaceholder"><op:translate key="APPLICATION_MANAGEMENT_FILTER_PLACEHOLDER" /></c:set>
 
 
 <div class="form-group">
-    <form:label path="filter" cssClass="sr-only"><op:translate key="PERSON_MANAGEMENT_FILTER"/></form:label>
+    <form:label path="filter" cssClass="sr-only"><op:translate key="APPLICATION_MANAGEMENT_FILTER"/></form:label>
     <div class="input-group">
         <div class="input-group-prepend">
             <span class="input-group-text">
@@ -17,7 +17,7 @@
         <form:input path="filter" cssClass="form-control" placeholder="${filterPlaceholder}" />
     </div>
     <p class="form-text text-muted">
-        <small><op:translate key="PERSON_MANAGEMENT_FILTER_HELP" /></small>
+        <small><op:translate key="APPLICATION_MANAGEMENT_FILTER_HELP" /></small>
     </p>
     
     <div class="d-none">
