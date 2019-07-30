@@ -28,7 +28,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpStatus;
-
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -38,6 +40,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 
+import fr.index.cloud.ens.ext.etb.EtablissementService;
 import fr.index.cloud.ens.ws.beans.CreateFolderBean;
 import fr.index.cloud.ens.ws.beans.CreateUserBean;
 import fr.index.cloud.ens.ws.beans.GetSharedUrlBean;
@@ -579,7 +582,12 @@ public class DriveRestController {
         try {
 
             NuxeoController nuxeoController = getNuxeocontroller(request, principal);
-
+            
+            
+            // Get the OAuth2 client ID
+            Authentication a = SecurityContextHolder.getContext().getAuthentication();
+            String clientId = ((OAuth2Authentication) a).getOAuth2Request().getClientId();
+             
             
             Document currentDoc = null;
             
@@ -594,7 +602,7 @@ public class DriveRestController {
             Map<String, String> properties = parseProperties(publishBean.getProperties());
 
             // Execute publish
-            INuxeoCommand command = new PublishCommand(currentDoc, publishBean, properties);
+            INuxeoCommand command = new PublishCommand(currentDoc, publishBean, clientId, properties);
 
             @SuppressWarnings("unchecked")
             Map<String, String> returnMap = (Map<String, String>) nuxeoController.executeNuxeoCommand(command);

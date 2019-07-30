@@ -148,6 +148,7 @@
 									<table class="table">
 										<thead class="thead-light">
 											<tr>
+												<th scope="col"><op:translate key="SHARED_TARGET_REFERENCES_ORGANIZATION"/></th>
 												<th scope="col"><op:translate key="SHARED_TARGET_REFERENCES_DATE"/></th>
 												<th scope="col"><op:translate key="SHARED_TARGET_REFERENCES_GROUP"/></th>
 												<th scope="col"><op:translate key="SHARED_TARGET_REFERENCES_CONTEXT"/></th>
@@ -155,11 +156,16 @@
 										</thead>
 										<tbody>
 											<c:forEach var="target" items="${targets}">
+												<c:set var="pubOrganization" value="${target.pubOrganization}" />											
 												<c:set var="pubDate" value="${target.pubDate}" />
 												<c:set var="pubGroup" value="${target.pubGroup}" />
 												<c:set var="pubContext" value="${target.pubContext}" />
-
+	
 												<tr>
+													<td><c:if test="${not empty pubOrganization}">
+														<op:oauth2ClientDetail clientId="${pubOrganization}" var="client"/>
+															${client.title}
+														</c:if></td>												
 													<td><c:if test="${not empty pubDate}">
 															<fmt:formatDate value="${pubDate}" type="date" dateStyle="long" />
 														</c:if></td>

@@ -38,6 +38,8 @@ public class PublishCommand implements INuxeoCommand {
     Map<String, String> qualifiers;
     
 
+    /** organization */
+    String organization;
 
     /** publication target */    
     PublishBean publishBean;
@@ -45,10 +47,10 @@ public class PublishCommand implements INuxeoCommand {
     /**
      * Constructor.
      */
-    public PublishCommand(Document doc,  PublishBean publishBean, Map<String, String> qualifiers) {
+    public PublishCommand(Document doc,  PublishBean publishBean, String organization, Map<String, String> qualifiers) {
         super();
         this.doc = doc;
-
+        this.organization= organization;
         this.qualifiers = qualifiers;
 
         this.publishBean = publishBean;
@@ -80,9 +82,8 @@ public class PublishCommand implements INuxeoCommand {
         String pubId = IDGenerator.generateId();
         value.set("pubId", pubId);
         
-        // TODO Get AAuth2 token
-        value.set("pubOrganization", "");
-        
+
+        value.set("pubOrganization", organization);
         value.set("pubGroup", publishBean.getPubGroup());   
         value.set("pubContext",publishBean.getPubContext());
         value.set("pubSchoolYear",publishBean.getPubSchoolYear());
