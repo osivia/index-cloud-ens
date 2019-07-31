@@ -47,23 +47,6 @@ public class DashboardPortletController {
 	}
 
 
-    /**
-     * Sort action mapping.
-     *
-     * @param request  action request
-     * @param response action response
-     * @param sortId   sort property identifier request parameter
-     * @param alt      alternative sort indicator request parameter
-     * @param form     dashboard form model attribute
-     */
-    @ActionMapping("sort")
-    public void sort(ActionRequest request, ActionResponse response, @RequestParam("sortId") String sortId, @RequestParam("alt") String alt,
-                     @ModelAttribute("dashboardForm") DashboardForm form) throws PortletException {
-        // Portal controller context
-        PortalControllerContext portalControllerContext = new PortalControllerContext(this.portletContext, request, response);
-
-        this.service.sort(portalControllerContext, form, DashboardSort.fromId(sortId), BooleanUtils.toBoolean(alt));
-    }
 
 
     /**
@@ -74,12 +57,12 @@ public class DashboardPortletController {
      * @param identifiers selection identifiers request parameter
      * @param form     dashboard form model attribute
      */
-    @ActionMapping("delete")
-    public void delete(ActionRequest request, ActionResponse response, @RequestParam("identifiers") String[] identifiers, @ModelAttribute("dashboardForm") DashboardForm form) throws PortletException {
+    @ActionMapping("revoke")
+    public void revoke(ActionRequest request, ActionResponse response, @RequestParam("clientId") String clientId, @ModelAttribute("dashboard") Dashboard dashboard) throws PortletException {
         // Portal controller context
         PortalControllerContext portalControllerContext = new PortalControllerContext(this.portletContext, request, response);
 
-        this.service.delete(portalControllerContext, form, identifiers);
+        this.service.revoke(portalControllerContext,  clientId, dashboard);
     }
 
 
@@ -91,37 +74,14 @@ public class DashboardPortletController {
      * @return trash form
      * @throws PortletException
      */
-    @ModelAttribute("dashboardForm")
-    public DashboardForm getDashboardForm(PortletRequest request, PortletResponse response) throws PortletException {
+    @ModelAttribute("dashboard")
+    public Dashboard getDashboard(PortletRequest request, PortletResponse response) throws PortletException {
         // Portal controller context
         PortalControllerContext portalControllerContext = new PortalControllerContext(portletContext, request, response);
 
-        return this.service.getDashboardForm(portalControllerContext);
+        return this.service.getDashboard(portalControllerContext);
     }
 
 
-    /**
-     * Get toolbar resource mapping.
-     *
-     * @param request  resource request
-     * @param response resource response
-     * @param indexes  selected row indexes
-     */
-    @ResourceMapping("toolbar")
-    public void getToolbar(ResourceRequest request, ResourceResponse response, @RequestParam("indexes") String indexes) throws PortletException, IOException {
-        // Portal controller context
-        PortalControllerContext portalControllerContext = new PortalControllerContext(this.portletContext, request, response);
-
-        // Toolbar
-        Element toolbar = this.service.getToolbar(portalControllerContext, Arrays.asList(StringUtils.split(StringUtils.trimToEmpty(indexes), ",")));
-
-        // Content type
-        response.setContentType("text/html");
-
-        // Content
-        HTMLWriter htmlWriter = new HTMLWriter(response.getPortletOutputStream());
-        htmlWriter.write(toolbar);
-        htmlWriter.close();
-    }
 
 }

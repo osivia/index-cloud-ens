@@ -13,24 +13,17 @@ import org.springframework.web.context.WebApplicationContext;
  * @author JS Steux
  */
 @Component
-@Scope(WebApplicationContext.SCOPE_SESSION)
-@Refreshable
-public class DashboardForm {
+public class Dashboard {
 
     /** Trashed documents. */
     private List<DashboardApplication> applications;
-    /** Sort property. */
-    private DashboardSort sort;
-    /** Alternative sort indicator. */
-    private boolean alt;
-    /** Loaded indicator. */
-    private boolean loaded;
+
 
 
     /**
      * Constructor.
      */
-    public DashboardForm() {
+    public Dashboard() {
         super();
     }
 
@@ -54,38 +47,6 @@ public class DashboardForm {
         this.applications = applications;
     }
 
-    public DashboardSort getSort() {
-        return sort;
-    }
 
-    public void setSort(DashboardSort sort) {
-        this.sort = sort;
-    }
-
-    public boolean isAlt() {
-        return alt;
-    }
-
-    public void setAlt(boolean alt) {
-        this.alt = alt;
-    }
-
-    /**
-     * Getter for loaded.
-     * 
-     * @return the loaded
-     */
-    public boolean isLoaded() {
-        return loaded;
-    }
-
-    /**
-     * Setter for loaded.
-     * 
-     * @param loaded the loaded to set
-     */
-    public void setLoaded(boolean loaded) {
-        this.loaded = loaded;
-    }
 
 }

@@ -41,8 +41,10 @@ import org.springframework.security.oauth2.provider.token.TokenStore;
 import fr.index.cloud.ens.application.api.Application;
 import fr.index.cloud.ens.application.api.IApplicationService;
 import fr.index.cloud.oauth.authentication.PortalUserDetailService;
+import fr.index.cloud.oauth.tokenStore.IPortalTokenStore;
 import fr.index.cloud.oauth.tokenStore.PortalTokenStore;
 import fr.index.security.oauth.approval.PronoteApprovalHandler;
+import fr.index.security.oauth.approval.PronoteApprovalStore;
 import fr.index.security.oauth.services.mvc.AccessConfirmationController;
 
 
@@ -197,12 +199,12 @@ public class OAuth2ServerConfig {
         private ClientDetailsService clientDetailsService;
 
         @Autowired
-        private TokenStore tokenStore;
+        private IPortalTokenStore tokenStore;
 
         @Bean
         public ApprovalStore approvalStore() throws Exception {
-            TokenApprovalStore store = new TokenApprovalStore();
-            store.setTokenStore(tokenStore);
+            PronoteApprovalStore store = new PronoteApprovalStore();
+            store.setPortalTokenStore(tokenStore);
             return store;
         }
 

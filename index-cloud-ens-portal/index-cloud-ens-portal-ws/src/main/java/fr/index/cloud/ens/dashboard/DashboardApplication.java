@@ -18,8 +18,6 @@ import fr.index.cloud.oauth.tokenStore.PortalRefreshTokenAuthenticationDatas;
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class DashboardApplication  {
 
-    /** The token. */
-    private AggregateRefreshTokenInfos token;
 
     /** Client identifier. */
     private String clientId;
@@ -37,14 +35,7 @@ public class DashboardApplication  {
     }
 
 
-    public AggregateRefreshTokenInfos getToken() {
-        return token;
-    }
-
-    public void setToken(AggregateRefreshTokenInfos token) {
-        this.token = token;
-    }
-
+ 
     public String getClientId() {
         return clientId;
     }

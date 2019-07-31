@@ -3,7 +3,7 @@ package fr.index.cloud.ens.application.management;
 import org.dom4j.Element;
 import org.osivia.portal.api.context.PortalControllerContext;
 
-import fr.index.cloud.ens.dashboard.DashboardForm;
+import fr.index.cloud.ens.dashboard.Dashboard;
 
 import javax.portlet.PortletException;
 import java.io.IOException;

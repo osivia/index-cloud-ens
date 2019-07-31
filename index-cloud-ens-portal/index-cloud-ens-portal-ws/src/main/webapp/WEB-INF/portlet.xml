@@ -19,7 +19,7 @@
             <value>fr.index.cloud.ens.dashboard.DashboardPortletConfiguration</value>
         </init-param>
         
-        <expiration-cache>180</expiration-cache>
+        <expiration-cache>0</expiration-cache>
 
 		<supports>
             <mime-type>text/html</mime-type>
