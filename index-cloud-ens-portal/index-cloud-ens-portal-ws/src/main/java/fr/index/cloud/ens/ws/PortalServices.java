@@ -15,6 +15,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 
+import fr.index.cloud.ens.ext.etb.BaseConfiguration;
 import fr.toutatice.portail.cms.nuxeo.api.services.INuxeoService;
 import fr.toutatice.portail.cms.nuxeo.api.services.dao.DocumentDAO;
 
@@ -28,7 +29,7 @@ import fr.toutatice.portail.cms.nuxeo.api.services.dao.DocumentDAO;
  *
  */
 @Configuration
-public class PortalServices   {
+public class PortalServices  extends BaseConfiguration {
 
 
 
@@ -86,16 +87,7 @@ public class PortalServices   {
     }
     
     
-    @Bean
-    public ICacheService getCacheService() {
-        return Locator.findMBean(ICacheService.class, ICacheService.MBEAN_NAME);
-    }
 
-    
-    @Bean
-    public IStatusService getStatusService() {
-        return Locator.findMBean(IStatusService.class, "osivia:service=StatusServices");
-    }
     
     
     /**

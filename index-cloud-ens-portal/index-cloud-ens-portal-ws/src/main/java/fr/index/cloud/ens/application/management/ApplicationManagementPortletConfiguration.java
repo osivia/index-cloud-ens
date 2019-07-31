@@ -21,6 +21,7 @@ import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import org.springframework.web.servlet.view.JstlView;
 
+import fr.index.cloud.ens.ext.etb.BaseConfiguration;
 import fr.toutatice.portail.cms.nuxeo.api.CMSPortlet;
 import fr.toutatice.portail.cms.nuxeo.api.services.INuxeoCustomizer;
 import fr.toutatice.portail.cms.nuxeo.api.services.INuxeoService;
@@ -32,7 +33,7 @@ import fr.toutatice.portail.cms.nuxeo.api.services.INuxeoService;
 @Configuration
 @ComponentScan(basePackages = "fr.index.cloud.ens.application.management,fr.index.cloud.ens.ext")
 
-public class ApplicationManagementPortletConfiguration  extends CMSPortlet {
+public class ApplicationManagementPortletConfiguration  extends BaseConfiguration {
 
     /**
      * Get view resolver.
@@ -106,21 +107,6 @@ public class ApplicationManagementPortletConfiguration  extends CMSPortlet {
         return Locator.findMBean(IInternationalizationService.class, IInternationalizationService.MBEAN_NAME);
     }
 
-    /**
-     * Get cache service.
-     * 
-     * @return internationalization service
-     */
-    @Bean
-    public ICacheService getCacheService() {
-        return Locator.findMBean(ICacheService.class, ICacheService.MBEAN_NAME);
-    }
-
-    
-    @Bean
-    public IStatusService getStatusService() {
-        return Locator.findMBean(IStatusService.class, "osivia:service=StatusServices");
-    }
 
     
     /**

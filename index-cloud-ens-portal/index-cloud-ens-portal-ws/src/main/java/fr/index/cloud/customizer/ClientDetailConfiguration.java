@@ -10,14 +10,16 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.ResourceBundleMessageSource;
 
+import fr.index.cloud.ens.ext.etb.BaseConfiguration;
+
 /**
- * Group creation plugin configuration.
+ * Client detail customizer
  * 
- * @author Julien Barberet
+ * @author Jean-Sébastien Steux
  */
 @Configuration
 @ComponentScan(basePackages = "fr.index.cloud.customizer,fr.index.cloud.ens.ext")
-public class ClientDetailConfiguration {
+public class ClientDetailConfiguration extends BaseConfiguration {
 
 
     

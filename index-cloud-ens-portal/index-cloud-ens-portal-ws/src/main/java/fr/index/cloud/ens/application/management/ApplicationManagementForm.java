@@ -28,7 +28,32 @@ public class ApplicationManagementForm {
     /** Search filter. */
     private String filter;
     
+    /** Max Results. */
+    private boolean maxResults = false;
     
+    
+    
+    /**
+     * Getter for maxResults.
+     * @return the maxResults
+     */
+    public boolean isMaxResults() {
+        return maxResults;
+    }
+
+
+    
+    /**
+     * Setter for maxResults.
+     * @param maxResults the maxResults to set
+     */
+    public void setMaxResults(boolean maxResults) {
+        this.maxResults = maxResults;
+    }
+
+
+
+
     /**
      * Getter for filter.
      * @return the filter

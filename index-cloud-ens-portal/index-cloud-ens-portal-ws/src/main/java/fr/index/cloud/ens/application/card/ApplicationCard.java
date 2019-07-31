@@ -15,6 +15,10 @@ import org.springframework.web.context.WebApplicationContext;
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class ApplicationCard {
 
+
+    /** Code. */
+    private String code;
+
     /** Title. */
     private String title;
     /** Description. */
@@ -26,6 +30,26 @@ public class ApplicationCard {
      */
     public ApplicationCard() {
         super();
+    }
+
+
+    /**
+     * Getter for code.
+     * 
+     * @return the code
+     */
+    public String getCode() {
+        return code;
+    }
+
+
+    /**
+     * Setter for code.
+     * 
+     * @param code the code to set
+     */
+    public void setCode(String code) {
+        this.code = code;
     }
 
 
@@ -64,7 +88,6 @@ public class ApplicationCard {
     public void setDescription(String description) {
         this.description = description;
     }
-
 
 
 }

@@ -13,6 +13,8 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.ResourceBundleMessageSource;
 
+import fr.index.cloud.ens.ext.etb.BaseConfiguration;
+
 /**
  * Application creation plugin configuration.
  * 
@@ -20,7 +22,7 @@ import org.springframework.context.support.ResourceBundleMessageSource;
  */
 @Configuration
 @ComponentScan(basePackages = "fr.index.cloud.ens.application.creation,fr.index.cloud.ens.ext")
-public class ApplicationCreationPluginConfiguration {
+public class ApplicationCreationPluginConfiguration extends BaseConfiguration{
 
     /** Application context. */
     @Autowired
@@ -70,26 +72,6 @@ public class ApplicationCreationPluginConfiguration {
         return Locator.findMBean(IPortalUrlFactory.class, IPortalUrlFactory.MBEAN_NAME);
     }    
     
-    /**
-     * Get cache service.
-     * 
-     * @return internationalization service
-     */
-    @Bean
-    public ICacheService getCacheService() {
-        return Locator.findMBean(ICacheService.class, ICacheService.MBEAN_NAME);
-    }
-    
-    
-    /**
-     * Gets the status service.
-     *
-     * @return the status service
-     */
-    @Bean
-    public IStatusService getStatusService() {
-        return Locator.findMBean(IStatusService.class, "osivia:service=StatusServices");
-    }
 
 
 }

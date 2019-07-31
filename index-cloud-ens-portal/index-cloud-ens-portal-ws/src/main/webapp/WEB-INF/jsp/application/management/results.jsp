@@ -12,6 +12,10 @@
         <tr>
             <th>
                 <c:choose>
+                    <c:when test="${applicationForm.maxResults}">
+                        <span><op:translate key="APPLICATION_MANAGEMENT_TOO_MANY_RESULTS" /></span>
+                    </c:when>
+
                     <c:when test="${empty applicationForm.applications}">
                         <span><op:translate key="APPLICATION_MANAGEMENT_NO_RESULT" /></span>
                     </c:when>

@@ -49,8 +49,9 @@ import fr.toutatice.portail.cms.nuxeo.api.services.NuxeoCommandContext;
  */
 @Service
 public class ApplicationManagementServiceImpl implements ApplicationManagementService, ApplicationContextAware {
-    
+
     private static final String PROP_TTC_WEBID = "ttc:webid";
+    private static int MAX_RESULTS = 2;
 
 
     @Autowired
@@ -74,7 +75,7 @@ public class ApplicationManagementServiceImpl implements ApplicationManagementSe
     /** View resolver. */
     @Autowired
     private InternalResourceViewResolver viewResolver;
-    
+
 
     /** Log. */
     private final Log log;
@@ -88,8 +89,6 @@ public class ApplicationManagementServiceImpl implements ApplicationManagementSe
         this.log = LogFactory.getLog(this.getClass());
     }
 
-
-    
 
     /**
      * Get search filters map.
@@ -145,35 +144,44 @@ public class ApplicationManagementServiceImpl implements ApplicationManagementSe
     public ApplicationManagementForm getApplicationForm(PortalControllerContext portalControllerContext) throws PortletException {
         // application form
         ApplicationManagementForm form = this.applicationContext.getBean(ApplicationManagementForm.class);
-        
-        search (portalControllerContext, form);
+
+        search(portalControllerContext, form);
         return form;
     }
 
-    
+
     /**
      * {@inheritDoc}
      */
     @Override
     public void search(PortalControllerContext portalControllerContext, ApplicationManagementForm form) throws PortletException {
- 
-        
+
+
         NuxeoController nuxeoController = getNuxeoController();
 
-        Documents returnDocs = (Documents) nuxeoController.executeNuxeoCommand(new GetApplicationsByFilterCommand(form.getFilter()));
-        List<Document> docs = new ArrayList<>();
-        for(Document returnDoc: returnDocs)  {
-            docs.add(returnDoc);
-        }
-        
-        form.setApplications(docs);
-    }
+        Documents returnDocs = (Documents) nuxeoController.executeNuxeoCommand(new GetApplicationsByFilterCommand(form.getFilter(), MAX_RESULTS + 1));
 
+        if (returnDocs.size() < MAX_RESULTS + 1) {
+
+            List<Document> docs = new ArrayList<>();
+            for (Document returnDoc : returnDocs) {
+                docs.add(returnDoc);
+            }
+
+            form.setApplications(docs);
+            form.setMaxResults(false);
+        } else {
+            form.setMaxResults(true);
+            form.setApplications(new ArrayList<Document>());
+        }
+
+
+    }
 
 
     @Override
     public void search(PortalControllerContext portalControllerContext, ApplicationManagementForm form, String filters) throws PortletException {
-        
+
         // Filters map
         Map<String, String> map = this.getFiltersMap(portalControllerContext, filters);
 
@@ -186,13 +194,12 @@ public class ApplicationManagementServiceImpl implements ApplicationManagementSe
         }
         form.setFilter(filter);
 
-        
+
         this.search(portalControllerContext, form);
-        
+
     }
 
-    
-    
+
     /**
      * {@inheritDoc}
      */
@@ -202,15 +209,15 @@ public class ApplicationManagementServiceImpl implements ApplicationManagementSe
         PortletRequest request = portalControllerContext.getRequest();
         // Selected user identifier
         String id = form.getSelectedApplicationId();
-        
+
         String applicationWebID = null;
-        for( Document doc: form.getApplications()) {
-            if( doc.getId().equals(id)) {
+        for (Document doc : form.getApplications()) {
+            if (doc.getId().equals(id)) {
                 applicationWebID = doc.getProperties().getString(PROP_TTC_WEBID);
             }
         }
-        
-        
+
+
         // Region
         String region = System.getProperty(REGION_PROPERTY);
 
@@ -230,8 +237,8 @@ public class ApplicationManagementServiceImpl implements ApplicationManagementSe
             request.setAttribute(Constants.PORTLET_ATTR_START_WINDOW, window);
         }
     }
-    
-    
+
+
     /**
      * {@inheritDoc}
      */
@@ -256,5 +263,5 @@ public class ApplicationManagementServiceImpl implements ApplicationManagementSe
 
         return path;
     }
-    
+
 }

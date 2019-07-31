@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 
 import fr.index.cloud.ens.application.api.Application;
 import fr.index.cloud.ens.application.api.IApplicationService;
+import fr.index.cloud.ens.ext.etb.EtablissementService;
 import fr.index.cloud.ens.ws.DriveRestController;
 import fr.toutatice.portail.cms.nuxeo.api.NuxeoController;
 import fr.toutatice.portail.cms.nuxeo.api.services.NuxeoCommandContext;
@@ -83,6 +84,7 @@ public class ApplicationCardServiceImpl implements ApplicationCardService {
         
         // May have been deleted
         if( application != null)    {
+            card.setCode(application.getCode().substring(EtablissementService.APPLICATION_ID_PREFIX.length()));
             card.setTitle(application.getTitle());
             card.setDescription((String) application.getDescription());
         }   

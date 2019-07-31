@@ -11,6 +11,7 @@ import org.apache.commons.logging.LogFactory;
 import org.osivia.portal.api.PortalException;
 import org.osivia.portal.api.cache.services.CacheInfo;
 import org.osivia.portal.api.cache.services.ICacheService;
+import org.osivia.portal.api.profiler.IProfilerService;
 import org.osivia.portal.api.status.IStatusService;
 import org.osivia.portal.api.status.UnavailableServer;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,6 +42,9 @@ public class EtablissementService implements IApplicationService {
 
     @Autowired
     IStatusService statusService;
+    
+    @Autowired
+    IProfilerService profilerService;
 
     @Autowired
     EtablissementRepository repository;
@@ -100,11 +104,14 @@ public class EtablissementService implements IApplicationService {
 
             if (lastCheck == null || lastCheck + CACHE_TIMEOUT < System.currentTimeMillis() || create) {
                 if (statusService.isReady(pronoteEtablissementCheckUrl)) {
+                    boolean error = false;
+                    long begin = System.currentTimeMillis();                    
+                    String codeEtablissement = clientID.substring(PRONOTE_CLIENT_PREFIX.length());
                     try {
                         // Check etablissement
 
                         RestTemplate restTemplate = new RestTemplate();
-                        String codeEtablissement = clientID.substring(PRONOTE_CLIENT_PREFIX.length());
+                        
                         String url = pronoteEtablissementUrl.replaceAll("\\{idEtb\\}", codeEtablissement);
                         EtablissementResponse etablissement = restTemplate.getForObject(url, EtablissementResponse.class);
 
@@ -114,10 +121,24 @@ public class EtablissementService implements IApplicationService {
                         lastWSCheck.put(clientID, System.currentTimeMillis());
 
                     } catch (HttpClientErrorException e) {
+                        error = true;
+                        
                         statusService.notifyError(pronoteEtablissementCheckUrl, new UnavailableServer(e.getStatusText()));
                         logger.error("can't retrieve etablissement #" + clientID, e);
                     } catch (Exception e) {
+                        
+                        error = true;
+                        
                         logger.error("can't retrieve etablissement #" + clientID, e);
+                    } finally   {
+                        
+                        long end = System.currentTimeMillis();
+                        long elapsedTime = end - begin;
+
+                        String name = "code='"+codeEtablissement+"'";
+                        String src = "ETB" ;
+                        profilerService.logEvent(src, name, elapsedTime, error);
+     
                     }
                 }
             }

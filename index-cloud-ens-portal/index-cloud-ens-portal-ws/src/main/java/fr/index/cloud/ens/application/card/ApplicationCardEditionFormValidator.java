@@ -35,7 +35,7 @@ public class ApplicationCardEditionFormValidator implements Validator {
      */
     @Override
     public void validate(Object target, Errors errors) {
-        //ValidationUtils.rejectIfEmptyOrWhitespace(errors, "bean.title", "NotEmpty");
+        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "bean.title", "NotEmpty");
     }
 
 }

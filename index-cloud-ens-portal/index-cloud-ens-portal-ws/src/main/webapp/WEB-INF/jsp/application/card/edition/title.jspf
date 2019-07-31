@@ -5,16 +5,11 @@
 
 
 <spring:bind path="bean.title">
-<div class="form-group required ${status.error ? 'has-error has-feedback' : ''}">
-    <form:label path="bean.title" cssClass="col-sm-3 col-lg-2 col-form-label"><op:translate key="APPLICATION_CARD_DISPLAYNAME" /></form:label>
-    <div class="col-sm-9 col-lg-10">
-        <form:input path="bean.title" cssClass="form-control application-edition-title" />
-        <c:if test="${status.error}">
-            <span class="form-control-feedback">
-                <i class="glyphicons glyphicons-remove"></i>
-            </span>
-        </c:if>
-        <form:errors path="bean.title" cssClass="help-block" />
-    </div>
-</div>
+	<div class="form-group required ${status.error ? 'has-error has-feedback' : ''}">
+	    <form:label path="bean.title" cssClass="col-sm-3 col-lg-2 col-form-label"><op:translate key="APPLICATION_CARD_DISPLAYNAME" /></form:label>
+	    <div class="col-sm-9 col-lg-10">
+	         <form:input path="bean.title" cssClass="form-control ${status.error ? 'is-invalid' : ''}" />   
+		     <form:errors path="bean.title" cssClass="invalid-feedback" />
+	    </div>
+	</div>
 </spring:bind>

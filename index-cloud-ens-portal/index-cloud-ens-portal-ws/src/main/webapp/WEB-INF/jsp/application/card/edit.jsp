@@ -15,6 +15,10 @@
 	   <fieldset>
 		       <legend><op:translate key="APPLICATION_CARD_EDITION_LEGEND" /></legend>
 		       <div class="portlet-filler">
+		       
+		        <!-- Code- -->
+			    <%@ include file="edition/code.jspf" %>
+			    
 			    <!-- Displayname- -->
 			    <%@ include file="edition/title.jspf" %>
 			    

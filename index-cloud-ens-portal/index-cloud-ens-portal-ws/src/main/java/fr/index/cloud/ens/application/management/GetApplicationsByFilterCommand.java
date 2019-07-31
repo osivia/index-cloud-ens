@@ -3,38 +3,37 @@ package fr.index.cloud.ens.application.management;
 import org.nuxeo.ecm.automation.client.Constants;
 import org.nuxeo.ecm.automation.client.OperationRequest;
 import org.nuxeo.ecm.automation.client.Session;
-import org.nuxeo.ecm.automation.client.model.DocRef;
-import org.nuxeo.ecm.automation.client.model.PropertyMap;
 
+import fr.index.cloud.ens.ext.etb.EtablissementService;
 import fr.toutatice.portail.cms.nuxeo.api.INuxeoCommand;
-import fr.toutatice.portail.cms.nuxeo.api.NuxeoQueryFilter;
-import fr.toutatice.portail.cms.nuxeo.api.NuxeoQueryFilterContext;
 
 
 /**
- * Stores a refresh token
+ * Applications search commane
  * 
  * @author Jean-Sébastien
  */
 public class GetApplicationsByFilterCommand implements INuxeoCommand {
 
-    private String title;
+    /** The keyword. */
+    private String keyword;
     
-    public GetApplicationsByFilterCommand(String title) {
+    /** The max result. */
+    private int maxResults;
+    
+    public GetApplicationsByFilterCommand(String keyword, int maxResults) {
         super();
-        this.title = title;
+        this.keyword = keyword;
+        this.maxResults = maxResults;
     }
 
     @Override
     public Object execute(Session nuxeoSession) throws Exception {
         
-        // TODO add webID search
-        // TODO add filtering
-        
+
         // Clause
         StringBuilder clause = new StringBuilder();
-        clause.append("dc:title ILIKE  '%"+title+"%' ");
-        
+        clause.append("( dc:title ILIKE  '%"+keyword+"%' OR ttc:webid STARTSWITH  '"+EtablissementService.APPLICATION_ID_PREFIX+keyword+"' )");
         
         clause.append("AND ecm:primaryType='OAuth2Application'");        
 
@@ -42,8 +41,15 @@ public class GetApplicationsByFilterCommand implements INuxeoCommand {
         OperationRequest request = nuxeoSession.newRequest("Document.QueryES");
         request.set(Constants.HEADER_NX_SCHEMAS, "*");
         request.set("query", "SELECT * FROM Document WHERE " + clause.toString());
-
+        
+        
+        request.set("pageSize", maxResults);
+        request.set("currentPageIndex", 0);
+        
+  
         return request.execute();
+        
+
     }
 
     /**
@@ -54,7 +60,7 @@ public class GetApplicationsByFilterCommand implements INuxeoCommand {
         StringBuilder builder = new StringBuilder();
         builder.append(this.getClass().getSimpleName());
         builder.append("|");
-        builder.append(this.title);
+        builder.append(this.keyword);
         return builder.toString();
     }
 }
