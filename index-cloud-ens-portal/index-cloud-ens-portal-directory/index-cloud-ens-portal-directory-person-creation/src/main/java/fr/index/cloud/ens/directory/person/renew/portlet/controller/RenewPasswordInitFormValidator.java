@@ -1,7 +1,7 @@
 /**
  * 
  */
-package fr.index.cloud.ens.directory.person.creation.portlet.controller;
+package fr.index.cloud.ens.directory.person.renew.portlet.controller;
 
 import java.util.Date;
 import java.util.List;
@@ -22,7 +22,7 @@ import org.springframework.validation.Validator;
  *
  */
 @Component
-public class RenewPasswordFormValidator implements Validator {
+public class RenewPasswordInitFormValidator implements Validator {
 	
 	
     /** Mail regex. */
@@ -37,7 +37,7 @@ public class RenewPasswordFormValidator implements Validator {
     /**
 	 * 
 	 */
-	public RenewPasswordFormValidator() {
+	public RenewPasswordInitFormValidator() {
 		
         super();
 

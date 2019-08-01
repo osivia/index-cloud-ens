@@ -4,6 +4,7 @@ import java.text.Normalizer;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -256,11 +257,11 @@ public class PersonCreationPluginServiceImpl implements PersonCreationPluginServ
             throw new FormFilterException(message);
         }
         
-        List<String> messages = personService.validatePasswordRules(context.getPortalControllerContext(), password);
+        Map<String, String> messages = personService.validatePasswordRules(password);
         if(!messages.isEmpty()) {
         	String messagesConcat = bundle.getString("PASSWORD_VALIDATION") + "<ul>";
         	
-        	for(String message : messages) {
+        	for(String message : messages.values()) {
         		messagesConcat = messagesConcat.concat("<li>").concat(message).concat("</li>");
         	}
         	messagesConcat.concat("</ul>");
