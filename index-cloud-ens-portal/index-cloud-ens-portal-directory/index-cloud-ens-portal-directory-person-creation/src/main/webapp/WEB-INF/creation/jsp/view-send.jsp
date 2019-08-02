@@ -4,11 +4,11 @@
 
 <h1 class="text-center">
 	<span><i class="halflings halflings-info-sign"></i> </span>
-	<op:translate key="CREATION_INFO" />
+	<op:translate key="createaccount.send.title" />
 </h1>
 
 <p class="text-center">
-	<op:translate key="CHECK_MAIL" />
+	<op:translate key="createaccount.send.message" />
 </p>
 
 

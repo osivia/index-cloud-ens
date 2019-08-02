@@ -4,18 +4,18 @@
 
 <h1 class="text-center">
 	<span><i class="halflings halflings-ok"></i> </span>
-	<op:translate key="CREATION_CONFIRMED" />
+	<op:translate key="createaccount.confirm.title" />
 </h1>
 
 <p class="text-center">
-	<op:translate key="PLEASE_CONNECT" />
+	<op:translate key="createaccount.confirm.message" />
 </p>
 
 
-<div class="text-center">
+<div class="text-center no-ajax-link">
 	<a href="/portal/auth" class="btn btn-primary"> <i
 		class="halflings halflings-log-in"></i> <span><op:translate
-				key="CONNECT" /></span>
+				key="createaccount.confirm.connect" /></span>
 	</a>
 	
 </div>

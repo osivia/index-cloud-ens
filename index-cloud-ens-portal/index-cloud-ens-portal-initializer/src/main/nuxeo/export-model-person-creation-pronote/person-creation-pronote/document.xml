@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document repository="default" id="8e4c2ff8-0e97-40e5-a8ad-3b37e267c787">
+<document repository="default" id="ec1fa398-8577-4b0d-a28e-1f9786abf849">
   <system>
     <type>ProcedureModel</type>
     <path>default-domain/procedures/procedures-models/person-creation-pronote</path>
@@ -19,333 +19,202 @@
   </system>
   <schema xmlns:uid="http://project.nuxeo.com/geide/schemas/uid/" name="uid">
     <uid:uid><![CDATA[]]></uid:uid>
-    <uid:minor_version><![CDATA[0]]></uid:minor_version>
     <uid:major_version><![CDATA[0]]></uid:major_version>
+    <uid:minor_version><![CDATA[0]]></uid:minor_version>
+  </schema>
+  <schema xmlns:ttc="http://www.nuxeo.org/ecm/project/schemas/ACRENNES2/toutatice" name="toutatice">
+    <ttc:modelVersion><![CDATA[]]></ttc:modelVersion>
+    <ttc:isPreloadedOnLogin><![CDATA[false]]></ttc:isPreloadedOnLogin>
+    <ttc:abstract><![CDATA[]]></ttc:abstract>
+    <ttc:isOnline><![CDATA[false]]></ttc:isOnline>
+    <ttc:explicitUrl><![CDATA[]]></ttc:explicitUrl>
+    <ttc:images/>
+    <ttc:domainID><![CDATA[default-domain]]></ttc:domainID>
+    <ttc:hiddenInNavigation/>
+    <ttc:webid><![CDATA[procedure_person-creation-pronote]]></ttc:webid>
+    <ttc:publicationDate/>
+    <ttc:theme><![CDATA[]]></ttc:theme>
+    <ttc:extensionUrl><![CDATA[]]></ttc:extensionUrl>
+    <ttc:keywords/>
+    <ttc:commentsForbidden/>
+    <ttc:pageTemplate><![CDATA[]]></ttc:pageTemplate>
+    <ttc:childrenPageTemplate><![CDATA[]]></ttc:childrenPageTemplate>
+    <ttc:pageScope><![CDATA[]]></ttc:pageScope>
+    <ttc:showInMenu><![CDATA[true]]></ttc:showInMenu>
+    <ttc:tabOrder><![CDATA[0]]></ttc:tabOrder>
+    <ttc:contextualizeExternalContents><![CDATA[false]]></ttc:contextualizeExternalContents>
+    <ttc:editorialTitle><![CDATA[]]></ttc:editorialTitle>
+    <ttc:contextualizeInternalContents><![CDATA[false]]></ttc:contextualizeInternalContents>
+    <ttc:useES><![CDATA[false]]></ttc:useES>
+    <ttc:hideMetadatas/>
+    <ttc:lstTargetedPublic/>
+    <ttc:vignette/>
+    <ttc:selectors><![CDATA[]]></ttc:selectors>
+    <ttc:queryPart><![CDATA[]]></ttc:queryPart>
+    <ttc:spaceID><![CDATA[d29f19b3-18d1-4eb1-9cbe-2bdca1fb278a]]></ttc:spaceID>
   </schema>
   <schema xmlns:dc="http://www.nuxeo.org/ecm/schemas/dublincore/" name="dublincore">
+    <dc:description><![CDATA[]]></dc:description>
+    <dc:language><![CDATA[]]></dc:language>
+    <dc:coverage><![CDATA[]]></dc:coverage>
+    <dc:valid/>
     <dc:creator><![CDATA[admin]]></dc:creator>
-    <dc:source><![CDATA[]]></dc:source>
+    <dc:modified><![CDATA[2019-08-02T10:45:26.75Z]]></dc:modified>
+    <dc:lastContributor><![CDATA[admin]]></dc:lastContributor>
+    <dc:format><![CDATA[]]></dc:format>
+    <dc:expired/>
+    <dc:rights><![CDATA[]]></dc:rights>
+    <dc:created><![CDATA[2019-07-23T13:20:25.33Z]]></dc:created>
+    <dc:title><![CDATA[Création de compte utilisateur depuis Pronote]]></dc:title>
+    <dc:issued/>
     <dc:nature><![CDATA[]]></dc:nature>
+    <dc:subjects/>
     <dc:contributors>
       <item><![CDATA[admin]]></item>
     </dc:contributors>
-    <dc:created><![CDATA[2019-04-18T15:29:41.14Z]]></dc:created>
-    <dc:description><![CDATA[]]></dc:description>
-    <dc:rights><![CDATA[]]></dc:rights>
-    <dc:subjects/>
+    <dc:source><![CDATA[]]></dc:source>
     <dc:publisher><![CDATA[]]></dc:publisher>
-    <dc:valid/>
-    <dc:format><![CDATA[]]></dc:format>
-    <dc:issued/>
-    <dc:modified><![CDATA[2019-04-30T08:47:14.00Z]]></dc:modified>
-    <dc:language><![CDATA[]]></dc:language>
-    <dc:coverage><![CDATA[]]></dc:coverage>
-    <dc:expired/>
-    <dc:lastContributor><![CDATA[admin]]></dc:lastContributor>
-    <dc:title><![CDATA[Création de compte utilisateur depuis Pronote]]></dc:title>
-  </schema>
-  <schema xmlns:ttc="http://www.nuxeo.org/ecm/project/schemas/ACRENNES2/toutatice" name="toutatice">
-    <ttc:childrenPageTemplate><![CDATA[]]></ttc:childrenPageTemplate>
-    <ttc:selectors><![CDATA[]]></ttc:selectors>
-    <ttc:isOnline><![CDATA[false]]></ttc:isOnline>
-    <ttc:spaceID><![CDATA[6602bc99-aad1-45c5-9370-cbb4b360ecec]]></ttc:spaceID>
-    <ttc:pageScope><![CDATA[]]></ttc:pageScope>
-    <ttc:contextualizeInternalContents><![CDATA[false]]></ttc:contextualizeInternalContents>
-    <ttc:extensionUrl><![CDATA[]]></ttc:extensionUrl>
-    <ttc:isPreloadedOnLogin><![CDATA[false]]></ttc:isPreloadedOnLogin>
-    <ttc:webid><![CDATA[procedure_person-creation-pronote]]></ttc:webid>
-    <ttc:keywords/>
-    <ttc:abstract><![CDATA[]]></ttc:abstract>
-    <ttc:explicitUrl><![CDATA[]]></ttc:explicitUrl>
-    <ttc:useES><![CDATA[false]]></ttc:useES>
-    <ttc:queryPart><![CDATA[]]></ttc:queryPart>
-    <ttc:contextualizeExternalContents><![CDATA[false]]></ttc:contextualizeExternalContents>
-    <ttc:showInMenu><![CDATA[true]]></ttc:showInMenu>
-    <ttc:hiddenInNavigation/>
-    <ttc:tabOrder><![CDATA[0]]></ttc:tabOrder>
-    <ttc:commentsForbidden/>
-    <ttc:hideMetadatas/>
-    <ttc:publicationDate/>
-    <ttc:modelVersion><![CDATA[]]></ttc:modelVersion>
-    <ttc:domainID><![CDATA[default-domain]]></ttc:domainID>
-    <ttc:editorialTitle><![CDATA[]]></ttc:editorialTitle>
-    <ttc:vignette/>
-    <ttc:pageTemplate><![CDATA[]]></ttc:pageTemplate>
-    <ttc:images/>
-    <ttc:theme><![CDATA[]]></ttc:theme>
-    <ttc:lstTargetedPublic/>
-  </schema>
-  <schema xmlns:ottcweb="http://www.nuxeo.org/ecm/project/schemas/opentoutatice/webmode" name="ottc_web">
-    <ottcweb:segment><![CDATA[]]></ottcweb:segment>
   </schema>
   <schema xmlns:pcd="http://www.nuxeo.org/ecm/project/schemas/osivia/models/procedure" name="procedure">
+    <pcd:webIdParent/>
     <pcd:startingStep><![CDATA[0]]></pcd:startingStep>
+    <pcd:dashboards/>
+    <pcd:procedureObjects/>
+    <pcd:authorizedActors/>
+    <pcd:businessRules><![CDATA[{"rules":null}]]></pcd:businessRules>
     <pcd:globalVariablesDefinitions>
       <definition>
-        <varOptions><![CDATA[]]></varOptions>
-        <name><![CDATA[firstname]]></name>
-        <label><![CDATA[Nom]]></label>
-        <type><![CDATA[TEXT]]></type>
-      </definition>
-      <definition>
-        <varOptions><![CDATA[]]></varOptions>
-        <name><![CDATA[password]]></name>
-        <label><![CDATA[Mot de passe]]></label>
-        <type><![CDATA[PASSWORD]]></type>
-      </definition>
-      <definition>
-        <varOptions><![CDATA[]]></varOptions>
         <name><![CDATA[mail]]></name>
+        <varOptions><![CDATA[]]></varOptions>
         <label><![CDATA[Adresse e-mail]]></label>
         <type><![CDATA[TEXT]]></type>
       </definition>
-      <definition>
-        <varOptions><![CDATA[]]></varOptions>
-        <name><![CDATA[confirmpassword]]></name>
-        <label><![CDATA[Confirmation du mot de passe]]></label>
-        <type><![CDATA[PASSWORD]]></type>
-      </definition>
-      <definition>
-        <varOptions><![CDATA[]]></varOptions>
-        <name><![CDATA[lastname]]></name>
-        <label><![CDATA[Prénom]]></label>
-        <type><![CDATA[TEXT]]></type>
-      </definition>
     </pcd:globalVariablesDefinitions>
-    <pcd:webIdParent/>
-    <pcd:businessRules><![CDATA[{"rules":null}]]></pcd:businessRules>
-    <pcd:authorizedActors/>
     <pcd:steps>
       <step>
+        <closable><![CDATA[false]]></closable>
+        <notifiable><![CDATA[true]]></notifiable>
         <stringMsg><![CDATA[${document:linkWithText(taskPath,taskName)}]]></stringMsg>
-        <index><![CDATA[0]]></index>
-        <actionIdYes><![CDATA[]]></actionIdYes>
         <actionIdClosable><![CDATA[]]></actionIdClosable>
-        <reference><![CDATA[0]]></reference>
-        <acquitable><![CDATA[false]]></acquitable>
+        <index><![CDATA[0]]></index>
         <endStepMsg><![CDATA[Un lien de confirmation vous a été envoyé à l'adresse mail indiquée. Vous pouvez maintenant fermer cette fenêtre.]]></endStepMsg>
+        <acquitable><![CDATA[false]]></acquitable>
+        <actionIdNo><![CDATA[]]></actionIdNo>
         <initAction>
-          <filtersList>
-            <filter>
-              <filterInstanceId><![CDATA[DecodeUserCreationTokenFilter0]]></filterInstanceId>
-              <filterId><![CDATA[DecodeUserCreationTokenFilter]]></filterId>
-              <argumentsList/>
-              <filterName><![CDATA[]]></filterName>
-              <filterPath><![CDATA[0]]></filterPath>
-            </filter>
-          </filtersList>
-          <label><![CDATA[]]></label>
+          <filtersList/>
           <actionId><![CDATA[]]></actionId>
+          <label><![CDATA[]]></label>
           <stepReference><![CDATA[]]></stepReference>
         </initAction>
-        <closable><![CDATA[false]]></closable>
-        <globalVariablesReferences>
-          <globalVariablesReference>
-            <variableName><![CDATA[password]]></variableName>
-            <isInput><![CDATA[true]]></isInput>
-            <path><![CDATA[3]]></path>
-            <isFieldSet><![CDATA[false]]></isFieldSet>
-            <superLabel><![CDATA[Mot de passe]]></superLabel>
-            <helpText><![CDATA[]]></helpText>
-            <required><![CDATA[true]]></required>
-          </globalVariablesReference>
-          <globalVariablesReference>
-            <variableName><![CDATA[firstname]]></variableName>
-            <isInput><![CDATA[true]]></isInput>
-            <path><![CDATA[0]]></path>
-            <isFieldSet><![CDATA[false]]></isFieldSet>
-            <superLabel><![CDATA[Prénom]]></superLabel>
-            <helpText><![CDATA[]]></helpText>
-            <required><![CDATA[true]]></required>
-          </globalVariablesReference>
-          <globalVariablesReference>
-            <variableName><![CDATA[confirmpassword]]></variableName>
-            <isInput><![CDATA[true]]></isInput>
-            <path><![CDATA[4]]></path>
-            <isFieldSet><![CDATA[false]]></isFieldSet>
-            <superLabel><![CDATA[Confirmation du mot de passe]]></superLabel>
-            <helpText><![CDATA[Veuillez bien noter votre passe, il ne vous sera pas transmis ultérieurement.]]></helpText>
-            <required><![CDATA[true]]></required>
-          </globalVariablesReference>
-          <globalVariablesReference>
-            <variableName><![CDATA[lastname]]></variableName>
-            <isInput><![CDATA[true]]></isInput>
-            <path><![CDATA[1]]></path>
-            <isFieldSet><![CDATA[false]]></isFieldSet>
-            <superLabel><![CDATA[Nom]]></superLabel>
-            <helpText><![CDATA[]]></helpText>
-            <required><![CDATA[true]]></required>
-          </globalVariablesReference>
-          <globalVariablesReference>
-            <variableName><![CDATA[mail]]></variableName>
-            <isInput><![CDATA[true]]></isInput>
-            <path><![CDATA[2]]></path>
-            <isFieldSet><![CDATA[false]]></isFieldSet>
-            <superLabel><![CDATA[Adresse e-mail]]></superLabel>
-            <helpText><![CDATA[Une invitation sera envoyée à cette adresse avec les identifiants de connexion.]]></helpText>
-            <required><![CDATA[true]]></required>
-          </globalVariablesReference>
-        </globalVariablesReferences>
-        <name><![CDATA[Inscription d'un nouvel utilisateur]]></name>
-        <actionIdDefault><![CDATA[]]></actionIdDefault>
+        <reference><![CDATA[0]]></reference>
         <actors/>
-        <notifiable><![CDATA[true]]></notifiable>
+        <actionIdDefault><![CDATA[00]]></actionIdDefault>
+        <notifEmail><![CDATA[false]]></notifEmail>
+        <name><![CDATA[Inscription d'un nouvel utilisateur]]></name>
+        <globalVariablesReferences/>
         <actions>
           <action>
             <filtersList>
               <filter>
-                <filterInstanceId><![CDATA[PERSON_CREATION0]]></filterInstanceId>
-                <filterId><![CDATA[PERSON_CREATION]]></filterId>
-                <argumentsList/>
-                <filterName><![CDATA[]]></filterName>
+                <filterId><![CDATA[SET_ACTOR]]></filterId>
                 <filterPath><![CDATA[0]]></filterPath>
-              </filter>
-              <filter>
-                <filterInstanceId><![CDATA[SendMailFilter2]]></filterInstanceId>
-                <filterId><![CDATA[SendMailFilter]]></filterId>
+                <filterName><![CDATA[Droit à l'utilisateur anonyme sur la tâche]]></filterName>
+                <filterInstanceId><![CDATA[SET_ACTOR0]]></filterInstanceId>
                 <argumentsList>
                   <argument>
+                    <argumentName><![CDATA[actor]]></argumentName>
+                    <argumentType><![CDATA[TEXT]]></argumentType>
+                    <argumentValue><![CDATA[utilisateur-invité]]></argumentValue>
+                  </argument>
+                </argumentsList>
+              </filter>
+              <filter>
+                <filterId><![CDATA[SendMailFilter]]></filterId>
+                <filterPath><![CDATA[1]]></filterPath>
+                <filterName><![CDATA[Envoi e-mail de confirmation]]></filterName>
+                <filterInstanceId><![CDATA[SendMailFilter1]]></filterInstanceId>
+                <argumentsList>
+                  <argument>
+                    <argumentName><![CDATA[body]]></argumentName>
+                    <argumentType><![CDATA[TEXTAREA]]></argumentType>
                     <argumentValue><![CDATA[Bonjour 
 
 Vous vous êtes inscrit sur le portail Cloud enseignant d'Index Education.
 
 Il vous reste à valider votre adresse e-mail en cliquant sur le lien ci-dessous :
 
-${command:link("Valider", "verify")}]]></argumentValue>
-                    <argumentType><![CDATA[TEXTAREA]]></argumentType>
-                    <argumentName><![CDATA[body]]></argumentName>
+${task:link("Confirmer mon adresse e-mail")}]]></argumentValue>
                   </argument>
                   <argument>
-                    <argumentValue><![CDATA[noreply@osivia.com]]></argumentValue>
-                    <argumentType><![CDATA[TEXT]]></argumentType>
                     <argumentName><![CDATA[mailFrom]]></argumentName>
+                    <argumentType><![CDATA[TEXT]]></argumentType>
+                    <argumentValue><![CDATA[noreply@osivia.com]]></argumentValue>
                   </argument>
                   <argument>
-                    <argumentValue/>
-                    <argumentType><![CDATA[BOOLEAN]]></argumentType>
                     <argumentName><![CDATA[continue]]></argumentName>
+                    <argumentType><![CDATA[BOOLEAN]]></argumentType>
+                    <argumentValue/>
                   </argument>
                   <argument>
-                    <argumentValue><![CDATA[${mail}]]></argumentValue>
-                    <argumentType><![CDATA[TEXT]]></argumentType>
                     <argumentName><![CDATA[mailTo]]></argumentName>
+                    <argumentType><![CDATA[TEXT]]></argumentType>
+                    <argumentValue><![CDATA[${mail}]]></argumentValue>
                   </argument>
                   <argument>
-                    <argumentValue><![CDATA[Votre compte a été créé mais il reste une étape.]]></argumentValue>
-                    <argumentType><![CDATA[TEXT]]></argumentType>
                     <argumentName><![CDATA[mailObject]]></argumentName>
+                    <argumentType><![CDATA[TEXT]]></argumentType>
+                    <argumentValue><![CDATA[Votre compte a été créé mais il reste une étape.]]></argumentValue>
                   </argument>
                 </argumentsList>
-                <filterName><![CDATA[Envoi e-mail de confirmation]]></filterName>
-                <filterPath><![CDATA[2]]></filterPath>
-              </filter>
-              <filter>
-                <filterInstanceId><![CDATA[DefineVarFilter3]]></filterInstanceId>
-                <filterId><![CDATA[DefineVarFilter]]></filterId>
-                <argumentsList>
-                  <argument>
-                    <argumentValue><![CDATA[information-mail]]></argumentValue>
-                    <argumentType><![CDATA[TEXT]]></argumentType>
-                    <argumentName><![CDATA[variableValue]]></argumentName>
-                  </argument>
-                  <argument>
-                    <argumentValue><![CDATA[command.redirection.fragment-type]]></argumentValue>
-                    <argumentType><![CDATA[TEXT]]></argumentType>
-                    <argumentName><![CDATA[variableName]]></argumentName>
-                  </argument>
-                </argumentsList>
-                <filterName><![CDATA[Paramètre de l'écran de confirmation]]></filterName>
-                <filterPath><![CDATA[3]]></filterPath>
-              </filter>
-              <filter>
-                <filterInstanceId><![CDATA[SET_ACTOR1]]></filterInstanceId>
-                <filterId><![CDATA[SET_ACTOR]]></filterId>
-                <argumentsList>
-                  <argument>
-                    <argumentValue><![CDATA[utilisateur-invité]]></argumentValue>
-                    <argumentType><![CDATA[TEXT]]></argumentType>
-                    <argumentName><![CDATA[actor]]></argumentName>
-                  </argument>
-                </argumentsList>
-                <filterName><![CDATA[Droit à l'utilisateur anonyme sur la tâche]]></filterName>
-                <filterPath><![CDATA[1]]></filterPath>
               </filter>
             </filtersList>
-            <label><![CDATA[Valider]]></label>
             <actionId><![CDATA[00]]></actionId>
+            <label><![CDATA[Valider]]></label>
             <stepReference><![CDATA[1]]></stepReference>
           </action>
         </actions>
-        <notifEmail><![CDATA[false]]></notifEmail>
-        <actionIdNo><![CDATA[]]></actionIdNo>
+        <actionIdYes><![CDATA[]]></actionIdYes>
       </step>
       <step>
+        <closable><![CDATA[true]]></closable>
+        <notifiable><![CDATA[true]]></notifiable>
         <stringMsg><![CDATA[${document:linkWithText(taskPath,taskName)}]]></stringMsg>
-        <index><![CDATA[1]]></index>
-        <actionIdYes><![CDATA[]]></actionIdYes>
         <actionIdClosable><![CDATA[]]></actionIdClosable>
-        <reference><![CDATA[1]]></reference>
-        <acquitable><![CDATA[false]]></acquitable>
+        <index><![CDATA[1]]></index>
         <endStepMsg><![CDATA[Votre e-mail a été confirmé. Vous pouvez maintenant vous connecter avec vos identifiants.]]></endStepMsg>
+        <acquitable><![CDATA[false]]></acquitable>
+        <actionIdNo><![CDATA[]]></actionIdNo>
         <initAction>
           <filtersList/>
-          <label><![CDATA[]]></label>
           <actionId><![CDATA[]]></actionId>
+          <label><![CDATA[]]></label>
           <stepReference><![CDATA[]]></stepReference>
         </initAction>
-        <closable><![CDATA[true]]></closable>
-        <globalVariablesReferences/>
-        <name><![CDATA[Validation de l'e-mail]]></name>
-        <actionIdDefault><![CDATA[]]></actionIdDefault>
+        <reference><![CDATA[1]]></reference>
         <actors/>
-        <notifiable><![CDATA[true]]></notifiable>
+        <actionIdDefault><![CDATA[]]></actionIdDefault>
+        <notifEmail><![CDATA[false]]></notifEmail>
+        <name><![CDATA[Validation de l'e-mail]]></name>
+        <globalVariablesReferences/>
         <actions>
           <action>
             <filtersList>
               <filter>
-                <filterInstanceId><![CDATA[DeleteOnEnding2]]></filterInstanceId>
                 <filterId><![CDATA[DeleteOnEnding]]></filterId>
-                <argumentsList/>
-                <filterName><![CDATA[]]></filterName>
-                <filterPath><![CDATA[2]]></filterPath>
-              </filter>
-              <filter>
-                <filterInstanceId><![CDATA[DefineVarFilter0]]></filterInstanceId>
-                <filterId><![CDATA[DefineVarFilter]]></filterId>
-                <argumentsList>
-                  <argument>
-                    <argumentValue><![CDATA[confirmation-mail]]></argumentValue>
-                    <argumentType><![CDATA[TEXT]]></argumentType>
-                    <argumentName><![CDATA[variableValue]]></argumentName>
-                  </argument>
-                  <argument>
-                    <argumentValue><![CDATA[command.redirection.fragment-type]]></argumentValue>
-                    <argumentType><![CDATA[TEXT]]></argumentType>
-                    <argumentName><![CDATA[variableName]]></argumentName>
-                  </argument>
-                </argumentsList>
-                <filterName><![CDATA[Paramètre de l'écran de confirmation]]></filterName>
                 <filterPath><![CDATA[0]]></filterPath>
-              </filter>
-              <filter>
-                <filterInstanceId><![CDATA[PERSON_VERIFY_MAIL1]]></filterInstanceId>
-                <filterId><![CDATA[PERSON_VERIFY_MAIL]]></filterId>
-                <argumentsList/>
                 <filterName><![CDATA[]]></filterName>
-                <filterPath><![CDATA[1]]></filterPath>
+                <filterInstanceId><![CDATA[DeleteOnEnding0]]></filterInstanceId>
+                <argumentsList/>
               </filter>
             </filtersList>
-            <label><![CDATA[Valider]]></label>
             <actionId><![CDATA[verify]]></actionId>
+            <label><![CDATA[Valider]]></label>
             <stepReference><![CDATA[endStep]]></stepReference>
           </action>
         </actions>
-        <notifEmail><![CDATA[false]]></notifEmail>
-        <actionIdNo><![CDATA[]]></actionIdNo>
+        <actionIdYes><![CDATA[]]></actionIdYes>
       </step>
     </pcd:steps>
     <pcd:authorizedGroups/>
-    <pcd:dashboards/>
-    <pcd:procedureObjects/>
   </schema>
 </document>
