@@ -4,7 +4,6 @@
 package fr.index.cloud.ens.directory.person.creation.plugin.controller;
 
 import java.util.List;
-import java.util.Map;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
@@ -12,18 +11,12 @@ import javax.portlet.PortletConfig;
 import javax.portlet.PortletException;
 
 import org.osivia.portal.api.customization.CustomizationContext;
+import org.osivia.portal.api.player.IPlayerModule;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Controller;
 
-import fr.index.cloud.ens.directory.person.creation.plugin.form.CheckAccountValidityFormFilter;
-import fr.index.cloud.ens.directory.person.creation.plugin.form.DecodeUserCreationTokenFilter;
-import fr.index.cloud.ens.directory.person.creation.plugin.form.PersonCreationFormFilter;
-import fr.index.cloud.ens.directory.person.creation.plugin.form.RenewPasswordFormFilter;
-import fr.index.cloud.ens.directory.person.creation.plugin.form.VerifyMailAddressFormFilter;
 import fr.toutatice.portail.cms.nuxeo.api.domain.AbstractPluginPortlet;
-import fr.toutatice.portail.cms.nuxeo.api.domain.FragmentType;
-import fr.toutatice.portail.cms.nuxeo.api.forms.FormFilter;
 
 /**
  * @author Loïc Billon
@@ -54,6 +47,14 @@ public class PersonCreationPluginController extends AbstractPluginPortlet {
 	}
 
 
+    /* (non-Javadoc)
+     * @see fr.toutatice.portail.cms.nuxeo.api.domain.AbstractPluginPortlet#getOrder()
+     */
+    @Override
+    public int getOrder() {
+        // After procedures
+        return DEFAULT_DEPLOYMENT_ORDER + 10;
+    }
 
     /**
      * Constructor.
@@ -89,28 +90,13 @@ public class PersonCreationPluginController extends AbstractPluginPortlet {
 	 */
 	@Override
 	protected void customizeCMSProperties(CustomizationContext context) {
-		
-        // Form filters
-        Map<String, FormFilter> formFilters = this.getFormFilters(context);
-        formFilters.put(PersonCreationFormFilter.IDENTIFIER, this.applicationContext.getBean(PersonCreationFormFilter.class));
-        formFilters.put(VerifyMailAddressFormFilter.IDENTIFIER,  this.applicationContext.getBean(VerifyMailAddressFormFilter.class));
-		formFilters.put(DecodeUserCreationTokenFilter.IDENTIFIER, this.applicationContext.getBean(DecodeUserCreationTokenFilter.class));
-		
-		// TODO : inutilisé, remplacé par la portlet renew-password
-		formFilters.put(CheckAccountValidityFormFilter.IDENTIFIER , this.applicationContext.getBean(CheckAccountValidityFormFilter.class));
-		
-		formFilters.put(RenewPasswordFormFilter.IDENTIFIER , this.applicationContext.getBean(RenewPasswordFormFilter.class));
 
-		// Fragments
-		List<FragmentType> fragmentTypes = this.getFragmentTypes(context);
-		
-		SimpleJspFragmentModule cfm = new SimpleJspFragmentModule(getPortletContext(),"information-mail" );
-		fragmentTypes.add(new FragmentType("information-mail", "information mail", cfm));
-		SimpleJspFragmentModule cfm2 = new SimpleJspFragmentModule(getPortletContext(),"confirmation-mail" );
-		fragmentTypes.add(new FragmentType("confirmation-mail", "Confirmation mail", cfm2));
-		SimpleJspFragmentModule cfm3 = new SimpleJspFragmentModule(getPortletContext(),"password-renewed" );
-		fragmentTypes.add(new FragmentType("password-renewed", "password-renewed", cfm3));
-		
+        // Players
+        List<IPlayerModule> players = this.getPlayers(context);
+        CreateAccountPlayer createPlayer = new CreateAccountPlayer(this.getPortletContext());
+        players.add(0, createPlayer);
+        RenewPasswordPlayer player = new RenewPasswordPlayer(this.getPortletContext());
+		players.add(0, player);
 	}
 
 }

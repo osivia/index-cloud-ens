@@ -2,14 +2,11 @@ package fr.index.cloud.ens.ws;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
 import java.security.KeyFactory;
 import java.security.NoSuchAlgorithmException;
 import java.security.Principal;
-import java.security.PublicKey;
 import java.security.interfaces.RSAKey;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.X509EncodedKeySpec;
@@ -27,19 +24,15 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.bouncycastle.util.io.pem.PemObject;
 import org.bouncycastle.util.io.pem.PemReader;
-import org.nuxeo.ecm.automation.client.model.Document;
 import org.osivia.directory.v2.service.PersonUpdateService;
 import org.osivia.portal.api.PortalException;
-import org.osivia.portal.api.cache.services.CacheInfo;
 import org.osivia.portal.api.directory.v2.model.Person;
 import org.osivia.portal.api.tokens.ITokenService;
-import org.osivia.portal.core.web.IWebIdService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -48,10 +41,6 @@ import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.AlgorithmMismatchException;
 import com.auth0.jwt.interfaces.DecodedJWT;
-
-import fr.toutatice.portail.cms.nuxeo.api.NuxeoController;
-import fr.toutatice.portail.cms.nuxeo.api.cms.NuxeoDocumentContext;
-import fr.toutatice.portail.cms.nuxeo.api.services.NuxeoCommandContext;
 
 
 /**
@@ -75,7 +64,7 @@ public class UserRestController {
 
     @Autowired
     private ITokenService tokenService;
-
+    
     @Autowired
     private ErrorMgr errorMgr;
 
@@ -117,7 +106,8 @@ public class UserRestController {
                 String webToken = tokenService.generateToken(attributes);
     
                 // 4 - Compute and return a link to start UserCreation procedure
-                computeCreateAccountProcUrl(request, returnObject, webToken);
+                //computeCreateAccountProcUrl(request, returnObject, webToken);
+                computeCreateAccountUrl(request, returnObject, webToken);
                 returnObject.put("returnCode", ErrorMgr.ERR_OK);
             }
             
@@ -134,8 +124,11 @@ public class UserRestController {
     }
     
 
-    
-    /**
+
+
+
+
+	/**
      * decode the jwt token, check mandatory fields and initialize a map of attributs. 
      * 
      * @param request
@@ -251,30 +244,21 @@ public class UserRestController {
     }
     
     /**
-     * Compute and return a link to start UserCreation procedure
-     * @param request
-     * @param returnObject
-     * @param webToken
-     */
-    private void computeCreateAccountProcUrl(HttpServletRequest request, Map<String, Object> returnObject, String webToken) {
-        
-        NuxeoController nuxeoController = new NuxeoController(portletContext);
-        nuxeoController.setServletRequest(request);
-        nuxeoController.setAuthType(NuxeoCommandContext.AUTH_TYPE_SUPERUSER);
-        nuxeoController.setCacheType(CacheInfo.CACHE_SCOPE_NONE);
-        NuxeoDocumentContext ctx = nuxeoController.getDocumentContext(IWebIdService.FETCH_PATH_PREFIX + "procedure_person-creation-pronote");
-
-        // Get parent doc
-        Document userCreationProcedure = ctx.getDocument();
-
-        String url = "/portal/cms" + userCreationProcedure.getPath();
+	 * @param request
+	 * @param returnObject
+	 * @param webToken
+	 */
+	private void computeCreateAccountUrl(HttpServletRequest request, Map<String, Object> returnObject,
+			String webToken) {
+		
+        String url = "/portal/portal/default/create-account/";
 
         String publicHost = System.getProperty("osivia.tasks.host");
         url = publicHost + url + "?displayContext=uncluttered&token=" + webToken;
         returnObject.put("url", url);
-        
-    }   
-    
+		
+	}
+
     
     /**
      * Gets the user profile

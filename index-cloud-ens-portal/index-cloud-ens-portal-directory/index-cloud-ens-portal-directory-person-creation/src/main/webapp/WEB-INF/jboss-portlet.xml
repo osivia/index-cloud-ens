@@ -3,14 +3,50 @@
 <portlet-app>
 
     <portlet>
+        <portlet-name>cloudens-person-creation-portlet</portlet-name>
+
+        <transaction>
+            <trans-attribute>Required</trans-attribute>
+        </transaction>
+        
+        <header-content>
+             <script type="text/javascript" src="/js/create-account.js"></script>
+        </header-content>        
+    </portlet>
+
+    <portlet>
         <portlet-name>cloudens-person-renew-pwd-portlet</portlet-name>
 
         <transaction>
             <trans-attribute>Required</trans-attribute>
         </transaction>
+        
+        <header-content>
+             <script type="text/javascript" src="/js/renew-pwd.js"></script>
+        </header-content>        
     </portlet>
 
+    <portlet>
+        <portlet-name>cloudens-person-deleting-portlet</portlet-name>
 
+        <transaction>
+            <trans-attribute>Required</trans-attribute>
+        </transaction>
+        
+        <header-content>
+             <script type="text/javascript" src="/js/delete-account.js"></script>
+        </header-content>        
+    </portlet>
+    
+    <portlet>
+        <portlet-name>cloudens-person-export-portlet</portlet-name>
+
+        <transaction>
+            <trans-attribute>Required</trans-attribute>
+        </transaction>
+      
+    </portlet>
+        
 	<service>
         <service-name>CustomizationModulesRepository</service-name>
         <service-class>org.osivia.portal.api.customization.ICustomizationModulesRepository</service-class>

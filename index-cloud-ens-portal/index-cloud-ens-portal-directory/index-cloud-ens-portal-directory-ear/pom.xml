@@ -131,7 +131,7 @@
                         <webModule>
 				            <groupId>${project.groupId}</groupId>
 				            <artifactId>index-cloud-ens-portal-directory-person-creation</artifactId>
-                            <contextRoot>/cloudens-person-creation</contextRoot>
+                            <contextRoot>/index-cloudens-person-creation</contextRoot>
                         </webModule>
                         <webModule>
                             <groupId>org.osivia.services.directory.group</groupId>
