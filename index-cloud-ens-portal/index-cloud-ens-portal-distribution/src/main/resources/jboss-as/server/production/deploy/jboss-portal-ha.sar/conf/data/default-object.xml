@@ -402,8 +402,65 @@ return nuxeoRequest.toString();</value>
 					</properties>
 					<height>0</height>
 				</window>
-			</page>		
-
+			</page>
+		
+		
+			<page>
+				<page-name>create-account</page-name>
+				<display-name xml:lang="fr">Créer mon compte</display-name>
+				<properties>
+					<property>
+						<name>layout.id</name>
+						<value>cloud-ens-uncluttered</value>
+					</property>
+				</properties>
+				<security-constraint>
+					<policy-permission>
+						<action-name>view</action-name>
+						<unchecked />
+					</policy-permission>
+				</security-constraint>
+				<window>
+					<window-name>cloudens-person-creation-portlet-instance_1564665295669</window-name>
+					<instance-ref>cloudens-person-creation-portlet-instance</instance-ref>
+					<region>col-1</region>
+					<properties>
+						<property>
+							<name>osivia.hideDecorators</name>
+							<value>1</value>
+						</property>
+						<property>
+							<name>portal.windowContentType</name>
+							<value>portlet</value>
+						</property>
+						<property>
+							<name>osivia.bootstrapPanelStyle</name>
+							<value>false</value>
+						</property>
+						<property>
+							<name>osivia.title</name>
+							<value>Création de compte</value>
+						</property>
+						<property>
+							<name>osivia.maximized.cms.url</name>
+							<value>false</value>
+						</property>
+						<property>
+							<name>osivia.mobileCollapse</name>
+							<value>false</value>
+						</property>
+						<property>
+							<name>osivia.hideTitle</name>
+							<value>1</value>
+						</property>
+						<property>
+							<name>theme.order</name>
+							<value>0</value>
+						</property>
+					</properties>
+					<height>0</height>
+				</window>
+			</page>
             <page>
                 <page-name>workspace-management</page-name>
                 <display-name xml:lang="fr">Espaces collaboratifs</display-name>
@@ -991,42 +1048,60 @@ return nuxeoRequest.toString();</value>
 		    </page>
 
 
-            <page>
-                <page-name>tests</page-name>
-                <display-name xml:lang="fr">Tests</display-name>
-                <properties/>
-
-                <security-constraint>
-                    <policy-permission>
-                        <action-name>view</action-name>
-                        <role-name>Administrators</role-name>
-                    </policy-permission>
-                </security-constraint>
-
-                <window>
-                    <window-name>index-cloud-portal-ens-ws-instance_1547630498157</window-name>
-                    <instance-ref>index-cloud-portal-ens-ws-instance</instance-ref>
-                    <region>top</region>
-                    <properties>
-                        <property>
-                            <name>osivia.title</name>
-                            <value>Test Web Services</value>
-                        </property>
-                        <property>
-                            <name>theme.order</name>
-                            <value>0</value>
-                        </property>
-                        <property>
-                            <name>osivia.maximized.cms.url</name>
-                            <value>false</value>
-                        </property>
-                        <property>
-                            <name>portal.windowContentType</name>
-                            <value>portlet</value>
-                        </property>
-                    </properties>
-                    <height>0</height>
-                </window>
+         <page>
+              <page-name>conversion</page-name>
+              <display-name xml:lang="fr">conversion de données</display-name>
+              <properties>
+                <property>
+                  <name>order</name>
+                  <value>6</value>
+                </property>
+              </properties>
+              <security-constraint/>
+              <window>
+                <window-name>index-cloud-portal-ens-conversion-adminInstance_1564649596563</window-name>
+                <instance-ref>index-cloud-portal-ens-conversion-adminInstance</instance-ref>
+                <region>top</region>
+                <properties>
+                  <property>
+                    <name>portal.windowContentType</name>
+                    <value>portlet</value>
+                  </property>
+                  <property>
+                    <name>osivia.bootstrapPanelStyle</name>
+                    <value>true</value>
+                  </property>
+                  <property>
+                    <name>osivia.maximized.cms.url</name>
+                    <value>false</value>
+                  </property>
+                  <property>
+                    <name>osivia.hideTitle</name>
+                    <value>1</value>
+                  </property>
+                  <property>
+                    <name>theme.order</name>
+                    <value>0</value>
+                  </property>
+                  <property>
+                    <name>osivia.ajaxLink</name>
+                    <value>1</value>
+                  </property>
+                  <property>
+                    <name>osivia.hideDecorators</name>
+                    <value>1</value>
+                  </property>
+                  <property>
+                    <name>osivia.mobileCollapse</name>
+                    <value>false</value>
+                  </property>
+                  <property>
+                    <name>theme.dyna.partial_refresh_enabled</name>
+                    <value>true</value>
+                  </property>
+                </properties>
+                <height>0</height>
+              </window>
             </page>
 
             <page>
