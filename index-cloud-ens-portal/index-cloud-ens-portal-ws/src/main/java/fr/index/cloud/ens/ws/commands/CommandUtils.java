@@ -1,41 +1,76 @@
 package fr.index.cloud.ens.ws.commands;
 
-import org.nuxeo.ecm.automation.client.model.Document;
+import org.apache.commons.lang.StringUtils;
 import org.nuxeo.ecm.automation.client.model.PropertyList;
-import org.nuxeo.ecm.automation.client.model.PropertyMap;
 
+
+/**
+ * The Class CommandUtils.
+ */
 public class CommandUtils {
-    
+
 
     /**
-     * Add new item to PropertyList
-     * 
-     * @param properties
-     * @param item
-     * @param listName
+     * Adds  to list.
+     *
+     * @param properties the properties
+     * @param item the item
+     * @return true, if successful
      */
-    
-    
-    public static void addToList(Document doc, PropertyMap properties, String item, String listName) {
+    public static boolean addToList(PropertyList properties, String item) {
 
-        if( item != null)    {
-            PropertyList items = doc.getProperties().getList(listName);        
-            if( items == null)
-                items = new PropertyList();
-            if( !items.getList().contains(item))    {
-                StringBuffer sItems = new StringBuffer();
-                for (Object sLevel : items.getList())  {
-                    if( sItems.length()> 0)
-                        sItems.append(",");
-                    sItems.append(sLevel);
-                }
-                
-                if( sItems.length()> 0)
-                    sItems.append(",");
-                sItems.append(item);
-                properties.set( listName, sItems.toString());                
-            }
+        boolean inserted = false;
+
+        // Insert items
+        if (StringUtils.isNotEmpty(item) && !properties.getList().contains(item)) {
+            properties.list().add(item);
+            inserted = true;
         }
+
+        return inserted;
+    }
+
+
+    /**
+     * Removes from list.
+     *
+     * @param properties the properties
+     * @param item the item
+     * @return true, if successful
+     */
+    public static boolean removeFromList(PropertyList properties, String item) {
+
+        boolean removed = false;
+
+        if (StringUtils.isNotEmpty(item) && properties.getList().contains(item)) {
+            properties.list().remove(item);
+            removed = true;
+        }
+
+        return removed;
+    }
+
+    /**
+     * Convert to string.
+     *
+     * @param properties the properties
+     * @return the string
+     */
+    public static String convertToString(PropertyList properties) {
+
+        StringBuffer sItems = new StringBuffer();
+
+
+        for (Object sValue : properties.getList()) {
+
+            if (sItems.length() > 0)
+                sItems.append(",");
+            sItems.append(sValue);
+
+
+        }
+        return sItems.toString();
+
     }
 
 

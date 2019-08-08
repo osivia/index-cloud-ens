@@ -143,8 +143,6 @@ public class OAuth2ServerConfig {
                 @Override
                 public ClientDetails loadClientByClientId(String clientId) throws ClientRegistrationException {
 
-
-                    // System.out.println("osivia loadClientByClientId");
                     Application application = applicationService.getApplicationByClientID(clientId);
                     
                     if (application != null) {
@@ -158,9 +156,10 @@ public class OAuth2ServerConfig {
                         authorities.add(new SimpleGrantedAuthority("ROLE_CLIENT"));
                         authorities.add(new SimpleGrantedAuthority("ROLE_TRUSTED_CLIENT"));
                         details.setAuthorities(authorities);
+                        // 10 minutes
                         details.setAccessTokenValiditySeconds(600);
-                        // TODO : externalize
-                        details.setRefreshTokenValiditySeconds(3600);
+                        // default one year
+                        details.setRefreshTokenValiditySeconds(60 * 60 * 24 * 365);
                         return details;
                     } else
                         throw new NoSuchClientException("Client with ID '" + clientId + "' not found");

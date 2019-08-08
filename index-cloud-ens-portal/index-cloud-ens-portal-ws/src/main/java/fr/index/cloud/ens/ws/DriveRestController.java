@@ -21,6 +21,7 @@ import org.nuxeo.ecm.automation.client.model.PropertyList;
 import org.nuxeo.ecm.automation.client.model.PropertyMap;
 import org.osivia.directory.v2.service.PersonUpdateService;
 import org.osivia.portal.api.cache.services.CacheInfo;
+import org.osivia.portal.api.context.PortalControllerContext;
 import org.osivia.portal.api.directory.v2.model.Person;
 import org.osivia.portal.api.tokens.ITokenService;
 import org.osivia.portal.core.web.IWebIdService;
@@ -40,6 +41,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 
+import fr.index.cloud.ens.ext.conversion.ConversionRepository;
+import fr.index.cloud.ens.ext.conversion.IConversionService;
 import fr.index.cloud.ens.ext.etb.EtablissementService;
 import fr.index.cloud.ens.ws.beans.CreateFolderBean;
 import fr.index.cloud.ens.ws.beans.CreateUserBean;
@@ -47,6 +50,7 @@ import fr.index.cloud.ens.ws.beans.GetSharedUrlBean;
 import fr.index.cloud.ens.ws.beans.PublishBean;
 import fr.index.cloud.ens.ws.beans.UnpublishBean;
 import fr.index.cloud.ens.ws.beans.UploadBean;
+import fr.index.cloud.ens.ws.commands.AddPropertiesCommand;
 import fr.index.cloud.ens.ws.commands.CreateFolderCommand;
 import fr.index.cloud.ens.ws.commands.FetchByPubIdCommand;
 import fr.index.cloud.ens.ws.commands.FetchByTitleCommand;
@@ -114,7 +118,7 @@ public class DriveRestController {
      * Document DAO.
      */
     @Autowired
-    private DocumentDAO documentDao;
+    IConversionService conversionService;
 
     /**
      * Wraps the doc. fetching according to the WS error handling
@@ -409,14 +413,22 @@ public class DriveRestController {
 
             // Get parent doc
             Document parentDoc = wrapContentFetching(nuxeoController, IWebIdService.FETCH_PATH_PREFIX + uploadBean.getParentId());
-
-            // set qualifiers
-            Map<String, String> properties = parseProperties(uploadBean.getProperties());
+            
+            // Get the OAuth2 client ID
+            Authentication a = SecurityContextHolder.getContext().getAuthentication();
+            String clientId = ((OAuth2Authentication) a).getOAuth2Request().getClientId();
 
 
             // Execute import
-            INuxeoCommand command = new UploadFileCommand(parentDoc.getId(), file, properties);
-            nuxeoController.executeNuxeoCommand(command);
+            INuxeoCommand command = new UploadFileCommand(parentDoc.getId(), file);
+            Document doc = (Document) nuxeoController.executeNuxeoCommand(command);
+            
+            // set qualifiers
+            // retrieve doc webId
+            doc = wrapContentFetching(nuxeoController, doc.getPath());
+            Map<String, String> properties = parseProperties(ctx, doc.getProperties().getString(PROP_TTC_WEBID), clientId, uploadBean.getProperties());
+            INuxeoCommand updateCommand = new AddPropertiesCommand(doc, properties);
+            nuxeoController.executeNuxeoCommand(updateCommand);            
 
         } catch (Exception e) {
             returnObject = errorMgr.handleDefaultExceptions(ctx, e);
@@ -598,14 +610,18 @@ public class DriveRestController {
                 currentDoc = nuxeoController.fetchSharedDocument(url.substring(iName + 1), false);
             }
 
-            // set qualifiers
-            Map<String, String> properties = parseProperties(publishBean.getProperties());
+
 
             // Execute publish
-            INuxeoCommand command = new PublishCommand(currentDoc, publishBean, clientId, properties);
+            INuxeoCommand command = new PublishCommand(currentDoc, publishBean, clientId);
 
             @SuppressWarnings("unchecked")
             Map<String, String> returnMap = (Map<String, String>) nuxeoController.executeNuxeoCommand(command);
+            
+            // set qualifiers
+            Map<String, String> properties = parseProperties(wsCtx, currentDoc.getProperties().getString(PROP_TTC_WEBID), clientId, publishBean.getProperties());            
+            INuxeoCommand updateCommand = new AddPropertiesCommand(currentDoc, properties);
+            nuxeoController.executeNuxeoCommand(updateCommand);
 
             // Prepare results
             returnObject.put("pubId", returnMap.get("pubId"));
@@ -745,15 +761,15 @@ public class DriveRestController {
     }
 
 
-    private Map<String, String> parseProperties(Map<String, String> requestProperties) {
+    private Map<String, String> parseProperties(PortalControllerContext ctx, String docId, String clientId, Map<String, String> requestProperties) {
         // set qualifiers
         Map<String, String> properties = new HashMap<String, String>();
-        String standardLevel = convertLevelQualifier(requestProperties.get("levelCode"));
+        String standardLevel = convertLevelQualifier(ctx, docId, clientId, requestProperties.get("levelCode"), requestProperties.get("levelName"));
         if (standardLevel != null)
             properties.put("level", standardLevel);
-        String subject = requestProperties.get("subjectCode");
-        if (subject != null)
-            properties.put("subject", subject);
+        String standardSubject = convertSubjectQualifier(ctx, docId, clientId, requestProperties.get("subjectCode"), requestProperties.get("subjectName"));
+        if (standardSubject != null)               
+            properties.put("subject", standardSubject);
 
         return properties;
     }
@@ -764,20 +780,18 @@ public class DriveRestController {
      * @param pronoteQualifier
      * @return the supported qualifier, or null
      */
-    private String convertLevelQualifier(String pronoteQualifier) {
-
-        if (levelQualifier == null) {
-            levelQualifier = new ConcurrentHashMap<>();
-            levelQualifier.put("LT", "T");
-            levelQualifier.put("L1", "1");
-            levelQualifier.put("L2", "2");
-            levelQualifier.put("L3", "3");
-            levelQualifier.put("L4", "4");
-            levelQualifier.put("L5", "5");
-            levelQualifier.put("L6", "6");
-        }
-
-        return levelQualifier.get(pronoteQualifier);
+    private String convertLevelQualifier(PortalControllerContext ctx, String docId, String clientId,String pronoteCode, String pronoteLabel) {
+        return conversionService.convert(ctx, docId, clientId, "L", pronoteCode, pronoteLabel);
+    }
+    
+    /**
+     * Convert the local qualifier to the standard one
+     * 
+     * @param pronoteQualifier
+     * @return the supported qualifier, or null
+     */
+    private String convertSubjectQualifier(PortalControllerContext ctx, String docId, String clientId,String pronoteCode, String pronoteLabel) {
+        return conversionService.convert(ctx, docId, clientId, "S", pronoteCode, pronoteLabel);
     }
 
     /**

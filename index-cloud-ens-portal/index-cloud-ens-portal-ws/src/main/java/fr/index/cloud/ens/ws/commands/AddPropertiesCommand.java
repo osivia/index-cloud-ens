@@ -25,32 +25,27 @@ import fr.toutatice.portail.cms.nuxeo.api.INuxeoCommand;
  * @author Jean-Sébastien Steux
  * @see INuxeoCommand
  */
-public class PublishCommand implements INuxeoCommand {
+public class AddPropertiesCommand implements INuxeoCommand {
     
-    private final static String DEFAULT_FORMAT = "default";
+
     
 
     /** Parent identifier. */
     private final Document doc;
 
     
-
-    /** organization */
-    String organization;
-
-    /** publication target */    
-    PublishBean publishBean;
+    /** meta-datas */
+    Map<String, String> qualifiers;
     
+  
     /**
      * Constructor.
      */
-    public PublishCommand(Document doc,  PublishBean publishBean, String organization) {
+    public AddPropertiesCommand(Document doc,  Map<String, String> qualifiers) {
         super();
         this.doc = doc;
-        this.organization= organization;
+        this.qualifiers = qualifiers;
 
-
-        this.publishBean = publishBean;
     }
 
 
@@ -63,41 +58,30 @@ public class PublishCommand implements INuxeoCommand {
          
         PropertyMap properties = new PropertyMap();        
         
-
-        Boolean enabledLink = doc.getProperties().getBoolean("rshr:enabledLink", false) ;
-        if( !enabledLink)
-            properties.set( "rshr:enabledLink", true);
+   
           
-       
-        documentService.update(doc, properties);
+        
+        PropertyList levels = doc.getProperties().getList( "idxcl:levels");
+        if( levels == null)
+            levels = new PropertyList();
+        
+        if( CommandUtils.addToList( levels, qualifiers.get("level")))
+            properties.set("idxcl:levels", CommandUtils.convertToString(levels));
+        
+        PropertyList subjects = doc.getProperties().getList( "idxcl:subjects");
+        if( subjects == null)
+            subjects = new PropertyList();
+        
+        if( CommandUtils.addToList( subjects, qualifiers.get("subject")))
+            properties.set("idxcl:subjects", CommandUtils.convertToString(subjects));     
+        
+   
+        
+        if( properties.size() > 0)
+            documentService.update(doc, properties);
         
 
-        
-        PropertyMap value = new PropertyMap();
-        String pubId = IDGenerator.generateId();
-        value.set("pubId", pubId);
-        
-
-        value.set("pubOrganization", organization);
-        value.set("pubGroup", publishBean.getPubGroup());   
-        value.set("pubContext",publishBean.getPubContext());
-        value.set("pubSchoolYear",publishBean.getPubSchoolYear());
-        
-        value.set("pubDate", new Date(System.currentTimeMillis()));
-        
-         // Operation request
-        OperationRequest request = nuxeoSession.newRequest("Document.AddComplexProperty");
-        request.setInput(doc);
-        request.set("xpath", "rshr:targets");
-        request.set("value", value);
-        
-        request.execute();        
-        
-        // Return 
-        Map<String, String> returnMap = new HashMap<>();
-        returnMap.put("pubId",pubId);
-     
-        return returnMap;
+        return null;
     }
 
 

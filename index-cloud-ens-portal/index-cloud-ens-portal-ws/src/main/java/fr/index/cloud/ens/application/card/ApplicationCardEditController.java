@@ -123,7 +123,7 @@ public class ApplicationCardEditController {
 
 
     /**
-     * Get person edition form model attribute.
+     * Get application edition form model attribute.
      * 
      * @param request portlet request
      * @param response portlet response

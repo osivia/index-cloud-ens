@@ -106,6 +106,33 @@
             <title>Application creation plugin</title>
         </portlet-info>
     </portlet>
+    
+    
+    <portlet>
+        <portlet-name>index-cloud-portal-ens-conversion-adminPortlet</portlet-name>
+        <portlet-class>org.springframework.web.portlet.DispatcherPortlet</portlet-class>
+
+        <init-param>
+            <name>contextClass</name>
+            <value>org.osivia.portal.api.portlet.AnnotationPortletApplicationContext</value>
+        </init-param>
+        <init-param>
+            <name>contextConfigLocation</name>
+            <value>fr.index.cloud.ens.conversion.admin.ConversionAdminConfiguration</value>
+        </init-param>
+        
+        <expiration-cache>0</expiration-cache>
+
+		<supports>
+            <mime-type>text/html</mime-type>
+            <portlet-mode>view</portlet-mode>
+        </supports>
+        
+		<portlet-info>
+			<title>Conversion management</title>
+		</portlet-info>
+	</portlet>
+    
 
 	<portlet>
         <portlet-name>index-cloud-portal-ens-ws</portlet-name>

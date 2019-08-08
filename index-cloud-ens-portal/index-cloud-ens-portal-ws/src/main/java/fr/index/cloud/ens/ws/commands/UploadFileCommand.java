@@ -35,19 +35,18 @@ public class UploadFileCommand implements INuxeoCommand {
     /** Synchronized ES indexation flag. */
     public static final String ES_SYNC_FLAG = "nx_es_sync";
     
-    /** meta-datas */
-    Map<String,String> qualifiers;
+
 
 
     /**
      * Constructor.
      */
-    public UploadFileCommand(String parentId, MultipartFile file, Map<String,String> qualifiers) {
+    public UploadFileCommand(String parentId, MultipartFile file) {
         super();
         this.parentId = parentId;
         this.file = file;
         this.overwite = true;
-        this.qualifiers = qualifiers;
+
     }
 
 
@@ -65,16 +64,7 @@ public class UploadFileCommand implements INuxeoCommand {
 
         Document doc = (Document) operationRequest.execute();
         
-        DocumentService documentService = nuxeoSession.getAdapter(DocumentService.class);
-        
-        
-        PropertyMap properties = new PropertyMap();     
-        
-        CommandUtils.addToList(doc, properties,  qualifiers.get("level"), "idxcl:levels");        
-        CommandUtils.addToList(doc, properties,  qualifiers.get("subject"), "idxcl:subjects");       
-        
-        documentService.update(doc, properties);
-        
+         
         return doc;
     }
 
