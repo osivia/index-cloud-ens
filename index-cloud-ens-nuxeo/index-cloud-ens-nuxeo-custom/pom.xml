@@ -13,7 +13,12 @@
     
 	<packaging>jar</packaging>
     
-    <name>Cloud enseignant - Custom Nuxeo</name>  
+    <name>Cloud enseignant - Custom Nuxeo</name>
+    
+    <properties>
+    	<opentoutatice.version>4.7.6</opentoutatice.version>
+    </properties>
+    
     
     <dependencyManagement>
         <dependencies>
@@ -38,12 +43,12 @@
         <dependency>
             <groupId>opentoutatice-ecm.elasticsearch</groupId>
             <artifactId>opentoutatice-addon-elasticsearch-ecm</artifactId>
-            <version>${ottc.es.version}</version>
+            <version>4.7</version>
         </dependency>
         <dependency>
             <groupId>opentoutatice-ecm.elasticsearch-customizer</groupId>
             <artifactId>opentoutatice-addon-elasticsearch-customizer-ecm</artifactId>
-            <version>${ottc.es.custom.version}</version>
+            <version>4.7</version>
         </dependency>
     </dependencies>
 

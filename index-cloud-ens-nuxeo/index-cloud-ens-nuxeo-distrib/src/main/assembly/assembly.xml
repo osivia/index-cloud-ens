@@ -29,8 +29,6 @@
 				</include>
 				<include>opentoutatice-ecm.platform:opentoutatice-ecm-platform-reporting:jar:${opentoutatice.version}
                 </include>
-				<include>opentoutatice-ecm.platform:opentoutatice-core-type-enricher:jar:${opentoutatice.version}
-                </include>                
 
 				<!-- Add ons -->				
 				<include>opentoutatice-ecm.elasticsearch:opentoutatice-addon-elasticsearch-ecm:jar:${ottc.es.version}
@@ -41,40 +39,32 @@
 				</include>
 				<include>opentoutatice-ecm.portal-notifications:opentoutatice-addon-portal-notifications-ecm:jar:${ottc.notif.version}
 				</include>
-				<!-- 
 				<include>opentoutatice-ecm.ui:opentoutatice-addon-simple-ui-ecm:jar:${ottc.ui.version}
 				</include>
 				<include>opentoutatice-ecm.workflows-integration:opentoutatice-addon-workflows-integration-ecm:jar:${ottc.wf.version}
 				</include>
-				 -->
 				<include>opentoutatice-ecm.collab-tools:opentoutatice-collab-tools-ecm:jar:${ottc.collab.version}
 				</include>
-				<!-- 
 				<include>opentoutatice-ecm.drive:opentoutatice-drive:jar:${ottc.drive.version}
 				</include>
-				 -->
 				<include>opentoutatice-ecm.generic-ui-service:opentoutatice-generic-ui-service-ecm:jar:${ottc.generic-ui.version}
 				</include>
 				<include>opentoutatice-ecm.elasticsearch-customizer:opentoutatice-addon-elasticsearch-customizer-ecm:jar:${ottc.es.custom.version}
 				</include>
 				<include>opentoutatice-ecm.procedures:opentoutatice-addon-procedures-ecm:jar:${ottc.procedure.version}
 				</include>
-				<!-- 
 				<include>opentoutatice-ecm.checkin:opentoutatice-addon-checkin-ecm:jar:${ottc.checkin.version}
 				</include>
-				 -->
 				<include>opentoutatice-ecm.monitoring:opentoutatice-monitoring-ecm:jar:${ottc.monitoring.version}
                 </include>
-                <!-- 
 				<include>opentoutatice-ecm.web-mode:opentoutatice-web-mode-ecm:jar:${webmode.version}
                 </include>  
                 <include>opentoutatice-ecm.news:opentoutatice-addon-news-ecm:jar:${ottc.news.version}
-                </include>				 -->
+                </include>              
 				<include>opentoutatice-ecm.jwt:opentoutatice-addon-jwt-ecm:jar:${ottc.jwt.version}
                 </include>     
                 <include>opentoutatice-ecm.onlyoffice:opentoutatice-addon-onlyoffice-ecm:jar:${ottc.onlyoffice.version}
 				</include>
-
 				<!-- Login & SSO -->
 				<include>org.nuxeo.ecm.platform:nuxeo-platform-login-portal-sso:jar:${nuxeo.version}
 				</include>
@@ -134,7 +124,7 @@
 				<!-- Login & SSO -->
 				<include>org.nuxeo.ecm.platform:nuxeo-platform-login-cas2:jar:${nuxeo.version}
 				</include>
-				<!-- Nuxeo Drive 
+				<!-- Nuxeo Drive -->
 				<include>org.nuxeo.ecm:nuxeo-drive-core:jar:${nuxeodrive.version}
 				</include>
 				<include>org.nuxeo.ecm:nuxeo-drive-jsf:jar:${nuxeodrive.version}
@@ -144,7 +134,7 @@
 				<include>org.nuxeo.lib.core:nuxeo-core-storage-sql-extensions:jar:${nuxeodrive.version}
 				</include>
 				<include>org.nuxeo.lib.wss:nuxeo-wss-front:jar:${nuxeodrive.version}
-				</include>-->
+				</include>
 				<!-- Platform explorer -->
 				<include>org.nuxeo.ecm.platform:nuxeo-apidoc-core:jar:${nuxeo.version}
 				</include>
@@ -202,7 +192,6 @@
 			<!-- Surcharges -->
 			<excludes>
 				<exclude>lib/log4j.xml</exclude>
-				<exclude>templates/common/config/blacklist.nxftl</exclude>
 			</excludes>
 		</fileSet>
 
