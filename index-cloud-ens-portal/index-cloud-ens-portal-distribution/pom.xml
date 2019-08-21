@@ -179,6 +179,7 @@
     
         <!-- Development environment -->
         <profile>
+            <id>environment</id>
             <activation>
                 <property>
                     <name>env</name>

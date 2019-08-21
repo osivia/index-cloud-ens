@@ -17,7 +17,6 @@
     
     
     <properties>
-        
         <!-- Toutatice -->
         <toutatice.version>4.9-SNAPSHOT</toutatice.version>
         
@@ -111,34 +110,20 @@
     <build>
         <pluginManagement>
             <plugins>
-            
+
                 <!-- Compiler -->
                 <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-compiler-plugin</artifactId>
-                    <version>3.3</version>
                     <configuration>
-                        <encoding>UTF-8</encoding>
-                        <source>1.7</source>
-                        <target>1.7</target>
+                        <source>1.8</source>
+                        <target>1.8</target>
                     </configuration>
                 </plugin>
-                
-                <!-- Resources -->
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-resources-plugin</artifactId>
-                    <version>2.7</version>
-                    <configuration>
-                        <encoding>UTF-8</encoding>
-                    </configuration>
-                </plugin>
-            
+
                 <!-- WAR -->
                 <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-war-plugin</artifactId>
-                    <version>2.6</version>
+                    <version>3.2.3</version>
                     <configuration>
                         <archive>
                             <manifest>
@@ -150,9 +135,8 @@
                 
                 <!-- EAR -->
                 <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-ear-plugin</artifactId>
-                    <version>2.10.1</version>
+                    <version>3.0.1</version>
                     <configuration>
                         <archive>
                             <manifest>
@@ -208,23 +192,20 @@
 
                 <!-- AntRun -->
                 <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-antrun-plugin</artifactId>
                     <version>1.8</version>
                 </plugin>
                 
                 <!-- Dependency -->
                 <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-dependency-plugin</artifactId>
-                    <version>2.10</version>
+                    <version>3.1.1</version>
                 </plugin>
-                
+
                 <!-- Assembly -->
                 <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-assembly-plugin</artifactId>
-                    <version>2.6</version>
+                    <version>3.1.1</version>
                 </plugin>
             
             </plugins>

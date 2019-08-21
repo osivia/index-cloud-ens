@@ -36,8 +36,8 @@
                 <include>org.osivia.services.cgu:osivia-services-cgu-portail:war:${cgu.version}</include>     
 				<include>org.osivia.services:osivia-services-onlyoffice:war:${onlyoffice.version}</include>    
 				<include>org.osivia.services:osivia-services-document-creation:war:${document-creation.version}</include>    
-			                       
             </includes>
+            <useProjectArtifact>false</useProjectArtifact>
         </dependencySet>
         
         <dependencySet>
@@ -56,8 +56,8 @@
                 <include>com.fasterxml.jackson.core:jackson-core:jar:${jackson.version}</include>     
                 <include>com.fasterxml.jackson.core:jackson-databind:jar:${jackson.version}</include>                    
                 <include>com.fasterxml.jackson.core:jackson-annotations:jar:${jackson.version}</include>                    
-
             </includes>
+            <useProjectArtifact>false</useProjectArtifact>
         </dependencySet>
     </dependencySets>
 
