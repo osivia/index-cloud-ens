@@ -4,6 +4,7 @@ import fr.index.cloud.ens.taskbar.portlet.model.Taskbar;
 import fr.index.cloud.ens.taskbar.portlet.service.TaskbarService;
 import net.sf.json.JSONArray;
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.math.NumberUtils;
 import org.osivia.portal.api.context.PortalControllerContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -77,6 +78,24 @@ public class TaskbarViewController {
         PortalControllerContext portalControllerContext = new PortalControllerContext(portletContext, request, response);
 
         this.service.drop(portalControllerContext, Arrays.asList(StringUtils.split(sourceIds, ",")), targetId);
+    }
+
+
+    /**
+     * Search action mapping.
+     *
+     * @param request  action request
+     * @param response action response
+     * @param id       saved search identifier request parameter
+     */
+    @ActionMapping("search")
+    public void search(ActionRequest request, ActionResponse response, @RequestParam("id") String id) throws PortletException, IOException {
+        // Portal controller context
+        PortalControllerContext portalControllerContext = new PortalControllerContext(this.portletContext, request, response);
+
+        // Redirection
+        String url = this.service.getSavedSearchUrl(portalControllerContext, NumberUtils.toInt(id));
+        response.sendRedirect(url);
     }
 
 

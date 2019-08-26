@@ -6,6 +6,7 @@ import fr.index.cloud.ens.taskbar.portlet.model.Task;
 import fr.index.cloud.ens.taskbar.portlet.model.TaskbarWindowProperties;
 import org.osivia.portal.api.context.PortalControllerContext;
 import org.osivia.portal.api.taskbar.TaskbarTask;
+import org.osivia.portal.api.user.UserSavedSearch;
 
 import javax.portlet.PortletException;
 import java.io.IOException;
@@ -68,6 +69,34 @@ public interface TaskbarRepository {
      * @return folder children
      */
     SortedSet<FolderTask> getFolderChildren(PortalControllerContext portalControllerContext, String basePath, String path) throws PortletException;
+
+
+    /**
+     * Get saved searches tasks.
+     *
+     * @param portalControllerContext portal controller context
+     * @return tasks
+     */
+    List<Task> getSavedSearchesTasks(PortalControllerContext portalControllerContext) throws PortletException;
+
+
+    /**
+     * Get search path.
+     *
+     * @param portalControllerContext portal controller context
+     * @return path
+     */
+    String getSearchPath(PortalControllerContext portalControllerContext) throws PortletException;
+
+
+    /**
+     * Get saved search.
+     *
+     * @param portalControllerContext portal controller context
+     * @param id                      saved search identifier
+     * @return saved search
+     */
+    UserSavedSearch getSavedSearch(PortalControllerContext portalControllerContext, int id) throws PortletException;
 
 
     /**

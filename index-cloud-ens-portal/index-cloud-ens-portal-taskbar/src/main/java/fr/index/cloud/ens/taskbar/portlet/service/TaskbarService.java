@@ -60,6 +60,16 @@ public interface TaskbarService {
 
 
     /**
+     * Get saved search URL.
+     *
+     * @param portalControllerContext portal controller context
+     * @param id                      saved search identifier
+     * @return URL
+     */
+    String getSavedSearchUrl(PortalControllerContext portalControllerContext, int id) throws PortletException;
+
+
+    /**
      * Get folder children.
      *
      * @param portalControllerContext portal controller context

@@ -1,10 +1,8 @@
 package fr.index.cloud.ens.taskbar.portlet.repository;
 
-import fr.index.cloud.ens.taskbar.portlet.model.AddDropdownItem;
-import fr.index.cloud.ens.taskbar.portlet.model.FolderTask;
-import fr.index.cloud.ens.taskbar.portlet.model.Task;
-import fr.index.cloud.ens.taskbar.portlet.model.TaskbarWindowProperties;
+import fr.index.cloud.ens.taskbar.portlet.model.*;
 import fr.index.cloud.ens.taskbar.portlet.model.comparator.FolderTaskComparator;
+import fr.index.cloud.ens.taskbar.portlet.model.comparator.SavedSearchComparator;
 import fr.index.cloud.ens.taskbar.portlet.repository.command.MoveDocumentsCommand;
 import fr.toutatice.portail.cms.nuxeo.api.INuxeoCommand;
 import fr.toutatice.portail.cms.nuxeo.api.NuxeoController;
@@ -23,6 +21,7 @@ import org.osivia.portal.api.Constants;
 import org.osivia.portal.api.PortalException;
 import org.osivia.portal.api.cms.DocumentType;
 import org.osivia.portal.api.cms.FileMimeType;
+import org.osivia.portal.api.cms.VirtualNavigationUtils;
 import org.osivia.portal.api.context.PortalControllerContext;
 import org.osivia.portal.api.html.DOM4JUtils;
 import org.osivia.portal.api.internationalization.Bundle;
@@ -31,12 +30,14 @@ import org.osivia.portal.api.taskbar.ITaskbarService;
 import org.osivia.portal.api.taskbar.TaskbarTask;
 import org.osivia.portal.api.urls.IPortalUrlFactory;
 import org.osivia.portal.api.urls.PortalUrlType;
+import org.osivia.portal.api.user.UserPreferences;
+import org.osivia.portal.api.user.UserSavedSearch;
 import org.osivia.portal.core.cms.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Repository;
 
-import javax.portlet.PortletException;
+import javax.portlet.*;
 import java.io.IOException;
 import java.util.*;
 
@@ -100,6 +101,10 @@ public class TaskbarRepositoryImpl implements TaskbarRepository {
      */
     @Autowired
     private FolderTaskComparator folderTaskComparator;
+
+    /** Saved search comparator. */
+    @Autowired
+    private SavedSearchComparator savedSearchComparator;
 
 
     /**
@@ -538,6 +543,159 @@ public class TaskbarRepositoryImpl implements TaskbarRepository {
             }
         }
         return acceptedTypes;
+    }
+
+
+    @Override
+    public List<Task> getSavedSearchesTasks(PortalControllerContext portalControllerContext) throws PortletException {
+        // Portlet response
+        PortletResponse portletResponse = portalControllerContext.getResponse();
+        // MIME response
+        MimeResponse mimeResponse;
+        if (portletResponse instanceof MimeResponse) {
+            mimeResponse = (MimeResponse) portletResponse;
+        } else {
+            mimeResponse = null;
+        }
+
+        // User preferences
+        UserPreferences userPreferences = this.getUserPreferences(portalControllerContext);
+        // Saved searches
+        List<UserSavedSearch> savedSearches = userPreferences.getSavedSearches();
+
+
+        // Tasks
+        List<Task> tasks;
+        if ((mimeResponse == null) || CollectionUtils.isEmpty(savedSearches)) {
+            tasks = null;
+        } else {
+            tasks = new ArrayList<>(savedSearches.size());
+
+            // Sort
+            Collections.sort(savedSearches, this.savedSearchComparator);
+
+            for (UserSavedSearch savedSearch : savedSearches) {
+                // Action URL
+                PortletURL actionUrl = mimeResponse.createActionURL();
+                actionUrl.setParameter(ActionRequest.ACTION_NAME, "search");
+                actionUrl.setParameter("id", String.valueOf(savedSearch.getId()));
+
+                // Task
+                ServiceTask task = this.applicationContext.getBean(ServiceTask.class);
+                task.setIcon("glyphicons glyphicons-basic-filter");
+                task.setDisplayName(savedSearch.getDisplayName());
+                task.setUrl(actionUrl.toString());
+
+                tasks.add(task);
+            }
+        }
+
+        return tasks;
+    }
+
+
+    @Override
+    public String getSearchPath(PortalControllerContext portalControllerContext) throws PortletException {
+        // CMS service
+        ICMSService cmsService = this.cmsServiceLocator.getCMSService();
+        // CMS context
+        CMSServiceCtx cmsContext = new CMSServiceCtx();
+        cmsContext.setPortalControllerContext(portalControllerContext);
+
+        // User workspace
+        CMSItem userWorkspace;
+        try {
+            userWorkspace = cmsService.getUserWorkspace(cmsContext);
+        } catch (CMSException e) {
+            throw new PortletException(e);
+        }
+
+        // Navigation tasks
+        List<TaskbarTask> navigationTasks;
+        if (userWorkspace == null) {
+            navigationTasks = null;
+        } else {
+            try {
+                navigationTasks = this.taskbarService.getTasks(portalControllerContext, userWorkspace.getCmsPath());
+            } catch (PortalException e) {
+                throw new PortletException(e);
+            }
+        }
+
+        // Search taskbar task
+        TaskbarTask searchTask = null;
+        if (CollectionUtils.isNotEmpty(navigationTasks)) {
+            Iterator<TaskbarTask> iterator = navigationTasks.iterator();
+
+            while ((searchTask == null) && iterator.hasNext()) {
+                TaskbarTask task = iterator.next();
+
+                // Task staple identifier
+                String stapleId = VirtualNavigationUtils.getStapleId(task.getPath());
+
+                if (StringUtils.equals(ITaskbarService.SEARCH_TASK_ID, stapleId)) {
+                    searchTask = task;
+                }
+            }
+        }
+
+        // Search path
+        String path;
+        if (searchTask == null) {
+            path = null;
+        } else {
+            path = searchTask.getPath();
+        }
+
+        return path;
+    }
+
+
+    @Override
+    public UserSavedSearch getSavedSearch(PortalControllerContext portalControllerContext, int id) throws PortletException {
+        // User preferences
+        UserPreferences userPreferences = this.getUserPreferences(portalControllerContext);
+        // Saved searches
+        List<UserSavedSearch> savedSearches = userPreferences.getSavedSearches();
+
+        // Saved search
+        UserSavedSearch savedSearch = null;
+        if (CollectionUtils.isNotEmpty(savedSearches)) {
+            Iterator<UserSavedSearch> iterator = savedSearches.iterator();
+            while ((savedSearch == null) && iterator.hasNext()) {
+                UserSavedSearch item = iterator.next();
+                if (id == item.getId()) {
+                    savedSearch = item;
+                }
+            }
+        }
+
+        return savedSearch;
+    }
+
+
+    /**
+     * Get user preferences.
+     *
+     * @param portalControllerContext portal controller context
+     * @return user preferences
+     */
+    private UserPreferences getUserPreferences(PortalControllerContext portalControllerContext) throws PortletException {
+        // CMS service
+        ICMSService cmsService = this.cmsServiceLocator.getCMSService();
+        // CMS context
+        CMSServiceCtx cmsContext = new CMSServiceCtx();
+        cmsContext.setPortalControllerContext(portalControllerContext);
+
+        // User preferences
+        UserPreferences userPreferences;
+        try {
+            userPreferences = cmsService.getUserPreferences(portalControllerContext);
+        } catch (PortalException e) {
+            throw new PortletException(e);
+        }
+
+        return userPreferences;
     }
 
 

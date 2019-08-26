@@ -21,6 +21,7 @@ import org.osivia.portal.api.taskbar.TaskbarItem;
 import org.osivia.portal.api.taskbar.TaskbarItemType;
 import org.osivia.portal.api.taskbar.TaskbarTask;
 import org.osivia.portal.api.urls.IPortalUrlFactory;
+import org.osivia.portal.api.user.UserSavedSearch;
 import org.osivia.portal.api.windows.PortalWindow;
 import org.osivia.portal.api.windows.WindowFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -140,11 +141,6 @@ public class TaskbarServiceImpl implements TaskbarService {
             throw new PortletException(e);
         }
 
-        
-
-
-
-
 
         // Tasks
         List<Task> tasks = new ArrayList<>();
@@ -173,7 +169,7 @@ public class TaskbarServiceImpl implements TaskbarService {
         Task filtersTitle = this.applicationContext.getBean(FiltersTitleTask.class);
         tasks.add(filtersTitle);
         // Search
-        TaskbarTask search = this.extractVirtualStaple(portalControllerContext, navigationTasks,  "SEARCH");
+        TaskbarTask search = this.extractVirtualStaple(portalControllerContext, navigationTasks, "SEARCH");
         if (search != null) {
             Task task = this.createTask(portalControllerContext, basePath, bundle, activeId, search);
             SearchTask searchTask = this.applicationContext.getBean(SearchTask.class);
@@ -181,9 +177,14 @@ public class TaskbarServiceImpl implements TaskbarService {
             tasks.add(searchTask);
         }
         // Recent items
-        TaskbarTask recentItems = this.extractVirtualStaple(portalControllerContext, navigationTasks,  "RECENT_ITEMS");
+        TaskbarTask recentItems = this.extractVirtualStaple(portalControllerContext, navigationTasks, "RECENT_ITEMS");
         if (recentItems != null) {
             tasks.add(this.createTask(portalControllerContext, basePath, bundle, activeId, recentItems));
+        }
+        // Saved searches
+        List<Task> savedSearches = this.repository.getSavedSearchesTasks(portalControllerContext);
+        if (CollectionUtils.isNotEmpty(savedSearches)) {
+            tasks.addAll(savedSearches);
         }
 
 
@@ -234,12 +235,12 @@ public class TaskbarServiceImpl implements TaskbarService {
      * Extract task from virtual navigation.
      *
      * @param portalControllerContext the portal controller context
-     * @param navigationTasks the navigation tasks
-     * @param targetTaskbarItemId the target taskbar item id
+     * @param navigationTasks         the navigation tasks
+     * @param targetTaskbarItemId     the target taskbar item id
      * @return the taskbar task
      * @throws PortletException the portlet exception
      */
-    
+
     private TaskbarTask extractVirtualStaple(PortalControllerContext portalControllerContext, List<TaskbarTask> navigationTasks,
                                              String targetTaskbarItemId) throws PortletException {
         TaskbarTask task = null;
@@ -406,6 +407,37 @@ public class TaskbarServiceImpl implements TaskbarService {
 
         // Update public render parameter for associated portlets refresh
         response.setRenderParameter("dnd-update", String.valueOf(System.currentTimeMillis()));
+    }
+
+
+    @Override
+    public String getSavedSearchUrl(PortalControllerContext portalControllerContext, int id) throws PortletException {
+        // Saved search
+        UserSavedSearch savedSearch = this.repository.getSavedSearch(portalControllerContext, id);
+
+        // Search path
+        String path = this.repository.getSearchPath(portalControllerContext);
+
+        // URL
+        String url;
+        if ((savedSearch == null) || StringUtils.isEmpty(path)) {
+            url = null;
+        } else {
+            // Selectors
+            String selectors = savedSearch.getData();
+
+            // Page parameters
+            Map<String, String> parameters = new HashMap<>(1);
+            if (StringUtils.isNotEmpty(selectors)) {
+                parameters.put("selectors", selectors);
+            }
+
+            // CMS URL
+            url = this.portalUrlFactory.getCMSUrl(portalControllerContext, null, path, parameters, null, null, null, null,
+                    null, null);
+        }
+
+        return url;
     }
 
 
