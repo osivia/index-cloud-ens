@@ -7,6 +7,8 @@ import org.osivia.portal.api.cms.VirtualNavigationUtils;
 import org.osivia.portal.api.context.PortalControllerContext;
 import org.osivia.portal.api.taskbar.ITaskbarService;
 import org.osivia.portal.api.taskbar.TaskbarTask;
+import org.osivia.portal.api.user.UserPreferences;
+import org.osivia.portal.api.user.UserSavedSearch;
 import org.osivia.portal.core.cms.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -97,6 +99,35 @@ public class SearchCommonRepositoryImpl implements SearchCommonRepository {
         }
 
         return path;
+    }
+
+
+    @Override
+    public UserPreferences getUserPreferences(PortalControllerContext portalControllerContext) throws PortletException {
+        // CMS service
+        ICMSService cmsService = this.cmsServiceLocator.getCMSService();
+        // CMS context
+        CMSServiceCtx cmsContext = new CMSServiceCtx();
+        cmsContext.setPortalControllerContext(portalControllerContext);
+
+        // User preferences
+        UserPreferences userPreferences;
+        try {
+            userPreferences = cmsService.getUserPreferences(portalControllerContext);
+        } catch (PortalException e) {
+            throw new PortletException(e);
+        }
+
+        return userPreferences;
+    }
+
+
+    @Override
+    public List<UserSavedSearch> getSavedSearches(PortalControllerContext portalControllerContext) throws PortletException {
+        // User preferences
+        UserPreferences userPreferences = this.getUserPreferences(portalControllerContext);
+
+        return userPreferences.getSavedSearches();
     }
 
 }

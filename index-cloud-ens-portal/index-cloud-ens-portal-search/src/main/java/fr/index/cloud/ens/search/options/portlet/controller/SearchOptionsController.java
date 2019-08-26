@@ -61,7 +61,7 @@ public class SearchOptionsController {
      * @param form          search options form model attribute
      * @param sessionStatus session status
      */
-    @ActionMapping("search")
+    @ActionMapping(name = "submit", params = "search")
     public void search(ActionRequest request, ActionResponse response, @ModelAttribute("form") SearchOptionsForm form, SessionStatus sessionStatus) throws PortletException, IOException {
         // Portal Controller context
         PortalControllerContext portalControllerContext = new PortalControllerContext(this.portletContext, request, response);
@@ -77,13 +77,31 @@ public class SearchOptionsController {
 
 
     /**
+     * Save search action mapping.
+     *
+     * @param request  action request
+     * @param response action response
+     * @param form     search options form model attribute
+     */
+    @ActionMapping(name = "submit", params = "saveSearchPopoverCallback")
+    public void saveSearch(ActionRequest request, ActionResponse response, @ModelAttribute("form") SearchOptionsForm form) throws PortletException, IOException {
+        // Portal controller context
+        PortalControllerContext portalControllerContext = new PortalControllerContext(portletContext, request, response);
+
+        // Redirection
+        String url = this.service.saveSearch(portalControllerContext, form);
+        response.sendRedirect(url);
+    }
+
+
+    /**
      * Clear location action mapping.
      *
      * @param request  action request
      * @param response action response
      * @param form     search options form model attribute
      */
-    @ActionMapping("clear-location")
+    @ActionMapping(name="submit", params = "clearLocation")
     public void clearLocation(ActionRequest request, ActionResponse response, @ModelAttribute("form") SearchOptionsForm form) throws PortletException {
         // Portal Controller context
         PortalControllerContext portalControllerContext = new PortalControllerContext(this.portletContext, request, response);
@@ -99,7 +117,7 @@ public class SearchOptionsController {
      * @param response resource response
      * @param filter   select2 filter request parameter
      */
-    @ResourceMapping("loadLevels")
+    @ResourceMapping("load-levels")
     public void loadLevels(ResourceRequest request, ResourceResponse response, @RequestParam(name = "filter", required = false) String filter) throws PortletException, IOException {
         // Portal controller context
         PortalControllerContext portalControllerContext = new PortalControllerContext(portletContext, request, response);
@@ -114,6 +132,26 @@ public class SearchOptionsController {
         PrintWriter printWriter = new PrintWriter(response.getPortletOutputStream());
         printWriter.write(results.toString());
         printWriter.close();
+    }
+
+
+    /**
+     * Save search popover resource mapping.
+     *
+     * @param request  resource request
+     * @param response resource response
+     */
+    @ResourceMapping("save-search-popover")
+    public void saveSearchPopover(ResourceRequest request, ResourceResponse response) throws PortletException, IOException {
+        // Portal controller context
+        PortalControllerContext portalControllerContext = new PortalControllerContext(portletContext, request, response);
+
+        // View path
+        String path = this.service.resolveViewPath(portalControllerContext, "save-search-popover");
+
+        // Portlet request dispatcher
+        PortletRequestDispatcher dispatcher = this.portletContext.getRequestDispatcher(path);
+        dispatcher.include(request, response);
     }
 
 

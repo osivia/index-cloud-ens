@@ -15,12 +15,4 @@ import java.util.List;
  */
 public interface SavedSearchesRepository extends SearchCommonRepository {
 
-    /**
-     * Get saved searches.
-     *
-     * @param portalControllerContext portal controller context
-     * @return saved searches
-     */
-    List<UserSavedSearch> getSavedSearches(PortalControllerContext portalControllerContext) throws PortletException;
-
 }

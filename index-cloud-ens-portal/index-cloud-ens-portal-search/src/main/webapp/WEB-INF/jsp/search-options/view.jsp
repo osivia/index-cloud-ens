@@ -8,13 +8,13 @@
 <%@ page isELIgnored="false" %>
 
 
-<portlet:actionURL name="search" var="searchUrl"/>
-<portlet:actionURL name="clear-location" var="clearLocationUrl"/>
+<portlet:actionURL name="submit" var="submitUrl"/>
 
-<portlet:resourceURL id="loadLevels" var="loadLevelsUrl"/>
+<portlet:resourceURL id="load-levels" var="loadLevelsUrl"/>
+<portlet:resourceURL id="save-search-popover" var="saveSearchPopoverUrl"/>
 
 
-<form:form action="${searchUrl}" method="post" modelAttribute="form">
+<form:form action="${submitUrl}" method="post" modelAttribute="form">
     <%--Level--%>
     <div class="form-group row">
         <form:label path="level" cssClass="col-md-3 col-form-label"><op:translate
@@ -29,7 +29,8 @@
                     </c:when>
 
                     <c:otherwise>
-                        <form:option value="${form.level}"><ttc:vocabularyLabel name="idx_level" key="${form.level}"/></form:option>
+                        <form:option value="${form.level}"><ttc:vocabularyLabel name="idx_level"
+                                                                                key="${form.level}"/></form:option>
                     </c:otherwise>
                 </c:choose>
             </form:select>
@@ -51,9 +52,9 @@
         </div>
         <c:if test="${not empty form.location}">
             <div class="col-md-3">
-                <a href="${clearLocationUrl}" class="btn btn-link">
+                <button type="button" class="btn btn-link" data-clear-location>
                     <small><op:translate key="SEARCH_OPTIONS_LOCATION_CLEAR"/></small>
-                </a>
+                </button>
             </div>
         </c:if>
     </div>
@@ -73,15 +74,31 @@
     <%--Buttons--%>
     <div class="row">
         <div class="col-md-9 offset-md-3">
-                <%--Submit--%>
-            <button type="submit" class="btn btn-primary">
-                <span><op:translate key="SEARCH_OPTIONS_SUBMIT"/></span>
-            </button>
+            <div class="d-flex justify-content-between">
+                <div>
+                        <%--Save search--%>
+                    <button type="button" class="btn btn-outline-primary"
+                            data-save-search-popover="${saveSearchPopoverUrl}">
+                        <span><op:translate key="SEARCH_OPTIONS_SAVE"/></span>
+                    </button>
+                </div>
 
-                <%--Cancel--%>
-            <button type="button" class="btn btn-secondary ml-2" data-dismiss="modal">
-                <span><op:translate key="CANCEL"/></span>
-            </button>
+                <div class="text-right">
+                        <%--Cancel--%>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                        <span><op:translate key="CANCEL"/></span>
+                    </button>
+
+                        <%--Submit--%>
+                    <button type="submit" name="search" class="btn btn-primary">
+                        <span><op:translate key="SEARCH_OPTIONS_SUBMIT"/></span>
+                    </button>
+                </div>
+            </div>
         </div>
     </div>
+
+    <form:hidden path="savedSearchDisplayName"/>
+    <input type="submit" name="saveSearchPopoverCallback" class="d-none"/>
+    <input type="submit" name="clearLocation" class="d-none"/>
 </form:form>

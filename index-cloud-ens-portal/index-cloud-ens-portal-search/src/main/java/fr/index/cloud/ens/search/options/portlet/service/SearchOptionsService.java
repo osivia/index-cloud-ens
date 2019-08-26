@@ -56,6 +56,16 @@ public interface SearchOptionsService extends SearchCommonService {
 
 
     /**
+     * Search search.
+     *
+     * @param portalControllerContext portal controller context
+     * @param form                    search options form
+     * @return URL
+     */
+    String saveSearch(PortalControllerContext portalControllerContext, SearchOptionsForm form) throws PortletException;
+
+
+    /**
      * Clear location.
      *
      * @param portalControllerContext portal controller context

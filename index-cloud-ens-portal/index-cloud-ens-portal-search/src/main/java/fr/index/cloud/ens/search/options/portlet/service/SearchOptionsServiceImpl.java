@@ -11,7 +11,6 @@ import fr.toutatice.portail.cms.nuxeo.api.services.dao.DocumentDAO;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang.CharEncoding;
 import org.apache.commons.lang.StringUtils;
 import org.osivia.portal.api.context.PortalControllerContext;
@@ -19,6 +18,8 @@ import org.osivia.portal.api.internationalization.Bundle;
 import org.osivia.portal.api.internationalization.IBundleFactory;
 import org.osivia.portal.api.page.PageParametersEncoder;
 import org.osivia.portal.api.urls.IPortalUrlFactory;
+import org.osivia.portal.api.user.UserPreferences;
+import org.osivia.portal.api.user.UserSavedSearch;
 import org.osivia.portal.api.windows.PortalWindow;
 import org.osivia.portal.api.windows.WindowFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -136,27 +137,9 @@ public class SearchOptionsServiceImpl extends SearchCommonServiceImpl implements
         if (StringUtils.isEmpty(path)) {
             url = null;
         } else {
-            // Selectors
-            Map<String, List<String>> selectors = new HashMap<>();
-            // Location
-            DocumentDTO location = form.getLocation();
-            if (location != null) {
-                selectors.put(LOCATION_SELECTOR_ID, Collections.singletonList(location.getPath()));
-            }
-            // Level
-            String level = form.getLevel();
-            if (StringUtils.isNotEmpty(level)) {
-                selectors.put(LEVEL_SELECTOR_ID, Collections.singletonList(level));
-            }
-            // Keywords
-            String keywords = form.getKeywords();
-            if (StringUtils.isNotEmpty(keywords)) {
-                selectors.put(KEYWORDS_SELECTOR_ID, Collections.singletonList(keywords));
-            }
-
             // Page parameters
             Map<String, String> parameters = new HashMap<>(1);
-            parameters.put(SELECTORS_PARAMETER, PageParametersEncoder.encodeProperties(selectors));
+            parameters.put(SELECTORS_PARAMETER, this.buildSelectorsParameter(form));
 
             // CMS URL
             url = this.portalUrlFactory.getCMSUrl(portalControllerContext, null, path, parameters, null, null, null, null,
@@ -164,6 +147,74 @@ public class SearchOptionsServiceImpl extends SearchCommonServiceImpl implements
         }
 
         return url;
+    }
+
+
+    @Override
+    public String saveSearch(PortalControllerContext portalControllerContext, SearchOptionsForm form) throws PortletException {
+        if (StringUtils.isNotBlank(form.getSavedSearchDisplayName())) {
+            // User preferences
+            UserPreferences userPreferences = this.repository.getUserPreferences(portalControllerContext);
+            // Saved searches
+            List<UserSavedSearch> savedSearches = userPreferences.getSavedSearches();
+            if (CollectionUtils.isEmpty(savedSearches)) {
+                savedSearches = new ArrayList<>(1);
+            }
+
+            // Search identifier
+            int max = 0;
+            for (UserSavedSearch savedSearch : savedSearches) {
+                max = Math.max(max, savedSearch.getId());
+            }
+            int id = max + 1;
+
+            // Search data
+            String data = this.buildSelectorsParameter(form);
+
+            // Saved search
+            UserSavedSearch savedSearch = new UserSavedSearch(id);
+            savedSearch.setDisplayName(form.getSavedSearchDisplayName());
+            savedSearch.setData(data);
+            savedSearches.add(savedSearch);
+
+            // Update user preferences
+            userPreferences.setSavedSearches(savedSearches);
+            userPreferences.setUpdate(true);
+        }
+
+        return this.getSearchRedirectionUrl(portalControllerContext, form);
+    }
+
+
+    /**
+     * Build selectors parameter.
+     *
+     * @param form search options form
+     * @return parameter
+     */
+    private String buildSelectorsParameter(SearchOptionsForm form) {
+        // Selectors
+        Map<String, List<String>> selectors = new HashMap<>();
+
+        // Location
+        DocumentDTO location = form.getLocation();
+        if (location != null) {
+            selectors.put(LOCATION_SELECTOR_ID, Collections.singletonList(location.getPath()));
+        }
+
+        // Level
+        String level = form.getLevel();
+        if (StringUtils.isNotEmpty(level)) {
+            selectors.put(LEVEL_SELECTOR_ID, Collections.singletonList(level));
+        }
+
+        // Keywords
+        String keywords = form.getKeywords();
+        if (StringUtils.isNotEmpty(keywords)) {
+            selectors.put(KEYWORDS_SELECTOR_ID, Collections.singletonList(keywords));
+        }
+
+        return PageParametersEncoder.encodeProperties(selectors);
     }
 
 

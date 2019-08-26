@@ -28,6 +28,11 @@ public class SearchOptionsForm {
      */
     private String keywords;
 
+    /**
+     * Saved search display name.
+     */
+    private String savedSearchDisplayName;
+
 
     public DocumentDTO getLocation() {
         return location;
@@ -51,5 +56,13 @@ public class SearchOptionsForm {
 
     public void setKeywords(String keywords) {
         this.keywords = keywords;
+    }
+
+    public String getSavedSearchDisplayName() {
+        return savedSearchDisplayName;
+    }
+
+    public void setSavedSearchDisplayName(String savedSearchDisplayName) {
+        this.savedSearchDisplayName = savedSearchDisplayName;
     }
 }
