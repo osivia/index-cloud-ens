@@ -1,12 +1,12 @@
 package fr.index.cloud.ens.search.portlet.service;
 
+import fr.index.cloud.ens.search.common.portlet.service.SearchCommonServiceImpl;
 import fr.index.cloud.ens.search.options.portlet.service.SearchOptionsService;
 import fr.index.cloud.ens.search.portlet.model.SearchForm;
 import fr.index.cloud.ens.search.portlet.model.SearchView;
 import fr.index.cloud.ens.search.portlet.model.SearchWindowProperties;
 import fr.index.cloud.ens.search.portlet.repository.SearchRepository;
 import fr.toutatice.portail.cms.nuxeo.api.PageSelectors;
-
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang.StringUtils;
@@ -28,38 +28,22 @@ import org.springframework.stereotype.Service;
 import javax.portlet.ActionResponse;
 import javax.portlet.PortletException;
 import javax.portlet.PortletRequest;
-import javax.portlet.PortletResponse;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Search portlet service implementation.
  *
  * @author Cédric Krommenhoek
+ * @see SearchCommonServiceImpl
  * @see SearchService
  */
 @Service
-public class SearchServiceImpl implements SearchService {
-
-    /**
-     * Selectors parameter.
-     */
-    private static final String SELECTORS_PARAMETER = "selectors";
+public class SearchServiceImpl extends SearchCommonServiceImpl implements SearchService {
 
     /**
      * Search view prefix.
      */
     private static final String VIEW_PREFIX = "view-";
-    
-    
-    /**
-     * Keywords selector identifier.
-     */
-    public static final String KEYWORDS_SELECTOR_ID = "search";
 
 
     /**
@@ -79,6 +63,14 @@ public class SearchServiceImpl implements SearchService {
      */
     @Autowired
     private IPortalUrlFactory portalUrlFactory;
+
+
+    /**
+     * Constructor.
+     */
+    public SearchServiceImpl() {
+        super();
+    }
 
 
     @Override
@@ -150,29 +142,6 @@ public class SearchServiceImpl implements SearchService {
         return form;
     }
 
-    /**
-     * Get selector value.
-     *
-     * @param selectors  selectors
-     * @param selectorId selector identifier
-     * @return value, may be null
-     */
-    public  String getSelectorValue(Map<String, List<String>> selectors, String selectorId) {
-        String value;
-        if (MapUtils.isEmpty(selectors)) {
-            value = null;
-        } else {
-            List<String> values = selectors.get(selectorId);
-            if (CollectionUtils.isEmpty(values)) {
-                value = null;
-            } else {
-                value = values.get(0);
-            }
-        }
-        return value;
-    }
-
-
 
     @Override
     public String getViewPath(PortalControllerContext portalControllerContext) throws PortletException {
@@ -227,10 +196,10 @@ public class SearchServiceImpl implements SearchService {
 
         // Portlet request
         PortletRequest request = portalControllerContext.getRequest();
-        
+
         // Portlet request
-        ActionResponse response = (ActionResponse) portalControllerContext.getResponse();        
-        
+        ActionResponse response = (ActionResponse) portalControllerContext.getResponse();
+
         // Current window properties
         SearchWindowProperties currentWindowProperties = this.getWindowProperties(portalControllerContext);
 
@@ -265,10 +234,10 @@ public class SearchServiceImpl implements SearchService {
                 // CMS URL
                 url = this.portalUrlFactory.getCMSUrl(portalControllerContext, null, path, parameters, null, null, null, null, null, null);
             }
-        }   else    {
+        } else {
             // AUTOSUBMIT : render parameters
             url = null;
-            
+
             Map<String, List<String>> selectors = PageSelectors.decodeProperties(request.getParameter(SELECTORS_PARAMETER));
 
             List<String> keywords = selectors.get(KEYWORDS_SELECTOR_ID);
@@ -283,19 +252,19 @@ public class SearchServiceImpl implements SearchService {
                 keywords.clear();
                 keywords.add(search);
             }
-            
-            if( request.getParameter("selectors")!= null) {
+
+            if (request.getParameter("selectors") != null) {
                 response.setRenderParameter("lastSelectors", request.getParameter("selectors"));
-            }  
-            
-            
+            }
+
+
             response.setRenderParameter("selectors", PageSelectors.encodeProperties(selectors));
 
             // Refresh other portlet model attributes
             PageProperties.getProperties().setRefreshingPage(true);
-            
+
             request.setAttribute("osivia.ajax.preventRefresh", Constants.PORTLET_VALUE_ACTIVATE);
-            
+
         }
 
 

@@ -27,11 +27,20 @@ public class SearchCommonRepositoryImpl implements SearchCommonRepository {
      */
     @Autowired
     private ICMSServiceLocator cmsServiceLocator;
+
     /**
      * Taskbar service.
      */
     @Autowired
     private ITaskbarService taskbarService;
+
+
+    /**
+     * Constructor.
+     */
+    public SearchCommonRepositoryImpl() {
+        super();
+    }
 
 
     @Override

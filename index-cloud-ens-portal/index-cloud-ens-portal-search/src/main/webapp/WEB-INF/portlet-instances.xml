@@ -45,5 +45,22 @@
             </preferences>
         </instance>
     </deployment>
+
+
+    <deployment>
+        <if-exists>overwrite</if-exists>
+        <instance>
+            <display-name xml:lang="en">Cloud Ens - Saved searches</display-name>
+            <display-name xml:lang="fr">Cloud Ens - Recherches enregistrées</display-name>
+            <instance-id>index-cloud-ens-saved-searches-instance</instance-id>
+            <portlet-ref>index-cloud-ens-saved-searches</portlet-ref>
+            <security-constraint>
+                <policy-permission>
+                    <action-name>view</action-name>
+                    <unchecked />
+                </policy-permission>
+            </security-constraint>
+        </instance>
+    </deployment>
     
 </deployments>

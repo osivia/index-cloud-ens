@@ -1,5 +1,6 @@
 package fr.index.cloud.ens.search.portlet.service;
 
+import fr.index.cloud.ens.search.common.portlet.service.SearchCommonService;
 import fr.index.cloud.ens.search.portlet.model.SearchForm;
 import fr.index.cloud.ens.search.portlet.model.SearchWindowProperties;
 import org.osivia.portal.api.context.PortalControllerContext;
@@ -10,8 +11,9 @@ import javax.portlet.PortletException;
  * Search portlet service interface.
  *
  * @author Cédric Krommenhoek
+ * @see SearchCommonService
  */
-public interface SearchService {
+public interface SearchService extends SearchCommonService {
 
     /**
      * Search view window property.

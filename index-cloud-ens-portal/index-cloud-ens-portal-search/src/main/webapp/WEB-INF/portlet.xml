@@ -61,6 +61,32 @@
     </portlet>
 
 
+    <portlet>
+        <portlet-name>index-cloud-ens-saved-searches</portlet-name>
+        <portlet-class>org.springframework.web.portlet.DispatcherPortlet</portlet-class>
+
+        <init-param>
+            <name>contextClass</name>
+            <value>org.osivia.portal.api.portlet.AnnotationPortletApplicationContext</value>
+        </init-param>
+        <init-param>
+            <name>contextConfigLocation</name>
+            <value>fr.index.cloud.ens.search.saved.portlet.configuration.SavedSearchesConfiguration</value>
+        </init-param>
+
+        <expiration-cache>180</expiration-cache>
+
+        <supports>
+            <mime-type>text/html</mime-type>
+            <portlet-mode>view</portlet-mode>
+        </supports>
+
+        <portlet-info>
+            <title>Saved searches</title>
+        </portlet-info>
+    </portlet>
+
+
     <public-render-parameter>
         <identifier>selectors</identifier>
         <name>selectors</name>

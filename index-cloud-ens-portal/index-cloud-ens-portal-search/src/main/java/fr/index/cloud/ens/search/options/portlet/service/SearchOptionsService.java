@@ -1,5 +1,6 @@
 package fr.index.cloud.ens.search.options.portlet.service;
 
+import fr.index.cloud.ens.search.common.portlet.service.SearchCommonService;
 import fr.index.cloud.ens.search.options.portlet.model.SearchOptionsForm;
 import net.sf.json.JSONArray;
 import org.osivia.portal.api.context.PortalControllerContext;
@@ -11,8 +12,9 @@ import java.io.IOException;
  * Search options portlet service interface.
  *
  * @author Cédric Krommenhoek
+ * @see SearchCommonService
  */
-public interface SearchOptionsService {
+public interface SearchOptionsService extends SearchCommonService {
 
     /**
      * Search options portlet instance.

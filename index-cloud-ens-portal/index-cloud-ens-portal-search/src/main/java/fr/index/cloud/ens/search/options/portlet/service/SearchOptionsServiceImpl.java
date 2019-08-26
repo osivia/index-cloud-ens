@@ -1,5 +1,6 @@
 package fr.index.cloud.ens.search.options.portlet.service;
 
+import fr.index.cloud.ens.search.common.portlet.service.SearchCommonServiceImpl;
 import fr.index.cloud.ens.search.options.portlet.model.SearchOptionsForm;
 import fr.index.cloud.ens.search.options.portlet.model.SearchOptionsVocabularyItem;
 import fr.index.cloud.ens.search.options.portlet.repository.SearchOptionsRepository;
@@ -36,15 +37,11 @@ import java.util.*;
  * Search options portlet service implementation.
  *
  * @author Cédric Krommenhoek
+ * @see SearchCommonServiceImpl
  * @see SearchOptionsService
  */
 @Service
-public class SearchOptionsServiceImpl implements SearchOptionsService {
-
-    /**
-     * Selectors parameter.
-     */
-    private static final String SELECTORS_PARAMETER = "selectors";
+public class SearchOptionsServiceImpl extends SearchCommonServiceImpl implements SearchOptionsService {
 
     /**
      * Location selector identifier.
@@ -54,10 +51,6 @@ public class SearchOptionsServiceImpl implements SearchOptionsService {
      * Level selector identifier.
      */
     private static final String LEVEL_SELECTOR_ID = "level";
-    /**
-     * Keywords selector identifier.
-     */
-    public static final String KEYWORDS_SELECTOR_ID = "search";
 
 
     /**
@@ -91,6 +84,14 @@ public class SearchOptionsServiceImpl implements SearchOptionsService {
     private DocumentDAO documentDao;
 
 
+    /**
+     * Constructor.
+     */
+    public SearchOptionsServiceImpl() {
+        super();
+    }
+
+
     @Override
     public SearchOptionsForm getForm(PortalControllerContext portalControllerContext) throws PortletException {
         // Window
@@ -122,29 +123,6 @@ public class SearchOptionsServiceImpl implements SearchOptionsService {
         form.setKeywords(keywords);
 
         return form;
-    }
-
-
-    /**
-     * Get selector value.
-     *
-     * @param selectors  selectors
-     * @param selectorId selector identifier
-     * @return value, may be null
-     */
-    public static String getSelectorValue(Map<String, List<String>> selectors, String selectorId) {
-        String value;
-        if (MapUtils.isEmpty(selectors)) {
-            value = null;
-        } else {
-            List<String> values = selectors.get(selectorId);
-            if (CollectionUtils.isEmpty(values)) {
-                value = null;
-            } else {
-                value = values.get(0);
-            }
-        }
-        return value;
     }
 
 
