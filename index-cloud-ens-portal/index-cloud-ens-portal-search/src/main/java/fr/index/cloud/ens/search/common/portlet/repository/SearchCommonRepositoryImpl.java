@@ -47,6 +47,23 @@ public class SearchCommonRepositoryImpl implements SearchCommonRepository {
 
     @Override
     public String getSearchPath(PortalControllerContext portalControllerContext) throws PortletException {
+        return this.getTaskPath(portalControllerContext, ITaskbarService.SEARCH_TASK_ID);
+    }
+
+
+    @Override
+    public String getSearchFiltersPath(PortalControllerContext portalControllerContext) throws PortletException {
+        return this.getTaskPath(portalControllerContext, SEARCH_FILTERS_TASK_ID);
+    }
+
+
+    /**
+     * Get task path.
+     * @param portalControllerContext portal controller context
+     * @param taskId task identifier
+     * @return path
+     */
+    private String getTaskPath(PortalControllerContext portalControllerContext, String taskId) throws PortletException {
         // CMS service
         ICMSService cmsService = this.cmsServiceLocator.getCMSService();
         // CMS context
@@ -84,7 +101,7 @@ public class SearchCommonRepositoryImpl implements SearchCommonRepository {
                 // Task staple identifier
                 String stapleId = VirtualNavigationUtils.getStapleId(task.getPath());
 
-                if (StringUtils.equals(ITaskbarService.SEARCH_TASK_ID, stapleId)) {
+                if (StringUtils.equals(taskId, stapleId)) {
                     searchTask = task;
                 }
             }

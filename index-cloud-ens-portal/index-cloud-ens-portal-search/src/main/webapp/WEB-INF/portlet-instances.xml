@@ -27,22 +27,16 @@
     <deployment>
         <if-exists>overwrite</if-exists>
         <instance>
-            <display-name xml:lang="en">Cloud Ens - Search options</display-name>
-            <display-name xml:lang="fr">Cloud Ens - Options de recherche</display-name>
-            <instance-id>index-cloud-ens-search-options-instance</instance-id>
-            <portlet-ref>index-cloud-ens-search-options</portlet-ref>
+            <display-name xml:lang="en">Cloud Ens - Search filters</display-name>
+            <display-name xml:lang="fr">Cloud Ens - Filtres de recherche</display-name>
+            <instance-id>index-cloud-ens-search-filters-instance</instance-id>
+            <portlet-ref>index-cloud-ens-search-filters</portlet-ref>
             <security-constraint>
                 <policy-permission>
                     <action-name>view</action-name>
                     <unchecked />
                 </policy-permission>
             </security-constraint>
-            <preferences>
-                <preference>
-                    <name>hide</name>
-                    <value>true</value>
-                </preference>
-            </preferences>
         </instance>
     </deployment>
 

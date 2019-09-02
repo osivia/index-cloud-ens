@@ -1,7 +1,7 @@
-package fr.index.cloud.ens.search.options.portlet.service;
+package fr.index.cloud.ens.search.filters.portlet.service;
 
 import fr.index.cloud.ens.search.common.portlet.service.SearchCommonService;
-import fr.index.cloud.ens.search.options.portlet.model.SearchOptionsForm;
+import fr.index.cloud.ens.search.filters.portlet.model.SearchFiltersForm;
 import net.sf.json.JSONArray;
 import org.osivia.portal.api.context.PortalControllerContext;
 
@@ -9,18 +9,22 @@ import javax.portlet.PortletException;
 import java.io.IOException;
 
 /**
- * Search options portlet service interface.
+ * Search filters portlet service interface.
  *
  * @author Cédric Krommenhoek
  * @see SearchCommonService
  */
-public interface SearchOptionsService extends SearchCommonService {
+public interface SearchFiltersService extends SearchCommonService {
 
     /**
-     * Search options portlet instance.
+     * Search filters portlet instance.
      */
-    String PORTLET_INSTANCE = "index-cloud-ens-search-options-instance";
+    String PORTLET_INSTANCE = "index-cloud-ens-search-filters-instance";
 
+    /**
+     * Modal indicator window property.
+     */
+    String MODAL_WINDOW_PROPERTY = "osivia.search.modal";
     /**
      * Navigation path window property.
      */
@@ -37,22 +41,22 @@ public interface SearchOptionsService extends SearchCommonService {
 
 
     /**
-     * Get search options form.
+     * Get search filters form.
      *
      * @param portalControllerContext portal controller context
      * @return form
      */
-    SearchOptionsForm getForm(PortalControllerContext portalControllerContext) throws PortletException;
+    SearchFiltersForm getForm(PortalControllerContext portalControllerContext) throws PortletException;
 
 
     /**
      * Get search redirection URL.
      *
      * @param portalControllerContext portal controller context
-     * @param form                    search options form
+     * @param form                    search filters form
      * @return URL
      */
-    String getSearchRedirectionUrl(PortalControllerContext portalControllerContext, SearchOptionsForm form) throws PortletException;
+    String getSearchRedirectionUrl(PortalControllerContext portalControllerContext, SearchFiltersForm form) throws PortletException;
 
 
     /**
@@ -62,16 +66,16 @@ public interface SearchOptionsService extends SearchCommonService {
      * @param form                    search options form
      * @return URL
      */
-    String saveSearch(PortalControllerContext portalControllerContext, SearchOptionsForm form) throws PortletException;
+    String saveSearch(PortalControllerContext portalControllerContext, SearchFiltersForm form) throws PortletException;
 
 
     /**
      * Clear location.
      *
      * @param portalControllerContext portal controller context
-     * @param form                    search options form
+     * @param form                    search filters form
      */
-    void clearLocation(PortalControllerContext portalControllerContext, SearchOptionsForm form) throws PortletException;
+    void clearLocation(PortalControllerContext portalControllerContext, SearchFiltersForm form) throws PortletException;
 
 
     /**

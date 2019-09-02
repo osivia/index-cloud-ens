@@ -1,4 +1,4 @@
-package fr.index.cloud.ens.search.options.portlet.repository;
+package fr.index.cloud.ens.search.filters.portlet.repository;
 
 import fr.index.cloud.ens.search.common.portlet.repository.SearchCommonRepository;
 import fr.toutatice.portail.cms.nuxeo.api.cms.NuxeoDocumentContext;
@@ -9,12 +9,12 @@ import javax.portlet.PortletException;
 import java.io.IOException;
 
 /**
- * Search options portlet repository interface.
+ * Search filters portlet repository interface.
  *
  * @author Cédric Krommenhoek
  * @see SearchCommonRepository
  */
-public interface SearchOptionsRepository extends SearchCommonRepository {
+public interface SearchFiltersRepository extends SearchCommonRepository {
 
     /**
      * Get document context.

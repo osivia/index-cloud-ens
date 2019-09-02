@@ -1,7 +1,7 @@
-package fr.index.cloud.ens.search.options.portlet.repository;
+package fr.index.cloud.ens.search.filters.portlet.repository;
 
 import fr.index.cloud.ens.search.common.portlet.repository.SearchCommonRepositoryImpl;
-import fr.index.cloud.ens.search.options.portlet.repository.command.LoadVocabularyCommand;
+import fr.index.cloud.ens.search.filters.portlet.repository.command.LoadVocabularyCommand;
 import fr.toutatice.portail.cms.nuxeo.api.INuxeoCommand;
 import fr.toutatice.portail.cms.nuxeo.api.NuxeoController;
 import fr.toutatice.portail.cms.nuxeo.api.cms.NuxeoDocumentContext;
@@ -17,14 +17,14 @@ import javax.portlet.PortletException;
 import java.util.concurrent.TimeUnit;
 
 /**
- * Search options portlet repository implementation.
+ * Search filters portlet repository implementation.
  *
  * @author Cédric Krommenhoek
  * @see SearchCommonRepositoryImpl
- * @see SearchOptionsRepository
+ * @see SearchFiltersRepository
  */
 @Repository
-public class SearchOptionsRepositoryImpl extends SearchCommonRepositoryImpl implements SearchOptionsRepository {
+public class SearchFiltersRepositoryImpl extends SearchCommonRepositoryImpl implements SearchFiltersRepository {
 
     /**
      * Application context.

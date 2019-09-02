@@ -94,18 +94,20 @@ public class CloudEnsNavigationAdapter implements INavigationAdapterModule {
             List<Symlink> links = new ArrayList<>();
             symlinks.setLinks(links);
 
-            // Virtual staples
-
-            Symlink recentItemsSymlink = this.virtualNavigationService.createSymlink(userWorkspace.getCmsPath(), null, CloudEnsConstants.ROOT_WORKSPACE_PATH+"/recent-items",null);
+            // Recent items
+            Symlink recentItemsSymlink = this.virtualNavigationService.createSymlink(userWorkspace.getCmsPath(), null, CloudEnsConstants.ROOT_WORKSPACE_PATH + "/recent-items", null);
             symlinks.getLinks().add(recentItemsSymlink);
-            Symlink searchSymlink = this.virtualNavigationService.createSymlink(userWorkspace.getCmsPath(), null, CloudEnsConstants.ROOT_WORKSPACE_PATH+"/search",null);
+
+            // Search
+            Symlink searchSymlink = this.virtualNavigationService.createSymlink(userWorkspace.getCmsPath(), null, CloudEnsConstants.ROOT_WORKSPACE_PATH + "/search", null);
             symlinks.getLinks().add(searchSymlink);
+
+            // Search filters
+            Symlink searchFiltersSymlink = this.virtualNavigationService.createSymlink(userWorkspace.getCmsPath(), null, CloudEnsConstants.ROOT_WORKSPACE_PATH + "/search-filters", null);
+            symlinks.getLinks().add(searchFiltersSymlink);
         }
 
         symlinks.getPaths().add(CloudEnsConstants.ROOT_WORKSPACE_PATH);
-
-
-
 
         return symlinks;
     }

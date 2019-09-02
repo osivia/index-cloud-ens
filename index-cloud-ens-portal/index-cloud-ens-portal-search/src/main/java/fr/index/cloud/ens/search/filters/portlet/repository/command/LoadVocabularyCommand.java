@@ -1,4 +1,4 @@
-package fr.index.cloud.ens.search.options.portlet.repository.command;
+package fr.index.cloud.ens.search.filters.portlet.repository.command;
 
 import fr.toutatice.portail.cms.nuxeo.api.INuxeoCommand;
 import net.sf.json.JSONArray;

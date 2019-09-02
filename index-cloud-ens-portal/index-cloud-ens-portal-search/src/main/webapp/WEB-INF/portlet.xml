@@ -36,7 +36,7 @@
 
 
     <portlet>
-        <portlet-name>index-cloud-ens-search-options</portlet-name>
+        <portlet-name>index-cloud-ens-search-filters</portlet-name>
         <portlet-class>org.springframework.web.portlet.DispatcherPortlet</portlet-class>
 
         <init-param>
@@ -45,7 +45,7 @@
         </init-param>
         <init-param>
             <name>contextConfigLocation</name>
-            <value>fr.index.cloud.ens.search.options.portlet.configuration.SearchOptionsConfiguration</value>
+            <value>fr.index.cloud.ens.search.filters.portlet.configuration.SearchFiltersConfiguration</value>
         </init-param>
 
         <expiration-cache>180</expiration-cache>
@@ -56,8 +56,10 @@
         </supports>
 
         <portlet-info>
-            <title>Search options</title>
+            <title>Search filters</title>
         </portlet-info>
+
+        <supported-public-render-parameter>selectors</supported-public-render-parameter>
     </portlet>
 
 

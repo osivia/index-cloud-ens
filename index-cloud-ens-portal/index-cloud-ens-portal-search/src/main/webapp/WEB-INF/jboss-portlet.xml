@@ -17,11 +17,15 @@
 
 
     <portlet>
-        <portlet-name>index-cloud-ens-search-options</portlet-name>
+        <portlet-name>index-cloud-ens-search-filters</portlet-name>
 
         <transaction>
             <trans-attribute>Required</trans-attribute>
         </transaction>
+
+        <header-content>
+            <script type="text/javascript" src="/js/search.js"></script>
+        </header-content>
     </portlet>
 
 

@@ -1,7 +1,7 @@
-package fr.index.cloud.ens.search.options.portlet.controller;
+package fr.index.cloud.ens.search.filters.portlet.controller;
 
-import fr.index.cloud.ens.search.options.portlet.model.SearchOptionsForm;
-import fr.index.cloud.ens.search.options.portlet.service.SearchOptionsService;
+import fr.index.cloud.ens.search.filters.portlet.service.SearchFiltersService;
+import fr.index.cloud.ens.search.filters.portlet.model.SearchFiltersForm;
 import net.sf.json.JSONArray;
 import org.osivia.portal.api.context.PortalControllerContext;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,14 +20,14 @@ import java.io.IOException;
 import java.io.PrintWriter;
 
 /**
- * Search options portlet controller.
+ * Search filters portlet controller.
  *
  * @author Cédric Krommenhoek
  */
 @Controller
 @RequestMapping("VIEW")
 @SessionAttributes("form")
-public class SearchOptionsController {
+public class SearchFiltersController {
 
     /**
      * Portlet context.
@@ -39,7 +39,7 @@ public class SearchOptionsController {
      * Portlet service.
      */
     @Autowired
-    private SearchOptionsService service;
+    private SearchFiltersService service;
 
 
     /**
@@ -58,11 +58,11 @@ public class SearchOptionsController {
      *
      * @param request       action request
      * @param response      action response
-     * @param form          search options form model attribute
+     * @param form          search filters form model attribute
      * @param sessionStatus session status
      */
     @ActionMapping(name = "submit", params = "search")
-    public void search(ActionRequest request, ActionResponse response, @ModelAttribute("form") SearchOptionsForm form, SessionStatus sessionStatus) throws PortletException, IOException {
+    public void search(ActionRequest request, ActionResponse response, @ModelAttribute("form") SearchFiltersForm form, SessionStatus sessionStatus) throws PortletException, IOException {
         // Portal Controller context
         PortalControllerContext portalControllerContext = new PortalControllerContext(this.portletContext, request, response);
 
@@ -81,10 +81,10 @@ public class SearchOptionsController {
      *
      * @param request  action request
      * @param response action response
-     * @param form     search options form model attribute
+     * @param form     search filters form model attribute
      */
     @ActionMapping(name = "submit", params = "saveSearchPopoverCallback")
-    public void saveSearch(ActionRequest request, ActionResponse response, @ModelAttribute("form") SearchOptionsForm form) throws PortletException, IOException {
+    public void saveSearch(ActionRequest request, ActionResponse response, @ModelAttribute("form") SearchFiltersForm form) throws PortletException, IOException {
         // Portal controller context
         PortalControllerContext portalControllerContext = new PortalControllerContext(portletContext, request, response);
 
@@ -99,10 +99,10 @@ public class SearchOptionsController {
      *
      * @param request  action request
      * @param response action response
-     * @param form     search options form model attribute
+     * @param form     search filters form model attribute
      */
-    @ActionMapping(name="submit", params = "clearLocation")
-    public void clearLocation(ActionRequest request, ActionResponse response, @ModelAttribute("form") SearchOptionsForm form) throws PortletException {
+    @ActionMapping(name = "submit", params = "clearLocation")
+    public void clearLocation(ActionRequest request, ActionResponse response, @ModelAttribute("form") SearchFiltersForm form) throws PortletException {
         // Portal Controller context
         PortalControllerContext portalControllerContext = new PortalControllerContext(this.portletContext, request, response);
 
@@ -156,14 +156,14 @@ public class SearchOptionsController {
 
 
     /**
-     * Get search options form model attribute.
+     * Get search filters form model attribute.
      *
      * @param request  portlet request
      * @param response portlet response
      * @return form
      */
     @ModelAttribute("form")
-    public SearchOptionsForm getForm(PortletRequest request, PortletResponse response) throws PortletException {
+    public SearchFiltersForm getForm(PortletRequest request, PortletResponse response) throws PortletException {
         // Portal Controller context
         PortalControllerContext portalControllerContext = new PortalControllerContext(this.portletContext, request, response);
 

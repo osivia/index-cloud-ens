@@ -168,10 +168,10 @@ public class TaskbarServiceImpl implements TaskbarService {
         // Filters title
         Task filtersTitle = this.applicationContext.getBean(FiltersTitleTask.class);
         tasks.add(filtersTitle);
-        // Search
-        TaskbarTask search = this.extractVirtualStaple(portalControllerContext, navigationTasks, "SEARCH");
-        if (search != null) {
-            Task task = this.createTask(portalControllerContext, basePath, bundle, activeId, search);
+        // Advanced search
+        TaskbarTask advancedSearch = this.extractVirtualStaple(portalControllerContext, navigationTasks, "SEARCH_FILTERS");
+        if (advancedSearch != null) {
+            Task task = this.createTask(portalControllerContext, basePath, bundle, activeId, advancedSearch);
             SearchTask searchTask = this.applicationContext.getBean(SearchTask.class);
             searchTask.setUrl(task.getUrl());
             tasks.add(searchTask);

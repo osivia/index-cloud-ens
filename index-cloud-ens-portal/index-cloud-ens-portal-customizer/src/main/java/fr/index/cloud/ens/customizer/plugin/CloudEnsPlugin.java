@@ -6,15 +6,12 @@ import fr.index.cloud.ens.customizer.plugin.theming.CloudEnsTemplateAdapter;
 import fr.toutatice.portail.cms.nuxeo.api.domain.AbstractPluginPortlet;
 import fr.toutatice.portail.cms.nuxeo.api.domain.INavigationAdapterModule;
 import fr.toutatice.portail.cms.nuxeo.api.domain.ListTemplate;
-import org.jboss.portal.theme.impl.render.dynamic.DynaRenderOptions;
-import org.osivia.portal.api.cms.DocumentType;
 import org.osivia.portal.api.customization.CustomizationContext;
 import org.osivia.portal.api.internationalization.Bundle;
 import org.osivia.portal.api.internationalization.IBundleFactory;
 import org.osivia.portal.api.internationalization.IInternationalizationService;
 import org.osivia.portal.api.locator.Locator;
 import org.osivia.portal.api.menubar.MenubarModule;
-import org.osivia.portal.api.panels.PanelPlayer;
 import org.osivia.portal.api.taskbar.TaskbarFactory;
 import org.osivia.portal.api.taskbar.TaskbarItem;
 import org.osivia.portal.api.taskbar.TaskbarItems;
@@ -22,7 +19,6 @@ import org.osivia.portal.api.theming.TemplateAdapter;
 
 import javax.portlet.PortletContext;
 import javax.portlet.PortletException;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -163,9 +159,13 @@ public class CloudEnsPlugin extends AbstractPluginPortlet {
         // Factory
         TaskbarFactory factory = this.getTaskbarService().getFactory();
 
-       
-        TaskbarItem item = factory.createStapledTaskbarItem("RECENT_ITEMS", "RECENT_ITEMS_TASK", "glyphicons glyphicons-basic-history", "\\default\\templates\\recent");
-        items.add(item);
+        // Recent items
+        TaskbarItem recentItems = factory.createStapledTaskbarItem("RECENT_ITEMS", "RECENT_ITEMS_TASK", "glyphicons glyphicons-basic-history", "\\default\\templates\\recent");
+        items.add(recentItems);
+
+        // Search filters
+        TaskbarItem searchFilters = factory.createStapledTaskbarItem("SEARCH_FILTERS", "SEARCH_FILTERS_TASK", "glyphicons glyphicons-basic-search", "\\default\\templates\\search-filters");
+        items.add(searchFilters);
     }
 
 

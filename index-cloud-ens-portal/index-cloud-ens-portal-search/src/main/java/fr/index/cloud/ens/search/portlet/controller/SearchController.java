@@ -2,7 +2,6 @@ package fr.index.cloud.ens.search.portlet.controller;
 
 import fr.index.cloud.ens.search.portlet.model.SearchForm;
 import fr.index.cloud.ens.search.portlet.service.SearchService;
-
 import org.apache.commons.lang.StringUtils;
 import org.osivia.portal.api.context.PortalControllerContext;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,11 +49,11 @@ public class SearchController {
     public String view(RenderRequest request, RenderResponse response, @ModelAttribute("form") SearchForm form) throws PortletException {
         // Portal Controller context
         PortalControllerContext portalControllerContext = new PortalControllerContext(this.portletContext, request, response);
-        
-        if( StringUtils.isEmpty(form.getFolderName()))  {
+
+        if (StringUtils.isEmpty(form.getFolderName())) {
             // Empty response indicator
             request.setAttribute("osivia.emptyResponse", "1");
-          
+
         }
 
         return this.service.getViewPath(portalControllerContext);
@@ -72,12 +71,24 @@ public class SearchController {
     public void search(ActionRequest request, ActionResponse response, @ModelAttribute("form") SearchForm form) throws PortletException, IOException {
         // Portal Controller context
         PortalControllerContext portalControllerContext = new PortalControllerContext(this.portletContext, request, response);
-        
- 
+
         // Search redirection URL
         String url = this.service.getSearchRedirectionUrl(portalControllerContext, form);
-        if( url != null)
-           response.sendRedirect(url);
+        if (StringUtils.isNotEmpty(url)) {
+            response.sendRedirect(url);
+        }
+    }
+
+
+    /**
+     * Search filters action mapping.
+     *
+     * @param request  action request
+     * @param response action response
+     */
+    @ActionMapping("search-filters")
+    public void searchFilters(ActionRequest request, ActionResponse response) throws PortletException, IOException {
+        this.search(request, response, null);
     }
 
 

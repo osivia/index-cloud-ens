@@ -13,8 +13,8 @@ function saveSearch(button) {
 	var $button = $JQry(button);
 	var $popoverForm = $button.closest("form");
 	var displayName = $popoverForm.find("input[type=text]").val();
-	var $popover = $popoverForm.closest(".popover");
-	var $form = $popover.closest("form");
+	var $container = $popoverForm.closest(".search-filters-container");
+	var $form = $container.children("form");
 
 	// Update hidden input
 	$form.find("input[type=hidden][name$=savedSearchDisplayName]").val(displayName);
@@ -57,7 +57,7 @@ $JQry(function() {
 
 		if (!$element.data("loaded")) {
 			$element.popover({
-				container: "form",
+				container: ".search-filters-container",
 				content: function() {
 					var result;
 

@@ -11,24 +11,13 @@
 <c:set var="namespace"><portlet:namespace/></c:set>
 
 
-<div class="ml-3 search auto-submit">
+<div class="search auto-submit">
     <form:form id="${namespace}-form" action="${searchUrl}" method="post" modelAttribute="form">
+        <c:set var="placeholder"><op:translate key="SEARCH_FILTERS_KEYWORDS_PLACEHOLDER"/></c:set>
         <div class="form-group mb-0">
             <form:label path="value" cssClass="sr-only"><op:translate key="SEARCH_INPUT_VALUE_LABEL"/></form:label>
-            <div class="input-group border rounded">
-                <c:set var="placeholder"><op:translate key="SEARCH_OPTIONS_KEYWORDS_PLACEHOLDER"/></c:set>
-                <form:input path="value" type="search" placeholder="${placeholder}"
-                            cssClass="form-control border-0"></form:input>
-                <button type="submit" class="d-none"></button>
-                <div class="input-group-append">
-                    <c:set var="title"><op:translate key="SEARCH_OPTIONS"/></c:set>
-                    <button type="button" class="btn btn-outline-secondary border-0" data-target="#osivia-modal"
-                            data-load-url="${optionsUrl}" data-load-callback-function="searchOptionsLoadCallback" data-load-callback-function-args="${namespace}-form" data-size="large" data-title="${title}">
-                        <i class="glyphicons glyphicons-basic-set-down"></i>
-                        <span class="sr-only">${title}</span>
-                    </button>
-                </div>
-            </div>
+            <form:input path="value" type="search" placeholder="${placeholder}" cssClass="form-control"></form:input>
+            <button type="submit" class="d-none"></button>
         </div>
     </form:form>
 </div>

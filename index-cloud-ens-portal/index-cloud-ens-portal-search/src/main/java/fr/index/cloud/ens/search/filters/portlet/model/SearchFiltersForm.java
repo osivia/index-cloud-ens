@@ -1,4 +1,4 @@
-package fr.index.cloud.ens.search.options.portlet.model;
+package fr.index.cloud.ens.search.filters.portlet.model;
 
 import fr.toutatice.portail.cms.nuxeo.api.domain.DocumentDTO;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
@@ -6,18 +6,22 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 /**
- * Search options form java-bean.
+ * Search filters form java-bean.
  *
  * @author Cédric Krommenhoek
  */
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-public class SearchOptionsForm {
+public class SearchFiltersForm {
 
     /**
      * Location.
      */
     private DocumentDTO location;
+    /**
+     * Modal indicator.
+     */
+    private boolean modal;
 
     /**
      * Level.
@@ -40,6 +44,14 @@ public class SearchOptionsForm {
 
     public void setLocation(DocumentDTO location) {
         this.location = location;
+    }
+
+    public boolean isModal() {
+        return modal;
+    }
+
+    public void setModal(boolean modal) {
+        this.modal = modal;
     }
 
     public String getLevel() {

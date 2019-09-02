@@ -1,14 +1,12 @@
 package fr.index.cloud.ens.search.portlet.service;
 
 import fr.index.cloud.ens.search.common.portlet.service.SearchCommonServiceImpl;
-import fr.index.cloud.ens.search.options.portlet.service.SearchOptionsService;
+import fr.index.cloud.ens.search.filters.portlet.service.SearchFiltersService;
 import fr.index.cloud.ens.search.portlet.model.SearchForm;
 import fr.index.cloud.ens.search.portlet.model.SearchView;
 import fr.index.cloud.ens.search.portlet.model.SearchWindowProperties;
 import fr.index.cloud.ens.search.portlet.repository.SearchRepository;
 import fr.toutatice.portail.cms.nuxeo.api.PageSelectors;
-import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang.StringUtils;
 import org.nuxeo.ecm.automation.client.model.Document;
 import org.nuxeo.ecm.automation.client.model.PropertyList;
@@ -28,7 +26,10 @@ import org.springframework.stereotype.Service;
 import javax.portlet.ActionResponse;
 import javax.portlet.PortletException;
 import javax.portlet.PortletRequest;
-import java.util.*;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Search portlet service implementation.
@@ -128,16 +129,13 @@ public class SearchServiceImpl extends SearchCommonServiceImpl implements Search
             }
         }
 
-
         if (SearchView.AUTOSUBMIT.equals(view)) {
-
             // Selectors
             Map<String, List<String>> selectors = PageSelectors.decodeProperties(request.getParameter(SELECTORS_PARAMETER));
 
             String keywords = getSelectorValue(selectors, KEYWORDS_SELECTOR_ID);
             form.setValue(keywords);
         }
-
 
         return form;
     }
@@ -161,26 +159,27 @@ public class SearchServiceImpl extends SearchCommonServiceImpl implements Search
         SearchWindowProperties currentWindowProperties = this.getWindowProperties(portalControllerContext);
 
         // Search options window properties
-        Map<String, String> properties = new HashMap<>(1);
+        Map<String, String> properties = new HashMap<>();
+        properties.put(SearchFiltersService.MODAL_WINDOW_PROPERTY, String.valueOf(true));
 
         if (SearchView.BUTTON.equals(currentWindowProperties.getView()) || SearchView.AUTOSUBMIT.equals(currentWindowProperties.getView())) {
             // Selectors
             String selectors = request.getParameter(SELECTORS_PARAMETER);
             if (StringUtils.isNotEmpty(selectors)) {
-                properties.put(SearchOptionsService.SELECTORS_WINDOW_PROPERTY, selectors);
+                properties.put(SearchFiltersService.SELECTORS_WINDOW_PROPERTY, selectors);
             }
         } else if (SearchView.INPUT.equals(currentWindowProperties.getView())) {
             // Navigation path
             String navigationPath = this.repository.getNavigationPath(portalControllerContext);
             if (StringUtils.isNotEmpty(navigationPath)) {
-                properties.put(SearchOptionsService.NAVIGATION_PATH_WINDOW_PROPERTY, navigationPath);
+                properties.put(SearchFiltersService.NAVIGATION_PATH_WINDOW_PROPERTY, navigationPath);
             }
         }
 
         // URL
         String url;
         try {
-            url = this.portalUrlFactory.getStartPortletUrl(portalControllerContext, SearchOptionsService.PORTLET_INSTANCE, properties, PortalUrlType.MODAL);
+            url = this.portalUrlFactory.getStartPortletUrl(portalControllerContext, SearchFiltersService.PORTLET_INSTANCE, properties, PortalUrlType.MODAL);
         } catch (PortalException e) {
             throw new PortletException(e);
         }
@@ -191,17 +190,24 @@ public class SearchServiceImpl extends SearchCommonServiceImpl implements Search
 
     @Override
     public String getSearchRedirectionUrl(PortalControllerContext portalControllerContext, SearchForm form) throws PortletException {
-        // Search path
-        String path = this.repository.getSearchPath(portalControllerContext);
-
         // Portlet request
         PortletRequest request = portalControllerContext.getRequest();
-
-        // Portlet request
+        // Action response
         ActionResponse response = (ActionResponse) portalControllerContext.getResponse();
 
         // Current window properties
         SearchWindowProperties currentWindowProperties = this.getWindowProperties(portalControllerContext);
+
+        // Search path
+        String path;
+        if (SearchView.INPUT.equals(currentWindowProperties.getView())) {
+            path = this.repository.getSearchPath(portalControllerContext);
+        } else if (SearchView.BUTTON.equals(currentWindowProperties.getView())) {
+            path = this.repository.getSearchFiltersPath(portalControllerContext);
+        } else {
+            path = null;
+        }
+
 
         // Search URL
         String url;
@@ -211,20 +217,23 @@ public class SearchServiceImpl extends SearchCommonServiceImpl implements Search
                 url = null;
             } else {
                 // Selectors
-                Map<String, List<String>> selectors = new HashMap<>();
+                Map<String, List<String>> selectors;
+                if (form == null) {
+                    selectors = PageSelectors.decodeProperties(request.getParameter(SELECTORS_PARAMETER));
+                } else {
+                    selectors = new HashMap<>();
 
+                    // Location
+                    String navigationPath = this.repository.getNavigationPath(portalControllerContext);
+                    if (StringUtils.isNotEmpty(navigationPath)) {
+                        selectors.put("location", Collections.singletonList(navigationPath));
+                    }
 
-                // Location
-                String navigationPath = this.repository.getNavigationPath(portalControllerContext);
-                if (StringUtils.isNotEmpty(navigationPath)) {
-                    selectors.put("location", Collections.singletonList(navigationPath));
-                }
-
-
-                // Search
-                String search = form.getValue();
-                if (StringUtils.isNotEmpty(search)) {
-                    selectors.put("search", Collections.singletonList(search));
+                    // Search
+                    String search = form.getValue();
+                    if (StringUtils.isNotEmpty(search)) {
+                        selectors.put(KEYWORDS_SELECTOR_ID, Collections.singletonList(search));
+                    }
                 }
 
                 // Page parameters
@@ -234,29 +243,26 @@ public class SearchServiceImpl extends SearchCommonServiceImpl implements Search
                 // CMS URL
                 url = this.portalUrlFactory.getCMSUrl(portalControllerContext, null, path, parameters, null, null, null, null, null, null);
             }
-        } else {
-            // AUTOSUBMIT : render parameters
+        } else if (SearchView.AUTOSUBMIT.equals(currentWindowProperties.getView())) {
             url = null;
 
-            Map<String, List<String>> selectors = PageSelectors.decodeProperties(request.getParameter(SELECTORS_PARAMETER));
-
-            List<String> keywords = selectors.get(KEYWORDS_SELECTOR_ID);
-            if (keywords == null) {
-                keywords = new ArrayList<String>();
-                selectors.put(KEYWORDS_SELECTOR_ID, keywords);
+            // Selectors
+            String selectorsParameter = request.getParameter(SELECTORS_PARAMETER);
+            if (StringUtils.isNotEmpty(selectorsParameter)) {
+                response.setRenderParameter("lastSelectors", selectorsParameter);
             }
+            Map<String, List<String>> selectors = PageSelectors.decodeProperties(selectorsParameter);
 
-            String search = form.getValue();
-
-            if (StringUtils.isNotBlank(search)) {
-                keywords.clear();
-                keywords.add(search);
+            // Search
+            String search;
+            if (form == null) {
+                search = null;
+            } else {
+                search = form.getValue();
             }
-
-            if (request.getParameter("selectors") != null) {
-                response.setRenderParameter("lastSelectors", request.getParameter("selectors"));
+            if (StringUtils.isNotEmpty(search)) {
+                selectors.put(KEYWORDS_SELECTOR_ID, Collections.singletonList(search));
             }
-
 
             response.setRenderParameter("selectors", PageSelectors.encodeProperties(selectors));
 
@@ -264,12 +270,11 @@ public class SearchServiceImpl extends SearchCommonServiceImpl implements Search
             PageProperties.getProperties().setRefreshingPage(true);
 
             request.setAttribute("osivia.ajax.preventRefresh", Constants.PORTLET_VALUE_ACTIVATE);
-
+        } else {
+            throw new PortletException("Unknown search view.");
         }
-
 
         return url;
     }
-
 
 }

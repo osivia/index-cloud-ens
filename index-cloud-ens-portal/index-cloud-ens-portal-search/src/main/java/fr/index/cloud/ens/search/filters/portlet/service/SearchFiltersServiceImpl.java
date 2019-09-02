@@ -1,9 +1,9 @@
-package fr.index.cloud.ens.search.options.portlet.service;
+package fr.index.cloud.ens.search.filters.portlet.service;
 
 import fr.index.cloud.ens.search.common.portlet.service.SearchCommonServiceImpl;
-import fr.index.cloud.ens.search.options.portlet.model.SearchOptionsForm;
-import fr.index.cloud.ens.search.options.portlet.model.SearchOptionsVocabularyItem;
-import fr.index.cloud.ens.search.options.portlet.repository.SearchOptionsRepository;
+import fr.index.cloud.ens.search.filters.portlet.model.SearchFiltersForm;
+import fr.index.cloud.ens.search.filters.portlet.model.SearchFiltersVocabularyItem;
+import fr.index.cloud.ens.search.filters.portlet.repository.SearchFiltersRepository;
 import fr.toutatice.portail.cms.nuxeo.api.PageSelectors;
 import fr.toutatice.portail.cms.nuxeo.api.cms.NuxeoDocumentContext;
 import fr.toutatice.portail.cms.nuxeo.api.domain.DocumentDTO;
@@ -11,6 +11,7 @@ import fr.toutatice.portail.cms.nuxeo.api.services.dao.DocumentDAO;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang.BooleanUtils;
 import org.apache.commons.lang.CharEncoding;
 import org.apache.commons.lang.StringUtils;
 import org.osivia.portal.api.context.PortalControllerContext;
@@ -35,14 +36,14 @@ import java.text.Normalizer;
 import java.util.*;
 
 /**
- * Search options portlet service implementation.
+ * Search filters portlet service implementation.
  *
  * @author Cédric Krommenhoek
  * @see SearchCommonServiceImpl
- * @see SearchOptionsService
+ * @see SearchFiltersService
  */
 @Service
-public class SearchOptionsServiceImpl extends SearchCommonServiceImpl implements SearchOptionsService {
+public class SearchFiltersServiceImpl extends SearchCommonServiceImpl implements SearchFiltersService {
 
     /**
      * Location selector identifier.
@@ -64,7 +65,7 @@ public class SearchOptionsServiceImpl extends SearchCommonServiceImpl implements
      * Portlet repository.
      */
     @Autowired
-    private SearchOptionsRepository repository;
+    private SearchFiltersRepository repository;
 
     /**
      * Portal URL factory.
@@ -88,21 +89,32 @@ public class SearchOptionsServiceImpl extends SearchCommonServiceImpl implements
     /**
      * Constructor.
      */
-    public SearchOptionsServiceImpl() {
+    public SearchFiltersServiceImpl() {
         super();
     }
 
 
     @Override
-    public SearchOptionsForm getForm(PortalControllerContext portalControllerContext) throws PortletException {
+    public SearchFiltersForm getForm(PortalControllerContext portalControllerContext) throws PortletException {
+        // Portlet request
+        PortletRequest request = portalControllerContext.getRequest();
         // Window
-        PortalWindow window = WindowFactory.getWindow(portalControllerContext.getRequest());
+        PortalWindow window = WindowFactory.getWindow(request);
 
         // Form
-        SearchOptionsForm form = this.applicationContext.getBean(SearchOptionsForm.class);
+        SearchFiltersForm form = this.applicationContext.getBean(SearchFiltersForm.class);
+
+        // Modal indicator
+        boolean modal = BooleanUtils.toBoolean(window.getProperty(MODAL_WINDOW_PROPERTY));
+        form.setModal(modal);
 
         // Selectors
-        Map<String, List<String>> selectors = PageSelectors.decodeProperties(window.getProperty(SELECTORS_WINDOW_PROPERTY));
+        Map<String, List<String>> selectors;
+        if (modal) {
+            selectors = PageSelectors.decodeProperties(window.getProperty(SELECTORS_WINDOW_PROPERTY));
+        } else {
+            selectors = PageSelectors.decodeProperties(request.getParameter(SELECTORS_PARAMETER));
+        }
 
         // Location
         String navigationPath = window.getProperty(NAVIGATION_PATH_WINDOW_PROPERTY);
@@ -128,30 +140,16 @@ public class SearchOptionsServiceImpl extends SearchCommonServiceImpl implements
 
 
     @Override
-    public String getSearchRedirectionUrl(PortalControllerContext portalControllerContext, SearchOptionsForm form) throws PortletException {
+    public String getSearchRedirectionUrl(PortalControllerContext portalControllerContext, SearchFiltersForm form) throws PortletException {
         // Search path
         String path = this.repository.getSearchPath(portalControllerContext);
 
-        // Search URL
-        String url;
-        if (StringUtils.isEmpty(path)) {
-            url = null;
-        } else {
-            // Page parameters
-            Map<String, String> parameters = new HashMap<>(1);
-            parameters.put(SELECTORS_PARAMETER, this.buildSelectorsParameter(form));
-
-            // CMS URL
-            url = this.portalUrlFactory.getCMSUrl(portalControllerContext, null, path, parameters, null, null, null, null,
-                    null, null);
-        }
-
-        return url;
+        return this.getRedirectionUrl(portalControllerContext, form, path);
     }
 
 
     @Override
-    public String saveSearch(PortalControllerContext portalControllerContext, SearchOptionsForm form) throws PortletException {
+    public String saveSearch(PortalControllerContext portalControllerContext, SearchFiltersForm form) throws PortletException {
         if (StringUtils.isNotBlank(form.getSavedSearchDisplayName())) {
             // User preferences
             UserPreferences userPreferences = this.repository.getUserPreferences(portalControllerContext);
@@ -182,17 +180,48 @@ public class SearchOptionsServiceImpl extends SearchCommonServiceImpl implements
             userPreferences.setUpdate(true);
         }
 
-        return this.getSearchRedirectionUrl(portalControllerContext, form);
+        // Search filters path
+        String path = this.repository.getSearchFiltersPath(portalControllerContext);
+
+        return this.getRedirectionUrl(portalControllerContext, form, path);
+    }
+
+
+    /**
+     * Get redirection URL.
+     *
+     * @param portalControllerContext portal controller context
+     * @param form                    search filters form
+     * @param path                    path
+     * @return URL
+     */
+    private String getRedirectionUrl(PortalControllerContext portalControllerContext, SearchFiltersForm form, String path) {
+        // Redirection URL
+        String url;
+
+        if (StringUtils.isEmpty(path)) {
+            url = null;
+        } else {
+            // Page parameters
+            Map<String, String> parameters = new HashMap<>(1);
+            parameters.put(SELECTORS_PARAMETER, this.buildSelectorsParameter(form));
+
+            // CMS URL
+            url = this.portalUrlFactory.getCMSUrl(portalControllerContext, null, path, parameters, null, null, null, null,
+                    null, null);
+        }
+
+        return url;
     }
 
 
     /**
      * Build selectors parameter.
      *
-     * @param form search options form
+     * @param form search filters form
      * @return parameter
      */
-    private String buildSelectorsParameter(SearchOptionsForm form) {
+    private String buildSelectorsParameter(SearchFiltersForm form) {
         // Selectors
         Map<String, List<String>> selectors = new HashMap<>();
 
@@ -219,7 +248,7 @@ public class SearchOptionsServiceImpl extends SearchCommonServiceImpl implements
 
 
     @Override
-    public void clearLocation(PortalControllerContext portalControllerContext, SearchOptionsForm form) throws PortletException {
+    public void clearLocation(PortalControllerContext portalControllerContext, SearchFiltersForm form) {
         form.setLocation(null);
     }
 
@@ -244,7 +273,7 @@ public class SearchOptionsServiceImpl extends SearchCommonServiceImpl implements
             // All
             JSONObject object = new JSONObject();
             object.put("id", StringUtils.EMPTY);
-            object.put("text", bundle.getString("SEARCH_OPTIONS_LEVEL_ALL"));
+            object.put("text", bundle.getString("SEARCH_FILTERS_LEVEL_ALL"));
             object.put("optgroup", false);
             object.put("level", 1);
             results.add(0, object);
@@ -262,7 +291,7 @@ public class SearchOptionsServiceImpl extends SearchCommonServiceImpl implements
      * @return results
      */
     private JSONArray parseVocabulary(JSONArray jsonArray, String filter) throws IOException {
-        Map<String, SearchOptionsVocabularyItem> items = new HashMap<>(jsonArray.size());
+        Map<String, SearchFiltersVocabularyItem> items = new HashMap<>(jsonArray.size());
         Set<String> rootItems = new LinkedHashSet<>();
 
         boolean multilevel = false;
@@ -278,9 +307,9 @@ public class SearchOptionsServiceImpl extends SearchCommonServiceImpl implements
             }
             boolean matches = this.matchesVocabularyItem(value, filter);
 
-            SearchOptionsVocabularyItem item = items.get(key);
+            SearchFiltersVocabularyItem item = items.get(key);
             if (item == null) {
-                item = this.applicationContext.getBean(SearchOptionsVocabularyItem.class, key);
+                item = this.applicationContext.getBean(SearchFiltersVocabularyItem.class, key);
                 items.put(key, item);
             }
             item.setValue(value);
@@ -295,9 +324,9 @@ public class SearchOptionsServiceImpl extends SearchCommonServiceImpl implements
             } else {
                 multilevel = true;
 
-                SearchOptionsVocabularyItem parentItem = items.get(parent);
+                SearchFiltersVocabularyItem parentItem = items.get(parent);
                 if (parentItem == null) {
-                    parentItem = this.applicationContext.getBean(SearchOptionsVocabularyItem.class, parent);
+                    parentItem = this.applicationContext.getBean(SearchFiltersVocabularyItem.class, parent);
                     items.put(parent, parentItem);
                 }
                 parentItem.getChildren().add(key);
@@ -367,10 +396,10 @@ public class SearchOptionsServiceImpl extends SearchCommonServiceImpl implements
      * @param level     depth level
      * @param parentId  parent identifier
      */
-    private void generateVocabularyChildren(Map<String, SearchOptionsVocabularyItem> items, JSONArray jsonArray, Set<String> children, boolean optgroup, int level,
+    private void generateVocabularyChildren(Map<String, SearchFiltersVocabularyItem> items, JSONArray jsonArray, Set<String> children, boolean optgroup, int level,
                                             String parentId) throws UnsupportedEncodingException {
         for (String child : children) {
-            SearchOptionsVocabularyItem item = items.get(child);
+            SearchFiltersVocabularyItem item = items.get(child);
             if ((item != null) && item.isDisplayed()) {
                 // Identifier
                 String id;

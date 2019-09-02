@@ -1,4 +1,4 @@
-package fr.index.cloud.ens.search.options.portlet.model;
+package fr.index.cloud.ens.search.filters.portlet.model;
 
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
@@ -8,13 +8,13 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 
 /**
- * Search options vocabulary item java-bean.
+ * Search filters vocabulary item java-bean.
  *
  * @author Cédric Krommenhoek
  */
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-public class SearchOptionsVocabularyItem {
+public class SearchFiltersVocabularyItem {
 
     /**
      * Vocabulary key.
@@ -48,7 +48,7 @@ public class SearchOptionsVocabularyItem {
      *
      * @param key vocabulary key
      */
-    public SearchOptionsVocabularyItem(String key) {
+    public SearchFiltersVocabularyItem(String key) {
         super();
         this.key = key;
         this.children = new LinkedHashSet<>();
