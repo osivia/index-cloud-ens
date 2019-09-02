@@ -56,7 +56,7 @@ public class CreatePublicationSpaceCommand implements INuxeoCommand {
 
 
         // Mass publication
-        Documents documents = documentService.query("SELECT * FROM Document WHERE ecm:path STARTSWITH '/default-domain/publication-space'");
+        Documents documents = documentService.query("SELECT * FROM Document WHERE ecm:path STARTSWITH '/default-domain/publication-space' AND ecm:primaryType <> 'PortalSite'");
         for (Document document : documents) {
             this.log.info("Publish document : " + document.getPath());
 
