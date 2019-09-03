@@ -25,23 +25,20 @@ import fr.toutatice.portail.cms.nuxeo.api.INuxeoCommand;
  * @see INuxeoCommand
  */
 public class GetSharedUrlCommand implements INuxeoCommand {
-    
 
-    
 
     /** Parent identifier. */
     private final Document doc;
 
 
-    /** publication format */    
+    /** publication format */
     String format;
 
 
-    
     /**
      * Constructor.
      */
-    public GetSharedUrlCommand(Document doc,  String format) {
+    public GetSharedUrlCommand(Document doc, String format) {
         super();
         this.doc = doc;
         this.format = format;
@@ -53,35 +50,36 @@ public class GetSharedUrlCommand implements INuxeoCommand {
      */
     @Override
     public Object execute(Session nuxeoSession) throws Exception {
-        DocumentService documentService = nuxeoSession.getAdapter(DocumentService.class);
-         
-        PropertyMap properties = new PropertyMap();        
-        
-        String shareId = doc.getProperties().getString("rshr:linkId") ;
-        if( StringUtils.isEmpty(shareId)) {
+
+        PropertyMap properties = new PropertyMap();
+        boolean removeFormat = false;
+
+        String shareId = doc.getProperties().getString("rshr:linkId");
+        if (StringUtils.isEmpty(shareId)) {
             shareId = IDGenerator.generateId();
-            properties.set( "rshr:linkId", shareId);
+            properties.set("rshr:linkId", shareId);
         }
+
+        if (StringUtils.isNotEmpty(format))
+            properties.set("rshr:format", format);
         
- 
-        if( StringUtils.isNotEmpty(format))
-            properties.set( "rshr:format", format);   
-        
-        documentService.update(doc, properties);
-        
-        
-        if(DriveRestController.DEFAULT_FORMAT.equals(format))    {
-            documentService.removeProperty(doc, "rshr:format");           
+        if (DriveRestController.DEFAULT_FORMAT.equals(format)) {
+            removeFormat = true;
         }
+
+        // Operation request
+        OperationRequest request = nuxeoSession.newRequest("Index.UpdateMetadata");
+        request.setInput(doc);
+        request.set("properties", properties);
+        request.set("removeFormat", removeFormat);
         
-        // Return 
+        request.execute();
+
+        // Return
         Map<String, String> returnMap = new HashMap<>();
-        returnMap.put("shareId",shareId);       
+        returnMap.put("shareId", shareId);
         return returnMap;
     }
-
-
-
 
 
     /**

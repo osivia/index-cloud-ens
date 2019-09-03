@@ -91,7 +91,13 @@ public class PatchCommand implements INuxeoCommand {
             PropertyMap properties = new PropertyMap();     
             properties.set(listName, CommandUtils.convertToString(list));
             
-            documentService.update(doc, properties);
+            // Operation request
+            OperationRequest request = nuxeoSession.newRequest("Index.UpdateMetadata");
+            request.setInput(doc);
+            request.set("properties", properties);     
+            
+             
+            request.execute();   
         }
 
 
