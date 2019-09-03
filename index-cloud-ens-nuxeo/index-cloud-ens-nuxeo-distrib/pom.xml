@@ -15,33 +15,32 @@
     <name>Cloud enseignant - Distribution Nuxeo</name>
 
 	<properties>
-		<nuxeo.version>6.0-HF44</nuxeo.version>
-		<nuxeodrive.version>6.0-HF44</nuxeodrive.version>
-		<opentoutatice.version>4.7.6</opentoutatice.version>
-		<ottc.es.version>4.7</ottc.es.version>
-		<ottc.collab.version>4.9-SNAPSHOT</ottc.collab.version>
-		<ottc.filenaming.version>4.6</ottc.filenaming.version>
-		<ottc.file.versioning.version>4.7</ottc.file.versioning.version>
-		<ottc.wf.version>4.6</ottc.wf.version>
-		<ottc.notif.version>4.7</ottc.notif.version>
-		
-		<ottc.ui.version>4.6.1</ottc.ui.version>
-		<ottc.drive.version>4.6.2</ottc.drive.version>
-		<ottc.generic-ui.version>4.6</ottc.generic-ui.version>
-		<ottc.checkin.version>4.6.1</ottc.checkin.version> 
 
-		<ottc.es.custom.version>4.7</ottc.es.custom.version>
-		<ottc.procedure.version>4.7.1</ottc.procedure.version>
+		<nuxeo.version>6.1.0</nuxeo.version>
+		<nuxeodrive.version>6.1.0</nuxeodrive.version>
+		<ottc.collab.version>4.7.17</ottc.collab.version>
+		<ottc.filenaming.version>4.7.17</ottc.filenaming.version>
+		<ottc.file.versioning.version>4.7.17</ottc.file.versioning.version>
+		<!-- <ottc.wf.version>4.6</ottc.wf.version> -->
+		<ottc.notif.version>4.7.17</ottc.notif.version>
+
 		
-		<ottc.news.version>4.6</ottc.news.version>
+		<!-- <ottc.ui.version>4.6.1</ottc.ui.version>
+		<ottc.drive.version>4.6.2</ottc.drive.version> -->
+		<ottc.generic-ui.version>4.7.17</ottc.generic-ui.version>
+		<!-- <ottc.checkin.version>4.6.1</ottc.checkin.version> --> 
+
+		<ottc.procedure.version>4.7.17</ottc.procedure.version>
 		
-		<ottc.jwt.version>4.7</ottc.jwt.version>
-		<ottc.onlyoffice.version>4.7.2</ottc.onlyoffice.version>
+		<!-- <ottc.news.version>4.6</ottc.news.version> -->
+		
+		<ottc.jwt.version>4.7.17</ottc.jwt.version>
+		<ottc.onlyoffice.version>4.7.17</ottc.onlyoffice.version>
 		
 		<ottc.monitoring.version>2.1</ottc.monitoring.version>
 		
 
-		<webmode.version>4.7.1</webmode.version>
+		<!-- <webmode.version>4.7.1</webmode.version> -->
 		
 	</properties>
 
@@ -158,6 +157,11 @@
             <artifactId>opentoutatice-ecm-platform-reporting</artifactId>
             <version>${opentoutatice.version}</version>
         </dependency>
+        <dependency>
+            <groupId>opentoutatice-ecm.platform</groupId>
+            <artifactId>opentoutatice-core-type-enricher</artifactId>
+            <version>${opentoutatice.version}</version>
+        </dependency>        
 
 		<!-- Addons -->
 		<dependency>
@@ -180,6 +184,7 @@
 			<artifactId>opentoutatice-addon-portal-notifications-ecm</artifactId>
 			<version>${ottc.notif.version}</version>
 		</dependency>
+		<!-- 
 		<dependency>
 			<groupId>opentoutatice-ecm.ui</groupId>
 			<artifactId>opentoutatice-addon-simple-ui-ecm</artifactId>
@@ -189,17 +194,19 @@
 			<groupId>opentoutatice-ecm.workflows-integration</groupId>
 			<artifactId>opentoutatice-addon-workflows-integration-ecm</artifactId>
 			<version>${ottc.wf.version}</version>
-		</dependency>
+		</dependency> -->
 		<dependency>
 			<groupId>opentoutatice-ecm.collab-tools</groupId>
 			<artifactId>opentoutatice-collab-tools-ecm</artifactId>
 			<version>${ottc.collab.version}</version>
 		</dependency>
+		<!-- 
 		<dependency>
 			<groupId>opentoutatice-ecm.drive</groupId>
 			<artifactId>opentoutatice-drive</artifactId>
 			<version>${ottc.drive.version}</version>
 		</dependency>
+		 -->
 		<dependency>
 			<groupId>opentoutatice-ecm.generic-ui-service</groupId>
 			<artifactId>opentoutatice-generic-ui-service-ecm</artifactId>
@@ -215,6 +222,7 @@
 		    <artifactId>opentoutatice-addon-procedures-ecm</artifactId>
 		    <version>${ottc.procedure.version}</version>
 		</dependency>
+		<!-- 
 		<dependency>
 		    <groupId>opentoutatice-ecm.checkin</groupId>
 		    <artifactId>opentoutatice-addon-checkin-ecm</artifactId>
@@ -225,6 +233,8 @@
             <artifactId>opentoutatice-addon-news-ecm</artifactId>
             <version>${ottc.news.version}</version>
         </dependency>
+        
+        -->
         <dependency>
             <groupId>opentoutatice-ecm.jwt</groupId>
             <artifactId>opentoutatice-addon-jwt-ecm</artifactId>
@@ -234,13 +244,15 @@
             <groupId>opentoutatice-ecm.onlyoffice</groupId>
         	<artifactId>opentoutatice-addon-onlyoffice-ecm</artifactId>
             <version>${ottc.onlyoffice.version}</version>
-		</dependency>        
+		</dependency>
+		
+		<!--         
 		<dependency>
             <groupId>opentoutatice-ecm.web-mode</groupId>
             <artifactId>opentoutatice-web-mode-ecm</artifactId>
             <version>${webmode.version}</version>
         </dependency>        
-        
+         -->
         <dependency>
             <groupId>opentoutatice-ecm.monitoring</groupId>
             <artifactId>opentoutatice-monitoring-ecm</artifactId>
@@ -375,7 +387,7 @@
 		</dependency>
 		
 
-		<!-- Nuxeo Drive -->
+		<!-- Nuxeo Drive 
 		<dependency>
   			<groupId>org.nuxeo.ecm</groupId>
 			<artifactId>nuxeo-drive-core</artifactId>
@@ -401,7 +413,8 @@
 			<artifactId>nuxeo-wss-front</artifactId>
 			<version>${nuxeodrive.version}</version>
 		</dependency>
-
+		-->
+		
 		<!-- Platform explorer -->
 		<dependency>
 			<groupId>org.nuxeo.ecm.platform</groupId>
