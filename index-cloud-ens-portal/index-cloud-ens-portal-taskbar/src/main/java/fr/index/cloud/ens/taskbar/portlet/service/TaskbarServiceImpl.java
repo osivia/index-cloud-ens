@@ -3,9 +3,11 @@ package fr.index.cloud.ens.taskbar.portlet.service;
 import fr.index.cloud.ens.taskbar.portlet.model.*;
 import fr.index.cloud.ens.taskbar.portlet.repository.TaskbarRepository;
 import fr.toutatice.portail.cms.nuxeo.api.NuxeoException;
+import fr.toutatice.portail.cms.nuxeo.api.PageSelectors;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang.StringUtils;
 import org.osivia.portal.api.Constants;
 import org.osivia.portal.api.PortalException;
@@ -132,6 +134,7 @@ public class TaskbarServiceImpl implements TaskbarService {
         String basePath = this.repository.getBasePath(portalControllerContext, windowProperties);
         // Navigation tasks
         List<TaskbarTask> navigationTasks = this.repository.getNavigationTasks(portalControllerContext, basePath);
+
 
         // Active navigation task identifier
         String activeId;
@@ -285,6 +288,9 @@ public class TaskbarServiceImpl implements TaskbarService {
      */
     private List<Task> createTasks(PortalControllerContext portalControllerContext, String basePath, Bundle bundle, String activeId,
                                    List<TaskbarTask> navigationTasks) throws PortletException {
+        // Search path
+        String searchPath = this.getSearchPath(portalControllerContext);
+
         List<Task> tasks;
 
         if (CollectionUtils.isEmpty(navigationTasks)) {
@@ -293,7 +299,13 @@ public class TaskbarServiceImpl implements TaskbarService {
             tasks = new ArrayList<>(navigationTasks.size());
 
             for (TaskbarTask navigationTask : navigationTasks) {
-                Task task = this.createTask(portalControllerContext, basePath, bundle, activeId, navigationTask);
+                Task task;
+                if ("Folder".equals(navigationTask.getDocumentType())) {
+                    task = this.repository.generateFolderTask(portalControllerContext, basePath, navigationTask.getPath(), searchPath);
+                } else {
+                    task = this.createTask(portalControllerContext, basePath, bundle, activeId, navigationTask);
+                }
+
                 if (task != null) {
                     tasks.add(task);
                 }
@@ -315,63 +327,58 @@ public class TaskbarServiceImpl implements TaskbarService {
      * @return task
      */
     private Task createTask(PortalControllerContext portalControllerContext, String basePath, Bundle bundle, String activeId, TaskbarTask navigationTask) throws PortletException {
-        Task task;
-        if ("Folder".equals(navigationTask.getDocumentType())) {
-            task = this.repository.generateFolderTask(portalControllerContext, basePath, navigationTask.getPath());
+        Task task = this.applicationContext.getBean(ServiceTask.class);
+
+        // Icon
+        String icon = navigationTask.getIcon();
+        task.setIcon(icon);
+
+        // Display name
+        String displayName;
+        if (StringUtils.isEmpty(navigationTask.getTitle())) {
+            displayName = bundle.getString(navigationTask.getKey(), navigationTask.getCustomizedClassLoader());
         } else {
-            task = this.applicationContext.getBean(ServiceTask.class);
-
-            // Icon
-            String icon = navigationTask.getIcon();
-            task.setIcon(icon);
-
-            // Display name
-            String displayName;
-            if (StringUtils.isEmpty(navigationTask.getTitle())) {
-                displayName = bundle.getString(navigationTask.getKey(), navigationTask.getCustomizedClassLoader());
-            } else {
-                displayName = navigationTask.getTitle();
-            }
-            task.setDisplayName(displayName);
-
-            // URL
-            String url;
-            if (navigationTask.getPlayer() != null) {
-                // Start portlet URL
-                PanelPlayer player = navigationTask.getPlayer();
-
-                // Window properties
-                Map<String, String> properties = new HashMap<>();
-                if (player.getProperties() != null) {
-                    properties.putAll(player.getProperties());
-                }
-                properties.put(ITaskbarService.TASK_ID_WINDOW_PROPERTY, navigationTask.getId());
-                if (StringUtils.isNotEmpty(displayName)) {
-                    properties.put("osivia.title", displayName);
-                }
-                properties.put("osivia.back.reset", String.valueOf(true));
-                properties.put("osivia.navigation.reset", String.valueOf(true));
-
-                try {
-                    url = this.portalUrlFactory.getStartPortletUrl(portalControllerContext, player.getInstance(), properties);
-                } catch (PortalException e) {
-                    throw new PortletException(e);
-                }
-            } else if (StringUtils.isNotEmpty(navigationTask.getPath())) {
-                // CMS URL
-                String path = navigationTask.getPath();
-
-                url = this.portalUrlFactory.getCMSUrl(portalControllerContext, null, path, null, null, "taskbar", null, null, "1", null);
-            } else {
-                // Unknown case
-                url = "#";
-            }
-            task.setUrl(url);
-
-            // Active indicator
-            boolean active = StringUtils.equals(activeId, navigationTask.getId());
-            task.setActive(active);
+            displayName = navigationTask.getTitle();
         }
+        task.setDisplayName(displayName);
+
+        // URL
+        String url;
+        if (navigationTask.getPlayer() != null) {
+            // Start portlet URL
+            PanelPlayer player = navigationTask.getPlayer();
+
+            // Window properties
+            Map<String, String> properties = new HashMap<>();
+            if (player.getProperties() != null) {
+                properties.putAll(player.getProperties());
+            }
+            properties.put(ITaskbarService.TASK_ID_WINDOW_PROPERTY, navigationTask.getId());
+            if (StringUtils.isNotEmpty(displayName)) {
+                properties.put("osivia.title", displayName);
+            }
+            properties.put("osivia.back.reset", String.valueOf(true));
+            properties.put("osivia.navigation.reset", String.valueOf(true));
+
+            try {
+                url = this.portalUrlFactory.getStartPortletUrl(portalControllerContext, player.getInstance(), properties);
+            } catch (PortalException e) {
+                throw new PortletException(e);
+            }
+        } else if (StringUtils.isNotEmpty(navigationTask.getPath())) {
+            // CMS URL
+            String path = navigationTask.getPath();
+
+            url = this.portalUrlFactory.getCMSUrl(portalControllerContext, null, path, null, null, "taskbar", null, null, "1", null);
+        } else {
+            // Unknown case
+            url = "#";
+        }
+        task.setUrl(url);
+
+        // Active indicator
+        boolean active = StringUtils.equals(activeId, navigationTask.getId());
+        task.setActive(active);
 
         return task;
     }
@@ -451,9 +458,11 @@ public class TaskbarServiceImpl implements TaskbarService {
 
         // Base path
         String basePath = this.repository.getBasePath(portalControllerContext, windowProperties);
+        // Search path
+        String searchPath = this.getSearchPath(portalControllerContext);
 
         // Children
-        SortedSet<FolderTask> children = this.repository.getFolderChildren(portalControllerContext, basePath, path);
+        SortedSet<FolderTask> children = this.repository.getFolderChildren(portalControllerContext, basePath, path, searchPath);
 
         // JSON array
         JSONArray array = new JSONArray();
@@ -485,6 +494,46 @@ public class TaskbarServiceImpl implements TaskbarService {
         }
 
         return array;
+    }
+
+
+    /**
+     * Get search path.
+     *
+     * @param portalControllerContext portal controller context
+     * @return path, may be null
+     */
+    private String getSearchPath(PortalControllerContext portalControllerContext) {
+        // Portlet request
+        PortletRequest request = portalControllerContext.getRequest();
+        // Selectors
+        Map<String, List<String>> selectors = PageSelectors.decodeProperties(request.getParameter("selectors"));
+
+        // Search path
+        return this.getSelectorValue(selectors, "location");
+    }
+
+
+    /**
+     * Get selector value.
+     *
+     * @param selectors  selectors
+     * @param selectorId selector identifier
+     * @return value, may be null
+     */
+    private String getSelectorValue(Map<String, List<String>> selectors, String selectorId) {
+        String value;
+        if (MapUtils.isEmpty(selectors)) {
+            value = null;
+        } else {
+            List<String> values = selectors.get(selectorId);
+            if (CollectionUtils.isEmpty(values)) {
+                value = null;
+            } else {
+                value = values.get(0);
+            }
+        }
+        return value;
     }
 
 }

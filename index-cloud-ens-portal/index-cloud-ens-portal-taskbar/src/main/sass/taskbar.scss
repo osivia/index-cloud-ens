@@ -1,4 +1,4 @@
-@import "../../../../index-cloud-ens-portal-charte/src/main/sass/osivia/variables";
+@import "../../../../index-cloud-ens-portal-charte/src/main/sass/cloud-ens/variables";
 
 .taskbar {
   > ul > li {
@@ -24,6 +24,14 @@
 
       &:hover {
         color: darken($secondary, $emphasized-link-hover-darken-percentage);
+      }
+    }
+
+    &.search-location {
+      background-color: $blue-lighter;
+
+      &:hover {
+        background-color: darken($blue-lighter, 5%);
       }
     }
   }

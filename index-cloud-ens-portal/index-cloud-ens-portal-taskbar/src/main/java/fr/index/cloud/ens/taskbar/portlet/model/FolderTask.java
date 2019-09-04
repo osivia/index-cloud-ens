@@ -1,6 +1,5 @@
 package fr.index.cloud.ens.taskbar.portlet.model;
 
-import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -46,6 +45,10 @@ public class FolderTask extends Task {
      * Accepted types.
      */
     private String[] acceptedTypes;
+    /**
+     * Search location indicator.
+     */
+    private boolean searchLocation;
 
 
     /**
@@ -61,7 +64,7 @@ public class FolderTask extends Task {
         return true;
     }
 
-    
+
     /**
      * Getter for children.
      *
@@ -188,4 +191,11 @@ public class FolderTask extends Task {
         this.acceptedTypes = acceptedTypes;
     }
 
+    public boolean isSearchLocation() {
+        return searchLocation;
+    }
+
+    public void setSearchLocation(boolean searchLocation) {
+        this.searchLocation = searchLocation;
+    }
 }
