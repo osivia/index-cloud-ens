@@ -34,7 +34,6 @@
     <uid:major_version><![CDATA[0]]></uid:major_version>
   </schema>
   <schema xmlns:ttcs="http://www.nuxeo.org/ecm/project/schemas/ACRENNES2/toutatice-space" name="toutatice_space">
-    <ttcs:headImage/>
     <ttcs:spaceCommentable><![CDATA[true]]></ttcs:spaceCommentable>
     <ttcs:visibility/>
     <ttcs:catSpaceKey/>

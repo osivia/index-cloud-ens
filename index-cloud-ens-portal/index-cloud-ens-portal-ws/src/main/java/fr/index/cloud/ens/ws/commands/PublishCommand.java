@@ -60,37 +60,32 @@ public class PublishCommand implements INuxeoCommand {
     @Override
     public Object execute(Session nuxeoSession) throws Exception {
         DocumentService documentService = nuxeoSession.getAdapter(DocumentService.class);
-         
-        PropertyMap properties = new PropertyMap();        
-        
 
+        PropertyMap properties = new PropertyMap();        
         Boolean enabledLink = doc.getProperties().getBoolean("rshr:enabledLink", false) ;
         if( !enabledLink)
             properties.set( "rshr:enabledLink", true);
-          
-       
-        documentService.update(doc, properties);
-        
-
-        
-        PropertyMap value = new PropertyMap();
+         
+        PropertyMap targetValue = new PropertyMap();
         String pubId = IDGenerator.generateId();
-        value.set("pubId", pubId);
+        targetValue.set("pubId", pubId);
         
 
-        value.set("pubOrganization", organization);
-        value.set("pubGroup", publishBean.getPubGroup());   
-        value.set("pubContext",publishBean.getPubContext());
-        value.set("pubSchoolYear",publishBean.getPubSchoolYear());
+        targetValue.set("pubOrganization", organization);
+        targetValue.set("pubGroup", publishBean.getPubGroup());   
+        targetValue.set("pubContext",publishBean.getPubContext());
+        targetValue.set("pubSchoolYear",publishBean.getPubSchoolYear());
         
-        value.set("pubDate", new Date(System.currentTimeMillis()));
+        targetValue.set("pubDate", new Date(System.currentTimeMillis()));
         
          // Operation request
-        OperationRequest request = nuxeoSession.newRequest("Document.AddComplexProperty");
+        OperationRequest request = nuxeoSession.newRequest("Index.UpdateMetadata");
         request.setInput(doc);
-        request.set("xpath", "rshr:targets");
-        request.set("value", value);
+        request.set("targetValue", targetValue);
+        request.set("targetAction", "publish");        
+        request.set("properties", properties);     
         
+         
         request.execute();        
         
         // Return 

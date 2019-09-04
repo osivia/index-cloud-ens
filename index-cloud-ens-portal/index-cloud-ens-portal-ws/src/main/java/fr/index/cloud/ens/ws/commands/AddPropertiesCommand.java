@@ -58,9 +58,7 @@ public class AddPropertiesCommand implements INuxeoCommand {
          
         PropertyMap properties = new PropertyMap();        
         
-   
-          
-        
+         
         PropertyList levels = doc.getProperties().getList( "idxcl:levels");
         if( levels == null)
             levels = new PropertyList();
@@ -77,8 +75,15 @@ public class AddPropertiesCommand implements INuxeoCommand {
         
    
         
-        if( properties.size() > 0)
-            documentService.update(doc, properties);
+        if( properties.size() > 0)  {
+            // Operation request
+            OperationRequest request = nuxeoSession.newRequest("Index.UpdateMetadata");
+            request.setInput(doc);
+            request.set("properties", properties);     
+            
+             
+            request.execute();   
+        }
         
 
         return null;

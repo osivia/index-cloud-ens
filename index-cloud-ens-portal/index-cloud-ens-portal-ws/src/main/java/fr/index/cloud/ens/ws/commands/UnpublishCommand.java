@@ -61,25 +61,26 @@ public class UnpublishCommand implements INuxeoCommand {
             throw new RuntimeException("Publication with id '" + unpubId + " not consistent");
         }
 
-        // Operation request
-        OperationRequest request = nuxeoSession.newRequest("Document.RemoveProperty");
-        request.setInput(currentDoc);
-        request.set("xpath", "rshr:targets/" + indice);
-
-        /* If document is not public, disable the link */
         
+        /* If document is not public, disable the link */
+        PropertyMap properties = new PropertyMap();
         if (targets.size() == 1) {
             Boolean publicLink = currentDoc.getProperties().getBoolean("rshr:publicLink", false);
             if (!publicLink) {
-                PropertyMap properties = new PropertyMap();
                 properties.set("rshr:enabledLink", false);
-                
-                documentService.update(currentDoc, properties);
             }
-        }
+        }      
+        
+        OperationRequest request = nuxeoSession.newRequest("Index.UpdateMetadata");
+        request.setInput(currentDoc);
+        request.set("targetIndex", indice);
+        request.set("targetAction", "unpublish");      
+        request.set("properties", properties);     
+        
+        request.execute();             
+        
 
 
-        request.execute();
 
         return null;
 
