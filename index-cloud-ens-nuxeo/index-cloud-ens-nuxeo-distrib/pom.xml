@@ -30,16 +30,16 @@
 		<ottc.generic-ui.version>4.7.17</ottc.generic-ui.version>
 		<!-- <ottc.checkin.version>4.6.1</ottc.checkin.version> --> 
 
-		<ottc.procedure.version>4.7.17</ottc.procedure.version>
+		<ottc.procedure.version>4.7.17.1</ottc.procedure.version>
 		
 		<!-- <ottc.news.version>4.6</ottc.news.version> -->
 		
 		<ottc.jwt.version>4.7.17</ottc.jwt.version>
 		<ottc.onlyoffice.version>4.7.17</ottc.onlyoffice.version>
+		<ottc.quota.version>4.9-SNAPSHOT</ottc.quota.version>
 		
 		<ottc.monitoring.version>2.1</ottc.monitoring.version>
 		
-
 		<!-- <webmode.version>4.7.1</webmode.version> -->
 		
 	</properties>
@@ -245,6 +245,11 @@
         	<artifactId>opentoutatice-addon-onlyoffice-ecm</artifactId>
             <version>${ottc.onlyoffice.version}</version>
 		</dependency>
+        <dependency>
+            <groupId>opentoutatice-ecm.quota</groupId>
+            <artifactId>opentoutatice-addon-quota</artifactId>
+            <version>${ottc.quota.version}</version>
+        </dependency>		
 		
 		<!--         
 		<dependency>

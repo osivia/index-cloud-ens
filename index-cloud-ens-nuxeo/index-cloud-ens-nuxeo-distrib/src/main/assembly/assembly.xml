@@ -74,6 +74,8 @@
                 </include>     
                 <include>opentoutatice-ecm.onlyoffice:opentoutatice-addon-onlyoffice-ecm:jar:${ottc.onlyoffice.version}
 				</include>
+                <include>opentoutatice-ecm.quota:opentoutatice-addon-quota:jar:${ottc.quota.version}
+                </include>
 
 				<!-- Login & SSO -->
 				<include>org.nuxeo.ecm.platform:nuxeo-platform-login-portal-sso:jar:${nuxeo.version}
