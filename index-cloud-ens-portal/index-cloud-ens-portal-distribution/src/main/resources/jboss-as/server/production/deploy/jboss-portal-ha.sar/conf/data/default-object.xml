@@ -1,9 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
-
-<!DOCTYPE deployments PUBLIC
-        "-//JBoss Portal//DTD Portal Object 2.6//EN"
-        "http://www.jboss.org/portal/dtd/portal-object_2_6.dtd">
+<!DOCTYPE deployments PUBLIC "-//JBoss Portal//DTD Portal Object 2.6//EN" "http://www.jboss.org/portal/dtd/portal-object_2_6.dtd">
 
 <deployments>
 
@@ -177,10 +173,6 @@
 
                 <properties>
                     <property>
-                        <name>order</name>
-                        <value>0</value>
-                    </property>
-                    <property>
                         <name>layout.id</name>
                         <value>cloud-ens-home</value>
                     </property>
@@ -241,10 +233,6 @@
 
                 <properties>
                     <property>
-                        <name>order</name>
-                        <value>0</value>
-                    </property>
-                    <property>
                         <name>layout.id</name>
                         <value>cloud-ens-home</value>
                     </property>
@@ -271,20 +259,8 @@
                             <value>portlet</value>
                         </property>
                         <property>
-                            <name>osivia.bootstrapPanelStyle</name>
-                            <value>false</value>
-                        </property>
-                        <property>
                             <name>osivia.title</name>
                             <value>Mes filtres</value>
-                        </property>
-                        <property>
-                            <name>osivia.maximized.cms.url</name>
-                            <value>false</value>
-                        </property>
-                        <property>
-                            <name>osivia.mobileCollapse</name>
-                            <value>false</value>
                         </property>
                         <property>
                             <name>theme.order</name>
@@ -411,23 +387,25 @@ return nuxeoRequest.toString();</value>
 					<height>0</height>
 				</window>
 			</page>
-		
-		
+
 			<page>
 				<page-name>create-account</page-name>
 				<display-name xml:lang="fr">Créer mon compte</display-name>
+
 				<properties>
 					<property>
 						<name>layout.id</name>
 						<value>cloud-ens-uncluttered</value>
 					</property>
 				</properties>
+
 				<security-constraint>
 					<policy-permission>
 						<action-name>view</action-name>
 						<unchecked />
 					</policy-permission>
 				</security-constraint>
+
 				<window>
 					<window-name>cloudens-person-creation-portlet-instance_1564665295669</window-name>
 					<instance-ref>cloudens-person-creation-portlet-instance</instance-ref>
@@ -442,20 +420,8 @@ return nuxeoRequest.toString();</value>
 							<value>portlet</value>
 						</property>
 						<property>
-							<name>osivia.bootstrapPanelStyle</name>
-							<value>false</value>
-						</property>
-						<property>
 							<name>osivia.title</name>
 							<value>Création de compte</value>
-						</property>
-						<property>
-							<name>osivia.maximized.cms.url</name>
-							<value>false</value>
-						</property>
-						<property>
-							<name>osivia.mobileCollapse</name>
-							<value>false</value>
 						</property>
 						<property>
 							<name>osivia.hideTitle</name>
@@ -469,16 +435,11 @@ return nuxeoRequest.toString();</value>
 					<height>0</height>
 				</window>
 			</page>
+
             <page>
                 <page-name>workspace-management</page-name>
                 <display-name xml:lang="fr">Espaces collaboratifs</display-name>
-
-                <properties>
-                    <property>
-                        <name>order</name>
-                        <value>1</value>
-                    </property>
-                </properties>
+                <properties />
 
                 <security-constraint>
                     <policy-permission>
@@ -636,13 +597,7 @@ return nuxeoRequest.toString();</value>
             <page>
                 <page-name>person-management</page-name>
                 <display-name xml:lang="fr">Utilisateurs</display-name>
-
-                <properties>
-                    <property>
-                        <name>order</name>
-                        <value>2</value>
-                    </property>
-                </properties>
+                <properties />
 
                 <security-constraint>
                     <policy-permission>
@@ -733,13 +688,7 @@ return nuxeoRequest.toString();</value>
             <page>
                 <page-name>group-management</page-name>
                 <display-name xml:lang="fr">Groupes</display-name>
-
-                <properties>
-                    <property>
-                        <name>order</name>
-                        <value>3</value>
-                    </property>
-                </properties>
+                <properties />
 
                 <security-constraint>
                     <policy-permission>
@@ -848,18 +797,10 @@ return nuxeoRequest.toString();</value>
                 </window>
             </page>
 
-
-
             <page>
                 <page-name>procedures-management</page-name>
                 <display-name xml:lang="fr">Télé-procédures</display-name>
-
-                <properties>
-                    <property>
-                        <name>order</name>
-                        <value>4</value>
-                    </property>
-                </properties>
+                <properties />
 
                 <security-constraint>
                     <policy-permission>
@@ -959,164 +900,144 @@ return nuxeoRequest.toString();</value>
                 </window>
             </page>
 
-		    <page>
-		      <page-name>application-management</page-name>
-		      <display-name xml:lang="fr">Applications</display-name>
-                <properties>
-                    <property>
-                        <name>order</name>
-                        <value>5</value>
-                    </property>
-                </properties>
-		      <security-constraint/>
-		      <window>
-		        <window-name>index-cloud-portal-ens-application-managementInstance_1563394688147</window-name>
-		        <instance-ref>index-cloud-portal-ens-application-managementInstance</instance-ref>
-		        <region>col-1</region>
-		        <properties>
-		          <property>
-		            <name>osivia.hideDecorators</name>
-		            <value>1</value>
-		          </property>
-                  <property>
-                      <name>osivia.ajaxLink</name>
-                      <value>1</value>
-                  </property>		          
-		          <property>
-		            <name>portal.windowContentType</name>
-		            <value>portlet</value>
-		          </property>
-		          <property>
-		            <name>osivia.bootstrapPanelStyle</name>
-		            <value>false</value>
-		          </property>
-		          <property>
-		            <name>osivia.maximized.cms.url</name>
-		            <value>false</value>
-		          </property>
-		          <property>
-		            <name>osivia.mobileCollapse</name>
-		            <value>false</value>
-		          </property>
-		          <property>
-		            <name>osivia.hideTitle</name>
-		            <value>1</value>
-		          </property>
-		          <property>
-		            <name>theme.order</name>
-		            <value>0</value>
-		          </property>
-		        </properties>
-		        <height>0</height>
-		      </window>
-		      <window>
-		        <window-name>toutatice-portail-cms-nuxeo-viewFragmentPortletInstance_1509441121000</window-name>
-		        <instance-ref>toutatice-portail-cms-nuxeo-viewFragmentPortletInstance</instance-ref>
-		        <region>col-1</region>
-		        <properties>
-		          <property>
-		            <name>portal.windowContentType</name>
-		            <value>portlet</value>
-		          </property>
-		          <property>
-		            <name>osivia.bootstrapPanelStyle</name>
-		            <value>true</value>
-		          </property>
-		          <property>
-		            <name>osivia.title</name>
-		            <value>Création d'un compte utilisateur</value>
-		          </property>
-		          <property>
-		            <name>osivia.hideTitle</name>
-		            <value>1</value>
-		          </property>
-		          <property>
-		            <name>theme.order</name>
-		            <value>1</value>
-		          </property>
-		          <property>
-		            <name>osivia.fragmentTypeId</name>
-		            <value>doc_link</value>
-		          </property>
-		          <property>
-		            <name>osivia.isNuxeoLink</name>
-		            <value>on</value>
-		          </property>
-		          <property>
-		            <name>osivia.docPathForLink</name>
-		            <value>procedure_creation-appli-pronote</value>
-		          </property>
-		          <property>
-		            <name>osivia.linkName</name>
-		            <value>dc:title</value>
-		          </property>
-		        </properties>
-		        <height>0</height>
-		      </window>	  		      
-		    </page>
+            <page>
+                <page-name>application-management</page-name>
+                <display-name xml:lang="fr">Applications</display-name>
+                <properties />
+                <security-constraint/>
 
+                <window>
+                    <window-name>index-cloud-portal-ens-application-managementInstance_1563394688147</window-name>
+                    <instance-ref>index-cloud-portal-ens-application-managementInstance</instance-ref>
+                    <region>col-1</region>
+                    <properties>
+                        <property>
+                            <name>osivia.hideDecorators</name>
+                            <value>1</value>
+                        </property>
+                        <property>
+                            <name>osivia.ajaxLink</name>
+                            <value>1</value>
+                        </property>
+                        <property>
+                            <name>portal.windowContentType</name>
+                            <value>portlet</value>
+                        </property>
+                        <property>
+                            <name>osivia.hideTitle</name>
+                            <value>1</value>
+                        </property>
+                        <property>
+                            <name>theme.order</name>
+                            <value>0</value>
+                        </property>
+                    </properties>
+                    <height>0</height>
+                </window>
 
-         <page>
-              <page-name>conversion</page-name>
-              <display-name xml:lang="fr">conversion de données</display-name>
-              <properties>
-                <property>
-                  <name>order</name>
-                  <value>6</value>
-                </property>
-              </properties>
-              <security-constraint/>
-              <window>
-                <window-name>index-cloud-portal-ens-conversion-adminInstance_1564649596563</window-name>
-                <instance-ref>index-cloud-portal-ens-conversion-adminInstance</instance-ref>
-                <region>top</region>
-                <properties>
-                  <property>
-                    <name>portal.windowContentType</name>
-                    <value>portlet</value>
-                  </property>
-                  <property>
-                    <name>osivia.bootstrapPanelStyle</name>
-                    <value>true</value>
-                  </property>
-                  <property>
-                    <name>osivia.maximized.cms.url</name>
-                    <value>false</value>
-                  </property>
-                  <property>
-                    <name>osivia.hideTitle</name>
-                    <value>1</value>
-                  </property>
-                  <property>
-                    <name>theme.order</name>
-                    <value>0</value>
-                  </property>
-                  <property>
-                    <name>osivia.ajaxLink</name>
-                    <value>1</value>
-                  </property>
-                  <property>
-                    <name>osivia.hideDecorators</name>
-                    <value>1</value>
-                  </property>
-                  <property>
-                    <name>osivia.mobileCollapse</name>
-                    <value>false</value>
-                  </property>
-                  <property>
-                    <name>theme.dyna.partial_refresh_enabled</name>
-                    <value>true</value>
-                  </property>
-                </properties>
-                <height>0</height>
-              </window>
+                <window>
+                    <window-name>toutatice-portail-cms-nuxeo-viewFragmentPortletInstance_1509441121000</window-name>
+                    <instance-ref>toutatice-portail-cms-nuxeo-viewFragmentPortletInstance</instance-ref>
+                    <region>col-1</region>
+                    <properties>
+                        <property>
+                            <name>portal.windowContentType</name>
+                            <value>portlet</value>
+                        </property>
+                        <property>
+                            <name>osivia.bootstrapPanelStyle</name>
+                            <value>true</value>
+                        </property>
+                        <property>
+                            <name>osivia.title</name>
+                            <value>Création d'un compte utilisateur</value>
+                        </property>
+                        <property>
+                            <name>osivia.hideTitle</name>
+                            <value>1</value>
+                        </property>
+                        <property>
+                            <name>theme.order</name>
+                            <value>1</value>
+                        </property>
+                        <property>
+                            <name>osivia.fragmentTypeId</name>
+                            <value>doc_link</value>
+                        </property>
+                        <property>
+                            <name>osivia.isNuxeoLink</name>
+                            <value>on</value>
+                        </property>
+                        <property>
+                            <name>osivia.docPathForLink</name>
+                            <value>procedure_creation-appli-pronote</value>
+                        </property>
+                        <property>
+                            <name>osivia.linkName</name>
+                            <value>dc:title</value>
+                        </property>
+                    </properties>
+                    <height>0</height>
+                </window>
+            </page>
+
+            <page>
+                <page-name>conversion</page-name>
+                <display-name xml:lang="fr">Conversion de données</display-name>
+                <properties />
+                <security-constraint/>
+
+                <window>
+                    <window-name>index-cloud-portal-ens-conversion-adminInstance_1564649596563</window-name>
+                    <instance-ref>index-cloud-portal-ens-conversion-adminInstance</instance-ref>
+                    <region>top</region>
+                    <properties>
+                        <property>
+                            <name>portal.windowContentType</name>
+                            <value>portlet</value>
+                        </property>
+                        <property>
+                            <name>osivia.bootstrapPanelStyle</name>
+                            <value>true</value>
+                        </property>
+                        <property>
+                            <name>osivia.hideTitle</name>
+                            <value>1</value>
+                        </property>
+                        <property>
+                            <name>theme.order</name>
+                            <value>0</value>
+                        </property>
+                        <property>
+                            <name>osivia.ajaxLink</name>
+                            <value>1</value>
+                        </property>
+                        <property>
+                            <name>osivia.hideDecorators</name>
+                            <value>1</value>
+                        </property>
+                        <property>
+                            <name>theme.dyna.partial_refresh_enabled</name>
+                            <value>true</value>
+                        </property>
+                    </properties>
+                    <height>0</height>
+                </window>
             </page>
 
             <page>
                 <page-name>mon-compte</page-name>
                 <display-name xml:lang="fr">Mon compte</display-name>
+
                 <properties />
-                <security-constraint />
+
+                <security-constraint>
+                    <policy-permission>
+                        <action-name>view</action-name>
+                        <role-name>Authenticated</role-name>
+                    </policy-permission>
+                </security-constraint>
+
                 <window>
                     <window-name>directory-person-card-instance_1567603720228</window-name>
                     <instance-ref>directory-person-card-instance</instance-ref>
@@ -1135,10 +1056,6 @@ return nuxeoRequest.toString();</value>
                             <value>Mes données personnelles</value>
                         </property>
                         <property>
-                            <name>osivia.maximized.cms.url</name>
-                            <value>false</value>
-                        </property>
-                        <property>
                             <name>theme.order</name>
                             <value>0</value>
                         </property>
@@ -1151,16 +1068,13 @@ return nuxeoRequest.toString();</value>
                             <value>1</value>
                         </property>
                         <property>
-                            <name>osivia.mobileCollapse</name>
-                            <value>false</value>
-                        </property>
-                        <property>
                             <name>theme.dyna.partial_refresh_enabled</name>
                             <value>true</value>
                         </property>
                     </properties>
                     <height>0</height>
                 </window>
+
                 <window>
                     <window-name>index-cloud-portal-ens-ws-dashboardInstance_1567603892790</window-name>
                     <instance-ref>index-cloud-portal-ens-ws-dashboardInstance</instance-ref>
@@ -1179,10 +1093,6 @@ return nuxeoRequest.toString();</value>
                             <value>Mes établissements</value>
                         </property>
                         <property>
-                            <name>osivia.maximized.cms.url</name>
-                            <value>false</value>
-                        </property>
-                        <property>
                             <name>theme.order</name>
                             <value>1</value>
                         </property>
@@ -1195,16 +1105,13 @@ return nuxeoRequest.toString();</value>
                             <value>1</value>
                         </property>
                         <property>
-                            <name>osivia.mobileCollapse</name>
-                            <value>false</value>
-                        </property>
-                        <property>
                             <name>theme.dyna.partial_refresh_enabled</name>
                             <value>true</value>
                         </property>
                     </properties>
                     <height>0</height>
                 </window>
+
                 <window>
                     <window-name>osivia-services-user-saved-searches-administration-instance_1567604433478</window-name>
                     <instance-ref>osivia-services-user-saved-searches-administration-instance</instance-ref>
@@ -1225,14 +1132,6 @@ return nuxeoRequest.toString();</value>
                         <property>
                             <name>osivia.title</name>
                             <value>Mes filtres</value>
-                        </property>
-                        <property>
-                            <name>osivia.maximized.cms.url</name>
-                            <value>false</value>
-                        </property>
-                        <property>
-                            <name>osivia.mobileCollapse</name>
-                            <value>false</value>
                         </property>
                         <property>
                             <name>theme.order</name>
