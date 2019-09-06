@@ -135,7 +135,7 @@ public class PortalTokenStore extends InMemoryTokenStore implements IPortalToken
                     String value = tokenMap.getString("value");
                     if (tokenValue.equals(value)) {
                         PortalRefreshToken refreshToken = null;
-                        Date expirationDate = tokenMap.getDate("expirationDate");
+                        Date expirationDate = tokenMap.getDate("expiration");
                         if (expirationDate == null)
                             refreshToken = new PortalRefreshToken(tokenValue);
                         else

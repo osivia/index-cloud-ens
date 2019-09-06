@@ -20,7 +20,6 @@ public class PortalExpiringRefreshToken extends PortalRefreshToken implements Se
 
     private static final long serialVersionUID = 4999653766590648859L;
 
-    private String value;
  
     private final Date expiration;
 
@@ -42,24 +41,5 @@ public class PortalExpiringRefreshToken extends PortalRefreshToken implements Se
     }
 
   
-
-    /**
-     * Getter for value.
-     * 
-     * @return the value
-     */
-    public String getValue() {
-        return value;
-    }
-
-
-    /**
-     * Setter for value.
-     * 
-     * @param value the value to set
-     */
-    public void setValue(String value) {
-        this.value = value;
-    }
 
 }

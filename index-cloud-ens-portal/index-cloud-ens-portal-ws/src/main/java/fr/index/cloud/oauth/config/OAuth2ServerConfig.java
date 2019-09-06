@@ -85,17 +85,7 @@ public class OAuth2ServerConfig {
                     .antMatchers("/rest/User.getProfile").access("#oauth2.hasScope('drive')")
                     .antMatchers("/rest/Drive.**").access("#oauth2.hasScope('drive')")
                     .antMatchers("/rest/Admin.**").access("hasRole('ROLE_ADMIN')")
-                    .antMatchers("/rest/User.signUp").permitAll().antMatchers("/Viewer.fileInfos").permitAll().antMatchers("/me").access("#oauth2.hasScope('read')").antMatchers("/photos")
-                    .access("#oauth2.hasScope('read') or (!#oauth2.isOAuth() and hasRole('ROLE_USER'))").antMatchers("/photos/trusted/**")
-                    .access("#oauth2.hasScope('trust')").antMatchers("/photos/user/**").access("#oauth2.hasScope('trust')")
-
-                    .antMatchers("/photos/**").access("#oauth2.hasScope('read') or (!#oauth2.isOAuth() and hasRole('ROLE_USER'))")
-                    .regexMatchers(HttpMethod.DELETE, "/oauth/users/([^/].*?)/tokens/.*")
-                    .access("#oauth2.clientHasRole('ROLE_CLIENT') and (hasRole('ROLE_USER') or #oauth2.isClient()) and #oauth2.hasScope('write')")
-                    .regexMatchers(HttpMethod.GET, "/oauth/clients/([^/].*?)/users/.*")
-                    .access("#oauth2.clientHasRole('ROLE_CLIENT') and (hasRole('ROLE_USER') or #oauth2.isClient()) and #oauth2.hasScope('read')")
-                    .regexMatchers(HttpMethod.GET, "/oauth/clients/.*")
-                    .access("#oauth2.clientHasRole('ROLE_CLIENT') and #oauth2.isClient() and #oauth2.hasScope('read')");
+                    .antMatchers("/rest/User.signUp").permitAll().antMatchers("/Viewer.fileInfos").permitAll();
 
 
             // @formatter:on
@@ -156,10 +146,17 @@ public class OAuth2ServerConfig {
                         authorities.add(new SimpleGrantedAuthority("ROLE_CLIENT"));
                         authorities.add(new SimpleGrantedAuthority("ROLE_TRUSTED_CLIENT"));
                         details.setAuthorities(authorities);
+/*                        
+                        // 10 secunds
+                        details.setAccessTokenValiditySeconds(30);
+                        // 3 mn
+                        details.setRefreshTokenValiditySeconds(180);                        
+*/                        
                         // 10 minutes
                         details.setAccessTokenValiditySeconds(600);
                         // default one year
                         details.setRefreshTokenValiditySeconds(60 * 60 * 24 * 365);
+                        
                         return details;
                     } else
                         throw new NoSuchClientException("Client with ID '" + clientId + "' not found");
