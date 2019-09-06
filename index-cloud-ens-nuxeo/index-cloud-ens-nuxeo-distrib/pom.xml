@@ -40,7 +40,6 @@
 		
 		<ottc.monitoring.version>2.1</ottc.monitoring.version>
 		
-
 		<!-- <webmode.version>4.7.1</webmode.version> -->
 		
 	</properties>
