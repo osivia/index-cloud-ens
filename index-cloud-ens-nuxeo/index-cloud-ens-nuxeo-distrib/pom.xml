@@ -18,7 +18,7 @@
 
 		<nuxeo.version>6.1.0</nuxeo.version>
 		<nuxeodrive.version>6.1.0</nuxeodrive.version>
-		<ottc.collab.version>4.7.17</ottc.collab.version>
+		<ottc.collab.version>4.9-SNAPSHOT</ottc.collab.version>
 		<ottc.filenaming.version>4.7.17</ottc.filenaming.version>
 		<ottc.file.versioning.version>4.7.17</ottc.file.versioning.version>
 		<!-- <ottc.wf.version>4.6</ottc.wf.version> -->
@@ -30,12 +30,13 @@
 		<ottc.generic-ui.version>4.7.17</ottc.generic-ui.version>
 		<!-- <ottc.checkin.version>4.6.1</ottc.checkin.version> --> 
 
-		<ottc.procedure.version>4.7.17</ottc.procedure.version>
+		<ottc.procedure.version>4.7.17.1</ottc.procedure.version>
 		
 		<!-- <ottc.news.version>4.6</ottc.news.version> -->
 		
 		<ottc.jwt.version>4.7.17</ottc.jwt.version>
 		<ottc.onlyoffice.version>4.7.17</ottc.onlyoffice.version>
+		<ottc.quota.version>4.9-SNAPSHOT</ottc.quota.version>
 		
 		<ottc.monitoring.version>2.1</ottc.monitoring.version>
 		
@@ -245,6 +246,11 @@
         	<artifactId>opentoutatice-addon-onlyoffice-ecm</artifactId>
             <version>${ottc.onlyoffice.version}</version>
 		</dependency>
+        <dependency>
+            <groupId>opentoutatice-ecm.quota</groupId>
+            <artifactId>opentoutatice-addon-quota</artifactId>
+            <version>${ottc.quota.version}</version>
+        </dependency>		
 		
 		<!--         
 		<dependency>
