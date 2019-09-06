@@ -19,6 +19,7 @@
         <module>index-cloud-ens-portal-directory-socle</module>
         <module>index-cloud-ens-portal-directory-person-creation</module>
         <module>index-cloud-ens-portal-directory-ear</module>
+        <module>index-cloud-ens-portal-directory-person-card</module>
     </modules>
 
     <dependencies>
