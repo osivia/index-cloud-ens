@@ -18,18 +18,16 @@ import org.springframework.web.servlet.view.JstlView;
 public class SearchFiltersConfiguration extends SearchCommonConfiguration {
 
     /**
-     * Get view resolver.
-     *
-     * @return view resolver
+     * Constructor.
      */
-    @Bean
-    public InternalResourceViewResolver getViewResolver() {
-        InternalResourceViewResolver viewResolver = new InternalResourceViewResolver();
-        viewResolver.setCache(true);
-        viewResolver.setViewClass(JstlView.class);
-        viewResolver.setPrefix("/WEB-INF/jsp/search-filters/");
-        viewResolver.setSuffix(".jsp");
-        return viewResolver;
+    public SearchFiltersConfiguration() {
+        super();
+    }
+
+
+    @Override
+    protected String getJspFolder() {
+        return "search-filters";
     }
 
 }

@@ -28,6 +28,10 @@ public class SearchFiltersForm {
      */
     private String level;
     /**
+     * Location path.
+     */
+    private String locationPath;
+    /**
      * Keywords.
      */
     private String keywords;
@@ -60,6 +64,14 @@ public class SearchFiltersForm {
 
     public void setLevel(String level) {
         this.level = level;
+    }
+
+    public String getLocationPath() {
+        return locationPath;
+    }
+
+    public void setLocationPath(String locationPath) {
+        this.locationPath = locationPath;
     }
 
     public String getKeywords() {

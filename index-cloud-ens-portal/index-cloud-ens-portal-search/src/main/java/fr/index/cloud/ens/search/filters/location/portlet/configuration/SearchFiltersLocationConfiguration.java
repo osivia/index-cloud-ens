@@ -1,30 +1,30 @@
-package fr.index.cloud.ens.search.saved.portlet.configuration;
+package fr.index.cloud.ens.search.filters.location.portlet.configuration;
 
 import fr.index.cloud.ens.search.common.portlet.configuration.SearchCommonConfiguration;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 
 /**
- * Saved searches portlet configuration.
+ * Search filters location portlet configuration.
  *
  * @author Cédric Krommenhoek
  * @see SearchCommonConfiguration
  */
 @Configuration
-@ComponentScan(basePackages = "fr.index.cloud.ens.search.saved.portlet")
-public class SavedSearchesConfiguration extends SearchCommonConfiguration {
+@ComponentScan(basePackages = "fr.index.cloud.ens.search.filters.location.portlet")
+public class SearchFiltersLocationConfiguration extends SearchCommonConfiguration {
 
     /**
      * Constructor.
      */
-    public SavedSearchesConfiguration() {
+    public SearchFiltersLocationConfiguration() {
         super();
     }
 
 
     @Override
     protected String getJspFolder() {
-        return "saved-searches";
+        return "search-filters-location";
     }
 
 }

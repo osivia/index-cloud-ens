@@ -10,5 +10,5 @@
 
 <a href="${searchFiltersUrl}" class="btn btn-primary">
     <i class="glyphicons glyphicons-basic-search"></i>
-    <span><op:translate key="SEARCH_FILTERS_DISPLAY"/></span>
+    <span class="d-none d-sm-inline"><op:translate key="SEARCH_FILTERS_DISPLAY"/></span>
 </a>

@@ -43,21 +43,26 @@
             <form:label path="location" cssClass="col-md-3 col-form-label"><op:translate
                     key="SEARCH_FILTERS_LOCATION_LABEL"/></form:label>
             <div class="col-md-6">
-                <p class="form-control-plaintext">
-                    <c:choose>
-                        <c:when test="${empty form.location}"><op:translate
-                                key="SEARCH_FILTERS_LOCATION_ANYWHERE"/></c:when>
-                        <c:otherwise><ttc:title document="${form.location}" linkable="false" icon="true"/></c:otherwise>
-                    </c:choose>
-                </p>
+                <c:choose>
+                    <c:when test="${form.modal}">
+                        <p class="form-control-plaintext">
+                            <c:choose>
+                                <c:when test="${empty form.location}"><op:translate
+                                        key="SEARCH_FILTERS_LOCATION_ANYWHERE"/></c:when>
+                                <c:otherwise><ttc:title document="${form.location}" linkable="false"
+                                                        icon="true"/></c:otherwise>
+                            </c:choose>
+                        </p>
+                    </c:when>
+
+                    <c:otherwise>
+                        <a href="javascript:" class="btn btn-outline-primary" data-target="#osivia-modal"
+                           data-load-url="${locationUrl}" data-size="small"><ttc:title document="${form.location}" linkable="false" icon="true"/>
+                        </a>
+                    </c:otherwise>
+                </c:choose>
             </div>
-            <c:if test="${not empty form.location}">
-                <div class="col-md-3">
-                    <button type="button" class="btn btn-link" data-clear-location>
-                        <small><op:translate key="SEARCH_FILTERS_LOCATION_CLEAR"/></small>
-                    </button>
-                </div>
-            </c:if>
+            <form:hidden path="locationPath"/>
         </div>
 
         <hr>
@@ -99,8 +104,9 @@
             </div>
         </div>
 
+        <input type="submit" name="update-location" class="d-none"/>
+
         <form:hidden path="savedSearchDisplayName"/>
-        <input type="submit" name="saveSearchPopoverCallback" class="d-none"/>
-        <input type="submit" name="clearLocation" class="d-none"/>
+        <input type="submit" name="save-search-popover-callback" class="d-none"/>
     </form:form>
 </div>

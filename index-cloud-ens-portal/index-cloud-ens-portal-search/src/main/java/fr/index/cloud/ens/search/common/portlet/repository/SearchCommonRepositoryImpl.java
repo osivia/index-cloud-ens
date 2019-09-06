@@ -46,6 +46,34 @@ public class SearchCommonRepositoryImpl implements SearchCommonRepository {
 
 
     @Override
+    public String getUserWorkspacePath(PortalControllerContext portalControllerContext) throws PortletException {
+        // CMS service
+        ICMSService cmsService = this.cmsServiceLocator.getCMSService();
+        // CMS context
+        CMSServiceCtx cmsContext = new CMSServiceCtx();
+        cmsContext.setPortalControllerContext(portalControllerContext);
+
+        // User workspace
+        CMSItem userWorkspace;
+        try {
+            userWorkspace = cmsService.getUserWorkspace(cmsContext);
+        } catch (CMSException e) {
+            throw new PortletException(e);
+        }
+
+        // User workspace path
+        String path;
+        if (userWorkspace == null) {
+            path = null;
+        } else {
+            path = userWorkspace.getCmsPath();
+        }
+
+        return path;
+    }
+
+
+    @Override
     public String getSearchPath(PortalControllerContext portalControllerContext) throws PortletException {
         return this.getTaskPath(portalControllerContext, ITaskbarService.SEARCH_TASK_ID);
     }
@@ -64,27 +92,16 @@ public class SearchCommonRepositoryImpl implements SearchCommonRepository {
      * @return path
      */
     private String getTaskPath(PortalControllerContext portalControllerContext, String taskId) throws PortletException {
-        // CMS service
-        ICMSService cmsService = this.cmsServiceLocator.getCMSService();
-        // CMS context
-        CMSServiceCtx cmsContext = new CMSServiceCtx();
-        cmsContext.setPortalControllerContext(portalControllerContext);
-
-        // User workspace
-        CMSItem userWorkspace;
-        try {
-            userWorkspace = cmsService.getUserWorkspace(cmsContext);
-        } catch (CMSException e) {
-            throw new PortletException(e);
-        }
+        // User workspace path
+        String userWorkspacePath = this.getUserWorkspacePath(portalControllerContext);
 
         // Navigation tasks
         List<TaskbarTask> navigationTasks;
-        if (userWorkspace == null) {
+        if (StringUtils.isEmpty(userWorkspacePath)) {
             navigationTasks = null;
         } else {
             try {
-                navigationTasks = this.taskbarService.getTasks(portalControllerContext, userWorkspace.getCmsPath());
+                navigationTasks = this.taskbarService.getTasks(portalControllerContext, userWorkspacePath);
             } catch (PortalException e) {
                 throw new PortletException(e);
             }

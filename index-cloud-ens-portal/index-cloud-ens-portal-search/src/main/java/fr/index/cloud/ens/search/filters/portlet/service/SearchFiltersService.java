@@ -50,6 +50,15 @@ public interface SearchFiltersService extends SearchCommonService {
 
 
     /**
+     * Update search location.
+     *
+     * @param portalControllerContext portal controller context
+     * @param form                    search filters form
+     */
+    void updateLocation(PortalControllerContext portalControllerContext, SearchFiltersForm form) throws PortletException;
+
+
+    /**
      * Get search redirection URL.
      *
      * @param portalControllerContext portal controller context
@@ -70,15 +79,6 @@ public interface SearchFiltersService extends SearchCommonService {
 
 
     /**
-     * Clear location.
-     *
-     * @param portalControllerContext portal controller context
-     * @param form                    search filters form
-     */
-    void clearLocation(PortalControllerContext portalControllerContext, SearchFiltersForm form) throws PortletException;
-
-
-    /**
      * Load levels select2 vocabulary.
      *
      * @param portalControllerContext portal controller context
@@ -86,5 +86,14 @@ public interface SearchFiltersService extends SearchCommonService {
      * @return select2 results JSON array
      */
     JSONArray loadLevels(PortalControllerContext portalControllerContext, String filter) throws PortletException, IOException;
+
+
+    /**
+     * Get location URL.
+     *
+     * @param portalControllerContext portal controller context
+     * @return URL
+     */
+    String getLocationUrl(PortalControllerContext portalControllerContext) throws PortletException;
 
 }
