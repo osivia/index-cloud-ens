@@ -8,6 +8,8 @@ import org.apache.commons.logging.LogFactory;
 import org.jboss.portal.core.controller.ControllerContext;
 import org.jboss.portal.core.controller.ControllerException;
 import org.jboss.portal.core.model.portal.Page;
+import org.jboss.portal.core.model.portal.Portal;
+import org.jboss.portal.core.model.portal.PortalObjectPath;
 import org.jboss.portal.core.model.portal.command.render.RenderPageCommand;
 import org.jboss.portal.core.theme.PageRendition;
 import org.osivia.portal.api.PortalException;
@@ -33,6 +35,8 @@ public class CustomizedAttributesBundle implements IAttributesBundle {
 
     /** SSO applications attribute name. */
     private static final String APPLICATIONS = "osivia.sso.applications";
+    /** My account URL. */
+    private static final String MY_ACCOUNT_URL = "osivia.my-account.url";
     /** User workspace URL. */
     private static final String USER_WORKSPACE_URL = "osivia.userWorkspace.url";
     /** RGPD URL. */
@@ -73,8 +77,9 @@ public class CustomizedAttributesBundle implements IAttributesBundle {
         this.log = LogFactory.getLog(this.getClass());
 
         // Attributes names
-        this.names = new HashSet<String>();
+        this.names = new HashSet<>();
         this.names.add(APPLICATIONS);
+        this.names.add(MY_ACCOUNT_URL);
         this.names.add(USER_WORKSPACE_URL);
         this.names.add(RGPD_URL);
         this.names.add(NAV_ITEMS);
@@ -82,7 +87,7 @@ public class CustomizedAttributesBundle implements IAttributesBundle {
         this.names.add(HIDE_FIRST_BREADCRUMB_ITEM);
 
         // SSO applications
-        this.applications = new ArrayList<String>();
+        this.applications = new ArrayList<>();
         this.applications.add(NuxeoConnectionProperties.getPublicBaseUri().toString().concat("/logout"));
         this.applications.add(System.getProperty("cas.logout"));
         
@@ -119,6 +124,8 @@ public class CustomizedAttributesBundle implements IAttributesBundle {
         CMSServiceCtx cmsContext = new CMSServiceCtx();
         cmsContext.setPortalControllerContext(portalControllerContext);
 
+        // Current portal
+        Portal portal = renderPageCommand.getPortal();
         // Current page
         Page page = renderPageCommand.getPage();
         // Current CMS base path
@@ -127,6 +134,18 @@ public class CustomizedAttributesBundle implements IAttributesBundle {
 
         // SSO applications
         attributes.put(APPLICATIONS, this.applications);
+
+
+        // My account URL
+        Page myAccountPage = portal.getChild("mon-compte", Page.class);
+        String myAccountUrl;
+        if (myAccountPage == null) {
+            myAccountUrl = null;
+        } else {
+            String myAccountPageId = myAccountPage.getId().toString(PortalObjectPath.SAFEST_FORMAT);
+            myAccountUrl = this.portalUrlFactory.getViewPageUrl(portalControllerContext, myAccountPageId);
+        }
+        attributes.put(MY_ACCOUNT_URL, myAccountUrl);
 
 
         // User workspace
@@ -143,10 +162,10 @@ public class CustomizedAttributesBundle implements IAttributesBundle {
             // User workspace URL
             userWorkspaceUrl = this.portalUrlFactory.getCMSUrl(portalControllerContext, null, userWorkspace.getCmsPath(), null, null, null, null, null,
                     null, null);
-            attributes.put(USER_WORKSPACE_URL, userWorkspaceUrl);
         } else {
             userWorkspaceUrl = null;
         }
+        attributes.put(USER_WORKSPACE_URL, userWorkspaceUrl);
 
 
         // RGPD URL
