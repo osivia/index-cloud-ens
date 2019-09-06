@@ -43,7 +43,7 @@
     <dc:coverage><![CDATA[]]></dc:coverage>
     <dc:expired/>
     <dc:lastContributor><![CDATA[admin]]></dc:lastContributor>
-    <dc:title><![CDATA[Recherche]]></dc:title>
+    <dc:title><![CDATA[Résultats de la recherche]]></dc:title>
   </schema>
   <schema xmlns:ttc="http://www.nuxeo.org/ecm/project/schemas/ACRENNES2/toutatice" name="toutatice">
     <ttc:childrenPageTemplate><![CDATA[]]></ttc:childrenPageTemplate>

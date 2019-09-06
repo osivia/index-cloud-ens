@@ -19,7 +19,7 @@ import fr.index.cloud.oauth.tokenStore.PortalRefreshTokenAuthenticationDatas;
  * Like in Google System, we consider that the approvals expiration is directly
  * linked to the refresh token expiration
  * 
- * Thanks to this implementation, if a user wants to renew a ticket, he won't be
+ * Thanks to this implementation, if a user wants to renew a refresh token, he won't be
  * asked for consentement if he has already one active consentement 
  * 
  */

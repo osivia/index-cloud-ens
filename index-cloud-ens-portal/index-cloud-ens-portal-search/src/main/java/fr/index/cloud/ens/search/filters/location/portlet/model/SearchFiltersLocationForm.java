@@ -22,10 +22,6 @@ public class SearchFiltersLocationForm {
      * Base path.
      */
     private String basePath;
-    /**
-     * Accepted types.
-     */
-    private String[] acceptedTypes;
 
 
     /**
@@ -52,11 +48,4 @@ public class SearchFiltersLocationForm {
         this.basePath = basePath;
     }
 
-    public String[] getAcceptedTypes() {
-        return acceptedTypes;
-    }
-
-    public void setAcceptedTypes(String[] acceptedTypes) {
-        this.acceptedTypes = acceptedTypes;
-    }
 }

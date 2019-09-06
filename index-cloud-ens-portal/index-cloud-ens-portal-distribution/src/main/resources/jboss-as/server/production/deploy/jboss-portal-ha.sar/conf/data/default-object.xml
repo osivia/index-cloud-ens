@@ -258,34 +258,42 @@
                 </security-constraint>
 
                 <window>
-                    <window-name>index-cloud-ens-highest-levels-instance_1560328144443</window-name>
-                    <instance-ref>index-cloud-ens-highest-levels-instance</instance-ref>
+                    <window-name>index-cloud-ens-saved-searches-instance_1567605355591</window-name>
+                    <instance-ref>index-cloud-ens-saved-searches-instance</instance-ref>
                     <region>col-1</region>
                     <properties>
-                        <property>
-                            <name>portal.windowContentType</name>
-                            <value>portlet</value>
-                        </property>
-                        <property>
-                            <name>osivia.title</name>
-                            <value>Mes niveaux préférés</value>
-                        </property>
-                        <property>
-                            <name>theme.order</name>
-                            <value>0</value>
-                        </property>
                         <property>
                             <name>osivia.hideDecorators</name>
                             <value>1</value>
                         </property>
                         <property>
-                            <name>osivia.hideEmptyPortlet</name>
-                            <value>1</value>
+                            <name>portal.windowContentType</name>
+                            <value>portlet</value>
+                        </property>
+                        <property>
+                            <name>osivia.bootstrapPanelStyle</name>
+                            <value>false</value>
+                        </property>
+                        <property>
+                            <name>osivia.title</name>
+                            <value>Mes filtres</value>
+                        </property>
+                        <property>
+                            <name>osivia.maximized.cms.url</name>
+                            <value>false</value>
+                        </property>
+                        <property>
+                            <name>osivia.mobileCollapse</name>
+                            <value>false</value>
+                        </property>
+                        <property>
+                            <name>theme.order</name>
+                            <value>0</value>
                         </property>
                     </properties>
                     <height>0</height>
                 </window>
-
+                  
                 <window>
                     <window-name>toutatice-portail-cms-nuxeo-viewListPortletInstance_1556902653408</window-name>
                     <instance-ref>toutatice-portail-cms-nuxeo-viewListPortletInstance</instance-ref>
@@ -1102,6 +1110,137 @@ return nuxeoRequest.toString();</value>
                 </properties>
                 <height>0</height>
               </window>
+            </page>
+
+            <page>
+                <page-name>mon-compte</page-name>
+                <display-name xml:lang="fr">Mon compte</display-name>
+                <properties />
+                <security-constraint />
+                <window>
+                    <window-name>directory-person-card-instance_1567603720228</window-name>
+                    <instance-ref>directory-person-card-instance</instance-ref>
+                    <region>col-1</region>
+                    <properties>
+                        <property>
+                            <name>portal.windowContentType</name>
+                            <value>portlet</value>
+                        </property>
+                        <property>
+                            <name>osivia.bootstrapPanelStyle</name>
+                            <value>true</value>
+                        </property>
+                        <property>
+                            <name>osivia.title</name>
+                            <value>Mes données personnelles</value>
+                        </property>
+                        <property>
+                            <name>osivia.maximized.cms.url</name>
+                            <value>false</value>
+                        </property>
+                        <property>
+                            <name>theme.order</name>
+                            <value>0</value>
+                        </property>
+                        <property>
+                            <name>osivia.ajaxLink</name>
+                            <value>1</value>
+                        </property>
+                        <property>
+                            <name>osivia.hideDecorators</name>
+                            <value>1</value>
+                        </property>
+                        <property>
+                            <name>osivia.mobileCollapse</name>
+                            <value>false</value>
+                        </property>
+                        <property>
+                            <name>theme.dyna.partial_refresh_enabled</name>
+                            <value>true</value>
+                        </property>
+                    </properties>
+                    <height>0</height>
+                </window>
+                <window>
+                    <window-name>index-cloud-portal-ens-ws-dashboardInstance_1567603892790</window-name>
+                    <instance-ref>index-cloud-portal-ens-ws-dashboardInstance</instance-ref>
+                    <region>col-1</region>
+                    <properties>
+                        <property>
+                            <name>portal.windowContentType</name>
+                            <value>portlet</value>
+                        </property>
+                        <property>
+                            <name>osivia.bootstrapPanelStyle</name>
+                            <value>true</value>
+                        </property>
+                        <property>
+                            <name>osivia.title</name>
+                            <value>Mes établissements</value>
+                        </property>
+                        <property>
+                            <name>osivia.maximized.cms.url</name>
+                            <value>false</value>
+                        </property>
+                        <property>
+                            <name>theme.order</name>
+                            <value>1</value>
+                        </property>
+                        <property>
+                            <name>osivia.ajaxLink</name>
+                            <value>1</value>
+                        </property>
+                        <property>
+                            <name>osivia.hideDecorators</name>
+                            <value>1</value>
+                        </property>
+                        <property>
+                            <name>osivia.mobileCollapse</name>
+                            <value>false</value>
+                        </property>
+                        <property>
+                            <name>theme.dyna.partial_refresh_enabled</name>
+                            <value>true</value>
+                        </property>
+                    </properties>
+                    <height>0</height>
+                </window>
+                <window>
+                    <window-name>osivia-services-user-saved-searches-administration-instance_1567604433478</window-name>
+                    <instance-ref>osivia-services-user-saved-searches-administration-instance</instance-ref>
+                    <region>col-2</region>
+                    <properties>
+                        <property>
+                            <name>osivia.hideDecorators</name>
+                            <value>1</value>
+                        </property>
+                        <property>
+                            <name>portal.windowContentType</name>
+                            <value>portlet</value>
+                        </property>
+                        <property>
+                            <name>osivia.bootstrapPanelStyle</name>
+                            <value>true</value>
+                        </property>
+                        <property>
+                            <name>osivia.title</name>
+                            <value>Mes filtres</value>
+                        </property>
+                        <property>
+                            <name>osivia.maximized.cms.url</name>
+                            <value>false</value>
+                        </property>
+                        <property>
+                            <name>osivia.mobileCollapse</name>
+                            <value>false</value>
+                        </property>
+                        <property>
+                            <name>theme.order</name>
+                            <value>0</value>
+                        </property>
+                    </properties>
+                    <height>0</height>
+                </window>
             </page>
 
             <page>

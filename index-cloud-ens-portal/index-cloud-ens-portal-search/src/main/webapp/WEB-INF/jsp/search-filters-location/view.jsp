@@ -13,8 +13,10 @@
 
 <portlet:resourceURL id="browse" var="browseUrl">
     <portlet:param name="cmsBasePath" value="${form.basePath}"/>
+    <portlet:param name="navigation" value="true"/>
     <portlet:param name="live" value="true"/>
-    <portlet:param name="acceptedTypes" value="${fn:join(form.acceptedTypes, ',')}"/>
+    <portlet:param name="includedTypes" value="Folder"/>
+    <portlet:param name="hideUnavailable" value="true"/>
 </portlet:resourceURL>
 
 

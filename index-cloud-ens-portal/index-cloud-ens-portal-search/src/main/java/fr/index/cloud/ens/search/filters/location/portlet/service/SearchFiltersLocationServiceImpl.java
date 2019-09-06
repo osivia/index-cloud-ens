@@ -67,10 +67,6 @@ public class SearchFiltersLocationServiceImpl extends SearchCommonServiceImpl im
         }
         form.setBasePath(basePath);
 
-        // Accepted types
-        String[] acceptedTypes = new String[]{"Folder"};
-        form.setAcceptedTypes(acceptedTypes);
-
         return form;
     }
 

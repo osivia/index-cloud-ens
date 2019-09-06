@@ -94,7 +94,7 @@ public class DashboardServiceImpl implements DashboardService, ApplicationContex
             String clientId = token.getAuthentication().getClientId();
 
 
-            if (token.getExpirationDate() != null && token.getExpirationDate().after(today)) {
+            if (token.getExpirationDate() == null || token.getExpirationDate().after(today)) {
 
                 // One occurence per clientId
                 if (!clientIds.contains(clientId)) {
