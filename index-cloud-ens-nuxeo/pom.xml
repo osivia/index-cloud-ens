@@ -15,7 +15,7 @@
     <name>Cloud enseignant - Nuxeo</name>
 
 	<properties>
-		<opentoutatice.version>4.7.17</opentoutatice.version>
+		<opentoutatice.version>4.7-SNAPSHOT</opentoutatice.version>
 		<ottc.es.version>4.7.17</ottc.es.version>
 		<ottc.es.custom.version>4.7.17.1</ottc.es.custom.version>		
 	</properties>
