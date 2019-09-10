@@ -1,6 +1,7 @@
 package fr.index.cloud.ens.search.filters.portlet.service;
 
 import fr.index.cloud.ens.search.common.portlet.service.SearchCommonServiceImpl;
+import fr.index.cloud.ens.search.filters.location.portlet.service.SearchFiltersLocationService;
 import fr.index.cloud.ens.search.filters.portlet.model.SearchFiltersForm;
 import fr.index.cloud.ens.search.filters.portlet.model.SearchFiltersVocabularyItem;
 import fr.index.cloud.ens.search.filters.portlet.repository.SearchFiltersRepository;
@@ -14,11 +15,13 @@ import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.BooleanUtils;
 import org.apache.commons.lang.CharEncoding;
 import org.apache.commons.lang.StringUtils;
+import org.osivia.portal.api.PortalException;
 import org.osivia.portal.api.context.PortalControllerContext;
 import org.osivia.portal.api.internationalization.Bundle;
 import org.osivia.portal.api.internationalization.IBundleFactory;
 import org.osivia.portal.api.page.PageParametersEncoder;
 import org.osivia.portal.api.urls.IPortalUrlFactory;
+import org.osivia.portal.api.urls.PortalUrlType;
 import org.osivia.portal.api.user.UserPreferences;
 import org.osivia.portal.api.user.UserSavedSearch;
 import org.osivia.portal.api.windows.PortalWindow;
@@ -121,11 +124,8 @@ public class SearchFiltersServiceImpl extends SearchCommonServiceImpl implements
         if (StringUtils.isEmpty(navigationPath)) {
             navigationPath = this.getSelectorValue(selectors, LOCATION_SELECTOR_ID);
         }
-        if (StringUtils.isNotEmpty(navigationPath)) {
-            NuxeoDocumentContext documentContext = this.repository.getDocumentContext(portalControllerContext, navigationPath);
-            DocumentDTO documentDto = this.documentDao.toDTO(documentContext.getDocument());
-            form.setLocation(documentDto);
-        }
+        form.setLocationPath(navigationPath);
+        this.updateLocation(portalControllerContext, form);
 
         // Level
         String level = this.getSelectorValue(selectors, LEVEL_SELECTOR_ID);
@@ -136,6 +136,42 @@ public class SearchFiltersServiceImpl extends SearchCommonServiceImpl implements
         form.setKeywords(keywords);
 
         return form;
+    }
+
+
+    @Override
+    public void updateLocation(PortalControllerContext portalControllerContext, SearchFiltersForm form) throws PortletException {
+        // String path
+        String path = form.getLocationPath();
+        if (StringUtils.isEmpty(path)) {
+            // User workspace path
+            String userWorkspacePath = this.repository.getUserWorkspacePath(portalControllerContext);
+
+            if (StringUtils.isEmpty(userWorkspacePath)) {
+                throw new PortletException("Unable to find user workspace path.");
+            } else {
+                path = userWorkspacePath + "/documents";
+            }
+        }
+
+        // Document DTO
+        DocumentDTO documentDto = this.getDocumentDto(portalControllerContext, path);
+        form.setLocation(documentDto);
+    }
+
+
+    /**
+     * Get document DTO from path.
+     *
+     * @param portalControllerContext portal controller context
+     * @param path                    document path
+     * @return document DTO
+     */
+    private DocumentDTO getDocumentDto(PortalControllerContext portalControllerContext, String path) throws PortletException {
+        // Document context
+        NuxeoDocumentContext documentContext = this.repository.getDocumentContext(portalControllerContext, path);
+
+        return this.documentDao.toDTO(documentContext.getDocument());
     }
 
 
@@ -244,12 +280,6 @@ public class SearchFiltersServiceImpl extends SearchCommonServiceImpl implements
         }
 
         return PageParametersEncoder.encodeProperties(selectors);
-    }
-
-
-    @Override
-    public void clearLocation(PortalControllerContext portalControllerContext, SearchFiltersForm form) {
-        form.setLocation(null);
     }
 
 
@@ -428,4 +458,17 @@ public class SearchFiltersServiceImpl extends SearchCommonServiceImpl implements
         }
     }
 
+
+    @Override
+    public String getLocationUrl(PortalControllerContext portalControllerContext) throws PortletException {
+        // URL
+        String url;
+        try {
+            url = this.portalUrlFactory.getStartPortletUrl(portalControllerContext, SearchFiltersLocationService.PORTLET_INSTANCE, null, PortalUrlType.MODAL);
+        } catch (PortalException e) {
+            throw new PortletException(e);
+        }
+
+        return url;
+    }
 }

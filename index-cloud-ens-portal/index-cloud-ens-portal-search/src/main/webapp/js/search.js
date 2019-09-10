@@ -1,3 +1,17 @@
+function saveSearchFiltersLocation(button) {
+	var $button = $JQry(button);
+	var $modalForm = $button.closest("form");
+	var path = $modalForm.find("input[name$=targetPath]").val();
+	var $form = $JQry(".search-filters-container form");
+
+	// Update hidden input
+	$form.find("input[type=hidden][name$=locationPath]").val(path);
+
+	// Submit form
+	$form.find("input[type=submit][name='update-location']").click();
+}
+
+
 function searchOptionsLoadCallback(formId) {
     var $form = $JQry("#" + formId);
     var $source = $form.find("input[type=search]");
@@ -20,7 +34,7 @@ function saveSearch(button) {
 	$form.find("input[type=hidden][name$=savedSearchDisplayName]").val(displayName);
 
 	// Submit form
-	$form.find("input[type=submit][name=saveSearchPopoverCallback]").click();
+	$form.find("input[type=submit][name='save-search-popover-callback']").click();
 }
 
 
@@ -79,14 +93,6 @@ $JQry(function() {
 
 			$element.data("loaded", true);
 		}
-	});
-
-
-	$JQry("button[data-clear-location]").click(function(event) {
-		var $target = $JQry(event.currentTarget);
-		var $form = $target.closest("form");
-
-		$form.find("input[type=submit][name=clearLocation]").click();
 	});
 
 });

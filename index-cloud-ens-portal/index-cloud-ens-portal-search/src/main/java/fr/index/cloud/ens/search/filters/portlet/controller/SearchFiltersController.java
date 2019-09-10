@@ -1,7 +1,7 @@
 package fr.index.cloud.ens.search.filters.portlet.controller;
 
-import fr.index.cloud.ens.search.filters.portlet.service.SearchFiltersService;
 import fr.index.cloud.ens.search.filters.portlet.model.SearchFiltersForm;
+import fr.index.cloud.ens.search.filters.portlet.service.SearchFiltersService;
 import net.sf.json.JSONArray;
 import org.osivia.portal.api.context.PortalControllerContext;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -77,13 +77,29 @@ public class SearchFiltersController {
 
 
     /**
+     * Update location action mapping.
+     *
+     * @param request  action request
+     * @param response action response
+     * @param form     search filters form model attribute
+     */
+    @ActionMapping(name = "submit", params = "update-location")
+    public void updateLocation(ActionRequest request, ActionResponse response, @ModelAttribute("form") SearchFiltersForm form) throws PortletException {
+        // Portal Controller context
+        PortalControllerContext portalControllerContext = new PortalControllerContext(this.portletContext, request, response);
+
+        this.service.updateLocation(portalControllerContext, form);
+    }
+
+
+    /**
      * Save search action mapping.
      *
      * @param request  action request
      * @param response action response
      * @param form     search filters form model attribute
      */
-    @ActionMapping(name = "submit", params = "saveSearchPopoverCallback")
+    @ActionMapping(name = "submit", params = "save-search-popover-callback")
     public void saveSearch(ActionRequest request, ActionResponse response, @ModelAttribute("form") SearchFiltersForm form) throws PortletException, IOException {
         // Portal controller context
         PortalControllerContext portalControllerContext = new PortalControllerContext(portletContext, request, response);
@@ -91,22 +107,6 @@ public class SearchFiltersController {
         // Redirection
         String url = this.service.saveSearch(portalControllerContext, form);
         response.sendRedirect(url);
-    }
-
-
-    /**
-     * Clear location action mapping.
-     *
-     * @param request  action request
-     * @param response action response
-     * @param form     search filters form model attribute
-     */
-    @ActionMapping(name = "submit", params = "clearLocation")
-    public void clearLocation(ActionRequest request, ActionResponse response, @ModelAttribute("form") SearchFiltersForm form) throws PortletException {
-        // Portal Controller context
-        PortalControllerContext portalControllerContext = new PortalControllerContext(this.portletContext, request, response);
-
-        this.service.clearLocation(portalControllerContext, form);
     }
 
 
@@ -168,6 +168,22 @@ public class SearchFiltersController {
         PortalControllerContext portalControllerContext = new PortalControllerContext(this.portletContext, request, response);
 
         return this.service.getForm(portalControllerContext);
+    }
+
+
+    /**
+     * Get location URL model attribute.
+     *
+     * @param request  portlet request
+     * @param response portlet response
+     * @return URL
+     */
+    @ModelAttribute("locationUrl")
+    public String getLocationUrl(PortletRequest request, PortletResponse response) throws PortletException {
+        // Portal Controller context
+        PortalControllerContext portalControllerContext = new PortalControllerContext(this.portletContext, request, response);
+
+        return this.service.getLocationUrl(portalControllerContext);
     }
 
 }

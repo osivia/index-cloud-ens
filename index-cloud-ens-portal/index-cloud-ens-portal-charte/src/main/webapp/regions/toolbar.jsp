@@ -85,12 +85,12 @@
                     <div class="dropdown-menu dropdown-menu-right">
                         <div class="dropdown-header d-lg-none">${empty requestScope['osivia.toolbar.person'] ? requestScope['osivia.toolbar.principal'] : requestScope['osivia.toolbar.person'].displayName}</div>
 
-                            <%--User profile--%>
-                        <c:set var="url" value="${requestScope['osivia.toolbar.myprofile']}"/>
+                            <%--User account--%>
+                        <c:set var="url" value="${requestScope['osivia.my-account.url']}"/>
                         <c:if test="${not empty url}">
                             <a href="${url}" class="dropdown-item">
                                 <i class="glyphicons glyphicons-basic-id-badge"></i>
-                                <span><op:translate key="TOOLBAR_USER_PROFILE"/></span>
+                                <span><op:translate key="TOOLBAR_USER_ACCOUNT"/></span>
                             </a>
 
                             <%--Divider--%>

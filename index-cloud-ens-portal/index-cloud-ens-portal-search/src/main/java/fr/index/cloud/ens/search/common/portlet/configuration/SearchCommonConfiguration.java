@@ -5,6 +5,7 @@ import fr.toutatice.portail.cms.nuxeo.api.services.dao.DocumentDAO;
 import org.osivia.portal.api.internationalization.IBundleFactory;
 import org.osivia.portal.api.internationalization.IInternationalizationService;
 import org.osivia.portal.api.locator.Locator;
+import org.osivia.portal.api.path.IBrowserService;
 import org.osivia.portal.api.portlet.PortletAppUtils;
 import org.osivia.portal.api.taskbar.ITaskbarService;
 import org.osivia.portal.api.urls.IPortalUrlFactory;
@@ -14,6 +15,8 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.web.portlet.context.PortletConfigAware;
+import org.springframework.web.servlet.view.InternalResourceViewResolver;
+import org.springframework.web.servlet.view.JstlView;
 
 import javax.portlet.PortletConfig;
 import javax.portlet.PortletException;
@@ -24,7 +27,7 @@ import javax.portlet.PortletException;
  * @author Cédric Krommenhoek
  * @see CMSPortlet
  */
-public class SearchCommonConfiguration extends CMSPortlet implements PortletConfigAware {
+public abstract class SearchCommonConfiguration extends CMSPortlet implements PortletConfigAware {
 
     /**
      * Application context.
@@ -47,6 +50,30 @@ public class SearchCommonConfiguration extends CMSPortlet implements PortletConf
         // Register portlet application context
         PortletAppUtils.registerApplication(portletConfig, this.applicationContext);
     }
+
+
+    /**
+     * Get view resolver.
+     *
+     * @return view resolver
+     */
+    @Bean
+    public InternalResourceViewResolver getViewResolver() {
+        InternalResourceViewResolver viewResolver = new InternalResourceViewResolver();
+        viewResolver.setCache(true);
+        viewResolver.setViewClass(JstlView.class);
+        viewResolver.setPrefix("/WEB-INF/jsp/" + this.getJspFolder() + "/");
+        viewResolver.setSuffix(".jsp");
+        return viewResolver;
+    }
+
+
+    /**
+     * Get JSP folder name.
+     *
+     * @return folder name
+     */
+    protected abstract String getJspFolder();
 
 
     /**
@@ -92,6 +119,17 @@ public class SearchCommonConfiguration extends CMSPortlet implements PortletConf
     @Bean
     public ITaskbarService getTaskbarService() {
         return Locator.findMBean(ITaskbarService.class, ITaskbarService.MBEAN_NAME);
+    }
+
+
+    /**
+     * Get browser service.
+     *
+     * @return browser service
+     */
+    @Bean
+    public IBrowserService getBrowserService() {
+        return Locator.findMBean(IBrowserService.class, IBrowserService.MBEAN_NAME);
     }
 
 

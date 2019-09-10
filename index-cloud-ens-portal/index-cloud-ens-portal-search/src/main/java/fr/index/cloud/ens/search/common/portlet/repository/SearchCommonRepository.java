@@ -14,8 +14,19 @@ import java.util.List;
  */
 public interface SearchCommonRepository {
 
-    /** Search filters task identifier. */
+    /**
+     * Search filters task identifier.
+     */
     String SEARCH_FILTERS_TASK_ID = "SEARCH_FILTERS";
+
+
+    /**
+     * Get user workspace path.
+     *
+     * @param portalControllerContext portal controller context
+     * @return path
+     */
+    String getUserWorkspacePath(PortalControllerContext portalControllerContext) throws PortletException;
 
 
     /**

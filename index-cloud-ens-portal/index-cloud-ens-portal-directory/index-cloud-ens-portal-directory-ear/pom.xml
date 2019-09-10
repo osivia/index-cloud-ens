@@ -28,9 +28,9 @@
         
         <!-- Person card -->
         <dependency>
-            <groupId>org.osivia.services.directory.person</groupId>
-            <artifactId>osivia-services-directory-person-card</artifactId>
-            <version>${directory.version}</version>
+            <groupId>fr.index.cloud.ens.portal.directory</groupId>
+            <artifactId>index-cloud-ens-portal-directory-person-card</artifactId>
+            <version>${project.version}</version>
             <type>war</type>
         </dependency>
         
@@ -117,9 +117,9 @@
                             <contextRoot>/index-cloud-ens-portal-directory-services</contextRoot>
                         </webModule>
                         <webModule>
-                            <groupId>org.osivia.services.directory.person</groupId>
-                            <artifactId>osivia-services-directory-person-card</artifactId>
-                            <contextRoot>/osivia-services-directory-person-card</contextRoot>
+                            <groupId>fr.index.cloud.ens.portal.directory</groupId>
+                            <artifactId>index-cloud-ens-portal-directory-person-card</artifactId>
+                            <contextRoot>/index-cloud-ens-portal-directory-person-card</contextRoot>
                         </webModule>
                         <webModule>
                             <groupId>org.osivia.services.directory.person</groupId>
