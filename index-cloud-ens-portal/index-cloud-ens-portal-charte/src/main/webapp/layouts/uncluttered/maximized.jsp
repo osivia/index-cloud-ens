@@ -12,7 +12,7 @@
 </head>
 
 
-<body class="vh-100 overflow-hidden d-flex flex-column" data-page-header="true">
+<body class="vh-100 overflow-hidden d-flex flex-column uncluttered" data-page-header="true">
 
 <header>
     <%--Simple toolbar--%>
@@ -20,7 +20,7 @@
 </header>
 
 <main class="d-flex flex-column flex-grow-1 overflow-auto">
-    <div class="container-fluid d-flex flex-column flex-grow-1 overflow-auto">
+    <div class="container my-auto py-4">
         <p:region regionName="maximized"/>
     </div>
 </main>

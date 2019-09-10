@@ -180,9 +180,7 @@ public class PersonCreationController extends CMSPortlet {
         // Portal controller context
         PortalControllerContext portalControllerContext = new PortalControllerContext(this.portletContext, request, response);
 
-        if (result.hasErrors()) {
-        	copyRenderParameters(request, response);
-        } else {
+        if (!result.hasErrors()) {
         	this.service.proceedInit(portalControllerContext, form);
 
         	response.setRenderParameter(VIEW_WINDOW_PROPERTY, RenewPasswordStep.SEND.name());
@@ -190,23 +188,13 @@ public class PersonCreationController extends CMSPortlet {
         }
 	}
 
-	private void copyRenderParameters(ActionRequest request, ActionResponse response) {
-		// Copy render parameters
-		Map<String, String[]> parameters = request.getPrivateParameterMap();
-		if (MapUtils.isNotEmpty(parameters)) {
-		    for (Entry<String, String[]> entry : parameters.entrySet()) {
-		        response.setRenderParameter(entry.getKey(), entry.getValue());
-		    }
-		}
-	}
-	
 
     /**
      * Password rules information resource mapping.
      *
      * @param request  resource request
      * @param response resource response
-     * @param password password
+     * @param newpassword password
      */
     @ResourceMapping("password-information")
     public void passwordInformation(ResourceRequest request, ResourceResponse response, @RequestParam(name = "newpassword", required = false) String newpassword) throws PortletException, IOException {

@@ -1,0 +1,16 @@
+@import "../osivia/variables";
+
+
+header {
+  .uncluttered & {
+    .navbar {
+      background-color: $uncluttered-toolbar-bg;
+    }
+  }
+}
+
+main {
+  .uncluttered & {
+    background: $uncluttered-body-bg-center linear-gradient(to right, $uncluttered-body-bg-left 0%, $uncluttered-body-bg-center 50%, $uncluttered-body-bg-right 100%);
+  }
+}
