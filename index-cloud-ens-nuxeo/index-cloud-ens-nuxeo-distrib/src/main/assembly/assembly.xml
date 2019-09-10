@@ -49,10 +49,9 @@
 				 -->
 				<include>opentoutatice-ecm.collab-tools:opentoutatice-collab-tools-ecm:jar:${ottc.collab.version}
 				</include>
-				<!-- 
 				<include>opentoutatice-ecm.drive:opentoutatice-drive:jar:${ottc.drive.version}
 				</include>
-				 -->
+
 				<include>opentoutatice-ecm.generic-ui-service:opentoutatice-generic-ui-service-ecm:jar:${ottc.generic-ui.version}
 				</include>
 				<include>opentoutatice-ecm.elasticsearch-customizer:opentoutatice-addon-elasticsearch-customizer-ecm:jar:${ottc.es.custom.version}
@@ -136,17 +135,17 @@
 				<!-- Login & SSO -->
 				<include>org.nuxeo.ecm.platform:nuxeo-platform-login-cas2:jar:${nuxeo.version}
 				</include>
-				<!-- Nuxeo Drive 
-				<include>org.nuxeo.ecm:nuxeo-drive-core:jar:${nuxeodrive.version}
+				<!-- Nuxeo Drive -->
+				<include>org.nuxeo.ecm:nuxeo-drive-core:jar:${nuxeo.version}
 				</include>
-				<include>org.nuxeo.ecm:nuxeo-drive-jsf:jar:${nuxeodrive.version}
+				<include>org.nuxeo.ecm:nuxeo-drive-jsf:jar:${nuxeo.version}
 				</include>
-				<include>org.nuxeo.ecm:nuxeo-drive-operations:jar:${nuxeodrive.version}
+				<include>org.nuxeo.ecm:nuxeo-drive-operations:jar:${nuxeo.version}
 				</include>
-				<include>org.nuxeo.lib.core:nuxeo-core-storage-sql-extensions:jar:${nuxeodrive.version}
+				<include>org.nuxeo.lib.core:nuxeo-core-storage-sql-extensions:jar:${nuxeo.version}
 				</include>
-				<include>org.nuxeo.lib.wss:nuxeo-wss-front:jar:${nuxeodrive.version}
-				</include>-->
+				<include>org.nuxeo.lib.wss:nuxeo-wss-front:jar:${nuxeo.version}
+				</include>
 				<!-- Platform explorer -->
 				<include>org.nuxeo.ecm.platform:nuxeo-apidoc-core:jar:${nuxeo.version}
 				</include>

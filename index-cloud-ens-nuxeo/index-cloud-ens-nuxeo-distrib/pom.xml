@@ -17,7 +17,6 @@
 	<properties>
 
 		<nuxeo.version>6.1.0</nuxeo.version>
-		<nuxeodrive.version>6.1.0</nuxeodrive.version>
 		<ottc.collab.version>4.9-SNAPSHOT</ottc.collab.version>
 		<ottc.filenaming.version>4.7.17</ottc.filenaming.version>
 		<ottc.file.versioning.version>4.7.17</ottc.file.versioning.version>
@@ -25,8 +24,8 @@
 		<ottc.notif.version>4.7.17</ottc.notif.version>
 
 		
-		<!-- <ottc.ui.version>4.6.1</ottc.ui.version>
-		<ottc.drive.version>4.6.2</ottc.drive.version> -->
+		<!-- <ottc.ui.version>4.6.1</ottc.ui.version> -->
+		<ottc.drive.version>4.7.17</ottc.drive.version>
 		<ottc.generic-ui.version>4.7.17</ottc.generic-ui.version>
 		<!-- <ottc.checkin.version>4.6.1</ottc.checkin.version> --> 
 
@@ -200,13 +199,11 @@
 			<artifactId>opentoutatice-collab-tools-ecm</artifactId>
 			<version>${ottc.collab.version}</version>
 		</dependency>
-		<!-- 
 		<dependency>
 			<groupId>opentoutatice-ecm.drive</groupId>
 			<artifactId>opentoutatice-drive</artifactId>
 			<version>${ottc.drive.version}</version>
 		</dependency>
-		 -->
 		<dependency>
 			<groupId>opentoutatice-ecm.generic-ui-service</groupId>
 			<artifactId>opentoutatice-generic-ui-service-ecm</artifactId>
@@ -392,33 +389,33 @@
 		</dependency>
 		
 
-		<!-- Nuxeo Drive 
+		<!-- Nuxeo Drive -->
 		<dependency>
   			<groupId>org.nuxeo.ecm</groupId>
 			<artifactId>nuxeo-drive-core</artifactId>
-			<version>${nuxeodrive.version}</version>
+			<version>${nuxeo.version}</version>
 		</dependency>
 		<dependency>
   			<groupId>org.nuxeo.ecm</groupId>
 			<artifactId>nuxeo-drive-jsf</artifactId>
-			<version>${nuxeodrive.version}</version>
+			<version>${nuxeo.version}</version>
 		</dependency>
 		<dependency>
   			<groupId>org.nuxeo.ecm</groupId>
 			<artifactId>nuxeo-drive-operations</artifactId>
-			<version>${nuxeodrive.version}</version>
+			<version>${nuxeo.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.nuxeo.lib.core</groupId>
 			<artifactId>nuxeo-core-storage-sql-extensions</artifactId>
-			<version>${nuxeodrive.version}</version>
+			<version>${nuxeo.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.nuxeo.lib.wss</groupId>
 			<artifactId>nuxeo-wss-front</artifactId>
-			<version>${nuxeodrive.version}</version>
+			<version>${nuxeo.version}</version>
 		</dependency>
-		-->
+
 		
 		<!-- Platform explorer -->
 		<dependency>
