@@ -113,23 +113,6 @@
     </div>
 </main>
 
-<footer>
-    <nav class="navbar navbar-expand navbar-light bg-blue-lighter d-none d-md-flex">
-        <a class="navbar-brand mr-5 py-0" href="https://www.index-education.com">
-            <img alt="Index &Eacute;ducation" src="${contextPath}/img/logo-index-full.png" height="40">
-        </a>
-
-        <ul class="navbar-nav">
-            <li class="nav-item">
-                <a href="#" class="btn btn-blue-dark disabled">
-                    <span class="text-blue-light font-weight-bolder"><op:translate key="FOOTER_RGPD"/></span>
-                    <i class="glyphicons glyphicons-basic-shield-check"></i>
-                </a>
-            </li>
-        </ul>
-    </nav>
-</footer>
-
 </body>
 
 </html>
