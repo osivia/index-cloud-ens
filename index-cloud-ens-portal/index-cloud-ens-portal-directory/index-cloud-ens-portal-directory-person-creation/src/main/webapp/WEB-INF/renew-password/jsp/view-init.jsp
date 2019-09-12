@@ -6,34 +6,37 @@
 
 <%@ page contentType="text/html" isELIgnored="false" %>
 
+
 <portlet:actionURL name="sendMail" var="sendMailUrl" copyCurrentRenderParameters="true"/>
 
-<div class="page-heade">
-	<div class="h2 m-0"><op:translate key="renew.init.title" /></div>
+
+<div class="row">
+	<div class="col-md-6 offset-md-3 col-lg-4 offset-lg-4">
+		<div class="card bg-blue-lighter shadow-lg">
+			<div class="card-body">
+				<h3 class="card-title h5"><op:translate key="renew.init.title"/></h3>
+
+				<form:form action="${sendMailUrl}" method="post" modelAttribute="form" enctype="multipart/form-data" role="form">
+					<spring:bind path="mail">
+						<div class="form-group required">
+							<form:label path="mail"><op:translate key="renew.init.mail" /></form:label>
+							<c:set var="placeholder"><op:translate key="renew.init.mail.placeholder"/></c:set>
+							<form:input path="mail" type="email" cssClass="form-control" cssErrorClass="form-control is-invalid" placeholder="${placeholder}" />
+							<form:errors path="mail" cssClass="invalid-feedback" />
+						</div>
+					</spring:bind>
+
+					<div class="text-right">
+						<button type="submit" name="save" class="btn btn-primary">
+							<span><op:translate key="renew.init.submit" /></span>
+						</button>
+					</div>
+				</form:form>
+			</div>
+		</div>
+	</div>
 </div>
 
 
-<form:form action="${sendMailUrl}" method="post" modelAttribute="form" enctype="multipart/form-data" role="form">
-
-	<spring:bind path="mail">
-	    <div class="form-group row required ${status.error ? 'has-error has-feedback' : ''}">
-	        <form:label path="mail" cssClass="col-md-3 col-lg-2 col-form-label"><op:translate key="renew.init.mail" /></form:label>
-	        <div class="col-md-9 col-lg-10">
-	        	
-	            <form:input path="mail" cssClass="form-control ${status.error ? 'is-invalid' : ''}" />   
-	            <form:errors path="mail" cssClass="invalid-feedback" />
-	        </div>
-	    </div>
-	</spring:bind>
-
-	<div class="form-group row">
-	    <div class="col-md-9 offset-md-3 col-lg-10 offset-lg-2">
-	        <!-- Save -->
-	        <button type="submit" name="save" class="btn btn-primary">
-	            <span><op:translate key="renew.init.submit" /></span>
-	        </button>
-	    </div>
-	</div>
 
 
-</form:form>

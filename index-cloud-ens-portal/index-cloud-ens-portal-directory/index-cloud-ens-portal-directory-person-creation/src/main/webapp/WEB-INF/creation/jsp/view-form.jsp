@@ -12,33 +12,39 @@
 
 
 <div class="row">
-    <div class="col-lg-4 offset-lg-4">
-        <div class="card bg-blue-lighter create-account">
+    <div class="col-md-6 offset-md-3 col-lg-4 offset-lg-4">
+        <div class="card bg-blue-lighter shadow-lg create-account">
             <div class="card-body">
-                <form:form action="${submitFormUrl}" method="post" modelAttribute="form" role="form">
-                    <h3 class="card-title text-center text-uppercase font-weight-bold"><op:translate key="createaccount.title"/></h3>
+                <h3 class="card-title text-center text-uppercase font-weight-bold"><op:translate
+                        key="createaccount.title"/></h3>
 
+                <form:form action="${submitFormUrl}" method="post" modelAttribute="form" role="form">
                     <spring:bind path="lastname">
                         <div class="form-group required">
-                            <form:label path="lastname" cssClass="text-secondary"><op:translate key="createaccount.form.lastname"/></form:label>
-                            <form:input path="lastname" cssClass="form-control ${status.error ? 'is-invalid' : ''}"/>
+                            <form:label path="lastname" cssClass="text-secondary"><op:translate
+                                    key="createaccount.form.lastname"/></form:label>
+                            <form:input path="lastname" cssClass="form-control"
+                                        cssErrorClass="form-control is-invalid"/>
                             <form:errors path="lastname" cssClass="invalid-feedback"/>
                         </div>
                     </spring:bind>
 
                     <spring:bind path="firstname">
                         <div class="form-group required">
-                            <form:label path="firstname" cssClass="text-secondary"><op:translate key="createaccount.form.firstname"/></form:label>
-                            <form:input path="firstname" cssClass="form-control ${status.error ? 'is-invalid' : ''}"/>
+                            <form:label path="firstname" cssClass="text-secondary"><op:translate
+                                    key="createaccount.form.firstname"/></form:label>
+                            <form:input path="firstname" cssClass="form-control"
+                                        cssErrorClass="form-control is-invalid"/>
                             <form:errors path="firstname" cssClass="invalid-feedback"/>
                         </div>
                     </spring:bind>
 
                     <spring:bind path="mail">
                         <div class="form-group required">
-                            <form:label path="mail" cssClass="text-secondary"><op:translate key="createaccount.form.mail"/></form:label>
-                            <form:input path="mail" type="email"
-                                        cssClass="form-control ${status.error ? 'is-invalid' : ''}"/>
+                            <form:label path="mail" cssClass="text-secondary"><op:translate
+                                    key="createaccount.form.mail"/></form:label>
+                            <form:input path="mail" type="email" cssClass="form-control"
+                                        cssErrorClass="form-control is-invalid"/>
                             <form:errors path="mail" cssClass="invalid-feedback"/>
                         </div>
                     </spring:bind>
@@ -47,24 +53,26 @@
                         <div class="form-group required">
                             <form:label path="newpassword" cssClass="text-secondary"><op:translate
                                     key="createaccount.form.newpassword"/></form:label>
-                            <form:password path="newpassword"
-                                           cssClass="form-control ${status.error ? 'is-invalid' : ''}"/>
+                            <form:password path="newpassword" cssClass="form-control"
+                                           cssErrorClass="form-control is-invalid"/>
                             <form:errors path="newpassword" cssClass="invalid-feedback"/>
                         </div>
                     </spring:bind>
 
                     <spring:bind path="confirmpassword">
                         <div class="form-group required">
-                            <form:label path="confirmpassword" cssClass="text-secondary"><op:translate key="createaccount.form.confirmpassword"/></form:label>
-                            <form:password path="confirmpassword"
-                                           cssClass="form-control ${status.error ? 'is-invalid' : ''}"/>
+                            <form:label path="confirmpassword" cssClass="text-secondary"><op:translate
+                                    key="createaccount.form.confirmpassword"/></form:label>
+                            <form:password path="confirmpassword" cssClass="form-control"
+                                           cssErrorClass="form-control is-invalid"/>
                             <form:errors path="confirmpassword" cssClass="invalid-feedback"/>
                         </div>
                     </spring:bind>
 
                     <div class="text-right">
                         <button type="submit" name="save" class="btn btn-secondary">
-                            <span class="text-uppercase font-weight-bold"><op:translate key="createaccount.submit"/></span>
+                            <span class="text-uppercase font-weight-bold"><op:translate
+                                    key="createaccount.submit"/></span>
                         </button>
                     </div>
                 </form:form>
@@ -90,7 +98,9 @@
                     <li class="mb-1">avoir la garantie de rester propri&eacute;taire de vos documents</li>
                     <li class="mb-1">pouvoir cl&ocirc;turer votre compte &agrave; tout moment</li>
                     <li class="mb-1">&ecirc;tre assur&eacute; que vos donn&eacute;es personnelles ne seront pas exploit&eacute;es</li>
-                    <li class="mb-1">pouvoir r&eacute;cup&eacute;rer tout ou partie de vos documents quand vous le souhaitez</li>
+                    <li class="mb-1">pouvoir r&eacute;cup&eacute;rer tout ou partie de vos documents quand vous le
+                        souhaitez
+                    </li>
                 </ul>
             </div>
         </div>
