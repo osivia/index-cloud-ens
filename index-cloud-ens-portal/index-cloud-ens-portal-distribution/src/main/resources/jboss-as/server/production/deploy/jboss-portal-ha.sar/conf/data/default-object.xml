@@ -1279,6 +1279,47 @@ return nuxeoRequest.toString();</value>
                         </properties>
                         <height>0</height>
                     </window>
+                   <window>
+                        <window-name>osivia-services-workspace-quota-instance_1567782310685</window-name>
+                        <instance-ref>osivia-services-workspace-quota-instance</instance-ref>
+                        <region>nav-bottom</region>
+                        <properties>
+                            <property>
+                                <name>osivia.hideDecorators</name>
+                                <value>1</value>
+                            </property>
+                            <property>
+                                <name>portal.windowContentType</name>
+                                <value>portlet</value>
+                            </property>
+                            <property>
+                                <name>osivia.bootstrapPanelStyle</name>
+                                <value>false</value>
+                            </property>
+                            <property>
+                                <name>osivia.maximized.cms.url</name>
+                                <value>false</value>
+                            </property>
+                            <property>
+                                <name>osivia.mobileCollapse</name>
+                                <value>false</value>
+                            </property>
+                            <property>
+                                <name>osivia.hideTitle</name>
+                                <value>1</value>
+                            </property>
+                            <property>
+                                <name>theme.order</name>
+                                <value>0</value>
+                            </property>
+                            <property>
+                                <name>osivia.cacheID</name>
+                                <value>quota</value>
+                            </property>
+                        </properties>
+                        <height>0</height>
+                    </window>                    
+                       
                 </page>
 
                 <page>
@@ -1520,6 +1561,46 @@ return nuxeoRequest.toString();</value>
                         </properties>
                         <height>0</height>
                     </window>
+                    <window>
+                        <window-name>osivia-services-workspace-quota-instance_1567782310685</window-name>
+                        <instance-ref>osivia-services-workspace-quota-instance</instance-ref>
+                        <region>nav-bottom</region>
+                        <properties>
+                            <property>
+                                <name>osivia.hideDecorators</name>
+                                <value>1</value>
+                            </property>
+                            <property>
+                                <name>portal.windowContentType</name>
+                                <value>portlet</value>
+                            </property>
+                            <property>
+                                <name>osivia.bootstrapPanelStyle</name>
+                                <value>false</value>
+                            </property>
+                            <property>
+                                <name>osivia.maximized.cms.url</name>
+                                <value>false</value>
+                            </property>
+                            <property>
+                                <name>osivia.mobileCollapse</name>
+                                <value>false</value>
+                            </property>
+                            <property>
+                                <name>osivia.hideTitle</name>
+                                <value>1</value>
+                            </property>
+                            <property>
+                                <name>theme.order</name>
+                                <value>0</value>
+                            </property>
+                            <property>
+                                <name>osivia.cacheID</name>
+                                <value>quota</value>
+                            </property>
+                        </properties>
+                        <height>0</height>
+                    </window>                    
                 </page>
 
                 <page>
@@ -1786,6 +1867,47 @@ return nuxeoRequest.toString();</value>
                         </properties>
                         <height>0</height>
                     </window>
+                   <window>
+                        <window-name>osivia-services-workspace-quota-instance_1567782310685</window-name>
+                        <instance-ref>osivia-services-workspace-quota-instance</instance-ref>
+                        <region>nav-bottom</region>
+                        <properties>
+                            <property>
+                                <name>osivia.hideDecorators</name>
+                                <value>1</value>
+                            </property>
+                            <property>
+                                <name>portal.windowContentType</name>
+                                <value>portlet</value>
+                            </property>
+                            <property>
+                                <name>osivia.bootstrapPanelStyle</name>
+                                <value>false</value>
+                            </property>
+                            <property>
+                                <name>osivia.maximized.cms.url</name>
+                                <value>false</value>
+                            </property>
+                            <property>
+                                <name>osivia.mobileCollapse</name>
+                                <value>false</value>
+                            </property>
+                            <property>
+                                <name>osivia.hideTitle</name>
+                                <value>1</value>
+                            </property>
+                            <property>
+                                <name>theme.order</name>
+                                <value>0</value>
+                            </property>
+                            <property>
+                                <name>osivia.cacheID</name>
+                                <value>quota</value>
+                            </property>
+                       
+                        </properties>
+                        <height>0</height>
+                    </window>                           
                 </page>
 
                 <page>
@@ -1878,6 +2000,47 @@ return nuxeoRequest.toString();</value>
                         </properties>
                         <height>0</height>
                     </window>
+                   <window>
+                        <window-name>osivia-services-workspace-quota-instance_1567782310685</window-name>
+                        <instance-ref>osivia-services-workspace-quota-instance</instance-ref>
+                        <region>nav-bottom</region>
+                        <properties>
+                            <property>
+                                <name>osivia.hideDecorators</name>
+                                <value>1</value>
+                            </property>
+                            <property>
+                                <name>portal.windowContentType</name>
+                                <value>portlet</value>
+                            </property>
+                            <property>
+                                <name>osivia.bootstrapPanelStyle</name>
+                                <value>false</value>
+                            </property>
+                            <property>
+                                <name>osivia.maximized.cms.url</name>
+                                <value>false</value>
+                            </property>
+                            <property>
+                                <name>osivia.mobileCollapse</name>
+                                <value>false</value>
+                            </property>
+                            <property>
+                                <name>osivia.hideTitle</name>
+                                <value>1</value>
+                            </property>
+                            <property>
+                                <name>theme.order</name>
+                                <value>0</value>
+                            </property>
+                            <property>
+                                <name>osivia.cacheID</name>
+                                <value>quota</value>
+                            </property>
+                        </properties>
+                        <height>0</height>
+                    </window>                    
+                       
                 </page>
 
                 <page>
@@ -1929,6 +2092,47 @@ return nuxeoRequest.toString();</value>
                         </properties>
                         <height>0</height>
                     </window>
+                   <window>
+                        <window-name>osivia-services-workspace-quota-instance_1567782310685</window-name>
+                        <instance-ref>osivia-services-workspace-quota-instance</instance-ref>
+                        <region>nav-bottom</region>
+                        <properties>
+                            <property>
+                                <name>osivia.hideDecorators</name>
+                                <value>1</value>
+                            </property>
+                            <property>
+                                <name>portal.windowContentType</name>
+                                <value>portlet</value>
+                            </property>
+                            <property>
+                                <name>osivia.bootstrapPanelStyle</name>
+                                <value>false</value>
+                            </property>
+                            <property>
+                                <name>osivia.maximized.cms.url</name>
+                                <value>false</value>
+                            </property>
+                            <property>
+                                <name>osivia.mobileCollapse</name>
+                                <value>false</value>
+                            </property>
+                            <property>
+                                <name>osivia.hideTitle</name>
+                                <value>1</value>
+                            </property>
+                            <property>
+                                <name>theme.order</name>
+                                <value>0</value>
+                            </property>
+                            <property>
+                                <name>osivia.cacheID</name>
+                                <value>quota</value>
+                            </property>
+
+                        </properties>
+                        <height>0</height>
+                    </window>                           
                 </page>
 
                 <page>
@@ -2068,6 +2272,46 @@ return nuxeoRequest.toString();</value>
                         </properties>
                         <height>0</height>
                     </window>
+                   <window>
+                        <window-name>osivia-services-workspace-quota-instance_1567782310685</window-name>
+                        <instance-ref>osivia-services-workspace-quota-instance</instance-ref>
+                        <region>nav-bottom</region>
+                        <properties>
+                            <property>
+                                <name>osivia.hideDecorators</name>
+                                <value>1</value>
+                            </property>
+                            <property>
+                                <name>portal.windowContentType</name>
+                                <value>portlet</value>
+                            </property>
+                            <property>
+                                <name>osivia.bootstrapPanelStyle</name>
+                                <value>false</value>
+                            </property>
+                            <property>
+                                <name>osivia.maximized.cms.url</name>
+                                <value>false</value>
+                            </property>
+                            <property>
+                                <name>osivia.mobileCollapse</name>
+                                <value>false</value>
+                            </property>
+                            <property>
+                                <name>osivia.hideTitle</name>
+                                <value>1</value>
+                            </property>
+                            <property>
+                                <name>theme.order</name>
+                                <value>0</value>
+                            </property>
+                            <property>
+                                <name>osivia.cacheID</name>
+                                <value>quota</value>
+                            </property>
+                        </properties>
+                        <height>0</height>
+                    </window>                           
                 </page>
             </page>
         </portal>
