@@ -1,5 +1,6 @@
-package fr.index.cloud.ens.directory.person.deleting.portlet.controller;
+package fr.index.cloud.ens.directory.person.deleting.portlet.repository.command;
 
+import fr.toutatice.portail.cms.nuxeo.api.INuxeoCommand;
 import org.nuxeo.ecm.automation.client.OperationRequest;
 import org.nuxeo.ecm.automation.client.Session;
 import org.nuxeo.ecm.automation.client.model.DocRef;
@@ -7,28 +8,30 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import fr.toutatice.portail.cms.nuxeo.api.INuxeoCommand;
-
 /**
  * Delete userworkspace Nuxeo command.
- * 
+ *
  * @author Loïc Billon
  */
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class DeleteWorkspaceCommand implements INuxeoCommand {
 
-    /** Operation identifier . */
+    /**
+     * Operation identifier .
+     */
     private static final String OPERATION_ID = "Document.Delete";
 
 
-    /** Workspace path. */
+    /**
+     * Workspace path.
+     */
     private final String path;
 
 
     /**
      * Constructor.
-     * 
+     *
      * @param path workspace path
      */
     public DeleteWorkspaceCommand(String path) {
@@ -44,7 +47,7 @@ public class DeleteWorkspaceCommand implements INuxeoCommand {
     public Object execute(Session nuxeoSession) throws Exception {
         // Document reference
         DocRef docRef = new DocRef(this.path);
-        
+
         // Operation request
         OperationRequest request = nuxeoSession.newRequest(OPERATION_ID);
         request.setInput(docRef);

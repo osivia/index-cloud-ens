@@ -14,13 +14,6 @@
     <name>Cloud enseignant - Customizer Portail</name>
 
 
-    <properties>
-        <!-- JBoss -->
-        <jboss-portal.version>2.7.2</jboss-portal.version>
-        <!-- <jboss.version>4.2.3.GA</jboss.version> -->
-    </properties>
-
-
     <dependencies>
 
         <!-- JBoss -->

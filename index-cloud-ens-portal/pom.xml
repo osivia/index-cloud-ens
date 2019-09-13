@@ -46,7 +46,9 @@
 
         <!-- REST -->        
         <jackson.version>2.7.3</jackson.version>
-        
+
+        <!-- JBoss -->
+        <jboss-portal.version>2.7.2</jboss-portal.version>
     </properties>
     
     

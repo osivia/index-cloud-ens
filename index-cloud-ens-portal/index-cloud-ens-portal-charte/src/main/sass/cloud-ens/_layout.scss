@@ -1,15 +1,6 @@
-//.drawer-toggle-button {
-//  body:not([data-drawer="true"]) & {
-//    display: none !important;
-//  }
-//}
-
-
 #maximized {
   > .page-header {
-    body:not([data-page-header="true"]) & {
-      display: none !important;
-    }
+    display: none !important;
   }
 }
 
