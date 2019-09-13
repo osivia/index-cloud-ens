@@ -3,6 +3,7 @@ package fr.index.cloud.ens.search.filters.portlet.service;
 import fr.index.cloud.ens.search.common.portlet.service.SearchCommonServiceImpl;
 import fr.index.cloud.ens.search.filters.location.portlet.service.SearchFiltersLocationService;
 import fr.index.cloud.ens.search.filters.portlet.model.SearchFiltersForm;
+import fr.index.cloud.ens.search.filters.portlet.model.SearchFiltersVocabulary;
 import fr.index.cloud.ens.search.filters.portlet.model.SearchFiltersVocabularyItem;
 import fr.index.cloud.ens.search.filters.portlet.repository.SearchFiltersRepository;
 import fr.toutatice.portail.cms.nuxeo.api.PageSelectors;
@@ -56,6 +57,10 @@ public class SearchFiltersServiceImpl extends SearchCommonServiceImpl implements
      * Level selector identifier.
      */
     private static final String LEVEL_SELECTOR_ID = "level";
+    /**
+     * Subject selector identifier.
+     */
+    private static final String SUBJECT_SELECTOR_ID = "subject";
 
 
     /**
@@ -119,6 +124,14 @@ public class SearchFiltersServiceImpl extends SearchCommonServiceImpl implements
             selectors = PageSelectors.decodeProperties(request.getParameter(SELECTORS_PARAMETER));
         }
 
+        // Level
+        String level = this.getSelectorValue(selectors, LEVEL_SELECTOR_ID);
+        form.setLevel(level);
+
+        // Subject
+        String subject = this.getSelectorValue(selectors, SUBJECT_SELECTOR_ID);
+        form.setSubject(subject);
+
         // Location
         String navigationPath = window.getProperty(NAVIGATION_PATH_WINDOW_PROPERTY);
         if (StringUtils.isEmpty(navigationPath)) {
@@ -126,10 +139,6 @@ public class SearchFiltersServiceImpl extends SearchCommonServiceImpl implements
         }
         form.setLocationPath(navigationPath);
         this.updateLocation(portalControllerContext, form);
-
-        // Level
-        String level = this.getSelectorValue(selectors, LEVEL_SELECTOR_ID);
-        form.setLevel(level);
 
         // Keywords
         String keywords = this.getSelectorValue(selectors, KEYWORDS_SELECTOR_ID);
@@ -261,16 +270,22 @@ public class SearchFiltersServiceImpl extends SearchCommonServiceImpl implements
         // Selectors
         Map<String, List<String>> selectors = new HashMap<>();
 
-        // Location
-        DocumentDTO location = form.getLocation();
-        if (location != null) {
-            selectors.put(LOCATION_SELECTOR_ID, Collections.singletonList(location.getPath()));
-        }
-
         // Level
         String level = form.getLevel();
         if (StringUtils.isNotEmpty(level)) {
             selectors.put(LEVEL_SELECTOR_ID, Collections.singletonList(level));
+        }
+
+        // Subject
+        String subject = form.getSubject();
+        if (StringUtils.isNotEmpty(subject)) {
+            selectors.put(SUBJECT_SELECTOR_ID, Collections.singletonList(subject));
+        }
+
+        // Location
+        DocumentDTO location = form.getLocation();
+        if (location != null) {
+            selectors.put(LOCATION_SELECTOR_ID, Collections.singletonList(location.getPath()));
         }
 
         // Keywords
@@ -284,14 +299,19 @@ public class SearchFiltersServiceImpl extends SearchCommonServiceImpl implements
 
 
     @Override
-    public JSONArray loadLevels(PortalControllerContext portalControllerContext, String filter) throws PortletException, IOException {
+    public JSONArray loadVocabulary(PortalControllerContext portalControllerContext, SearchFiltersVocabulary vocabulary, String filter) throws PortletException, IOException {
         // Portlet request
         PortletRequest request = portalControllerContext.getRequest();
         // Internationalization bundle
         Bundle bundle = this.bundleFactory.getBundle(request.getLocale());
 
         // Vocabulary JSON array
-        JSONArray array = this.repository.loadVocabulary(portalControllerContext, LEVELS_VOCABULARY);
+        JSONArray array;
+        if (vocabulary == null) {
+            array = null;
+        } else {
+            array = this.repository.loadVocabulary(portalControllerContext, vocabulary.getVocabularyName());
+        }
 
         // Select2 results
         JSONArray results;
@@ -303,7 +323,7 @@ public class SearchFiltersServiceImpl extends SearchCommonServiceImpl implements
             // All
             JSONObject object = new JSONObject();
             object.put("id", StringUtils.EMPTY);
-            object.put("text", bundle.getString("SEARCH_FILTERS_LEVEL_ALL"));
+            object.put("text", bundle.getString(vocabulary.getAllKey()));
             object.put("optgroup", false);
             object.put("level", 1);
             results.add(0, object);

@@ -1424,7 +1424,7 @@ return nuxeoRequest.toString();</value>
                     <window>
                         <window-name>index-cloud-ens-file-browser-filter-eraser-instance_1560325542241</window-name>
                         <instance-ref>index-cloud-ens-file-browser-filter-eraser-instance</instance-ref>
-                        <region>filter-2</region>
+                        <region>filters</region>
                         <properties>
                             <property>
                                 <name>portal.windowContentType</name>
@@ -1440,7 +1440,7 @@ return nuxeoRequest.toString();</value>
                             </property>
                             <property>
                                 <name>theme.order</name>
-                                <value>0</value>
+                                <value>2</value>
                             </property>
                             <property>
                                 <name>osivia.ajaxLink</name>
@@ -1465,7 +1465,7 @@ return nuxeoRequest.toString();</value>
                     <window>
                         <window-name>index-cloud-ens-file-browser-filter-instance_1560241323028</window-name>
                         <instance-ref>index-cloud-ens-file-browser-filter-instance</instance-ref>
-                        <region>filter-1</region>
+                        <region>filters</region>
                         <properties>
                             <property>
                                 <name>portal.windowContentType</name>
@@ -1490,6 +1490,55 @@ return nuxeoRequest.toString();</value>
                             <property>
                                 <name>osivia.file-browser-filter.selector-id</name>
                                 <value>level</value>
+                            </property>
+                            <property>
+                                <name>osivia.ajaxLink</name>
+                                <value>1</value>
+                            </property>
+                            <property>
+                                <name>osivia.hideDecorators</name>
+                                <value>1</value>
+                            </property>
+                            <property>
+                                <name>theme.dyna.partial_refresh_enabled</name>
+                                <value>true</value>
+                            </property>
+                        </properties>
+                        <height>0</height>
+                    </window>
+
+                    <window>
+                        <window-name>index-cloud-ens-file-browser-filter-instance_1568366903545</window-name>
+                        <instance-ref>index-cloud-ens-file-browser-filter-instance</instance-ref>
+                        <region>filters</region>
+                        <properties>
+                            <property>
+                                <name>portal.windowContentType</name>
+                                <value>portlet</value>
+                            </property>
+                            <property>
+                                <name>osivia.title</name>
+                                <value>Matière</value>
+                            </property>
+                            <property>
+                                <name>osivia.file-browser-filter.vocabulary</name>
+                                <value>idx_subject</value>
+                            </property>
+                            <property>
+                                <name>osivia.hideTitle</name>
+                                <value>1</value>
+                            </property>
+                            <property>
+                                <name>theme.order</name>
+                                <value>1</value>
+                            </property>
+                            <property>
+                                <name>osivia.file-browser-filter.title</name>
+                                <value>Matière</value>
+                            </property>
+                            <property>
+                                <name>osivia.file-browser-filter.selector-id</name>
+                                <value>subject</value>
                             </property>
                             <property>
                                 <name>osivia.ajaxLink</name>
@@ -1561,6 +1610,17 @@ nuxeoRequest.append("AND (");&#13;
 for (String level : levels) {&#13;
 first ? first = false : nuxeoRequest.append("OR ");&#13;
 nuxeoRequest.append("idxcl:levelsTree STARTSWITH '").append(level).append("' ");&#13;
+}&#13;
+nuxeoRequest.append(") ");&#13;
+}&#13;
+&#13;
+List subjects = params.get("subject");&#13;
+if ((subjects != null) &amp;&amp; !subjects.isEmpty()) {&#13;
+boolean first = true;&#13;
+nuxeoRequest.append("AND (");&#13;
+for (String subject : subjects) {&#13;
+first ? first = false : nuxeoRequest.append("OR ");&#13;
+nuxeoRequest.append("idxcl:subjectsTree STARTSWITH '").append(subject).append("' ");&#13;
 }&#13;
 nuxeoRequest.append(") ");&#13;
 }&#13;
@@ -1773,6 +1833,18 @@ nuxeoRequest.append("AND (");&#13;
 for (String level : levels) {&#13;
 first ? first = false : nuxeoRequest.append("OR ");&#13;
 nuxeoRequest.append("idxcl:levelsTree STARTSWITH '").append(level).append("' ");&#13;
+}&#13;
+nuxeoRequest.append(") ");&#13;
+}&#13;
+&#13;
+// Subject&#13;
+List subjects = params.get("subject");&#13;
+if ((subjects != null) &amp;&amp; !subjects.isEmpty()) {&#13;
+boolean first = true;&#13;
+nuxeoRequest.append("AND (");&#13;
+for (String subject : subjects) {&#13;
+first ? first = false : nuxeoRequest.append("OR ");&#13;
+nuxeoRequest.append("idxcl:subjectsTree STARTSWITH '").append(subject).append("' ");&#13;
 }&#13;
 nuxeoRequest.append(") ");&#13;
 }&#13;
@@ -2262,6 +2334,18 @@ nuxeoRequest.append("AND (");&#13;
 for (String level : levels) {&#13;
 first ? first = false : nuxeoRequest.append("OR ");&#13;
 nuxeoRequest.append("idxcl:levelsTree STARTSWITH '").append(level).append("' ");&#13;
+}&#13;
+nuxeoRequest.append(") ");&#13;
+}&#13;
+&#13;
+// Subjects&#13;
+List subjects = params.get("subject");&#13;
+if ((subjects != null) &amp;&amp; !subjects.isEmpty()) {&#13;
+boolean first = true;&#13;
+nuxeoRequest.append("AND (");&#13;
+for (String subject : subjects) {&#13;
+first ? first = false : nuxeoRequest.append("OR ");&#13;
+nuxeoRequest.append("idxcl:subjectsTree STARTSWITH '").append(subject).append("' ");&#13;
 }&#13;
 nuxeoRequest.append(") ");&#13;
 }&#13;

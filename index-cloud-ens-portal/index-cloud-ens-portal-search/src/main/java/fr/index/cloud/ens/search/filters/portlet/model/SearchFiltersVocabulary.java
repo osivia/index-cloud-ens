@@ -1,0 +1,68 @@
+package fr.index.cloud.ens.search.filters.portlet.model;
+
+import org.apache.commons.lang.StringUtils;
+
+/**
+ * Search filters vocabularies enumeration.
+ *
+ * @author Cédric Krommenhoek
+ */
+public enum SearchFiltersVocabulary {
+
+    /**
+     * Levels.
+     */
+    LEVELS("idx_level", "SEARCH_FILTERS_LEVEL_ALL"),
+    /**
+     * Subjects.
+     */
+    SUBJECTS("idx_subject", "SEARCH_FILTERS_SUBJECT_ALL");
+
+
+    /**
+     * Vocabulary name.
+     */
+    private final String vocabularyName;
+    /**
+     * "All" internationalization key.
+     */
+    private final String allKey;
+
+
+    /**
+     * Constructor.
+     *
+     * @param vocabularyName vocabulary name
+     * @param "All"          internationalization key
+     */
+    SearchFiltersVocabulary(String vocabularyName, String allKey) {
+        this.vocabularyName = vocabularyName;
+        this.allKey = allKey;
+    }
+
+
+    /**
+     * Get search filters vocabulary from vocabulary name.
+     *
+     * @param vocabularyName vocabulary name
+     * @return search filters vocabulary
+     */
+    public static final SearchFiltersVocabulary fromVocabularyName(String vocabularyName) {
+        SearchFiltersVocabulary result = null;
+        for (SearchFiltersVocabulary value : SearchFiltersVocabulary.values()) {
+            if (StringUtils.equals(vocabularyName, value.vocabularyName)) {
+                result = value;
+            }
+        }
+        return result;
+    }
+
+
+    public String getVocabularyName() {
+        return vocabularyName;
+    }
+
+    public String getAllKey() {
+        return allKey;
+    }
+}

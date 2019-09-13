@@ -1,6 +1,7 @@
 package fr.index.cloud.ens.search.filters.portlet.controller;
 
 import fr.index.cloud.ens.search.filters.portlet.model.SearchFiltersForm;
+import fr.index.cloud.ens.search.filters.portlet.model.SearchFiltersVocabulary;
 import fr.index.cloud.ens.search.filters.portlet.service.SearchFiltersService;
 import net.sf.json.JSONArray;
 import org.osivia.portal.api.context.PortalControllerContext;
@@ -113,17 +114,20 @@ public class SearchFiltersController {
     /**
      * Load levels select2 vocabulary resource mapping.
      *
-     * @param request  resource request
-     * @param response resource response
-     * @param filter   select2 filter request parameter
+     * @param request             resource request
+     * @param response            resource response
+     * @param vocabularyName vocabulary name request parameter
+     * @param filter              select2 filter request parameter
      */
-    @ResourceMapping("load-levels")
-    public void loadLevels(ResourceRequest request, ResourceResponse response, @RequestParam(name = "filter", required = false) String filter) throws PortletException, IOException {
+    @ResourceMapping("load-vocabulary")
+    public void loadLevels(ResourceRequest request, ResourceResponse response, @RequestParam("vocabulary") String vocabularyName, @RequestParam(name = "filter", required = false) String filter) throws PortletException, IOException {
         // Portal controller context
         PortalControllerContext portalControllerContext = new PortalControllerContext(portletContext, request, response);
 
+        // Vocabulary
+        SearchFiltersVocabulary vocabulary = SearchFiltersVocabulary.fromVocabularyName(vocabularyName);
         // Select2 results
-        JSONArray results = this.service.loadLevels(portalControllerContext, filter);
+        JSONArray results = this.service.loadVocabulary(portalControllerContext, vocabulary, filter);
 
         // Content type
         response.setContentType("application/json");

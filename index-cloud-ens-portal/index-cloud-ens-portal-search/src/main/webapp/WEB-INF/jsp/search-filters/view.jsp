@@ -10,8 +10,16 @@
 
 <portlet:actionURL name="submit" var="submitUrl"/>
 
-<portlet:resourceURL id="load-levels" var="loadLevelsUrl"/>
+<portlet:resourceURL id="load-vocabulary" var="loadLevelsUrl">
+    <portlet:param name="vocabulary" value="idx_level"/>
+</portlet:resourceURL>
+<portlet:resourceURL id="load-vocabulary" var="loadSubjectsUrl">
+    <portlet:param name="vocabulary" value="idx_subject"/>
+</portlet:resourceURL>
 <portlet:resourceURL id="save-search-popover" var="saveSearchPopoverUrl"/>
+
+
+<c:set var="select2Searching"><op:translate key="SELECT2_SEARCHING"/></c:set>
 
 
 <div class="search-filters-container">
@@ -21,7 +29,6 @@
             <form:label path="level" cssClass="col-md-3 col-form-label"><op:translate
                     key="SEARCH_FILTERS_LEVEL_LABEL"/></form:label>
             <div class="col-md-6">
-                <c:set var="select2Searching"><op:translate key="SELECT2_SEARCHING"/></c:set>
                 <form:select path="level" cssClass="form-control select2 select2-default" data-url="${loadLevelsUrl}"
                              data-searching="${select2Searching}">
                     <c:choose>
@@ -32,6 +39,27 @@
                         <c:otherwise>
                             <form:option value="${form.level}"><ttc:vocabularyLabel name="idx_level"
                                                                                     key="${form.level}"/></form:option>
+                        </c:otherwise>
+                    </c:choose>
+                </form:select>
+            </div>
+        </div>
+
+        <%--Subject--%>
+        <div class="form-group row">
+            <form:label path="subject" cssClass="col-md-3 col-form-label"><op:translate
+                    key="SEARCH_FILTERS_SUBJECT_LABEL"/></form:label>
+            <div class="col-md-6">
+                <form:select path="subject" cssClass="form-control select2 select2-default" data-url="${loadSubjectsUrl}"
+                             data-searching="${select2Searching}">
+                    <c:choose>
+                        <c:when test="${empty form.subject}">
+                            <form:option value=""><op:translate key="SEARCH_FILTERS_SUBJECT_ALL"/></form:option>
+                        </c:when>
+
+                        <c:otherwise>
+                            <form:option value="${form.subject}"><ttc:vocabularyLabel name="idx_subject"
+                                                                                    key="${form.subject}"/></form:option>
                         </c:otherwise>
                     </c:choose>
                 </form:select>

@@ -28,6 +28,10 @@ public class SearchFiltersForm {
      */
     private String level;
     /**
+     * Subject.
+     */
+    private String subject;
+    /**
      * Location path.
      */
     private String locationPath;
@@ -64,6 +68,14 @@ public class SearchFiltersForm {
 
     public void setLevel(String level) {
         this.level = level;
+    }
+
+    public String getSubject() {
+        return subject;
+    }
+
+    public void setSubject(String subject) {
+        this.subject = subject;
     }
 
     public String getLocationPath() {
