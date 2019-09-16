@@ -36,7 +36,7 @@
 
         
         <!-- Identity SSO -->
-        <identity-sso.version>3.0.11</identity-sso.version>
+        <identity-sso.version>3.0.12-SNAPSHOT</identity-sso.version>
  
         <!-- Java Melody -->
         <java-melody.version>1.2</java-melody.version>
@@ -46,7 +46,9 @@
 
         <!-- REST -->        
         <jackson.version>2.7.3</jackson.version>
-        
+
+        <!-- JBoss -->
+        <jboss-portal.version>2.7.2</jboss-portal.version>
     </properties>
     
     
