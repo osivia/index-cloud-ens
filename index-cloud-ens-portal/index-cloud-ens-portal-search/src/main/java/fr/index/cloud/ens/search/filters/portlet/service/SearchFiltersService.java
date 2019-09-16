@@ -8,6 +8,7 @@ import org.osivia.portal.api.context.PortalControllerContext;
 
 import javax.portlet.PortletException;
 import java.io.IOException;
+import java.util.Date;
 
 /**
  * Search filters portlet service interface.
@@ -92,5 +93,23 @@ public interface SearchFiltersService extends SearchCommonService {
      * @return URL
      */
     String getLocationUrl(PortalControllerContext portalControllerContext) throws PortletException;
+
+
+    /**
+     * Format date.
+     *
+     * @param date date
+     * @return formatted date
+     */
+    String formatDate(Date date);
+
+
+    /**
+     * Parse date.
+     *
+     * @param source source
+     * @return date
+     */
+    Date parseDate(String source);
 
 }
