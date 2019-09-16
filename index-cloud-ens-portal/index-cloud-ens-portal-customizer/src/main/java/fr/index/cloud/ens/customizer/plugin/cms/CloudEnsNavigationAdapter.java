@@ -30,11 +30,6 @@ import java.util.List;
 public class CloudEnsNavigationAdapter implements INavigationAdapterModule {
 
     /**
-     * Portlet context.
-     */
-    private final PortletContext portletContext;
-
-    /**
      * Log.
      */
     private final Log log;
@@ -55,12 +50,9 @@ public class CloudEnsNavigationAdapter implements INavigationAdapterModule {
 
     /**
      * Constructor.
-     *
-     * @param portletContext portlet context
      */
-    public CloudEnsNavigationAdapter(PortletContext portletContext) {
+    public CloudEnsNavigationAdapter() {
         super();
-        this.portletContext = portletContext;
 
         // Log
         this.log = LogFactory.getLog(this.getClass());

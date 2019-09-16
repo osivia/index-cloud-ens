@@ -5,6 +5,8 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import java.util.Date;
+
 /**
  * Search filters form java-bean.
  *
@@ -28,6 +30,10 @@ public class SearchFiltersForm {
      */
     private String level;
     /**
+     * Subject.
+     */
+    private String subject;
+    /**
      * Location path.
      */
     private String locationPath;
@@ -35,11 +41,39 @@ public class SearchFiltersForm {
      * Keywords.
      */
     private String keywords;
+    /**
+     * Size range.
+     */
+    private SearchFiltersSizeRange sizeRange;
+    /**
+     * Size amount.
+     */
+    private Float sizeAmount;
+    /**
+     * Size unit.
+     */
+    private SearchFiltersSizeUnit sizeUnit;
+    /**
+     * Date range.
+     */
+    private SearchFiltersDateRange dateRange;
+    /**
+     * Customized date.
+     */
+    private Date customizedDate;
 
     /**
      * Saved search display name.
      */
     private String savedSearchDisplayName;
+
+
+    /**
+     * Constructor.
+     */
+    public SearchFiltersForm() {
+        super();
+    }
 
 
     public DocumentDTO getLocation() {
@@ -66,6 +100,14 @@ public class SearchFiltersForm {
         this.level = level;
     }
 
+    public String getSubject() {
+        return subject;
+    }
+
+    public void setSubject(String subject) {
+        this.subject = subject;
+    }
+
     public String getLocationPath() {
         return locationPath;
     }
@@ -80,6 +122,46 @@ public class SearchFiltersForm {
 
     public void setKeywords(String keywords) {
         this.keywords = keywords;
+    }
+
+    public SearchFiltersSizeRange getSizeRange() {
+        return sizeRange;
+    }
+
+    public void setSizeRange(SearchFiltersSizeRange sizeRange) {
+        this.sizeRange = sizeRange;
+    }
+
+    public Float getSizeAmount() {
+        return sizeAmount;
+    }
+
+    public void setSizeAmount(Float sizeAmount) {
+        this.sizeAmount = sizeAmount;
+    }
+
+    public SearchFiltersSizeUnit getSizeUnit() {
+        return sizeUnit;
+    }
+
+    public void setSizeUnit(SearchFiltersSizeUnit sizeUnit) {
+        this.sizeUnit = sizeUnit;
+    }
+
+    public SearchFiltersDateRange getDateRange() {
+        return dateRange;
+    }
+
+    public void setDateRange(SearchFiltersDateRange dateRange) {
+        this.dateRange = dateRange;
+    }
+
+    public Date getCustomizedDate() {
+        return customizedDate;
+    }
+
+    public void setCustomizedDate(Date customizedDate) {
+        this.customizedDate = customizedDate;
     }
 
     public String getSavedSearchDisplayName() {

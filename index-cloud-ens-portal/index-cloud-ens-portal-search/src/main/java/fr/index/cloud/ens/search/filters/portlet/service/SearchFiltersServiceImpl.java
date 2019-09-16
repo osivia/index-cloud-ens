@@ -2,8 +2,7 @@ package fr.index.cloud.ens.search.filters.portlet.service;
 
 import fr.index.cloud.ens.search.common.portlet.service.SearchCommonServiceImpl;
 import fr.index.cloud.ens.search.filters.location.portlet.service.SearchFiltersLocationService;
-import fr.index.cloud.ens.search.filters.portlet.model.SearchFiltersForm;
-import fr.index.cloud.ens.search.filters.portlet.model.SearchFiltersVocabularyItem;
+import fr.index.cloud.ens.search.filters.portlet.model.*;
 import fr.index.cloud.ens.search.filters.portlet.repository.SearchFiltersRepository;
 import fr.toutatice.portail.cms.nuxeo.api.PageSelectors;
 import fr.toutatice.portail.cms.nuxeo.api.cms.NuxeoDocumentContext;
@@ -15,6 +14,9 @@ import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.BooleanUtils;
 import org.apache.commons.lang.CharEncoding;
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.math.NumberUtils;
+import org.apache.commons.lang.time.DateFormatUtils;
+import org.apache.commons.lang.time.DateUtils;
 import org.osivia.portal.api.PortalException;
 import org.osivia.portal.api.context.PortalControllerContext;
 import org.osivia.portal.api.internationalization.Bundle;
@@ -35,7 +37,10 @@ import javax.portlet.PortletRequest;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
+import java.text.DateFormat;
 import java.text.Normalizer;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -49,39 +54,33 @@ import java.util.*;
 public class SearchFiltersServiceImpl extends SearchCommonServiceImpl implements SearchFiltersService {
 
     /**
-     * Location selector identifier.
+     * Unit factor.
      */
-    private static final String LOCATION_SELECTOR_ID = "location";
+    private static final double UNIT_FACTOR = 1024;
     /**
-     * Level selector identifier.
+     * Date format.
      */
-    private static final String LEVEL_SELECTOR_ID = "level";
-
-
+    private final DateFormat dateFormat;
     /**
      * Application context.
      */
     @Autowired
     private ApplicationContext applicationContext;
-
     /**
      * Portlet repository.
      */
     @Autowired
     private SearchFiltersRepository repository;
-
     /**
      * Portal URL factory.
      */
     @Autowired
     private IPortalUrlFactory portalUrlFactory;
-
     /**
      * Internationalization bundle factory.
      */
     @Autowired
     private IBundleFactory bundleFactory;
-
     /**
      * Document DAO.
      */
@@ -94,6 +93,10 @@ public class SearchFiltersServiceImpl extends SearchCommonServiceImpl implements
      */
     public SearchFiltersServiceImpl() {
         super();
+
+        // Date format
+        this.dateFormat = new SimpleDateFormat(DateFormatUtils.ISO_DATE_FORMAT.getPattern());
+        this.dateFormat.setTimeZone(DateUtils.UTC_TIME_ZONE);
     }
 
 
@@ -119,6 +122,14 @@ public class SearchFiltersServiceImpl extends SearchCommonServiceImpl implements
             selectors = PageSelectors.decodeProperties(request.getParameter(SELECTORS_PARAMETER));
         }
 
+        // Level
+        String level = this.getSelectorValue(selectors, LEVEL_SELECTOR_ID);
+        form.setLevel(level);
+
+        // Subject
+        String subject = this.getSelectorValue(selectors, SUBJECT_SELECTOR_ID);
+        form.setSubject(subject);
+
         // Location
         String navigationPath = window.getProperty(NAVIGATION_PATH_WINDOW_PROPERTY);
         if (StringUtils.isEmpty(navigationPath)) {
@@ -127,13 +138,54 @@ public class SearchFiltersServiceImpl extends SearchCommonServiceImpl implements
         form.setLocationPath(navigationPath);
         this.updateLocation(portalControllerContext, form);
 
-        // Level
-        String level = this.getSelectorValue(selectors, LEVEL_SELECTOR_ID);
-        form.setLevel(level);
-
         // Keywords
         String keywords = this.getSelectorValue(selectors, KEYWORDS_SELECTOR_ID);
         form.setKeywords(keywords);
+
+        // Size range
+        String sizeRangeSelector = this.getSelectorValue(selectors, SIZE_RANGE_SELECTOR_ID);
+        SearchFiltersSizeRange sizeRange;
+        if (StringUtils.isEmpty(sizeRangeSelector)) {
+            sizeRange = SearchFiltersSizeRange.DEFAULT;
+        } else {
+            sizeRange = SearchFiltersSizeRange.valueOf(sizeRangeSelector);
+        }
+        form.setSizeRange(sizeRange);
+
+        // Size amount
+        String sizeAmountSelector = this.getSelectorValue(selectors, SIZE_AMOUNT_SELECTOR_ID);
+        Float sizeAmout;
+        if (StringUtils.isEmpty(sizeAmountSelector)) {
+            sizeAmout = null;
+        } else {
+            sizeAmout = NumberUtils.toFloat(sizeAmountSelector);
+        }
+        form.setSizeAmount(sizeAmout);
+
+        // Size unit
+        String sizeUnitSelector = this.getSelectorValue(selectors, SIZE_UNIT_SELECTOR_ID);
+        SearchFiltersSizeUnit sizeUnit;
+        if (StringUtils.isEmpty(sizeUnitSelector)) {
+            sizeUnit = SearchFiltersSizeUnit.DEFAULT;
+        } else {
+            sizeUnit = SearchFiltersSizeUnit.valueOf(sizeUnitSelector);
+        }
+        form.setSizeUnit(sizeUnit);
+
+        // Date range
+        String dateRangeSelector = this.getSelectorValue(selectors, DATE_RANGE_SELECTOR_ID);
+        SearchFiltersDateRange dateRange;
+        if (StringUtils.isEmpty(dateRangeSelector)) {
+            dateRange = SearchFiltersDateRange.DEFAULT;
+        } else {
+            dateRange = SearchFiltersDateRange.valueOf(dateRangeSelector);
+        }
+        form.setDateRange(dateRange);
+
+        // Customized date
+        String customizedDateSelector = this.getSelectorValue(selectors, CUSTOMIZED_DATE_SELECTOR_ID);
+        Date customizedDate = this.parseDate(customizedDateSelector);
+        form.setCustomizedDate(customizedDate);
 
         return form;
     }
@@ -203,7 +255,7 @@ public class SearchFiltersServiceImpl extends SearchCommonServiceImpl implements
             int id = max + 1;
 
             // Search data
-            String data = this.buildSelectorsParameter(form);
+            String data = this.buildSelectorsParameter(portalControllerContext, form);
 
             // Saved search
             UserSavedSearch savedSearch = new UserSavedSearch(id);
@@ -240,7 +292,7 @@ public class SearchFiltersServiceImpl extends SearchCommonServiceImpl implements
         } else {
             // Page parameters
             Map<String, String> parameters = new HashMap<>(1);
-            parameters.put(SELECTORS_PARAMETER, this.buildSelectorsParameter(form));
+            parameters.put(SELECTORS_PARAMETER, this.buildSelectorsParameter(portalControllerContext, form));
 
             // CMS URL
             url = this.portalUrlFactory.getCMSUrl(portalControllerContext, null, path, parameters, null, null, null, null,
@@ -254,23 +306,30 @@ public class SearchFiltersServiceImpl extends SearchCommonServiceImpl implements
     /**
      * Build selectors parameter.
      *
-     * @param form search filters form
+     * @param portalControllerContext portal controller context
+     * @param form                    search filters form
      * @return parameter
      */
-    private String buildSelectorsParameter(SearchFiltersForm form) {
+    private String buildSelectorsParameter(PortalControllerContext portalControllerContext, SearchFiltersForm form) {
         // Selectors
         Map<String, List<String>> selectors = new HashMap<>();
-
-        // Location
-        DocumentDTO location = form.getLocation();
-        if (location != null) {
-            selectors.put(LOCATION_SELECTOR_ID, Collections.singletonList(location.getPath()));
-        }
 
         // Level
         String level = form.getLevel();
         if (StringUtils.isNotEmpty(level)) {
             selectors.put(LEVEL_SELECTOR_ID, Collections.singletonList(level));
+        }
+
+        // Subject
+        String subject = form.getSubject();
+        if (StringUtils.isNotEmpty(subject)) {
+            selectors.put(SUBJECT_SELECTOR_ID, Collections.singletonList(subject));
+        }
+
+        // Location
+        DocumentDTO location = form.getLocation();
+        if (location != null) {
+            selectors.put(LOCATION_SELECTOR_ID, Collections.singletonList(location.getPath()));
         }
 
         // Keywords
@@ -279,19 +338,89 @@ public class SearchFiltersServiceImpl extends SearchCommonServiceImpl implements
             selectors.put(KEYWORDS_SELECTOR_ID, Collections.singletonList(keywords));
         }
 
+        // Size range
+        selectors.put(SIZE_RANGE_SELECTOR_ID, Collections.singletonList(form.getSizeRange().name()));
+
+        // Size amount
+        Float sizeAmount = form.getSizeAmount();
+        if (sizeAmount != null) {
+            selectors.put(SIZE_AMOUNT_SELECTOR_ID, Collections.singletonList(sizeAmount.toString()));
+        }
+
+        // Size unit
+        SearchFiltersSizeUnit sizeUnit = form.getSizeUnit();
+        selectors.put(SIZE_UNIT_SELECTOR_ID, Collections.singletonList(sizeUnit.name()));
+
+        // Computed size
+        if (sizeAmount != null) {
+            Long computedSize = Math.round(new Double(sizeAmount) * Math.pow(UNIT_FACTOR, sizeUnit.getFactor()));
+            selectors.put(COMPUTED_SIZE_SELECTOR_ID, Collections.singletonList(computedSize.toString()));
+        }
+
+        // Date range
+        SearchFiltersDateRange dateRange = form.getDateRange();
+        selectors.put(DATE_RANGE_SELECTOR_ID, Collections.singletonList(dateRange.name()));
+
+        // Customized date
+        Date customizedDate = form.getCustomizedDate();
+        if (SearchFiltersDateRange.CUSTOMIZED.equals(dateRange) && (customizedDate != null)) {
+            selectors.put(CUSTOMIZED_DATE_SELECTOR_ID, Collections.singletonList(this.formatDate(customizedDate)));
+        }
+
+        // Computed date
+        Date computedDate = this.getComputedDate(portalControllerContext, form);
+        if (computedDate != null) {
+            selectors.put(COMPUTED_DATE_SELECTOR_ID, Collections.singletonList(this.formatDate(computedDate)));
+        }
+
         return PageParametersEncoder.encodeProperties(selectors);
     }
 
 
+    /**
+     * Get computed date.
+     *
+     * @param portalControllerContext portal controller context
+     * @param form                    search filters form
+     * @return date
+     */
+    private Date getComputedDate(PortalControllerContext portalControllerContext, SearchFiltersForm form) {
+        // Locale
+        Locale locale = portalControllerContext.getRequest().getLocale();
+        // Date range
+        SearchFiltersDateRange dateRange = form.getDateRange();
+
+        // Computed date
+        Date computedDate;
+        if (SearchFiltersDateRange.CUSTOMIZED.equals(dateRange)) {
+            computedDate = form.getCustomizedDate();
+        } else if (dateRange.getOffset() != null) {
+            // Current date
+            Date currentDate = DateUtils.truncate(new Date(), Calendar.DAY_OF_MONTH);
+
+            computedDate = DateUtils.addDays(currentDate, dateRange.getOffset());
+        } else {
+            computedDate = null;
+        }
+
+        return computedDate;
+    }
+
+
     @Override
-    public JSONArray loadLevels(PortalControllerContext portalControllerContext, String filter) throws PortletException, IOException {
+    public JSONArray loadVocabulary(PortalControllerContext portalControllerContext, SearchFiltersVocabulary vocabulary, String filter) throws PortletException, IOException {
         // Portlet request
         PortletRequest request = portalControllerContext.getRequest();
         // Internationalization bundle
         Bundle bundle = this.bundleFactory.getBundle(request.getLocale());
 
         // Vocabulary JSON array
-        JSONArray array = this.repository.loadVocabulary(portalControllerContext, LEVELS_VOCABULARY);
+        JSONArray array;
+        if (vocabulary == null) {
+            array = null;
+        } else {
+            array = this.repository.loadVocabulary(portalControllerContext, vocabulary.getVocabularyName());
+        }
 
         // Select2 results
         JSONArray results;
@@ -303,7 +432,7 @@ public class SearchFiltersServiceImpl extends SearchCommonServiceImpl implements
             // All
             JSONObject object = new JSONObject();
             object.put("id", StringUtils.EMPTY);
-            object.put("text", bundle.getString("SEARCH_FILTERS_LEVEL_ALL"));
+            object.put("text", bundle.getString(vocabulary.getAllKey()));
             object.put("optgroup", false);
             object.put("level", 1);
             results.add(0, object);
@@ -471,4 +600,33 @@ public class SearchFiltersServiceImpl extends SearchCommonServiceImpl implements
 
         return url;
     }
+
+
+    @Override
+    public String formatDate(Date date) {
+        String result;
+        if (date == null) {
+            result = null;
+        } else {
+            result = this.dateFormat.format(date);
+        }
+        return result;
+    }
+
+
+    @Override
+    public Date parseDate(String source) {
+        Date date;
+        if (StringUtils.isEmpty(source)) {
+            date = null;
+        } else {
+            try {
+                date = this.dateFormat.parse(source);
+            } catch (ParseException e) {
+                date = null;
+            }
+        }
+        return date;
+    }
+
 }

@@ -33,16 +33,8 @@
                                 </p>
                             </div>
 
-                            <div class="col-auto">
-                                <p:region regionName="filter-1"/>
-                            </div>
-
-                            <div class="col-auto">
-                                <p:region regionName="filter-2"/>
-                            </div>
-
-                            <div class="col-auto">
-                                <p:region regionName="filter-3"/>
+                            <div class="col">
+                                <p:region regionName="filters"/>
                             </div>
                         </div>
 

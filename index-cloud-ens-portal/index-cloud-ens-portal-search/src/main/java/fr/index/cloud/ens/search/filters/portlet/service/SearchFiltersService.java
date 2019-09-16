@@ -2,11 +2,13 @@ package fr.index.cloud.ens.search.filters.portlet.service;
 
 import fr.index.cloud.ens.search.common.portlet.service.SearchCommonService;
 import fr.index.cloud.ens.search.filters.portlet.model.SearchFiltersForm;
+import fr.index.cloud.ens.search.filters.portlet.model.SearchFiltersVocabulary;
 import net.sf.json.JSONArray;
 import org.osivia.portal.api.context.PortalControllerContext;
 
 import javax.portlet.PortletException;
 import java.io.IOException;
+import java.util.Date;
 
 /**
  * Search filters portlet service interface.
@@ -33,11 +35,6 @@ public interface SearchFiltersService extends SearchCommonService {
      * Selectors window property.
      */
     String SELECTORS_WINDOW_PROPERTY = "osivia.search.selectors";
-
-    /**
-     * Levels vocabulary name.
-     */
-    String LEVELS_VOCABULARY = "idx_level";
 
 
     /**
@@ -79,13 +76,14 @@ public interface SearchFiltersService extends SearchCommonService {
 
 
     /**
-     * Load levels select2 vocabulary.
+     * Load select2 vocabulary.
      *
      * @param portalControllerContext portal controller context
+     * @param vocabulary              vocabulary
      * @param filter                  select2 filter
      * @return select2 results JSON array
      */
-    JSONArray loadLevels(PortalControllerContext portalControllerContext, String filter) throws PortletException, IOException;
+    JSONArray loadVocabulary(PortalControllerContext portalControllerContext, SearchFiltersVocabulary vocabulary, String filter) throws PortletException, IOException;
 
 
     /**
@@ -95,5 +93,23 @@ public interface SearchFiltersService extends SearchCommonService {
      * @return URL
      */
     String getLocationUrl(PortalControllerContext portalControllerContext) throws PortletException;
+
+
+    /**
+     * Format date.
+     *
+     * @param date date
+     * @return formatted date
+     */
+    String formatDate(Date date);
+
+
+    /**
+     * Parse date.
+     *
+     * @param source source
+     * @return date
+     */
+    Date parseDate(String source);
 
 }

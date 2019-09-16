@@ -6,6 +6,7 @@
         <uri>/layouts/with-nav/index.jsp</uri>
         <uri state="maximized">/layouts/with-nav/maximized.jsp</uri>
         <regions>
+            <region name="contextualized-search" />
             <region name="nav" />
             <region name="nav-bottom" />
             <region name="top" />
@@ -19,6 +20,7 @@
         <uri>/layouts/without-nav/index.jsp</uri>
         <uri state="maximized">/layouts/without-nav/maximized.jsp</uri>
         <regions>
+            <region name="contextualized-search" />
             <region name="top" />
             <region name="col-1" />
             <region name="col-2" />
@@ -30,6 +32,7 @@
         <uri>/layouts/home/index.jsp</uri>
         <uri state="maximized">/layouts/without-nav/maximized.jsp</uri>
         <regions>
+            <region name="contextualized-search" />
             <region name="top" />
             <region name="col-1" />
             <region name="col-2" />
@@ -59,9 +62,7 @@
             <region name="nav" />
             <region name="nav-bottom" />
             <region name="top" />
-            <region name="filter-1" />
-            <region name="filter-2" />
-            <region name="filter-3" />
+            <region name="filters" />
             <region name="col-1" />
             <region name="col-2" />
         </regions>
@@ -72,6 +73,7 @@
         <uri>/layouts/rgpd/index.jsp</uri>
         <uri state="maximized">/layouts/without-nav/maximized.jsp</uri>
         <regions>
+            <region name="contextualized-search" />
             <region name="top" />
             <region name="col-1" />
             <region name="col-2" />

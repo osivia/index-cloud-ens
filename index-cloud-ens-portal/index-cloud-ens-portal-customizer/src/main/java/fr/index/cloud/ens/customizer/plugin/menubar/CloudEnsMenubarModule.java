@@ -34,6 +34,16 @@ public class CloudEnsMenubarModule implements MenubarModule {
 
 
     /**
+     * Removed space items.
+     */
+    private final List<String> removedSpaceItems;
+    /**
+     * Removed document items.
+     */
+    private final List<String> removedDocumentItems;
+
+
+    /**
      * Portal URL factory.
      */
     private final IPortalUrlFactory portalUrlFactory;
@@ -48,6 +58,11 @@ public class CloudEnsMenubarModule implements MenubarModule {
      */
     public CloudEnsMenubarModule() {
         super();
+
+        // Removed space items
+        this.removedSpaceItems = Arrays.asList("REFRESH", "PRINT");
+        // Removed document items
+        this.removedDocumentItems = Arrays.asList("WORKSPACE_ACL_MANAGEMENT", "SUBSCRIBE_URL");
 
         // Portal URL factory
         this.portalUrlFactory = Locator.findMBean(IPortalUrlFactory.class, IPortalUrlFactory.MBEAN_NAME);
@@ -72,8 +87,7 @@ public class CloudEnsMenubarModule implements MenubarModule {
             MenubarItem item = iterator.next();
             MenubarContainer parent = item.getParent();
 
-            if ("REFRESH".equals(item.getId())) {
-                // Remove refresh
+            if (this.removedSpaceItems.contains(item.getId())) {
                 iterator.remove();
             } else if (StringUtils.startsWith(basePath, "/default-domain/UserWorkspaces/") && (parent instanceof MenubarDropdown)) {
                 // Remove user workspace configuration dropdown
@@ -108,7 +122,7 @@ public class CloudEnsMenubarModule implements MenubarModule {
             DocumentType documentType = documentContext.getDocumentType();
 
             // Removed menubar item identifiers
-            List<String> itemIdentifiers = new ArrayList<>(Arrays.asList("WORKSPACE_ACL_MANAGEMENT", "SUBSCRIBE_URL"));
+            List<String> itemIdentifiers = new ArrayList<>(this.removedDocumentItems);
             // Removed menubar dropdown menu identifiers
             List<String> dropdownIdentifiers = new ArrayList<>();
 

@@ -23,6 +23,7 @@
 
         <supports>
             <mime-type>text/html</mime-type>
+            <portlet-mode>view</portlet-mode>
         </supports>
 
         <portlet-info>
@@ -72,6 +73,7 @@
 
         <supports>
             <mime-type>text/html</mime-type>
+            <portlet-mode>view</portlet-mode>
         </supports>
 
         <portlet-info>
@@ -98,10 +100,11 @@
 
         <supports>
             <mime-type>text/html</mime-type>
+            <portlet-mode>view</portlet-mode>
         </supports>
 
         <portlet-info>
-            <title>Person deleting plugin</title>
+            <title>Person deleting portlet</title>
         </portlet-info>
     </portlet>    
 
@@ -122,10 +125,11 @@
 
         <supports>
             <mime-type>text/html</mime-type>
+            <portlet-mode>view</portlet-mode>
         </supports>
 
         <portlet-info>
-            <title>Person data export plugin</title>
+            <title>Person data export portlet</title>
         </portlet-info>
     </portlet>    
 

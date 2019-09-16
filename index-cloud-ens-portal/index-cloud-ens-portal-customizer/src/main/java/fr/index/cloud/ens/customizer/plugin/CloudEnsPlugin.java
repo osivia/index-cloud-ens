@@ -2,6 +2,7 @@ package fr.index.cloud.ens.customizer.plugin;
 
 import fr.index.cloud.ens.customizer.plugin.cms.CloudEnsNavigationAdapter;
 import fr.index.cloud.ens.customizer.plugin.menubar.CloudEnsMenubarModule;
+import fr.index.cloud.ens.customizer.plugin.tasks.CloudEnsTaskModule;
 import fr.index.cloud.ens.customizer.plugin.theming.CloudEnsTemplateAdapter;
 import fr.toutatice.portail.cms.nuxeo.api.domain.AbstractPluginPortlet;
 import fr.toutatice.portail.cms.nuxeo.api.domain.INavigationAdapterModule;
@@ -15,6 +16,7 @@ import org.osivia.portal.api.menubar.MenubarModule;
 import org.osivia.portal.api.taskbar.TaskbarFactory;
 import org.osivia.portal.api.taskbar.TaskbarItem;
 import org.osivia.portal.api.taskbar.TaskbarItems;
+import org.osivia.portal.api.tasks.TaskModule;
 import org.osivia.portal.api.theming.TemplateAdapter;
 
 import javax.portlet.PortletContext;
@@ -97,6 +99,8 @@ public class CloudEnsPlugin extends AbstractPluginPortlet {
         this.customizeTaskbarItems(customizationContext);
         // Navigation adapters
         this.customizeNavigationAdapters(customizationContext);
+        // Task modules
+        this.customizeTaskModules(customizationContext);
     }
 
 
@@ -175,15 +179,27 @@ public class CloudEnsPlugin extends AbstractPluginPortlet {
      * @param customizationContext customization context
      */
     private void customizeNavigationAdapters(CustomizationContext customizationContext) {
-        // Portlet context
-        PortletContext portletContext = this.getPortletContext();
-
         // Navigation adapters
         List<INavigationAdapterModule> navigationAdapters = this.getNavigationAdapters(customizationContext);
 
         // Customized navigation adapter
-        INavigationAdapterModule navigationAdapter = new CloudEnsNavigationAdapter(portletContext);
+        INavigationAdapterModule navigationAdapter = new CloudEnsNavigationAdapter();
         navigationAdapters.add(navigationAdapter);
+    }
+
+
+    /**
+     * Customize task modules.
+     *
+     * @param customizationContext customization context
+     */
+    private void customizeTaskModules(CustomizationContext customizationContext) {
+        // Task modules
+        List<TaskModule> taskModules = this.getTaskModules(customizationContext);
+
+        // Customized task module
+        TaskModule taskModule = new CloudEnsTaskModule();
+        taskModules.add(taskModule);
     }
 
 }

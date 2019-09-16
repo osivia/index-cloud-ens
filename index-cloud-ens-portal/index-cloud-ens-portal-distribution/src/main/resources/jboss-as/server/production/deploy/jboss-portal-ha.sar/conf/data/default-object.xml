@@ -1134,8 +1134,49 @@ return nuxeoRequest.toString();</value>
                             <value>Mes filtres</value>
                         </property>
                         <property>
+                            <name>osivia.ajaxLink</name>
+                            <value>1</value>
+                        </property>
+                        <property>
                             <name>theme.order</name>
                             <value>0</value>
+                        </property>
+                    </properties>
+                    <height>0</height>
+                </window>
+
+                <window>
+                    <window-name>cloudens-person-deleting-portlet-instance_1568132548114</window-name>
+                    <instance-ref>cloudens-person-deleting-portlet-instance</instance-ref>
+                    <region>contextualized-search</region>
+                    <properties>
+                        <property>
+                            <name>portal.windowContentType</name>
+                            <value>portlet</value>
+                        </property>
+                        <property>
+                            <name>osivia.title</name>
+                            <value>Suppression du compte</value>
+                        </property>
+                        <property>
+                            <name>osivia.hideTitle</name>
+                            <value>1</value>
+                        </property>
+                        <property>
+                            <name>theme.order</name>
+                            <value>0</value>
+                        </property>
+                        <property>
+                            <name>osivia.ajaxLink</name>
+                            <value>1</value>
+                        </property>
+                        <property>
+                            <name>osivia.hideDecorators</name>
+                            <value>1</value>
+                        </property>
+                        <property>
+                            <name>theme.dyna.partial_refresh_enabled</name>
+                            <value>true</value>
                         </property>
                     </properties>
                     <height>0</height>
@@ -1210,25 +1251,6 @@ return nuxeoRequest.toString();</value>
                     <properties/>
                     <security-constraint/>
                 </page>
-
-                <!--<page>
-                    <page-name>workspace</page-name>
-                    <display-name xml:lang="fr">Espace collaboratif</display-name>
-
-                    <property>
-                        <name>layout.id</name>
-                        <value>cloud-ens-with-nav</value>
-                    </property>
-
-                    <security-constraint/>
-
-                    <page>
-                        <page-name>search</page-name>
-                        <display-name xml:lang="fr">Recherche</display-name>
-                        <properties/>
-                        <security-constraint/>
-                    </page>
-                </page>-->
 
                 <page>
                     <page-name>user-workspace</page-name>
@@ -1383,7 +1405,7 @@ return nuxeoRequest.toString();</value>
                     <window>
                         <window-name>index-cloud-ens-file-browser-filter-eraser-instance_1560325542241</window-name>
                         <instance-ref>index-cloud-ens-file-browser-filter-eraser-instance</instance-ref>
-                        <region>filter-2</region>
+                        <region>filters</region>
                         <properties>
                             <property>
                                 <name>portal.windowContentType</name>
@@ -1399,7 +1421,7 @@ return nuxeoRequest.toString();</value>
                             </property>
                             <property>
                                 <name>theme.order</name>
-                                <value>0</value>
+                                <value>2</value>
                             </property>
                             <property>
                                 <name>osivia.ajaxLink</name>
@@ -1424,7 +1446,7 @@ return nuxeoRequest.toString();</value>
                     <window>
                         <window-name>index-cloud-ens-file-browser-filter-instance_1560241323028</window-name>
                         <instance-ref>index-cloud-ens-file-browser-filter-instance</instance-ref>
-                        <region>filter-1</region>
+                        <region>filters</region>
                         <properties>
                             <property>
                                 <name>portal.windowContentType</name>
@@ -1449,6 +1471,55 @@ return nuxeoRequest.toString();</value>
                             <property>
                                 <name>osivia.file-browser-filter.selector-id</name>
                                 <value>level</value>
+                            </property>
+                            <property>
+                                <name>osivia.ajaxLink</name>
+                                <value>1</value>
+                            </property>
+                            <property>
+                                <name>osivia.hideDecorators</name>
+                                <value>1</value>
+                            </property>
+                            <property>
+                                <name>theme.dyna.partial_refresh_enabled</name>
+                                <value>true</value>
+                            </property>
+                        </properties>
+                        <height>0</height>
+                    </window>
+
+                    <window>
+                        <window-name>index-cloud-ens-file-browser-filter-instance_1568366903545</window-name>
+                        <instance-ref>index-cloud-ens-file-browser-filter-instance</instance-ref>
+                        <region>filters</region>
+                        <properties>
+                            <property>
+                                <name>portal.windowContentType</name>
+                                <value>portlet</value>
+                            </property>
+                            <property>
+                                <name>osivia.title</name>
+                                <value>Matière</value>
+                            </property>
+                            <property>
+                                <name>osivia.file-browser-filter.vocabulary</name>
+                                <value>idx_subject</value>
+                            </property>
+                            <property>
+                                <name>osivia.hideTitle</name>
+                                <value>1</value>
+                            </property>
+                            <property>
+                                <name>theme.order</name>
+                                <value>1</value>
+                            </property>
+                            <property>
+                                <name>osivia.file-browser-filter.title</name>
+                                <value>Matière</value>
+                            </property>
+                            <property>
+                                <name>osivia.file-browser-filter.selector-id</name>
+                                <value>subject</value>
                             </property>
                             <property>
                                 <name>osivia.ajaxLink</name>
@@ -1520,6 +1591,17 @@ nuxeoRequest.append("AND (");&#13;
 for (String level : levels) {&#13;
 first ? first = false : nuxeoRequest.append("OR ");&#13;
 nuxeoRequest.append("idxcl:levelsTree STARTSWITH '").append(level).append("' ");&#13;
+}&#13;
+nuxeoRequest.append(") ");&#13;
+}&#13;
+&#13;
+List subjects = params.get("subject");&#13;
+if ((subjects != null) &amp;&amp; !subjects.isEmpty()) {&#13;
+boolean first = true;&#13;
+nuxeoRequest.append("AND (");&#13;
+for (String subject : subjects) {&#13;
+first ? first = false : nuxeoRequest.append("OR ");&#13;
+nuxeoRequest.append("idxcl:subjectsTree STARTSWITH '").append(subject).append("' ");&#13;
 }&#13;
 nuxeoRequest.append(") ");&#13;
 }&#13;
@@ -1734,6 +1816,31 @@ first ? first = false : nuxeoRequest.append("OR ");&#13;
 nuxeoRequest.append("idxcl:levelsTree STARTSWITH '").append(level).append("' ");&#13;
 }&#13;
 nuxeoRequest.append(") ");&#13;
+}&#13;
+&#13;
+// Subject&#13;
+List subjects = params.get("subject");&#13;
+if ((subjects != null) &amp;&amp; !subjects.isEmpty()) {&#13;
+boolean first = true;&#13;
+nuxeoRequest.append("AND (");&#13;
+for (String subject : subjects) {&#13;
+first ? first = false : nuxeoRequest.append("OR ");&#13;
+nuxeoRequest.append("idxcl:subjectsTree STARTSWITH '").append(subject).append("' ");&#13;
+}&#13;
+nuxeoRequest.append(") ");&#13;
+}&#13;
+&#13;
+// Size&#13;
+List sizes = params.get("size");&#13;
+List sizeRanges = params.get("size-range");&#13;
+if ((sizes != null) &amp;&amp; !sizes.isEmpty() &amp;&amp; (sizeRanges != null) &amp;&amp; !sizeRanges.isEmpty()) {&#13;
+nuxeoRequest.append("AND file:content/length ").append("LESS".equals(sizeRanges.get(0)) ? "&lt;" : "&gt;").append(" ").append(sizes.get(0)).append(" ");&#13;
+}&#13;
+&#13;
+// Date&#13;
+List dates = params.get("date");&#13;
+if ((dates != null) &amp;&amp; !dates.isEmpty()) {&#13;
+nuxeoRequest.append("AND dc:modified &gt;= DATE '").append(dates.get(0)).append("' ");&#13;
 }&#13;
 &#13;
 if (StringUtils.isEmpty(search)) {&#13;
@@ -2221,6 +2328,18 @@ nuxeoRequest.append("AND (");&#13;
 for (String level : levels) {&#13;
 first ? first = false : nuxeoRequest.append("OR ");&#13;
 nuxeoRequest.append("idxcl:levelsTree STARTSWITH '").append(level).append("' ");&#13;
+}&#13;
+nuxeoRequest.append(") ");&#13;
+}&#13;
+&#13;
+// Subjects&#13;
+List subjects = params.get("subject");&#13;
+if ((subjects != null) &amp;&amp; !subjects.isEmpty()) {&#13;
+boolean first = true;&#13;
+nuxeoRequest.append("AND (");&#13;
+for (String subject : subjects) {&#13;
+first ? first = false : nuxeoRequest.append("OR ");&#13;
+nuxeoRequest.append("idxcl:subjectsTree STARTSWITH '").append(subject).append("' ");&#13;
 }&#13;
 nuxeoRequest.append(") ");&#13;
 }&#13;
