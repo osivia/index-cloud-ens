@@ -76,7 +76,7 @@ $JQry(function() {
 					var result;
 
 					jQuery.ajax({
-						url: $element.data("save-search-popover"),
+						url: adaptAjaxRedirection($element.data("save-search-popover")),
 						async: false,
 						dataType: "html",
 						success: function(data, status, xhr) {

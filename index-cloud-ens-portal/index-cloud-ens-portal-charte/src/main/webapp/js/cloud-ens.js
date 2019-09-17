@@ -15,7 +15,7 @@ $JQry(function() {
 
             if (url !== undefined) {
                 options["ajax"] = {
-                    url : url,
+                    url : adaptAjaxRedirection(url),
                     dataType : "json",
                     delay : 250,
                     data : function(params) {
@@ -28,7 +28,18 @@ $JQry(function() {
                             results : data
                         };
                     },
-                    cache : true
+                    cache : true,
+                    
+                     
+                    transport: function (params, success, failure) {
+                        var $request = $JQry.ajax(params);
+
+                        $request.then(success);
+                        $request.defaultFailure=failure;
+                        $request.fail(select2LoadFailure);
+
+                        return $request;
+                      }
                 };
 
                 options["escapeMarkup"] = function(markup) {
@@ -145,6 +156,21 @@ $JQry(function() {
 
 });
 
+
+function select2LoadFailure( request, errorType ) {
+	
+	var defaultFailure = true
+	
+	if( errorType == 'parsererror')	{
+		if( handleAjaxRedirection(request.responseText))	{
+				defaultFailure = false;
+		}
+	}
+	
+	if( defaultFailure == true)
+		request.defaultFailure();
+           
+}
 
 
 
