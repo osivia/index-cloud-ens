@@ -197,34 +197,37 @@
         }
       },
       "file:content" : {
-      	 "type" : "nested",
          "properties" : {
-	         "name" : {
-	             "index" : "not_analyzed",
-	             "type" : "string"
-	           },
-	           "mime-type" : {
-	             "index" : "not_analyzed",
-	             "type" : "string"
-	           },
-	           "encoding" : {
-	             "index" : "not_analyzed",
-	             "type" : "string"
-	           },
-	           "digestAlgorithm" : {
-	             "index" : "not_analyzed",
-	             "type" : "string"
-	           },
-	           "digest" : {
-	             "index" : "not_analyzed",
-	             "type" : "string"
-	           },
-	           "length" : {
-	             "index" : "not_analyzed",
-	             "type" : "double"
-	           }
-        }
-      },      
+            "name" : {
+               "index" : "not_analyzed",
+               "type" : "string"
+            },
+            "mime-type" : {
+               "index" : "not_analyzed",
+               "type" : "string"
+            },
+            "encoding" : {
+               "index" : "not_analyzed",
+               "type" : "string"
+            },
+            "digestAlgorithm" : {
+               "index" : "not_analyzed",
+               "type" : "string"
+            },
+            "digest" : {
+               "index" : "not_analyzed",
+               "type" : "string"
+            },
+            "length" : {
+               "index" : "not_analyzed",
+               "type" : "long"
+            }
+         }
+      },
+      "quota:length" : {
+        "index" : "not_analyzed",
+        "type" : "long"
+      },
       "ecm:binarytext" : {
          "type" : "string",
          "index" : "no",
