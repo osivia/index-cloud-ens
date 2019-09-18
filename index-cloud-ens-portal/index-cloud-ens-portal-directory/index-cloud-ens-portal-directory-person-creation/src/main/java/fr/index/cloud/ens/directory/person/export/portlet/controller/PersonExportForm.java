@@ -6,13 +6,23 @@ package fr.index.cloud.ens.directory.person.export.portlet.controller;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
+
 /**
  * @author Loïc Billon
  *
  */
+@Component
+@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class PersonExportForm {
 
-	private Map<String, Export> exports = new HashMap<>();
+	public PersonExportForm() {
+        super();
+    }
+
+    private Map<String, Export> exports = new HashMap<>();
 	
 	private Boolean isExportRunning = Boolean.FALSE;
 	

@@ -25,6 +25,7 @@ import org.osivia.portal.core.cms.CMSItem;
 import org.osivia.portal.core.cms.CMSServiceCtx;
 import org.osivia.portal.core.cms.ICMSServiceLocator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
 
 import fr.index.cloud.ens.directory.person.export.portlet.commands.GetExportProceduresCommand;
@@ -32,6 +33,7 @@ import fr.index.cloud.ens.directory.person.export.portlet.commands.RemoveProcedu
 import fr.index.cloud.ens.directory.person.export.portlet.controller.Export;
 import fr.index.cloud.ens.directory.person.export.portlet.controller.PersonExportForm;
 import fr.index.cloud.ens.directory.person.export.portlet.controller.Export.ExportStatus;
+
 import fr.toutatice.portail.cms.nuxeo.api.NuxeoController;
 import fr.toutatice.portail.cms.nuxeo.api.forms.FormFilterException;
 import fr.toutatice.portail.cms.nuxeo.api.forms.IFormsService;
@@ -44,6 +46,12 @@ import fr.toutatice.portail.cms.nuxeo.api.services.NuxeoCommandContext;
 @Service
 public class PersonExportServiceImpl implements PersonExportService {
 
+
+    /**
+     * Application context.
+     */
+    @Autowired
+    private ApplicationContext applicationContext;
 
 	@Autowired
 	private IBatchService batchService;
@@ -90,6 +98,8 @@ public class PersonExportServiceImpl implements PersonExportService {
 		batch.setBatchId(batchId);
 
 		batchService.addBatch(batch);
+		
+		getForm(portalControllerContext);
 	}
 
 	/* (non-Javadoc)
@@ -98,8 +108,10 @@ public class PersonExportServiceImpl implements PersonExportService {
 	@Override
 	public PersonExportForm getForm(PortalControllerContext pcc) {
 		
-		PersonExportForm form = new PersonExportForm();
-		        
+        // Form
+		PersonExportForm form = this.applicationContext.getBean(PersonExportForm.class);
+        
+        
         // Get logger person
         Person person = (Person) pcc.getRequest().getAttribute(Constants.ATTR_LOGGED_PERSON_2);
 		
@@ -156,7 +168,7 @@ public class PersonExportServiceImpl implements PersonExportService {
 		
         nuxeoController.executeNuxeoCommand(new RemoveProcedureCommand(export.getPi()));
         
-        
+        getForm(pcc);
 	}
 
 	private String getExportsPath() {

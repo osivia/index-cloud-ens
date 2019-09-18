@@ -19,7 +19,7 @@
             <value>fr.index.cloud.ens.directory.person.creation.portlet.configuration.PersonCreationPortletConfiguration</value>
         </init-param>
         
-        <expiration-cache>180</expiration-cache>
+        <expiration-cache>0</expiration-cache>
 
         <supports>
             <mime-type>text/html</mime-type>
@@ -44,7 +44,7 @@
             <value>fr.index.cloud.ens.directory.person.creation.plugin.configuration.PersonCreationPluginConfiguration</value>
         </init-param>
         
-        <expiration-cache>180</expiration-cache>
+        <expiration-cache>0</expiration-cache>
 
         <supports>
             <mime-type>text/html</mime-type>
@@ -69,7 +69,7 @@
             <value>fr.index.cloud.ens.directory.person.renew.portlet.configuration.RenewPasswordPortletCfg</value>
         </init-param>
         
-        <expiration-cache>180</expiration-cache>
+        <expiration-cache>0</expiration-cache>
 
         <supports>
             <mime-type>text/html</mime-type>
@@ -96,7 +96,7 @@
             <value>fr.index.cloud.ens.directory.person.deleting.portlet.configuration.PersonDeletingConfiguration</value>
         </init-param>
         
-        <expiration-cache>180</expiration-cache>
+        <expiration-cache>0</expiration-cache>
 
         <supports>
             <mime-type>text/html</mime-type>
@@ -121,7 +121,7 @@
             <value>fr.index.cloud.ens.directory.person.export.portlet.configuration.PersonExportConfiguration</value>
         </init-param>
         
-        <expiration-cache>180</expiration-cache>
+        <expiration-cache>0</expiration-cache>
 
         <supports>
             <mime-type>text/html</mime-type>

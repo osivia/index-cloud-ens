@@ -10,13 +10,11 @@
 
 <portlet:actionURL name="exportData" var="exportDataUrl" copyCurrentRenderParameters="true"/>
 
-<div class="page-heade">
-	<div class="h2 m-0"><op:translate key="exportaccount.title" /></div>
-</div>
+
 <op:translate key="exportaccount.info" />
 
 <div class="export-account">
-	<form:form action="${exportDataUrl}" method="post" enctype="multipart/form-data" role="form">
+	<form:form action="${exportDataUrl}" method="post" modelAttribute="form"  enctype="multipart/form-data" role="form" >
 	
 		<c:if test="${empty form.exports}">
 			<op:translate key="exportaccount.empty"/>

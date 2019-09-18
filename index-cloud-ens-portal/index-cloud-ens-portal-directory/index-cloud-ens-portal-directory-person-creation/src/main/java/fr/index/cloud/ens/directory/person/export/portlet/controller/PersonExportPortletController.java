@@ -56,7 +56,7 @@ import fr.toutatice.portail.cms.nuxeo.api.NuxeoController;
  */
 @Controller
 @RequestMapping(value = "VIEW")
-@SessionAttributes("form")
+
 public class PersonExportPortletController extends CMSPortlet {
 	
     /** Portlet context. */
