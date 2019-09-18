@@ -52,21 +52,28 @@
 			<c:set value="disabled=disabled" var="exportDisabled"></c:set>
 		</c:if>
 	
-		<div class="form-group row">
-		    <div class="col-md-9 offset-md-3 col-lg-10 offset-lg-2">
-		        <!-- Save -->
-		        <button type="submit" name="export" class="btn btn-primary" ${exportDisabled}>
-		            <span><op:translate key="exportaccount.submit" /></span>
-		        </button>
-		    </div>
-		</div>
+	        <hr>
+  	
+		
 		<c:if test="${form.limitReached}">
-			<op:translate key="exportaccount.error.limitReached"/>
+		      <div class="alert alert-info">
+		              <op:translate key="exportaccount.error.limitReached"/>
+		      </div>
 		</c:if>
 		<c:if test="${form.isExportRunning}">
-			<op:translate key="exportaccount.error.isExportRunning"/>
+		      <div class="alert alert-info">
+		              <op:translate key="exportaccount.error.isExportRunning"/>
+		      </div>
 		</c:if>
 		
+		<div class="text-right">
+                    <div class="col-md-9 offset-md-3 col-lg-10 offset-lg-2">
+                        <!-- Save -->
+                        <button type="submit" name="export" class="btn btn-primary" ${exportDisabled}>
+                            <span><op:translate key="exportaccount.submit" /></span>
+                        </button>
+                    </div>
+                </div>
 	
 	</form:form>
 </div>

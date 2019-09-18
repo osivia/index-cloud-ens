@@ -28,7 +28,7 @@ public interface PersonExportService {
 	 * @param uid 
 	 * @param userWorkspacePath
 	 */
-	void prepareBatch(PortalControllerContext portalControllerContext, String uid, String userWorkspacePath) throws ParseException, PortalException;
+	void prepareBatch(PortalControllerContext portalControllerContext, String uid, String userWorkspacePath, PersonExportForm form) throws ParseException, PortalException;
 
 	/**
 	 * Get all exports procedures
@@ -44,6 +44,6 @@ public interface PersonExportService {
 	 * @param portalControllerContext
 	 * @param export
 	 */
-	void remove(PortalControllerContext portalControllerContext, Export export);
+	void remove(PortalControllerContext portalControllerContext, Export export, PersonExportForm form);
 
 }

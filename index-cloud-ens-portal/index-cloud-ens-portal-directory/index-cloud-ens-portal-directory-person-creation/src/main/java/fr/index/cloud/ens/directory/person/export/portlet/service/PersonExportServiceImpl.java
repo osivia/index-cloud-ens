@@ -7,6 +7,7 @@ import java.io.File;
 import java.text.ParseException;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Hashtable;
 import java.util.Map;
 import java.util.UUID;
 
@@ -66,7 +67,7 @@ public class PersonExportServiceImpl implements PersonExportService {
 	 * @see fr.index.cloud.ens.directory.person.export.portlet.controller.PersonExportService#prepareBatch(org.osivia.portal.api.context.PortalControllerContext, java.lang.String)
 	 */
 	@Override
-	public void prepareBatch(PortalControllerContext portalControllerContext, String uid, String userWorkspacePath)
+	public void prepareBatch(PortalControllerContext portalControllerContext, String uid, String userWorkspacePath, PersonExportForm form)
 			throws ParseException, PortalException {
 		
 		
@@ -99,7 +100,7 @@ public class PersonExportServiceImpl implements PersonExportService {
 
 		batchService.addBatch(batch);
 		
-		getForm(portalControllerContext);
+		updateForm(portalControllerContext, form);
 	}
 
 	/* (non-Javadoc)
@@ -110,6 +111,11 @@ public class PersonExportServiceImpl implements PersonExportService {
 		
         // Form
 		PersonExportForm form = this.applicationContext.getBean(PersonExportForm.class);
+		updateForm(pcc, form);
+		return form;
+	}
+	
+	public void updateForm(PortalControllerContext pcc, PersonExportForm form) {
         
         
         // Get logger person
@@ -117,6 +123,10 @@ public class PersonExportServiceImpl implements PersonExportService {
 		
         NuxeoController nuxeoController = new NuxeoController(pcc.getRequest(), pcc.getResponse(), pcc.getPortletCtx());
         Documents procedures = (Documents) nuxeoController.executeNuxeoCommand(new GetExportProceduresCommand(person.getUid()));
+        
+        form.setIsExportRunning(Boolean.FALSE);
+        form.setExports(new Hashtable<String, Export>());
+        form.setLimitReached(Boolean.FALSE);
 		
         int countExports = 0;
         for(Document procedure : procedures) {
@@ -148,15 +158,14 @@ public class PersonExportServiceImpl implements PersonExportService {
         	form.setLimitReached(Boolean.TRUE);
         }
         
-        
-		return form;
+
 	}
 
 	/* (non-Javadoc)
 	 * @see fr.index.cloud.ens.directory.person.export.portlet.controller.PersonExportService#remove(org.osivia.portal.api.context.PortalControllerContext, java.lang.String)
 	 */
 	@Override
-	public void remove(PortalControllerContext pcc, Export export) {
+	public void remove(PortalControllerContext pcc, Export export, PersonExportForm form) {
 		
 		
 		File file = new File(getExportsPath()+export.getZipFilename());
@@ -168,7 +177,7 @@ public class PersonExportServiceImpl implements PersonExportService {
 		
         nuxeoController.executeNuxeoCommand(new RemoveProcedureCommand(export.getPi()));
         
-        getForm(pcc);
+        updateForm(pcc, form);
 	}
 
 	private String getExportsPath() {

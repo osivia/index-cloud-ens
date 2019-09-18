@@ -81,7 +81,7 @@ public class PersonExportPortletController extends CMSPortlet {
 	}
 
 	@ActionMapping(name = "exportData")
-	public void exportData(ActionRequest request, ActionResponse response, SessionStatus status) throws CMSException, ParseException, PortalException {
+	public void exportData(ActionRequest request, ActionResponse response, SessionStatus status, @ModelAttribute("form") PersonExportForm form) throws CMSException, ParseException, PortalException {
 		
         // Portal controller context
         PortalControllerContext portalControllerContext = new PortalControllerContext(this.portletContext, request, response);
@@ -95,7 +95,7 @@ public class PersonExportPortletController extends CMSPortlet {
         CMSItem userWorkspace = getCMSService().getUserWorkspace(cmsCtx);
         String userWorkspacePath = userWorkspace.getNavigationPath();
         
-        service.prepareBatch(portalControllerContext, person.getUid(), userWorkspacePath);
+        service.prepareBatch(portalControllerContext, person.getUid(), userWorkspacePath, form);
         status.setComplete();
         
         Bundle bundle = getBundleFactory().getBundle(request.getLocale());
@@ -112,7 +112,7 @@ public class PersonExportPortletController extends CMSPortlet {
         
         Export export = form.getExports().get(uuid);
         
-        service.remove(portalControllerContext, export);
+        service.remove(portalControllerContext, export, form);
         status.setComplete();
         
         Bundle bundle = getBundleFactory().getBundle(request.getLocale());
