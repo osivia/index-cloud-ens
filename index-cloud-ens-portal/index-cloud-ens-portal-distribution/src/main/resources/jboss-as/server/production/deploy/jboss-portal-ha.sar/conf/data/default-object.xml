@@ -1181,6 +1181,44 @@ return nuxeoRequest.toString();</value>
                     </properties>
                     <height>0</height>
                 </window>
+
+
+                <window>
+                    <window-name>cloudens-person-export-portlet-instance_1568733938877</window-name>
+                    <instance-ref>cloudens-person-export-portlet-instance</instance-ref>
+                    <region>col-2</region>
+                    <properties>
+                        <property>
+                            <name>osivia.hideDecorators</name>
+                            <value>1</value>
+                        </property>
+                        <property>
+                            <name>portal.windowContentType</name>
+                            <value>portlet</value>
+                        </property>
+                        <property>
+                            <name>osivia.bootstrapPanelStyle</name>
+                            <value>true</value>
+                        </property>
+                        <property>
+                            <name>osivia.title</name>
+                            <value>Récupération des fichiers</value>
+                        </property>
+                        <property>
+                            <name>osivia.maximized.cms.url</name>
+                            <value>false</value>
+                        </property>
+                        <property>
+                            <name>osivia.mobileCollapse</name>
+                            <value>false</value>
+                        </property>
+                        <property>
+                            <name>theme.order</name>
+                            <value>1</value>
+                        </property>
+                    </properties>
+                    <height>0</height>
+                </window>                
             </page>
 
             <page>
