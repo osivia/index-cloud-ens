@@ -13,6 +13,7 @@ import org.nuxeo.ecm.automation.client.model.PropertyMap;
 import org.osivia.portal.api.cache.services.CacheInfo;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.common.ExpiringOAuth2RefreshToken;
+import org.springframework.security.oauth2.common.OAuth2AccessToken;
 import org.springframework.security.oauth2.common.OAuth2RefreshToken;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.security.oauth2.provider.OAuth2Request;
@@ -205,5 +206,27 @@ public class PortalTokenStore extends InMemoryTokenStore implements IPortalToken
         return refreshTokens;
     }
 
+    
+    @Override  
+    public OAuth2AccessToken getAccessToken(OAuth2Authentication authentication) {
+        
+        // In case of re-authentification, the refresh token is in the inMemoryCache
+        // but may have been revoked from the dashpboard UI
+        
+        OAuth2AccessToken accessToken = super.getAccessToken(authentication);
+        if( accessToken != null) {
+            OAuth2RefreshToken refreshToken = accessToken.getRefreshToken() ;
+            if( refreshToken == null)
+                accessToken = null;
+            else {
+                OAuth2RefreshToken actualRefreshToken = readRefreshToken(refreshToken.getValue());
+                if( actualRefreshToken == null)
+                    accessToken = null;
+                
+            }
+        }
+        
+        return accessToken;
+    }
 
 }
