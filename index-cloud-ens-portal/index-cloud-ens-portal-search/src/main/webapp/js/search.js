@@ -66,7 +66,7 @@ $JQry(function() {
 	});
 
 
-	$JQry("button[data-save-search-popover").each(function(index, element) {
+	$JQry("button[data-save-search-popover]").each(function(index, element) {
 		var $element = $JQry(element);
 
 		if (!$element.data("loaded")) {
