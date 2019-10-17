@@ -193,7 +193,7 @@
       </layout>
    </appender>
    
- <!-- A time/date based rolling appender -->
+   <!-- A time/date based rolling appender -->
    <appender name="PORTAL_CONVERSION_APPENDER" class="org.jboss.logging.appender.DailyRollingFileAppender">
       <errorHandler class="org.jboss.logging.util.OnlyOnceErrorHandler"/>
       <param name="File" value="${jboss.server.log.dir}/portal_conversion.log"/>
@@ -376,7 +376,7 @@
            - cluster evolution (node death/startup)
            - When an EJB archive is deployed (and associated verified messages)
            - When an EAR archive is deployed
-        
+      	 
    <category name="org.jboss.system.server.Server">
      <priority value="INFO" />
      <appender-ref ref="TRAP_LOG"/>
@@ -408,12 +408,7 @@
    <!-- ======================= -->
    <!-- Setup the Root category -->
    <!-- ======================= -->
-   <root>
-      <appender-ref ref="FILE"/>
-      <priority value ="INFO" />
-   </root>
 
-  
    <!-- Clustering logging -->
    <!-- Uncomment the following to redirect the org.jgroups and
       org.jboss.ha categories to a cluster.log file.
@@ -444,10 +439,20 @@
    <!-- ======================= -->
 
   <category name="PORTAL" additivity="false">
-      <priority value="ERROR"/>
+      <priority value="INFO"/>
       <appender-ref ref="PORTAL"/>
    </category>
 
+   
+    <category name="org.jboss.portal" additivity="true">
+      <priority value="INFO"/>
+      <appender-ref ref="PORTAL"/>
+   </category>
+   
+   <category name="org.osivia.portal" additivity="true">
+      <priority value="INFO"/>
+      <appender-ref ref="PORTAL"/>
+   </category>
 
 
   <category name="PORTAL_ERROR" additivity="false">
@@ -463,9 +468,10 @@
 
   <!-- paser en mode INFO pour faire du profiling -->
   <category name="PORTAL_PROFILER"  additivity="false">
-       <appender-ref ref="PORTAL_PROFILER_APPENDER"/>
+	  
+<appender-ref ref="PORTAL_PROFILER_APPENDER"/>
  <priority value="WARN"/>
-   </category>
+      </category>
 
   <category name="PORTAL_STATUS"  additivity="false">
       <priority value="INFO"/>
@@ -529,12 +535,19 @@
    </category>
 
    
+   
    <category name="PORTAL_CONVERSION"  additivity="false">
       <priority value="INFO"/>
       <appender-ref ref="PORTAL_CONVERSION_APPENDER"/>
    </category>
    
-   
+
+   <root>
+      <priority value ="INFO"/>
+      <appender-ref ref="FILE"/>
+      </root>
+
+  
 
 
 </log4j:configuration>
