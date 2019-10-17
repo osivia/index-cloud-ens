@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>fr.index.cloud.ens.portal.collaboration</groupId>
+        <artifactId>index-cloud-ens-portal-collaboration-parent</artifactId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>index-cloud-ens-portal-collaboration-ear</artifactId>
+    <packaging>ear</packaging>
+
+    <name>Cloud enseignant - Collaboration EAR</name>
+
+
+    <dependencies>
+
+        <!-- File browser -->
+        <dependency>
+            <groupId>fr.index.cloud.ens.portal.collaboration</groupId>
+            <artifactId>index-cloud-ens-portal-file-browser</artifactId>
+            <version>${project.version}</version>
+            <type>war</type>
+        </dependency>
+
+        <!-- Document edition -->
+        <dependency>
+            <groupId>org.osivia.services</groupId>
+            <artifactId>osivia-services-document-edition</artifactId>
+            <version>${collaboration.version}</version>
+            <type>war</type>
+        </dependency>
+
+        <!-- Editor helpers -->
+        <dependency>
+            <groupId>org.osivia.services</groupId>
+            <artifactId>osivia-services-editor-helpers</artifactId>
+            <version>${collaboration.version}</version>
+            <type>war</type>
+        </dependency>
+
+        <!-- Taskbar -->
+        <dependency>
+            <groupId>org.osivia.services</groupId>
+            <artifactId>osivia-services-taskbar</artifactId>
+            <version>${collaboration.version}</version>
+            <type>war</type>
+        </dependency>
+
+        <!-- Versions -->
+        <dependency>
+            <groupId>org.osivia.services</groupId>
+            <artifactId>osivia-services-versions</artifactId>
+            <version>${collaboration.version}</version>
+            <type>war</type>
+        </dependency>
+
+        <!-- Widgets -->
+        <dependency>
+            <groupId>org.osivia.services</groupId>
+            <artifactId>osivia-services-widgets</artifactId>
+            <version>${collaboration.version}</version>
+            <type>war</type>
+        </dependency>
+
+        <!-- Workspace -->
+        <dependency>
+            <groupId>org.osivia.services.workspace</groupId>
+            <artifactId>osivia-services-workspace-trash</artifactId>
+            <version>${collaboration.version}</version>
+            <type>war</type>
+        </dependency>
+        <dependency>
+            <groupId>org.osivia.services.workspace</groupId>
+            <artifactId>osivia-services-workspace-quota</artifactId>
+            <version>${collaboration.version}</version>
+            <type>war</type>
+        </dependency>
+
+    </dependencies>
+
+
+    <build>
+        <plugins>
+
+            <!-- EAR -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-ear-plugin</artifactId>
+                <configuration>
+                    <defaultLibBundleDir>lib</defaultLibBundleDir>
+                    <modules>
+                        <!--File browser-->
+                        <webModule>
+                            <groupId>fr.index.cloud.ens.portal.collaboration</groupId>
+                            <artifactId>index-cloud-ens-portal-file-browser</artifactId>
+                            <contextRoot>/index-cloud-ens-portal-file-browser</contextRoot>
+                        </webModule>
+
+                        <!-- Document edition -->
+                        <webModule>
+                            <groupId>org.osivia.services</groupId>
+                            <artifactId>osivia-services-document-edition</artifactId>
+                            <contextRoot>/osivia-services-document-edition</contextRoot>
+                        </webModule>
+
+                        <!-- Editor helpers -->
+                        <webModule>
+                            <groupId>org.osivia.services</groupId>
+                            <artifactId>osivia-services-editor-helpers</artifactId>
+                            <contextRoot>/osivia-services-editor-helpers</contextRoot>
+                        </webModule>
+
+                        <!-- Taskbar -->
+                        <webModule>
+                            <groupId>org.osivia.services</groupId>
+                            <artifactId>osivia-services-taskbar</artifactId>
+                            <contextRoot>/osivia-services-taskbar</contextRoot>
+                        </webModule>
+
+                        <!-- Versions -->
+                        <webModule>
+                            <groupId>org.osivia.services</groupId>
+                            <artifactId>osivia-services-versions</artifactId>
+                            <contextRoot>/osivia-services-versions</contextRoot>
+                        </webModule>
+
+                        <!-- Widgets -->
+                        <webModule>
+                            <groupId>org.osivia.services</groupId>
+                            <artifactId>osivia-services-widgets</artifactId>
+                            <contextRoot>/osivia-services-widgets</contextRoot>
+                        </webModule>
+
+                        <!-- Workspace -->
+                        <webModule>
+                            <groupId>org.osivia.services.workspace</groupId>
+                            <artifactId>osivia-services-workspace-trash</artifactId>
+                            <contextRoot>/osivia-services-workspace-trash</contextRoot>
+                        </webModule>
+                        <webModule>
+                            <groupId>org.osivia.services.workspace</groupId>
+                            <artifactId>osivia-services-workspace-quota</artifactId>
+                            <contextRoot>/osivia-services-workspace-quota</contextRoot>
+                        </webModule>
+                    </modules>
+                </configuration>
+            </plugin>
+
+        </plugins>
+    </build>
+
+</project>

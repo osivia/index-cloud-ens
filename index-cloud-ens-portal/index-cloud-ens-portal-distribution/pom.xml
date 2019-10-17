@@ -47,6 +47,12 @@
             <type>ear</type>
         </dependency>
         <dependency>
+            <groupId>${project.groupId}.collaboration</groupId>
+            <artifactId>index-cloud-ens-portal-collaboration-ear</artifactId>
+            <version>${project.version}</version>
+            <type>ear</type>
+        </dependency>
+        <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>index-cloud-ens-portal-initializer</artifactId>
             <version>${project.version}</version>
@@ -96,14 +102,6 @@
             <groupId>org.osivia.services.directory.socle</groupId>
             <artifactId>osivia-services-directory-socle-interfaces</artifactId>
             <scope>compile</scope>
-        </dependency>
-
-        <!-- Collaboration -->        
-        <dependency>
-            <groupId>org.osivia.services</groupId>
-            <artifactId>osivia-services-collaboration-ear</artifactId>
-            <version>${collaboration.version}</version>
-            <type>ear</type>
         </dependency>
         
         <!-- Other services -->

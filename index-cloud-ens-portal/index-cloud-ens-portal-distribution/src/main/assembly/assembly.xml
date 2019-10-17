@@ -19,6 +19,7 @@
                 <include>${project.groupId}:index-cloud-ens-portal-charte:war:${project.version}</include>
                 <include>${project.groupId}:index-cloud-ens-portal-customizer:war:${project.version}</include>
                 <include>${project.groupId}.directory:index-cloud-ens-portal-directory-ear:ear:${project.version}</include>
+                <include>${project.groupId}.collaboration:index-cloud-ens-portal-collaboration-ear:ear:${project.version}</include>
                 <include>${project.groupId}:index-cloud-ens-portal-initializer:war:${project.version}</include>                
                 <include>${project.groupId}:index-cloud-ens-portal-ws:war:${project.version}</include>     
                 <include>${project.groupId}:index-cloud-ens-portal-taskbar:war:${project.version}</include>
@@ -28,8 +29,6 @@
 
                  <!-- Toutatice CMS -->
                 <include>toutatice-portail.cms:toutatice-portail-cms-nuxeo-web:war:${toutatice.version}</include>
-                <!-- Collaboration -->
-                <include>org.osivia.services:osivia-services-collaboration-ear:ear:${collaboration.version}</include>
                 <!-- Other services -->
                 <include>org.osivia.services:osivia-services-tasks:war:${tasks.version}</include>
                 <include>org.osivia.services:osivia-services-procedure:war:${procedure.version}</include>
