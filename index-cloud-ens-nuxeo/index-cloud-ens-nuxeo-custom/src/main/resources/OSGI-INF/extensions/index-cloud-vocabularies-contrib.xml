@@ -1,39 +1,52 @@
 <?xml version="1.0"?>
 <component name="fr.index.vocabularies">
-	<require>org.nuxeo.ecm.platform.forms.layouts.webapp</require>
+    <require>org.nuxeo.ecm.platform.forms.layouts.webapp</require>
     <require>org.nuxeo.ecm.directory.sql.SQLDirectoryFactory</require>
     <require>org.nuxeo.ecm.directory.ui.DirectoryUIManager</require>
-    
-   
+
+
     <extension target="org.nuxeo.ecm.directory.sql.SQLDirectoryFactory" point="directories">
 
-        <!-- Thèmes des actualités -->
+        <!--Levels-->
         <directory name="idx_level">
-            <schema>xvocabulary</schema> 
+            <schema>xvocabulary</schema>
             <dataSource>java:/nxsqldirectory</dataSource>
             <table>vocabulary_index_level</table>
             <idField>id</idField>
             <autoincrementIdField>false</autoincrementIdField>
-            <createTablePolicy>always</createTablePolicy> 
+            <createTablePolicy>always</createTablePolicy>
             <dataFile>vocabularies/level.csv</dataFile>
             <cacheTimeout>3600</cacheTimeout>
             <cacheMaxSize>1000</cacheMaxSize>
         </directory>
-        
-        <!-- Thèmes des actualités -->
+
+        <!--Subjects-->
         <directory name="idx_subject">
-            <schema>xvocabulary</schema> 
+            <schema>xvocabulary</schema>
             <dataSource>java:/nxsqldirectory</dataSource>
             <table>vocabulary_index_subject</table>
             <idField>id</idField>
             <autoincrementIdField>false</autoincrementIdField>
-            <createTablePolicy>always</createTablePolicy> 
+            <createTablePolicy>always</createTablePolicy>
             <dataFile>vocabularies/subject.csv</dataFile>
             <cacheTimeout>3600</cacheTimeout>
             <cacheMaxSize>1000</cacheMaxSize>
-        </directory>        
+        </directory>
+
+        <!--Document types-->
+        <directory name="idx_document_types">
+            <schema>xvocabulary</schema>
+            <dataSource>java:/nxsqldirectory</dataSource>
+            <table>vocabulary_index_document_type</table>
+            <idField>id</idField>
+            <autoincrementIdField>false</autoincrementIdField>
+            <createTablePolicy>always</createTablePolicy>
+            <dataFile>vocabularies/document-type.csv</dataFile>
+            <cacheTimeout>3600</cacheTimeout>
+            <cacheMaxSize>1000</cacheMaxSize>
+        </directory>
 
     </extension>
-    
+
 
 </component>
