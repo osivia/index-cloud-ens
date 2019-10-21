@@ -1,0 +1,72 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="op" uri="http://www.osivia.org/jsp/taglib/osivia-portal" %>
+<%@ taglib prefix="ttc" uri="http://www.toutatice.fr/jsp/taglib/toutatice" %>
+
+
+<c:set var="checkboxTitle"><op:translate key="TABLE_CHECKBOX_TITLE"/></c:set>
+
+<c:choose>
+    <c:when test="${form.customizedColumn.id eq 'document-type'}">
+        <c:set var="vocabularyName" value="idx_document_types" scope="request"/>
+    </c:when>
+    <c:when test="${form.customizedColumn.id eq 'level'}">
+        <c:set var="vocabularyName" value="idx_level" scope="request"/>
+    </c:when>
+    <c:when test="${form.customizedColumn.id eq 'subject'}">
+        <c:set var="vocabularyName" value="idx_subject" scope="request"/>
+    </c:when>
+</c:choose>
+
+
+<c:choose>
+    <c:when test="${empty form.items}">
+        <div class="portal-table-row-group">
+            <div class="portal-table-row">
+                <div class="portal-table-cell">
+                    <div class="portal-table-cell-inner">
+                        <span class="text-muted"><op:translate key="FILE_BROWSER_EMPTY"/></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </c:when>
+
+    <c:otherwise>
+        <div class="portal-table-row-group portal-table-selectable">
+            <c:forEach var="item" items="${form.items}">
+                <div class="portal-table-row portal-table-selectable-filter ${item.folderish ? 'file-browser-droppable' : ''}"
+                     data-id="${item.document.id}"
+                     data-type="${item.document.type.name}" data-text="${item.title}"
+                     data-accepted-types="${item.acceptedTypes}"
+                     data-double-click-target=".file-browser-draggable a">
+                        <%--Title--%>
+                    <%@ include file="table-body-title.jspf" %>
+
+                        <%--Customized column--%>
+                    <%@ include file="table-body-customized-column.jspf" %>
+
+                        <%--Location--%>
+                    <c:if test="${form.listMode}">
+                        <%@ include file="table-body-location.jspf" %>
+                    </c:if>
+
+                        <%--Last modification--%>
+                    <%@ include file="table-body-last-modification.jspf" %>
+
+                        <%--File size--%>
+                    <%@ include file="table-body-file-size.jspf" %>
+
+                        <%--Checkbox--%>
+                    <%@ include file="table-body-checkbox.jspf" %>
+
+                        <%--Draggable--%>
+                    <c:if test="${item.document.type.editable}">
+                        <div class="file-browser-draggable file-browser-draggable-shadowbox"></div>
+                    </c:if>
+                </div>
+            </c:forEach>
+        </div>
+    </c:otherwise>
+</c:choose>

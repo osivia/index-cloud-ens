@@ -1,0 +1,20 @@
+@import "../../../../../index-cloud-ens-portal-charte/src/main/sass/cloud-ens/variables";
+
+
+@include media-breakpoint-down("md") {
+  [data-column="customized-column"] {
+    display: none;
+  }
+}
+
+@include media-breakpoint-between("md", "xl") {
+  [data-column="customized-column"] {
+    width: 130px;
+  }
+}
+
+@include media-breakpoint-up("xl") {
+  [data-column="customized-column"] {
+    width: 150px;
+  }
+}

@@ -16,7 +16,7 @@
         </init-param>
         <init-param>
             <name>contextConfigLocation</name>
-            <value>org.osivia.services.workspace.filebrowser.portlet.configuration.FileBrowserConfiguration</value>
+            <value>fr.index.cloud.ens.filebrowser.portlet.configuration.CustomizedFileBrowserConfiguration</value>
         </init-param>
 
         <expiration-cache>0</expiration-cache>

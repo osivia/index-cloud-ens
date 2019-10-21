@@ -7,6 +7,19 @@
 
     <extension target="org.nuxeo.ecm.directory.sql.SQLDirectoryFactory" point="directories">
 
+        <!--Document types-->
+        <directory name="idx_document_types">
+            <schema>xvocabulary</schema>
+            <dataSource>java:/nxsqldirectory</dataSource>
+            <table>vocabulary_index_document_type</table>
+            <idField>id</idField>
+            <autoincrementIdField>false</autoincrementIdField>
+            <createTablePolicy>always</createTablePolicy>
+            <dataFile>vocabularies/document-type.csv</dataFile>
+            <cacheTimeout>3600</cacheTimeout>
+            <cacheMaxSize>1000</cacheMaxSize>
+        </directory>
+
         <!--Levels-->
         <directory name="idx_level">
             <schema>xvocabulary</schema>
@@ -29,19 +42,6 @@
             <autoincrementIdField>false</autoincrementIdField>
             <createTablePolicy>always</createTablePolicy>
             <dataFile>vocabularies/subject.csv</dataFile>
-            <cacheTimeout>3600</cacheTimeout>
-            <cacheMaxSize>1000</cacheMaxSize>
-        </directory>
-
-        <!--Document types-->
-        <directory name="idx_document_types">
-            <schema>xvocabulary</schema>
-            <dataSource>java:/nxsqldirectory</dataSource>
-            <table>vocabulary_index_document_type</table>
-            <idField>id</idField>
-            <autoincrementIdField>false</autoincrementIdField>
-            <createTablePolicy>always</createTablePolicy>
-            <dataFile>vocabularies/document-type.csv</dataFile>
             <cacheTimeout>3600</cacheTimeout>
             <cacheMaxSize>1000</cacheMaxSize>
         </directory>

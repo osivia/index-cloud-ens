@@ -3,6 +3,7 @@ package fr.index.cloud.ens.filebrowser.portlet.configuration;
 import org.osivia.services.workspace.filebrowser.portlet.configuration.FileBrowserConfiguration;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.support.ResourceBundleMessageSource;
 
 /**
  * File browser customized portlet configuration.
@@ -19,6 +20,14 @@ public class CustomizedFileBrowserConfiguration extends FileBrowserConfiguration
      */
     public CustomizedFileBrowserConfiguration() {
         super();
+    }
+
+
+    @Override
+    public ResourceBundleMessageSource getMessageSource() {
+        ResourceBundleMessageSource messageSource = super.getMessageSource();
+        messageSource.setBasenames("file-browser", "customized-file-browser");
+        return messageSource;
     }
 
 }

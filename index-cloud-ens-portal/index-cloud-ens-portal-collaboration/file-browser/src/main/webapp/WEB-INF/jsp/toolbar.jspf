@@ -1,0 +1,24 @@
+<%@ taglib prefix="portlet" uri="http://java.sun.com/portlet_2_0" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@ taglib prefix="op" uri="http://www.osivia.org/jsp/taglib/osivia-portal" %>
+
+
+<portlet:resourceURL id="toolbar" var="toolbarUrl"/>
+
+
+<div class="portal-table-toolbar-container" data-url="${toolbarUrl}">
+    <%--View--%>
+    <%@ include file="toolbar-view.jspf" %>
+
+    <%--Customized column--%>
+    <%@ include file="toolbar-customized-column.jspf" %>
+
+    <%--State--%>
+    <%@ include file="toolbar-state.jspf" %>
+
+    <%--Contextual toolbar--%>
+    <div class="portal-table-toolbar">
+        <div></div>
+    </div>
+</div>

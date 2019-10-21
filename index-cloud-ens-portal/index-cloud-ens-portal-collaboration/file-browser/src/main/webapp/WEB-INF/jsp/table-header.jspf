@@ -1,0 +1,40 @@
+<%@ taglib prefix="portlet" uri="http://java.sun.com/portlet_2_0" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@ taglib prefix="op" uri="http://www.osivia.org/jsp/taglib/osivia-portal" %>
+
+
+<%--Column group--%>
+<div class="portal-table-column-group">
+    <div class="portal-table-column" data-column="title"></div>
+    <div class="portal-table-column" data-column="customized-column"></div>
+    <c:if test="${form.listMode}">
+        <div class="portal-table-column" data-column="location"></div>
+    </c:if>
+    <div class="portal-table-column" data-column="last-modification"></div>
+    <div class="portal-table-column" data-column="file-size"></div>
+    <div class="portal-table-column" data-column="checkbox"></div>
+</div>
+
+<%--Header--%>
+<div class="portal-table-header-group">
+    <%--Title--%>
+    <%@ include file="table-header-title.jspf" %>
+
+    <%--Customized column--%>
+    <%@ include file="table-header-customized-column.jspf"%>
+
+    <%--Location--%>
+    <c:if test="${form.listMode}">
+        <%@ include file="table-header-location.jspf" %>
+    </c:if>
+
+    <%--Last modification--%>
+    <%@ include file="table-header-last-modification.jspf" %>
+
+    <%--File size--%>
+    <%@ include file="table-header-file-size.jspf" %>
+
+    <%--Checkbox--%>
+    <%@ include file="table-header-checkbox.jspf" %>
+</div>
