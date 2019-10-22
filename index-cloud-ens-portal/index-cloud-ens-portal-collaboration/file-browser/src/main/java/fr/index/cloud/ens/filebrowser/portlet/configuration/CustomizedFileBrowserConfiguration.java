@@ -1,6 +1,10 @@
 package fr.index.cloud.ens.filebrowser.portlet.configuration;
 
+import fr.index.cloud.ens.directory.service.preferences.CustomizedUserPreferencesService;
+import org.osivia.portal.api.directory.v2.DirServiceFactory;
 import org.osivia.services.workspace.filebrowser.portlet.configuration.FileBrowserConfiguration;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.ResourceBundleMessageSource;
@@ -16,6 +20,13 @@ import org.springframework.context.support.ResourceBundleMessageSource;
 public class CustomizedFileBrowserConfiguration extends FileBrowserConfiguration {
 
     /**
+     * Application context.
+     */
+    @Autowired
+    private ApplicationContext applicationContext;
+
+
+    /**
      * Constructor.
      */
     public CustomizedFileBrowserConfiguration() {
@@ -28,6 +39,12 @@ public class CustomizedFileBrowserConfiguration extends FileBrowserConfiguration
         ResourceBundleMessageSource messageSource = super.getMessageSource();
         messageSource.setBasenames("file-browser", "customized-file-browser");
         return messageSource;
+    }
+
+
+    @Override
+    public CustomizedUserPreferencesService getUserPreferencesService() {
+        return DirServiceFactory.getService(CustomizedUserPreferencesService.class);
     }
 
 }

@@ -38,6 +38,12 @@
             <groupId>org.osivia.services.directory.socle</groupId>
             <artifactId>osivia-services-directory-socle-interfaces</artifactId>
         </dependency>
+        <dependency>
+            <groupId>fr.index.cloud.ens.portal.directory</groupId>
+            <artifactId>index-cloud-ens-portal-directory-interfaces</artifactId>
+            <version>${project.version}</version>
+            <scope>provided</scope>
+        </dependency>
 
     </dependencies>
 

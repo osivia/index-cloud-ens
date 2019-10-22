@@ -27,7 +27,7 @@
             <groupId>org.osivia.services.directory.socle</groupId>
             <artifactId>osivia-services-directory-socle-implementations</artifactId>
         </dependency>
-        
+
     </dependencies>
 
 </project> 

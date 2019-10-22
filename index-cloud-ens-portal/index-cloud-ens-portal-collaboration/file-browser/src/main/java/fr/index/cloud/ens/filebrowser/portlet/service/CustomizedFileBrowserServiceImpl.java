@@ -1,5 +1,7 @@
 package fr.index.cloud.ens.filebrowser.portlet.service;
 
+import fr.index.cloud.ens.directory.model.preferences.CustomizedUserPreferences;
+import fr.index.cloud.ens.directory.service.preferences.CustomizedUserPreferencesService;
 import fr.index.cloud.ens.filebrowser.portlet.model.CustomizedFileBrowserForm;
 import fr.index.cloud.ens.filebrowser.portlet.model.CustomizedFileBrowserItem;
 import fr.index.cloud.ens.filebrowser.portlet.model.CustomizedFileBrowserSortEnum;
@@ -9,8 +11,6 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.nuxeo.ecm.automation.client.model.Document;
-import org.osivia.directory.v2.model.preferences.UserPreferences;
-import org.osivia.directory.v2.service.preferences.UserPreferencesService;
 import org.osivia.portal.api.PortalException;
 import org.osivia.portal.api.context.PortalControllerContext;
 import org.osivia.services.workspace.filebrowser.portlet.model.FileBrowserItem;
@@ -60,7 +60,7 @@ public class CustomizedFileBrowserServiceImpl extends FileBrowserServiceImpl imp
      * User preferences service.
      */
     @Autowired
-    private UserPreferencesService userPreferencesService;
+    private CustomizedUserPreferencesService userPreferencesService;
 
 
     /**
@@ -82,7 +82,7 @@ public class CustomizedFileBrowserServiceImpl extends FileBrowserServiceImpl imp
             this.initializeForm(portalControllerContext, form);
 
             // User preferences
-            UserPreferences userPreferences;
+            CustomizedUserPreferences userPreferences;
             try {
                 userPreferences = this.userPreferencesService.getUserPreferences(portalControllerContext);
             } catch (PortalException e) {
@@ -90,7 +90,26 @@ public class CustomizedFileBrowserServiceImpl extends FileBrowserServiceImpl imp
             }
 
             // Customized column
-            CustomizedFileBrowserSortField customizedColumn = CustomizedFileBrowserSortEnum.DOCUMENT_TYPE; // TODO
+            CustomizedFileBrowserSortField customizedColumn = null;
+            if (StringUtils.isNotEmpty(userPreferences.getCustomizedColumn())) {
+                // Enum values
+                CustomizedFileBrowserSortEnum[] values = CustomizedFileBrowserSortEnum.values();
+
+                int i = 0;
+                while ((customizedColumn == null) && (i < values.length)) {
+                    CustomizedFileBrowserSortField value = values[i];
+
+                    if (value.isCustomizable() && StringUtils.equals(userPreferences.getCustomizedColumn(), value.getId())) {
+                        customizedColumn = value;
+                    }
+
+                    i++;
+                }
+            }
+            if (customizedColumn == null) {
+                // Default value
+                customizedColumn = CustomizedFileBrowserSortEnum.DOCUMENT_TYPE;
+            }
             form.setCustomizedColumn(customizedColumn);
 
             // Initialized indicator
@@ -241,8 +260,17 @@ public class CustomizedFileBrowserServiceImpl extends FileBrowserServiceImpl imp
         sortFields.clear();
         sortFields.addAll(this.getSortFields(portalControllerContext));
 
-        // Save user preferences
-        // TODO
+        // User preferences
+        CustomizedUserPreferences userPreferences;
+        try {
+            userPreferences = this.userPreferencesService.getUserPreferences(portalControllerContext);
+        } catch (PortalException e) {
+            throw new PortletException(e);
+        }
+
+        // Update user preferences
+        userPreferences.setCustomizedColumn(customizedColumn.getId());
+        userPreferences.setUpdated(true);
     }
 
 }
