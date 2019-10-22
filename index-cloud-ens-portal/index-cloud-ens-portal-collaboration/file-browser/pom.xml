@@ -17,6 +17,8 @@
 
 
     <dependencies>
+
+        <!--File browser-->
         <dependency>
             <groupId>org.osivia.services.workspace</groupId>
             <artifactId>osivia-services-workspace-file-browser</artifactId>
@@ -30,6 +32,13 @@
             <classifier>classes</classifier>
             <scope>provided</scope>
         </dependency>
+
+        <!--Directory-->
+        <dependency>
+            <groupId>org.osivia.services.directory.socle</groupId>
+            <artifactId>osivia-services-directory-socle-interfaces</artifactId>
+        </dependency>
+
     </dependencies>
 
 

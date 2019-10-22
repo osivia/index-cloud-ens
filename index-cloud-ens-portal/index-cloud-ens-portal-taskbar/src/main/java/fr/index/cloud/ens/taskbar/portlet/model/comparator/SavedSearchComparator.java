@@ -1,6 +1,6 @@
 package fr.index.cloud.ens.taskbar.portlet.model.comparator;
 
-import org.osivia.portal.api.user.UserSavedSearch;
+import org.osivia.directory.v2.model.preferences.UserSavedSearch;
 import org.springframework.stereotype.Component;
 
 import java.util.Comparator;
@@ -22,7 +22,7 @@ public class SavedSearchComparator implements Comparator<UserSavedSearch> {
         super();
     }
 
-    
+
     @Override
     public int compare(UserSavedSearch savedSearch1, UserSavedSearch savedSearch2) {
         int result;

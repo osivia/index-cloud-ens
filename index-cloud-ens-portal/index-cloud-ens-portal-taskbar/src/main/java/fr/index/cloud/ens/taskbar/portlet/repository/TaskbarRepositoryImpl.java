@@ -17,6 +17,9 @@ import org.apache.commons.lang.StringUtils;
 import org.dom4j.Element;
 import org.jboss.portal.theme.impl.render.dynamic.DynaRenderOptions;
 import org.nuxeo.ecm.automation.client.model.Document;
+import org.osivia.directory.v2.model.preferences.UserPreferences;
+import org.osivia.directory.v2.model.preferences.UserSavedSearch;
+import org.osivia.directory.v2.service.preferences.UserPreferencesService;
 import org.osivia.portal.api.Constants;
 import org.osivia.portal.api.PortalException;
 import org.osivia.portal.api.cms.DocumentType;
@@ -30,8 +33,6 @@ import org.osivia.portal.api.taskbar.ITaskbarService;
 import org.osivia.portal.api.taskbar.TaskbarTask;
 import org.osivia.portal.api.urls.IPortalUrlFactory;
 import org.osivia.portal.api.urls.PortalUrlType;
-import org.osivia.portal.api.user.UserPreferences;
-import org.osivia.portal.api.user.UserSavedSearch;
 import org.osivia.portal.core.cms.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
@@ -107,6 +108,12 @@ public class TaskbarRepositoryImpl implements TaskbarRepository {
      */
     @Autowired
     private SavedSearchComparator savedSearchComparator;
+
+    /**
+     * User preferences service.
+     */
+    @Autowired
+    private UserPreferencesService userPreferencesService;
 
 
     /**
@@ -580,7 +587,12 @@ public class TaskbarRepositoryImpl implements TaskbarRepository {
         }
 
         // User preferences
-        UserPreferences userPreferences = this.getUserPreferences(portalControllerContext);
+        UserPreferences userPreferences;
+        try {
+            userPreferences = this.userPreferencesService.getUserPreferences(portalControllerContext);
+        } catch (PortalException e) {
+            throw new PortletException(e);
+        }
         // Saved searches
         List<UserSavedSearch> savedSearches = userPreferences.getSavedSearches();
 
@@ -675,7 +687,12 @@ public class TaskbarRepositoryImpl implements TaskbarRepository {
     @Override
     public UserSavedSearch getSavedSearch(PortalControllerContext portalControllerContext, int id) throws PortletException {
         // User preferences
-        UserPreferences userPreferences = this.getUserPreferences(portalControllerContext);
+        UserPreferences userPreferences = null;
+        try {
+            userPreferences = this.userPreferencesService.getUserPreferences(portalControllerContext);
+        } catch (PortalException e) {
+            throw new PortletException(e);
+        }
         // Saved searches
         List<UserSavedSearch> savedSearches = userPreferences.getSavedSearches();
 
@@ -692,31 +709,6 @@ public class TaskbarRepositoryImpl implements TaskbarRepository {
         }
 
         return savedSearch;
-    }
-
-
-    /**
-     * Get user preferences.
-     *
-     * @param portalControllerContext portal controller context
-     * @return user preferences
-     */
-    private UserPreferences getUserPreferences(PortalControllerContext portalControllerContext) throws PortletException {
-        // CMS service
-        ICMSService cmsService = this.cmsServiceLocator.getCMSService();
-        // CMS context
-        CMSServiceCtx cmsContext = new CMSServiceCtx();
-        cmsContext.setPortalControllerContext(portalControllerContext);
-
-        // User preferences
-        UserPreferences userPreferences;
-        try {
-            userPreferences = cmsService.getUserPreferences(portalControllerContext);
-        } catch (PortalException e) {
-            throw new PortletException(e);
-        }
-
-        return userPreferences;
     }
 
 

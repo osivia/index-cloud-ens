@@ -248,9 +248,6 @@ public class SearchServiceImpl extends SearchCommonServiceImpl implements Search
 
             // Selectors
             String selectorsParameter = request.getParameter(SELECTORS_PARAMETER);
-            if (StringUtils.isNotEmpty(selectorsParameter)) {
-                response.setRenderParameter("lastSelectors", selectorsParameter);
-            }
             Map<String, List<String>> selectors = PageSelectors.decodeProperties(selectorsParameter);
 
             // Search

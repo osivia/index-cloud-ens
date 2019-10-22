@@ -13,6 +13,16 @@
     <name>Cloud enseignant - Taskbar</name>
 
 
+    <dependencies>
+
+        <dependency>
+            <groupId>org.osivia.services.directory.socle</groupId>
+            <artifactId>osivia-services-directory-socle-interfaces</artifactId>
+        </dependency>
+
+    </dependencies>
+
+
     <build>
         <plugins>
 

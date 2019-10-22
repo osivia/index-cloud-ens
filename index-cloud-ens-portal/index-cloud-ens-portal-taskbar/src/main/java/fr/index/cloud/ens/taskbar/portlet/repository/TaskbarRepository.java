@@ -4,9 +4,9 @@ import fr.index.cloud.ens.taskbar.portlet.model.AddDropdownItem;
 import fr.index.cloud.ens.taskbar.portlet.model.FolderTask;
 import fr.index.cloud.ens.taskbar.portlet.model.Task;
 import fr.index.cloud.ens.taskbar.portlet.model.TaskbarWindowProperties;
+import org.osivia.directory.v2.model.preferences.UserSavedSearch;
 import org.osivia.portal.api.context.PortalControllerContext;
 import org.osivia.portal.api.taskbar.TaskbarTask;
-import org.osivia.portal.api.user.UserSavedSearch;
 
 import javax.portlet.PortletException;
 import java.io.IOException;

@@ -17,6 +17,9 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.math.NumberUtils;
 import org.apache.commons.lang.time.DateFormatUtils;
 import org.apache.commons.lang.time.DateUtils;
+import org.osivia.directory.v2.model.preferences.UserPreferences;
+import org.osivia.directory.v2.model.preferences.UserSavedSearch;
+import org.osivia.directory.v2.service.preferences.UserPreferencesService;
 import org.osivia.portal.api.PortalException;
 import org.osivia.portal.api.context.PortalControllerContext;
 import org.osivia.portal.api.internationalization.Bundle;
@@ -24,8 +27,6 @@ import org.osivia.portal.api.internationalization.IBundleFactory;
 import org.osivia.portal.api.page.PageParametersEncoder;
 import org.osivia.portal.api.urls.IPortalUrlFactory;
 import org.osivia.portal.api.urls.PortalUrlType;
-import org.osivia.portal.api.user.UserPreferences;
-import org.osivia.portal.api.user.UserSavedSearch;
 import org.osivia.portal.api.windows.PortalWindow;
 import org.osivia.portal.api.windows.WindowFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,35 +58,48 @@ public class SearchFiltersServiceImpl extends SearchCommonServiceImpl implements
      * Unit factor.
      */
     private static final double UNIT_FACTOR = 1024;
+
+
     /**
      * Date format.
      */
     private final DateFormat dateFormat;
+
     /**
      * Application context.
      */
     @Autowired
     private ApplicationContext applicationContext;
+
     /**
      * Portlet repository.
      */
     @Autowired
     private SearchFiltersRepository repository;
+
     /**
      * Portal URL factory.
      */
     @Autowired
     private IPortalUrlFactory portalUrlFactory;
+
     /**
      * Internationalization bundle factory.
      */
     @Autowired
     private IBundleFactory bundleFactory;
+
     /**
      * Document DAO.
      */
     @Autowired
     private DocumentDAO documentDao;
+
+    /**
+     * User preferences service.
+     */
+    @Autowired
+    private UserPreferencesService userPreferencesService;
 
 
     /**
@@ -240,7 +254,12 @@ public class SearchFiltersServiceImpl extends SearchCommonServiceImpl implements
     public String saveSearch(PortalControllerContext portalControllerContext, SearchFiltersForm form) throws PortletException {
         if (StringUtils.isNotBlank(form.getSavedSearchDisplayName())) {
             // User preferences
-            UserPreferences userPreferences = this.repository.getUserPreferences(portalControllerContext);
+            UserPreferences userPreferences;
+            try {
+                userPreferences = this.userPreferencesService.getUserPreferences(portalControllerContext);
+            } catch (PortalException e) {
+                throw new PortletException(e);
+            }
             // Saved searches
             List<UserSavedSearch> savedSearches = userPreferences.getSavedSearches();
             if (CollectionUtils.isEmpty(savedSearches)) {
@@ -258,14 +277,19 @@ public class SearchFiltersServiceImpl extends SearchCommonServiceImpl implements
             String data = this.buildSelectorsParameter(portalControllerContext, form);
 
             // Saved search
-            UserSavedSearch savedSearch = new UserSavedSearch(id);
+            UserSavedSearch savedSearch;
+            try {
+                savedSearch = this.userPreferencesService.createUserSavedSearch(portalControllerContext, id);
+            } catch (PortalException e) {
+                throw new PortletException(e);
+            }
             savedSearch.setDisplayName(form.getSavedSearchDisplayName());
             savedSearch.setData(data);
             savedSearches.add(savedSearch);
 
             // Update user preferences
             userPreferences.setSavedSearches(savedSearches);
-            userPreferences.setUpdate(true);
+            userPreferences.setUpdated(true);
         }
 
         // Search filters path
@@ -385,8 +409,6 @@ public class SearchFiltersServiceImpl extends SearchCommonServiceImpl implements
      * @return date
      */
     private Date getComputedDate(PortalControllerContext portalControllerContext, SearchFiltersForm form) {
-        // Locale
-        Locale locale = portalControllerContext.getRequest().getLocale();
         // Date range
         SearchFiltersDateRange dateRange = form.getDateRange();
 

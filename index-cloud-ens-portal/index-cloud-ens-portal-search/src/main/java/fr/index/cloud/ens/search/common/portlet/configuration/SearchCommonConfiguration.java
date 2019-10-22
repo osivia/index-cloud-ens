@@ -2,6 +2,8 @@ package fr.index.cloud.ens.search.common.portlet.configuration;
 
 import fr.toutatice.portail.cms.nuxeo.api.CMSPortlet;
 import fr.toutatice.portail.cms.nuxeo.api.services.dao.DocumentDAO;
+import org.osivia.directory.v2.service.preferences.UserPreferencesService;
+import org.osivia.portal.api.directory.v2.DirServiceFactory;
 import org.osivia.portal.api.internationalization.IBundleFactory;
 import org.osivia.portal.api.internationalization.IInternationalizationService;
 import org.osivia.portal.api.locator.Locator;
@@ -154,6 +156,17 @@ public abstract class SearchCommonConfiguration extends CMSPortlet implements Po
     @Bean
     public DocumentDAO getDocumentDao() {
         return DocumentDAO.getInstance();
+    }
+
+
+    /**
+     * Get user preferences service.
+     *
+     * @return user preferences service
+     */
+    @Bean
+    public UserPreferencesService getUserPreferencesService() {
+        return DirServiceFactory.getService(UserPreferencesService.class);
     }
 
 }

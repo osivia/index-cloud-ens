@@ -1,11 +1,6 @@
 package fr.index.cloud.ens.search.saved.portlet.repository;
 
 import fr.index.cloud.ens.search.common.portlet.repository.SearchCommonRepository;
-import org.osivia.portal.api.context.PortalControllerContext;
-import org.osivia.portal.api.user.UserSavedSearch;
-
-import javax.portlet.PortletException;
-import java.util.List;
 
 /**
  * Saved searches portlet repository interface.

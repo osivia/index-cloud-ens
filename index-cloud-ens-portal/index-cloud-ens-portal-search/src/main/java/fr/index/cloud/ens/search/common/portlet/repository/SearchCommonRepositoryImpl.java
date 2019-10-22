@@ -2,13 +2,14 @@ package fr.index.cloud.ens.search.common.portlet.repository;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
+import org.osivia.directory.v2.model.preferences.UserPreferences;
+import org.osivia.directory.v2.model.preferences.UserSavedSearch;
+import org.osivia.directory.v2.service.preferences.UserPreferencesService;
 import org.osivia.portal.api.PortalException;
 import org.osivia.portal.api.cms.VirtualNavigationUtils;
 import org.osivia.portal.api.context.PortalControllerContext;
 import org.osivia.portal.api.taskbar.ITaskbarService;
 import org.osivia.portal.api.taskbar.TaskbarTask;
-import org.osivia.portal.api.user.UserPreferences;
-import org.osivia.portal.api.user.UserSavedSearch;
 import org.osivia.portal.core.cms.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -35,6 +36,12 @@ public class SearchCommonRepositoryImpl implements SearchCommonRepository {
      */
     @Autowired
     private ITaskbarService taskbarService;
+
+    /**
+     * User preferences service.
+     */
+    @Autowired
+    private UserPreferencesService userPreferencesService;
 
 
     /**
@@ -87,8 +94,9 @@ public class SearchCommonRepositoryImpl implements SearchCommonRepository {
 
     /**
      * Get task path.
+     *
      * @param portalControllerContext portal controller context
-     * @param taskId task identifier
+     * @param taskId                  task identifier
      * @return path
      */
     private String getTaskPath(PortalControllerContext portalControllerContext, String taskId) throws PortletException {
@@ -137,29 +145,14 @@ public class SearchCommonRepositoryImpl implements SearchCommonRepository {
 
 
     @Override
-    public UserPreferences getUserPreferences(PortalControllerContext portalControllerContext) throws PortletException {
-        // CMS service
-        ICMSService cmsService = this.cmsServiceLocator.getCMSService();
-        // CMS context
-        CMSServiceCtx cmsContext = new CMSServiceCtx();
-        cmsContext.setPortalControllerContext(portalControllerContext);
-
+    public List<UserSavedSearch> getSavedSearches(PortalControllerContext portalControllerContext) throws PortletException {
         // User preferences
         UserPreferences userPreferences;
         try {
-            userPreferences = cmsService.getUserPreferences(portalControllerContext);
+            userPreferences = this.userPreferencesService.getUserPreferences(portalControllerContext);
         } catch (PortalException e) {
             throw new PortletException(e);
         }
-
-        return userPreferences;
-    }
-
-
-    @Override
-    public List<UserSavedSearch> getSavedSearches(PortalControllerContext portalControllerContext) throws PortletException {
-        // User preferences
-        UserPreferences userPreferences = this.getUserPreferences(portalControllerContext);
 
         return userPreferences.getSavedSearches();
     }

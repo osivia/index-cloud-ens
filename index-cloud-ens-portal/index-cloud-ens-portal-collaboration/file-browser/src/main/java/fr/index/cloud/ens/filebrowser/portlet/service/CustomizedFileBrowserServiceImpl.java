@@ -9,8 +9,10 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.nuxeo.ecm.automation.client.model.Document;
+import org.osivia.directory.v2.model.preferences.UserPreferences;
+import org.osivia.directory.v2.service.preferences.UserPreferencesService;
+import org.osivia.portal.api.PortalException;
 import org.osivia.portal.api.context.PortalControllerContext;
-import org.osivia.portal.api.user.UserPreferences;
 import org.osivia.services.workspace.filebrowser.portlet.model.FileBrowserItem;
 import org.osivia.services.workspace.filebrowser.portlet.model.FileBrowserSortField;
 import org.osivia.services.workspace.filebrowser.portlet.repository.FileBrowserRepository;
@@ -54,6 +56,12 @@ public class CustomizedFileBrowserServiceImpl extends FileBrowserServiceImpl imp
     @Autowired
     private FileBrowserRepository repository;
 
+    /**
+     * User preferences service.
+     */
+    @Autowired
+    private UserPreferencesService userPreferencesService;
+
 
     /**
      * Constructor.
@@ -74,7 +82,12 @@ public class CustomizedFileBrowserServiceImpl extends FileBrowserServiceImpl imp
             this.initializeForm(portalControllerContext, form);
 
             // User preferences
-            UserPreferences userPreferences = this.repository.getUserPreferences(portalControllerContext);
+            UserPreferences userPreferences;
+            try {
+                userPreferences = this.userPreferencesService.getUserPreferences(portalControllerContext);
+            } catch (PortalException e) {
+                throw new PortletException(e);
+            }
 
             // Customized column
             CustomizedFileBrowserSortField customizedColumn = CustomizedFileBrowserSortEnum.DOCUMENT_TYPE; // TODO
