@@ -112,14 +112,14 @@ public class CustomizedJsonESDocumentWriter extends AbstractCustomJsonESWriter {
             jsonGenerator.writeArrayFieldStart(denormalizedField);
 
             // Property values
-            String[] values = property.getValue(String[].class);
+            List<?> values = property.getValue(List.class);
 
-            for (String level : values) {
+            for (Object value : values) {
                 // Tree
                 List<String> tree = new ArrayList<>();
 
                 // Vocabulary entry
-                VocabularyEntry entry = vocabulary.get(level);
+                VocabularyEntry entry = vocabulary.get(value);
 
                 while (entry != null) {
                     tree.add(0, entry.getId());

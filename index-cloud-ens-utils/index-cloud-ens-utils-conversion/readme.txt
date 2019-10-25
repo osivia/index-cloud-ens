@@ -1,0 +1,1 @@
+Put your distribution in c:\\datas\\conversion and launch java BrowseDistrib
