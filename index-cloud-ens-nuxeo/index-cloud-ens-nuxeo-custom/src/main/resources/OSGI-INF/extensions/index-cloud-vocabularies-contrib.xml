@@ -8,7 +8,7 @@
     <extension target="org.nuxeo.ecm.directory.sql.SQLDirectoryFactory" point="directories">
 
         <!--Document types-->
-        <directory name="idx_document_types">
+        <directory name="idx_document_type">
             <schema>xvocabulary</schema>
             <dataSource>java:/nxsqldirectory</dataSource>
             <table>vocabulary_index_document_type</table>
