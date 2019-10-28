@@ -112,11 +112,11 @@
 
 
 <c:if test="${not empty requestScope['osivia.nav.items']}">
-    <nav class="navbar navbar-expand navbar-light bg-blue-light d-none d-md-flex">
+    <nav class="navbar navbar-expand navbar-customized d-none d-md-flex">
         <ul class="navbar-nav flex-grow-1 h5">
             <c:forEach var="navItem" items="${requestScope['osivia.nav.items']}" varStatus="status">
                 <li class="nav-item ${navItem.active ? 'active dotted-nav-item' : ''} ${status.last ? '' : 'mr-4'}">
-                    <a href="${navItem.url}" class="nav-link ${empty navItem.url ? 'disabled' : ''} ${navItem.active ? 'text-white' : ''}">
+                    <a href="${navItem.url}" class="nav-link ${empty navItem.url ? 'disabled' : ''} ${navItem.active ? 'text-white' : empty navItem.color ? '' : navItem.color}">
                         <i class="${navItem.icon}"></i>
                         <strong class="${status.first ? 'sr-only' : ''}"><op:translate key="${navItem.key}"/></strong>
                     </a>

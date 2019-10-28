@@ -163,6 +163,8 @@ public class CloudEnsMenubarModule implements MenubarModule {
                     if (dropdownIdentifiers.contains(dropdown.getId())) {
                         iterator.remove();
                     }
+                } else if ((documentType != null) && documentType.isFile()) {
+                    item.setVisible(false);
                 }
             }
         }

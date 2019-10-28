@@ -20,6 +20,10 @@ public class NavItem {
      */
     private String key;
     /**
+     * Color.
+     */
+    private String color;
+    /**
      * Active indicator.
      */
     private boolean active;
@@ -55,6 +59,14 @@ public class NavItem {
 
     public void setKey(String key) {
         this.key = key;
+    }
+
+    public String getColor() {
+        return color;
+    }
+
+    public void setColor(String color) {
+        this.color = color;
     }
 
     public boolean isActive() {

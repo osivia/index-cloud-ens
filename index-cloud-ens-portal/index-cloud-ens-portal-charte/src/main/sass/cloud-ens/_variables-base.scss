@@ -1,0 +1,34 @@
+$cloud-dark: #11795d;
+
+$mutualized-dark: #d3531a;
+$mutualized-light: #f4da92;
+$mutualized-lighter: #ffefcc;
+
+$blue-dark: #242860;
+$blue-light: #76c7a7;
+$blue-lighter: #d8ede5;
+
+$uncluttered-toolbar-bg: #f0f9f5;
+$uncluttered-body-bg-left: #68cda3;
+$uncluttered-body-bg-center: #67b898;
+$uncluttered-body-bg-right: #81c896;
+
+
+$theme-colors: (
+        "cloud-dark": $cloud-dark,
+        "mutualized-dark": $mutualized-dark,
+        "mutualized-light": $mutualized-light,
+        "mutualized-lighter": $mutualized-lighter,
+        "blue-dark": $blue-dark,
+        "blue-light": $blue-light,
+        "blue-lighter": $blue-lighter
+);
+
+
+$font-size-base: .75rem; // 12px
+$font-family-base: "Montserrat", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+
+$table-cell-padding: .75em;
+
+$breadcrumb-bg: transparent;
+$breadcrumb-divider: quote(">");

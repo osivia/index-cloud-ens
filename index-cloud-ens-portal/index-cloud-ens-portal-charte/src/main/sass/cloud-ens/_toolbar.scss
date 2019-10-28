@@ -1,6 +1,11 @@
 @import "../osivia/variables";
 
 
+.navbar-customized {
+  background: $blue-light linear-gradient(to right, $blue-light 0%, $mutualized-light 100%);
+}
+
+
 .dotted-nav-item {
   a {
     position: relative;

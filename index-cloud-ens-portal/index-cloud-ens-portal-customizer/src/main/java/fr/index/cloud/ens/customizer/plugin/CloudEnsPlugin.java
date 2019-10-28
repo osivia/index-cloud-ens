@@ -1,12 +1,14 @@
 package fr.index.cloud.ens.customizer.plugin;
 
 import fr.index.cloud.ens.customizer.plugin.cms.CloudEnsNavigationAdapter;
+import fr.index.cloud.ens.customizer.plugin.cms.FileDocumentModule;
 import fr.index.cloud.ens.customizer.plugin.menubar.CloudEnsMenubarModule;
 import fr.index.cloud.ens.customizer.plugin.tasks.CloudEnsTaskModule;
 import fr.index.cloud.ens.customizer.plugin.theming.CloudEnsTemplateAdapter;
 import fr.toutatice.portail.cms.nuxeo.api.domain.AbstractPluginPortlet;
 import fr.toutatice.portail.cms.nuxeo.api.domain.INavigationAdapterModule;
 import fr.toutatice.portail.cms.nuxeo.api.domain.ListTemplate;
+import fr.toutatice.portail.cms.nuxeo.api.portlet.IPortletModule;
 import org.osivia.portal.api.customization.CustomizationContext;
 import org.osivia.portal.api.internationalization.Bundle;
 import org.osivia.portal.api.internationalization.IBundleFactory;
@@ -21,6 +23,7 @@ import org.osivia.portal.api.theming.TemplateAdapter;
 
 import javax.portlet.PortletContext;
 import javax.portlet.PortletException;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -101,6 +104,8 @@ public class CloudEnsPlugin extends AbstractPluginPortlet {
         this.customizeNavigationAdapters(customizationContext);
         // Task modules
         this.customizeTaskModules(customizationContext);
+        // Document modules
+        this.customizeDocumentModules(customizationContext);
     }
 
 
@@ -200,6 +205,27 @@ public class CloudEnsPlugin extends AbstractPluginPortlet {
         // Customized task module
         TaskModule taskModule = new CloudEnsTaskModule();
         taskModules.add(taskModule);
+    }
+
+
+    /**
+     * Customize document modules.
+     *
+     * @param customizationContext customization context
+     */
+    private void customizeDocumentModules(CustomizationContext customizationContext) {
+        // Portlet context
+        PortletContext portletContext = this.getPortletContext();
+
+        // File document module
+        IPortletModule fileDocumentModule = new FileDocumentModule(portletContext);
+
+        for (String type : Arrays.asList("File", "Picture", "Audio", "Video")) {
+            // Document modules
+            List<IPortletModule> modules = this.getDocumentModules(customizationContext, type);
+
+            modules.add(fileDocumentModule);
+        }
     }
 
 }

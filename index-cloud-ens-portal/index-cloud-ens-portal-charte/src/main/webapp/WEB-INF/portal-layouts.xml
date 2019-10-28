@@ -33,7 +33,6 @@
         <uri state="maximized">/layouts/without-nav/maximized.jsp</uri>
         <regions>
             <region name="contextualized-search" />
-            <region name="top" />
             <region name="col-1" />
             <region name="col-2" />
         </regions>
