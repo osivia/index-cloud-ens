@@ -7,15 +7,14 @@ import fr.index.cloud.ens.filebrowser.portlet.model.CustomizedFileBrowserItem;
 import fr.index.cloud.ens.filebrowser.portlet.model.CustomizedFileBrowserSortEnum;
 import fr.index.cloud.ens.filebrowser.portlet.model.CustomizedFileBrowserSortField;
 import fr.toutatice.portail.cms.nuxeo.api.domain.DocumentDTO;
+import org.apache.commons.lang.BooleanUtils;
 import org.apache.commons.lang.StringUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.nuxeo.ecm.automation.client.model.Document;
 import org.osivia.portal.api.PortalException;
 import org.osivia.portal.api.context.PortalControllerContext;
 import org.osivia.services.workspace.filebrowser.portlet.model.FileBrowserItem;
 import org.osivia.services.workspace.filebrowser.portlet.model.FileBrowserSortField;
-import org.osivia.services.workspace.filebrowser.portlet.repository.FileBrowserRepository;
+import org.osivia.services.workspace.filebrowser.portlet.model.FileBrowserWindowProperties;
 import org.osivia.services.workspace.filebrowser.portlet.service.FileBrowserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
@@ -39,22 +38,10 @@ import java.util.List;
 public class CustomizedFileBrowserServiceImpl extends FileBrowserServiceImpl implements CustomizedFileBrowserService {
 
     /**
-     * Log.
-     */
-    private final Log log;
-
-
-    /**
      * Application context.
      */
     @Autowired
     private ApplicationContext applicationContext;
-
-    /**
-     * Portlet repository.
-     */
-    @Autowired
-    private FileBrowserRepository repository;
 
     /**
      * User preferences service.
@@ -68,9 +55,6 @@ public class CustomizedFileBrowserServiceImpl extends FileBrowserServiceImpl imp
      */
     public CustomizedFileBrowserServiceImpl() {
         super();
-
-        // Log
-        this.log = LogFactory.getLog(this.getClass());
     }
 
 
@@ -188,33 +172,43 @@ public class CustomizedFileBrowserServiceImpl extends FileBrowserServiceImpl imp
 
 
     @Override
-    protected FileBrowserSortField getDefaultSortField(boolean listMode) {
-        FileBrowserSortField field;
-        if (listMode) {
-            field = CustomizedFileBrowserSortEnum.RELEVANCE;
-        } else {
-            field = CustomizedFileBrowserSortEnum.TITLE;
-        }
-        return field;
-    }
-
-
-    @Override
     public List<FileBrowserSortField> getSortFields(PortalControllerContext portalControllerContext) throws PortletException {
         CustomizedFileBrowserSortEnum[] values = CustomizedFileBrowserSortEnum.values();
 
         // Form
         CustomizedFileBrowserForm form = this.getForm(portalControllerContext);
 
+        // Default sort field
+        FileBrowserSortField defaultSortField = this.getDefaultSortField(portalControllerContext);
+
         // Filtered sort fields
         List<FileBrowserSortField> filteredFields = new ArrayList<>();
         for (CustomizedFileBrowserSortEnum value : values) {
-            if ((form.isListMode() || !value.isListMode()) && (!value.isCustomizable() || value.equals(form.getCustomizedColumn()))) {
+            if ((form.isListMode() || !value.isListMode()) && (!value.isCustomizable() || value.equals(form.getCustomizedColumn())) && !(StringUtils.equals(CustomizedFileBrowserSortEnum.RELEVANCE.getId(), value.getId()) && ((defaultSortField == null) || !StringUtils.equals(CustomizedFileBrowserSortEnum.RELEVANCE.getId(), defaultSortField.getId())))) {
                 filteredFields.add(value);
             }
         }
 
         return filteredFields;
+    }
+
+
+    @Override
+    protected FileBrowserSortField getDefaultSortField(PortalControllerContext portalControllerContext) {
+        // Window properties
+        FileBrowserWindowProperties windowProperties = this.getWindowProperties(portalControllerContext);
+
+        // Default sort field
+        FileBrowserSortField field;
+        if (windowProperties.getDefaultSortField() != null) {
+            field = this.getSortField(portalControllerContext, windowProperties.getDefaultSortField(), false);
+        } else if (BooleanUtils.isTrue(windowProperties.getListMode())) {
+            field = CustomizedFileBrowserSortEnum.RELEVANCE;
+        } else {
+            field = CustomizedFileBrowserSortEnum.TITLE;
+        }
+
+        return field;
     }
 
 

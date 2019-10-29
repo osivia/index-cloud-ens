@@ -76,15 +76,15 @@
                 <property>
                     <name>control.page.resource_uri</name>
                     <value>/WEB-INF/jsp/error/page.jsp</value>
-			    </property>
-				<property>
-					<name>osivia.services.cgu.path</name>
-					<value>/default-domain/publication-space/cgu</value>
-				</property>
-				<property>
-					<name>osivia.services.cgu.level</name>
-					<value>1</value>
-				</property>                
+                </property>
+                <property>
+                    <name>osivia.services.cgu.path</name>
+                    <value>/default-domain/publication-space/cgu</value>
+                </property>
+                <property>
+                    <name>osivia.services.cgu.level</name>
+                    <value>1</value>
+                </property>
             </properties>
         </context>
     </deployment>
@@ -225,7 +225,7 @@
                     </properties>
                     <height>0</height>
                 </window>
-		    </page>
+            </page>
 
             <page>
                 <page-name>home-member</page-name>
@@ -269,7 +269,7 @@
                     </properties>
                     <height>0</height>
                 </window>
-                  
+
                 <window>
                     <window-name>toutatice-portail-cms-nuxeo-viewListPortletInstance_1556902653408</window-name>
                     <instance-ref>toutatice-portail-cms-nuxeo-viewListPortletInstance</instance-ref>
@@ -331,115 +331,115 @@ return nuxeoRequest.toString();</value>
                     <height>0</height>
                 </window>
             </page>
-		
-			<page>
-				<page-name>change-password</page-name>
-				<display-name xml:lang="fr">Changer de mot de passe</display-name>
 
-				<properties>
-					<property>
-						<name>layout.id</name>
-						<value>cloud-ens-uncluttered</value>
-					</property>
-				</properties>
+            <page>
+                <page-name>change-password</page-name>
+                <display-name xml:lang="fr">Changer de mot de passe</display-name>
 
-				<security-constraint>
-					<policy-permission>
-						<action-name>view</action-name>
-						<unchecked />
-					</policy-permission>
-				</security-constraint>
+                <properties>
+                    <property>
+                        <name>layout.id</name>
+                        <value>cloud-ens-uncluttered</value>
+                    </property>
+                </properties>
 
-				<window>
-					<window-name>cloudens-person-renew-pwd-portlet-instance_1560868045408</window-name>
-					<instance-ref>cloudens-person-renew-pwd-portlet-instance</instance-ref>
-					<region>col-1</region>
-					<properties>
-						<property>
-							<name>portal.windowContentType</name>
-							<value>portlet</value>
-						</property>
-						<property>
-							<name>osivia.title</name>
-							<value>Changer mon mot de passe</value>
-						</property>
-						<property>
-							<name>osivia.hideTitle</name>
-							<value>1</value>
-						</property>
-						<property>
-							<name>theme.order</name>
-							<value>0</value>
-						</property>
-						<property>
-							<name>osivia.ajaxLink</name>
-							<value>1</value>
-						</property>
-						<property>
-							<name>osivia.hideDecorators</name>
-							<value>1</value>
-						</property>
-						<property>
-							<name>theme.dyna.partial_refresh_enabled</name>
-							<value>true</value>
-						</property>
-					</properties>
-					<height>0</height>
-				</window>
-			</page>
+                <security-constraint>
+                    <policy-permission>
+                        <action-name>view</action-name>
+                        <unchecked/>
+                    </policy-permission>
+                </security-constraint>
 
-			<page>
-				<page-name>create-account</page-name>
-				<display-name xml:lang="fr">Créer mon compte</display-name>
+                <window>
+                    <window-name>cloudens-person-renew-pwd-portlet-instance_1560868045408</window-name>
+                    <instance-ref>cloudens-person-renew-pwd-portlet-instance</instance-ref>
+                    <region>col-1</region>
+                    <properties>
+                        <property>
+                            <name>portal.windowContentType</name>
+                            <value>portlet</value>
+                        </property>
+                        <property>
+                            <name>osivia.title</name>
+                            <value>Changer mon mot de passe</value>
+                        </property>
+                        <property>
+                            <name>osivia.hideTitle</name>
+                            <value>1</value>
+                        </property>
+                        <property>
+                            <name>theme.order</name>
+                            <value>0</value>
+                        </property>
+                        <property>
+                            <name>osivia.ajaxLink</name>
+                            <value>1</value>
+                        </property>
+                        <property>
+                            <name>osivia.hideDecorators</name>
+                            <value>1</value>
+                        </property>
+                        <property>
+                            <name>theme.dyna.partial_refresh_enabled</name>
+                            <value>true</value>
+                        </property>
+                    </properties>
+                    <height>0</height>
+                </window>
+            </page>
 
-				<properties>
-					<property>
-						<name>layout.id</name>
-						<value>cloud-ens-uncluttered</value>
-					</property>
-				</properties>
+            <page>
+                <page-name>create-account</page-name>
+                <display-name xml:lang="fr">Créer mon compte</display-name>
 
-				<security-constraint>
-					<policy-permission>
-						<action-name>view</action-name>
-						<unchecked />
-					</policy-permission>
-				</security-constraint>
+                <properties>
+                    <property>
+                        <name>layout.id</name>
+                        <value>cloud-ens-uncluttered</value>
+                    </property>
+                </properties>
 
-				<window>
-					<window-name>cloudens-person-creation-portlet-instance_1564665295669</window-name>
-					<instance-ref>cloudens-person-creation-portlet-instance</instance-ref>
-					<region>col-1</region>
-					<properties>
-						<property>
-							<name>osivia.hideDecorators</name>
-							<value>1</value>
-						</property>
-						<property>
-							<name>portal.windowContentType</name>
-							<value>portlet</value>
-						</property>
-						<property>
-							<name>osivia.title</name>
-							<value>Création de compte</value>
-						</property>
-						<property>
-							<name>osivia.hideTitle</name>
-							<value>1</value>
-						</property>
-						<property>
-							<name>theme.order</name>
-							<value>0</value>
-						</property>
-					</properties>
-					<height>0</height>
-				</window>
-			</page>
+                <security-constraint>
+                    <policy-permission>
+                        <action-name>view</action-name>
+                        <unchecked/>
+                    </policy-permission>
+                </security-constraint>
+
+                <window>
+                    <window-name>cloudens-person-creation-portlet-instance_1564665295669</window-name>
+                    <instance-ref>cloudens-person-creation-portlet-instance</instance-ref>
+                    <region>col-1</region>
+                    <properties>
+                        <property>
+                            <name>osivia.hideDecorators</name>
+                            <value>1</value>
+                        </property>
+                        <property>
+                            <name>portal.windowContentType</name>
+                            <value>portlet</value>
+                        </property>
+                        <property>
+                            <name>osivia.title</name>
+                            <value>Création de compte</value>
+                        </property>
+                        <property>
+                            <name>osivia.hideTitle</name>
+                            <value>1</value>
+                        </property>
+                        <property>
+                            <name>theme.order</name>
+                            <value>0</value>
+                        </property>
+                    </properties>
+                    <height>0</height>
+                </window>
+            </page>
 
             <page>
                 <page-name>workspace-management</page-name>
                 <display-name xml:lang="fr">Espaces collaboratifs</display-name>
-                <properties />
+                <properties/>
 
                 <security-constraint>
                     <policy-permission>
@@ -597,7 +597,7 @@ return nuxeoRequest.toString();</value>
             <page>
                 <page-name>person-management</page-name>
                 <display-name xml:lang="fr">Utilisateurs</display-name>
-                <properties />
+                <properties/>
 
                 <security-constraint>
                     <policy-permission>
@@ -688,7 +688,7 @@ return nuxeoRequest.toString();</value>
             <page>
                 <page-name>group-management</page-name>
                 <display-name xml:lang="fr">Groupes</display-name>
-                <properties />
+                <properties/>
 
                 <security-constraint>
                     <policy-permission>
@@ -800,7 +800,7 @@ return nuxeoRequest.toString();</value>
             <page>
                 <page-name>procedures-management</page-name>
                 <display-name xml:lang="fr">Télé-procédures</display-name>
-                <properties />
+                <properties/>
 
                 <security-constraint>
                     <policy-permission>
@@ -903,7 +903,7 @@ return nuxeoRequest.toString();</value>
             <page>
                 <page-name>application-management</page-name>
                 <display-name xml:lang="fr">Applications</display-name>
-                <properties />
+                <properties/>
                 <security-constraint/>
 
                 <window>
@@ -984,7 +984,7 @@ return nuxeoRequest.toString();</value>
             <page>
                 <page-name>conversion</page-name>
                 <display-name xml:lang="fr">Conversion de données</display-name>
-                <properties />
+                <properties/>
                 <security-constraint/>
 
                 <window>
@@ -1029,7 +1029,7 @@ return nuxeoRequest.toString();</value>
                 <page-name>mon-compte</page-name>
                 <display-name xml:lang="fr">Mon compte</display-name>
 
-                <properties />
+                <properties/>
 
                 <security-constraint>
                     <policy-permission>
@@ -1218,7 +1218,7 @@ return nuxeoRequest.toString();</value>
                         </property>
                     </properties>
                     <height>0</height>
-                </window>                
+                </window>
             </page>
 
             <page>
@@ -1339,7 +1339,7 @@ return nuxeoRequest.toString();</value>
                         </properties>
                         <height>0</height>
                     </window>
-                   <window>
+                    <window>
                         <window-name>osivia-services-workspace-quota-instance_1567782310685</window-name>
                         <instance-ref>osivia-services-workspace-quota-instance</instance-ref>
                         <region>nav-bottom</region>
@@ -1378,8 +1378,8 @@ return nuxeoRequest.toString();</value>
                             </property>
                         </properties>
                         <height>0</height>
-                    </window>                    
-                       
+                    </window>
+
                 </page>
 
                 <page>
@@ -1432,10 +1432,10 @@ return nuxeoRequest.toString();</value>
                                 <name>theme.dyna.partial_refresh_enabled</name>
                                 <value>true</value>
                             </property>
-					        <property>
-					            <name>osivia.hideEmptyPortlet</name>
-					            <value>1</value>
-					        </property>                            
+                            <property>
+                                <name>osivia.hideEmptyPortlet</name>
+                                <value>1</value>
+                            </property>
                         </properties>
                         <height>0</height>
                     </window>
@@ -1720,7 +1720,7 @@ return nuxeoRequest.toString();</value>
                             </property>
                         </properties>
                         <height>0</height>
-                    </window>                    
+                    </window>
                 </page>
 
                 <page>
@@ -2012,7 +2012,7 @@ return nuxeoRequest.toString();</value>
                         </properties>
                         <height>0</height>
                     </window>
-                   <window>
+                    <window>
                         <window-name>osivia-services-workspace-quota-instance_1567782310685</window-name>
                         <instance-ref>osivia-services-workspace-quota-instance</instance-ref>
                         <region>nav-bottom</region>
@@ -2049,10 +2049,10 @@ return nuxeoRequest.toString();</value>
                                 <name>osivia.cacheID</name>
                                 <value>quota</value>
                             </property>
-                       
+
                         </properties>
                         <height>0</height>
-                    </window>                           
+                    </window>
                 </page>
 
                 <page>
@@ -2145,7 +2145,7 @@ return nuxeoRequest.toString();</value>
                         </properties>
                         <height>0</height>
                     </window>
-                   <window>
+                    <window>
                         <window-name>osivia-services-workspace-quota-instance_1567782310685</window-name>
                         <instance-ref>osivia-services-workspace-quota-instance</instance-ref>
                         <region>nav-bottom</region>
@@ -2184,8 +2184,8 @@ return nuxeoRequest.toString();</value>
                             </property>
                         </properties>
                         <height>0</height>
-                    </window>                    
-                       
+                    </window>
+
                 </page>
 
                 <page>
@@ -2237,7 +2237,7 @@ return nuxeoRequest.toString();</value>
                         </properties>
                         <height>0</height>
                     </window>
-                   <window>
+                    <window>
                         <window-name>osivia-services-workspace-quota-instance_1567782310685</window-name>
                         <instance-ref>osivia-services-workspace-quota-instance</instance-ref>
                         <region>nav-bottom</region>
@@ -2277,7 +2277,7 @@ return nuxeoRequest.toString();</value>
 
                         </properties>
                         <height>0</height>
-                    </window>                           
+                    </window>
                 </page>
 
                 <page>
@@ -2292,7 +2292,7 @@ return nuxeoRequest.toString();</value>
                     </properties>
 
                     <security-constraint/>
-                  
+
                     <window>
                         <window-name>index-cloud-ens-taskbar-instance_1560502743858</window-name>
                         <instance-ref>index-cloud-ens-taskbar-instance</instance-ref>
@@ -2426,10 +2426,14 @@ return nuxeoRequest.toString();</value>
                                 <name>theme.dyna.partial_refresh_enabled</name>
                                 <value>true</value>
                             </property>
+                            <property>
+                                <name>osivia.file-browser.default-sort-field</name>
+                                <value>last-modification</value>
+                            </property>
                         </properties>
                         <height>0</height>
                     </window>
-                   <window>
+                    <window>
                         <window-name>osivia-services-workspace-quota-instance_1567782310685</window-name>
                         <instance-ref>osivia-services-workspace-quota-instance</instance-ref>
                         <region>nav-bottom</region>
@@ -2468,7 +2472,7 @@ return nuxeoRequest.toString();</value>
                             </property>
                         </properties>
                         <height>0</height>
-                    </window>                           
+                    </window>
                 </page>
             </page>
         </portal>
