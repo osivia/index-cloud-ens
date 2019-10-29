@@ -12,7 +12,12 @@ import org.osivia.portal.api.PortalException;
 import org.osivia.portal.api.cms.DocumentType;
 import org.osivia.portal.api.cms.Permissions;
 import org.osivia.portal.api.context.PortalControllerContext;
+import org.osivia.portal.api.internationalization.Bundle;
+import org.osivia.portal.api.internationalization.IBundleFactory;
+import org.osivia.portal.api.internationalization.IInternationalizationService;
 import org.osivia.portal.api.locator.Locator;
+import org.osivia.portal.api.notifications.INotificationsService;
+import org.osivia.portal.api.notifications.NotificationsType;
 import org.osivia.portal.api.urls.IPortalUrlFactory;
 import org.osivia.portal.api.urls.PortalUrlType;
 import org.osivia.portal.api.windows.PortalWindow;
@@ -24,6 +29,7 @@ import org.osivia.portal.core.cms.ICMSServiceLocator;
 import org.osivia.portal.core.page.PageProperties;
 
 import javax.portlet.*;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -45,6 +51,12 @@ public class FileDocumentModule extends PortletModule {
      */
     private final ICMSServiceLocator cmsServiceLocator;
 
+    /** Internationalization bundle factory. */
+    private final IBundleFactory bundleFactory;
+
+    /** Notifications service. */
+    private final INotificationsService notificationsService;
+
 
     /**
      * Constructor.
@@ -58,6 +70,11 @@ public class FileDocumentModule extends PortletModule {
         this.portalUrlFactory = Locator.findMBean(IPortalUrlFactory.class, IPortalUrlFactory.MBEAN_NAME);
         // CMS service locator
         this.cmsServiceLocator = Locator.findMBean(ICMSServiceLocator.class, ICMSServiceLocator.MBEAN_NAME);
+        // Internationalization bundle factory
+        IInternationalizationService internationalizationService = Locator.findMBean(IInternationalizationService.class, IInternationalizationService.MBEAN_NAME);
+        this.bundleFactory = internationalizationService.getBundleFactory(this.getClassLoader());
+        // Notifications service
+        this.notificationsService = Locator.findMBean(INotificationsService.class, INotificationsService.MBEAN_NAME);
     }
 
 
@@ -151,11 +168,14 @@ public class FileDocumentModule extends PortletModule {
 
 
     @Override
-    protected void processAction(ActionRequest request, ActionResponse response, PortletContext portletContext) throws PortletException {
+    protected void processAction(ActionRequest request, ActionResponse response, PortletContext portletContext) throws PortletException, IOException {
         // Portal controller context
         PortalControllerContext portalControllerContext = new PortalControllerContext(portletContext, request, response);
         // Nuxeo controller
         NuxeoController nuxeoController = new NuxeoController(portalControllerContext);
+
+        // Internationalization bundle
+        Bundle bundle = this.bundleFactory.getBundle(request.getLocale());
 
         // Document path
         String path = this.getDocumentPath(nuxeoController);
@@ -187,6 +207,15 @@ public class FileDocumentModule extends PortletModule {
             } catch (CMSException e) {
                 throw new PortletException(e);
             }
+
+            // Notifications
+            String message = bundle.getString("DOCUMENT_DELETE_MESSAGE_SUCCESS");
+            this.notificationsService.addSimpleNotification(portalControllerContext, message, NotificationsType.SUCCESS);
+
+            // Redirection
+            String parentPath = StringUtils.substringBeforeLast(path, "/");
+            String redirectionUrl = this.portalUrlFactory.getCMSUrl(portalControllerContext, null, parentPath, null, null, IPortalUrlFactory.DISPLAYCTX_REFRESH, null, null, null, null);
+            response.sendRedirect(redirectionUrl);
         }
     }
 
