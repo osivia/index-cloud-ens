@@ -6,13 +6,20 @@ import fr.index.cloud.ens.search.portlet.model.SearchForm;
 import fr.index.cloud.ens.search.portlet.model.SearchView;
 import fr.index.cloud.ens.search.portlet.model.SearchWindowProperties;
 import fr.index.cloud.ens.search.portlet.repository.SearchRepository;
+import fr.toutatice.portail.cms.nuxeo.api.NuxeoController;
 import fr.toutatice.portail.cms.nuxeo.api.PageSelectors;
+import fr.toutatice.portail.cms.nuxeo.api.VocabularyHelper;
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.time.DateFormatUtils;
 import org.nuxeo.ecm.automation.client.model.Document;
 import org.nuxeo.ecm.automation.client.model.PropertyList;
 import org.osivia.portal.api.Constants;
 import org.osivia.portal.api.PortalException;
 import org.osivia.portal.api.context.PortalControllerContext;
+import org.osivia.portal.api.internationalization.Bundle;
+import org.osivia.portal.api.internationalization.IBundleFactory;
 import org.osivia.portal.api.page.PageParametersEncoder;
 import org.osivia.portal.api.urls.IPortalUrlFactory;
 import org.osivia.portal.api.urls.PortalUrlType;
@@ -26,10 +33,10 @@ import org.springframework.stereotype.Service;
 import javax.portlet.ActionResponse;
 import javax.portlet.PortletException;
 import javax.portlet.PortletRequest;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 /**
  * Search portlet service implementation.
@@ -64,6 +71,12 @@ public class SearchServiceImpl extends SearchCommonServiceImpl implements Search
      */
     @Autowired
     private IPortalUrlFactory portalUrlFactory;
+
+    /**
+     * Internationalization bundle factory.
+     */
+    @Autowired
+    private IBundleFactory bundleFactory;
 
 
     /**
@@ -106,11 +119,15 @@ public class SearchServiceImpl extends SearchCommonServiceImpl implements Search
 
     @Override
     public SearchForm getForm(PortalControllerContext portalControllerContext) {
+        // Nuxeo controller
+        NuxeoController nuxeoController = new NuxeoController(portalControllerContext);
         // Window properties
         SearchWindowProperties windowProperties = this.getWindowProperties(portalControllerContext);
 
         // Portlet request
         PortletRequest request = portalControllerContext.getRequest();
+        // Internationalization bundle
+        Bundle bundle = this.bundleFactory.getBundle(request.getLocale());
 
         // Search form
         SearchForm form = this.applicationContext.getBean(SearchForm.class);
@@ -137,12 +154,124 @@ public class SearchServiceImpl extends SearchCommonServiceImpl implements Search
             form.setValue(keywords);
         }
 
+        if (SearchView.REMINDER.equals(view)) {
+            // Selectors
+            Map<String, List<String>> selectors = PageSelectors.decodeProperties(request.getParameter(SELECTORS_PARAMETER));
+
+            // Reminder
+            List<String> reminder;
+
+            if (MapUtils.isEmpty(selectors)) {
+                reminder = null;
+            } else {
+                reminder = new ArrayList<>();
+
+                // Displayed selectors
+                List<String> displayedSelectors = Arrays.asList(LEVEL_SELECTOR_ID, SUBJECT_SELECTOR_ID, DOCUMENT_TYPE_SELECTOR_ID, SIZE_AMOUNT_SELECTOR_ID, DATE_RANGE_SELECTOR_ID);
+
+                for (Map.Entry<String, List<String>> selector : selectors.entrySet()) {
+                    // Selector name
+                    String name = selector.getKey();
+                    // Selector values
+                    List<String> values = selector.getValue();
+
+                    if (displayedSelectors.contains(name) && CollectionUtils.isNotEmpty(values)) {
+                        if (SIZE_AMOUNT_SELECTOR_ID.equals(name)) {
+                            String range = this.getSelectorValue(selectors, SIZE_RANGE_SELECTOR_ID);
+                            String amount = this.getSelectorValue(selectors, SIZE_AMOUNT_SELECTOR_ID);
+                            String unit = this.getSelectorValue(selectors, SIZE_UNIT_SELECTOR_ID);
+
+                            if (StringUtils.isNotEmpty(range) && StringUtils.isNotEmpty(amount) && StringUtils.isNotEmpty(unit)) {
+                                // Displayed value
+                                String display;
+                                if ("LESS".equals(range)) {
+                                    display = "<";
+                                } else {
+                                    display = ">";
+                                }
+                                display += " " + amount + " " + bundle.getString("SEARCH_FILTERS_SIZE_UNIT_" + StringUtils.upperCase(unit));
+
+                                reminder.add(display);
+                            }
+                        } else if (DATE_RANGE_SELECTOR_ID.equals(name)) {
+                            String range = this.getSelectorValue(selectors, DATE_RANGE_SELECTOR_ID);
+
+                            // Displayed value
+                            String display;
+
+                            if (StringUtils.isEmpty(range) || "UNSET".equals(range)) {
+                                display = null;
+                            } else if ("CUSTOMIZED".equals(range)) {
+                                String value = this.getSelectorValue(selectors, CUSTOMIZED_DATE_SELECTOR_ID);
+
+                                // Customized date
+                                Date customizedDate;
+                                if (StringUtils.isEmpty(value)) {
+                                    customizedDate = null;
+                                } else {
+                                    // Date format
+                                    DateFormat dateFormat = new SimpleDateFormat(DateFormatUtils.ISO_DATE_FORMAT.getPattern());
+
+                                    try {
+                                        customizedDate = dateFormat.parse(value);
+                                    } catch (ParseException e) {
+                                        customizedDate = null;
+                                    }
+                                }
+
+                                if (customizedDate == null) {
+                                    display = null;
+                                } else {
+                                    display = DateFormat.getDateInstance(DateFormat.MEDIUM).format(customizedDate);
+                                }
+                            } else {
+                                display = bundle.getString("SEARCH_FILTERS_DATE_RANGE_" + StringUtils.upperCase(range));
+                            }
+
+                            if (StringUtils.isNotEmpty(display)) {
+                                reminder.add(display);
+                            }
+                        } else {
+                            // Selector vocabulary
+                            String vocabulary;
+                            if (LEVEL_SELECTOR_ID.equals(name)) {
+                                vocabulary = "idx_level";
+                            } else if (SUBJECT_SELECTOR_ID.equals(name)) {
+                                vocabulary = "idx_subject";
+                            } else if (DOCUMENT_TYPE_SELECTOR_ID.equals(name)) {
+                                vocabulary = "idx_document_type";
+                            } else {
+                                vocabulary = null;
+                            }
+
+                            for (String value : values) {
+                                // Displayed value
+                                String display;
+
+                                if (StringUtils.isNotEmpty(vocabulary)) {
+                                    display = VocabularyHelper.getVocabularyLabel(nuxeoController, vocabulary, value);
+                                } else {
+                                    display = null;
+                                }
+
+                                if (StringUtils.isNotEmpty(display)) {
+                                    reminder.add(display);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            form.setReminder(reminder);
+        }
+
         return form;
     }
 
 
     @Override
-    public String getViewPath(PortalControllerContext portalControllerContext) throws PortletException {
+    public String getViewPath(PortalControllerContext portalControllerContext) {
         // Window properties
         SearchWindowProperties windowProperties = this.getWindowProperties(portalControllerContext);
 
@@ -226,7 +355,7 @@ public class SearchServiceImpl extends SearchCommonServiceImpl implements Search
                     // Location
                     String navigationPath = this.repository.getNavigationPath(portalControllerContext);
                     if (StringUtils.isNotEmpty(navigationPath)) {
-                        selectors.put("location", Collections.singletonList(navigationPath));
+                        selectors.put(LOCATION_SELECTOR_ID, Collections.singletonList(navigationPath));
                     }
 
                     // Search
@@ -257,7 +386,9 @@ public class SearchServiceImpl extends SearchCommonServiceImpl implements Search
             } else {
                 search = form.getValue();
             }
-            if (StringUtils.isNotEmpty(search)) {
+            if (StringUtils.isEmpty(search)) {
+                selectors.remove(KEYWORDS_SELECTOR_ID);
+            } else {
                 selectors.put(KEYWORDS_SELECTOR_ID, Collections.singletonList(search));
             }
 

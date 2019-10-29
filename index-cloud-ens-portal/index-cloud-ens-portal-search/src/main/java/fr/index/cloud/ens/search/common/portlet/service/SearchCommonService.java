@@ -25,6 +25,10 @@ public interface SearchCommonService {
      */
     String SUBJECT_SELECTOR_ID = "subject";
     /**
+     * Document type selector identifier.
+     */
+    String DOCUMENT_TYPE_SELECTOR_ID = "documentType";
+    /**
      * Location selector identifier.
      */
     String LOCATION_SELECTOR_ID = "location";

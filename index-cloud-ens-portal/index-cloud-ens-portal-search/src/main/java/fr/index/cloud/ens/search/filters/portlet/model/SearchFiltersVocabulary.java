@@ -16,7 +16,11 @@ public enum SearchFiltersVocabulary {
     /**
      * Subjects.
      */
-    SUBJECTS("idx_subject", "SEARCH_FILTERS_SUBJECT_ALL");
+    SUBJECTS("idx_subject", "SEARCH_FILTERS_SUBJECT_ALL"),
+    /**
+     * Document types.
+     */
+    DOCUMENT_TYPES("idx_document_type", "SEARCH_FILTERS_DOCUMENT_TYPE_ALL");
 
 
     /**

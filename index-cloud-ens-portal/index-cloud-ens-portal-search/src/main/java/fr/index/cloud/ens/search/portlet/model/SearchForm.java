@@ -4,6 +4,8 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 /**
  * Search form java-bean.
  *
@@ -22,28 +24,17 @@ public class SearchForm {
      * Input value.
      */
     private String value;
-    
+
     /**
      * folder name.
      */
     private String folderName;
 
-   
     /**
-     * Getter for folderName.
-     * @return the folderName
+     * Reminder.
      */
-    public String getFolderName() {
-        return folderName;
-    }
-   
-    /**
-     * Setter for folderName.
-     * @param folderName the folderName to set
-     */
-    public void setFolderName(String folderName) {
-        this.folderName = folderName;
-    }
+    private List<String> reminder;
+
 
     public SearchView getView() {
         return view;
@@ -59,5 +50,21 @@ public class SearchForm {
 
     public void setValue(String value) {
         this.value = value;
+    }
+
+    public String getFolderName() {
+        return folderName;
+    }
+
+    public void setFolderName(String folderName) {
+        this.folderName = folderName;
+    }
+
+    public List<String> getReminder() {
+        return reminder;
+    }
+
+    public void setReminder(List<String> reminder) {
+        this.reminder = reminder;
     }
 }

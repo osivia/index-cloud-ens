@@ -144,6 +144,10 @@ public class SearchFiltersServiceImpl extends SearchCommonServiceImpl implements
         String subject = this.getSelectorValue(selectors, SUBJECT_SELECTOR_ID);
         form.setSubject(subject);
 
+        // Document type
+        String documentType = this.getSelectorValue(selectors, DOCUMENT_TYPE_SELECTOR_ID);
+        form.setDocumentType(documentType);
+
         // Location
         String navigationPath = window.getProperty(NAVIGATION_PATH_WINDOW_PROPERTY);
         if (StringUtils.isEmpty(navigationPath)) {
@@ -348,6 +352,12 @@ public class SearchFiltersServiceImpl extends SearchCommonServiceImpl implements
         String subject = form.getSubject();
         if (StringUtils.isNotEmpty(subject)) {
             selectors.put(SUBJECT_SELECTOR_ID, Collections.singletonList(subject));
+        }
+
+        // Document type
+        String documentType = form.getDocumentType();
+        if (StringUtils.isNotEmpty(documentType)) {
+            selectors.put(DOCUMENT_TYPE_SELECTOR_ID, Collections.singletonList(documentType));
         }
 
         // Location

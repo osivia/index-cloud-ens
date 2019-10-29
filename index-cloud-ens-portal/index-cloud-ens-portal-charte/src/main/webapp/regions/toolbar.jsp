@@ -85,28 +85,26 @@
                     <div class="dropdown-menu dropdown-menu-right">
                         <div class="dropdown-header d-lg-none">${empty requestScope['osivia.toolbar.person'] ? requestScope['osivia.toolbar.principal'] : requestScope['osivia.toolbar.person'].displayName}</div>
 
-                            <%--User account--%>
+                        <%--User account--%>
                         <c:set var="url" value="${requestScope['osivia.my-account.url']}"/>
                         <c:if test="${not empty url}">
                             <a href="${url}" class="dropdown-item">
                                 <i class="glyphicons glyphicons-basic-id-badge"></i>
                                 <span><op:translate key="TOOLBAR_USER_ACCOUNT"/></span>
                             </a>
-
-                            <%--Divider--%>
-                            <div class="dropdown-divider"></div>
                         </c:if>
-
-                            <%--Logout--%>
-                        <a href="javascript:" onclick="logout()" class="dropdown-item">
-                            <i class="glyphicons glyphicons-basic-log-out"></i>
-                            <span><op:translate key="TOOLBAR_LOGOUT"/></span>
-                        </a>
                     </div>
+                </li>
+
+                <%--Logout--%>
+                <li class="nav-item">
+                    <a href="javascript:" onclick="logout()" class="nav-link">
+                        <i class="glyphicons glyphicons-basic-log-out"></i>
+                        <span><op:translate key="TOOLBAR_LOGOUT"/></span>
+                    </a>
                 </li>
             </c:otherwise>
         </c:choose>
-        <li></li>
     </ul>
 </nav>
 

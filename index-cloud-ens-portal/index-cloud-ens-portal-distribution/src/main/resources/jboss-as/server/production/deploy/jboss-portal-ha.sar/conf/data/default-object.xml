@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE deployments PUBLIC "-//JBoss Portal//DTD Portal Object 2.6//EN" "http://www.jboss.org/portal/dtd/portal-object_2_6.dtd">
+<!DOCTYPE deployments PUBLIC "-//JBoss Portal//DTD Portal Object 2.6//EN"
+        "http://www.jboss.org/portal/dtd/portal-object_2_6.dtd">
 
 <deployments>
 
@@ -188,7 +189,7 @@
                 <window>
                     <window-name>toutatice-portail-cms-nuxeo-viewFragmentPortletInstance_1510733841224</window-name>
                     <instance-ref>toutatice-portail-cms-nuxeo-viewFragmentPortletInstance</instance-ref>
-                    <region>top</region>
+                    <region>col-1</region>
                     <properties>
                         <property>
                             <name>osivia.title</name>
@@ -1286,8 +1287,71 @@ return nuxeoRequest.toString();</value>
                 <page>
                     <page-name>portalSitePublish</page-name>
                     <display-name xml:lang="fr">Site</display-name>
-                    <properties/>
+
+                    <properties>
+                        <property>
+                            <name>theme.id</name>
+                            <value>cloud-ens-charte-mutualized</value>
+                        </property>
+                    </properties>
+
                     <security-constraint/>
+
+                    <window>
+                        <window-name>osivia-services-workspace-file-browser-instance_1572344953476</window-name>
+                        <instance-ref>osivia-services-workspace-file-browser-instance</instance-ref>
+                        <region>top</region>
+                        <properties>
+                            <property>
+                                <name>osivia.ajaxLink</name>
+                                <value>1</value>
+                            </property>
+                            <property>
+                                <name>osivia.file-browser.nxql</name>
+                                <value>StringBuilder nuxeoRequest = new StringBuilder();&#13;
+nuxeoRequest.append("ecm:path STARTSWITH '").append(basePath).append("' ");&#13;
+nuxeoRequest.append("ORDER BY dc:issued DESC");&#13;
+return nuxeoRequest.toString();</value>
+                            </property>
+                            <property>
+                                <name>osivia.hideDecorators</name>
+                                <value>1</value>
+                            </property>
+                            <property>
+                                <name>portal.windowContentType</name>
+                                <value>portlet</value>
+                            </property>
+                            <property>
+                                <name>osivia.file-browser.list-mode</name>
+                                <value>true</value>
+                            </property>
+                            <property>
+                                <name>osivia.title</name>
+                                <value>Explorateur</value>
+                            </property>
+                            <property>
+                                <name>osivia.file-browser.beanshell</name>
+                                <value>true</value>
+                            </property>
+                            <property>
+                                <name>osivia.file-browser.base-path</name>
+                                <value>${basePath}</value>
+                            </property>
+                            <property>
+                                <name>osivia.hideTitle</name>
+                                <value>1</value>
+                            </property>
+                            <property>
+                                <name>theme.order</name>
+                                <value>0</value>
+                            </property>
+                            <property>
+                                <name>theme.dyna.partial_refresh_enabled</name>
+                                <value>true</value>
+                            </property>
+                        </properties>
+                        <height>0</height>
+                    </window>
                 </page>
 
                 <page>
@@ -1459,7 +1523,7 @@ return nuxeoRequest.toString();</value>
                             </property>
                             <property>
                                 <name>theme.order</name>
-                                <value>2</value>
+                                <value>3</value>
                             </property>
                             <property>
                                 <name>osivia.ajaxLink</name>
@@ -1576,6 +1640,55 @@ return nuxeoRequest.toString();</value>
                     </window>
 
                     <window>
+                        <window-name>index-cloud-ens-file-browser-filter-instance_1572276093698</window-name>
+                        <instance-ref>index-cloud-ens-file-browser-filter-instance</instance-ref>
+                        <region>filters</region>
+                        <properties>
+                            <property>
+                                <name>portal.windowContentType</name>
+                                <value>portlet</value>
+                            </property>
+                            <property>
+                                <name>osivia.title</name>
+                                <value>Type de document</value>
+                            </property>
+                            <property>
+                                <name>osivia.file-browser-filter.vocabulary</name>
+                                <value>idx_document_type</value>
+                            </property>
+                            <property>
+                                <name>osivia.hideTitle</name>
+                                <value>1</value>
+                            </property>
+                            <property>
+                                <name>theme.order</name>
+                                <value>2</value>
+                            </property>
+                            <property>
+                                <name>osivia.file-browser-filter.title</name>
+                                <value>Type de document</value>
+                            </property>
+                            <property>
+                                <name>osivia.file-browser-filter.selector-id</name>
+                                <value>documentType</value>
+                            </property>
+                            <property>
+                                <name>osivia.ajaxLink</name>
+                                <value>1</value>
+                            </property>
+                            <property>
+                                <name>osivia.hideDecorators</name>
+                                <value>1</value>
+                            </property>
+                            <property>
+                                <name>theme.dyna.partial_refresh_enabled</name>
+                                <value>true</value>
+                            </property>
+                        </properties>
+                        <height>0</height>
+                    </window>
+
+                    <window>
                         <window-name>index-cloud-ens-taskbar-instance_1556902638730</window-name>
                         <instance-ref>index-cloud-ens-taskbar-instance</instance-ref>
                         <region>nav</region>
@@ -1640,6 +1753,17 @@ nuxeoRequest.append("AND (");&#13;
 for (String subject : subjects) {&#13;
 first ? first = false : nuxeoRequest.append("OR ");&#13;
 nuxeoRequest.append("idxcl:subjectsTree STARTSWITH '").append(subject).append("' ");&#13;
+}&#13;
+nuxeoRequest.append(") ");&#13;
+}&#13;
+&#13;
+List documentTypes = params.get("documentTypes");&#13;
+if ((documentTypes != null) &amp;&amp; !documentTypes.isEmpty()) {&#13;
+boolean first = true;&#13;
+nuxeoRequest.append("AND (");&#13;
+for (String documentType : documentTypes) {&#13;
+first ? first = false : nuxeoRequest.append("OR ");&#13;
+nuxeoRequest.append("idxcl:documentTypes = '").append(documentType).append("' ");&#13;
 }&#13;
 nuxeoRequest.append(") ");&#13;
 }&#13;
@@ -1739,7 +1863,7 @@ return nuxeoRequest.toString();</value>
                     <window>
                         <window-name>index-cloud-ens-search-instance_1562314905380</window-name>
                         <instance-ref>index-cloud-ens-search-instance</instance-ref>
-                        <region>top</region>
+                        <region>col-1</region>
                         <properties>
                             <property>
                                 <name>portal.windowContentType</name>
@@ -1768,6 +1892,39 @@ return nuxeoRequest.toString();</value>
                             <property>
                                 <name>theme.dyna.partial_refresh_enabled</name>
                                 <value>true</value>
+                            </property>
+                        </properties>
+                        <height>0</height>
+                    </window>
+
+                    <window>
+                        <window-name>index-cloud-ens-search-instance_1572337507142</window-name>
+                        <instance-ref>index-cloud-ens-search-instance</instance-ref>
+                        <region>top</region>
+                        <properties>
+                            <property>
+                                <name>portal.windowContentType</name>
+                                <value>portlet</value>
+                            </property>
+                            <property>
+                                <name>osivia.title</name>
+                                <value>Rappel des filtres</value>
+                            </property>
+                            <property>
+                                <name>osivia.hideTitle</name>
+                                <value>1</value>
+                            </property>
+                            <property>
+                                <name>theme.order</name>
+                                <value>0</value>
+                            </property>
+                            <property>
+                                <name>osivia.search.view</name>
+                                <value>reminder</value>
+                            </property>
+                            <property>
+                                <name>osivia.hideDecorators</name>
+                                <value>1</value>
                             </property>
                         </properties>
                         <height>0</height>
@@ -1868,6 +2025,18 @@ nuxeoRequest.append("idxcl:subjectsTree STARTSWITH '").append(subject).append("'
 nuxeoRequest.append(") ");&#13;
 }&#13;
 &#13;
+// Document type&#13;
+List documentTypes = params.get("documentType");&#13;
+if ((documentTypes != null) &amp;&amp; !documentTypes.isEmpty()) {&#13;
+boolean first = true;&#13;
+nuxeoRequest.append("AND (");&#13;
+for (String documentType : documentTypes) {&#13;
+first ? first = false : nuxeoRequest.append("OR ");&#13;
+nuxeoRequest.append("idxcl:documentType = '").append(documentType).append("' ");&#13;
+}&#13;
+nuxeoRequest.append(") ");&#13;
+}&#13;
+&#13;
 // Size&#13;
 List sizes = params.get("size");&#13;
 List sizeRanges = params.get("size-range");&#13;
@@ -1901,7 +2070,7 @@ return nuxeoRequest.toString();</value>
                             </property>
                             <property>
                                 <name>theme.order</name>
-                                <value>0</value>
+                                <value>1</value>
                             </property>
                             <property>
                                 <name>osivia.ajaxLink</name>
@@ -2145,6 +2314,7 @@ return nuxeoRequest.toString();</value>
                         </properties>
                         <height>0</height>
                     </window>
+
                     <window>
                         <window-name>osivia-services-workspace-quota-instance_1567782310685</window-name>
                         <instance-ref>osivia-services-workspace-quota-instance</instance-ref>

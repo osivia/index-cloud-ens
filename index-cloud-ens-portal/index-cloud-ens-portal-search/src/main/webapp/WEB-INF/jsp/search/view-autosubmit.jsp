@@ -16,7 +16,7 @@
         <c:set var="placeholder"><op:translate key="SEARCH_FILTERS_KEYWORDS_PLACEHOLDER"/></c:set>
         <div class="form-group mb-0">
             <form:label path="value" cssClass="sr-only"><op:translate key="SEARCH_INPUT_VALUE_LABEL"/></form:label>
-            <form:input path="value" type="search" placeholder="${placeholder}" cssClass="form-control"></form:input>
+            <form:input path="value" type="search" placeholder="${placeholder}" cssClass="form-control form-control-sm"></form:input>
             <button type="submit" class="d-none"></button>
         </div>
     </form:form>

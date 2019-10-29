@@ -20,11 +20,16 @@ public enum SearchView {
     /**
      * Autosubmit view.
      */
-    AUTOSUBMIT;
-    
+    AUTOSUBMIT,
+    /**
+     * Reminder view.
+     */
+    REMINDER;
 
 
-    /** Default view. */
+    /**
+     * Default view.
+     */
     public static final SearchView DEFAULT = INPUT;
 
 

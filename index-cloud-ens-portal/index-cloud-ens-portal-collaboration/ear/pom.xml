@@ -50,14 +50,6 @@
             <type>war</type>
         </dependency>
 
-        <!-- Versions -->
-        <dependency>
-            <groupId>org.osivia.services</groupId>
-            <artifactId>osivia-services-versions</artifactId>
-            <version>${collaboration.version}</version>
-            <type>war</type>
-        </dependency>
-
         <!-- Widgets -->
         <dependency>
             <groupId>org.osivia.services</groupId>
@@ -119,13 +111,6 @@
                             <groupId>org.osivia.services</groupId>
                             <artifactId>osivia-services-taskbar</artifactId>
                             <contextRoot>/osivia-services-taskbar</contextRoot>
-                        </webModule>
-
-                        <!-- Versions -->
-                        <webModule>
-                            <groupId>org.osivia.services</groupId>
-                            <artifactId>osivia-services-versions</artifactId>
-                            <contextRoot>/osivia-services-versions</contextRoot>
                         </webModule>
 
                         <!-- Widgets -->

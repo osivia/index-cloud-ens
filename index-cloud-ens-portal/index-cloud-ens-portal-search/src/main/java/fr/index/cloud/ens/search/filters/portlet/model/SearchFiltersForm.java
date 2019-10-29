@@ -34,6 +34,10 @@ public class SearchFiltersForm {
      */
     private String subject;
     /**
+     * Document type.
+     */
+    private String documentType;
+    /**
      * Location path.
      */
     private String locationPath;
@@ -106,6 +110,14 @@ public class SearchFiltersForm {
 
     public void setSubject(String subject) {
         this.subject = subject;
+    }
+
+    public String getDocumentType() {
+        return documentType;
+    }
+
+    public void setDocumentType(String documentType) {
+        this.documentType = documentType;
     }
 
     public String getLocationPath() {

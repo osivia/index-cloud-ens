@@ -8,7 +8,7 @@
 
     </div>
 
-    <div class="col-auto ml-auto">
+    <div class="d-none">
         <%--Menubar--%>
         <p:region regionName="menubar"/>
     </div>

@@ -4,6 +4,9 @@
 <%@ taglib prefix="ttc" uri="http://www.toutatice.fr/jsp/taglib/toutatice" %>
 
 
+<c:set var="namespace"><portlet:namespace/></c:set>
+
+
 <div class="d-flex align-items-center mb-3">
     <%--Title--%>
     <div class="mr-3">
@@ -42,34 +45,72 @@
         <c:if test="${document.type.file}">
             <c:choose>
                 <c:when test="${document.type.name eq 'Picture'}">
-                    <c:set var="url"><ttc:documentLink document="${document}" picture="true" /></c:set>
+                    <c:set var="url"><ttc:documentLink document="${document}" picture="true"/></c:set>
                 </c:when>
                 <c:otherwise>
                     <c:set var="url"><ttc:documentLink document="${document}" displayContext="download"/></c:set>
                 </c:otherwise>
             </c:choose>
-            <a href="${url}" target="_blank" class="btn btn-secondary btn-sm no-ajax-link">
+            <a href="${url}" target="_blank" class="btn btn-primary btn-sm no-ajax-link">
                 <i class="glyphicons glyphicons-basic-square-download"></i>
                 <span><op:translate key="DOWNLOAD"/></span>
             </a>
         </c:if>
 
         <%--Rename--%>
-        <a href="#" class="btn btn-secondary btn-sm">
-            <i class="glyphicons glyphicons-basic-square-edit"></i>
-            <span><op:translate key="DOCUMENT_RENAME"/></span>
-        </a>
+        <c:if test="${not empty renameUrl}">
+            <c:set var="title"><op:translate key="DOCUMENT_RENAME"/></c:set>
+            <a href="javascript:" class="btn btn-primary btn-sm no-ajax-link" data-target="#osivia-modal"
+               data-load-url="${renameUrl}" data-title="${title}">
+                <i class="glyphicons glyphicons-basic-square-edit"></i>
+                <span>${title}</span>
+            </a>
+        </c:if>
 
-        <%--Update--%>
-        <a href="#" class="btn btn-secondary btn-sm">
-            <i class="glyphicons glyphicons-basic-copy-duplicate"></i>
-            <span><op:translate key="DOCUMENT_UPDATE"/></span>
-        </a>
+        <%--Edit--%>
+        <c:if test="${not empty editUrl}">
+            <c:set var="title"><op:translate key="DOCUMENT_EDIT"/></c:set>
+            <a href="javascript:" class="btn btn-primary btn-sm no-ajax-link" data-target="#osivia-modal"
+               data-load-url="${editUrl}" data-title="${title}">
+                <i class="glyphicons glyphicons-basic-import"></i>
+                <span>${title}</span>
+            </a>
+        </c:if>
 
         <%--Delete--%>
-        <a href="#" class="btn btn-secondary btn-sm">
-            <i class="glyphicons glyphicons-basic-bin"></i>
-            <span><op:translate key="DELETE"/></span>
-        </a>
+        <c:if test="${deletable}">
+            <a href="#${namespace}-delete" class="btn btn-primary btn-sm no-ajax-link" data-toggle="modal">
+                <i class="glyphicons glyphicons-basic-bin"></i>
+                <span><op:translate key="DELETE"/></span>
+            </a>
+        </c:if>
+    </div>
+</div>
+
+
+<div id="${namespace}-delete" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"><op:translate key="DOCUMENT_DELELE_MODAL_TITLE"/></h5>
+                <button class="close" type="button" data-dismiss="modal">&times;</button>
+            </div>
+
+            <div class="modal-body">
+                <p><op:translate key="DOCUMENT_DELELE_MODAL_BODY"/></p>
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn btn-secondary" type="button" data-dismiss="modal">
+                    <span><op:translate key="CANCEL"/></span>
+                </button>
+
+                <portlet:actionURL name="delete" var="deleteUrl"/>
+                <a href="${deleteUrl}" class="btn btn-warning no-ajax-link">
+                    <i class="glyphicons glyphicons-basic-bin"></i>
+                    <span><op:translate key="DELETE"/></span>
+                </a>
+            </div>
+        </div>
     </div>
 </div>

@@ -8,7 +8,7 @@
 <portlet:actionURL var="searchFiltersUrl" name="search-filters"/>
 
 
-<a href="${searchFiltersUrl}" class="btn btn-primary">
+<a href="${searchFiltersUrl}" class="btn btn-primary btn-sm">
     <i class="glyphicons glyphicons-basic-search"></i>
     <span class="d-none d-sm-inline"><op:translate key="SEARCH_FILTERS_DISPLAY"/></span>
 </a>

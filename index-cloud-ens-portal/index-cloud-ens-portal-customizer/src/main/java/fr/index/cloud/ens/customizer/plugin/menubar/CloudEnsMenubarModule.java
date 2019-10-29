@@ -62,7 +62,7 @@ public class CloudEnsMenubarModule implements MenubarModule {
         // Removed space items
         this.removedSpaceItems = Arrays.asList("REFRESH", "PRINT");
         // Removed document items
-        this.removedDocumentItems = Arrays.asList("WORKSPACE_ACL_MANAGEMENT", "SUBSCRIBE_URL");
+        this.removedDocumentItems = Arrays.asList("WORKSPACE_ACL_MANAGEMENT", "SUBSCRIBE_URL", "VERSIONS");
 
         // Portal URL factory
         this.portalUrlFactory = Locator.findMBean(IPortalUrlFactory.class, IPortalUrlFactory.MBEAN_NAME);
@@ -136,8 +136,9 @@ public class CloudEnsMenubarModule implements MenubarModule {
                 }
 
                 if (StringUtils.equals(nuxeoController.getBasePath(), StringUtils.substringBeforeLast(path, "/"))) {
-                    // Remove delete and move items
+                    // Remove delete, rename and move items
                     itemIdentifiers.add("DELETE");
+                    itemIdentifiers.add("RENAME");
                     itemIdentifiers.add("MOVE");
                 }
             }

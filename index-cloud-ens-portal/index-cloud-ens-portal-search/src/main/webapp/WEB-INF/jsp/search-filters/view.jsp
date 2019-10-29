@@ -16,6 +16,9 @@
 <portlet:resourceURL id="load-vocabulary" var="loadSubjectsUrl">
     <portlet:param name="vocabulary" value="idx_subject"/>
 </portlet:resourceURL>
+<portlet:resourceURL id="load-vocabulary" var="loadDocumentTypesUrl">
+    <portlet:param name="vocabulary" value="idx_document_type"/>
+</portlet:resourceURL>
 <portlet:resourceURL id="save-search-popover" var="saveSearchPopoverUrl"/>
 
 
@@ -63,6 +66,26 @@
                         <c:otherwise>
                             <form:option value="${form.subject}"><ttc:vocabularyLabel name="idx_subject"
                                                                                       key="${form.subject}"/></form:option>
+                        </c:otherwise>
+                    </c:choose>
+                </form:select>
+            </div>
+        </div>
+
+        <%--Document type--%>
+        <div class="form-group row">
+            <form:label path="documentType" cssClass="col-md-3 col-form-label"><op:translate
+                    key="SEARCH_FILTERS_DOCUMENT_TYPE_LABEL"/></form:label>
+            <div class="col-md-6">
+                <form:select path="documentType" cssClass="form-control select2 select2-default"
+                             data-url="${loadDocumentTypesUrl}" data-searching="${select2Searching}">
+                    <c:choose>
+                        <c:when test="${empty form.documentType}">
+                            <form:option value=""><op:translate key="SEARCH_FILTERS_DOCUMENT_TYPE_ALL"/></form:option>
+                        </c:when>
+                        <c:otherwise>
+                            <form:option value="${form.documentType}"><ttc:vocabularyLabel name="idx_document_type"
+                                                                                           key="${form.documentType}"/></form:option>
                         </c:otherwise>
                     </c:choose>
                 </form:select>

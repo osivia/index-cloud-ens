@@ -259,7 +259,7 @@
 
     <%--Mutualized informations--%>
     <c:if test="${not empty document.publishedDocuments}">
-        <div class="card mb-3 border-mutualized-dark">
+        <div class="card mb-3 bg-mutualized-lighter border-mutualized-dark">
             <div class="card-body">
                 <%--Title--%>
                 <p class="card-text mb-0">Titre</p>
