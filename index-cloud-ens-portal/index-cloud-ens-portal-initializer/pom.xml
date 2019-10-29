@@ -73,7 +73,19 @@
                         <goals>
                             <goal>single</goal>
                         </goals>
-                    </execution>                    
+                    </execution>
+                    <execution>
+                        <id>nuxeo-exports-mutualized-space</id>
+                        <phase>process-resources</phase>
+                        <configuration>
+                            <descriptorSourceDirectory>src/main/assembly/mutualized-space</descriptorSourceDirectory>
+                            <finalName>export</finalName>
+                            <outputDirectory>${project.build.directory}/${project.artifactId}-${project.version}/docs/mutualized-space</outputDirectory>
+                        </configuration>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                    </execution>
                 </executions>
             </plugin>
         </plugins>
