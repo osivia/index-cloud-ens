@@ -208,9 +208,9 @@ class ICAP implements Closeable {
                 int y = response.indexOf("</title>",x);
                 String statusCode = response.substring(x+7,y);
 
-                if (statusCode.equals("ProxyAV: Access Denied")){
+//                if (statusCode.equals("ProxyAV: Access Denied")){
                     return false;
-                }
+//                }
             }
         }
         throw new ICAPException("Unrecognized or no status code in response header.");

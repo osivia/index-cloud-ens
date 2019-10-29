@@ -17,7 +17,19 @@
 
 	</extension>
 
-
+        <extension
+                target="org.nuxeo.ecm.core.event.EventServiceComponent"
+                point="listener">
+    
+                <listener name="virusCanListener" async="false"
+                        postCommit="false" enabled="true"
+                        class="fr.index.cloud.ens.virusscan.ScanListener"
+                        priority="10">
+                        <event>aboutToCreate</event>
+                        <event>aboutToImport</event>
+                </listener>
+    
+        </extension>
 
 
 </component>
