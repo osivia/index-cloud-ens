@@ -10,6 +10,7 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.nuxeo.ecm.core.api.ClientException;
@@ -19,6 +20,7 @@ import org.nuxeo.ecm.core.api.event.DocumentEventTypes;
 import org.nuxeo.ecm.core.event.Event;
 import org.nuxeo.ecm.core.event.EventListener;
 import org.nuxeo.ecm.core.event.impl.DocumentEventContext;
+import org.nuxeo.runtime.api.Framework;
 
 
 /**
@@ -76,37 +78,43 @@ public class ScanListener implements EventListener {
                     if (log.isDebugEnabled())
                         log.debug("ScanListener.scan " + bHolder.getBlob().getFilename());
 
+                    String ICAPHost = Framework.getProperty("index.antivirus.icap.host");
+                    String ICAPPort = Framework.getProperty("index.antivirus.icap.port");
 
-                    ICAP icap = new ICAP("icap", 1344, "avscan", bHolder.getBlob().getStream(), bHolder.getBlob().getLength());
+                    if (StringUtils.isNotEmpty(ICAPHost) && StringUtils.isNotEmpty(ICAPPort)) {
 
-                    Future<ICAPResult> future = getThreadPool().submit(icap);
+                        ICAP icap = new ICAP(ICAPHost, Integer.parseInt(ICAPPort) , "avscan", bHolder.getBlob().getStream(), bHolder.getBlob().getLength());
 
-                    ICAPResult result = null;
+                        Future<ICAPResult> future = getThreadPool().submit(icap);
 
-                    result = future.get(timeout, TimeUnit.SECONDS);
+                        ICAPResult result = null;
 
-                    removeFromQuarantine(docToCreate);
+                        result = future.get(timeout, TimeUnit.SECONDS);
 
-                    if (result != null && result.getStateProcessing() == ICAPResult.STATE_VIRUS_FOUND) {
-                        event.markBubbleException();
+                        removeFromQuarantine(docToCreate);
 
-                        throw new VirusScanException(DEFAULT_ERROR_VIRUS_FOUND_MESSAGE, ERROR_VIRUS_FOUND_LOCALIZED_MESSAGE, null);
+                        if (result != null && result.getStateProcessing() == ICAPResult.STATE_VIRUS_FOUND) {
+                            event.markBubbleException();
+
+                            throw new VirusScanException(DEFAULT_ERROR_VIRUS_FOUND_MESSAGE, ERROR_VIRUS_FOUND_LOCALIZED_MESSAGE, null);
+                        }
                     }
 
 
                 } catch (Exception ex) {
-                    
-                    if( ex instanceof VirusScanException)    {
+
+                    if (ex instanceof VirusScanException) {
                         // The document is not created
                         throw (VirusScanException) ex;
                     }
-                    
+
                     // Other errors are logged
                     if (ex instanceof TimeoutException)
                         log.warn("Timeout during scan of " + bHolder.getBlob().getFilename() + ". File is put in quarantine .");
                     else
                         log.error("error during scan of " + bHolder.getBlob().getFilename() + ". File is put in quarantine .", ex);
 
+                    // If the file can not have be scanned, it must be marked
                     addToQuarantine(docToCreate);
                 }
             }
