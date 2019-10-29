@@ -575,7 +575,7 @@ public class TaskbarRepositoryImpl implements TaskbarRepository {
 
 
     @Override
-    public List<Task> getSavedSearchesTasks(PortalControllerContext portalControllerContext) throws PortletException {
+    public List<Task> getSavedSearchesTasks(PortalControllerContext portalControllerContext, String activeSavedSearch) throws PortletException {
         // Portlet response
         PortletResponse portletResponse = portalControllerContext.getResponse();
         // MIME response
@@ -618,6 +618,7 @@ public class TaskbarRepositoryImpl implements TaskbarRepository {
                 task.setIcon("glyphicons glyphicons-basic-filter");
                 task.setDisplayName(savedSearch.getDisplayName());
                 task.setUrl(actionUrl.toString());
+                task.setActive(StringUtils.equals(activeSavedSearch, String.valueOf(savedSearch.getId())));
 
                 tasks.add(task);
             }

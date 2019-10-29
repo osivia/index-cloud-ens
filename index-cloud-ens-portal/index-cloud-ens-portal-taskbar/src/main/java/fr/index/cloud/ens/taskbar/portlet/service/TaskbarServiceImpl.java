@@ -26,6 +26,7 @@ import org.osivia.portal.api.taskbar.TaskbarTask;
 import org.osivia.portal.api.urls.IPortalUrlFactory;
 import org.osivia.portal.api.windows.PortalWindow;
 import org.osivia.portal.api.windows.WindowFactory;
+import org.osivia.portal.core.page.PageProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
@@ -135,6 +136,9 @@ public class TaskbarServiceImpl implements TaskbarService {
         // Navigation tasks
         List<TaskbarTask> navigationTasks = this.repository.getNavigationTasks(portalControllerContext, basePath);
 
+        // Selectors
+        Map<String, List<String>> selectors = PageSelectors.decodeProperties(request.getParameter("selectors"));
+
 
         // Active navigation task identifier
         String activeId;
@@ -142,6 +146,15 @@ public class TaskbarServiceImpl implements TaskbarService {
             activeId = this.taskbarService.getActiveId(portalControllerContext);
         } catch (PortalException e) {
             throw new PortletException(e);
+        }
+
+        // Active saved search
+        String activeSavedSearch;
+        List<String> savedSearchValues = selectors.get("active-saved-search");
+        if (CollectionUtils.isEmpty(savedSearchValues)) {
+            activeSavedSearch = null;
+        } else {
+            activeSavedSearch = savedSearchValues.get(0);
         }
 
 
@@ -185,7 +198,7 @@ public class TaskbarServiceImpl implements TaskbarService {
             tasks.add(this.createTask(portalControllerContext, basePath, bundle, activeId, recentItems));
         }
         // Saved searches
-        List<Task> savedSearches = this.repository.getSavedSearchesTasks(portalControllerContext);
+        List<Task> savedSearches = this.repository.getSavedSearchesTasks(portalControllerContext, activeSavedSearch);
         if (CollectionUtils.isNotEmpty(savedSearches)) {
             tasks.addAll(savedSearches);
         }
@@ -430,13 +443,19 @@ public class TaskbarServiceImpl implements TaskbarService {
         if ((savedSearch == null) || StringUtils.isEmpty(path)) {
             url = null;
         } else {
-            // Selectors
-            String selectors = savedSearch.getData();
+            // Selectors data
+            String data = savedSearch.getData();
 
             // Page parameters
             Map<String, String> parameters = new HashMap<>(1);
-            if (StringUtils.isNotEmpty(selectors)) {
-                parameters.put("selectors", selectors);
+            if (StringUtils.isNotEmpty(data)) {
+                // Decoded selectors
+                Map<String, List<String>> decodedSelectors = PageSelectors.decodeProperties(data);
+
+                // Add saved search selector value
+                decodedSelectors.put("active-saved-search", Collections.singletonList(String.valueOf(savedSearch.getId())));
+
+                parameters.put("selectors", PageSelectors.encodeProperties(decodedSelectors));
             }
 
             // CMS URL

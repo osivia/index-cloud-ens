@@ -77,9 +77,10 @@ public interface TaskbarRepository {
      * Get saved searches tasks.
      *
      * @param portalControllerContext portal controller context
+     * @param activeSavedSearch       active saved search identifier
      * @return tasks
      */
-    List<Task> getSavedSearchesTasks(PortalControllerContext portalControllerContext) throws PortletException;
+    List<Task> getSavedSearchesTasks(PortalControllerContext portalControllerContext, String activeSavedSearch) throws PortletException;
 
 
     /**

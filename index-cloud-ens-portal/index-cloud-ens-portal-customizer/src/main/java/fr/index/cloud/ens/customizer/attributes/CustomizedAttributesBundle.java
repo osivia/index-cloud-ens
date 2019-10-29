@@ -1,23 +1,37 @@
 package fr.index.cloud.ens.customizer.attributes;
 
+import fr.toutatice.portail.cms.nuxeo.api.PageSelectors;
 import fr.toutatice.portail.cms.nuxeo.api.services.NuxeoConnectionProperties;
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.collections.MapUtils;
+import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.jboss.portal.core.controller.ControllerCommand;
 import org.jboss.portal.core.controller.ControllerContext;
 import org.jboss.portal.core.controller.ControllerException;
 import org.jboss.portal.core.model.portal.Page;
 import org.jboss.portal.core.model.portal.Portal;
 import org.jboss.portal.core.model.portal.PortalObjectPath;
 import org.jboss.portal.core.model.portal.command.render.RenderPageCommand;
+import org.jboss.portal.core.model.portal.navstate.PageNavigationalState;
+import org.jboss.portal.core.navstate.NavigationalStateContext;
 import org.jboss.portal.core.theme.PageRendition;
+import org.osivia.directory.v2.model.preferences.UserPreferences;
+import org.osivia.directory.v2.model.preferences.UserSavedSearch;
+import org.osivia.directory.v2.service.preferences.UserPreferencesService;
 import org.osivia.portal.api.PortalException;
 import org.osivia.portal.api.context.PortalControllerContext;
+import org.osivia.portal.api.directory.v2.DirServiceFactory;
 import org.osivia.portal.api.locator.Locator;
 import org.osivia.portal.api.theming.IAttributesBundle;
 import org.osivia.portal.api.urls.IPortalUrlFactory;
 import org.osivia.portal.core.cms.*;
+import org.springframework.beans.factory.annotation.Autowired;
 
+import javax.xml.XMLConstants;
+import javax.xml.namespace.QName;
 import java.util.*;
 
 /**
@@ -60,6 +74,11 @@ public class CustomizedAttributesBundle implements IAttributesBundle {
      * Hide first breadcrumb item indicator.
      */
     private static final String HIDE_FIRST_BREADCRUMB_ITEM = "osivia.breadcrumb.hide-first";
+    /**
+     * Active saved search.
+     */
+    private static final String ACTIVE_SAVED_SEARCH = "osivia.saved-search.active";
+
 
     /**
      * Index Éducation URL value.
@@ -99,6 +118,10 @@ public class CustomizedAttributesBundle implements IAttributesBundle {
      * CMS service locator.
      */
     private final ICMSServiceLocator cmsServiceLocator;
+    /**
+     * User preferences service.
+     */
+    private UserPreferencesService userPreferencesService;
 
 
     /**
@@ -118,6 +141,7 @@ public class CustomizedAttributesBundle implements IAttributesBundle {
         this.names.add(NAV_ITEMS);
         this.names.add(INDEX_EDUCATION_URL_KEY);
         this.names.add(HIDE_FIRST_BREADCRUMB_ITEM);
+        this.names.add(ACTIVE_SAVED_SEARCH);
 
         // SSO applications
         this.applications = new ArrayList<>();
@@ -128,6 +152,8 @@ public class CustomizedAttributesBundle implements IAttributesBundle {
         this.portalUrlFactory = Locator.findMBean(IPortalUrlFactory.class, IPortalUrlFactory.MBEAN_NAME);
         // CMS service locator
         this.cmsServiceLocator = Locator.findMBean(ICMSServiceLocator.class, ICMSServiceLocator.MBEAN_NAME);
+        // User preferences service
+        this.userPreferencesService = DirServiceFactory.getService(UserPreferencesService.class);
     }
 
 
@@ -264,6 +290,61 @@ public class CustomizedAttributesBundle implements IAttributesBundle {
 
         // Hide first breadcrumb item indicator
         attributes.put(HIDE_FIRST_BREADCRUMB_ITEM, userWorkspaceNavItem.isActive());
+
+
+        // Active saved search
+        NavigationalStateContext nsContext = (NavigationalStateContext) controllerContext.getAttributeResolver(ControllerCommand.NAVIGATIONAL_STATE_SCOPE);
+        PageNavigationalState pageState = nsContext.getPageNavigationalState(page.getId().toString());
+        Map<String, List<String>> selectors;
+        if (pageState == null) {
+            selectors = null;
+        } else {
+            String[] parameter = pageState.getParameter(new QName(XMLConstants.DEFAULT_NS_PREFIX, "selectors"));
+            if (ArrayUtils.isEmpty(parameter)) {
+                selectors = null;
+            } else {
+                selectors = PageSelectors.decodeProperties(parameter[0]);
+            }
+        }
+        UserSavedSearch activeSavedSearch = null;
+        if (MapUtils.isNotEmpty(selectors)) {
+            List<String> values = selectors.get("active-saved-search");
+            if (CollectionUtils.isNotEmpty(values)) {
+                String value = values.get(0);
+
+                // User preferences
+                UserPreferences userPreferences;
+                try {
+                    userPreferences = this.userPreferencesService.getUserPreferences(portalControllerContext);
+                } catch (PortalException e) {
+                    this.log.error(e.getMessage(), e.getCause());
+                    userPreferences = null;
+                }
+
+                // Saved searches
+                List<UserSavedSearch> savedSearches;
+                if (userPreferences == null) {
+                    savedSearches = null;
+                } else {
+                    savedSearches = userPreferences.getSavedSearches();
+                }
+
+                // Active saved search
+                if (CollectionUtils.isNotEmpty(savedSearches)) {
+                    Iterator<UserSavedSearch> iterator = savedSearches.iterator();
+                    while ((activeSavedSearch == null) && iterator.hasNext()) {
+                        UserSavedSearch savedSearch = iterator.next();
+
+                        if (StringUtils.equals(value, String.valueOf(savedSearch.getId()))) {
+                            activeSavedSearch = savedSearch;
+                        }
+                    }
+                }
+            }
+        }
+        if (activeSavedSearch != null) {
+            attributes.put(ACTIVE_SAVED_SEARCH, activeSavedSearch.getDisplayName());
+        }
     }
 
 
