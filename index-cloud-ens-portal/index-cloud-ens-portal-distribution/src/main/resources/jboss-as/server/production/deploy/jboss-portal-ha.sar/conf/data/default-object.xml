@@ -2103,7 +2103,7 @@ return nuxeoRequest.toString();</value>
                     <window>
                         <window-name>index-cloud-ens-search-instance_1562314905380</window-name>
                         <instance-ref>index-cloud-ens-search-instance</instance-ref>
-                        <region>top</region>
+                        <region>col-1</region>
                         <properties>
                             <property>
                                 <name>portal.windowContentType</name>
