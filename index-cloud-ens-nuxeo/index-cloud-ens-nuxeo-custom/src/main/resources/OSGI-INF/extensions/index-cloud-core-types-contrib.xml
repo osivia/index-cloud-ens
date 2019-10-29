@@ -8,21 +8,25 @@
         <doctype name="File" append="true">
             <schema name="indexClassifiers"/>
             <schema name="resourceSharing"/>
+            <schema name="virusScan"/>
         </doctype>
 
         <doctype name="Picture" append="true">
             <schema name="indexClassifiers"/>
             <schema name="resourceSharing"/>
+            <schema name="virusScan"/>
         </doctype>
 
         <doctype name="Video" append="true">
             <schema name="indexClassifiers"/>
             <schema name="resourceSharing"/>
+            <schema name="virusScan"/>
         </doctype>
 
         <doctype name="Audio" append="true">
             <schema name="indexClassifiers"/>
             <schema name="resourceSharing"/>
+            <schema name="virusScan"/>
         </doctype>
 
         <doctype name="UserProfile" append="true">

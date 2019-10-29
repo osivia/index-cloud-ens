@@ -16,7 +16,7 @@
 
 	<properties>
         <nuxeo.version>6.1.1</nuxeo.version>
-		<opentoutatice.version>4.7.17.2</opentoutatice.version>
+        <opentoutatice.version>4.7.17.3-SNAPSHOT</opentoutatice.version>
 		<ottc.es.version>4.7.17</ottc.es.version>
 		<ottc.es.custom.version>4.7.17.1</ottc.es.custom.version>		
 	</properties>

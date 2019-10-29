@@ -17,6 +17,14 @@
 		<unzip from="${bundle.fileName}" to="/">
 			<include>nuxeo.war/**</include>
 		</unzip>
+        
+                <!-- append l10n files -->
+                <delete path="${bundle.fileName}.tmp" />
+                <mkdir path="${bundle.fileName}.tmp" />
+
+                <unzip from="${bundle.fileName}" to="${bundle.fileName}.tmp">
+                        <include>OSGI-INF/l10n/**</include>
+                </unzip>        
 	</install>
 
 </fragment>
