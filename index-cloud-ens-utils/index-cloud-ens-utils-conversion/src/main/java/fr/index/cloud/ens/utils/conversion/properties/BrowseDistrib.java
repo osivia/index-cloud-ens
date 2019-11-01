@@ -1,4 +1,4 @@
-package fr.index.cloud.ens.utils.conversion;
+package fr.index.cloud.ens.utils.conversion.properties;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -288,7 +288,7 @@ public class BrowseDistrib {
     public static void main(String[] args) {
         
         if( args.length == 0)   {
-            System.out.println( "java fr.index.cloud.ens.utils.conversion.BrowseDistrib work-directory");
+            System.out.println( "java fr.index.cloud.ens.utils.conversion.properties.BrowseDistrib work-directory");
             System.exit(1);
         }
         

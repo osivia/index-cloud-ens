@@ -10,10 +10,12 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
+
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.nuxeo.ecm.core.api.ClientException;
+import org.nuxeo.ecm.core.api.DataModel;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.blobholder.BlobHolder;
 import org.nuxeo.ecm.core.api.event.DocumentEventTypes;
@@ -83,8 +85,10 @@ public class ScanListener implements EventListener {
             DocumentModel docToUpdate = evtCtx.getSourceDocument();     
             
            
-            if( docToUpdate.getDataModel("file").isDirty() )    {
-                checkFile(event, docToUpdate);
+            if( docToUpdate != null)    {
+                DataModel dm = docToUpdate.getDataModel("file");
+                if( dm != null && dm.isDirty())
+                    checkFile(event, docToUpdate);
             }
             
         }
