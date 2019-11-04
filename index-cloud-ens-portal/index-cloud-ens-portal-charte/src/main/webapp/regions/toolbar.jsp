@@ -77,13 +77,13 @@
 
                             <c:otherwise>
                                 <img class="avatar" src="${requestScope['osivia.toolbar.person'].avatar.url}" alt="">
-                                <span class="d-none d-lg-inline">${requestScope['osivia.toolbar.person'].displayName}</span>
+                                <span class="d-none d-lg-inline">${requestScope['osivia.toolbar.person'].cn}</span>
                             </c:otherwise>
                         </c:choose>
                     </a>
 
                     <div class="dropdown-menu dropdown-menu-right">
-                        <div class="dropdown-header d-lg-none">${empty requestScope['osivia.toolbar.person'] ? requestScope['osivia.toolbar.principal'] : requestScope['osivia.toolbar.person'].displayName}</div>
+                        <div class="dropdown-header d-lg-none">${empty requestScope['osivia.toolbar.person'] ? requestScope['osivia.toolbar.principal'] : requestScope['osivia.toolbar.person'].cn}</div>
 
                         <%--User account--%>
                         <c:set var="url" value="${requestScope['osivia.my-account.url']}"/>
