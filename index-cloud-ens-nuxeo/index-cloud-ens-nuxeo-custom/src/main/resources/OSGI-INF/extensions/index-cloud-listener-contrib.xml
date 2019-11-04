@@ -27,9 +27,9 @@
                         priority="10">
                         <event>aboutToCreate</event>
                         <event>aboutToImport</event>
+                        <event>beforeDocumentModification</event>
                 </listener>
     
         </extension>
-
 
 </component>
