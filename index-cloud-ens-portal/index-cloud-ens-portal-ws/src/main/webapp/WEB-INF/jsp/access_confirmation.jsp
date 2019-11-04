@@ -40,7 +40,7 @@
                 </legend>
 
                 <p>
-                    <span>J'autorise l'application <b><c:out value="${clientName}"/></b> à&nbsp;:</span>
+                    <span>J'autorise l'application <b><c:out value="${clientName}"/></b> &agrave;&nbsp;:</span>
                 </p>
 
                 <c:forEach items="${scopes}" var="scope" varStatus="status">
@@ -56,8 +56,7 @@
                             <div class="card-body">
                                 <label>
                                     <c:choose>
-                                        <c:when test="${scope.key eq 'scope.drive'}"><b>Acc&eacute;der &agrave; mes
-                                            fichiers</b></c:when>
+                                        <c:when test="${scope.key eq 'scope.drive'}"><b>Acc&eacute;der &agrave; mes fichiers</b></c:when>
                                         <c:otherwise>${scope.key}</c:otherwise>
                                     </c:choose>
                                 </label>
