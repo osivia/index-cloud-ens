@@ -21,6 +21,13 @@
             <version>${directory.version}</version>
             <type>war</type>
         </dependency>
+        <dependency>
+            <groupId>org.osivia.services.directory.person</groupId>
+            <artifactId>osivia-services-directory-person-card</artifactId>
+            <version>${directory.version}</version>
+            <classifier>classes</classifier>
+            <scope>provided</scope>
+        </dependency>
     </dependencies>
 
 

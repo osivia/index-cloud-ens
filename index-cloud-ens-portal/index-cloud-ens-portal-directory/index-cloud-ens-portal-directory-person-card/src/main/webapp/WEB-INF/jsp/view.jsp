@@ -5,6 +5,9 @@
     <%--Avatar--%>
     <%@ include file="person-card/avatar.jspf" %>
 
+    <%--Nickname--%>
+    <%@ include file="person-card/nickname.jspf" %>
+
     <%--Last name--%>
     <%@ include file="person-card/last-name.jspf" %>
 

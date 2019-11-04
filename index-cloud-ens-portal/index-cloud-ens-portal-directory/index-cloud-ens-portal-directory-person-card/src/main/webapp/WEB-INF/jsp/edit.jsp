@@ -5,26 +5,29 @@
 <%@ page contentType="text/html" isELIgnored="false" %>
 
 
-<portlet:actionURL name="save" var="saveUrl" copyCurrentRenderParameters="true" />
+<portlet:actionURL name="save" var="saveUrl" copyCurrentRenderParameters="true"/>
 
 
 <form:form action="${saveUrl}" method="post" modelAttribute="editionForm" enctype="multipart/form-data" role="form">
     <fieldset>
-        <legend><op:translate key="PERSON_CARD_EDITION_LEGEND" /></legend>
+        <legend><op:translate key="PERSON_CARD_EDITION_LEGEND"/></legend>
 
-        <%--Avatar--%>
+            <%--Avatar--%>
         <%@ include file="edition/avatar.jspf" %>
 
-        <%--First name--%>
+            <%--Nickname--%>
+        <%@ include file="edition/nickname.jspf" %>
+
+            <%--First name--%>
         <%@ include file="edition/first-name.jspf" %>
 
-        <%--Last name--%>
+            <%--Last name--%>
         <%@ include file="edition/last-name.jspf" %>
 
-        <%--Mail--%>
+            <%--Mail--%>
         <%@ include file="edition/mail.jspf" %>
 
-        <%--Buttons--%>
+            <%--Buttons--%>
         <%@ include file="edition/buttons.jspf" %>
     </fieldset>
 </form:form>
