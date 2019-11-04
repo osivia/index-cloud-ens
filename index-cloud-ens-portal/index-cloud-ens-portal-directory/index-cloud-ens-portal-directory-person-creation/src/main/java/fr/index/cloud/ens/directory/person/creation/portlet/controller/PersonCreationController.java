@@ -1,34 +1,20 @@
 /**
- * 
+ *
  */
 package fr.index.cloud.ens.directory.person.creation.portlet.controller;
 
-import java.io.IOException;
-import java.util.Map;
-import java.util.Map.Entry;
-
-import javax.annotation.PostConstruct;
-import javax.portlet.ActionRequest;
-import javax.portlet.ActionResponse;
-import javax.portlet.PortletConfig;
-import javax.portlet.PortletContext;
-import javax.portlet.PortletException;
-import javax.portlet.PortletRequest;
-import javax.portlet.PortletResponse;
-import javax.portlet.RenderRequest;
-import javax.portlet.RenderResponse;
-import javax.portlet.ResourceRequest;
-import javax.portlet.ResourceResponse;
-import javax.servlet.http.HttpServletRequest;
-
-import org.apache.commons.collections.MapUtils;
+import fr.index.cloud.ens.directory.person.creation.portlet.model.PersonCreationForm;
+import fr.index.cloud.ens.directory.person.creation.portlet.model.PersonCreationInvalidTokenException;
+import fr.index.cloud.ens.directory.person.creation.portlet.model.validation.PersonCreationFormValidator;
+import fr.index.cloud.ens.directory.person.creation.portlet.service.PersonCreationService;
+import fr.index.cloud.ens.directory.person.renew.portlet.controller.RenewPasswordForm;
+import fr.toutatice.portail.cms.nuxeo.api.CMSPortlet;
 import org.apache.commons.lang.StringUtils;
 import org.dom4j.Element;
 import org.dom4j.io.HTMLWriter;
 import org.osivia.portal.api.Constants;
 import org.osivia.portal.api.context.PortalControllerContext;
 import org.osivia.portal.api.directory.v2.model.Person;
-import org.osivia.portal.api.internationalization.Bundle;
 import org.osivia.portal.api.locator.Locator;
 import org.osivia.portal.api.tokens.ITokenService;
 import org.osivia.portal.api.windows.PortalWindow;
@@ -38,24 +24,18 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.InitBinder;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.portlet.bind.PortletRequestDataBinder;
 import org.springframework.web.portlet.bind.annotation.ActionMapping;
 import org.springframework.web.portlet.bind.annotation.RenderMapping;
 import org.springframework.web.portlet.bind.annotation.ResourceMapping;
 
-import fr.index.cloud.ens.directory.person.creation.portlet.controller.PersonCreationForm.CreationStep;
-import fr.index.cloud.ens.directory.person.creation.portlet.service.PersonCreationService;
-import fr.index.cloud.ens.directory.person.renew.portlet.controller.RenewPasswordForm.RenewPasswordStep;
-import fr.index.cloud.ens.directory.person.renew.portlet.service.RenewPasswordService;
-import fr.toutatice.portail.cms.nuxeo.api.CMSPortlet;
-import fr.toutatice.portail.cms.nuxeo.api.forms.FormFilterException;
+import javax.annotation.PostConstruct;
+import javax.portlet.*;
+import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
+import java.util.Map;
 
 /**
  * @author Loïc Billon
@@ -70,123 +50,119 @@ public class PersonCreationController extends CMSPortlet {
      * Search view window property.
      */
     public static String VIEW_WINDOW_PROPERTY = "creation.person.step";
-	
+
     /** Application context. */
     @Autowired
     private ApplicationContext applicationContext;
-	
+
     /** Portlet context. */
     @Autowired
     private PortletContext portletContext;
-	
+
     /** Portlet config. */
     @Autowired
     private PortletConfig portletConfig;
-    
+
     @Autowired
     private PersonCreationService service;
-	
-	@RenderMapping
-	public String view(RenderRequest request, RenderResponse response) {
-		
-		// Get logger person
+
+    @RenderMapping
+    public String view(RenderRequest request, RenderResponse response) {
+
+        // Get logger person
         Person person = (Person) request.getAttribute(Constants.ATTR_LOGGED_PERSON_2);
-        if(person != null) {
-        	return "view-logged";
+        if (person != null) {
+            return "view-logged";
+        } else {
+
+            PersonCreationForm.CreationStep currentStep = getCurrentStep(request, response);
+            return "view-" + currentStep.name().toLowerCase();
         }
-        else {
-        	
-        	CreationStep currentStep = getCurrentStep(request, response);
-			return "view-" + currentStep.name().toLowerCase();
-        }
-		
-	}
-	
-	@ExceptionHandler(PersonCreationInvalidTokenException.class)
-	public String viewError() {
-		return "view-invalid-token";
-	}
-	
-	/**
-	 * @return
-	 */
-	private CreationStep getCurrentStep(PortletRequest request, PortletResponse response) {
-		
+
+    }
+
+    @ExceptionHandler(PersonCreationInvalidTokenException.class)
+    public String viewError() {
+        return "view-invalid-token";
+    }
+
+    /**
+     * @return
+     */
+    private PersonCreationForm.CreationStep getCurrentStep(PortletRequest request, PortletResponse response) {
+
         // Window
         PortalControllerContext portalControllerContext = new PortalControllerContext(this.portletContext, request, response);
         PortalWindow window = WindowFactory.getWindow(portalControllerContext.getRequest());
-        
+
         String view = request.getParameter(VIEW_WINDOW_PROPERTY);
-        if(StringUtils.isEmpty(view)) {
-        	view = window.getProperty(VIEW_WINDOW_PROPERTY);
+        if (StringUtils.isEmpty(view)) {
+            view = window.getProperty(VIEW_WINDOW_PROPERTY);
         }
-        CreationStep step;
-        if(view != null) {
-        	step = CreationStep.valueOf(view);
+        PersonCreationForm.CreationStep step;
+        if (view != null) {
+            step = PersonCreationForm.CreationStep.valueOf(view);
+        } else {
+            step = PersonCreationForm.DEFAULT;
         }
-        else {
-        	step = PersonCreationForm.DEFAULT;
-        }
-    	
+
         return step;
 
-	}
+    }
 
-	@ModelAttribute("form")
-	public PersonCreationForm getForm(PortletRequest request, PortletResponse response) throws PersonCreationInvalidTokenException {
-		
-		PortalControllerContext portalControllerContext = new PortalControllerContext(getPortletContext(), request, response);
+    @ModelAttribute("form")
+    public PersonCreationForm getForm(PortletRequest request, PortletResponse response) throws PersonCreationInvalidTokenException {
 
-		// Search form
-		PersonCreationForm form = this.applicationContext.getBean(PersonCreationForm.class);
-		
-		CreationStep currentStep = getCurrentStep(request, response);
-		
-		if(currentStep != CreationStep.CONFIRM) {
-		
-			
-			HttpServletRequest servletRequest = portalControllerContext.getHttpServletRequest();
-			if(servletRequest != null) {
-				String token = servletRequest.getParameter("token");
-				
-				ITokenService tokenService = Locator.findMBean(ITokenService.class, ITokenService.MBEAN_NAME);
-				Map<String, String> validateToken = tokenService.validateToken(token, false);
-				
-				if(validateToken != null) {
-					form.setFirstname(validateToken.get("firstname"));
-					form.setLastname(validateToken.get("lastname"));
-					form.setMail(validateToken.get("mail"));
-				}
-				else {
-					throw new PersonCreationInvalidTokenException();
-	
-				}
-				
-				
-			}
-		}
-		else {
-			
-			PortalWindow window = WindowFactory.getWindow(portalControllerContext.getRequest());	
-			service.proceedRegistration(portalControllerContext, window.getProperty("uid")); 
-		}
+        PortalControllerContext portalControllerContext = new PortalControllerContext(getPortletContext(), request, response);
 
-		return form;
-	}
-	
-	@ActionMapping(name = "submitForm")
-	public void submitForm(ActionRequest request, ActionResponse response, @Validated @ModelAttribute("form") PersonCreationForm form, BindingResult result,
-			SessionStatus session) throws PortletException {
+        // Search form
+        PersonCreationForm form = this.applicationContext.getBean(PersonCreationForm.class);
+
+        PersonCreationForm.CreationStep currentStep = getCurrentStep(request, response);
+
+        if (currentStep != PersonCreationForm.CreationStep.CONFIRM) {
+
+
+            HttpServletRequest servletRequest = portalControllerContext.getHttpServletRequest();
+            if (servletRequest != null) {
+                String token = servletRequest.getParameter("token");
+
+                ITokenService tokenService = Locator.findMBean(ITokenService.class, ITokenService.MBEAN_NAME);
+                Map<String, String> validateToken = tokenService.validateToken(token, false);
+
+                if (validateToken != null) {
+                    form.setFirstname(validateToken.get("firstname"));
+                    form.setLastname(validateToken.get("lastname"));
+                    form.setMail(validateToken.get("mail"));
+                } else {
+                    throw new PersonCreationInvalidTokenException();
+
+                }
+
+
+            }
+        } else {
+
+            PortalWindow window = WindowFactory.getWindow(portalControllerContext.getRequest());
+            service.proceedRegistration(portalControllerContext, window.getProperty("uid"));
+        }
+
+        return form;
+    }
+
+    @ActionMapping(name = "submitForm")
+    public void submitForm(ActionRequest request, ActionResponse response, @Validated @ModelAttribute("form") PersonCreationForm form, BindingResult result,
+                           SessionStatus session) throws PortletException {
         // Portal controller context
         PortalControllerContext portalControllerContext = new PortalControllerContext(this.portletContext, request, response);
 
         if (!result.hasErrors()) {
-        	this.service.proceedInit(portalControllerContext, form);
+            this.service.proceedInit(portalControllerContext, form);
 
-        	response.setRenderParameter(VIEW_WINDOW_PROPERTY, RenewPasswordStep.SEND.name());
-        	
+            response.setRenderParameter(VIEW_WINDOW_PROPERTY, RenewPasswordForm.RenewPasswordStep.SEND.name());
+
         }
-	}
+    }
 
 
     /**
@@ -194,15 +170,15 @@ public class PersonCreationController extends CMSPortlet {
      *
      * @param request  resource request
      * @param response resource response
-     * @param newpassword password
+     * @param password password request parameter
      */
     @ResourceMapping("password-information")
-    public void passwordInformation(ResourceRequest request, ResourceResponse response, @RequestParam(name = "newpassword", required = false) String newpassword) throws PortletException, IOException {
+    public void passwordInformation(ResourceRequest request, ResourceResponse response, @RequestParam(name = "password", required = false) String password) throws PortletException, IOException {
         // Portal controller context
         PortalControllerContext portalControllerContext = new PortalControllerContext(this.portletContext, request, response);
 
         // Password rules information
-        Element information = this.service.getPasswordRulesInformation(portalControllerContext, newpassword);
+        Element information = this.service.getPasswordRulesInformation(portalControllerContext, password);
 
         // Content type
         response.setContentType("text/html");
@@ -212,8 +188,8 @@ public class PersonCreationController extends CMSPortlet {
         htmlWriter.write(information);
         htmlWriter.close();
     }
-	
-	
+
+
     /**
      * Person edition form init binder.
      *
@@ -222,15 +198,15 @@ public class PersonCreationController extends CMSPortlet {
     @InitBinder("form")
     public void initBinder(PortletRequest request, PortletResponse response, PortletRequestDataBinder binder) {
 
-    	CreationStep step = getCurrentStep(request, response);
+        PersonCreationForm.CreationStep step = getCurrentStep(request, response);
 
-    	if(step.equals(CreationStep.FORM)) {
-    		PersonCreationFormValidator bean = applicationContext.getBean(PersonCreationFormValidator.class);
-    		binder.addValidators(bean);
-    	}
+        if (step.equals(PersonCreationForm.CreationStep.FORM)) {
+            PersonCreationFormValidator bean = applicationContext.getBean(PersonCreationFormValidator.class);
+            binder.addValidators(bean);
+        }
 
     }
-    
+
     /**
      * Post-construct.
      *
@@ -239,5 +215,5 @@ public class PersonCreationController extends CMSPortlet {
     @PostConstruct
     public void postConstruct() throws PortletException {
         super.init(this.portletConfig);
-    }    
+    }
 }

@@ -1,7 +1,7 @@
 /**
  * 
  */
-package fr.index.cloud.ens.directory.person.creation.portlet.controller;
+package fr.index.cloud.ens.directory.person.creation.portlet.model;
 
 /**
  * @author Loïc Billon

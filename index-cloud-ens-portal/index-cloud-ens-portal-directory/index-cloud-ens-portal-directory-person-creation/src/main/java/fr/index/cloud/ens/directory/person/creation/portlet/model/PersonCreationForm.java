@@ -1,7 +1,7 @@
 /**
  * 
  */
-package fr.index.cloud.ens.directory.person.creation.portlet.controller;
+package fr.index.cloud.ens.directory.person.creation.portlet.model;
 
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
@@ -16,9 +16,14 @@ import org.springframework.stereotype.Component;
 public class PersonCreationForm {
 
 	public enum CreationStep { FORM, SEND, CONFIRM };
+
     /** Default view. */
     public static final CreationStep DEFAULT = CreationStep.FORM;
-    
+
+
+    /** Nickname. */
+    private String nickname;
+
     private String firstname;
     
     private String lastname;
@@ -28,6 +33,23 @@ public class PersonCreationForm {
     private String newpassword;
     
     private String confirmpassword;
+
+
+	/**
+	 * Constructor.
+	 */
+	public PersonCreationForm() {
+		super();
+	}
+
+
+	public String getNickname() {
+		return nickname;
+	}
+
+	public void setNickname(String nickname) {
+		this.nickname = nickname;
+	}
 
 	/**
 	 * @return the firstname

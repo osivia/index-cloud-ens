@@ -1,8 +1,9 @@
 /**
  *
  */
-package fr.index.cloud.ens.directory.person.creation.portlet.controller;
+package fr.index.cloud.ens.directory.person.creation.portlet.model.validation;
 
+import fr.index.cloud.ens.directory.person.creation.portlet.model.PersonCreationForm;
 import fr.index.cloud.ens.directory.person.creation.portlet.service.PersonCreationService;
 import org.apache.commons.lang.StringUtils;
 import org.osivia.directory.v2.service.PersonUpdateService;
@@ -75,6 +76,7 @@ public class PersonCreationFormValidator implements Validator {
         PersonCreationForm form = (PersonCreationForm) target;
 
         // Empty fields
+        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "nickname", "empty");
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "firstname", "empty");
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "lastname", "empty");
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "mail", "empty");

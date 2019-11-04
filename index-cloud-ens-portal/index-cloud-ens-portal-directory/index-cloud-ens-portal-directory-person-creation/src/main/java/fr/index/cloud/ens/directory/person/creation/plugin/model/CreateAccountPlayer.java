@@ -4,7 +4,7 @@
 package fr.index.cloud.ens.directory.person.creation.plugin.model;
 
 import fr.index.cloud.ens.directory.person.creation.portlet.controller.PersonCreationController;
-import fr.index.cloud.ens.directory.person.creation.portlet.controller.PersonCreationForm.CreationStep;
+import fr.index.cloud.ens.directory.person.creation.portlet.model.PersonCreationForm;
 import fr.index.cloud.ens.directory.person.creation.portlet.service.PersonCreationService;
 import fr.toutatice.portail.cms.nuxeo.api.cms.NuxeoDocumentContext;
 import fr.toutatice.portail.cms.nuxeo.api.player.INuxeoPlayerModule;
@@ -67,7 +67,7 @@ public class CreateAccountPlayer implements INuxeoPlayerModule {
         properties.put("osivia.hideTitle", "1");
         properties.put(DynaRenderOptions.PARTIAL_REFRESH_ENABLED, String.valueOf(true));
         properties.put("osivia.ajaxLink", "1");
-        properties.put(PersonCreationController.VIEW_WINDOW_PROPERTY, CreationStep.CONFIRM.name());
+        properties.put(PersonCreationController.VIEW_WINDOW_PROPERTY, PersonCreationForm.CreationStep.CONFIRM.name());
         properties.put("uid", uid);
 
         // Player
