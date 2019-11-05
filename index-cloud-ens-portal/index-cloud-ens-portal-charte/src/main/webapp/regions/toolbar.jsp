@@ -27,7 +27,7 @@
     <%--Brand--%>
     <a class="navbar-brand mx-auto py-0" href="${requestScope['osivia.home.url']}">
         <img alt="${requestScope['osivia.header.application.name']}" src="${contextPath}/img/logo-cloud-pronote.png"
-             height="40">
+             class="my-n2" height="50">
     </a>
 
     <ul class="navbar-nav">
@@ -37,7 +37,7 @@
                 <li class="nav-item">
                     <a href="${requestScope['osivia.toolbar.loginURL']}" class="nav-link">
                         <i class="glyphicons glyphicons-basic-log-in"></i>
-                        <span><op:translate key="TOOLBAR_LOGIN"/></span>
+                        <span class="d-none d-sm-inline"><op:translate key="TOOLBAR_LOGIN"/></span>
                     </a>
                 </li>
             </c:when>
@@ -100,7 +100,7 @@
                 <li class="nav-item">
                     <a href="javascript:" onclick="logout()" class="nav-link">
                         <i class="glyphicons glyphicons-basic-log-out"></i>
-                        <span><op:translate key="TOOLBAR_LOGOUT"/></span>
+                        <span class="d-none d-sm-inline"><op:translate key="TOOLBAR_LOGOUT"/></span>
                     </a>
                 </li>
             </c:otherwise>
