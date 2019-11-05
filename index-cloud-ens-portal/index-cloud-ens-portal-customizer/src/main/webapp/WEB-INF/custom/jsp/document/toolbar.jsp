@@ -4,9 +4,6 @@
 <%@ taglib prefix="ttc" uri="http://www.toutatice.fr/jsp/taglib/toutatice" %>
 
 
-<c:set var="namespace"><portlet:namespace/></c:set>
-
-
 <div class="d-flex align-items-center mb-3">
     <%--Title--%>
     <div class="mr-3">
@@ -78,39 +75,12 @@
         </c:if>
 
         <%--Delete--%>
-        <c:if test="${deletable}">
-            <a href="#${namespace}-delete" class="btn btn-primary btn-sm no-ajax-link" data-toggle="modal">
+        <c:if test="${not empty deleteUrl}">
+            <c:set var="title"><op:translate key="DELETE"/></c:set>
+            <a href="javascript:" class="btn btn-primary btn-sm no-ajax-link" data-target="#osivia-modal" data-load-url="${deleteUrl}" data-title="${title}">
                 <i class="glyphicons glyphicons-basic-bin"></i>
-                <span><op:translate key="DELETE"/></span>
+                <span>${title}</span>
             </a>
         </c:if>
-    </div>
-</div>
-
-
-<div id="${namespace}-delete" class="modal fade">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title"><op:translate key="DOCUMENT_DELELE_MODAL_TITLE"/></h5>
-                <button class="close" type="button" data-dismiss="modal">&times;</button>
-            </div>
-
-            <div class="modal-body">
-                <p><op:translate key="DOCUMENT_DELELE_MODAL_BODY"/></p>
-            </div>
-
-            <div class="modal-footer">
-                <button class="btn btn-secondary" type="button" data-dismiss="modal">
-                    <span><op:translate key="CANCEL"/></span>
-                </button>
-
-                <portlet:actionURL name="delete" var="deleteUrl"/>
-                <a href="${deleteUrl}" class="btn btn-warning no-ajax-link">
-                    <i class="glyphicons glyphicons-basic-bin"></i>
-                    <span><op:translate key="DELETE"/></span>
-                </a>
-            </div>
-        </div>
     </div>
 </div>

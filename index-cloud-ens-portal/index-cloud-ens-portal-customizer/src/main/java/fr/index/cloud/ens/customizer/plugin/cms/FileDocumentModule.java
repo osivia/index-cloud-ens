@@ -6,30 +6,18 @@ import fr.toutatice.portail.cms.nuxeo.api.NuxeoController;
 import fr.toutatice.portail.cms.nuxeo.api.cms.NuxeoDocumentContext;
 import fr.toutatice.portail.cms.nuxeo.api.portlet.PortletModule;
 import org.apache.commons.lang.StringUtils;
-import org.nuxeo.ecm.automation.client.model.Document;
 import org.osivia.portal.api.Constants;
 import org.osivia.portal.api.PortalException;
-import org.osivia.portal.api.cms.DocumentType;
 import org.osivia.portal.api.cms.Permissions;
 import org.osivia.portal.api.context.PortalControllerContext;
-import org.osivia.portal.api.internationalization.Bundle;
-import org.osivia.portal.api.internationalization.IBundleFactory;
-import org.osivia.portal.api.internationalization.IInternationalizationService;
 import org.osivia.portal.api.locator.Locator;
-import org.osivia.portal.api.notifications.INotificationsService;
-import org.osivia.portal.api.notifications.NotificationsType;
 import org.osivia.portal.api.urls.IPortalUrlFactory;
 import org.osivia.portal.api.urls.PortalUrlType;
 import org.osivia.portal.api.windows.PortalWindow;
 import org.osivia.portal.api.windows.WindowFactory;
-import org.osivia.portal.core.cms.CMSException;
-import org.osivia.portal.core.cms.CMSServiceCtx;
-import org.osivia.portal.core.cms.ICMSService;
-import org.osivia.portal.core.cms.ICMSServiceLocator;
 import org.osivia.portal.core.page.PageProperties;
 
 import javax.portlet.*;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -46,17 +34,6 @@ public class FileDocumentModule extends PortletModule {
      */
     private final IPortalUrlFactory portalUrlFactory;
 
-    /**
-     * CMS service locator.
-     */
-    private final ICMSServiceLocator cmsServiceLocator;
-
-    /** Internationalization bundle factory. */
-    private final IBundleFactory bundleFactory;
-
-    /** Notifications service. */
-    private final INotificationsService notificationsService;
-
 
     /**
      * Constructor.
@@ -68,13 +45,6 @@ public class FileDocumentModule extends PortletModule {
 
         // Portal URL factory
         this.portalUrlFactory = Locator.findMBean(IPortalUrlFactory.class, IPortalUrlFactory.MBEAN_NAME);
-        // CMS service locator
-        this.cmsServiceLocator = Locator.findMBean(ICMSServiceLocator.class, ICMSServiceLocator.MBEAN_NAME);
-        // Internationalization bundle factory
-        IInternationalizationService internationalizationService = Locator.findMBean(IInternationalizationService.class, IInternationalizationService.MBEAN_NAME);
-        this.bundleFactory = internationalizationService.getBundleFactory(this.getClassLoader());
-        // Notifications service
-        this.notificationsService = Locator.findMBean(INotificationsService.class, INotificationsService.MBEAN_NAME);
     }
 
 
@@ -93,8 +63,6 @@ public class FileDocumentModule extends PortletModule {
             NuxeoDocumentContext documentContext = nuxeoController.getDocumentContext(path);
 
             if (ContextualizationHelper.isCurrentDocContextualized(portalControllerContext)) {
-                // Document type
-                DocumentType type = documentContext.getDocumentType();
                 // Permissions
                 Permissions permissions = documentContext.getPermissions();
 
@@ -108,8 +76,11 @@ public class FileDocumentModule extends PortletModule {
                     request.setAttribute("editUrl", editUrl);
                 }
 
-                // Deletable indicator
-                request.setAttribute("deletable", permissions.isDeletable());
+                if (permissions.isDeletable()) {
+                    // Delete URL
+                    String deleteUrl = this.getDeleteUrl(portalControllerContext, path);
+                    request.setAttribute("deleteUrl", deleteUrl);
+                }
             }
         }
     }
@@ -167,15 +138,36 @@ public class FileDocumentModule extends PortletModule {
     }
 
 
+    /**
+     * Get delete URL.
+     *
+     * @param portalControllerContext portal controller context
+     * @param path                    document path
+     * @return URL
+     */
+    private String getDeleteUrl(PortalControllerContext portalControllerContext, String path) throws PortletException {
+        // Window properties
+        Map<String, String> properties = new HashMap<>();
+        properties.put("osivia.delete.path", path);
+
+        // URL
+        String url;
+        try {
+            url = this.portalUrlFactory.getStartPortletUrl(portalControllerContext, "osivia-services-widgets-delete-instance", properties, PortalUrlType.MODAL);
+        } catch (PortalException e) {
+            throw new PortletException(e);
+        }
+
+        return url;
+    }
+
+
     @Override
-    protected void processAction(ActionRequest request, ActionResponse response, PortletContext portletContext) throws PortletException, IOException {
+    protected void processAction(ActionRequest request, ActionResponse response, PortletContext portletContext) {
         // Portal controller context
         PortalControllerContext portalControllerContext = new PortalControllerContext(portletContext, request, response);
         // Nuxeo controller
         NuxeoController nuxeoController = new NuxeoController(portalControllerContext);
-
-        // Internationalization bundle
-        Bundle bundle = this.bundleFactory.getBundle(request.getLocale());
 
         // Document path
         String path = this.getDocumentPath(nuxeoController);
@@ -190,32 +182,6 @@ public class FileDocumentModule extends PortletModule {
 
             // Refresh
             PageProperties.getProperties().setRefreshingPage(true);
-        } else if ("delete".equals(action)) {
-            // CMS service
-            ICMSService cmsService = this.cmsServiceLocator.getCMSService();
-            // CMS context
-            CMSServiceCtx cmsContext = new CMSServiceCtx();
-            cmsContext.setPortalControllerContext(portalControllerContext);
-
-            // Document context
-            NuxeoDocumentContext documentContext = nuxeoController.getDocumentContext(path);
-            // Document
-            Document document = documentContext.getDocument();
-
-            try {
-                cmsService.putDocumentInTrash(cmsContext, document.getId());
-            } catch (CMSException e) {
-                throw new PortletException(e);
-            }
-
-            // Notifications
-            String message = bundle.getString("DOCUMENT_DELETE_MESSAGE_SUCCESS");
-            this.notificationsService.addSimpleNotification(portalControllerContext, message, NotificationsType.SUCCESS);
-
-            // Redirection
-            String parentPath = StringUtils.substringBeforeLast(path, "/");
-            String redirectionUrl = this.portalUrlFactory.getCMSUrl(portalControllerContext, null, parentPath, null, null, IPortalUrlFactory.DISPLAYCTX_REFRESH, null, null, null, null);
-            response.sendRedirect(redirectionUrl);
         }
     }
 
