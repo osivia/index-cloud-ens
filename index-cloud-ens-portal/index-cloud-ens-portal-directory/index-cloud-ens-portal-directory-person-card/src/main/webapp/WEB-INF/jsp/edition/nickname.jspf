@@ -10,6 +10,7 @@
         <div class="col">
             <form:input path="nickname" cssClass="form-control" cssErrorClass="form-control is-invalid" />
             <form:errors path="nickname" cssClass="invalid-feedback" />
+            <span class="form-text text-muted"><op:translate key="PERSON_CARD_NICKNAME_HELP"/></span>
         </div>
     </div>
 </spring:bind>

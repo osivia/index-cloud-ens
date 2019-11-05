@@ -35,7 +35,7 @@
         <portlet:actionURL name="mutualize" var="mutualizeUrl"/>
         <a href="${mutualizeUrl}" class="btn btn-mutualized-dark btn-sm">
             <i class="glyphicons glyphicons-basic-share"></i>
-            <span><op:translate key="DOCUMENT_FILE_TOOLBAR_MUTUALIZE"/></span>
+            <span class="d-none d-lg-inline"><op:translate key="DOCUMENT_FILE_TOOLBAR_MUTUALIZE"/></span>
         </a>
 
         <%--Download--%>
@@ -50,7 +50,7 @@
             </c:choose>
             <a href="${url}" target="_blank" class="btn btn-primary btn-sm no-ajax-link">
                 <i class="glyphicons glyphicons-basic-square-download"></i>
-                <span><op:translate key="DOWNLOAD"/></span>
+                <span class="d-none d-lg-inline"><op:translate key="DOWNLOAD"/></span>
             </a>
         </c:if>
 
@@ -60,7 +60,7 @@
             <a href="javascript:" class="btn btn-primary btn-sm no-ajax-link" data-target="#osivia-modal"
                data-load-url="${renameUrl}" data-title="${title}">
                 <i class="glyphicons glyphicons-basic-square-edit"></i>
-                <span>${title}</span>
+                <span class="d-none d-lg-inline">${title}</span>
             </a>
         </c:if>
 
@@ -70,7 +70,7 @@
             <a href="javascript:" class="btn btn-primary btn-sm no-ajax-link" data-target="#osivia-modal"
                data-load-url="${editUrl}" data-title="${title}">
                 <i class="glyphicons glyphicons-basic-import"></i>
-                <span>${title}</span>
+                <span class="d-none d-lg-inline">${title}</span>
             </a>
         </c:if>
 
@@ -79,7 +79,7 @@
             <c:set var="title"><op:translate key="DELETE"/></c:set>
             <a href="javascript:" class="btn btn-primary btn-sm no-ajax-link" data-target="#osivia-modal" data-load-url="${deleteUrl}" data-title="${title}">
                 <i class="glyphicons glyphicons-basic-bin"></i>
-                <span>${title}</span>
+                <span class="d-none d-lg-inline">${title}</span>
             </a>
         </c:if>
     </div>

@@ -50,7 +50,9 @@
                                         <form:errors path="firstname" cssClass="invalid-feedback"/>
                                     </div>
                                 </spring:bind>
+                            </div>
 
+                            <div class="col-md">
                                 <%--Mail--%>
                                 <spring:bind path="mail">
                                     <div class="form-group required">
@@ -59,9 +61,7 @@
                                         <form:errors path="mail" cssClass="invalid-feedback"/>
                                     </div>
                                 </spring:bind>
-                            </div>
 
-                            <div class="col-md">
                                 <%--Password--%>
                                 <spring:bind path="newpassword">
                                     <div class="form-group required">
