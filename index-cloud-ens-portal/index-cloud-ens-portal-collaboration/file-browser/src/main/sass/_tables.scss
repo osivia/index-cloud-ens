@@ -3,7 +3,7 @@
 
 @include media-breakpoint-down("md") {
   [data-column="customized-column"] {
-    display: none;
+    display: none !important;
   }
 }
 
