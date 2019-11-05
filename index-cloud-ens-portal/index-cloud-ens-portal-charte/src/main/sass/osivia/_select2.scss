@@ -130,10 +130,10 @@
     border-color: $input-border-color;
   }
 
-  //.select2-results__options {
-  //  max-height: 15rem;
-  //  overflow-y: auto;
-  //}
+  .select2-results__options {
+    max-height: 15rem;
+    overflow-y: auto;
+  }
 
   .select2-results__option {
     padding: $input-padding-y $input-padding-x;
