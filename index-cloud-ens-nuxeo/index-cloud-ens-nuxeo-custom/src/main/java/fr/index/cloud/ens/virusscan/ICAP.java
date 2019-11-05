@@ -88,10 +88,21 @@ class ICAP implements Callable<ICAPResult> {
         in = new DataInputStream(inFromServer);
 
         String parseMe = getOptions();
+        
+        if (log.isDebugEnabled())
+            log.debug("ICAP options = " +parseMe);     
+        
+        
         Map<String, String> responseMap = parseHeader(parseMe);
+        
 
         if (responseMap.get("StatusCode") != null) {
+           
+            
             int status = Integer.parseInt(responseMap.get("StatusCode"));
+            
+            if (log.isDebugEnabled())
+                log.debug("ICAP status = " +status);            
 
             switch (status) {
                 case 200:
@@ -151,6 +162,11 @@ class ICAP implements Callable<ICAPResult> {
 
             if (fileSize > previewSize) {
                 String parseMe = getHeader(ICAPTERMINATOR);
+                
+                
+                if (log.isDebugEnabled())
+                    log.debug("ICAP response(1) = " +parseMe);   
+                
                 responseMap = parseHeader(parseMe);
 
                 tempString = responseMap.get("StatusCode");
@@ -188,6 +204,10 @@ class ICAP implements Callable<ICAPResult> {
 
             responseMap.clear();
             String response = getHeader(ICAPTERMINATOR);
+            
+            if (log.isDebugEnabled())
+                log.debug("ICAP response(2) = " +response);   
+            
             responseMap = parseHeader(response);
 
             tempString = responseMap.get("StatusCode");
@@ -214,8 +234,8 @@ class ICAP implements Callable<ICAPResult> {
 
 
         } finally {
-
-            client.close();
+            if( client != null)
+                client.close();
         }
     }
 

@@ -3,13 +3,15 @@
  */
 package fr.index.cloud.ens.virusscan;
 
+import java.io.IOException;
+import java.net.UnknownHostException;
 import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
-
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
@@ -44,13 +46,13 @@ public class ScanListener implements EventListener {
 
     /** The max pool size. */
     int maxPoolSize = 50;
-    
+
     /** The pool size. */
     int poolSize = 20;
-    
+
     /** The keep alive time. */
     long keepAliveTime = 30;
-    
+
     /** The timeout. */
     long timeout = 10;
 
@@ -77,23 +79,22 @@ public class ScanListener implements EventListener {
 
         if (log.isDebugEnabled())
             log.debug("ScanListener.handleEvent " + event.getName());
-        
-        if ((event.getContext() instanceof DocumentEventContext) &&  (DocumentEventTypes.BEFORE_DOC_UPDATE.equals(event.getName())   ))    {
-            
+
+        if ((event.getContext() instanceof DocumentEventContext) && (DocumentEventTypes.BEFORE_DOC_UPDATE.equals(event.getName()))) {
+
             DocumentEventContext evtCtx = (DocumentEventContext) event.getContext();
 
-            DocumentModel docToUpdate = evtCtx.getSourceDocument();     
-            
-           
-            if( docToUpdate != null)    {
+            DocumentModel docToUpdate = evtCtx.getSourceDocument();
+
+
+            if (docToUpdate != null) {
                 DataModel dm = docToUpdate.getDataModel("file");
-                if( dm != null && dm.isDirty())
+                if (dm != null && dm.isDirty())
                     checkFile(event, docToUpdate);
             }
-            
+
         }
-        
-        
+
 
         if ((event.getContext() instanceof DocumentEventContext) && (DocumentEventTypes.ABOUT_TO_CREATE.equals(event.getName()))
                 || (DocumentEventTypes.ABOUT_TO_IMPORT.equals(event.getName()))) {
@@ -116,6 +117,9 @@ public class ScanListener implements EventListener {
      * @param docToCreate
      */
     private void checkFile(Event event, DocumentModel docToCreate) {
+
+        boolean virusFound = false;
+
         // BlobHolder is defined for document having file
         BlobHolder bHolder = docToCreate.getAdapter(BlobHolder.class);
         if (bHolder != null && bHolder.getBlob() != null) {
@@ -130,46 +134,63 @@ public class ScanListener implements EventListener {
 
                 if (StringUtils.isNotEmpty(ICAPHost) && StringUtils.isNotEmpty(ICAPPort)) {
 
-                    ICAP icap = new ICAP(ICAPHost, Integer.parseInt(ICAPPort) , "avscan", bHolder.getBlob().getStream(), bHolder.getBlob().getLength());
+                    ICAP icap = new ICAP(ICAPHost, Integer.parseInt(ICAPPort), "avscan", bHolder.getBlob().getStream(), bHolder.getBlob().getLength());
 
                     Future<ICAPResult> future = getThreadPool().submit(icap);
 
-                    ICAPResult result = null;
+                    ICAPResult result = future.get(timeout, TimeUnit.SECONDS);
 
-                    result = future.get(timeout, TimeUnit.SECONDS);
-
+                    // No technical errors : either safe or contains a virus
+                    // Anyway remove from quarantine
                     removeFromQuarantine(docToCreate);
-
+                    
                     if (result != null && result.getStateProcessing() == ICAPResult.STATE_VIRUS_FOUND) {
-                        event.markBubbleException();
+                        log.warn("Virus found in " + bHolder.getBlob().getFilename() + ".");
+                        virusFound = true;
+                    }                    
+                }
 
-                        throw new VirusScanException(DEFAULT_ERROR_VIRUS_FOUND_MESSAGE, ERROR_VIRUS_FOUND_LOCALIZED_MESSAGE, null);
+            } catch (Exception e) {
+
+                // If the file can not have be scanned, it must be pu in quarantine
+                addToQuarantine(docToCreate);
+
+                boolean mustLogError = true;
+
+                if (e instanceof TimeoutException) {
+                    // Timeout -> no stack
+                    log.warn("Timeout during scan of " + bHolder.getBlob().getFilename() + " . File is put in quarantine .");
+                    mustLogError = false;
+                }
+
+                if (e instanceof ExecutionException) {
+                    ExecutionException exec = (ExecutionException) e;
+                    if (exec.getCause() instanceof UnknownHostException || exec.getCause() instanceof IOException) {
+                        // IO error -> no stack
+                        log.error("error during scan of " + bHolder.getBlob().getFilename() + " : " + exec.getCause().toString()
+                                + ".  File is put in quarantine .");
+
+                        mustLogError = false;
                     }
                 }
 
-
-            } catch (Exception ex) {
-
-                if (ex instanceof VirusScanException) {
-                    // The document is not created
-                    throw (VirusScanException) ex;
-                }
-
-                // Other errors are logged
-                if (ex instanceof TimeoutException)
-                    log.warn("Timeout during scan of " + bHolder.getBlob().getFilename() + ". File is put in quarantine .");
-                else
-                    log.error("error during scan of " + bHolder.getBlob().getFilename() + ". File is put in quarantine .", ex);
-
-                // If the file can not have be scanned, it must be marked
-                addToQuarantine(docToCreate);
+                if (mustLogError)
+                    // all other errors : stack for easier diagnostic
+                    log.error("error during scan of " + bHolder.getBlob().getFilename() + " . File is put in quarantine .", e);
             }
+
+            
+           if( virusFound)  {
+               event.markBubbleException();
+               throw new VirusScanException(DEFAULT_ERROR_VIRUS_FOUND_MESSAGE, ERROR_VIRUS_FOUND_LOCALIZED_MESSAGE, null);
+           }
         }
     }
 
 
     /**
      * Add to quarantine
+     * 
      * @param docToCreate
      */
     private void addToQuarantine(DocumentModel docToCreate) {
@@ -180,6 +201,7 @@ public class ScanListener implements EventListener {
 
     /**
      * Remove from quaratine (if needed)
+     * 
      * @param docToCreate
      */
     private void removeFromQuarantine(DocumentModel docToCreate) {
