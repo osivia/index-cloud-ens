@@ -1,0 +1,46 @@
+<c:set var="contextPath" value="${pageContext.request.contextPath}"/>
+
+
+<div class="portal-table-cell" data-column="title">
+    <div class="portal-table-cell-inner" data-column="title">
+        <span><ttc:icon document="${item.document}" style="${item.folderish ? 'flat' : 'flat-inverse'}"/></span>
+
+        <div class="file-browser-draggable text-truncate">
+            <span><ttc:title document="${item.document}"/></span>
+        </div>
+
+        <%--PRONOTE indicator--%>
+        <c:if test="${item.pronote}">
+            <c:set var="title"><op:translate key="FILE_BROWSER_PRONOTE_INDICATOR"/></c:set>
+            <div class="ml-4">
+                <img src="${contextPath}/img/pronote.png" alt="${title}" title="${title}" height="24">
+            </div>
+        </c:if>
+
+        <%--Mutualized indicator--%>
+        <c:if test="${item.mutualized}">
+            <c:set var="title"><op:translate key="FILE_BROWSER_MUTUALIZED_INDICATOR"/></c:set>
+            <div class="ml-4">
+                <span class="text-mutualized-dark" title="${title}">
+                    <i class="glyphicons glyphicons-basic-share"></i>
+                </span>
+            </div>
+        </c:if>
+
+        <c:if test="${not empty item.lock || item.subscription}">
+            <div class="ml-auto">
+                <c:if test="${not empty item.lock}">
+                    <div>
+                        <i class="${item.lock}"></i>
+                    </div>
+                </c:if>
+
+                <c:if test="${item.subscription}">
+                    <div>
+                        <i class="glyphicons glyphicons-flag"></i>
+                    </div>
+                </c:if>
+            </div>
+        </c:if>
+    </div>
+</div>

@@ -10,6 +10,7 @@ import fr.toutatice.portail.cms.nuxeo.api.domain.DocumentDTO;
 import org.apache.commons.lang.BooleanUtils;
 import org.apache.commons.lang.StringUtils;
 import org.nuxeo.ecm.automation.client.model.Document;
+import org.nuxeo.ecm.automation.client.model.PropertyList;
 import org.osivia.portal.api.PortalException;
 import org.osivia.portal.api.context.PortalControllerContext;
 import org.osivia.services.workspace.filebrowser.portlet.model.FileBrowserItem;
@@ -114,6 +115,8 @@ public class CustomizedFileBrowserServiceImpl extends FileBrowserServiceImpl imp
 
             // Document DTO
             DocumentDTO documentDto = customizedItem.getDocument();
+            // Nuxeo document
+            Document document = documentDto.getDocument();
 
             // Document types
             List<String> documentTypes = this.getPropertyListValues(documentDto, "idxcl:documentTypes");
@@ -126,6 +129,15 @@ public class CustomizedFileBrowserServiceImpl extends FileBrowserServiceImpl imp
             // Subjects
             List<String> subjects = this.getPropertyListValues(documentDto, "idxcl:subjects");
             customizedItem.setSubjects(subjects);
+
+            // PRONOTE indicator
+            PropertyList targets = document.getProperties().getList("rshr:targets");
+            boolean pronote = (targets != null) && !targets.isEmpty();
+            customizedItem.setPronote(pronote);
+
+            // Mutualized indicator
+            boolean mutualized = BooleanUtils.isTrue(document.getProperties().getBoolean("rshr:mutualized"));
+            customizedItem.setMutualized(mutualized);
         }
 
         return item;

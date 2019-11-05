@@ -7,8 +7,9 @@
     <xs:element name="format" type="xs:string" />    
     <xs:element name="enabledLink" type="xs:boolean" />
     <xs:element name="publicLink" type="xs:boolean" />    
-    
+    <xs:element name="mutualized" type="xs:boolean" />
     <xs:element name="targets" type="nxs:shareTargetList" />
+
 
 	<xs:complexType name="shareTargetList">
 		<xs:sequence>
@@ -16,7 +17,6 @@
 				minOccurs="0" maxOccurs="unbounded" />
 		</xs:sequence>
 	</xs:complexType>
-
 
 	<xs:complexType name="shareTarget">
 		<xs:sequence>

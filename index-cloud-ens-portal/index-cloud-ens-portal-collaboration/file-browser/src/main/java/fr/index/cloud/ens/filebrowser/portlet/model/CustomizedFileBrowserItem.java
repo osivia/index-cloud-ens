@@ -28,6 +28,14 @@ public class CustomizedFileBrowserItem extends FileBrowserItem {
      * Subjects.
      */
     private List<String> subjects;
+    /**
+     * PRONOTE indicator.
+     */
+    private boolean pronote;
+    /**
+     * Mutualized indicator.
+     */
+    private boolean mutualized;
 
 
     /**
@@ -60,5 +68,21 @@ public class CustomizedFileBrowserItem extends FileBrowserItem {
 
     public void setSubjects(List<String> subjects) {
         this.subjects = subjects;
+    }
+
+    public boolean isPronote() {
+        return pronote;
+    }
+
+    public void setPronote(boolean pronote) {
+        this.pronote = pronote;
+    }
+
+    public boolean isMutualized() {
+        return mutualized;
+    }
+
+    public void setMutualized(boolean mutualized) {
+        this.mutualized = mutualized;
     }
 }
