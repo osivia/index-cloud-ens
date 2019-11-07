@@ -180,7 +180,8 @@ class ICAP implements Callable<ICAPResult> {
                         case 200:
                             return new ICAPResult(ICAPResult.STATE_VIRUS_FOUND);
                         case 204:
-                            return new ICAPResult(ICAPResult.STATE_CHECKED);
+                            String virusName = extractVirusName(parseMe);
+                            return new ICAPResult(ICAPResult.STATE_VIRUS_FOUND, virusName);
                         case 404:
                             throw new ICAPException("404: ICAP Service not found");
                         default:
@@ -220,14 +221,8 @@ class ICAP implements Callable<ICAPResult> {
                 } // Unmodified
 
                 if (status == 200) { // OK - The ICAP status is ok, but the encapsulated HTTP status will likely be different
-                    response = getHeader(HTTPTERMINATOR);
-                    int x = response.indexOf("<title>", 0);
-                    int y = response.indexOf("</title>", x);
-                    String statusCode = response.substring(x + 7, y);
-
-                    // if (statusCode.equals("ProxyAV: Access Denied")){
-                    return new ICAPResult(ICAPResult.STATE_VIRUS_FOUND);
-                    // }
+                    String virusName = extractVirusName(response);
+                    return new ICAPResult(ICAPResult.STATE_VIRUS_FOUND, virusName);
                 }
             }
 
@@ -240,6 +235,42 @@ class ICAP implements Callable<ICAPResult> {
         }
     }
 
+    
+    /**
+     * Search virus by begin/end sequence.
+     *
+     * @param response the response
+     * @param begin the begin 
+     * @param end the end
+     * @return the string
+     */
+    private String searchVirusBySequence( String response, String begin, String end) {
+        String virus = null;
+        int iBegin = response.indexOf(begin);
+        if (iBegin != -1)    {
+            int iEnd = response.indexOf(end, iBegin);
+            if( iEnd != -1) {
+                virus = response.substring( iBegin + begin.length(), iEnd);
+            }
+        }
+       return virus;
+    }
+    
+    
+    /**
+     * Extract virus name from the response
+     *
+     * @param response the response
+     * @return the string
+     */
+    private String extractVirusName(String response) {
+        String virusName = searchVirusBySequence(response, "Threat=", ";");
+        if( virusName == null)
+            virusName = searchVirusBySequence(response, "X-FSecure-Infection-Name: \"", "\"");
+        return virusName;
+    }
+    
+    
     /**
      * Automatically asks for the servers available options and returns the raw response as a String.
      * 

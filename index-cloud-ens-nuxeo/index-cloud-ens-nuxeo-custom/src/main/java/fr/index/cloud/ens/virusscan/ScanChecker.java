@@ -111,7 +111,10 @@ public class ScanChecker {
 
                         if (result != null) {
                             if (result.getStateProcessing() == ICAPResult.STATE_VIRUS_FOUND) {
-                                log.warn("Virus found in " + bHolder.getBlob().getFilename() + ".");
+                                String virusName = result.getVirusName();
+                                if( virusName == null)
+                                    virusName = "[unknown]";
+                                log.warn("Virus '"+virusName+"' found in " + bHolder.getBlob().getFilename() + ".");
                                 errorCode = ScanResult.ERROR_VIRUS_FOUND;
                             }
 
