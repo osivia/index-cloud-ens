@@ -1,6 +1,7 @@
 package fr.index.cloud.ens.virusscan;
 
 import java.io.*;
+import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.nio.charset.Charset;
@@ -14,7 +15,8 @@ import org.apache.commons.logging.LogFactory;
 import java.util.HashMap;
 
 class ICAP implements Callable<ICAPResult> {
-
+    
+    private static final int SOCKET_TIMEOUT = 2000;
     private static final Charset StandardCharsetsUTF8 = Charset.forName("UTF-8");
     private static final int BUFFER_SIZE = 32 * 1024;
     private static final int STD_RECEIVE_LENGTH = 8192;
@@ -76,8 +78,9 @@ class ICAP implements Callable<ICAPResult> {
      */
     private void initConnection() throws UnknownHostException, IOException, ICAPException {
 
-        // Initialize connection
-        client = new Socket(serverIP, port);
+        Socket client = new Socket();
+        client.connect(new InetSocketAddress(serverIP, port), SOCKET_TIMEOUT);
+
 
         // Openening out stream
         OutputStream outToServer = client.getOutputStream();
@@ -97,8 +100,6 @@ class ICAP implements Callable<ICAPResult> {
         
 
         if (responseMap.get("StatusCode") != null) {
-           
-            
             int status = Integer.parseInt(responseMap.get("StatusCode"));
             
             if (log.isDebugEnabled())
