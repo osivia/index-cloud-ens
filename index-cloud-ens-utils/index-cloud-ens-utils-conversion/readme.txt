@@ -6,4 +6,4 @@ Extract labels from distribution and concatenate them in a single file
 
 Converts subjects
 
-fr.index.cloud.ens.utils.conversion.vocabulary.ConvertSubject [your_directory]
+fr.index.cloud.ens.utils.conversion.vocabulary.Convert [your_directory]
