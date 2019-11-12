@@ -79,7 +79,7 @@ import fr.toutatice.portail.cms.nuxeo.api.services.dao.DocumentDAO;
 @RestController
 public class DriveRestController {
 
-    
+
     private static final String PROP_TTC_WEBID = "ttc:webid";
     private static final String PROP_SHARE_LINK = "rshr:linkId";
     private static final String PROP_ENABLE_LINK = "rshr:enabledLink";
@@ -94,13 +94,12 @@ public class DriveRestController {
     public static final String DRIVE_TYPE_FILE = "file";
     public static final String DRIVE_TYPE_FOLDER = "folder";
     public static final String DRIVE_TYPE_ROOT = "root";
-    
-    
-    public static PortletContext portletContext;
-    
- 
-    Map<String, String> levelQualifier = null;
 
+
+    public static PortletContext portletContext;
+
+
+    Map<String, String> levelQualifier = null;
 
 
     @Autowired
@@ -198,6 +197,10 @@ public class DriveRestController {
     private Map<String, Object> initContent(HttpServletRequest request, Document doc, String type, boolean mainObject) {
 
         Map<String, Object> contents = new LinkedHashMap<>();
+        
+        PropertyList facets = doc.getFacets();
+        
+        
 
         if (mainObject)
             contents.put("returnCode", ErrorMgr.ERR_OK);
@@ -206,13 +209,17 @@ public class DriveRestController {
         contents.put("id", doc.getProperties().getString(PROP_TTC_WEBID));
         contents.put("title", doc.getTitle());
 
-        if (doc.getProperties().get("common:size") != null) {
-            long size = doc.getProperties().getLong("common:size");
-            contents.put("fileSize", size);
-        }
 
-        if( mainObject) {
-            /* link */
+
+
+        /* link */
+        if (!facets.list().contains("Folderish"))    {
+            
+            if (doc.getProperties().get("common:size") != null) {
+                long size = doc.getProperties().getLong("common:size");
+                contents.put("fileSize", size);
+            }            
+
             Boolean enableLink = doc.getProperties().getBoolean(PROP_ENABLE_LINK, false);
             if (enableLink) {
                 String shareLink = doc.getProperties().getString(PROP_SHARE_LINK);
@@ -220,25 +227,25 @@ public class DriveRestController {
                     contents.put("shareUrl", getSharedUrl(request, shareLink));
                 }
             }
-
+    
             boolean pdfConvertible = ispdfConvertible(doc);
             contents.put("pdfConvertible", pdfConvertible);
-            
+    
             /* format */
             String format = doc.getProperties().getString("rshr:format");
-            if( StringUtils.isEmpty(format))    {
+            if (StringUtils.isEmpty(format)) {
                 format = DEFAULT_FORMAT;
-             }
-             contents.put("pubFormat", format);
-            
-            
+            }
+            contents.put("pubFormat", format);
+    
+    
             // Digest
             PropertyMap fileContent = doc.getProperties().getMap("file:content");
             if (fileContent != null) {
-                contents.put("hash", fileContent.getString("digest"));   
+                contents.put("hash", fileContent.getString("digest"));
             }
+
         }
-          
 
         if (doc.getProperties().get("dc:modified") != null) {
             Date lastModifiedDate = doc.getProperties().getDate("dc:modified");
@@ -257,10 +264,10 @@ public class DriveRestController {
      */
 
     private boolean ispdfConvertible(Document doc) {
-        
+
         DocumentDTO dto = DocumentDAO.getInstance().toDTO(doc);
         return dto.isPdfConvertible();
-     }
+    }
 
 
     private Map<String, Object> initContent(HttpServletRequest request, Document doc, String type) {
@@ -328,15 +335,15 @@ public class DriveRestController {
 
             // Get durrent doc
             Document currentDoc = wrapContentFetching(nuxeoController, path);
-            PropertyList facets = currentDoc.getFacets();            
+            PropertyList facets = currentDoc.getFacets();
 
             String type;
-            if(currentDoc.getPath().equals(rootPath))
-                type =  DRIVE_TYPE_ROOT;
+            if (currentDoc.getPath().equals(rootPath))
+                type = DRIVE_TYPE_ROOT;
             else if (facets.list().contains("Folderish"))
-                type =  DRIVE_TYPE_FOLDER;
-            else 
-                type =  DRIVE_TYPE_FILE;              
+                type = DRIVE_TYPE_FOLDER;
+            else
+                type = DRIVE_TYPE_FILE;
 
             returnObject = initContent(request, currentDoc, type, true);
 
@@ -413,7 +420,7 @@ public class DriveRestController {
 
             // Get parent doc
             Document parentDoc = wrapContentFetching(nuxeoController, IWebIdService.FETCH_PATH_PREFIX + uploadBean.getParentId());
-            
+
             // Get the OAuth2 client ID
             Authentication a = SecurityContextHolder.getContext().getAuthentication();
             String clientId = ((OAuth2Authentication) a).getOAuth2Request().getClientId();
@@ -422,13 +429,13 @@ public class DriveRestController {
             // Execute import
             INuxeoCommand command = new UploadFileCommand(parentDoc.getId(), file);
             Document doc = (Document) nuxeoController.executeNuxeoCommand(command);
-            
+
             // set qualifiers
             // retrieve doc webId
             doc = wrapContentFetching(nuxeoController, doc.getPath());
             Map<String, String> properties = parseProperties(ctx, doc.getProperties().getString(PROP_TTC_WEBID), clientId, uploadBean.getProperties());
             INuxeoCommand updateCommand = new AddPropertiesCommand(doc, properties);
-            nuxeoController.executeNuxeoCommand(updateCommand);            
+            nuxeoController.executeNuxeoCommand(updateCommand);
 
         } catch (Exception e) {
             returnObject = errorMgr.handleDefaultExceptions(ctx, e);
@@ -594,15 +601,15 @@ public class DriveRestController {
         try {
 
             NuxeoController nuxeoController = getNuxeocontroller(request, principal);
-            
-            
+
+
             // Get the OAuth2 client ID
             Authentication a = SecurityContextHolder.getContext().getAuthentication();
             String clientId = ((OAuth2Authentication) a).getOAuth2Request().getClientId();
-             
-            
+
+
             Document currentDoc = null;
-            
+
             // Extract share ID
             String url = publishBean.getShareUrl();
             int iName = url.lastIndexOf('/');
@@ -611,15 +618,15 @@ public class DriveRestController {
             }
 
 
-
             // Execute publish
             INuxeoCommand command = new PublishCommand(currentDoc, publishBean, clientId);
 
             @SuppressWarnings("unchecked")
             Map<String, String> returnMap = (Map<String, String>) nuxeoController.executeNuxeoCommand(command);
-            
+
             // set qualifiers
-            Map<String, String> properties = parseProperties(wsCtx, currentDoc.getProperties().getString(PROP_TTC_WEBID), clientId, publishBean.getProperties());            
+            Map<String, String> properties = parseProperties(wsCtx, currentDoc.getProperties().getString(PROP_TTC_WEBID), clientId,
+                    publishBean.getProperties());
             INuxeoCommand updateCommand = new AddPropertiesCommand(currentDoc, properties);
             nuxeoController.executeNuxeoCommand(updateCommand);
 
@@ -627,7 +634,7 @@ public class DriveRestController {
             returnObject.put("pubId", returnMap.get("pubId"));
 
             // Force cache initialisation
-            NuxeoDocumentContext ctx = nuxeoController.getDocumentContext(currentDoc.getPath());            
+            NuxeoDocumentContext ctx = nuxeoController.getDocumentContext(currentDoc.getPath());
             ctx.reload();
 
         } catch (Exception e) {
@@ -768,7 +775,7 @@ public class DriveRestController {
         if (standardLevel != null)
             properties.put("level", standardLevel);
         String standardSubject = convertSubjectQualifier(ctx, docId, clientId, requestProperties.get("subjectCode"), requestProperties.get("subjectName"));
-        if (standardSubject != null)               
+        if (standardSubject != null)
             properties.put("subject", standardSubject);
 
         return properties;
@@ -780,17 +787,17 @@ public class DriveRestController {
      * @param pronoteQualifier
      * @return the supported qualifier, or null
      */
-    private String convertLevelQualifier(PortalControllerContext ctx, String docId, String clientId,String pronoteCode, String pronoteLabel) {
+    private String convertLevelQualifier(PortalControllerContext ctx, String docId, String clientId, String pronoteCode, String pronoteLabel) {
         return conversionService.convert(ctx, docId, clientId, "L", pronoteCode, pronoteLabel);
     }
-    
+
     /**
      * Convert the local qualifier to the standard one
      * 
      * @param pronoteQualifier
      * @return the supported qualifier, or null
      */
-    private String convertSubjectQualifier(PortalControllerContext ctx, String docId, String clientId,String pronoteCode, String pronoteLabel) {
+    private String convertSubjectQualifier(PortalControllerContext ctx, String docId, String clientId, String pronoteCode, String pronoteLabel) {
         return conversionService.convert(ctx, docId, clientId, "S", pronoteCode, pronoteLabel);
     }
 

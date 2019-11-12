@@ -1,6 +1,7 @@
 package fr.index.cloud.ens.virusscan;
 
 import java.io.*;
+import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.nio.charset.Charset;
@@ -14,7 +15,8 @@ import org.apache.commons.logging.LogFactory;
 import java.util.HashMap;
 
 class ICAP implements Callable<ICAPResult> {
-
+    
+    private static final int SOCKET_TIMEOUT = 2000;
     private static final Charset StandardCharsetsUTF8 = Charset.forName("UTF-8");
     private static final int BUFFER_SIZE = 32 * 1024;
     private static final int STD_RECEIVE_LENGTH = 8192;
@@ -76,8 +78,9 @@ class ICAP implements Callable<ICAPResult> {
      */
     private void initConnection() throws UnknownHostException, IOException, ICAPException {
 
-        // Initialize connection
-        client = new Socket(serverIP, port);
+        Socket client = new Socket();
+        client.connect(new InetSocketAddress(serverIP, port), SOCKET_TIMEOUT);
+
 
         // Openening out stream
         OutputStream outToServer = client.getOutputStream();
@@ -88,10 +91,19 @@ class ICAP implements Callable<ICAPResult> {
         in = new DataInputStream(inFromServer);
 
         String parseMe = getOptions();
+        
+        if (log.isDebugEnabled())
+            log.debug("ICAP options = " +parseMe);     
+        
+        
         Map<String, String> responseMap = parseHeader(parseMe);
+        
 
         if (responseMap.get("StatusCode") != null) {
             int status = Integer.parseInt(responseMap.get("StatusCode"));
+            
+            if (log.isDebugEnabled())
+                log.debug("ICAP status = " +status);            
 
             switch (status) {
                 case 200:
@@ -151,6 +163,11 @@ class ICAP implements Callable<ICAPResult> {
 
             if (fileSize > previewSize) {
                 String parseMe = getHeader(ICAPTERMINATOR);
+                
+                
+                if (log.isDebugEnabled())
+                    log.debug("ICAP response(1) = " +parseMe);   
+                
                 responseMap = parseHeader(parseMe);
 
                 tempString = responseMap.get("StatusCode");
@@ -163,7 +180,8 @@ class ICAP implements Callable<ICAPResult> {
                         case 200:
                             return new ICAPResult(ICAPResult.STATE_VIRUS_FOUND);
                         case 204:
-                            return new ICAPResult(ICAPResult.STATE_CHECKED);
+                            String virusName = extractVirusName(parseMe);
+                            return new ICAPResult(ICAPResult.STATE_VIRUS_FOUND, virusName);
                         case 404:
                             throw new ICAPException("404: ICAP Service not found");
                         default:
@@ -188,6 +206,10 @@ class ICAP implements Callable<ICAPResult> {
 
             responseMap.clear();
             String response = getHeader(ICAPTERMINATOR);
+            
+            if (log.isDebugEnabled())
+                log.debug("ICAP response(2) = " +response);   
+            
             responseMap = parseHeader(response);
 
             tempString = responseMap.get("StatusCode");
@@ -199,14 +221,8 @@ class ICAP implements Callable<ICAPResult> {
                 } // Unmodified
 
                 if (status == 200) { // OK - The ICAP status is ok, but the encapsulated HTTP status will likely be different
-                    response = getHeader(HTTPTERMINATOR);
-                    int x = response.indexOf("<title>", 0);
-                    int y = response.indexOf("</title>", x);
-                    String statusCode = response.substring(x + 7, y);
-
-                    // if (statusCode.equals("ProxyAV: Access Denied")){
-                    return new ICAPResult(ICAPResult.STATE_VIRUS_FOUND);
-                    // }
+                    String virusName = extractVirusName(response);
+                    return new ICAPResult(ICAPResult.STATE_VIRUS_FOUND, virusName);
                 }
             }
 
@@ -214,11 +230,47 @@ class ICAP implements Callable<ICAPResult> {
 
 
         } finally {
-
-            client.close();
+            if( client != null)
+                client.close();
         }
     }
 
+    
+    /**
+     * Search virus by begin/end sequence.
+     *
+     * @param response the response
+     * @param begin the begin 
+     * @param end the end
+     * @return the string
+     */
+    private String searchVirusBySequence( String response, String begin, String end) {
+        String virus = null;
+        int iBegin = response.indexOf(begin);
+        if (iBegin != -1)    {
+            int iEnd = response.indexOf(end, iBegin);
+            if( iEnd != -1) {
+                virus = response.substring( iBegin + begin.length(), iEnd);
+            }
+        }
+       return virus;
+    }
+    
+    
+    /**
+     * Extract virus name from the response
+     *
+     * @param response the response
+     * @return the string
+     */
+    private String extractVirusName(String response) {
+        String virusName = searchVirusBySequence(response, "Threat=", ";");
+        if( virusName == null)
+            virusName = searchVirusBySequence(response, "X-FSecure-Infection-Name: \"", "\"");
+        return virusName;
+    }
+    
+    
     /**
      * Automatically asks for the servers available options and returns the raw response as a String.
      * 
