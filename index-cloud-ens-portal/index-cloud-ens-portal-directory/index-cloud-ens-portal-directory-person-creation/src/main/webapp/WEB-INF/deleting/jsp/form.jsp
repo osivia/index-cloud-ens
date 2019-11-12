@@ -27,11 +27,11 @@
 
                         <form:form action="${checkUrl}" method="post" modelAttribute="form">
                             <div class="form-group required">
-                                <form:label path="mail"><op:translate key="deleting.mail.label"/></form:label>
-                                <c:set var="placeholder"><op:translate key="deleting.mail.placeholder"/></c:set>
-                                <form:input path="mail" type="email" cssClass="form-control" cssErrorClass="form-control is-invalid" placeholder="${placeholder}" autocomplete="false"/>
-                                <small class="form-text text-muted"><op:translate key="deleting.mail.help"/></small>
-                                <form:errors path="mail" cssClass="invalid-feedback" />
+                                <form:label path="password"><op:translate key="deleting.password.label"/></form:label>
+                                <c:set var="placeholder"><op:translate key="deleting.password.placeholder"/></c:set>
+                                <form:password path="password" cssClass="form-control" cssErrorClass="form-control is-invalid" placeholder="${placeholder}" autocomplete="false"/>
+                                <small class="form-text text-muted"><op:translate key="deleting.password.help"/></small>
+                                <form:errors path="password" cssClass="invalid-feedback" />
                             </div>
 
                             <div class="form-group">

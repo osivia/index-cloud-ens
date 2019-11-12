@@ -25,9 +25,9 @@ public class PersonDeletingForm {
     private boolean validated;
 
     /**
-     * Mail.
+     * Password.
      */
-    private String mail;
+    private String password;
     /**
      * Accepted indicator.
      */
@@ -58,12 +58,12 @@ public class PersonDeletingForm {
         this.validated = validated;
     }
 
-    public String getMail() {
-        return mail;
+    public String getPassword() {
+        return password;
     }
 
-    public void setMail(String mail) {
-        this.mail = mail;
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public Boolean getAccepted() {
