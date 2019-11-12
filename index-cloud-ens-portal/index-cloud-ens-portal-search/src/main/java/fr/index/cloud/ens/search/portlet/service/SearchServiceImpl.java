@@ -244,18 +244,22 @@ public class SearchServiceImpl extends SearchCommonServiceImpl implements Search
                                 vocabulary = null;
                             }
 
-                            for (String value : values) {
-                                // Displayed value
-                                String display;
+                            if (StringUtils.isNotEmpty(vocabulary)) {
+                                for (String value : values) {
+                                    // Vocabulary entry key
+                                    String key;
+                                    if (StringUtils.contains(value, "/")) {
+                                        key = StringUtils.substringAfterLast(value, "/");
+                                    } else {
+                                        key = value;
+                                    }
 
-                                if (StringUtils.isNotEmpty(vocabulary)) {
-                                    display = VocabularyHelper.getVocabularyLabel(nuxeoController, vocabulary, value);
-                                } else {
-                                    display = null;
-                                }
+                                    // Displayed value
+                                    String display = VocabularyHelper.getVocabularyLabel(nuxeoController, vocabulary, key);
 
-                                if (StringUtils.isNotEmpty(display)) {
-                                    reminder.add(display);
+                                    if (StringUtils.isNotEmpty(display)) {
+                                        reminder.add(display);
+                                    }
                                 }
                             }
                         }
