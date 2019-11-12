@@ -134,22 +134,26 @@
         <div class="form-group row">
             <form:label path="sizeAmount" cssClass="col-md-3 col-form-label"><op:translate
                     key="SEARCH_FILTERS_SIZE_LABEL"/></form:label>
-            <div class="col-md-6">
-                <form:select path="sizeRange" cssClass="form-control">
-                    <c:forEach var="range" items="${sizeRanges}">
-                        <form:option value="${range}"><op:translate key="${range.key}"/></form:option>
-                    </c:forEach>
-                </form:select>
-            </div>
-            <div class="col-md">
-                <form:input path="sizeAmount" type="number" min="0" step="0.1" cssClass="form-control"/>
-            </div>
-            <div class="col-md">
-                <form:select path="sizeUnit" cssClass="form-control">
-                    <c:forEach var="unit" items="${sizeUnits}">
-                        <form:option value="${unit}"><op:translate key="${unit.key}"/></form:option>
-                    </c:forEach>
-                </form:select>
+            <div class="col-md-9">
+                <div class="form-row">
+                    <div class="col-md-8">
+                        <form:select path="sizeRange" cssClass="form-control">
+                            <c:forEach var="range" items="${sizeRanges}">
+                                <form:option value="${range}"><op:translate key="${range.key}"/></form:option>
+                            </c:forEach>
+                        </form:select>
+                    </div>
+                    <div class="col-md">
+                        <form:input path="sizeAmount" type="number" min="0" step="0.1" cssClass="form-control"/>
+                    </div>
+                    <div class="col-md">
+                        <form:select path="sizeUnit" cssClass="form-control">
+                            <c:forEach var="unit" items="${sizeUnits}">
+                                <form:option value="${unit}"><op:translate key="${unit.key}"/></form:option>
+                            </c:forEach>
+                        </form:select>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -157,18 +161,22 @@
         <div class="form-group row">
             <form:label path="dateRange" cssClass="col-md-3 col-form-label"><op:translate
                     key="SEARCH_FILTERS_DATE_LABEL"/></form:label>
-            <div class="col-md-6">
-                <form:select path="dateRange" cssClass="form-control" data-change-submit="${namespace}-update">
-                    <c:forEach var="range" items="${dateRanges}">
-                        <form:option value="${range}"><op:translate key="${range.key}"/></form:option>
-                    </c:forEach>
-                </form:select>
-            </div>
-            <c:if test="${form.dateRange.customized}">
-                <div class="col-md">
-                    <form:input path="customizedDate" type="date" cssClass="form-control"/>
+            <div class="col-md-9">
+                <div class="form-row">
+                    <div class="col-md-8">
+                        <form:select path="dateRange" cssClass="form-control" data-change-submit="${namespace}-update">
+                            <c:forEach var="range" items="${dateRanges}">
+                                <form:option value="${range}"><op:translate key="${range.key}"/></form:option>
+                            </c:forEach>
+                        </form:select>
+                    </div>
+                    <c:if test="${form.dateRange.customized}">
+                        <div class="col-md">
+                            <form:input path="customizedDate" type="date" cssClass="form-control"/>
+                        </div>
+                    </c:if>
                 </div>
-            </c:if>
+            </div>
         </div>
 
         <%--Buttons--%>
@@ -190,7 +198,7 @@
                         </button>
                     </c:if>
 
-                        <%--Submit--%>
+                    <%--Submit--%>
                     <button type="submit" name="search" class="btn btn-primary">
                         <span><op:translate key="SEARCH_FILTERS_SUBMIT"/></span>
                     </button>
