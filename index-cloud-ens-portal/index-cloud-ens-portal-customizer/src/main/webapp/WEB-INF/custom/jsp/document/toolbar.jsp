@@ -38,6 +38,28 @@
             <span class="d-none d-lg-inline"><op:translate key="DOCUMENT_FILE_TOOLBAR_MUTUALIZE"/></span>
         </a>
 
+        <%--Share--%>
+        <c:choose>
+            <c:when test="${document.properties['rshr:enabledLink']}">
+                <portlet:actionURL name="link-activation" var="activationUrl">
+                    <portlet:param name="activate" value="false"/>
+                </portlet:actionURL>
+                <c:set var="icon" value="glyphicons glyphicons-basic-paired-off" />
+                <c:set var="title"><op:translate key="SHARED_LINK_DEACTIVATE"/></c:set>
+            </c:when>
+            <c:otherwise>
+                <portlet:actionURL name="link-activation" var="activationUrl">
+                    <portlet:param name="activate" value="true"/>
+                </portlet:actionURL>
+                <c:set var="icon" value="glyphicons glyphicons-basic-paired" />
+                <c:set var="title"><op:translate key="SHARED_LINK_ACTIVATE"/></c:set>
+            </c:otherwise>
+        </c:choose>
+        <a href="${activationUrl}" class="btn btn-primary btn-sm">
+            <i class="${icon}"></i>
+            <span class="d-none d-lg-inline">${title}</span>
+        </a>
+
         <%--Download--%>
         <c:if test="${document.type.file}">
             <c:choose>
