@@ -13,84 +13,125 @@
 
 <portlet:resourceURL id="password-information" var="passwordInformationUrl"/>
 
+<c:set var="namespace"><portlet:namespace/></c:set>
+
 
 <div class="create-account">
     <div class="row">
         <div class="col-lg-8">
             <div class="card bg-blue-lighter shadow-lg create-account">
                 <div class="card-body">
-                    <h3 class="card-title text-center text-uppercase font-weight-bold"><op:translate key="createaccount.title"/></h3>
+                    <h3 class="card-title text-center text-uppercase font-weight-bold"><op:translate
+                            key="createaccount.title"/></h3>
 
                     <form:form action="${submitFormUrl}" method="post" modelAttribute="form" role="form">
                         <div class="row">
                             <div class="col-md">
-                                <%--Nickname--%>
+                                    <%--Nickname--%>
                                 <spring:bind path="nickname">
                                     <div class="form-group required">
-                                        <form:label path="nickname" cssClass="text-secondary"><op:translate key="createaccount.form.nickname"/></form:label>
-                                        <form:input path="nickname" cssClass="form-control" cssErrorClass="form-control is-invalid"/>
+                                        <form:label path="nickname" cssClass="text-secondary"><op:translate
+                                                key="createaccount.form.nickname"/></form:label>
+                                        <form:input path="nickname" cssClass="form-control"
+                                                    cssErrorClass="form-control is-invalid"/>
                                         <form:errors path="nickname" cssClass="invalid-feedback"/>
                                     </div>
                                 </spring:bind>
 
-                                <%--Lastname--%>
+                                    <%--Lastname--%>
                                 <spring:bind path="lastname">
                                     <div class="form-group required">
-                                        <form:label path="lastname" cssClass="text-secondary"><op:translate key="createaccount.form.lastname"/></form:label>
-                                        <form:input path="lastname" cssClass="form-control" cssErrorClass="form-control is-invalid"/>
+                                        <form:label path="lastname" cssClass="text-secondary"><op:translate
+                                                key="createaccount.form.lastname"/></form:label>
+                                        <form:input path="lastname" cssClass="form-control"
+                                                    cssErrorClass="form-control is-invalid"/>
                                         <form:errors path="lastname" cssClass="invalid-feedback"/>
                                     </div>
                                 </spring:bind>
 
-                                <%--Firstname--%>
+                                    <%--Firstname--%>
                                 <spring:bind path="firstname">
                                     <div class="form-group required">
-                                        <form:label path="firstname" cssClass="text-secondary"><op:translate key="createaccount.form.firstname"/></form:label>
-                                        <form:input path="firstname" cssClass="form-control" cssErrorClass="form-control is-invalid"/>
+                                        <form:label path="firstname" cssClass="text-secondary"><op:translate
+                                                key="createaccount.form.firstname"/></form:label>
+                                        <form:input path="firstname" cssClass="form-control"
+                                                    cssErrorClass="form-control is-invalid"/>
                                         <form:errors path="firstname" cssClass="invalid-feedback"/>
                                     </div>
                                 </spring:bind>
                             </div>
 
                             <div class="col-md">
-                                <%--Mail--%>
+                                    <%--Mail--%>
                                 <spring:bind path="mail">
                                     <div class="form-group required">
-                                        <form:label path="mail" cssClass="text-secondary"><op:translate key="createaccount.form.mail"/></form:label>
-                                        <form:input path="mail" type="email" cssClass="form-control" cssErrorClass="form-control is-invalid"/>
+                                        <form:label path="mail" cssClass="text-secondary"><op:translate
+                                                key="createaccount.form.mail"/></form:label>
+                                        <form:input path="mail" type="email" cssClass="form-control"
+                                                    cssErrorClass="form-control is-invalid"/>
                                         <form:errors path="mail" cssClass="invalid-feedback"/>
                                     </div>
                                 </spring:bind>
 
-                                <%--Password--%>
+                                    <%--Password--%>
                                 <spring:bind path="newpassword">
                                     <div class="form-group required">
                                         <div class="mb-2">
-                                            <form:label path="newpassword" cssClass="text-secondary"><op:translate key="createaccount.form.newpassword"/></form:label>
-                                            <form:password path="newpassword" cssClass="form-control" cssErrorClass="form-control is-invalid"/>
+                                            <form:label path="newpassword" cssClass="text-secondary"><op:translate
+                                                    key="createaccount.form.newpassword"/></form:label>
+                                            <form:password path="newpassword" cssClass="form-control"
+                                                           cssErrorClass="form-control is-invalid"/>
                                             <form:errors path="newpassword" cssClass="invalid-feedback"/>
                                         </div>
 
-                                        <div data-password-information-placeholder data-url="${passwordInformationUrl}"></div>
+                                        <div data-password-information-placeholder
+                                             data-url="${passwordInformationUrl}"></div>
                                     </div>
                                 </spring:bind>
 
-                                <%--Password confirmation--%>
+                                    <%--Password confirmation--%>
                                 <spring:bind path="confirmpassword">
                                     <div class="form-group required">
-                                        <form:label path="confirmpassword" cssClass="text-secondary"><op:translate key="createaccount.form.confirmpassword"/></form:label>
-                                        <form:password path="confirmpassword" cssClass="form-control" cssErrorClass="form-control is-invalid"/>
+                                        <form:label path="confirmpassword" cssClass="text-secondary"><op:translate
+                                                key="createaccount.form.confirmpassword"/></form:label>
+                                        <form:password path="confirmpassword" cssClass="form-control"
+                                                       cssErrorClass="form-control is-invalid"/>
                                         <form:errors path="confirmpassword" cssClass="invalid-feedback"/>
                                     </div>
                                 </spring:bind>
                             </div>
                         </div>
 
-                        <%--Buttons--%>
-                        <div class="text-right">
-                            <button type="submit" name="save" class="btn btn-secondary">
-                                <span class="text-uppercase font-weight-bold"><op:translate key="createaccount.submit"/></span>
-                            </button>
+
+                        <div class="row">
+                            <div class="col-md">
+                                    <%--Terms of service--%>
+                                <div class="form-check">
+                                    <form:checkbox id="${namespace}-accept-terms-of-service" path="acceptTermsOfService"
+                                                   cssClass="form-check-input" cssErrorClass="form-check-input is-invalid"/>
+                                    <form:label for="${namespace}-accept-terms-of-service" path="acceptTermsOfService"
+                                                cssClass="form-check-label"><op:translate
+                                            key="createaccount.form.acceptTermsOfService"/></form:label>
+                                    <form:errors path="acceptTermsOfService" cssClass="invalid-feedback" />
+                                    <div class="mt-1">
+                                        <c:set var="title"><op:translate key="createaccount.form.termsOfService"/></c:set>
+                                        <a href="javascript:" class="no-ajax-link" data-target="#osivia-modal"
+                                           data-load-url="${termsOfServiceUrl}" data-title="${title}" data-footer="true">
+                                            <span><op:translate key="createaccount.form.viewTermsOfService"/></span>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-auto align-self-end">
+                                    <%--Buttons--%>
+                                <div class="text-right mt-2">
+                                    <button type="submit" name="save" class="btn btn-secondary">
+                                        <span class="text-uppercase font-weight-bold"><op:translate
+                                                key="createaccount.submit"/></span>
+                                    </button>
+                                </div>
+                            </div>
                         </div>
                     </form:form>
                 </div>
@@ -114,8 +155,12 @@
                     <ul class="pl-3">
                         <li class="mb-1">avoir la garantie de rester propri&eacute;taire de vos documents</li>
                         <li class="mb-1">pouvoir cl&ocirc;turer votre compte &agrave; tout moment</li>
-                        <li class="mb-1">&ecirc;tre assur&eacute; que vos donn&eacute;es personnelles ne seront pas exploit&eacute;es</li>
-                        <li class="mb-1">pouvoir r&eacute;cup&eacute;rer tout ou partie de vos documents quand vous le souhaitez</li>
+                        <li class="mb-1">&ecirc;tre assur&eacute; que vos donn&eacute;es personnelles ne seront pas
+                            exploit&eacute;es
+                        </li>
+                        <li class="mb-1">pouvoir r&eacute;cup&eacute;rer tout ou partie de vos documents quand vous le
+                            souhaitez
+                        </li>
                     </ul>
                 </div>
             </div>

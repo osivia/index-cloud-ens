@@ -5,6 +5,7 @@ package fr.index.cloud.ens.directory.person.creation.portlet.model.validation;
 
 import fr.index.cloud.ens.directory.person.creation.portlet.model.PersonCreationForm;
 import fr.index.cloud.ens.directory.person.creation.portlet.service.PersonCreationService;
+import org.apache.commons.lang.BooleanUtils;
 import org.apache.commons.lang.StringUtils;
 import org.osivia.directory.v2.service.PersonUpdateService;
 import org.osivia.portal.api.directory.v2.model.Person;
@@ -129,6 +130,10 @@ public class PersonCreationFormValidator implements Validator {
         }
 
         service.validatePasswordRules(errors, "newpassword", form.getNewpassword());
+
+        if (BooleanUtils.isNotTrue(form.getAcceptTermsOfService())) {
+            errors.rejectValue("acceptTermsOfService", "required");
+        }
     }
 
 }

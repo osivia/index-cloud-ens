@@ -6,13 +6,20 @@ package fr.index.cloud.ens.directory.person.creation.portlet.service;
 import fr.index.cloud.ens.directory.person.creation.portlet.model.PersonCreationForm;
 import fr.toutatice.portail.cms.nuxeo.api.forms.FormFilterException;
 import fr.toutatice.portail.cms.nuxeo.api.forms.IFormsService;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang.BooleanUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.dom4j.Element;
+import org.jboss.portal.core.controller.ControllerContext;
+import org.jboss.portal.core.model.portal.Page;
+import org.jboss.portal.core.model.portal.Portal;
+import org.osivia.directory.v2.model.preferences.UserPreferences;
 import org.osivia.directory.v2.service.PersonUpdateService;
+import org.osivia.directory.v2.service.preferences.UserPreferencesService;
+import org.osivia.portal.api.Constants;
 import org.osivia.portal.api.PortalException;
 import org.osivia.portal.api.context.PortalControllerContext;
 import org.osivia.portal.api.directory.v2.model.Person;
@@ -21,10 +28,18 @@ import org.osivia.portal.api.internationalization.Bundle;
 import org.osivia.portal.api.internationalization.IBundleFactory;
 import org.osivia.portal.api.notifications.INotificationsService;
 import org.osivia.portal.api.notifications.NotificationsType;
+import org.osivia.portal.api.urls.IPortalUrlFactory;
+import org.osivia.portal.api.urls.PortalUrlType;
+import org.osivia.portal.api.windows.PortalWindow;
+import org.osivia.portal.api.windows.WindowFactory;
+import org.osivia.portal.core.context.ControllerContextAdapter;
+import org.osivia.portal.core.portalobjects.PortalObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.Errors;
 
+import javax.portlet.PortletException;
+import javax.portlet.PortletRequest;
 import java.text.Normalizer;
 import java.util.*;
 
@@ -35,16 +50,29 @@ import java.util.*;
 @Service
 public class PersonCreationServiceImpl implements PersonCreationService {
 
+    /** Base 62. */
+    private static final int BASE_62 = 62;
+
+    /** Base 62 alphabet conversion table. */
+    private static final char[] TO_BASE_62 = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W',
+            'X', 'Y', 'Z', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
+            '0', '1', '2', '3', '4', '5', '6', '7', '8', '9'};
+
+
     /** Logger. */
     private static final Log logger = LogFactory.getLog(PersonCreationServiceImpl.class);
+
 
     @Autowired
     private PersonUpdateService personService;
 
+    /** Portal URL factory. */
+    @Autowired
+    private IPortalUrlFactory portalUrlFactory;
+
     /** Forms service. */
     @Autowired
     private IFormsService formsService;
-
 
     /** Bundle factory. */
     @Autowired
@@ -53,6 +81,11 @@ public class PersonCreationServiceImpl implements PersonCreationService {
     /** Notifications service. */
     @Autowired
     private INotificationsService notificationsService;
+
+    /** User preferences service. */
+    @Autowired
+    private UserPreferencesService userPreferencesService;
+
 
     @Override
     public void validatePasswordRules(Errors errors, String field, String password) {
@@ -106,14 +139,13 @@ public class PersonCreationServiceImpl implements PersonCreationService {
      */
     @Override
     public void proceedInit(PortalControllerContext portalControllerContext, PersonCreationForm form) {
-
         // A person can be in directory but his account should not be valid
         Person searchByMail = this.personService.getEmptyPerson();
         searchByMail.setMail(form.getMail());
         List<Person> findByCriteria = personService.findByCriteria(searchByMail);
 
-        Person person = null;
-        String uid = null;
+        Person person;
+        String uid;
         boolean reuseAccount = false;
         if (findByCriteria.size() > 0) {
 
@@ -124,7 +156,7 @@ public class PersonCreationServiceImpl implements PersonCreationService {
 
         } else {
             person = this.personService.getEmptyPerson();
-            uid = genUid(form);
+            uid = this.generateUid();
             person.setUid(uid);
             // Person is created with passed current date validity. 
             // It can not be logged in until the mail is checked, which will remove this attribute.
@@ -154,13 +186,14 @@ public class PersonCreationServiceImpl implements PersonCreationService {
         Map<String, String> variables = new HashMap<>();
         variables.put("uid", uid);
         variables.put("mail", form.getMail());
+        variables.put("termsOfService", this.getPortalTermsOfService(portalControllerContext));
 
         // Start
         try {
             formsService.start(portalControllerContext, MODEL_ID, variables);
         } catch (PortalException | FormFilterException e) {
 
-            logger.error("Error during person cration", e);
+            logger.error("Error during person creation", e);
 
             Bundle bundle = this.bundleFactory.getBundle(portalControllerContext.getRequest().getLocale());
 
@@ -173,43 +206,57 @@ public class PersonCreationServiceImpl implements PersonCreationService {
 
 
     /**
-     * UID is first letter of the firstname + lastname without maj, or special characters, accents, .... + a single number
-     * @return the login
+     * Get portal terms of service.
+     *
+     * @param portalControllerContext portal controller context
+     * @return terms of service
      */
-    private String genUid(PersonCreationForm form) {
+    private String getPortalTermsOfService(PortalControllerContext portalControllerContext) {
+        // Controller context
+        ControllerContext controllerContext = ControllerContextAdapter.getControllerContext(portalControllerContext);
+        // Portal
+        Portal portal = PortalObjectUtils.getPortal(controllerContext);
 
-        // firstname : trim white spaces, remove accents then check the regex
-        String firstname = removeAccents(form.getFirstname());
-        String firstNameInitial = StringUtils.substring(firstname, 0, 1);
-
-        // lastname, idem
-        String lastname = removeAccents(form.getLastname());
-        String lastNameClean = StringUtils.replaceEach(lastname, new String[]{" ", "'"}, new String[]{"-", "-"});
-
-        // uid, build first le
-        String uid = StringUtils.lowerCase(firstNameInitial + lastNameClean);
-
-        Person searchByUid = this.personService.getEmptyPerson();
-        searchByUid.setUid(uid + "*");
-        List<Person> findByCriteria = personService.findByCriteria(searchByUid);
-
-        int suffix = 0;
-        for (Person p : findByCriteria) {
-
-            String suffixStr = StringUtils.remove(p.getUid(), uid);
-            if (!StringUtils.isEmpty(suffixStr)) {
-                int parseInt = Integer.parseInt(suffixStr);
-                if (parseInt > suffix) {
-                    suffix = parseInt;
-                }
-            }
-
-
+        // Terms of service
+        String termsOfService;
+        if (portal == null) {
+            termsOfService = null;
+        } else {
+            termsOfService = portal.getProperty("osivia.services.cgu.level");
         }
 
-        if (findByCriteria.size() > 0) {
-            suffix++;
-            uid += Integer.toString(suffix);
+        return termsOfService;
+    }
+
+
+    /**
+     * Generate person identifier.
+     *
+     * @return identifier
+     */
+    private String generateUid() {
+        // Random generator
+        Random random = new Random();
+
+        // Search criteria
+        Person criteria = this.personService.getEmptyPerson();
+        // Search results
+        List<Person> results = null;
+
+        // Person identifier
+        String uid = null;
+
+        while (StringUtils.isEmpty(uid) || CollectionUtils.isNotEmpty(results)) {
+            // Generate new identifier
+            Character[] array = new Character[PERSON_UID_LENGTH];
+            for (int i = 0; i < PERSON_UID_LENGTH; i++) {
+                array[i] = TO_BASE_62[random.nextInt(BASE_62)];
+            }
+            uid = StringUtils.join(array);
+
+            // Check identifier uniqueness
+            criteria.setUid(uid);
+            results = this.personService.findByCriteria(criteria);
         }
 
         return uid;
@@ -222,17 +269,85 @@ public class PersonCreationServiceImpl implements PersonCreationService {
         return input.replaceAll("[\\p{InCombiningDiacriticalMarks}]", "");
     }
 
-    /* (non-Javadoc)
-     * @see fr.index.cloud.ens.directory.person.creation.portlet.controller.PersonCreationService#proceedRegistration(org.osivia.portal.api.context.PortalControllerContext, java.lang.String)
-     */
-    @Override
-    public void proceedRegistration(PortalControllerContext portalControllerContext, String uid) {
 
+    @Override
+    public void proceedRegistration(PortalControllerContext portalControllerContext) throws PortletException {
+        // Portlet request
+        PortletRequest request = portalControllerContext.getRequest();
+        // Window
+        PortalWindow window = WindowFactory.getWindow(request);
+
+        // Person identifier
+        String uid = window.getProperty("uid");
+        // Accepted terms of service
+        String termsOfService = window.getProperty("termsOfService");
+
+
+        // Person
         Person person = personService.getPerson(uid);
 
         // Account is valid unlimited time
         person.setValidity(null);
 
         personService.update(person);
+
+
+        // User preferences
+        UserPreferences userPreferences;
+        try {
+            userPreferences = this.userPreferencesService.getUserPreferences(portalControllerContext, uid);
+        } catch (PortalException e) {
+            throw new PortletException(e);
+        }
+
+        // Save user preferences
+        userPreferences.setTermsOfService(termsOfService);
+        userPreferences.setUpdated(true);
+        try {
+            this.userPreferencesService.saveUserPreferences(portalControllerContext, userPreferences);
+        } catch (PortalException e) {
+            throw new PortletException(e);
+        }
     }
+
+
+    @Override
+    public String getTermsOfServiceUrl(PortalControllerContext portalControllerContext) throws PortletException {
+        // Controller context
+        ControllerContext controllerContext = ControllerContextAdapter.getControllerContext(portalControllerContext);
+        // Page
+        Page page = PortalObjectUtils.getPage(controllerContext);
+
+        // Terms of service path
+        String path;
+        if (page == null) {
+            path = null;
+        } else {
+            path = page.getProperty("osivia.services.cgu.path");
+        }
+
+        // Terms of service URL
+        String url;
+        if (StringUtils.isEmpty(path)) {
+            url = null;
+        } else {
+            // Portlet instance
+            String instance = "toutatice-portail-cms-nuxeo-viewFragmentPortletInstance";
+
+            // Window properties
+            Map<String, String> properties = new HashMap<>();
+            properties.put(Constants.WINDOW_PROP_URI, path);
+            properties.put("osivia.fragmentTypeId", "html_property");
+            properties.put("osivia.propertyName", "note:note");
+
+            try {
+                url = this.portalUrlFactory.getStartPortletUrl(portalControllerContext, instance, properties, PortalUrlType.MODAL);
+            } catch (PortalException e) {
+                throw new PortletException(e);
+            }
+        }
+
+        return url;
+    }
+
 }

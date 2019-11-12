@@ -14,6 +14,8 @@ import org.jboss.portal.core.model.portal.PortalObject;
 import org.jboss.portal.core.model.portal.Window;
 import org.jboss.portal.theme.impl.render.dynamic.DynaRenderOptions;
 import org.nuxeo.ecm.automation.client.model.Document;
+import org.osivia.directory.v2.model.preferences.UserPreferences;
+import org.osivia.directory.v2.service.preferences.UserPreferencesService;
 import org.osivia.portal.api.PortalException;
 import org.osivia.portal.api.context.PortalControllerContext;
 import org.osivia.portal.api.customization.*;
@@ -94,6 +96,9 @@ public class ProjectCustomizer extends CMSPortlet implements ICustomizationModul
     private final IBundleFactory bundleFactory;
     /** Taskbar service. */
     private final ITaskbarService taskbarService;
+    /** User preferences service. */
+    private final UserPreferencesService userPreferencesService;
+
 
     /**
      * Customization module metadatas.
@@ -107,6 +112,7 @@ public class ProjectCustomizer extends CMSPortlet implements ICustomizationModul
      * Customization modules repository.
      */
     private ICustomizationModulesRepository repository;
+
 
     /**
      * Constructor.
@@ -126,6 +132,8 @@ public class ProjectCustomizer extends CMSPortlet implements ICustomizationModul
         this.bundleFactory = internationalizationService.getBundleFactory(this.getClass().getClassLoader());
         // Taskbar service
         this.taskbarService = Locator.findMBean(ITaskbarService.class, ITaskbarService.MBEAN_NAME);
+        // User preferences service
+        this.userPreferencesService = DirServiceFactory.getService(UserPreferencesService.class);
 
         // Logs
         this.log = LogFactory.getLog(this.getClass());
@@ -394,13 +402,23 @@ public class ProjectCustomizer extends CMSPortlet implements ICustomizationModul
                 return;
             }
 
-            // Get user profile
-            INuxeoCommand command = new GetProfileCommand(principal.getName());
-            Document userProfile = (Document) nuxeoController.executeNuxeoCommand(command);
+            // User preferences
+            UserPreferences userPreferences;
+            try {
+                userPreferences = this.userPreferencesService.getUserPreferences(portalControllerContext);
+            } catch (PortalException e) {
+                this.log.error(e.getMessage());
+                userPreferences = null;
+            }
 
             // User level
-            String userLevel = userProfile.getProperties().getString("ttc_userprofile:terms_of_use_agreement");
-            session.setAttribute(CGU_LEVEL_ATTRIBUTE, userLevel);
+            String userLevel;
+            if (userPreferences == null) {
+                userLevel = null;
+            } else {
+                userLevel = userPreferences.getTermsOfService();
+                session.setAttribute(CGU_LEVEL_ATTRIBUTE, userLevel);
+            }
 
             if (!portalLevel.equals(userLevel)) {
                 session.setAttribute("osivia.services.cgu.pathToRedirect", configuration.buildRestorableURL());

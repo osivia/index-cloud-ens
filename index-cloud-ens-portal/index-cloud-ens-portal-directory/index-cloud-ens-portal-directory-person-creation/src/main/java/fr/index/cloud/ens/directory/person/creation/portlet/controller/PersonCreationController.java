@@ -111,7 +111,7 @@ public class PersonCreationController extends CMSPortlet {
     }
 
     @ModelAttribute("form")
-    public PersonCreationForm getForm(PortletRequest request, PortletResponse response) throws PersonCreationInvalidTokenException {
+    public PersonCreationForm getForm(PortletRequest request, PortletResponse response) throws PersonCreationInvalidTokenException, PortletException {
 
         PortalControllerContext portalControllerContext = new PortalControllerContext(getPortletContext(), request, response);
 
@@ -138,13 +138,9 @@ public class PersonCreationController extends CMSPortlet {
                     throw new PersonCreationInvalidTokenException();
 
                 }
-
-
             }
         } else {
-
-            PortalWindow window = WindowFactory.getWindow(portalControllerContext.getRequest());
-            service.proceedRegistration(portalControllerContext, window.getProperty("uid"));
+            service.proceedRegistration(portalControllerContext);
         }
 
         return form;
@@ -206,6 +202,22 @@ public class PersonCreationController extends CMSPortlet {
         }
 
     }
+
+
+    /**
+     * Get terms of service URL model attribute.
+     * @param request portlet request
+     * @param response portlet response
+     * @return URL
+     */
+    @ModelAttribute("termsOfServiceUrl")
+    public String getTermsOfServiceUrl(PortletRequest request, PortletResponse response) throws PortletException {
+        // Portal controller context
+        PortalControllerContext portalControllerContext = new PortalControllerContext(this.portletContext, request, response);
+
+        return this.service.getTermsOfServiceUrl(portalControllerContext);
+    }
+
 
     /**
      * Post-construct.

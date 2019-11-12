@@ -1,6 +1,9 @@
 package fr.index.cloud.ens.directory.person.creation.portlet.configuration;
 
+import fr.toutatice.portail.cms.nuxeo.api.forms.IFormsService;
+import fr.toutatice.portail.cms.nuxeo.api.services.NuxeoServiceFactory;
 import org.osivia.directory.v2.service.PersonUpdateService;
+import org.osivia.directory.v2.service.preferences.UserPreferencesService;
 import org.osivia.portal.api.directory.v2.DirServiceFactory;
 import org.osivia.portal.api.internationalization.IBundleFactory;
 import org.osivia.portal.api.internationalization.IInternationalizationService;
@@ -16,19 +19,18 @@ import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import org.springframework.web.servlet.view.JstlView;
 
-import fr.toutatice.portail.cms.nuxeo.api.forms.IFormsService;
-import fr.toutatice.portail.cms.nuxeo.api.services.NuxeoServiceFactory;
-
 /**
  * Person creation configuration.
- * 
+ *
  * @author Loïc Billon
  */
 @Configuration
 @ComponentScan(basePackages = "fr.index.cloud.ens.directory.person.creation.portlet")
 public class PersonCreationPortletConfiguration {
 
-    /** Application context. */
+    /**
+     * Application context.
+     */
     @Autowired
     private ApplicationContext applicationContext;
 
@@ -52,7 +54,7 @@ public class PersonCreationPortletConfiguration {
         messageSource.setBasename("Resource");
         return messageSource;
     }
-    
+
     /**
      * Get view resolver.
      *
@@ -67,11 +69,11 @@ public class PersonCreationPortletConfiguration {
         viewResolver.setSuffix(".jsp");
         return viewResolver;
     }
-    
+
 
     /**
      * Get person service.
-     * 
+     *
      * @return person service
      */
     @Bean
@@ -82,7 +84,7 @@ public class PersonCreationPortletConfiguration {
 
     /**
      * Get internationalization bundle factory.
-     * 
+     *
      * @return internationalization bundle factory
      */
     @Bean
@@ -91,7 +93,7 @@ public class PersonCreationPortletConfiguration {
                 IInternationalizationService.MBEAN_NAME);
         return internationalizationService.getBundleFactory(this.getClass().getClassLoader(), this.applicationContext);
     }
-    
+
     /**
      * Get portal URL factory.
      *
@@ -100,28 +102,39 @@ public class PersonCreationPortletConfiguration {
     @Bean
     public IPortalUrlFactory getPortalUrlFactory() {
         return Locator.findMBean(IPortalUrlFactory.class, IPortalUrlFactory.MBEAN_NAME);
-    }    
+    }
 
-    
+
     /**
      * Get notifications service.
-     * 
+     *
      * @return notification service
      */
     @Bean
     public INotificationsService getNotificationService() {
         return Locator.findMBean(INotificationsService.class, INotificationsService.MBEAN_NAME);
     }
-    
-    
+
+
     /**
      * Get forms service.
-     * 
+     *
      * @return forms service
      */
     @Bean
     public IFormsService getFormsService() {
         return NuxeoServiceFactory.getFormsService();
     }
-    
+
+
+    /**
+     * Get user preferences service.
+     *
+     * @return user preferences service
+     */
+    @Bean
+    public UserPreferencesService getUserPreferencesService() {
+        return DirServiceFactory.getService(UserPreferencesService.class);
+    }
+
 }

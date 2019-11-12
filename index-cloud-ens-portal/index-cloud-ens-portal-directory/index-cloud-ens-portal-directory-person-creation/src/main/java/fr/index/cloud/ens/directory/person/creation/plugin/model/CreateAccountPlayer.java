@@ -47,12 +47,14 @@ public class CreateAccountPlayer implements INuxeoPlayerModule {
 
 
     /**
-     * Get forum player.
+     * Get player.
      *
      * @param documentContext Nuxeo document context
-     * @return forum player
+     * @param uid person identifier
+     * @param termsOfService accepted terms of service
+     * @return player
      */
-    private Player getPortletPlayer(NuxeoDocumentContext documentContext, String uid) {
+    private Player getPortletPlayer(NuxeoDocumentContext documentContext, String uid, String termsOfService) {
         // Internationalization bundle
         Bundle bundle = this.bundleFactory.getBundle(Locale.getDefault());
 
@@ -69,6 +71,7 @@ public class CreateAccountPlayer implements INuxeoPlayerModule {
         properties.put("osivia.ajaxLink", "1");
         properties.put(PersonCreationController.VIEW_WINDOW_PROPERTY, PersonCreationForm.CreationStep.CONFIRM.name());
         properties.put("uid", uid);
+        properties.put("termsOfService", termsOfService);
 
         // Player
         Player player = new Player();
@@ -92,10 +95,11 @@ public class CreateAccountPlayer implements INuxeoPlayerModule {
 
             if (procMap != null && PersonCreationService.MODEL_ID.equals(procMap.get("pi:procedureModelWebId"))) {
 
-                PropertyMap variables = (PropertyMap) procMap.get("pi:globalVariablesValues");
-                String uid = (String) variables.get("uid");
+                PropertyMap variables = procMap.getMap("pi:globalVariablesValues");
+                String uid = variables.getString("uid");
+                String termsOfService = variables.getString("termsOfService");
 
-                return this.getPortletPlayer(documentContext, uid);
+                return this.getPortletPlayer(documentContext, uid, termsOfService);
             }
         }
         return null;
