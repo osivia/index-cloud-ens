@@ -38,9 +38,11 @@
             <c:forEach var="item" items="${form.items}">
                 <div class="portal-table-row portal-table-selectable-filter ${item.folderish ? 'file-browser-droppable' : ''}"
                      data-id="${item.document.id}"
-                     data-type="${item.document.type.name}" data-text="${item.title}"
+                     data-type="${item.document.type.name}"
+                     data-text="${item.title}"
                      data-accepted-types="${item.acceptedTypes}"
-                     data-double-click-target=".file-browser-draggable a">
+                     data-double-click-target=".file-browser-draggable a"
+                     data-pronote="${item.pronote}">
                         <%--Title--%>
                     <%@ include file="table-body-title.jspf" %>
 

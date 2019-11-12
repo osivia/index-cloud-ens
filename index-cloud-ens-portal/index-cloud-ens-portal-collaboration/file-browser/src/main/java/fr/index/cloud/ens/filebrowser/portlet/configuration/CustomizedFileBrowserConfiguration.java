@@ -37,7 +37,7 @@ public class CustomizedFileBrowserConfiguration extends FileBrowserConfiguration
     @Override
     public ResourceBundleMessageSource getMessageSource() {
         ResourceBundleMessageSource messageSource = super.getMessageSource();
-        messageSource.setBasenames("file-browser", "customized-file-browser");
+        messageSource.setBasenames("customized-file-browser", "file-browser");
         return messageSource;
     }
 
