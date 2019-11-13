@@ -2,6 +2,14 @@
 
 
 $primary: $cloud-dark;
+$primary-lighter: $blue-lighter;
+
+$theme-colors: map-merge(
+                (
+                        "primary-lighter": $primary-lighter
+                ),
+                $theme-colors
+);
 
 
 @import "../bootstrap/functions";

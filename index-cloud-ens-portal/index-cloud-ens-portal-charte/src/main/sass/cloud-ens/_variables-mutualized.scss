@@ -2,6 +2,14 @@
 
 
 $primary: $mutualized-dark;
+$primary-lighter: $mutualized-lighter;
+
+$theme-colors: map-merge(
+                (
+                        "primary-lighter": $primary-lighter
+                ),
+                $theme-colors
+);
 
 
 @import "../bootstrap/functions";

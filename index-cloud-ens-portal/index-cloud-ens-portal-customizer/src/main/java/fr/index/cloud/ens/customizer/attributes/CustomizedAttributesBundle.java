@@ -256,21 +256,12 @@ public class CustomizedAttributesBundle implements IAttributesBundle {
         List<NavItem> navItems = new ArrayList<>();
         attributes.put(NAV_ITEMS, navItems);
 
-        // Home
-        String homeUrl = controllerContext.getServerInvocation().getServerContext().getPortalContextPath();
-        NavItem homeNavItem = new NavItem();
-        homeNavItem.setUrl(homeUrl);
-        homeNavItem.setIcon("glyphicons glyphicons-basic-home");
-        homeNavItem.setKey("TOOLBAR_HOME");
-        homeNavItem.setActive(StringUtils.isEmpty(basePath));
-        navItems.add(homeNavItem);
-
         // User workspace nav item
         NavItem userWorkspaceNavItem = new NavItem();
         userWorkspaceNavItem.setUrl(userWorkspaceUrl);
         userWorkspaceNavItem.setIcon("glyphicons glyphicons-basic-user-rounded");
         userWorkspaceNavItem.setKey("TOOLBAR_USER_WORKSPACE");
-        userWorkspaceNavItem.setColor("text-cloud-dark");
+        userWorkspaceNavItem.setColor("cloud-dark");
         userWorkspaceNavItem.setActive((userWorkspace != null) && StringUtils.equals(basePath, userWorkspace.getCmsPath()));
         navItems.add(userWorkspaceNavItem);
 
@@ -279,7 +270,7 @@ public class CustomizedAttributesBundle implements IAttributesBundle {
         mutualizedSpaceNavItem.setUrl(mutualizedSpaceUrl);
         mutualizedSpaceNavItem.setIcon("glyphicons glyphicons-basic-share");
         mutualizedSpaceNavItem.setKey("TOOLBAR_COMMUNITY_WORKSPACE");
-        mutualizedSpaceNavItem.setColor("text-mutualized-dark");
+        mutualizedSpaceNavItem.setColor("mutualized-dark");
         mutualizedSpaceNavItem.setActive(StringUtils.equals(basePath, mutualizedSpacePath));
         navItems.add(mutualizedSpaceNavItem);
 
