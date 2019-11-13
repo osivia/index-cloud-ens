@@ -2,7 +2,7 @@
     <div class="row flex-grow-1 overflow-hidden">
         <div id="drawer" class="col d-flex flex-column mh-100 overflow-hidden">
             <div class="row flex-grow-1 overflow-auto">
-                <div class="col py-4 pl-0">
+                <div class="col pt-2 pb-4 pl-0">
                     <p:region regionName="nav"/>
                 </div>
             </div>

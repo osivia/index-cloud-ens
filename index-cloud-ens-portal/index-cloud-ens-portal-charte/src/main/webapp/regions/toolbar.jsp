@@ -7,7 +7,7 @@
 <c:set var="contextPath" value="${pageContext.request.contextPath}"/>
 
 
-<nav class="navbar navbar-expand-md navbar-light border-bottom">
+<nav class="navbar navbar-expand-md navbar-light border-bottom mb-2">
     <%--Drawer toggle button--%>
     <ul class="navbar-nav d-md-none ml-n1 mr-3 drawer-toggle-button">
         <li class="nav-item">
@@ -30,7 +30,7 @@
 
     <div id="navbar" class="collapse navbar-collapse">
         <%--Administration--%>
-        <ul class="navbar-nav">
+        <ul class="navbar-nav d-none d-md-flex mr-3">
             <li class="nav-item">
                 <c:out value="${requestScope['osivia.toolbar.administrationContent']}" escapeXml="false"/>
             </li>

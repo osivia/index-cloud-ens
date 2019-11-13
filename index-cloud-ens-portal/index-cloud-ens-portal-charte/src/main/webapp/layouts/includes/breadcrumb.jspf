@@ -1,5 +1,5 @@
-<div class="row align-items-center bg-primary-lighter">
-    <div class="col">
+<div class="align-items-center bg-primary-lighter rounded">
+    <div class="px-3">
         <div class="d-flex align-items-center justify-content-between">
             <%--Breadcrumb--%>
             <p:region regionName="breadcrumb"/>
