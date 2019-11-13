@@ -154,7 +154,15 @@ public class SearchCommonRepositoryImpl implements SearchCommonRepository {
             throw new PortletException(e);
         }
 
-        return userPreferences.getSavedSearches();
+        // Saved searches
+        List<UserSavedSearch> savedSearches;
+        if (userPreferences == null) {
+            savedSearches = null;
+        } else {
+            savedSearches = userPreferences.getSavedSearches();
+        }
+
+        return savedSearches;
     }
 
 }
