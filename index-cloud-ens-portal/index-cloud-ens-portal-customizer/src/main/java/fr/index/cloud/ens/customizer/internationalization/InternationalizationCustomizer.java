@@ -152,6 +152,8 @@ public class InternationalizationCustomizer extends GenericPortlet implements IC
                     try {
                         ResourceBundle rb = ResourceBundle.getBundle("cloud", Locale.FRENCH, fileClassLoader, _UTF8Control);
                         result = rb.getString(key);
+                        if( result != null)
+                            result = result.replaceAll("'", "''");
                     } catch (MissingResourceException e) {
                         // Do nothing
                     }

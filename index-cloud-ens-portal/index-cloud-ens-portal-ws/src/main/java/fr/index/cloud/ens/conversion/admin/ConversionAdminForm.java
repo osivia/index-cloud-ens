@@ -16,6 +16,8 @@ import org.springframework.web.multipart.MultipartFile;
  */
 @Component
 @Refreshable
+@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+
 public class ConversionAdminForm {
 
     /** original URL. */

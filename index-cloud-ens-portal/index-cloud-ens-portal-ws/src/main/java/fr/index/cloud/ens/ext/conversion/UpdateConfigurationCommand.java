@@ -56,7 +56,7 @@ public class UpdateConfigurationCommand implements INuxeoCommand {
 
     @Override
     public String getId() {
-        return null;
+        return this.getClass().getName() + "/" + System.currentTimeMillis();
     }
 
 

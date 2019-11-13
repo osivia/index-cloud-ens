@@ -70,6 +70,15 @@ public class ConversionServiceImpl implements IConversionService {
 
     private static SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
 
+    /** Code niveau ramené au MEFSTAT4 */
+    private static int LEVEL_MEFSTAT4_LG = 4;
+
+    /** Code matière tronqué */
+    private static int SUBJECT_LG = 6;
+
+    /** Code famille */
+    private static int SUBJECT_FAMILLE_LG = 2;
+
 
     /**
      * Gets the nuxeo controller.
@@ -89,17 +98,17 @@ public class ConversionServiceImpl implements IConversionService {
 
         String resultCode = null;
 
-        if( StringUtils.isNotEmpty(key) || StringUtils.isNotEmpty(label)) {
+        if (StringUtils.isNotEmpty(key) || StringUtils.isNotEmpty(label)) {
             try {
                 List<ConversionRecord> records = conversionRepository.getRecords(ctx);
-    
+
                 if (StringUtils.startsWith(clientId, EtablissementService.PRONOTE_CLIENT_PREFIX)) {
-    
+
                     String etablissement = clientId.substring(EtablissementService.PRONOTE_CLIENT_PREFIX.length());
-    
+
                     resultCode = convertBatch(records, docId, etablissement, field, key, label);
                 }
-    
+
             } catch (PortletException e) {
                 logger.error("Technical error in conversion tool ", e);
             }
@@ -124,11 +133,6 @@ public class ConversionServiceImpl implements IConversionService {
 
         String resultCode = null;
 
-        // No accents + uppercase
-        if (label != null) {
-            String strTemp = Normalizer.normalize(label, Normalizer.Form.NFD);
-            label = pattern.matcher(strTemp).replaceAll("").toUpperCase();
-        }
 
         resultCode = convertInternal(records, etablissementId, field, key, label);
 
@@ -152,19 +156,24 @@ public class ConversionServiceImpl implements IConversionService {
     private String convertInternal(List<ConversionRecord> records, String etablissement, String field, String key, String label) {
         String resultCode = null;
 
-        // ETB + CODE
-        resultCode = check(records, etablissement, field, key, label, true, true, false);
-        // ETB + LABEL
-        if (resultCode == null)
-            resultCode = check(records, etablissement, field, key, label, true, false, true);
+        if (records != null) {
 
-        // NO ETB + CODE
-        if (resultCode == null)
-            resultCode = check(records, etablissement, field, key, label, false, true, false);
-        // NO ETB + LABEL
-        if (resultCode == null)
-            resultCode = check(records, etablissement, field, key, label, false, false, true);
+            // ETB + CODE
+            resultCode = checkCode(records, etablissement, field, key, true);
+            // ETB + LABEL
+            if (resultCode == null)
+                resultCode = checkLabel(records, etablissement, field, label, true);
+
+            // NO ETB + CODE
+            if (resultCode == null)
+                resultCode = checkCode(records, etablissement, field, key, false);
+            // NO ETB + LABEL
+            if (resultCode == null)
+                resultCode = checkLabel(records, etablissement, field, label, false);
+
+        }
         return resultCode;
+
     }
 
 
@@ -178,30 +187,120 @@ public class ConversionServiceImpl implements IConversionService {
      * @param label the label
      * @param includeEtb the include etb
      * @param checkCode the check code
-     * @param checkLabel the check label
      * @return the string
      */
-    private String check(List<ConversionRecord> records, String etablissement, String field, String key, String label, boolean includeEtb, boolean checkCode,
-            boolean checkLabel) {
+    private String checkCode(List<ConversionRecord> records, String etablissement, String field, String code, boolean includeEtb) {
+
+        String resultCode = null;
+        String famille = null;
+
+        if (StringUtils.isNotBlank(code)) {
+
+            if ("L".equals(field)) {
+                // On retient les 4 premiers caractères du niveau
+                if (code.length() > LEVEL_MEFSTAT4_LG) {
+                    code = code.substring(0, LEVEL_MEFSTAT4_LG);
+                }
+            }
+
+            if ("S".equals(field)) {
+                // On supprime les caractères d’espacement en début de code (TrimLeft)
+                code = code.replaceAll("^\\s+", "");
+                // On ne prend que les 6 premiers caractères qui restent
+                if (code.length() > SUBJECT_LG)
+                    code = code.substring(SUBJECT_LG);
+                // Si le code comporte moins de 6 caractères, on remplit de ‘0’ le début.
+                if (code.length() < SUBJECT_LG)
+                    code = StringUtils.leftPad(code, SUBJECT_LG, "0");
+                // Et enfin on remplace les 2 derniers caractères (sensés correspondre à la modalité d’enseignement) par des ‘0’
+                code = code.substring(0, SUBJECT_LG - 2);
+                code = StringUtils.rightPad(code, SUBJECT_LG, "0");
+                famille = code.substring(0, 2);
+            }
+
+
+            for (ConversionRecord record : records) {
+                if ((!includeEtb && StringUtils.isEmpty(record.getEtablissement()))
+                        || (includeEtb && StringUtils.equals(record.getEtablissement(), etablissement))) {
+
+                    if (StringUtils.equals(record.getPublishCode(), code)) {
+                        resultCode = record.getResultCode();
+                        break;
+                    }
+                }
+            }
+
+            // Si non trouvé, recherche par famille
+            if (resultCode == null && StringUtils.isNotEmpty(famille)) {
+                for (ConversionRecord record : records) {
+                    if ((!includeEtb && StringUtils.isEmpty(record.getEtablissement()))
+                            || (includeEtb && StringUtils.equals(record.getEtablissement(), etablissement))) {
+
+                        if (StringUtils.equals(record.getPublishCode(), famille)) {
+                            resultCode = record.getResultCode();
+                            break;
+                        }
+                    }
+                }
+            }
+
+
+        }
+
+        return resultCode;
+    }
+
+
+    private String checkLabel(List<ConversionRecord> records, String etablissement, String field, String label, boolean includeEtb) {
 
         String resultCode = null;
 
-        // Check for code
-        for (ConversionRecord record : records) {
-            if ((!includeEtb && StringUtils.isEmpty(record.getEtablissement()))
-                    || (includeEtb && StringUtils.equals(record.getEtablissement(), etablissement))) {
 
-                if ((checkCode && StringUtils.isNotBlank(key) && StringUtils.equals(record.getPublishCode(), key))
-                        || (checkLabel && StringUtils.isNotBlank(label) && StringUtils.equals(record.getPublishLabel(), label))) {
+        if (StringUtils.isNotBlank(label)) {
 
-                    resultCode = record.getResultCode();
-                    break;
+            // Remplacer tous les caractères accentués par leur équivalent sans accent
+            label = Normalizer.normalize(label, Normalizer.Form.NFD);
+            label = label.replaceAll("[\\p{InCombiningDiacriticalMarks}]", "");
+
+            if ("L".equals(field)) {
+
+                // Suppression des espaces
+                label = label.replaceAll("\\s+", "");
+
+                // Passer toutes les lettres en majuscule
+                label = label.toUpperCase();
+            }
+
+            if ("S".equals(field)) {
+
+                // Passer toutes les lettres en majuscule
+                label = label.toUpperCase();
+
+                // Remplacer tous les caractères qui ne sont pas des lettres par des espaces
+                label = label.replaceAll("[^A-Za-z]", " ");
+
+                // Supprimer les caractères d’espacement en début et fin de libellé ainsi que les suites d’espaces par un seul.
+                label = label.replaceAll("^\\s+", "");
+                label = label.replaceAll("\\s+$", "");
+                label = StringUtils.normalizeSpace(label);
+            }
+
+
+            for (ConversionRecord record : records) {
+                if ((!includeEtb && StringUtils.isEmpty(record.getEtablissement()))
+                        || (includeEtb && StringUtils.equals(record.getEtablissement(), etablissement))) {
+
+                    if (StringUtils.equals(record.getPublishLabel(), label)) {
+                        resultCode = record.getResultCode();
+                        break;
+                    }
                 }
             }
         }
 
         return resultCode;
     }
+
 
     @Override
     public void applyPatch(PortalControllerContext ctx, File file) throws FileNotFoundException, IOException, MalformedLineException, PortletException {

@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.RandomAccessFile;
 import java.io.StringReader;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,6 +17,7 @@ import javax.activation.MimeTypeParseException;
 import javax.portlet.PortletException;
 import javax.portlet.PortletRequest;
 
+import org.apache.commons.io.input.ReversedLinesFileReader;
 import org.apache.log4j.spi.RepositorySelector;
 import org.nuxeo.ecm.automation.client.model.Document;
 import org.nuxeo.ecm.automation.client.model.FileBlob;
@@ -328,48 +330,35 @@ public class ConversionAdminServiceImpl implements ConversionAdminService {
 
     }
 
+    
+    /**
+     * Read last lines of e file
+     *
+     * @param file the file
+     * @param numLastLineToRead the num last line to read
+     * @return the list
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
+    public static List<String> readLastLine(File file, int numLastLineToRead) throws IOException {
 
-    // Read n lines from the end of the file
-    public String readFromLast(File file, int lines) throws IOException {
-
-        String endString = null;
-
-        StringBuffer result = new StringBuffer();
-        int readLines = 0;
-        StringBuilder builder = new StringBuilder();
-        RandomAccessFile randomAccessFile = null;
+        List<String> result = new ArrayList<>();
+  
+        ReversedLinesFileReader reader = new ReversedLinesFileReader(file);
         try {
-            randomAccessFile = new RandomAccessFile(file, "r");
-            long fileLength = file.length() - 1;
-            // Set the pointer at the last of the file
-            randomAccessFile.seek(fileLength);
-            for (long pointer = fileLength; pointer >= 0; pointer--) {
-                randomAccessFile.seek(pointer);
-                char c;
-                // read from the last one char at the time
-                c = (char) randomAccessFile.read();
-                // break when end of the line
-                if (c == '\n') {
-                    readLines++;
-                    if (readLines == lines)
-                        break;
-                }
-                builder.append(c);
+            String line = "";
+            while ((line = reader.readLine()) != null && result.size() < numLastLineToRead) {
+                result.add(line);
             }
-            // Since line is read from the last so it
-            // is in reverse so use reverse method to make it right
-            builder.reverse();
-
-            endString = builder.toString();
-
-        } finally {
-            if (randomAccessFile != null) {
-                randomAccessFile.close();
-            }
+        } finally   {
+            if(reader != null)
+                reader.close();
         }
 
-        return endString;
+
+        return result;
+
     }
+    
 
 
     /**
@@ -381,17 +370,10 @@ public class ConversionAdminServiceImpl implements ConversionAdminService {
 
         StringBuffer result = new StringBuffer();
         try {
-            String endOfFile = readFromLast(new File("/var/log/portal/portal_conversion.log"), 100);
-
-            BufferedReader reader = new BufferedReader(new StringReader(endOfFile));
-            List<String> orderedStrings = new ArrayList<>();
-            String str;
-
-            // Reverse order
-            while ((str = reader.readLine()) != null) {
-                if (str.length() > 0)
-                    orderedStrings.add(0, str);
-            }
+            
+            List<String> orderedStrings = readLastLine(new File("/var/log/portal/portal_conversion.log"),100);
+            
+            
             result.append("<table class=\"table \">");
             
             for (String line : orderedStrings) {
