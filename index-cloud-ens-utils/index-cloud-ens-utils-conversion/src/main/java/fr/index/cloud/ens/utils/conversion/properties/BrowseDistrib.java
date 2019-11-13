@@ -25,12 +25,12 @@ public class BrowseDistrib {
     public static final String SUFFIX = ".tmp";
 
     private static List<String> prefixsToRemove = Arrays.asList(new String[]{"fr.index.cloud.ens.portal.directory-", "org.osivia.services.directory.group-",
-            "org.osivia.services.directory.person-", "org.osivia.services-", "org.osivia.services.workspace-"});
+            "org.osivia.services.directory.person-", "org.osivia.services-", "org.osivia.services.workspace-", "fr.index.cloud.ens.portal.collaboration-"});
 
     private static List<String> prefixsToIgnore = Arrays.asList(new String[]{"osivia-portal-custom-services", "toutatice-portail-cms-nuxeo-web",
             "index-cloud-ens-portal-ws/CONVERSION_ADMIN", "index-cloud-ens-portal-ws/APPLICATION", "osivia-services-procedure", "osivia-services-statistics",
             "osivia-services-contact", "osivia-services-workspace-sharing", "osivia-services-workspace-participants", "osivia-services-calendar",
-            "osivia-services-editor-helpers", "osivia-services-pad", "osivia-services-workspace-file-browser/FILE_BROWSER_ADMIN", "osivia-services-versions",
+            "osivia-services-editor-helpers", "osivia-services-pad", "osivia-services-workspace-file-browser/FILE_BROWSER_ADMIN", "index-cloud-ens-portal-file-browser/FILE_BROWSER_ADMIN", "osivia-services-versions",
             "osivia-services-forum", "osivia-services-workspace-creation", "osivia-services-workspace-edition", "osivia-services-workspace-member-management",
             "osivia-services-workspace-local-group-management", "osivia-services-workspace-acl-management", "osivia-services-faq", "osivia-services-onlyoffice",
             "osivia-services-directory-person-management", "osivia-services-directory-group-card", "osivia-services-directory-group-management",
@@ -207,6 +207,8 @@ public class BrowseDistrib {
                                             // Add value
                                             ignore = false;
                                             if (applyFilter) {
+                                                System.out.println("prefix" + appName);
+                                                
                                                 for (String prefix : prefixsToIgnore) {
                                                     if ((appName + "/" + line).startsWith(prefix)) {
                                                         ignore = true;
@@ -266,6 +268,23 @@ public class BrowseDistrib {
         lineToInsert = lineToInsert.replaceAll("\\\\u00AB", "'");
         lineToInsert = lineToInsert.replaceAll("\\\\u00BB", "'");
         lineToInsert = lineToInsert.replaceAll("\\\\u00E0", "à");
+        
+        
+        //\u005C\u002F\u003A\u002A\u003F\u0022\u003C\u003E\u007C
+        
+        lineToInsert = lineToInsert.replaceAll("\\\\u005C", "\\\\");
+        lineToInsert = lineToInsert.replaceAll("\\\\u002F", "/");
+        lineToInsert = lineToInsert.replaceAll("\\\\u003A", ":");        
+        lineToInsert = lineToInsert.replaceAll("\\\\u002A", "*");
+        lineToInsert = lineToInsert.replaceAll("\\\\u003F", "?");
+        lineToInsert = lineToInsert.replaceAll("\\\\u0022", "\"");
+        lineToInsert = lineToInsert.replaceAll("\\\\u003C", "<");
+        lineToInsert = lineToInsert.replaceAll("\\\\u003E", ">");
+        lineToInsert = lineToInsert.replaceAll("\\\\u007C", "|");
+
+
+        
+        
 
         lineToInsert = lineToInsert.replaceAll("''", "'");
 
