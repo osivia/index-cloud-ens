@@ -110,7 +110,7 @@ public class Convert {
 
                     String code = toks[1];
                     if (code.length() == 0)
-                        code = toks[0] + "*";
+                        code = toks[0];
 
                     conversionOut.println("S;;" + code + ";;" + toks[2]);
                     nbConversion++;

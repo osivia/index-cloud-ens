@@ -178,11 +178,11 @@ class ICAP implements Callable<ICAPResult> {
                         case 100:
                             break; // Continue transfer
                         case 200:
-                            return new ICAPResult(ICAPResult.STATE_VIRUS_FOUND);
-                        case 204:
                             String virusName = extractVirusName(parseMe);
-                            return new ICAPResult(ICAPResult.STATE_VIRUS_FOUND, virusName);
-                        case 404:
+                            return new ICAPResult(ICAPResult.STATE_VIRUS_FOUND, virusName);                            
+                        case 204:
+                            return new ICAPResult(ICAPResult.STATE_CHECKED);
+                         case 404:
                             throw new ICAPException("404: ICAP Service not found");
                         default:
                             throw new ICAPException("Server returned unknown status code:" + status);

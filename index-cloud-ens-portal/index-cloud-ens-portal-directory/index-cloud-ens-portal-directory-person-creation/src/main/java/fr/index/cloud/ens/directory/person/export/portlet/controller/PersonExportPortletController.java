@@ -8,7 +8,10 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.text.MessageFormat;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import javax.annotation.PostConstruct;
 import javax.portlet.ActionRequest;
@@ -22,6 +25,7 @@ import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
 import javax.portlet.ResourceRequest;
 import javax.portlet.ResourceResponse;
+import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.CharEncoding;
@@ -32,6 +36,7 @@ import org.osivia.portal.api.context.PortalControllerContext;
 import org.osivia.portal.api.directory.v2.model.Person;
 import org.osivia.portal.api.internationalization.Bundle;
 import org.osivia.portal.api.notifications.NotificationsType;
+import org.osivia.portal.core.cms.CMSBinaryContent;
 import org.osivia.portal.core.cms.CMSException;
 import org.osivia.portal.core.cms.CMSItem;
 import org.osivia.portal.core.cms.CMSServiceCtx;
@@ -140,6 +145,8 @@ public class PersonExportPortletController extends CMSPortlet {
         response.getCacheControl().setExpirationTime(0);
         // Buffer size
         response.setBufferSize(4096);
+        
+        response.setProperty("Content-Disposition", getHeaderContentDisposition());
 
         // Input steam
         InputStream inputSteam = new FileInputStream(new File(file));
@@ -149,6 +156,30 @@ public class PersonExportPortletController extends CMSPortlet {
         IOUtils.copy(inputSteam, outputStream);
         outputStream.close();
     }
+    
+    
+    /**
+     * Get header content disposition value.
+     *
+     * @param request HTTP servlet request
+     * @param content CMS binary content
+     * @param forceDownload force the download 
+     * @return content disposition
+     */
+    private String getHeaderContentDisposition() {
+       StringBuilder builder = new StringBuilder();
+
+       // Force download
+        builder.append("attachment; ");
+
+        builder.append("filename=\"");
+        Date date = new Date();
+        SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy");
+        builder.append("export-cloud-"+format.format(date)+".zip");
+        builder.append("\"");
+        return builder.toString();
+    }
+    
 	
     /**
      * Post-construct.
