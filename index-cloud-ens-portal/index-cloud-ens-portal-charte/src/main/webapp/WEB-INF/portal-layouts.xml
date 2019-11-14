@@ -28,6 +28,16 @@
     </layout>
 
     <layout>
+        <name>cloud-ens-anonymous-home</name>
+        <uri>/layouts/anonymous-home/index.jsp</uri>
+        <uri state="maximized">/layouts/without-nav/maximized.jsp</uri>
+        <regions>
+            <region name="top" />
+        </regions>
+    </layout>
+
+
+    <layout>
         <name>cloud-ens-home</name>
         <uri>/layouts/home/index.jsp</uri>
         <uri state="maximized">/layouts/without-nav/maximized.jsp</uri>
