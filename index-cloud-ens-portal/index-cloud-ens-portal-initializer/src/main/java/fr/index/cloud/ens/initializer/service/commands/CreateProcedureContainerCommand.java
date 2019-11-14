@@ -1,8 +1,10 @@
 package fr.index.cloud.ens.initializer.service.commands;
 
 import org.nuxeo.ecm.automation.client.Session;
+import org.nuxeo.ecm.automation.client.adapters.DocumentSecurityService;
 import org.nuxeo.ecm.automation.client.adapters.DocumentService;
 import org.nuxeo.ecm.automation.client.model.Document;
+import org.nuxeo.ecm.automation.client.model.DocumentPermissions;
 import org.nuxeo.ecm.automation.client.model.Documents;
 import org.nuxeo.ecm.automation.client.model.PathRef;
 import org.nuxeo.ecm.automation.client.model.PropertyMap;
@@ -50,7 +52,12 @@ public class CreateProcedureContainerCommand implements INuxeoCommand {
 			properties.set("dc:title", "Instances");
 			proceduresInstancesContainer = documentService.createDocument(proceduresContainer, "ProceduresInstancesContainer", "procedures-instances", properties);
 
-			// TODO ACL
+			// ADD ACL
+            DocumentSecurityService securityService = nuxeoSession.getAdapter(DocumentSecurityService.class);
+            DocumentPermissions documentPermissions = new DocumentPermissions(1);
+            documentPermissions.setPermission("Administrators", "Everything");
+            securityService.addPermissions(proceduresInstancesContainer, documentPermissions, DocumentSecurityService.LOCAL_ACL, true);
+
 		}
 		else {
 			proceduresInstancesContainer = instancesCtn.get(0);

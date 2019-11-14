@@ -122,6 +122,9 @@ public class PersonExportServiceImpl implements PersonExportService {
         Person person = (Person) pcc.getRequest().getAttribute(Constants.ATTR_LOGGED_PERSON_2);
 		
         NuxeoController nuxeoController = new NuxeoController(pcc.getRequest(), pcc.getResponse(), pcc.getPortletCtx());
+        nuxeoController.setAuthType(NuxeoCommandContext.AUTH_TYPE_SUPERUSER);
+        nuxeoController.setCacheType(CacheInfo.CACHE_SCOPE_NONE);
+        
         Documents procedures = (Documents) nuxeoController.executeNuxeoCommand(new GetExportProceduresCommand(person.getUid()));
         
         form.setIsExportRunning(Boolean.FALSE);
