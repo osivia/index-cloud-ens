@@ -7,7 +7,8 @@
         <schema name="resourceSharing" prefix="rshr" src="schemas/resource-sharing.xsd"/>
         <schema name="oauth2Tokens" prefix="oatk" src="schemas/oauth2-tokens.xsd"/>
         <schema name="indexClassifiers" prefix="idxcl" src="schemas/index-classifiers.xsd"/>
+        <schema name="mutualization" prefix="mtz" src="schemas/mutualization.xsd"/>
         <schema name="indexUserPreferences" prefix="idxup" src="schemas/index-user-preferences.xsd"/>
-        <schema name="virusScan" prefix="idxvs" src="schemas/virus-scan.xsd"/>        
+        <schema name="virusScan" prefix="idxvs" src="schemas/virus-scan.xsd"/>
     </extension>
 </component>

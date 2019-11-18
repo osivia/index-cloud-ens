@@ -22,7 +22,7 @@
     </c:if>
 
     <%--Mutualized indicator--%>
-    <c:if test="${not empty document.publishedDocuments}">
+    <c:if test="${document.properties['mtz:enable']}">
         <div class="mr-3">
             <span class="h5 mb-0 text-mutualized-dark">
                 <i class="glyphicons glyphicons-basic-share"></i>
@@ -32,11 +32,13 @@
 
     <div class="flex-grow-1 text-right">
         <%--Mutualize--%>
-        <portlet:actionURL name="mutualize" var="mutualizeUrl"/>
-        <a href="${mutualizeUrl}" class="btn btn-mutualized-dark btn-sm">
-            <i class="glyphicons glyphicons-basic-share"></i>
-            <span class="d-none d-lg-inline"><op:translate key="DOCUMENT_FILE_TOOLBAR_MUTUALIZE"/></span>
-        </a>
+        <c:if test="${not empty mutualizeUrl}">
+            <c:set var="title"><op:translate key="DOCUMENT_FILE_TOOLBAR_MUTUALIZE"/></c:set>
+            <a href="javascript:" class="btn btn-mutualized-dark btn-sm" data-target="#osivia-modal" data-load-url="${mutualizeUrl}" data-title="${title}">
+                <i class="glyphicons glyphicons-basic-share"></i>
+                <span class="d-none d-lg-inline">${title}</span>
+            </a>
+        </c:if>
 
         <%--Share--%>
         <c:choose>

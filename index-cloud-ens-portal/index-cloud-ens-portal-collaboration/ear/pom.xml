@@ -26,6 +26,14 @@
             <type>war</type>
         </dependency>
 
+        <!--Mutualization-->
+        <dependency>
+            <groupId>fr.index.cloud.ens.portal.collaboration</groupId>
+            <artifactId>index-cloud-ens-portal-mutualization</artifactId>
+            <version>${project.version}</version>
+            <type>war</type>
+        </dependency>
+
         <!-- Document edition -->
         <dependency>
             <groupId>org.osivia.services</groupId>
@@ -90,6 +98,13 @@
                             <groupId>fr.index.cloud.ens.portal.collaboration</groupId>
                             <artifactId>index-cloud-ens-portal-file-browser</artifactId>
                             <contextRoot>/index-cloud-ens-portal-file-browser</contextRoot>
+                        </webModule>
+
+                        <!--Mutualization-->
+                        <webModule>
+                            <groupId>fr.index.cloud.ens.portal.collaboration</groupId>
+                            <artifactId>index-cloud-ens-portal-mutualization</artifactId>
+                            <contextRoot>/index-cloud-ens-portal-mutualization</contextRoot>
                         </webModule>
 
                         <!-- Document edition -->

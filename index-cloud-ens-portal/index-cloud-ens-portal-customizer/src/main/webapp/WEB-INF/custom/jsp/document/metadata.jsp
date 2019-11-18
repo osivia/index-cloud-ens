@@ -262,14 +262,26 @@
         <div class="card mb-3 bg-mutualized-lighter border-mutualized-dark">
             <div class="card-body">
                 <%--Title--%>
-                <p class="card-text mb-0">Titre</p>
+                <p class="card-text mb-0"><op:translate key="DOCUMENT_MUTUALIZATION_TITLE"/></p>
                 <p class="card-text">
-                    <strong>Titre de la mutualisation</strong>
+                    <strong>${document.properties['mtz:title']}</strong>
                 </p>
 
                 <%--Keywords--%>
-                <p class="card-text mb-0">Mots cl&eacute;</p>
-                <p class="card-text">-</p>
+                <p class="card-text mb-0"><op:translate key="DOCUMENT_MUTUALIZATION_KEYWORDS"/></p>
+                <c:choose>
+                    <c:when test="${empty document.properties['mtz:keywords']}">
+                        <p class="card-text">&ndash;</p>
+                    </c:when>
+
+                    <c:otherwise>
+                        <ul class="list-inline">
+                            <c:forEach var="keyword" items="${document.properties['mtz:keywords']}">
+                                <li class="list-inline-item">${keyword}</li>
+                            </c:forEach>
+                        </ul>
+                    </c:otherwise>
+                </c:choose>
 
                 <%--Informations--%>
                 <p class="card-text text-mutualized-dark">D&eacute;synchronis&eacute; de la vue mutualis&eacute;e</p>

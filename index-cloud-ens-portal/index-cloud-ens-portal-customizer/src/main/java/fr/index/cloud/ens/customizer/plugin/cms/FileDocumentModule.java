@@ -66,6 +66,10 @@ public class FileDocumentModule extends PortletModule {
                 // Permissions
                 Permissions permissions = documentContext.getPermissions();
 
+                // Mutualize URL
+                String mutualizeUrl = this.getMutualizeUrl(portalControllerContext, path);
+                request.setAttribute("mutualizeUrl", mutualizeUrl);
+
                 if (permissions.isEditable()) {
                     // Rename URL
                     String renameUrl = this.getRenameUrl(portalControllerContext, path);
@@ -83,6 +87,30 @@ public class FileDocumentModule extends PortletModule {
                 }
             }
         }
+    }
+
+
+    /**
+     * Get mutualize URL.
+     *
+     * @param portalControllerContext portal controller context
+     * @param path                    document path
+     * @return URL
+     */
+    private String getMutualizeUrl(PortalControllerContext portalControllerContext, String path) throws PortletException {
+        // Window properties
+        Map<String, String> properties = new HashMap<>();
+        properties.put("osivia.mutualize.path", path);
+
+        // URL
+        String url;
+        try {
+            url = this.portalUrlFactory.getStartPortletUrl(portalControllerContext, "index-cloud-ens-mutualization-instance", properties, PortalUrlType.MODAL);
+        } catch (PortalException e) {
+            throw new PortletException(e);
+        }
+
+        return url;
     }
 
 
@@ -159,30 +187,6 @@ public class FileDocumentModule extends PortletModule {
         }
 
         return url;
-    }
-
-
-    @Override
-    protected void processAction(ActionRequest request, ActionResponse response, PortletContext portletContext) {
-        // Portal controller context
-        PortalControllerContext portalControllerContext = new PortalControllerContext(portletContext, request, response);
-        // Nuxeo controller
-        NuxeoController nuxeoController = new NuxeoController(portalControllerContext);
-
-        // Document path
-        String path = this.getDocumentPath(nuxeoController);
-
-        // Action name
-        String action = request.getParameter(ActionRequest.ACTION_NAME);
-
-        if ("mutualize".equals(action)) {
-            // Nuxeo command
-            INuxeoCommand command = new MutualizeDocumentCommand(path);
-            nuxeoController.executeNuxeoCommand(command);
-
-            // Refresh
-            PageProperties.getProperties().setRefreshingPage(true);
-        }
     }
 
 
