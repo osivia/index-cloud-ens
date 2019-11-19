@@ -54,7 +54,7 @@
                     <li class="nav-item mt-2 mt-md-0">
                         <a href="${requestScope['osivia.toolbar.loginURL']}" class="nav-link">
                             <i class="glyphicons glyphicons-basic-log-in"></i>
-                            <span class="d-md-none d-sm-inline"><op:translate key="TOOLBAR_LOGIN"/></span>
+                            <span class="d-md-none d-lg-inline"><op:translate key="TOOLBAR_LOGIN"/></span>
                         </a>
                     </li>
                 </c:when>
