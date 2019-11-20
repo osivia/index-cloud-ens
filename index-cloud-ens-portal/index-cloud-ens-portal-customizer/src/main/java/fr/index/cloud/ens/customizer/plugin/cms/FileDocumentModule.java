@@ -1,10 +1,13 @@
 package fr.index.cloud.ens.customizer.plugin.cms;
 
 import fr.toutatice.portail.cms.nuxeo.api.ContextualizationHelper;
-import fr.toutatice.portail.cms.nuxeo.api.INuxeoCommand;
 import fr.toutatice.portail.cms.nuxeo.api.NuxeoController;
 import fr.toutatice.portail.cms.nuxeo.api.cms.NuxeoDocumentContext;
+import fr.toutatice.portail.cms.nuxeo.api.cms.NuxeoPublicationInfos;
+import fr.toutatice.portail.cms.nuxeo.api.domain.DocumentDTO;
+import fr.toutatice.portail.cms.nuxeo.api.domain.RemotePublishedDocumentDTO;
 import fr.toutatice.portail.cms.nuxeo.api.portlet.PortletModule;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.osivia.portal.api.Constants;
 import org.osivia.portal.api.PortalException;
@@ -15,10 +18,11 @@ import org.osivia.portal.api.urls.IPortalUrlFactory;
 import org.osivia.portal.api.urls.PortalUrlType;
 import org.osivia.portal.api.windows.PortalWindow;
 import org.osivia.portal.api.windows.WindowFactory;
-import org.osivia.portal.core.page.PageProperties;
 
 import javax.portlet.*;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -28,6 +32,12 @@ import java.util.Map;
  * @see PortletModule
  */
 public class FileDocumentModule extends PortletModule {
+
+    /**
+     * Mutualized space path.
+     */
+    private static final String MUTUALIZED_SPACE_PATH = System.getProperty("config.mutualized.path");
+
 
     /**
      * Portal URL factory.
@@ -85,6 +95,10 @@ public class FileDocumentModule extends PortletModule {
                     String deleteUrl = this.getDeleteUrl(portalControllerContext, path);
                     request.setAttribute("deleteUrl", deleteUrl);
                 }
+
+                // Desynchronized indicator
+                boolean desynchronized = this.isDesynchronized(portalControllerContext, documentContext);
+                request.setAttribute("desynchronized", desynchronized);
             }
         }
     }
@@ -187,6 +201,64 @@ public class FileDocumentModule extends PortletModule {
         }
 
         return url;
+    }
+
+
+    /**
+     * Check if mutualized document is desynchronized.
+     *
+     * @param portalControllerContext portal controller context
+     * @param documentContext         document context
+     * @return true if document is desynchronized
+     */
+    private boolean isDesynchronized(PortalControllerContext portalControllerContext, NuxeoDocumentContext documentContext) {
+        // Portlet request
+        PortletRequest request = portalControllerContext.getRequest();
+
+        // Document
+        DocumentDTO document = (DocumentDTO) request.getAttribute("document");
+
+        // Published documents
+        List<RemotePublishedDocumentDTO> publishedDocuments;
+        if (document == null) {
+            publishedDocuments = null;
+        } else {
+            publishedDocuments = document.getPublishedDocuments();
+        }
+
+        // Mutualized document
+        RemotePublishedDocumentDTO mutualizedDocument = null;
+        if (CollectionUtils.isNotEmpty(publishedDocuments)) {
+            Iterator<RemotePublishedDocumentDTO> iterator = publishedDocuments.iterator();
+            while ((mutualizedDocument == null) && iterator.hasNext()) {
+                RemotePublishedDocumentDTO publishedDocument = iterator.next();
+
+                // Published document path
+                String publishedDocumentPath = publishedDocument.getPath();
+                if (!StringUtils.startsWith(publishedDocumentPath, "/")) {
+                    publishedDocumentPath = "/" + publishedDocumentPath;
+                }
+
+                if (StringUtils.startsWith(publishedDocumentPath, MUTUALIZED_SPACE_PATH)) {
+                    mutualizedDocument = publishedDocument;
+                }
+            }
+        }
+
+
+        // Desynchronized indicator
+        boolean desynchronized;
+
+        if (mutualizedDocument == null) {
+            desynchronized = false;
+        } else {
+            // Publication infos
+            NuxeoPublicationInfos publicationInfos = documentContext.getPublicationInfos();
+
+            desynchronized = !StringUtils.equals(mutualizedDocument.getVersionLabel(), publicationInfos.getLiveVersion());
+        }
+
+        return desynchronized;
     }
 
 

@@ -283,8 +283,10 @@
                     </c:otherwise>
                 </c:choose>
 
-                <%--Informations--%>
-                <p class="card-text text-mutualized-dark">D&eacute;synchronis&eacute; de la vue mutualis&eacute;e</p>
+                <%--Desynchronized indicator--%>
+                <c:if test="${desynchronized}">
+                    <p class="card-text text-mutualized-dark"><op:translate key="DOCUMENT_MUTUALIZATION_DESYNCHRONIZED"/></p>
+                </c:if>
 
                 <ul class="list-inline mb-0">
                     <%--Views--%>
