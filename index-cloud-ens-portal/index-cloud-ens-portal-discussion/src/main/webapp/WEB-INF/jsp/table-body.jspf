@@ -1,0 +1,70 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="op" uri="http://www.osivia.org/jsp/taglib/osivia-portal" %>
+<%@ taglib prefix="ttc" uri="http://www.toutatice.fr/jsp/taglib/toutatice" %>
+
+
+<c:set var="checkboxTitle"><op:translate key="TABLE_CHECKBOX_TITLE"/></c:set>
+
+
+<c:choose>
+    <c:when test="${empty discussionsForm.trashedDocuments}">
+        <div class="portal-table-row-group">
+            <div class="portal-table-row">
+                <div class="portal-table-cell">
+                    <div class="portal-table-cell-inner">
+                        <span class="text-muted"><op:translate key="DISCUSSION_EMPTY_MESSAGE"/></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </c:when>
+
+    <c:otherwise>
+        <div class="portal-table-row-group portal-table-selectable popover-container">
+            <c:forEach var="trashedDocument" items="${discussionsForm.trashedDocuments}">
+                <div class="portal-table-row portal-table-selectable-filter"
+                     >
+                    <%--Document--%>
+                    <div class="portal-table-cell" data-column="document">
+                        <div class="portal-table-cell-inner" data-column="document">
+                            <div class="d-flex align-items-center">
+                                <span>${trashedDocument.title}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <%--Date--%>
+                    <div class="portal-table-cell" data-column="date">
+                        <div class="portal-table-cell-inner" data-column="date">
+                            <div class="d-flex flex-wrap overflow-hidden">
+                                <div class="text-truncate">
+                                    <span><op:formatRelativeDate
+                                            value="${trashedDocument.lastModified}"/></span>
+                                </div>
+                                <div class="text-truncate">
+                                    <small><op:translate key="DISCUSSION_BY_LAST_CONTRIBUTOR"/></small>
+                                    <small><ttc:user
+                                            name="${trashedDocument.lastContributor}"
+                                            linkable="false"/></small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+          
+
+                    <%--Checkbox--%>
+                    <div class="portal-table-cell" data-column="checkbox">
+                        <div class="portal-table-cell-inner" data-column="checkbox">
+                            <div class="portal-table-checkbox">
+                                <a href="javascript:" class="no-ajax-link" title="${checkboxTitle}">
+                                    <i class="glyphicons glyphicons-basic-square-empty"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </c:forEach>
+        </div>
+    </c:otherwise>
+</c:choose>

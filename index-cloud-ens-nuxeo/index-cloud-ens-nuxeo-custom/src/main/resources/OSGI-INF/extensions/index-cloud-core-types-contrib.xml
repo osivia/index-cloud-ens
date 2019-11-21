@@ -31,7 +31,7 @@
 
         <doctype name="UserProfile" append="true">
             <schema name="oauth2Tokens"/>
-			<schema name="indexUserPreferences"/>
+	    <schema name="indexUserPreferences"/>
         </doctype>
 
         <doctype name="OAuth2Application" extends="Document">
@@ -44,10 +44,22 @@
             <schema name="dublincore"/>
             <facet name="Folderish"/>
         </doctype>
+        
+        <doctype name="Discussion" extends="Document">
+            <schema name="common"/>
+            <schema name="dublincore"/>
+            <schema name="discussion"/>
+        </doctype>
+        
 
     </extension>
 
     <extension target="org.nuxeo.ecm.platform.types.TypeService" point="types">
+
+
+        <type id="Discussion">
+            <label>Discussion</label>
+        </type>
 
         <type id="OAuth2Application">
             <label>OAuth2Application</label>
@@ -66,7 +78,19 @@
                 <type>OAuth2ApplicationFolder</type>
             </subtypes>
         </type>
+        
+        
 
     </extension>
+    
+        <extension target="org.nuxeo.ecm.platform.types.TypeService"
+                point="types">
+                <type id="ProceduresInstancesContainer">
+                        <subtypes>
+                                <type>Discussion</type>
+                        </subtypes>
+                </type>
+        </extension>
+    
 
 </component>

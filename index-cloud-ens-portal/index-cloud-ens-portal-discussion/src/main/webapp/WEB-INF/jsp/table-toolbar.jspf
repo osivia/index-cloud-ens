@@ -1,0 +1,27 @@
+<%@ taglib uri="http://java.sun.com/portlet_2_0" prefix="portlet" %>
+<%@ taglib uri="http://www.osivia.org/jsp/taglib/osivia-portal" prefix="op" %>
+
+
+<portlet:resourceURL id="toolbar" var="toolbarUrl" />
+
+<c:set var="namespace"><portlet:namespace/></c:set>
+
+
+<div class="portal-table-toolbar-container" data-url="${toolbarUrl}">
+
+    <div>
+         <%--new discussion--%>
+        <a href="#${namespace}-new-discussion-users" class="btn btn-outline-secondary btn-sm mr-1 no-ajax-link" data-toggle="modal">
+            <i class="glyphicons glyphicons-basic-bin"></i>
+            <span class="d-none d-lg-inline"><op:translate key="DISCUSSION_NEW"/></span>
+        </a>
+        <a href="#${namespace}-new-discussion-publication" class="btn btn-outline-secondary btn-sm mr-1 no-ajax-link" data-toggle="modal">
+            <i class="glyphicons glyphicons-basic-bin"></i>
+            <span class="d-none d-lg-inline"><op:translate key="DISCUSSION_NEW_PUB"/></span>
+        </a>        
+    </div>
+    <%--Toolbar--%>
+    <div class="portal-table-toolbar">
+        <div></div>
+    </div>
+</div>
