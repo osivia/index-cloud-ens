@@ -15,6 +15,15 @@
 <div class="metadata">
     <div class="card mb-3">
         <div class="card-body">
+            <%--Keywords--%>
+            <c:if test="${readOnly and not empty document.properties['mtz:keywords']}">
+                <p class="card-text mb-0"><op:translate key="DOCUMENT_MUTUALIZATION_KEYWORDS"/></p>
+                <ul class="list-inline">
+                    <c:forEach var="keyword" items="${document.properties['mtz:keywords']}">
+                        <li class="list-inline-item">${keyword}</li>
+                    </c:forEach>
+                </ul>
+            </c:if>
 
             <%--Levels--%>
             <c:set var="levels" value="${document.properties['idxcl:levels']}"/>

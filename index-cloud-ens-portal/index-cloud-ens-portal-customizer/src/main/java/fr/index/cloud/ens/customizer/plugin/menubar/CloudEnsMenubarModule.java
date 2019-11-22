@@ -28,6 +28,11 @@ import java.util.*;
 public class CloudEnsMenubarModule implements MenubarModule {
 
     /**
+     * Mutualized space path.
+     */
+    private static final String MUTUALIZED_SPACE_PATH = System.getProperty("config.mutualized.path");
+
+    /**
      * Document edition portlet instance.
      */
     private static final String DOCUMENT_EDITION_PORTLET_INSTANCE = "osivia-services-document-edition-instance";
@@ -82,18 +87,22 @@ public class CloudEnsMenubarModule implements MenubarModule {
             basePath = spaceDocumentContext.getCmsPath();
         }
 
-        Iterator<MenubarItem> iterator = menubar.iterator();
-        while (iterator.hasNext()) {
-            MenubarItem item = iterator.next();
-            MenubarContainer parent = item.getParent();
+        if (StringUtils.equals(MUTUALIZED_SPACE_PATH, basePath)) {
+            menubar.clear();
+        } else {
+            Iterator<MenubarItem> iterator = menubar.iterator();
+            while (iterator.hasNext()) {
+                MenubarItem item = iterator.next();
+                MenubarContainer parent = item.getParent();
 
-            if (this.removedSpaceItems.contains(item.getId())) {
-                iterator.remove();
-            } else if (StringUtils.startsWith(basePath, "/default-domain/UserWorkspaces/") && (parent instanceof MenubarDropdown)) {
-                // Remove user workspace configuration dropdown
-                MenubarDropdown dropdown = (MenubarDropdown) parent;
-                if (StringUtils.equals("CONFIGURATION", dropdown.getId())) {
+                if (this.removedSpaceItems.contains(item.getId())) {
                     iterator.remove();
+                } else if (StringUtils.startsWith(basePath, "/default-domain/UserWorkspaces/") && (parent instanceof MenubarDropdown)) {
+                    // Remove user workspace configuration dropdown
+                    MenubarDropdown dropdown = (MenubarDropdown) parent;
+                    if (StringUtils.equals("CONFIGURATION", dropdown.getId())) {
+                        iterator.remove();
+                    }
                 }
             }
         }
@@ -114,7 +123,9 @@ public class CloudEnsMenubarModule implements MenubarModule {
             path = documentContext.getCmsPath();
         }
 
-        if ((documentContext != null) && StringUtils.startsWith(path, "/default-domain/UserWorkspaces/")) {
+        if (StringUtils.startsWith(path, MUTUALIZED_SPACE_PATH)) {
+            menubar.clear();
+        } else if ((documentContext != null) && StringUtils.startsWith(path, "/default-domain/UserWorkspaces/")) {
             // Inside user workspace
             NuxeoController nuxeoController = new NuxeoController(portalControllerContext);
 
