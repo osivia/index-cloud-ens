@@ -9,7 +9,14 @@
     <div class="mr-3">
         <h3 class="h5 mb-0">
             <span><ttc:icon document="${document}"/></span>
-            <span><ttc:title document="${document}" linkable="false"/></span>
+            <c:choose>
+                <c:when test="${readOnly and not empty document.properties['mtz:title']}">
+                    <span>${document.properties['mtz:title']}</span>
+                </c:when>
+                <c:otherwise>
+                    <span><ttc:title document="${document}" linkable="false"/></span>
+                </c:otherwise>
+            </c:choose>
         </h3>
     </div>
 
@@ -22,7 +29,7 @@
     </c:if>
 
     <%--Mutualized indicator--%>
-    <c:if test="${document.properties['mtz:enable']}">
+    <c:if test="${not readOnly and document.properties['mtz:enable']}">
         <div class="mr-3">
             <span class="h5 mb-0 text-mutualized-dark">
                 <i class="glyphicons glyphicons-basic-share"></i>
@@ -32,7 +39,7 @@
 
     <div class="flex-grow-1 text-right">
         <%--Mutualize--%>
-        <c:if test="${not empty mutualizeUrl}">
+        <c:if test="${not readOnly and not empty mutualizeUrl}">
             <c:set var="title"><op:translate key="DOCUMENT_FILE_TOOLBAR_MUTUALIZE"/></c:set>
             <a href="javascript:" class="btn btn-mutualized-dark btn-sm" data-target="#osivia-modal" data-load-url="${mutualizeUrl}" data-title="${title}">
                 <i class="glyphicons glyphicons-basic-share"></i>
@@ -40,27 +47,38 @@
             </a>
         </c:if>
 
+        <%--Copy--%>
+        <c:if test="${readOnly and not empty copyUrl}">
+            <c:set var="title"><op:translate key="DOCUMENT_FILE_TOOLBAR_COPY"/></c:set>
+            <a href="javascript:" class="btn btn-cloud-dark btn-sm" data-target="#osivia-modal" data-load-url="${copyUrl}" data-title="${title}">
+                <i class="glyphicons glyphicons-basic-copy-duplicate"></i>
+                <span class="d-none d-lg-inline">${title}</span>
+            </a>
+        </c:if>
+
         <%--Share--%>
-        <c:choose>
-            <c:when test="${document.properties['rshr:enabledLink']}">
-                <portlet:actionURL name="link-activation" var="activationUrl">
-                    <portlet:param name="activate" value="false"/>
-                </portlet:actionURL>
-                <c:set var="icon" value="glyphicons glyphicons-basic-paired-off" />
-                <c:set var="title"><op:translate key="SHARED_LINK_DEACTIVATE"/></c:set>
-            </c:when>
-            <c:otherwise>
-                <portlet:actionURL name="link-activation" var="activationUrl">
-                    <portlet:param name="activate" value="true"/>
-                </portlet:actionURL>
-                <c:set var="icon" value="glyphicons glyphicons-basic-paired" />
-                <c:set var="title"><op:translate key="SHARED_LINK_ACTIVATE"/></c:set>
-            </c:otherwise>
-        </c:choose>
-        <a href="${activationUrl}" class="btn btn-primary btn-sm">
-            <i class="${icon}"></i>
-            <span class="d-none d-lg-inline">${title}</span>
-        </a>
+        <c:if test="${not readOnly}">
+            <c:choose>
+                <c:when test="${document.properties['rshr:enabledLink']}">
+                    <portlet:actionURL name="link-activation" var="activationUrl">
+                        <portlet:param name="activate" value="false"/>
+                    </portlet:actionURL>
+                    <c:set var="icon" value="glyphicons glyphicons-basic-paired-off" />
+                    <c:set var="title"><op:translate key="SHARED_LINK_DEACTIVATE"/></c:set>
+                </c:when>
+                <c:otherwise>
+                    <portlet:actionURL name="link-activation" var="activationUrl">
+                        <portlet:param name="activate" value="true"/>
+                    </portlet:actionURL>
+                    <c:set var="icon" value="glyphicons glyphicons-basic-paired" />
+                    <c:set var="title"><op:translate key="SHARED_LINK_ACTIVATE"/></c:set>
+                </c:otherwise>
+            </c:choose>
+            <a href="${activationUrl}" class="btn btn-primary btn-sm">
+                <i class="${icon}"></i>
+                <span class="d-none d-lg-inline">${title}</span>
+            </a>
+        </c:if>
 
         <%--Download--%>
         <c:if test="${document.type.file}">
@@ -79,7 +97,7 @@
         </c:if>
 
         <%--Rename--%>
-        <c:if test="${not empty renameUrl}">
+        <c:if test="${not readOnly and not empty renameUrl}">
             <c:set var="title"><op:translate key="DOCUMENT_RENAME"/></c:set>
             <a href="javascript:" class="btn btn-primary btn-sm no-ajax-link" data-target="#osivia-modal"
                data-load-url="${renameUrl}" data-title="${title}">
@@ -89,7 +107,7 @@
         </c:if>
 
         <%--Edit--%>
-        <c:if test="${not empty editUrl}">
+        <c:if test="${not readOnly and not empty editUrl}">
             <c:set var="title"><op:translate key="DOCUMENT_EDIT"/></c:set>
             <a href="javascript:" class="btn btn-primary btn-sm no-ajax-link" data-target="#osivia-modal"
                data-load-url="${editUrl}" data-title="${title}">
@@ -99,7 +117,7 @@
         </c:if>
 
         <%--Delete--%>
-        <c:if test="${not empty deleteUrl}">
+        <c:if test="${not readOnly and not empty deleteUrl}">
             <c:set var="title"><op:translate key="DELETE"/></c:set>
             <a href="javascript:" class="btn btn-primary btn-sm no-ajax-link" data-target="#osivia-modal" data-load-url="${deleteUrl}" data-title="${title}">
                 <i class="glyphicons glyphicons-basic-bin"></i>

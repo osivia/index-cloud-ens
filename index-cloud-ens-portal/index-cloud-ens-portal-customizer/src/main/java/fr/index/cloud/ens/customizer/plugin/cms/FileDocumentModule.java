@@ -71,8 +71,18 @@ public class FileDocumentModule extends PortletModule {
         if (StringUtils.isNotBlank(path)) {
             // Document context
             NuxeoDocumentContext documentContext = nuxeoController.getDocumentContext(path);
+            // Publication infos
+            NuxeoPublicationInfos publicationInfos = documentContext.getPublicationInfos();
 
-            if (ContextualizationHelper.isCurrentDocContextualized(portalControllerContext)) {
+            if (publicationInfos.isPublished()) {
+                // Read only indicator
+                request.setAttribute("readOnly", true);
+
+                // Copy
+                String copyUrl = this.getCopyUrl(portalControllerContext, path);
+                request.setAttribute("copyUrl", copyUrl);
+
+            } else if (ContextualizationHelper.isCurrentDocContextualized(portalControllerContext)) {
                 // Permissions
                 Permissions permissions = documentContext.getPermissions();
 
@@ -120,6 +130,31 @@ public class FileDocumentModule extends PortletModule {
         String url;
         try {
             url = this.portalUrlFactory.getStartPortletUrl(portalControllerContext, "index-cloud-ens-mutualization-instance", properties, PortalUrlType.MODAL);
+        } catch (PortalException e) {
+            throw new PortletException(e);
+        }
+
+        return url;
+    }
+
+
+    /**
+     * Get copy URL.
+     *
+     * @param portalControllerContext portal controller context
+     * @param path                    document path
+     * @return URL
+     */
+    private String getCopyUrl(PortalControllerContext portalControllerContext, String path) throws PortletException {
+        // Window properties
+        Map<String, String> properties = new HashMap<>();
+        properties.put("osivia.copy.path", path);
+
+        // URL
+        String url;
+        try {
+            url = this.portalUrlFactory.getStartPortletUrl(portalControllerContext, "index-cloud-ens-mutualization-copy-instance", properties,
+                    PortalUrlType.MODAL);
         } catch (PortalException e) {
             throw new PortletException(e);
         }
