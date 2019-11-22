@@ -1,0 +1,23 @@
+<%--Column group--%>
+<div class="portal-table-column-group">
+    <div class="portal-table-column" data-column="title"></div>
+    <div class="portal-table-column" data-column="customized-column"></div>
+    <div class="portal-table-column" data-column="last-modification"></div>
+    <div class="portal-table-column" data-column="file-size"></div>
+</div>
+
+
+<%--Header--%>
+<div class="portal-table-header-group">
+    <%--Title--%>
+    <%@ include file="../table-header-title.jspf" %>
+
+    <%--Customized column--%>
+    <%@ include file="../table-header-customized-column.jspf"%>
+
+    <%--Last modification--%>
+    <%@ include file="../table-header-last-modification.jspf" %>
+
+    <%--File size--%>
+    <%@ include file="../table-header-file-size.jspf" %>
+</div>

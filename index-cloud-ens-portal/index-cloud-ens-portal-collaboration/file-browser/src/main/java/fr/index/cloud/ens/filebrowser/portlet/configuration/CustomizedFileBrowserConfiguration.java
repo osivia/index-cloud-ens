@@ -20,13 +20,6 @@ import org.springframework.context.support.ResourceBundleMessageSource;
 public class CustomizedFileBrowserConfiguration extends FileBrowserConfiguration {
 
     /**
-     * Application context.
-     */
-    @Autowired
-    private ApplicationContext applicationContext;
-
-
-    /**
      * Constructor.
      */
     public CustomizedFileBrowserConfiguration() {

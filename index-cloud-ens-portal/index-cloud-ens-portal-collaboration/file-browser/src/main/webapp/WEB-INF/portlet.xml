@@ -61,6 +61,35 @@
     </portlet>
 
 
+    <portlet>
+        <portlet-name>index-cloud-ens-mutualized-file-browser</portlet-name>
+        <portlet-class>org.springframework.web.portlet.DispatcherPortlet</portlet-class>
+
+        <init-param>
+            <name>contextClass</name>
+            <value>org.osivia.portal.api.portlet.AnnotationPortletApplicationContext</value>
+        </init-param>
+        <init-param>
+            <name>contextConfigLocation</name>
+            <value>fr.index.cloud.ens.filebrowser.mutualized.portlet.configuration.MutualizedFileBrowserConfiguration</value>
+        </init-param>
+
+        <expiration-cache>0</expiration-cache>
+
+        <supports>
+            <mime-type>text/html</mime-type>
+            <portlet-mode>view</portlet-mode>
+            <portlet-mode>admin</portlet-mode>
+        </supports>
+
+        <portlet-info>
+            <title>File browser (mutualization)</title>
+        </portlet-info>
+
+        <supported-public-render-parameter>selectors</supported-public-render-parameter>
+    </portlet>
+
+
     <public-render-parameter>
         <identifier>selectors</identifier>
         <name>selectors</name>

@@ -1,28 +1,26 @@
-package fr.index.cloud.ens.filebrowser.portlet.model;
+package fr.index.cloud.ens.filebrowser.mutualized.portlet.model;
 
 import fr.index.cloud.ens.filebrowser.commons.portlet.model.AbstractFileBrowserForm;
-import org.osivia.portal.api.portlet.Refreshable;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Primary;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
-import org.springframework.web.context.WebApplicationContext;
 
 /**
- * File browser customized form java-bean.
+ * Mutualized file browser form java-bean.
  *
  * @author Cédric Krommenhoek
  * @see AbstractFileBrowserForm
  */
 @Component
 @Primary
-@Scope(WebApplicationContext.SCOPE_SESSION)
-@Refreshable
-public class CustomizedFileBrowserForm extends AbstractFileBrowserForm {
+@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+public class MutualizedFileBrowserForm extends AbstractFileBrowserForm {
 
     /**
      * Constructor.
      */
-    public CustomizedFileBrowserForm() {
+    public MutualizedFileBrowserForm() {
         super();
     }
 

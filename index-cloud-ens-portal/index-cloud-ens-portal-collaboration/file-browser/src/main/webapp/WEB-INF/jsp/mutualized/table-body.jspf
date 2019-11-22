@@ -1,0 +1,46 @@
+<c:choose>
+    <c:when test="${form.customizedColumn.id eq 'document-type'}">
+        <c:set var="vocabularyName" value="idx_document_type" scope="request"/>
+    </c:when>
+    <c:when test="${form.customizedColumn.id eq 'level'}">
+        <c:set var="vocabularyName" value="idx_level" scope="request"/>
+    </c:when>
+    <c:when test="${form.customizedColumn.id eq 'subject'}">
+        <c:set var="vocabularyName" value="idx_subject" scope="request"/>
+    </c:when>
+</c:choose>
+
+
+<c:choose>
+    <c:when test="${empty form.items}">
+        <div class="portal-table-row-group">
+            <div class="portal-table-row">
+                <div class="portal-table-cell">
+                    <div class="portal-table-cell-inner">
+                        <span class="text-muted"><op:translate key="FILE_BROWSER_EMPTY"/></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </c:when>
+
+    <c:otherwise>
+        <div class="portal-table-row-group">
+            <c:forEach var="item" items="${form.items}">
+                <div class="portal-table-row">
+                    <%--Title--%>
+                    <%@ include file="table-body-title.jspf" %>
+
+                    <%--Customized column--%>
+                    <%@ include file="../table-body-customized-column.jspf" %>
+
+                    <%--Last modification--%>
+                    <%@ include file="../table-body-last-modification.jspf" %>
+
+                    <%--File size--%>
+                    <%@ include file="../table-body-file-size.jspf" %>
+                </div>
+            </c:forEach>
+        </div>
+    </c:otherwise>
+</c:choose>

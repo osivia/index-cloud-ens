@@ -1,0 +1,7 @@
+<div class="portal-table-toolbar-container ml-n2">
+    <%--Customized column--%>
+    <%@ include file="../toolbar-customized-column.jspf" %>
+
+    <%--State--%>
+    <%@ include file="../toolbar-state.jspf" %>
+</div>

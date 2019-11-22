@@ -1,11 +1,11 @@
-package fr.index.cloud.ens.filebrowser.portlet.model;
+package fr.index.cloud.ens.filebrowser.commons.portlet.model;
 
 import org.osivia.services.workspace.filebrowser.portlet.model.FileBrowserSortField;
 
 /**
- * File browser customized sort field interface.
+ * File browser sort field interface.
  */
-public interface CustomizedFileBrowserSortField extends FileBrowserSortField {
+public interface AbstractFileBrowserSortField extends FileBrowserSortField {
 
     /**
      * Get customizable field indicator.

@@ -1,0 +1,12 @@
+<div class="portal-table-cell" data-column="title">
+    <div class="portal-table-cell-inner" data-column="title">
+        <span><ttc:icon document="${item.document}" style="${item.folderish ? 'flat' : 'flat-inverse'}"/></span>
+
+        <div class="file-browser-draggable text-truncate mr-auto">
+            <ttc:documentLink document="${item.document}" var="link"/>
+            <a href="${link.url}" class="no-ajax-link">
+                <span>${item.title}</span>
+            </a>
+        </div>
+    </div>
+</div>
