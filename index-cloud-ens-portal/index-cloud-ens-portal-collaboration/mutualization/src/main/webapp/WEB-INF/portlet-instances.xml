@@ -24,5 +24,28 @@
             </preferences>
         </instance>
     </deployment>
+
+
+    <deployment>
+        <if-exists>overwrite</if-exists>
+        <instance>
+            <display-name xml:lang="en">Cloud Ens - Mutualization copy</display-name>
+            <display-name xml:lang="fr">Cloud Ens - Copie depuis la mutualisation</display-name>
+            <instance-id>index-cloud-ens-mutualization-copy-instance</instance-id>
+            <portlet-ref>index-cloud-ens-mutualization-copy</portlet-ref>
+            <security-constraint>
+                <policy-permission>
+                    <action-name>view</action-name>
+                    <unchecked />
+                </policy-permission>
+            </security-constraint>
+            <preferences>
+                <preference>
+                    <name>hide</name>
+                    <value>true</value>
+                </preference>
+            </preferences>
+        </instance>
+    </deployment>
     
 </deployments>

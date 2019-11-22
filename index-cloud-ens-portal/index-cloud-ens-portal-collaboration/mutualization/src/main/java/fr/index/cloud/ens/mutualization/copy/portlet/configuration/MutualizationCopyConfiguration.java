@@ -1,12 +1,7 @@
-package fr.index.cloud.ens.mutualization.portlet.configuration;
+package fr.index.cloud.ens.mutualization.copy.portlet.configuration;
 
 import fr.toutatice.portail.cms.nuxeo.api.CMSPortlet;
-import org.osivia.portal.api.internationalization.IBundleFactory;
-import org.osivia.portal.api.internationalization.IInternationalizationService;
-import org.osivia.portal.api.locator.Locator;
-import org.osivia.portal.api.notifications.INotificationsService;
 import org.osivia.portal.api.portlet.PortletAppUtils;
-import org.osivia.portal.api.urls.IPortalUrlFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
@@ -21,15 +16,15 @@ import javax.portlet.PortletConfig;
 import javax.portlet.PortletException;
 
 /**
- * Mutualization portlet configuration.
+ * Mutualization copy portlet configuration.
  *
  * @author Cédric Krommenhoek
  * @see CMSPortlet
  * @see PortletConfigAware
  */
 @Configuration
-@ComponentScan(basePackages = "fr.index.cloud.ens.mutualization.portlet")
-public class MutualizationConfiguration extends CMSPortlet implements PortletConfigAware {
+@ComponentScan(basePackages = "fr.index.cloud.ens.mutualization.copy.portlet")
+public class MutualizationCopyConfiguration extends CMSPortlet implements PortletConfigAware {
 
     /**
      * Application context.
@@ -41,7 +36,7 @@ public class MutualizationConfiguration extends CMSPortlet implements PortletCon
     /**
      * Constructor.
      */
-    public MutualizationConfiguration() {
+    public MutualizationCopyConfiguration() {
         super();
     }
 
@@ -69,7 +64,7 @@ public class MutualizationConfiguration extends CMSPortlet implements PortletCon
         InternalResourceViewResolver viewResolver = new InternalResourceViewResolver();
         viewResolver.setCache(true);
         viewResolver.setViewClass(JstlView.class);
-        viewResolver.setPrefix("/WEB-INF/jsp/mutualization/");
+        viewResolver.setPrefix("/WEB-INF/jsp/mutualization-copy/");
         viewResolver.setSuffix(".jsp");
         return viewResolver;
     }
@@ -83,42 +78,8 @@ public class MutualizationConfiguration extends CMSPortlet implements PortletCon
     @Bean(name = "messageSource")
     public ResourceBundleMessageSource getMessageSource() {
         ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();
-        messageSource.setBasename("mutualization");
+        messageSource.setBasename("mutualization-copy");
         return messageSource;
-    }
-
-
-    /**
-     * Get portal URL factory.
-     *
-     * @return portal URL factory
-     */
-    @Bean
-    public IPortalUrlFactory getPortalUrlFactory() {
-        return Locator.findMBean(IPortalUrlFactory.class, IPortalUrlFactory.MBEAN_NAME);
-    }
-
-
-    /**
-     * Get internationalization bundle factory
-     *
-     * @return internationalization bundle factory
-     */
-    @Bean
-    public IBundleFactory getBundleFactory() {
-        IInternationalizationService internationalizationService = Locator.findMBean(IInternationalizationService.class, IInternationalizationService.MBEAN_NAME);
-        return internationalizationService.getBundleFactory(this.getClass().getClassLoader(), this.applicationContext);
-    }
-
-
-    /**
-     * Get notifications service.
-     *
-     * @return notifications service
-     */
-    @Bean
-    public INotificationsService getNotificationsService() {
-        return Locator.findMBean(INotificationsService.class, INotificationsService.MBEAN_NAME);
     }
 
 }
