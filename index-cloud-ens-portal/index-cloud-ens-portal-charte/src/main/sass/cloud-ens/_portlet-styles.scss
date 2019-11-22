@@ -1,0 +1,8 @@
+@import "../osivia/variables";
+
+
+.no-gutter-left {
+  &.portlet-container {
+    margin-left: -$grid-gutter-width / 2 !important;
+  }
+}

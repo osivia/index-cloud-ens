@@ -12,10 +12,20 @@
 }
 
 
-#filters {
-  @extend .row;
+#nav-bottom {
+  .dyna-window {
+    padding-top: map_get($spacers, 3);
 
-  > div {
-    @extend .col-auto;
+    border-top: {
+      style: solid;
+      width: $border-width;
+      color: $border-color;
+    }
+
+    @include make-row();
+
+    > * {
+      @extend %grid-column;
+    }
   }
 }

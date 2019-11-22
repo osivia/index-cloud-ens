@@ -151,6 +151,10 @@
                     <name>osivia.cms.outgoingRecontextualizationSupport</name>
                     <value>1</value>
                 </property>
+                <property>
+                    <name>osivia.liste_styles</name>
+                    <value>no-gutter-left</value>
+                </property>
             </properties>
 
             <security-constraint>
@@ -1400,6 +1404,10 @@ return nuxeoRequest.toString();</value>
                                 <name>theme.dyna.partial_refresh_enabled</name>
                                 <value>true</value>
                             </property>
+                            <property>
+                                <name>osivia.style</name>
+                                <value>no-gutter-left</value>
+                            </property>
                         </properties>
                         <height>0</height>
                     </window>
@@ -1536,6 +1544,10 @@ return nuxeoRequest.toString();</value>
                             <property>
                                 <name>theme.dyna.partial_refresh_enabled</name>
                                 <value>true</value>
+                            </property>
+                            <property>
+                                <name>osivia.style</name>
+                                <value>no-gutter-left</value>
                             </property>
                         </properties>
                         <height>0</height>
@@ -1738,6 +1750,10 @@ return nuxeoRequest.toString();</value>
                             <property>
                                 <name>theme.dyna.partial_refresh_enabled</name>
                                 <value>true</value>
+                            </property>
+                            <property>
+                                <name>osivia.style</name>
+                                <value>no-gutter-left</value>
                             </property>
                         </properties>
                         <height>0</height>
@@ -2083,6 +2099,10 @@ return nuxeoRequest.toString();</value>
                                 <name>osivia.title</name>
                                 <value>Barre des tâches</value>
                             </property>
+                            <property>
+                                <name>osivia.style</name>
+                                <value>no-gutter-left</value>
+                            </property>
                         </properties>
                         <height>0</height>
                     </window>
@@ -2275,6 +2295,10 @@ return nuxeoRequest.toString();</value>
                             <property>
                                 <name>theme.dyna.partial_refresh_enabled</name>
                                 <value>true</value>
+                            </property>
+                            <property>
+                                <name>osivia.style</name>
+                                <value>no-gutter-left</value>
                             </property>
                         </properties>
                         <height>0</height>
