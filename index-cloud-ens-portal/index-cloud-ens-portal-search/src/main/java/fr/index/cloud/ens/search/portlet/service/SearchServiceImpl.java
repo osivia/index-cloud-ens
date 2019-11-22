@@ -182,14 +182,16 @@ public class SearchServiceImpl extends SearchCommonServiceImpl implements Search
                             String unit = this.getSelectorValue(selectors, SIZE_UNIT_SELECTOR_ID);
 
                             if (StringUtils.isNotEmpty(range) && StringUtils.isNotEmpty(amount) && StringUtils.isNotEmpty(unit)) {
-                                // Displayed value
-                                String display;
+                                // Displayed value internationalization key
+                                String key;
                                 if ("LESS".equals(range)) {
-                                    display = "<";
+                                    key = "SEARCH_FILTERS_REMINDER_SIZE_RANGE_LESS";
                                 } else {
-                                    display = ">";
+                                    key = "SEARCH_FILTERS_REMINDER_SIZE_RANGE_MORE";
                                 }
-                                display += " " + amount + " " + bundle.getString("SEARCH_FILTERS_SIZE_UNIT_" + StringUtils.upperCase(unit));
+
+                                // Displayed value
+                                String display = bundle.getString(key, amount, bundle.getString("SEARCH_FILTERS_SIZE_UNIT_" + StringUtils.upperCase(unit)));
 
                                 reminder.add(display);
                             }
