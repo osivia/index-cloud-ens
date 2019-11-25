@@ -35,6 +35,9 @@
 
     &.select2-selection--multiple {
       height: auto;
+
+      padding-top: calc(#{$input-padding-y - .1rem} - #{$border-width});
+      padding-bottom: 0;
     }
   }
 
@@ -76,6 +79,7 @@
     flex-wrap: wrap;
 
     margin-bottom: 0 !important;
+    margin-right: -(map_get($spacers, 1));
     padding-left: 0 !important;
     padding-right: 0 !important;
 
@@ -83,21 +87,42 @@
   }
 
   .select2-selection__choice {
-    margin-right: map_get($spacers, 1);
+    overflow: hidden;
+    text-overflow: ellipsis;
 
-    &:nth-last-child(2) {
-      margin-right: map_get($spacers, 2);
+    margin: {
+      bottom: map_get($spacers, 1);
+      right: map_get($spacers, 1);
+    }
+    padding: {
+      top: .1rem;
+      bottom: .1rem;
+      left: 0;
+      right: map_get($spacers, 1);
     }
 
-    &:not(:nth-last-child(2)) {
-      &::after {
-        content: ",";
-      }
+    border: {
+      style: solid;
+      width: $border-width;
+      color: $border-color;
+      radius: $border-radius;
     }
+
+    background-color: $gray-100;
   }
 
   .select2-selection__choice__remove {
-    display: none;
+    //display: none;
+    padding: {
+      left: map_get($spacers, 1);
+      right: map_get($spacers, 1);
+    }
+
+    color: $text-muted;
+
+    &:hover {
+      color: $primary;
+    }
   }
 
   .select2-search--inline {
@@ -110,7 +135,10 @@
     max-width: 100%;
     @include text-truncate;
 
-    margin-top: 0 !important;
+    margin: {
+      top: calc(.1rem + #{$border-width}) !important;
+      bottom: calc(.1rem + #{$border-width}) !important;
+    }
 
     color: $primary;
     font-style: italic;
@@ -140,15 +168,15 @@
     @include text-truncate;
 
     &.select2-results__option--highlighted {
-      background-color: $gray-300;
+      color: $white;
+      background-color: $primary;
     }
 
     &[aria-selected=true] {
-      color: $white;
-      background-color: $primary;
+      background-color: $gray-100;
 
       &.select2-results__option--highlighted {
-        background-color: darken($primary, 7.5%);
+        background-color: $primary;
       }
     }
 

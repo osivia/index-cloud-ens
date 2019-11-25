@@ -72,10 +72,12 @@ $JQry(function() {
             $element.select2(options);
 
             // Close on unselect
-            
             $element.on("select2:unselect", function (event) {
-        	  	var $target = $JQry(event.target);
-           		setTimeout(initSelect2, 100, $element);
+                setTimeout(function() {
+                    var search = $element.siblings().find(".select2-search__field");
+                    search.val("");
+                    $element.select2("close");
+                }, 100);
             });
           
 
@@ -171,16 +173,4 @@ function select2LoadFailure( request, errorType ) {
 		request.defaultFailure();
            
 }
-
-
-
-
-
-
-function initSelect2( element) {
-    var search = element.siblings().find(".select2-search__field");
-    search.val('');
-    element.select2('close');           
-}
-
 
