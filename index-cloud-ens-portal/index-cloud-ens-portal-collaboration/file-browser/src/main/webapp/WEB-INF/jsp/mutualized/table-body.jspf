@@ -27,7 +27,7 @@
     <c:otherwise>
         <div class="portal-table-row-group">
             <c:forEach var="item" items="${form.items}">
-                <div class="portal-table-row">
+                <div class="portal-table-row position-relative">
                     <%--Title--%>
                     <%@ include file="table-body-title.jspf" %>
 

@@ -107,6 +107,9 @@
     border-color: darken($primary, 5%);
 
     &, a:not(.btn), [class^="text"], .text-muted {
+      position: relative;
+      z-index: 2;
+
       color: $white !important;
     }
   }
@@ -149,11 +152,6 @@
     min-height: $line-height-base * 2 + $table-cell-padding * 2;
 
     padding: floor($table-cell-padding / 2) $table-cell-padding;
-  }
-
-  a {
-    position: relative;
-    z-index: 2;
   }
 }
 

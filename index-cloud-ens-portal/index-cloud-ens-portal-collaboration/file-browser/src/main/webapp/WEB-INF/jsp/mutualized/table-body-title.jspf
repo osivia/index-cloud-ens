@@ -4,7 +4,7 @@
 
         <div class="file-browser-draggable text-truncate mr-auto">
             <ttc:documentLink document="${item.document}" var="link"/>
-            <a href="${link.url}" class="no-ajax-link">
+            <a href="${link.url}" class="stretched-link no-ajax-link">
                 <span>${item.title}</span>
             </a>
         </div>
