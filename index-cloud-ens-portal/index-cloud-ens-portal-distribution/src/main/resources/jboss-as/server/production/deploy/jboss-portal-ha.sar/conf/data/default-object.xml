@@ -179,7 +179,7 @@
                 <properties>
                     <property>
                         <name>layout.id</name>
-                        <value>cloud-ens-home</value>
+                        <value>cloud-ens-anonymous-home</value>
                     </property>
                 </properties>
 

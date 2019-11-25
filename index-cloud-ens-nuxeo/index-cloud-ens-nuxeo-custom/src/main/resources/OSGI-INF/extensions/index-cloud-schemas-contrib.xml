@@ -10,5 +10,6 @@
         <schema name="mutualization" prefix="mtz" src="schemas/mutualization.xsd"/>
         <schema name="indexUserPreferences" prefix="idxup" src="schemas/index-user-preferences.xsd"/>
         <schema name="virusScan" prefix="idxvs" src="schemas/virus-scan.xsd"/>
+        <schema name="discussion" prefix="disc" src="schemas/discussion.xsd"/>
     </extension>
 </component>

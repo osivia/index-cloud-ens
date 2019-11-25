@@ -27,7 +27,7 @@
                 <include>${project.groupId}:index-cloud-ens-portal-highest-levels:war:${project.version}</include>
                 <include>${project.groupId}:index-cloud-ens-portal-search:war:${project.version}</include>
                 <include>${project.groupId}:index-cloud-ens-portal-antivirus:war:${project.version}</include>
-
+                <include>${project.groupId}:index-cloud-ens-portal-discussion:war:${project.version}</include>
                  <!-- Toutatice CMS -->
                 <include>toutatice-portail.cms:toutatice-portail-cms-nuxeo-web:war:${toutatice.version}</include>
                 <!-- Other services -->

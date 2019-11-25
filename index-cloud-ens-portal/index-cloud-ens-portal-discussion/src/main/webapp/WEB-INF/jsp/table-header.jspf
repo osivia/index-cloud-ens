@@ -1,0 +1,67 @@
+<%@ taglib uri="http://java.sun.com/portlet_2_0" prefix="portlet" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://www.osivia.org/jsp/taglib/osivia-portal" prefix="op" %>
+
+
+<%--Column group--%>
+<div class="portal-table-column-group">
+    <div class="portal-table-column" data-column="document"></div>
+    <div class="portal-table-column" data-column="date"></div>
+    <div class="portal-table-column" data-column="checkbox"></div>
+</div>
+
+<%--Header--%>
+<div class="portal-table-header-group">
+    <%--Document--%>
+    <div class="portal-table-cell" data-column="document">
+        <div class="portal-table-cell-inner" data-column="document">
+            <portlet:actionURL name="sort" var="url" copyCurrentRenderParameters="true">
+                <portlet:param name="sortId" value="document"/>
+                <portlet:param name="alt" value="${discussionsForm.sort.id eq 'document' and not discussionsForm.alt}"/>
+            </portlet:actionURL>
+
+            <a href="${url}">
+                <span><op:translate key="TRASH_HEADER_DOCUMENT"/></span>
+
+                <c:if test="${discussionsForm.sort.id eq 'document'}">
+                    <small class="d-inline-block align-text-bottom">
+                        <i class="glyphicons glyphicons-basic-arrow-${discussionsForm.alt ? 'up' : 'down'}"></i>
+                    </small>
+                </c:if>
+            </a>
+        </div>
+    </div>
+
+    <%--Date--%>
+    <div class="portal-table-cell" data-column="date">
+        <div class="portal-table-cell-inner" data-column="date">
+            <portlet:actionURL name="sort" var="url" copyCurrentRenderParameters="true">
+                <portlet:param name="sortId" value="date"/>
+                <portlet:param name="alt" value="${discussionsForm.sort.id eq 'date' and not discussionsForm.alt}"/>
+            </portlet:actionURL>
+
+            <a href="${url}">
+                <span><op:translate key="DISCUSSION_HEADER_DATE"/></span>
+
+                <c:if test="${discussionsForm.sort.id eq 'date'}">
+                    <small class="d-inline-block align-text-bottom">
+                        <i class="glyphicons glyphicons-basic-arrow-${discussionsForm.alt ? 'up' : 'down'}"></i>
+                    </small>
+                </c:if>
+            </a>
+        </div>
+    </div>
+
+
+    <%--Checkbox--%>
+    <div class="portal-table-cell" data-column="checkbox">
+        <div class="portal-table-cell-inner" data-column="checkbox">
+            <div class="portal-table-checkbox">
+                <c:set var="title"><op:translate key="TABLE_SELECT_ALL_CHECKBOX_TITLE"/></c:set>
+                <a href="javascript:" class="no-ajax-link" title="${title}">
+                    <i class="glyphicons glyphicons-basic-square-empty"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
