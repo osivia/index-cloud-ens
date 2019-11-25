@@ -15,6 +15,11 @@
 <div class="metadata">
     <div class="card mb-3">
         <div class="card-body">
+            <%--Mutualized title--%>
+            <c:if test="${readOnly}">
+                <h3 class="h4 card-title">${document.properties['mtz:title']}</h3>
+            </c:if>
+
             <%--Keywords--%>
             <c:if test="${readOnly and not empty document.properties['mtz:keywords']}">
                 <p class="card-text mb-0"><op:translate key="DOCUMENT_MUTUALIZATION_KEYWORDS"/></p>
@@ -285,9 +290,7 @@
                         <span>
                             <i class="glyphicons glyphicons-remove"></i>
                         </span>
-                        <span>
-                           <a href="${deactivationUrl}"><op:translate key="SHARED_LINK_DEACTIVATE"/>
-                        </span>
+                        <a href="${deactivationUrl}"><op:translate key="SHARED_LINK_DEACTIVATE"/></a>
                     </div>
                 </c:if>
 
@@ -342,7 +345,7 @@
                             key="DOCUMENT_MUTUALIZATION_DESYNCHRONIZED"/></p>
                 </c:if>
 
-                <ul class="list-inline mb-0">
+                <ul class="card-text list-inline">
                         <%--Views--%>
                     <li class="list-inline-item">
                         <i class="glyphicons glyphicons-basic-eye"></i>
@@ -357,6 +360,23 @@
                         <span>t&eacute;l&eacute;chargements</span>
                     </li>
                 </ul>
+
+                <a href="#" class="card-link text-mutualized-dark">
+                    <span><op:translate key="DOCUMENT_MUTUALIZATION_CONTACT_READERS"/></span>
+                </a>
+            </div>
+        </div>
+    </c:if>
+
+
+    <c:if test="${not readOnly and not empty document.properties['mtz:sourceWebId']}">
+        <div class="card mb-3 bg-mutualized-lighter border-mutualized-dark">
+            <div class="card-body">
+                <p class="card-text"><op:translate key="DOCUMENT_COPIED_INFORMATION"/></p>
+
+                <a href="#" class="card-link text-mutualized-dark">
+                    <span><op:translate key="DOCUMENT_COPIED_CONTACT_AUTHOR"/></span>
+                </a>
             </div>
         </div>
     </c:if>

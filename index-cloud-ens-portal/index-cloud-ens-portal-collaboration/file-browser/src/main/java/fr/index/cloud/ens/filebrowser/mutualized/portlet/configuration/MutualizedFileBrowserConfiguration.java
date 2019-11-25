@@ -47,7 +47,7 @@ public class MutualizedFileBrowserConfiguration extends FileBrowserConfiguration
     @Override
     public ResourceBundleMessageSource getMessageSource() {
         ResourceBundleMessageSource messageSource = super.getMessageSource();
-        messageSource.setBasenames("customized-file-browser", "file-browser");
+        messageSource.setBasenames("mutualized-file-browser", "customized-file-browser", "file-browser");
         return messageSource;
     }
 

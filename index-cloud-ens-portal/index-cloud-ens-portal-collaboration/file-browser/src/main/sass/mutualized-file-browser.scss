@@ -1,0 +1,8 @@
+@import "../../../../../index-cloud-ens-portal-charte/src/main/sass/cloud-ens/variables";
+
+
+.portal-table-row {
+  &:hover {
+    background-color: $mutualized-lighter;
+  }
+}

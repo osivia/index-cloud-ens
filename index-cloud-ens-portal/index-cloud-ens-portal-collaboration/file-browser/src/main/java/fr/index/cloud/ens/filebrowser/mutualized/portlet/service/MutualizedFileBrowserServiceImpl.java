@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import javax.portlet.PortletException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -57,6 +58,12 @@ public class MutualizedFileBrowserServiceImpl extends AbstractFileBrowserService
         // Mutualized title
         String title = nuxeoDocument.getString("mtz:title");
         item.setTitle(title);
+
+        // Publication date
+        Date date = nuxeoDocument.getDate("dc:issued");
+        if (date != null) {
+            item.setLastModification(date);
+        }
 
         return item;
     }

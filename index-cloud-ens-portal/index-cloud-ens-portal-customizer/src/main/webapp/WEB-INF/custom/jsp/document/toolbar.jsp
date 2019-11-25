@@ -9,14 +9,7 @@
     <div class="mr-3">
         <h3 class="h5 mb-0">
             <span><ttc:icon document="${document}"/></span>
-            <c:choose>
-                <c:when test="${readOnly and not empty document.properties['mtz:title']}">
-                    <span>${document.properties['mtz:title']}</span>
-                </c:when>
-                <c:otherwise>
-                    <span><ttc:title document="${document}" linkable="false"/></span>
-                </c:otherwise>
-            </c:choose>
+            <span><ttc:title document="${document}" linkable="false"/></span>
         </h3>
     </div>
 

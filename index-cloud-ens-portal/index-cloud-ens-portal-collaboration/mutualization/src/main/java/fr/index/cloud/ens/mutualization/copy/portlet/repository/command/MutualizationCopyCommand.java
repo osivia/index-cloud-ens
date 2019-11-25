@@ -72,7 +72,7 @@ public class MutualizationCopyCommand implements INuxeoCommand {
         PropertyMap properties = new PropertyMap();
 
         // Title
-        properties.set("dc:title", this.source.getString("mtz:title"));
+        properties.set("dc:title", this.source.getTitle());
         // Source webId
         properties.set("mtz:sourceWebId", this.source.getString("ttc:webid"));
         // Keywords
