@@ -7,5 +7,6 @@
     <xs:element name="enable" type="xs:boolean"/>
     <xs:element name="title" type="xs:string"/>
     <xs:element name="keywords" type="nxs:stringList"/>
+    <xs:element name="sourceWebId" type="xs:string"/>
 
 </xs:schema>
