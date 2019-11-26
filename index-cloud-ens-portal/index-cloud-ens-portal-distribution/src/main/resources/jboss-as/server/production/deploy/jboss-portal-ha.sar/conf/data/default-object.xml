@@ -1299,7 +1299,7 @@ return nuxeoRequest.toString();</value>
                         </property>
                         <property>
                             <name>layout.id</name>
-                            <value>cloud-ens-with-nav</value>
+                            <value>cloud-ens-mutualization</value>
                         </property>
                         <property>
                             <name>osivia.cms.propagateSelectors</name>

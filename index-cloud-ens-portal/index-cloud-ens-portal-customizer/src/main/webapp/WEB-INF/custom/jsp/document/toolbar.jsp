@@ -75,14 +75,7 @@
 
         <%--Download--%>
         <c:if test="${document.type.file}">
-            <c:choose>
-                <c:when test="${document.type.name eq 'Picture'}">
-                    <c:set var="url"><ttc:documentLink document="${document}" picture="true"/></c:set>
-                </c:when>
-                <c:otherwise>
-                    <c:set var="url"><ttc:documentLink document="${document}" displayContext="download"/></c:set>
-                </c:otherwise>
-            </c:choose>
+            <c:set var="url"><ttc:documentLink document="${document}" displayContext="download"/></c:set>
             <a href="${url}" target="_blank" class="btn btn-primary btn-sm no-ajax-link">
                 <i class="glyphicons glyphicons-basic-square-download"></i>
                 <span class="d-none d-lg-inline"><op:translate key="DOWNLOAD"/></span>

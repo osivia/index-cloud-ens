@@ -7,5 +7,46 @@
 
 <portlet:defineObjects/>
 
+<div>
 
-Detail fiche
+
+	<div class="row ">
+	        <div class=" col-8">
+	               <span class="text-right text-muted">Le ..... par </span>
+	              <div class="border rounded mb-2 p-3 bg-light" >
+	                
+	                       qsdflmkqsfmlkqsfmlk sfljsdflkjsdflkj sdflkjsfdlkj sdflkjsdfjl sldflkj
+	               </div>
+	        </div>
+	</div>
+        <div class="row ">
+	        <div class="offset-4  col-8">
+                        <div class="text-right">Le ..... 12/11/2019 
+                                      <i class="glyphicons glyphicons-basic-bin"></i>
+                                      <span class="d-none">Supprimer</span>             
+                        </div>	        
+	               <div class="border rounded mb-2  p-3 bg-info text-white" >
+				     
+		                sdqsdqsd nqsfd;kjhsdflkhsdf sdflkhsdfkjhsdfkjhsdfkjh sdfkjhsdfkh
+		                qsdflmkqsfmlkqsfmlk sfljsdflkjsdflkj sdflkjsfdlkj sdflkjsdfjl sldflkj
+		        </div>
+	        </div>
+	</div>
+	
+        <div class="row ">
+                <div class="col-8">
+                       <span class="text-right">Le ..... par </span>
+                      <div class="border rounded mb-2 p-3 bg-light" >
+                               qsdflmkqsfmlkqsfmlk sfljsdflkjsdflkj sdflkjsfdlkj sdflkjsdfjl sldflkj
+                       </div>
+                </div>
+        </div>
+        
+         <div class="row ">
+                <div class="col-12 text-right">
+                        <button type="button" class="btn btn-outline-info">Ajouter un message</button>
+                </div>
+        </div>
+        
+
+</div>
