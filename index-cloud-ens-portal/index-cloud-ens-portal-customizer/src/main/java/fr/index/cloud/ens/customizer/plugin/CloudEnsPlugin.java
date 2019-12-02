@@ -3,6 +3,7 @@ package fr.index.cloud.ens.customizer.plugin;
 import fr.index.cloud.ens.customizer.plugin.cms.CloudEnsNavigationAdapter;
 import fr.index.cloud.ens.customizer.plugin.cms.FileDocumentModule;
 import fr.index.cloud.ens.customizer.plugin.menubar.CloudEnsMenubarModule;
+import fr.index.cloud.ens.customizer.plugin.statistics.CloudEnsStatisticsModule;
 import fr.index.cloud.ens.customizer.plugin.tasks.CloudEnsTaskModule;
 import fr.index.cloud.ens.customizer.plugin.theming.CloudEnsTemplateAdapter;
 import fr.toutatice.portail.cms.nuxeo.api.domain.AbstractPluginPortlet;
@@ -15,6 +16,7 @@ import org.osivia.portal.api.internationalization.IBundleFactory;
 import org.osivia.portal.api.internationalization.IInternationalizationService;
 import org.osivia.portal.api.locator.Locator;
 import org.osivia.portal.api.menubar.MenubarModule;
+import org.osivia.portal.api.statistics.StatisticsModule;
 import org.osivia.portal.api.taskbar.TaskbarFactory;
 import org.osivia.portal.api.taskbar.TaskbarItem;
 import org.osivia.portal.api.taskbar.TaskbarItems;
@@ -106,6 +108,8 @@ public class CloudEnsPlugin extends AbstractPluginPortlet {
         this.customizeTaskModules(customizationContext);
         // Document modules
         this.customizeDocumentModules(customizationContext);
+        // Statistics modules
+        this.customizeStatisticsModules(customizationContext);
     }
 
 
@@ -226,6 +230,24 @@ public class CloudEnsPlugin extends AbstractPluginPortlet {
 
             modules.add(fileDocumentModule);
         }
+    }
+
+
+    /**
+     * Customize statistics modules.
+     *
+     * @param customizationContext customization context
+     */
+    private void customizeStatisticsModules(CustomizationContext customizationContext) {
+        // Portlet context
+        PortletContext portletContext = this.getPortletContext();
+
+        // Statistics modules
+        List<StatisticsModule> modules = this.getStatisticsModules(customizationContext);
+
+        // Customized statistics module
+        StatisticsModule module = new CloudEnsStatisticsModule(portletContext);
+        modules.add(module);
     }
 
 }

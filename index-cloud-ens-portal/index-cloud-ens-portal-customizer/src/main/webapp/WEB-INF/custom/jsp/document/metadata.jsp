@@ -349,15 +349,29 @@
                         <%--Views--%>
                     <li class="list-inline-item">
                         <i class="glyphicons glyphicons-basic-eye"></i>
-                        <strong>xx</strong>
-                        <span>vues</span>
+                        <strong>${document.properties['mtz:views']}</strong>
+                        <c:choose>
+                            <c:when test="${empty document.properties['mtz:views'] or document.properties['mtz:views'] le 1}">
+                                <span><op:translate key="DOCUMENT_MUTUALIZATION_VIEW"/></span>
+                            </c:when>
+                            <c:otherwise>
+                                <span><op:translate key="DOCUMENT_MUTUALIZATION_VIEWS"/></span>
+                            </c:otherwise>
+                        </c:choose>
                     </li>
 
                         <%--Downloads--%>
                     <li class="list-inline-item">
                         <i class="glyphicons glyphicons-basic-save"></i>
-                        <strong>xx</strong>
-                        <span>t&eacute;l&eacute;chargements</span>
+                        <strong>${document.properties['mtz:downloads']}</strong>
+                        <c:choose>
+                            <c:when test="${empty document.properties['mtz:downloads'] or document.properties['mtz:downloads'] le 1}">
+                                <span><op:translate key="DOCUMENT_MUTUALIZATION_DOWNLOAD"/></span>
+                            </c:when>
+                            <c:otherwise>
+                                <span><op:translate key="DOCUMENT_MUTUALIZATION_DOWNLOADS"/></span>
+                            </c:otherwise>
+                        </c:choose>
                     </li>
                 </ul>
 
