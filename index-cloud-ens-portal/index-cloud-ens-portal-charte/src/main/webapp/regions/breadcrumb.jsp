@@ -21,7 +21,7 @@
 
                         <c:when test="${status.last and not empty breadcrumb.menu}">
                             <li class="breadcrumb-item active">
-                                <div class="dropdown d-inline">
+                                <div class="dropdown">
                                     <a href="javascript:;" class="text-secondary dropdown-toggle" data-toggle="dropdown">
                                         <span>${child.name}</span>
                                     </a>

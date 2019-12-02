@@ -1,8 +1,10 @@
 <div class="align-items-center bg-primary-lighter rounded">
     <div class="px-3">
         <div class="d-flex align-items-center justify-content-between">
-            <%--Breadcrumb--%>
-            <p:region regionName="breadcrumb"/>
+            <div class="flex-shrink-1 mw-100">
+                <%--Breadcrumb--%>
+                <p:region regionName="breadcrumb"/>
+            </div>
 
             <div class="d-none d-md-block">
        		    <p:region regionName="contextualized-search" />
