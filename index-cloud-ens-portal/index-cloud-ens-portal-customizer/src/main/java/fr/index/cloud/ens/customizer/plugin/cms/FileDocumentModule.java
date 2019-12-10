@@ -1,14 +1,18 @@
 package fr.index.cloud.ens.customizer.plugin.cms;
 
 import fr.toutatice.portail.cms.nuxeo.api.ContextualizationHelper;
+import fr.toutatice.portail.cms.nuxeo.api.INuxeoCommand;
 import fr.toutatice.portail.cms.nuxeo.api.NuxeoController;
 import fr.toutatice.portail.cms.nuxeo.api.cms.NuxeoDocumentContext;
 import fr.toutatice.portail.cms.nuxeo.api.cms.NuxeoPublicationInfos;
 import fr.toutatice.portail.cms.nuxeo.api.domain.DocumentDTO;
 import fr.toutatice.portail.cms.nuxeo.api.domain.RemotePublishedDocumentDTO;
 import fr.toutatice.portail.cms.nuxeo.api.portlet.PortletModule;
+import fr.toutatice.portail.cms.nuxeo.api.services.dao.DocumentDAO;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
+import org.nuxeo.ecm.automation.client.model.Document;
+import org.nuxeo.ecm.automation.client.model.Documents;
 import org.osivia.portal.api.Constants;
 import org.osivia.portal.api.PortalException;
 import org.osivia.portal.api.cms.Permissions;
@@ -44,6 +48,11 @@ public class FileDocumentModule extends PortletModule {
      */
     private final IPortalUrlFactory portalUrlFactory;
 
+    /**
+     * Document DAO.
+     */
+    private final DocumentDAO documentDao;
+
 
     /**
      * Constructor.
@@ -55,6 +64,8 @@ public class FileDocumentModule extends PortletModule {
 
         // Portal URL factory
         this.portalUrlFactory = Locator.findMBean(IPortalUrlFactory.class, IPortalUrlFactory.MBEAN_NAME);
+        // Document DAO
+        this.documentDao = DocumentDAO.getInstance();
     }
 
 
@@ -109,6 +120,10 @@ public class FileDocumentModule extends PortletModule {
                 // Desynchronized indicator
                 boolean desynchronized = this.isDesynchronized(portalControllerContext, documentContext);
                 request.setAttribute("desynchronized", desynchronized);
+
+                // Source
+                DocumentDTO source = this.getSource(nuxeoController, documentContext);
+                request.setAttribute("source", source);
             }
         }
     }
@@ -294,6 +309,40 @@ public class FileDocumentModule extends PortletModule {
         }
 
         return desynchronized;
+    }
+
+
+    /**
+     * Get source document DTO.
+     *
+     * @param nuxeoController Nuxeo controller
+     * @param documentContext document context
+     * @return document DTO
+     */
+    private DocumentDTO getSource(NuxeoController nuxeoController, NuxeoDocumentContext documentContext) {
+        // Document
+        Document document = documentContext.getDocument();
+
+        // Source webId
+        String sourceWebId = document.getString("mtz:sourceWebId");
+
+        // Source
+        DocumentDTO source;
+        if (StringUtils.isEmpty(sourceWebId)) {
+            source = null;
+        } else {
+            // Nuxeo command
+            INuxeoCommand command = new GetSourceByWebIdCommand(sourceWebId);
+            Documents documents = (Documents) nuxeoController.executeNuxeoCommand(command);
+
+            if (documents.size() == 1) {
+                source = this.documentDao.toDTO(documents.get(0));
+            } else {
+                source = null;
+            }
+        }
+
+        return source;
     }
 
 

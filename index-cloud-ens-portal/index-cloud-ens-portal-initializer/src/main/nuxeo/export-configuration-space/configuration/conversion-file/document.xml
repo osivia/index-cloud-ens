@@ -73,7 +73,6 @@
     <idxvs:quarantineDate/>
   </schema>
   <schema xmlns:rshr="http://www.nuxeo.org/ecm/schemas/resourceSharing/" name="resourceSharing">
-    <rshr:mutualized/>
     <rshr:format/>
     <rshr:targets/>
     <rshr:linkId/>

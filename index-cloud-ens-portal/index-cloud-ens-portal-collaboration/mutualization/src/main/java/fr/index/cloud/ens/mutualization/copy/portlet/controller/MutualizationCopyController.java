@@ -11,6 +11,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.portlet.bind.PortletRequestDataBinder;
 import org.springframework.web.portlet.bind.annotation.ActionMapping;
 import org.springframework.web.portlet.bind.annotation.RenderMapping;
@@ -81,12 +82,20 @@ public class MutualizationCopyController {
         PortalControllerContext portalControllerContext = new PortalControllerContext(this.portletContext, request, response);
 
         if (!bindingResult.hasErrors()) {
-            // Copy
-            this.service.copy(portalControllerContext, form);
+            // Check if document already exists
+            boolean alreadyExists = this.service.alreadyExists(portalControllerContext, form);
 
-            // Redirection
-            String redirectionUrl = this.service.getRedirectionUrl(portalControllerContext, form);
-            response.sendRedirect(redirectionUrl);
+            if (alreadyExists) {
+                // Confirmation
+                response.setRenderParameter("step", "confirmation");
+            } else {
+                // Copy
+                this.service.copy(portalControllerContext, form, null);
+
+                // Redirection
+                String redirectionUrl = this.service.getRedirectionUrl(portalControllerContext, form);
+                response.sendRedirect(redirectionUrl);
+            }
         }
     }
 

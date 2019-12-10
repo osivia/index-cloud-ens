@@ -64,7 +64,7 @@ public class CloudEnsStatisticsModule implements StatisticsModule {
 
     @Override
     public void increments(PortalControllerContext portalControllerContext, String path) throws PortalException {
-        if (StringUtils.startsWith(path, MUTUALIZED_SPACE_PATH)) {
+        if (StringUtils.startsWith(path, MUTUALIZED_SPACE_PATH) && !StringUtils.equals(path, MUTUALIZED_SPACE_PATH)) {
             // HTTP session
             HttpSession session = portalControllerContext.getHttpServletRequest().getSession();
             // Session attribute
@@ -105,7 +105,7 @@ public class CloudEnsStatisticsModule implements StatisticsModule {
 
             for (String path : paths) {
                 // Nuxeo command
-                INuxeoCommand command = new UpdateStatisticsCommand(path);
+                INuxeoCommand command = new IncrementsDocumentViewsCommand(path);
 
                 // Lock
                 ReentrantLock lock = this.getLock(path);

@@ -8,6 +8,7 @@
     <xs:element name="title" type="xs:string"/>
     <xs:element name="keywords" type="nxs:stringList"/>
     <xs:element name="sourceWebId" type="xs:string"/>
+    <xs:element name="sourceVersion" type="xs:string"/>
     <xs:element name="views" type="xs:int" default="0"/>
     <xs:element name="downloads" type="xs:int" default="0"/>
 

@@ -3,8 +3,6 @@ package fr.index.cloud.ens.mutualization.portlet.repository.command;
 import fr.index.cloud.ens.mutualization.portlet.model.MutualizationForm;
 import fr.index.cloud.ens.mutualization.portlet.repository.MutualizationRepository;
 import fr.toutatice.portail.cms.nuxeo.api.INuxeoCommand;
-import net.sf.json.JSONArray;
-import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.nuxeo.ecm.automation.client.Session;
 import org.nuxeo.ecm.automation.client.adapters.DocumentService;
@@ -15,9 +13,6 @@ import org.nuxeo.ecm.automation.client.model.PropertyMap;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
-
-import java.util.Collection;
-import java.util.List;
 
 /**
  * Enable mutualization Nuxeo command.
@@ -82,29 +77,6 @@ public class EnableMutualizationCommand implements INuxeoCommand {
         Document updatedDocument = documentService.update(document, properties);
 
         return documentService.publish(updatedDocument, section, true);
-    }
-
-
-    /**
-     * Convert list to JSON
-     *
-     * @param values list values
-     * @return JSON
-     */
-    private String convert(Collection<String> values) {
-        String result;
-
-        if (CollectionUtils.isEmpty(values)) {
-            result = null;
-        } else {
-            JSONArray array = new JSONArray();
-            for (String value : values) {
-                array.add(value);
-            }
-            result = array.toString();
-        }
-
-        return result;
     }
 
 

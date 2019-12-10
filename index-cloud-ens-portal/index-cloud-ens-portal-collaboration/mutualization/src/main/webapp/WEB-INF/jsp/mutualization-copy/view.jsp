@@ -20,7 +20,7 @@
     <spring:bind path="targetPath">
         <div class="form-group required">
             <form:label path="targetPath"><op:translate key="MUTUALIZATION_COPY_TARGET_PATH_LABEL"/></form:label>
-            <div class="card ${status.error ? 'border-danger' : ''}">
+            <div class="card ${status.error ? 'border-danger is-invalid' : ''}">
                 <div class="card-body">
                     <div class="selector">
                         <div class="fancytree fancytree-selector" data-lazyloadingurl="${browseUrl}"></div>

@@ -388,9 +388,32 @@
             <div class="card-body">
                 <p class="card-text"><op:translate key="DOCUMENT_COPIED_INFORMATION"/></p>
 
-                <a href="#" class="card-link text-mutualized-dark">
-                    <span><op:translate key="DOCUMENT_COPIED_CONTACT_AUTHOR"/></span>
-                </a>
+                <p class="card-text">
+                    <a href="#" class="text-mutualized-dark">
+                        <span><op:translate key="DOCUMENT_COPIED_CONTACT_AUTHOR"/></span>
+                    </a>
+                </p>
+
+                <c:choose>
+                    <c:when test="${empty source}">
+                        <p class="card-text text-muted"><op:translate key="DOCUMENT_COPIED_SOURCE_NOT_FOUND"/></p>
+                    </c:when>
+
+                    <c:otherwise>
+                        <ttc:documentLink document="${source}" var="sourceLink" permalink="true"/>
+                        <p class="card-text">
+                            <a href="${sourceLink.url}" class="text-mutualized-dark no-ajax-link">
+                                <span><op:translate key="DOCUMENT_COPIED_VIEW_SOURCE"/></span>
+                            </a>
+                        </p>
+
+                        <c:if test="${document.properties['mtz:sourceVersion'] ne source.document.versionLabel}">
+                            <p class="card-text text-muted">
+                                <small><op:translate key="DOCUMENT_COPIED_NEW_VERSION_FOUND"/></small>
+                            </p>
+                        </c:if>
+                    </c:otherwise>
+                </c:choose>
             </div>
         </div>
     </c:if>

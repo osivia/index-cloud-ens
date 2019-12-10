@@ -1,6 +1,7 @@
 package fr.index.cloud.ens.mutualization.copy.portlet.configuration;
 
 import fr.toutatice.portail.cms.nuxeo.api.CMSPortlet;
+import fr.toutatice.portail.cms.nuxeo.api.services.dao.DocumentDAO;
 import org.osivia.portal.api.internationalization.IBundleFactory;
 import org.osivia.portal.api.internationalization.IInternationalizationService;
 import org.osivia.portal.api.locator.Locator;
@@ -143,6 +144,17 @@ public class MutualizationCopyConfiguration extends CMSPortlet implements Portle
     @Bean
     public INotificationsService getNotificationsService() {
         return Locator.findMBean(INotificationsService.class, INotificationsService.MBEAN_NAME);
+    }
+
+
+    /**
+     * Get document DAO.
+     *
+     * @return document DAO
+     */
+    @Bean
+    public DocumentDAO getDocumentDao() {
+        return DocumentDAO.getInstance();
     }
 
 }

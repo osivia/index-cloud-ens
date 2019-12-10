@@ -1,8 +1,11 @@
 package fr.index.cloud.ens.mutualization.copy.portlet.model;
 
+import org.osivia.portal.api.portlet.Refreshable;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
+import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Component;
+import org.springframework.web.context.WebApplicationContext;
 
 /**
  * Mutualization copy form java-bean.
@@ -10,7 +13,7 @@ import org.springframework.stereotype.Component;
  * @author Cédric Krommenhoek
  */
 @Component
-@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+@Scope(scopeName = WebApplicationContext.SCOPE_SESSION)
 public class MutualizationCopyForm {
 
     /**
