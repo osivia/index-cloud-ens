@@ -1,6 +1,8 @@
 package fr.index.cloud.ens.portal.discussion.portlet.service;
 
 
+import fr.index.cloud.ens.portal.discussion.portlet.model.DetailForm;
+import fr.index.cloud.ens.portal.discussion.portlet.model.DiscussionMessage;
 import fr.index.cloud.ens.portal.discussion.portlet.model.DiscussionCreation;
 import fr.index.cloud.ens.portal.discussion.portlet.model.DiscussionsForm;
 import fr.index.cloud.ens.portal.discussion.portlet.model.DiscussionsFormSort;
@@ -117,6 +119,56 @@ public class DiscussionServiceImpl implements DiscussionService, ApplicationCont
      * {@inheritDoc}
      */
     @Override
+    public DetailForm getDetailForm(PortalControllerContext portalControllerContext, String id, String participant, String anchor) throws PortletException {
+        // Trash form
+        DetailForm form = this.applicationContext.getBean(DetailForm.class);
+
+        if (!form.isLoaded()) {
+
+            form.setId(id);
+            form.setParticipant(participant);
+            form.setAuthor(portalControllerContext.getRequest().getRemoteUser());
+            form.setAnchor(anchor);
+
+            updateModel(portalControllerContext, form);
+
+            form.setLoaded(true);
+        }
+
+        return form;
+    }
+
+
+    private void updateModel(PortalControllerContext portalControllerContext, DetailForm form) throws PortletException {
+
+
+        DiscussionDocument doc = null;
+
+        if (form.getId() != null) {
+            // Reading by id (default)
+            doc = this.repository.getDiscussion(portalControllerContext, form.getId());
+        } else if (form.getParticipant() != null) {
+            // Reading by participant
+            doc = this.repository.getDiscussionByParticipant(portalControllerContext, form.getParticipant());
+            form.setId(doc.getWebId());
+        }
+
+        // update read preference
+        if (form.getId() != null) {
+            repository.checkUserReadPreference(portalControllerContext, form.getId(), doc.getMessages().size());
+        }
+
+
+        form.setDocument(doc);
+
+
+    }
+
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public void sort(PortalControllerContext portalControllerContext, DiscussionsForm form, DiscussionsFormSort sort, boolean alt) {
         if (CollectionUtils.isNotEmpty(form.getTrashedDocuments())) {
             // Comparator
@@ -149,8 +201,6 @@ public class DiscussionServiceImpl implements DiscussionService, ApplicationCont
     }
 
 
-
-
     /**
      * {@inheritDoc}
      */
@@ -174,12 +224,10 @@ public class DiscussionServiceImpl implements DiscussionService, ApplicationCont
     }
 
 
-  
-
     /**
      * Get selected documents.
      *
-     * @param form        trash form
+     * @param form trash form
      * @param identifiers selected document identifiers
      * @return selected documents
      */
@@ -235,14 +283,14 @@ public class DiscussionServiceImpl implements DiscussionService, ApplicationCont
      * Update model.
      *
      * @param portalControllerContext portal controller context
-     * @param form                    trash form
-     * @param selection               selected documents
-     * @param rejected                rejected documents
-     * @param bundle                  internationalization bundle
-     * @param messagePrefix           message prefix
+     * @param form trash form
+     * @param selection selected documents
+     * @param rejected rejected documents
+     * @param bundle internationalization bundle
+     * @param messagePrefix message prefix
      */
-    private void updateModel(PortalControllerContext portalControllerContext, DiscussionsForm form, List<DiscussionDocument> selection, List<DiscussionDocument> rejected,
-                             Bundle bundle, String messagePrefix) {
+    private void updateModel(PortalControllerContext portalControllerContext, DiscussionsForm form, List<DiscussionDocument> selection,
+            List<DiscussionDocument> rejected, Bundle bundle, String messagePrefix) {
 
         // Portlet request
         PortletRequest request = portalControllerContext.getRequest();
@@ -338,13 +386,11 @@ public class DiscussionServiceImpl implements DiscussionService, ApplicationCont
     }
 
 
-
-
     /**
      * Get delete selection toolbar button DOM element.
      *
      * @param portalControllerContext portal controller context
-     * @param bundle                  internationalization bundle
+     * @param bundle internationalization bundle
      * @return DOM element
      */
     private Element getDeleteToolbarButton(PortalControllerContext portalControllerContext, Bundle bundle) {
@@ -366,9 +412,9 @@ public class DiscussionServiceImpl implements DiscussionService, ApplicationCont
     /**
      * Get toolbar button DOM element.
      *
-     * @param id    modal identifier
+     * @param id modal identifier
      * @param title button text
-     * @param icon  button icon
+     * @param icon button icon
      * @return DOM element
      */
     private Element getToolbarButton(String id, String title, String icon) {
@@ -393,8 +439,8 @@ public class DiscussionServiceImpl implements DiscussionService, ApplicationCont
      * Get delete modal confirmation DOM element.
      *
      * @param portalControllerContext portal controller context
-     * @param bundle                  internationalization bundle
-     * @param identifiers             selection identifiers
+     * @param bundle internationalization bundle
+     * @param identifiers selection identifiers
      * @return DOM element
      */
     private Element getDeleteModalConfirmation(PortalControllerContext portalControllerContext, Bundle bundle, String[] identifiers) {
@@ -418,15 +464,16 @@ public class DiscussionServiceImpl implements DiscussionService, ApplicationCont
      * Get modal confirmation DOM element.
      *
      * @param portalControllerContext portal controller context
-     * @param bundle                  internationalization bundle
-     * @param action                  confirmation action name
-     * @param identifiers             selection identifiers
-     * @param id                      modal identifier
-     * @param title                   modal title
-     * @param message                 modal message
+     * @param bundle internationalization bundle
+     * @param action confirmation action name
+     * @param identifiers selection identifiers
+     * @param id modal identifier
+     * @param title modal title
+     * @param message modal message
      * @return DOM element
      */
-    private Element getModalConfirmation(PortalControllerContext portalControllerContext, Bundle bundle, String action, String[] identifiers, String id, String title, String message) {
+    private Element getModalConfirmation(PortalControllerContext portalControllerContext, Bundle bundle, String action, String[] identifiers, String id,
+            String title, String message) {
         // Portlet response
         PortletResponse portletResponse = portalControllerContext.getResponse();
         // MIME response
@@ -501,8 +548,6 @@ public class DiscussionServiceImpl implements DiscussionService, ApplicationCont
     }
 
 
-
-
     /**
      * {@inheritDoc}
      */
@@ -516,7 +561,62 @@ public class DiscussionServiceImpl implements DiscussionService, ApplicationCont
     @Override
     public void createDiscussion(PortalControllerContext portalControllerContext, DiscussionCreation discution) throws PortletException {
         this.repository.createDiscussion(portalControllerContext, discution);
-        
+
+    }
+
+
+    @Override
+    public void addMessage(PortalControllerContext portalControllerContext, DetailForm form) throws PortletException {
+
+        // Internationalization bundle
+        Bundle bundle = this.bundleFactory.getBundle(portalControllerContext.getRequest().getLocale());
+
+
+        // Create discussion if necessary
+        if (form.getId() == null) {
+            if (StringUtils.isNotEmpty(form.getParticipant())) {
+                DiscussionCreation discussion = new DiscussionCreation();
+                List<String> participants = new ArrayList<>();
+                participants.add(form.getParticipant());
+                participants.add(portalControllerContext.getRequest().getRemoteUser());
+                discussion.setParticipants(participants);
+
+                createDiscussion(portalControllerContext, discussion);
+            } else
+                throw new PortletException("no participant. Can't create discussion");
+
+        }
+
+        // Add new Message
+        this.repository.addMessage(portalControllerContext, form);
+
+        updateModel(portalControllerContext, form);
+
+        form.setNewMessage(null);
+
+        // Notification
+        String message = bundle.getString("DISCUSSION_MESSAGE_SUCCESS_ADD_NEW_MESSAGE");
+        this.notificationsService.addSimpleNotification(portalControllerContext, message, NotificationsType.SUCCESS);
+
+    }
+
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void deleteMessage(PortalControllerContext portalControllerContext, DetailForm form, String messageId) throws PortletException {
+        // Internationalization bundle
+        Bundle bundle = this.bundleFactory.getBundle(portalControllerContext.getRequest().getLocale());
+
+        this.repository.deleteMessage(portalControllerContext, form, messageId);
+
+        updateModel(portalControllerContext, form);
+
+        // Notification
+        String message = bundle.getString("DISCUSSION_MESSAGE_SUCCESS_DELETE_MESSAGE");
+        this.notificationsService.addSimpleNotification(portalControllerContext, message, NotificationsType.SUCCESS);
+
     }
 
 }

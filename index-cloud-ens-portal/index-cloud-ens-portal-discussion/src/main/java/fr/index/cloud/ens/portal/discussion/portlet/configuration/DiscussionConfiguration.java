@@ -3,6 +3,8 @@ package fr.index.cloud.ens.portal.discussion.portlet.configuration;
 import fr.toutatice.portail.cms.nuxeo.api.services.INuxeoCustomizer;
 import fr.toutatice.portail.cms.nuxeo.api.services.INuxeoService;
 import fr.toutatice.portail.cms.nuxeo.api.services.dao.DocumentDAO;
+
+import org.osivia.directory.v2.service.preferences.UserPreferencesService;
 import org.osivia.portal.api.directory.v2.DirServiceFactory;
 import org.osivia.portal.api.directory.v2.service.PersonService;
 import org.osivia.portal.api.internationalization.IBundleFactory;
@@ -176,6 +178,18 @@ public class DiscussionConfiguration {
         return Locator.findMBean(ITasksService.class, ITasksService.MBEAN_NAME);
     }
 
+    
+    /**
+     * Get user preferences service.
+     *
+     * @return user preferences service
+     */
+    @Bean
+    public UserPreferencesService getUserPreferencesService() {
+        return DirServiceFactory.getService(UserPreferencesService.class);
+    }
+
+    
 }
 
 

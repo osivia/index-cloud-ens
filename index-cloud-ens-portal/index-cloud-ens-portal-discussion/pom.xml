@@ -13,8 +13,18 @@
     <name>Cloud enseignant - Discussion</name>
 
 
+  <dependencies>
+ 
+            <!-- Directory -->
+            <dependency>
+                <groupId>org.osivia.services.directory.socle</groupId>
+                <artifactId>osivia-services-directory-socle-interfaces</artifactId>
+                <version>${directory.version}</version>
+                <scope>provided</scope>
+            </dependency>
 
-
+    </dependencies>
+    
     <build>
         <plugins>
 

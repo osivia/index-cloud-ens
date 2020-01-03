@@ -1,5 +1,8 @@
 package fr.index.cloud.ens.portal.discussion.portlet.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -7,10 +10,29 @@ import org.springframework.stereotype.Component;
 
 public class DiscussionCreation {
 
-    private String type;
-    private String target; 
-    private String message;
+    private String type="";
+    private String target=""; 
+    private String message="";
+    private List<String> participants= new ArrayList<String>();
     
+    
+    /**
+     * Getter for participants.
+     * @return the participants
+     */
+    public List<String> getParticipants() {
+        return participants;
+    }
+
+    
+    /**
+     * Setter for participants.
+     * @param participants the participants to set
+     */
+    public void setParticipants(List<String> participants) {
+        this.participants = participants;
+    }
+
     /**
      * Getter for type.
      * @return the type

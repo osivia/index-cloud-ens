@@ -383,16 +383,22 @@
     </c:if>
 
 
+
     <c:if test="${not readOnly and not empty document.properties['mtz:sourceWebId']}">
         <div class="card mb-3 bg-mutualized-lighter border-mutualized-dark">
             <div class="card-body">
                 <p class="card-text"><op:translate key="DOCUMENT_COPIED_INFORMATION"/></p>
 
-                <p class="card-text">
-                    <a href="#" class="text-mutualized-dark">
-                        <span><op:translate key="DOCUMENT_COPIED_CONTACT_AUTHOR"/></span>
-                    </a>
-                </p>
+                <c:set var="discussionUrl"><ttc:discussion participant="${document.properties['mtz:sourceAuthor']}" /></c:set>
+                <c:if test="${not empty discussionUrl}">
+	                <p class="card-text">
+	                    <c:set var="discussionUrl"><ttc:discussion participant="${document.properties['mtz:sourceAuthor']}" /></c:set>
+	                
+	                    <a href="${discussionUrl}" class="text-mutualized-dark">
+	                        <span><op:translate key="DOCUMENT_COPIED_CONTACT_AUTHOR"/></span>
+	                    </a>
+	                </p>
+                </c:if>	                
 
                 <c:choose>
                     <c:when test="${empty source}">

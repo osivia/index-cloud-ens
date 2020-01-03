@@ -226,7 +226,7 @@ public class ViewDiscussionsController extends CMSPortlet {
 
 
     /**
-     * Get trash form model attribute.
+     * Get discussions form model attribute.
      *
      * @param request portlet request
      * @param response portlet response

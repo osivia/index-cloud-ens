@@ -4,6 +4,7 @@ import org.dom4j.Element;
 import org.osivia.portal.api.context.PortalControllerContext;
 import org.osivia.portal.api.panels.PanelPlayer;
 
+import fr.index.cloud.ens.portal.discussion.portlet.model.DetailForm;
 import fr.index.cloud.ens.portal.discussion.portlet.model.DiscussionCreation;
 import fr.index.cloud.ens.portal.discussion.portlet.model.DiscussionsForm;
 import fr.index.cloud.ens.portal.discussion.portlet.model.DiscussionsFormSort;
@@ -26,7 +27,7 @@ public interface DiscussionService {
 
 
     /**
-     * Get trash form.
+     * Get dicussions form.
      *
      * @param portalControllerContext portal controller context
      * @return trash form
@@ -83,6 +84,44 @@ public interface DiscussionService {
      * @return DOM element
      */
     Element getToolbar(PortalControllerContext portalControllerContext, List<String> indexes) throws PortletException, IOException;
+
+   
+
+    /**
+     * Get detail form.
+     *
+     * @param portalControllerContext portal controller context
+     * @param id the id
+     * @param anchor the anchor
+     * @return detail form
+     * @throws PortletException the portlet exception
+     */
+    
+    DetailForm getDetailForm(PortalControllerContext portalControllerContext, String id, String recipient, String anchor) throws PortletException;
+
+
+    /**
+     * Adds the new message.
+     *
+     * @param portalControllerContext the portal controller context
+     * @param form the form
+     * @throws PortletException 
+     */
+    
+    void addMessage(PortalControllerContext portalControllerContext, DetailForm form) throws PortletException;
+
+
+    /**
+     * Delete message.
+     *
+     * @param portalControllerContext the portal controller context
+     * @param form the form
+     * @param idMessage the id message
+     * @throws PortletException the portlet exception
+     */
+    void deleteMessage(PortalControllerContext portalControllerContext, DetailForm form, String idMessage) throws PortletException;
+
+
 
 
 

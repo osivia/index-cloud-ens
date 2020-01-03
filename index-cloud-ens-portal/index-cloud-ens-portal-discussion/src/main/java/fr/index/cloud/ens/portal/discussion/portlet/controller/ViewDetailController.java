@@ -1,42 +1,33 @@
 package fr.index.cloud.ens.portal.discussion.portlet.controller;
 
-import fr.index.cloud.ens.portal.discussion.portlet.model.DiscussionsForm;
-import fr.index.cloud.ens.portal.discussion.portlet.model.DiscussionsFormSort;
-import fr.index.cloud.ens.portal.discussion.portlet.repository.DiscussionRepository;
-import fr.index.cloud.ens.portal.discussion.portlet.service.DiscussionService;
-import fr.toutatice.portail.cms.nuxeo.api.CMSPortlet;
-import fr.toutatice.portail.cms.nuxeo.api.NuxeoController;
-import fr.toutatice.portail.cms.nuxeo.api.forms.IFormsService;
-import fr.toutatice.portail.cms.nuxeo.api.services.NuxeoCommandServiceFactory;
-import fr.toutatice.portail.cms.nuxeo.api.services.NuxeoServiceFactory;
+import javax.annotation.PostConstruct;
+import javax.portlet.ActionRequest;
+import javax.portlet.ActionResponse;
+import javax.portlet.PortletConfig;
+import javax.portlet.PortletContext;
+import javax.portlet.PortletException;
+import javax.portlet.PortletRequest;
+import javax.portlet.PortletResponse;
+import javax.portlet.RenderRequest;
+import javax.portlet.RenderResponse;
 
-import org.apache.commons.lang.BooleanUtils;
-import org.apache.commons.lang.StringUtils;
-import org.dom4j.Element;
-import org.dom4j.io.HTMLWriter;
-import org.nuxeo.ecm.automation.client.model.Document;
 import org.osivia.portal.api.context.PortalControllerContext;
-import org.osivia.portal.api.directory.v2.model.Person;
 import org.osivia.portal.api.directory.v2.service.PersonService;
-import org.osivia.portal.api.urls.Link;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.portlet.bind.annotation.ActionMapping;
 import org.springframework.web.portlet.bind.annotation.RenderMapping;
-import org.springframework.web.portlet.bind.annotation.ResourceMapping;
 
-import javax.annotation.PostConstruct;
-import javax.naming.Name;
-import javax.portlet.*;
-import java.io.IOException;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import fr.index.cloud.ens.portal.discussion.portlet.model.DetailForm;
+import fr.index.cloud.ens.portal.discussion.portlet.model.DiscussionsForm;
+import fr.index.cloud.ens.portal.discussion.portlet.service.DiscussionService;
+import fr.toutatice.portail.cms.nuxeo.api.CMSPortlet;
 
 /**
  * View trash portlet controller.
@@ -103,7 +94,76 @@ public class ViewDetailController extends CMSPortlet {
     }
 
 
-  
+    /**
+     * Get detail form model attribute.
+     *
+     * @param request portlet request
+     * @param response portlet response
+     * @return trash form
+     */
+    @ModelAttribute("detailForm")
+    public DetailForm getDiscussionsForm(PortletRequest request, PortletResponse response, @RequestParam(name = "id", required = false) String id, @RequestParam(name = "participant", required = false) String participant, @RequestParam(name = "anchor", required = false) String anchor) throws PortletException {
+        // Portal controller context
+        PortalControllerContext portalControllerContext = new PortalControllerContext(portletContext, request, response);
 
+        return this.service.getDetailForm(portalControllerContext, id, participant, anchor);
+    }
+
+
+    /**
+     * Submit creation action mapping.
+     * 
+     * @param request action request
+     * @param response action response
+     * @param form form model attribute
+     * @param result binding result
+     * @param sessionStatus session status
+     * @throws PortletException
+     */
+    @ActionMapping("addMessage")
+    public void addMessage(ActionRequest request, ActionResponse response, @Validated @ModelAttribute("detailForm") DetailForm form, BindingResult result,
+            SessionStatus sessionStatus) throws PortletException {
+        // Portal controller context
+        PortalControllerContext portalControllerContext = new PortalControllerContext(this.portletContext, request, response);
+        
+        this.service.addMessage(portalControllerContext, form);
+
+        if (result.hasErrors()) {
+            response.setRenderParameter("view", "detail");
+            response.setRenderParameter("id", form.getId());
+        } else {
+            response.setRenderParameter("view", "detail");
+            response.setRenderParameter("id", form.getId());
+        }
+    }
+
+    
+    /**
+     * Delete current message
+     *
+     * @param request action request
+     * @param response action response
+     * @param form detail form model attribute
+     */
+    @ActionMapping("deleteMessage")
+    public void deleteMessage(ActionRequest request, ActionResponse response, @RequestParam("messageId") String messageId,
+            @ModelAttribute("detailForm") DetailForm form, BindingResult result) throws PortletException {
+        // Portal controller context
+        PortalControllerContext portalControllerContext = new PortalControllerContext(this.portletContext, request, response);
+
+        this.service.deleteMessage(portalControllerContext, form, messageId);
+        
+        if (result.hasErrors()) {
+            response.setRenderParameter("view", "detail");
+            response.setRenderParameter("id", form.getId());
+        } else {
+
+            response.setRenderParameter("view", "detail");
+            response.setRenderParameter("id", form.getId());
+        }
+        
+    }
+
+    
 
 }
