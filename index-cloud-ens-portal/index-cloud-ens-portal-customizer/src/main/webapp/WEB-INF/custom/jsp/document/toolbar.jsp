@@ -83,9 +83,10 @@
             <%--Download--%>
             <c:if test="${document.type.file}">
                 <c:set var="url"><ttc:documentLink document="${document}" displayContext="download"/></c:set>
+                <c:set var="title"><op:translate key="DOWNLOAD"/></c:set>
                 <a href="${url}" target="_blank" title="${title}" class="btn btn-primary btn-sm mb-1 ml-1 no-ajax-link">
                     <i class="glyphicons glyphicons-basic-square-download"></i>
-                    <span class="d-none d-xl-inline"><op:translate key="DOWNLOAD"/></span>
+                    <span class="d-none d-xl-inline">${title}</span>
                 </a>
             </c:if>
 
