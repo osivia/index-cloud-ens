@@ -9,19 +9,13 @@ import fr.index.cloud.ens.filebrowser.mutualized.portlet.model.MutualizedFileBro
 import fr.index.cloud.ens.filebrowser.mutualized.portlet.repository.MutualizedFileBrowserRepository;
 import fr.toutatice.portail.cms.nuxeo.api.domain.DocumentDTO;
 import fr.toutatice.portail.cms.nuxeo.api.services.dao.DocumentDAO;
-import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang.BooleanUtils;
 import org.apache.commons.lang.math.NumberUtils;
-import org.jboss.portal.common.invocation.Scope;
-import org.jboss.portal.core.controller.ControllerContext;
 import org.nuxeo.ecm.automation.client.model.Document;
 import org.nuxeo.ecm.automation.client.model.PaginableDocuments;
 import org.osivia.portal.api.context.PortalControllerContext;
 import org.osivia.portal.api.windows.PortalWindow;
 import org.osivia.portal.api.windows.WindowFactory;
-import org.osivia.portal.core.context.ControllerContextAdapter;
 import org.osivia.services.workspace.filebrowser.portlet.model.*;
-import org.osivia.services.workspace.filebrowser.portlet.model.comparator.FileBrowserItemComparator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Primary;
@@ -125,6 +119,8 @@ public class MutualizedFileBrowserServiceImpl extends AbstractFileBrowserService
 
     @Override
     protected void initializeForm(PortalControllerContext portalControllerContext, FileBrowserForm form) throws PortletException {
+        // Portlet request
+        PortletRequest request = portalControllerContext.getRequest();
         // Window properties
         MutualizedFileBrowserWindowProperties windowProperties = this.getWindowProperties(portalControllerContext);
 
@@ -133,7 +129,10 @@ public class MutualizedFileBrowserServiceImpl extends AbstractFileBrowserService
 
         super.initializeForm(portalControllerContext, mutualizedForm);
 
-        this.initializePagination(portalControllerContext, windowProperties, mutualizedForm);
+        // Previous page index
+        int previousPageIndex = NumberUtils.toInt(request.getParameter("page"), 0);
+
+        this.initializePagination(portalControllerContext, windowProperties, mutualizedForm, previousPageIndex);
     }
 
 
@@ -143,15 +142,11 @@ public class MutualizedFileBrowserServiceImpl extends AbstractFileBrowserService
      * @param portalControllerContext portal controller context
      * @param windowProperties        window properties
      * @param form                    form
+     * @param pageIndex               page index
      */
-    private void initializePagination(PortalControllerContext portalControllerContext, MutualizedFileBrowserWindowProperties windowProperties, MutualizedFileBrowserForm form) throws PortletException {
-        // Portlet request
-        PortletRequest request = portalControllerContext.getRequest();
-
-        // Previous page index
-        int previousPageIndex = NumberUtils.toInt(request.getParameter("page"), 0);
+    private void initializePagination(PortalControllerContext portalControllerContext, MutualizedFileBrowserWindowProperties windowProperties, MutualizedFileBrowserForm form, int pageIndex) throws PortletException {
         // Page size
-        int pageSize = (previousPageIndex + 1) * windowProperties.getPageSize();
+        int pageSize = (pageIndex + 1) * windowProperties.getPageSize();
 
         // Paginable documents
         PaginableDocuments documents = this.repository.getPaginableDocuments(portalControllerContext, windowProperties, form.getPath(), pageSize, 0, form.getCriteria());
@@ -167,7 +162,7 @@ public class MutualizedFileBrowserServiceImpl extends AbstractFileBrowserService
         // Next page index
         int nextPageIndex;
         if (documents.getTotalSize() > documents.getPageSize()) {
-            nextPageIndex = previousPageIndex + 1;
+            nextPageIndex = pageIndex + 1;
         } else {
             nextPageIndex = 0;
         }
@@ -192,10 +187,9 @@ public class MutualizedFileBrowserServiceImpl extends AbstractFileBrowserService
 
             items = new ArrayList<>(documents.getPageSize());
 
-            for (int i = 0; i < documents.getPageSize(); i++) {
-                // Document
-                Document document = documents.get(i);
-
+            int order = documents.getPageIndex() * documents.getPageSize();
+            for (Document document : documents.list()) {
+                // File browser item
                 FileBrowserItem item = this.createItem(portalControllerContext, document);
 
                 // Subscription
@@ -203,7 +197,7 @@ public class MutualizedFileBrowserServiceImpl extends AbstractFileBrowserService
                 item.setSubscription(subscription);
 
                 // Native order
-                item.setNativeOrder(i);
+                item.setNativeOrder(order);
 
                 // Parent document
                 Document parent = this.repository.getParentDocument(portalControllerContext, document);
@@ -213,6 +207,7 @@ public class MutualizedFileBrowserServiceImpl extends AbstractFileBrowserService
                 }
 
                 items.add(item);
+                order++;
             }
         }
         return items;
@@ -251,7 +246,7 @@ public class MutualizedFileBrowserServiceImpl extends AbstractFileBrowserService
         criteria.setAlt(alt);
         mutualizedForm.setCriteria(criteria);
 
-        this.initializePagination(portalControllerContext, windowProperties, mutualizedForm);
+        this.initializePagination(portalControllerContext, windowProperties, mutualizedForm, 0);
     }
 
 
@@ -296,16 +291,16 @@ public class MutualizedFileBrowserServiceImpl extends AbstractFileBrowserService
 
 
     @Override
-    public void savePosition(PortalControllerContext portalControllerContext) throws PortletException {
+    public void savePosition(PortalControllerContext portalControllerContext, MutualizedFileBrowserForm form, int pageIndex) throws PortletException {
         // Portlet request
         PortletRequest request = portalControllerContext.getRequest();
+        // Action response
+        ActionResponse response = (ActionResponse) portalControllerContext.getResponse();
 
         // Prevent Ajax refresh
         request.setAttribute("osivia.ajax.preventRefresh", true);
 
-
-        // TODO render parameters
-
+        response.setRenderParameter("page", String.valueOf(pageIndex));
     }
 
 
@@ -320,8 +315,10 @@ public class MutualizedFileBrowserServiceImpl extends AbstractFileBrowserService
 
         // Window properties
         MutualizedFileBrowserWindowProperties windowProperties = this.getWindowProperties(portalControllerContext);
+
         // Form
         MutualizedFileBrowserForm form = this.getForm(portalControllerContext);
+        request.setAttribute("form", form);
 
         // Paginable documents
         PaginableDocuments documents = this.repository.getPaginableDocuments(portalControllerContext, windowProperties, form.getPath(), windowProperties.getPageSize(), pageIndex, form.getCriteria());
@@ -338,6 +335,10 @@ public class MutualizedFileBrowserServiceImpl extends AbstractFileBrowserService
             nextPageIndex = 0;
         }
         request.setAttribute("nextPageIndex", nextPageIndex);
+
+        // Update model
+        form.getItems().addAll(items);
+        form.setNextPageIndex(nextPageIndex);
 
         // JSP path
         String jspPath;

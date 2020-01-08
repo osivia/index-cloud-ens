@@ -37,6 +37,7 @@
             <link rel="stylesheet" href="/css/file-browser.min.css" />
             <link rel="stylesheet" href="/css/customized-file-browser.css" />
             <link rel="stylesheet" href="/css/mutualized-file-browser.css" />
+            <script type="text/javascript" src="/js/mutualized-file-browser.js"></script>
         </header-content>
     </portlet>
 

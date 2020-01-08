@@ -32,23 +32,13 @@
 
             <c:if test="${form.nextPageIndex gt 0}">
                 <portlet:actionURL name="save-position" var="savePositionUrl">
-                    <portlet:param name="page" value="${form.nextPageIndex}"/>
+                    <portlet:param name="pageIndex" value="${form.nextPageIndex}"/>
                 </portlet:actionURL>
                 <portlet:resourceURL id="load-page" var="loadPageUrl">
-                    <portlet:param name="page" value="${form.nextPageIndex}"/>
+                    <portlet:param name="pageIndex" value="${form.nextPageIndex}"/>
                 </portlet:resourceURL>
 
-
-                <div class="portal-table-row hover-0">
-                    <div class="portal-table-cell">
-                        <div class="portal-table-cell-inner">
-                            <button type="button" class="btn btn-primary" data-save-position-url="${savePositionUrl}" data-load-page-url="${loadPageUrl}">
-                                <span class="spinner-border spinner-border-sm" role="status"></span>
-                                <span>Loading...</span>
-                            </button>
-                        </div>
-                    </div>
-                </div>
+                <%@ include file="more.jspf" %>
             </c:if>
         </div>
     </c:otherwise>

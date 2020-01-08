@@ -47,15 +47,17 @@ public interface MutualizedFileBrowserService extends AbstractFileBrowserService
      * Save position.
      *
      * @param portalControllerContext portal controller context
+     * @param form                    form
+     * @param pageIndex               page index
      */
-    void savePosition(PortalControllerContext portalControllerContext) throws PortletException;
+    void savePosition(PortalControllerContext portalControllerContext, MutualizedFileBrowserForm form, int pageIndex) throws PortletException;
 
 
     /**
      * Load page.
      *
      * @param portalControllerContext portal controller context
-     * @param pageIndex                    page index
+     * @param pageIndex               page index
      */
     void loadPage(PortalControllerContext portalControllerContext, int pageIndex) throws PortletException, IOException;
 
