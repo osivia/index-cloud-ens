@@ -1,0 +1,13 @@
+<div class="portal-table-row position-relative">
+    <%--Title--%>
+    <%@ include file="table-body-title.jspf" %>
+
+    <%--Customized column--%>
+    <%@ include file="../table-body-customized-column.jspf" %>
+
+    <%--Last modification--%>
+    <%@ include file="../table-body-last-modification.jspf" %>
+
+    <%--File size--%>
+    <%@ include file="../table-body-file-size.jspf" %>
+</div>

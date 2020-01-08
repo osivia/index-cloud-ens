@@ -3,5 +3,5 @@
     <%@ include file="../toolbar-customized-column.jspf" %>
 
     <%--State--%>
-    <%@ include file="../toolbar-state.jspf" %>
+    <%@ include file="toolbar-state.jspf" %>
 </div>

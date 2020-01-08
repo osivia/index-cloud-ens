@@ -34,7 +34,7 @@
             </div>
         </div>
 
-        <form:textarea path="nxql" cssClass="form-control" rows="10" placeholder="${placeholder}" />
+        <form:textarea path="nxql" cssClass="form-control" rows="10" placeholder="${placeholder}"/>
     </div>
 
     <%--BeanShell indicator--%>
@@ -45,6 +45,11 @@
         </div>
     </div>
 
+    <%--Page size--%>
+    <div class="form-group">
+        <form:label path="pageSize"><op:translate key="FILE_BROWSER_ADMIN_FORM_PAGE_SIZE_LABEL"/></form:label>
+        <form:input path="pageSize" cssClass="form-control"/>
+    </div>
 
     <%--Buttons--%>
     <div>
