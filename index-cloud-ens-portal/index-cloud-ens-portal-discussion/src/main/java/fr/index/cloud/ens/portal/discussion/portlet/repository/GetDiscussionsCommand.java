@@ -1,5 +1,7 @@
 package fr.index.cloud.ens.portal.discussion.portlet.repository;
 
+import java.util.Set;
+
 import org.nuxeo.ecm.automation.client.Constants;
 import org.nuxeo.ecm.automation.client.OperationRequest;
 import org.nuxeo.ecm.automation.client.Session;
@@ -7,36 +9,36 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import fr.index.cloud.ens.portal.discussion.portlet.model.DiscussionDocument;
 import fr.toutatice.portail.cms.nuxeo.api.INuxeoCommand;
 import fr.toutatice.portail.cms.nuxeo.api.NuxeoQueryFilter;
 import fr.toutatice.portail.cms.nuxeo.api.NuxeoQueryFilterContext;
-import fr.toutatice.portail.cms.nuxeo.api.forms.IFormsService;
 
 /**
- * Get Discussions
- * 
+ * Get Discussion Nuxeo command.
+ *
  * @author Jean-Sébastien Steux
  * @see INuxeoCommand
  */
+
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-public class GetDiscussionsByParticipantCommand implements INuxeoCommand {
 
-    /** The participant. */
-    private String participant;
+public class GetDiscussionsCommand implements INuxeoCommand {
+
+
+
+    String user;
+    Set<String> webIds;
     
-    /** The current user. */
-    private String currentUser;
-
     /**
      * Constructor.
      * 
-     * @param basePath base path
+
      */
-    public GetDiscussionsByParticipantCommand(String currentUser, String participant) {
-        super();
-        this.currentUser = currentUser;
-        this.participant = participant;
+    public GetDiscussionsCommand( String user, Set<String> webIds) {
+       this.user = user;
+       this.webIds = webIds;
 
     }
 
@@ -46,11 +48,30 @@ public class GetDiscussionsByParticipantCommand implements INuxeoCommand {
      */
     @Override
     public Object execute(Session nuxeoSession) throws Exception {
+        
+        // Query
         StringBuilder query = new StringBuilder();
 
+        for (String webId: webIds) {
+            if( query.length() == 0) 
+                query.append(" ( ");
+            else
+                query.append(" OR ");
+            
+            query.append("( disc:type = '"+DiscussionDocument.TYPE_USER_COPY+"' AND disc:target = '"+webId+"' )");
+        }
         
-        query.append("disc:participants/* = '"+currentUser+"' AND disc:participants/* = '"+participant+"'");
+        if( query.length() > 0)
+            query.append(" ) ");            
+        
 
+        if( user != null)   {
+            if( query.length() > 0)
+                query.append(" OR ");            
+            
+            query.append(" (disc:participants/* = '"+user+"') ");
+        }
+        
         // Query filter
         NuxeoQueryFilterContext queryFilterContext = new NuxeoQueryFilterContext(NuxeoQueryFilterContext.STATE_LIVE);
         String filteredRequest = NuxeoQueryFilter.addPublicationFilter(queryFilterContext, query.toString());
@@ -58,10 +79,10 @@ public class GetDiscussionsByParticipantCommand implements INuxeoCommand {
         // Operation request
         OperationRequest request = nuxeoSession.newRequest("Document.QueryES");
         request.set(Constants.HEADER_NX_SCHEMAS, "dublincore, toutatice, discussion");
-        request.set("query", filteredRequest.toString());
+        request.set("query", filteredRequest);
 
         return request.execute();
-      }
+    }
 
 
     /**
@@ -71,6 +92,7 @@ public class GetDiscussionsByParticipantCommand implements INuxeoCommand {
     public String getId() {
         StringBuilder builder = new StringBuilder();
         builder.append(this.getClass().getName());
+
         return builder.toString();
     }
 

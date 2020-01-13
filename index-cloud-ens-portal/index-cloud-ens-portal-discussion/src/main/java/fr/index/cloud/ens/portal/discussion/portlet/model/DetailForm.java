@@ -35,7 +35,8 @@ public class DetailForm {
     /** The author. */
     private String author;
 
-
+    /** The id. */
+    private String publicationId;
 
     /** The new message. */
     private String newMessage;
@@ -190,6 +191,30 @@ public class DetailForm {
      */
     public void setParticipant(String participant) {
         this.participant = participant;
+    }
+
+
+
+
+    
+    /**
+     * Getter for publicationId.
+     * @return the publicationId
+     */
+    public String getPublicationId() {
+        return publicationId;
+    }
+
+
+
+
+    
+    /**
+     * Setter for publicationId.
+     * @param publicationId the publicationId to set
+     */
+    public void setPublicationId(String publicationId) {
+        this.publicationId = publicationId;
     }
 
     

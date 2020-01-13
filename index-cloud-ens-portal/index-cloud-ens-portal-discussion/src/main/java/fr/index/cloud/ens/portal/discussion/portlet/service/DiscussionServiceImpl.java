@@ -9,6 +9,7 @@ import fr.index.cloud.ens.portal.discussion.portlet.model.DiscussionsFormSort;
 import fr.index.cloud.ens.portal.discussion.portlet.model.DiscussionDocument;
 import fr.index.cloud.ens.portal.discussion.portlet.model.comparator.DiscussionComparator;
 import fr.index.cloud.ens.portal.discussion.portlet.repository.DiscussionRepository;
+import fr.index.cloud.ens.portal.discussion.portlet.repository.DiscussionRepositoryImpl;
 import fr.index.cloud.ens.portal.discussion.util.ApplicationContextProvider;
 import fr.toutatice.portail.cms.nuxeo.api.domain.DocumentDTO;
 import org.apache.commons.collections.CollectionUtils;
@@ -16,10 +17,14 @@ import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.math.NumberUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.dom4j.Element;
 import org.jboss.portal.theme.impl.render.dynamic.DynaRenderOptions;
 import org.osivia.portal.api.Constants;
+import org.osivia.portal.api.PortalException;
 import org.osivia.portal.api.context.PortalControllerContext;
+import org.osivia.portal.api.directory.v2.service.PersonService;
 import org.osivia.portal.api.html.AccessibilityRoles;
 import org.osivia.portal.api.html.DOM4JUtils;
 import org.osivia.portal.api.internationalization.Bundle;
@@ -29,6 +34,7 @@ import org.osivia.portal.api.menubar.MenubarItem;
 import org.osivia.portal.api.notifications.INotificationsService;
 import org.osivia.portal.api.notifications.NotificationsType;
 import org.osivia.portal.api.panels.PanelPlayer;
+import org.osivia.portal.api.tasks.ITasksService;
 import org.osivia.portal.api.urls.IPortalUrlFactory;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -78,8 +84,18 @@ public class DiscussionServiceImpl implements DiscussionService, ApplicationCont
      * Application context.
      */
     private ApplicationContext applicationContext;
+    
+    
+    /**
+     * Person service.
+     */
+    @Autowired
+    public ITasksService tasksService;
 
 
+    /** The logger. */
+    protected static Log logger = LogFactory.getLog(DiscussionServiceImpl.class);
+    
     /**
      * Constructor.
      */
@@ -93,13 +109,13 @@ public class DiscussionServiceImpl implements DiscussionService, ApplicationCont
      */
     @Override
     public DiscussionsForm getDiscussionsForm(PortalControllerContext portalControllerContext) throws PortletException {
-        // Trash form
+        // Discussions form
         DiscussionsForm form = this.applicationContext.getBean(DiscussionsForm.class);
 
         if (!form.isLoaded()) {
-            // Trashed documents
-            List<DiscussionDocument> trashedDocuments = this.repository.getDiscussions(portalControllerContext);
-            form.setTrashedDocuments(trashedDocuments);
+            // Discussion documents
+            List<DiscussionDocument> discussionDocuments = this.repository.getDiscussions(portalControllerContext);
+            form.setDocuments(discussionDocuments);
 
             // Sort
             if (form.getSort() == null) {
@@ -119,8 +135,8 @@ public class DiscussionServiceImpl implements DiscussionService, ApplicationCont
      * {@inheritDoc}
      */
     @Override
-    public DetailForm getDetailForm(PortalControllerContext portalControllerContext, String id, String participant, String anchor) throws PortletException {
-        // Trash form
+    public DetailForm getDetailForm(PortalControllerContext portalControllerContext, String id, String participant, String publicationId, String anchor) throws PortletException {
+        // Discussion form
         DetailForm form = this.applicationContext.getBean(DetailForm.class);
 
         if (!form.isLoaded()) {
@@ -128,6 +144,7 @@ public class DiscussionServiceImpl implements DiscussionService, ApplicationCont
             form.setId(id);
             form.setParticipant(participant);
             form.setAuthor(portalControllerContext.getRequest().getRemoteUser());
+            form.setPublicationId(publicationId );
             form.setAnchor(anchor);
 
             updateModel(portalControllerContext, form);
@@ -139,6 +156,14 @@ public class DiscussionServiceImpl implements DiscussionService, ApplicationCont
     }
 
 
+    /**
+     * Update model.
+     *
+     * @param portalControllerContext the portal controller context
+     * @param form the form
+     * @throws PortletException the portlet exception
+     */
+    
     private void updateModel(PortalControllerContext portalControllerContext, DetailForm form) throws PortletException {
 
 
@@ -149,13 +174,57 @@ public class DiscussionServiceImpl implements DiscussionService, ApplicationCont
             doc = this.repository.getDiscussion(portalControllerContext, form.getId());
         } else if (form.getParticipant() != null) {
             // Reading by participant
+            List<String> participants = new ArrayList<String>();
+            participants.add(portalControllerContext.getRequest().getRemoteUser());
+            participants.add(form.getParticipant());
             doc = this.repository.getDiscussionByParticipant(portalControllerContext, form.getParticipant());
             form.setId(doc.getWebId());
+        } else if (form.getPublicationId () != null) {
+            doc = this.repository.getDiscussionByPublication(portalControllerContext, form.getPublicationId());
+            form.setId(doc.getWebId());            
         }
+        
+        // Check security after document has been loaded
+        if( doc != null) {
+            boolean checked = false;
+            
+            List<String> participants = doc.getParticipants();
+            if( participants != null && participants.contains(portalControllerContext.getRequest().getRemoteUser()))   {
+                checked = true;
+            }
+            
+            if( StringUtils.equals(doc.getType(), DiscussionDocument.TYPE_USER_COPY)    ) {
+                try {
+                    if(this.repository.getLocalPublicationDiscussionsWebId(portalControllerContext).containsKey(doc.getTarget())) {
+                        checked = true;
+                    }
+                } catch (PortalException e) {
+                    throw new PortletException(e);
+                }
+            }
+            
+             if( !checked)  {   
+                // Internationalization bundle
+                Bundle bundle = this.bundleFactory.getBundle(portalControllerContext.getRequest().getLocale());                
+                throw new SecurityException(bundle.getString("ERROR_403"));
+            }
+        }
+        
 
         // update read preference
         if (form.getId() != null) {
             repository.checkUserReadPreference(portalControllerContext, form.getId(), doc.getMessages().size());
+        }
+        
+        // update cache
+        if (form.getId() != null) {
+            repository.checkUserReadPreference(portalControllerContext, form.getId(), doc.getMessages().size());
+            
+            try {
+                tasksService.resetTasksCount(portalControllerContext);
+            } catch (PortalException e) {
+               throw new PortletException(e);
+            }
         }
 
 
@@ -170,11 +239,11 @@ public class DiscussionServiceImpl implements DiscussionService, ApplicationCont
      */
     @Override
     public void sort(PortalControllerContext portalControllerContext, DiscussionsForm form, DiscussionsFormSort sort, boolean alt) {
-        if (CollectionUtils.isNotEmpty(form.getTrashedDocuments())) {
+        if (CollectionUtils.isNotEmpty(form.getDocuments())) {
             // Comparator
             Comparator<DiscussionDocument> comparator = this.applicationContext.getBean(DiscussionComparator.class, sort, alt);
 
-            form.getTrashedDocuments().sort(comparator);
+            form.getDocuments().sort(comparator);
 
             // Update model
             form.setSort(sort);
@@ -183,29 +252,14 @@ public class DiscussionServiceImpl implements DiscussionService, ApplicationCont
     }
 
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void emptyTrash(PortalControllerContext portalControllerContext, DiscussionsForm form) throws PortletException {
-        // Portlet request
-        PortletRequest request = portalControllerContext.getRequest();
-        // Internationalization bundle
-        Bundle bundle = this.bundleFactory.getBundle(request.getLocale());
 
-        // Service invocation
-        List<DiscussionDocument> rejected = this.repository.deleteAll(portalControllerContext);
-
-        // Update model
-        this.updateModel(portalControllerContext, form, null, rejected, bundle, "TRASH_EMPTY_TRASH_MESSAGE_");
-    }
 
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public void delete(PortalControllerContext portalControllerContext, DiscussionsForm form, String[] identifiers) throws PortletException {
+    public void deleteDiscussions(PortalControllerContext portalControllerContext, DiscussionsForm form, String[] identifiers) throws PortletException {
         // Portlet request
         PortletRequest request = portalControllerContext.getRequest();
         // Internationalization bundle
@@ -213,47 +267,79 @@ public class DiscussionServiceImpl implements DiscussionService, ApplicationCont
 
         // Selected documents
         List<DiscussionDocument> selection = this.getSelection(form, identifiers);
-        // Selected paths
-        List<String> selectedPaths = this.getSelectedPaths(selection);
 
-        // Service invocation
-        List<DiscussionDocument> rejected = this.repository.delete(portalControllerContext, selectedPaths);
+        this.repository.markAsDeleted(portalControllerContext, selection);
+        
+        
 
         // Update model
-        this.updateModel(portalControllerContext, form, selection, rejected, bundle, "TRASH_DELETE_SELECTION_MESSAGE_");
+        this.updateModel(portalControllerContext, form, selection);
+        
+        // Notification
+        String message = bundle.getString( "DISCUSSION_DELETE_SELECTIONS_MESSAGE_SUCCESS");
+        this.notificationsService.addSimpleNotification(portalControllerContext, message, NotificationsType.SUCCESS);        
     }
 
+    
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void deleteDiscussion(PortalControllerContext portalControllerContext, DetailForm form) throws PortletException {
+        // Portlet request
+        PortletRequest request = portalControllerContext.getRequest();
+        // Internationalization bundle
+        Bundle bundle = this.bundleFactory.getBundle(request.getLocale());
+
+        // Selected documents
+        List<DiscussionDocument> selection = new ArrayList<>();
+        selection.add(form.getDocument());
+
+        this.repository.markAsDeleted(portalControllerContext, selection);
+
+        // Update model
+        updateModel(portalControllerContext,  form);
+        
+        // Notification
+        String message = bundle.getString( "DISCUSSION_DELETE_CURRENT_MESSAGE_SUCCESS");
+        this.notificationsService.addSimpleNotification(portalControllerContext, message, NotificationsType.SUCCESS);        
+        
+    }
+
+    
+    
+    
 
     /**
      * Get selected documents.
      *
-     * @param form trash form
+     * @param form discussion form
      * @param identifiers selected document identifiers
      * @return selected documents
      */
     private List<DiscussionDocument> getSelection(DiscussionsForm form, String[] identifiers) {
-        // Trashed document map
-        Map<String, DiscussionDocument> trashedDocumentMap;
-        if (CollectionUtils.isEmpty(form.getTrashedDocuments())) {
-            trashedDocumentMap = null;
+        // Discussion documents map
+        Map<String, DiscussionDocument> discussionDocumentMap;
+        if (CollectionUtils.isEmpty(form.getDocuments())) {
+            discussionDocumentMap = null;
         } else {
-            trashedDocumentMap = new HashMap<>(form.getTrashedDocuments().size());
-            for (DiscussionDocument trashedDocument : form.getTrashedDocuments()) {
-                trashedDocumentMap.put(trashedDocument.getId(), trashedDocument);
+            discussionDocumentMap = new HashMap<>(form.getDocuments().size());
+            for (DiscussionDocument discussion : form.getDocuments()) {
+                discussionDocumentMap.put(discussion.getId(), discussion);
             }
         }
 
 
         // Selected documents
         List<DiscussionDocument> selection;
-        if (ArrayUtils.isEmpty(identifiers) || MapUtils.isEmpty(trashedDocumentMap)) {
+        if (ArrayUtils.isEmpty(identifiers) || MapUtils.isEmpty(discussionDocumentMap)) {
             selection = null;
         } else {
             selection = new ArrayList<>(identifiers.length);
             for (String identifier : identifiers) {
-                DiscussionDocument trashedDocument = trashedDocumentMap.get(identifier);
-                if (trashedDocument != null) {
-                    selection.add(trashedDocument);
+                DiscussionDocument discussion = discussionDocumentMap.get(identifier);
+                if (discussion != null) {
+                    selection.add(discussion);
                 }
             }
         }
@@ -262,81 +348,42 @@ public class DiscussionServiceImpl implements DiscussionService, ApplicationCont
     }
 
 
-    /**
-     * Get selected document paths.
-     *
-     * @param selection selected documents
-     * @return paths
-     */
-    private List<String> getSelectedPaths(List<DiscussionDocument> selection) {
-        // Selected paths
-        List<String> paths = new ArrayList<>(selection.size());
-        for (DiscussionDocument document : selection) {
-            paths.add(document.getPath());
-        }
-
-        return paths;
-    }
-
 
     /**
      * Update model.
      *
      * @param portalControllerContext portal controller context
-     * @param form trash form
+     * @param form discussion form
      * @param selection selected documents
      * @param rejected rejected documents
      * @param bundle internationalization bundle
      * @param messagePrefix message prefix
      */
-    private void updateModel(PortalControllerContext portalControllerContext, DiscussionsForm form, List<DiscussionDocument> selection,
-            List<DiscussionDocument> rejected, Bundle bundle, String messagePrefix) {
+    private void updateModel(PortalControllerContext portalControllerContext, DiscussionsForm form, List<DiscussionDocument> selection) throws PortletException {
 
-        // Portlet request
-        PortletRequest request = portalControllerContext.getRequest();
+        // Discussion documents
+        List<DiscussionDocument> discussions = this.repository.getDiscussions(portalControllerContext);
+        form.setDocuments(discussions);
 
-        // Portlet response
-        PortletResponse response = portalControllerContext.getResponse();
-
-        if (selection == null) {
-            // Select all documents
-            selection = new ArrayList<>(form.getTrashedDocuments());
-        }
-
-        if (CollectionUtils.isEmpty(rejected)) {
-            // Notification
-            String message = bundle.getString(messagePrefix + "SUCCESS");
-            this.notificationsService.addSimpleNotification(portalControllerContext, message, NotificationsType.SUCCESS);
+        // Sort
+        if (form.getSort() == null) {
+            this.sort(portalControllerContext, form, DiscussionsFormSort.DOCUMENT, false);
         } else {
-            // Rejected titles
-            List<String> titles = new ArrayList<>(rejected.size());
-            for (DiscussionDocument document : rejected) {
-                titles.add(document.getTitle());
-                selection.remove(document);
-            }
-
-            // Notification
-            String message = bundle.getString(messagePrefix + "WARNING", StringUtils.join(titles, ", "));
-            this.notificationsService.addSimpleNotification(portalControllerContext, message, NotificationsType.WARNING);
+            this.sort(portalControllerContext, form, form.getSort(), form.isAlt());
         }
 
-
-        // Refresh space data
-        request.setAttribute(Constants.PORTLET_ATTR_UPDATE_SPACE_DATA, Constants.PORTLET_VALUE_ACTIVATE);
-
-        // Update public render parameter for associated portlets refresh
-        if (response instanceof ActionResponse) {
-            ActionResponse actionResponse = (ActionResponse) response;
-            actionResponse.setRenderParameter("dnd-update", String.valueOf(System.currentTimeMillis()));
-        }
 
         // Update model
-        form.getTrashedDocuments().removeAll(selection);
+        form.getDocuments().removeAll(selection);
     }
 
 
     @Override
-    public Element getToolbar(PortalControllerContext portalControllerContext, List<String> indexes) throws PortletException {
+    public Element getToolbar(PortalControllerContext portalControllerContext, List<String> indexes, DiscussionsForm form) throws PortletException {
+        
+        long  begin = System.currentTimeMillis();
+
+        
         // Internationalization bundle
         Bundle bundle = this.bundleFactory.getBundle(portalControllerContext.getRequest().getLocale());
 
@@ -348,11 +395,10 @@ public class DiscussionServiceImpl implements DiscussionService, ApplicationCont
         container.add(toolbar);
 
         if (CollectionUtils.isNotEmpty(indexes)) {
-            // Trash form
-            DiscussionsForm form = this.getDiscussionsForm(portalControllerContext);
 
-            // Trashed documents
-            List<DiscussionDocument> documents = form.getTrashedDocuments();
+
+            // Discussions documents
+            List<DiscussionDocument> documents = form.getDocuments();
 
             // Selection
             List<DiscussionDocument> selection = new ArrayList<>(indexes.size());
@@ -381,6 +427,13 @@ public class DiscussionServiceImpl implements DiscussionService, ApplicationCont
                 container.add(deleteModalConfirmation);
             }
         }
+        
+        
+        if( logger.isDebugEnabled())    {
+            long end = System.currentTimeMillis();
+            
+            logger.debug("getToolbar : elapsed time = " + (end- begin) + " ms.");
+        }
 
         return container;
     }
@@ -401,7 +454,7 @@ public class DiscussionServiceImpl implements DiscussionService, ApplicationCont
         String id = response.getNamespace() + "-delete";
 
         // Text
-        String text = bundle.getString("TRASH_TOOLBAR_DELETE_SELECTION");
+        String text = bundle.getString("DISCUSSION_TOOLBAR_DELETE_SELECTION");
         // Icon
         String icon = "glyphicons glyphicons-basic-bin";
 
@@ -567,6 +620,11 @@ public class DiscussionServiceImpl implements DiscussionService, ApplicationCont
 
     @Override
     public void addMessage(PortalControllerContext portalControllerContext, DetailForm form) throws PortletException {
+        
+        if( StringUtils.isEmpty(form.getNewMessage()))  {
+            form.setAnchor("newMessage");
+            return;
+        }
 
         // Internationalization bundle
         Bundle bundle = this.bundleFactory.getBundle(portalControllerContext.getRequest().getLocale());
@@ -575,15 +633,11 @@ public class DiscussionServiceImpl implements DiscussionService, ApplicationCont
         // Create discussion if necessary
         if (form.getId() == null) {
             if (StringUtils.isNotEmpty(form.getParticipant())) {
-                DiscussionCreation discussion = new DiscussionCreation();
-                List<String> participants = new ArrayList<>();
-                participants.add(form.getParticipant());
-                participants.add(portalControllerContext.getRequest().getRemoteUser());
-                discussion.setParticipants(participants);
-
-                createDiscussion(portalControllerContext, discussion);
+                saveNewDiscussionByParticpant(portalControllerContext, form);
+            } else if( StringUtils.isNotEmpty(form.getPublicationId())) {
+                saveNewDiscussionByPublication(portalControllerContext, form);
             } else
-                throw new PortletException("no participant. Can't create discussion");
+                throw new PortletException("no participant nor publication. Can't create discussion");
 
         }
 
@@ -593,6 +647,7 @@ public class DiscussionServiceImpl implements DiscussionService, ApplicationCont
         updateModel(portalControllerContext, form);
 
         form.setNewMessage(null);
+        form.setAnchor("newMessage");
 
         // Notification
         String message = bundle.getString("DISCUSSION_MESSAGE_SUCCESS_ADD_NEW_MESSAGE");
@@ -601,6 +656,49 @@ public class DiscussionServiceImpl implements DiscussionService, ApplicationCont
     }
 
 
+    /**
+     * Save the discussion by participant.
+     *
+     * @param portalControllerContext the portal controller context
+     * @param form the form
+     * @throws PortletException the portlet exception
+     */
+    
+    private void saveNewDiscussionByParticpant(PortalControllerContext portalControllerContext, DetailForm form) throws PortletException {
+
+        DiscussionCreation discussion = new DiscussionCreation();
+        List<String> participants = new ArrayList<>();
+        participants.add(form.getParticipant());
+        participants.add(portalControllerContext.getRequest().getRemoteUser());
+        discussion.setParticipants(participants);
+
+        createDiscussion(portalControllerContext, discussion);
+        
+        updateModel(portalControllerContext, form);
+    }
+
+
+    /**
+     * Save the discussion by participant.
+     *
+     * @param portalControllerContext the portal controller context
+     * @param form the form
+     * @throws PortletException the portlet exception
+     */
+    
+    private void saveNewDiscussionByPublication(PortalControllerContext portalControllerContext, DetailForm form) throws PortletException {
+
+        DiscussionCreation discussion = new DiscussionCreation();
+        discussion.setType("USER_COPY");
+        discussion.setTarget(form.getPublicationId());
+
+        createDiscussion(portalControllerContext, discussion);
+        
+        updateModel(portalControllerContext, form);
+    }
+
+    
+    
     /**
      * {@inheritDoc}
      */

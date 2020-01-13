@@ -1,15 +1,20 @@
 package fr.index.cloud.ens.portal.discussion.portlet.repository;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import javax.portlet.PortletException;
 
 import org.osivia.portal.api.PortalException;
+import org.osivia.portal.api.cms.EcmDocument;
 import org.osivia.portal.api.context.PortalControllerContext;
+import org.osivia.portal.api.tasks.CustomTask;
 
 import fr.index.cloud.ens.portal.discussion.portlet.model.DetailForm;
 import fr.index.cloud.ens.portal.discussion.portlet.model.DiscussionCreation;
 import fr.index.cloud.ens.portal.discussion.portlet.model.DiscussionDocument;
+import fr.toutatice.portail.cms.nuxeo.api.NuxeoController;
 import fr.toutatice.portail.cms.nuxeo.api.forms.IFormsService;
 
 /**
@@ -27,7 +32,7 @@ public interface DiscussionRepository {
      * Get discussion.
      * 
      * @param portalControllerContext portal controller context
-     * @return trashed documents
+     * @return discussions documents
      * @throws PortalException 
      * @throws PortletException
      */
@@ -35,32 +40,23 @@ public interface DiscussionRepository {
     List<DiscussionDocument> getDiscussions(PortalControllerContext portalControllerContext) throws PortletException;
 
 
-    /**
-     * Delete all items.
-     * 
-     * @param portalControllerContext portal controller context
-     * @return rejected documents
-     * @throws PortletException
-     */
-    List<DiscussionDocument> deleteAll(PortalControllerContext portalControllerContext) throws PortletException;
 
 
-      /**
-     * Delete selected items.
-     * 
-     * @param portalControllerContext portal controller context
-     * @param selectedPaths selected item paths
-     * @return rejected documents
-     * @throws PortletException
-     */
-    List<DiscussionDocument> delete(PortalControllerContext portalControllerContext, List<String> selectedPaths) throws PortletException;
+     /**
+      * Mark as deleted.
+      *
+      * @param portalControllerContext the portal controller context
+      * @param documents the documents
+      * @throws PortletException the portlet exception
+      */
+    void markAsDeleted(PortalControllerContext portalControllerContext, List<DiscussionDocument> documents) throws PortletException ;
 
 
     /**
      * Create new Discussion
      *
      * @param portalControllerContext portal controller context
-     * @param form                    trash form
+     * @param discution create bean
      */
     void createDiscussion(PortalControllerContext portalControllerContext, DiscussionCreation discution) throws PortletException;
 
@@ -117,6 +113,47 @@ public interface DiscussionRepository {
      * @throws PortletException the portlet exception
      */
     DiscussionDocument getDiscussionByParticipant(PortalControllerContext portalControllerContext, String participant) throws PortletException;
+
+
+
+
+    /**
+     * Gets the tasks.
+     *
+     * @param portalControllerContext the portal controller context
+     * @return the tasks
+     * @throws PortletException the portlet exception
+     * @throws PortalException 
+     */
+    List<CustomTask> getTasks(PortalControllerContext portalControllerContext) throws PortalException, PortletException;
+
+
+
+
+    /**
+     * Gets the discussion by publication.
+     *
+     * @param portalControllerContext the portal controller context
+     * @param publicationId the publication id
+     * @return the discussion by publication
+     * @throws PortletException the portlet exception
+     */
+    DiscussionDocument getDiscussionByPublication(PortalControllerContext portalControllerContext, String publicationId) throws PortletException;
+
+
+
+
+    /**
+     * Gets the local publication discussions web id for the current user
+     *
+     * @param portalControllerContext the portal controller context
+     * @return the local publication discussions web id
+     * @throws PortalException the portal exception
+     */
+    Map<String, String> getLocalPublicationDiscussionsWebId(PortalControllerContext portalControllerContext) throws PortalException;
+
+
+
 
  
 }

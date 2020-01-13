@@ -7,6 +7,7 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import fr.index.cloud.ens.portal.discussion.portlet.model.DiscussionDocument;
 import fr.toutatice.portail.cms.nuxeo.api.INuxeoCommand;
 import fr.toutatice.portail.cms.nuxeo.api.NuxeoQueryFilter;
 import fr.toutatice.portail.cms.nuxeo.api.NuxeoQueryFilterContext;
@@ -20,24 +21,21 @@ import fr.toutatice.portail.cms.nuxeo.api.forms.IFormsService;
  */
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-public class GetDiscussionsByParticipantCommand implements INuxeoCommand {
+public class GetDiscussionsByPublicationCommand implements INuxeoCommand {
 
-    /** The participant. */
-    private String participant;
-    
-    /** The current user. */
-    private String currentUser;
+
+    /** The publication id. */
+    private String publicationId;
+
 
     /**
-     * Constructor.
-     * 
-     * @param basePath base path
+     * Instantiates a new gets the discussions by publication command.
+     *
+     * @param publicationId the publication id
      */
-    public GetDiscussionsByParticipantCommand(String currentUser, String participant) {
+    public GetDiscussionsByPublicationCommand(String publicationId) {
         super();
-        this.currentUser = currentUser;
-        this.participant = participant;
-
+        this.publicationId = publicationId;
     }
 
 
@@ -48,13 +46,14 @@ public class GetDiscussionsByParticipantCommand implements INuxeoCommand {
     public Object execute(Session nuxeoSession) throws Exception {
         StringBuilder query = new StringBuilder();
 
-        
-        query.append("disc:participants/* = '"+currentUser+"' AND disc:participants/* = '"+participant+"'");
+        query.append("( disc:type = '"+DiscussionDocument.TYPE_USER_COPY+"' AND disc:target = '"+publicationId+"' )");
+
 
         // Query filter
         NuxeoQueryFilterContext queryFilterContext = new NuxeoQueryFilterContext(NuxeoQueryFilterContext.STATE_LIVE);
         String filteredRequest = NuxeoQueryFilter.addPublicationFilter(queryFilterContext, query.toString());
         
+
         // Operation request
         OperationRequest request = nuxeoSession.newRequest("Document.QueryES");
         request.set(Constants.HEADER_NX_SCHEMAS, "dublincore, toutatice, discussion");

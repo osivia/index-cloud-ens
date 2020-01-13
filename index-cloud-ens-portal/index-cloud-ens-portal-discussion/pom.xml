@@ -28,12 +28,12 @@
     <build>
         <plugins>
 
-            <!-- SASS -->
+            <!-- LESS -->
             <plugin>
-                <groupId>com.github.warmuuh</groupId>
-                <artifactId>libsass-maven-plugin</artifactId>
+                <groupId>org.lesscss</groupId>
+                <artifactId>lesscss-maven-plugin</artifactId>
             </plugin>
-
+            
         </plugins>
     </build>
 

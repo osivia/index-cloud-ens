@@ -73,7 +73,13 @@ public class AddPropertiesCommand implements INuxeoCommand {
         if( CommandUtils.addToList( subjects, qualifiers.get("subject")))
             properties.set("idxcl:subjects", CommandUtils.convertToString(subjects));     
         
-   
+        PropertyList documentTypes = doc.getProperties().getList( "idxcl:documentTypes");
+        if( documentTypes == null)
+            documentTypes = new PropertyList();
+        
+        if( CommandUtils.addToList( documentTypes, qualifiers.get("documentType")))
+            properties.set("idxcl:documentTypes", CommandUtils.convertToString(documentTypes));     
+  
         
         if( properties.size() > 0)  {
             // Operation request

@@ -13,15 +13,20 @@ import org.apache.commons.lang.StringUtils;
 import org.dom4j.Element;
 import org.dom4j.io.HTMLWriter;
 import org.nuxeo.ecm.automation.client.model.Document;
+import org.osivia.portal.api.Constants;
 import org.osivia.portal.api.context.PortalControllerContext;
 import org.osivia.portal.api.directory.v2.model.Person;
 import org.osivia.portal.api.directory.v2.service.PersonService;
+import org.osivia.portal.api.internationalization.Bundle;
+import org.osivia.portal.api.internationalization.IBundleFactory;
+import org.osivia.portal.api.path.PortletPathItem;
 import org.osivia.portal.api.urls.Link;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.portlet.bind.annotation.ActionMapping;
 import org.springframework.web.portlet.bind.annotation.RenderMapping;
 import org.springframework.web.portlet.bind.annotation.ResourceMapping;
@@ -30,6 +35,7 @@ import javax.annotation.PostConstruct;
 import javax.naming.Name;
 import javax.portlet.*;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
@@ -37,13 +43,14 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * View trash portlet controller.
+ * View discussions portlet controller.
  *
  * @author Jean-Sébastien Steux
  * @see CMSPortlet
  */
 @Controller
 @RequestMapping("VIEW")
+@SessionAttributes("discussionsForm")
 public class ViewDiscussionsController extends CMSPortlet {
 
 
@@ -70,6 +77,12 @@ public class ViewDiscussionsController extends CMSPortlet {
      */
     @Autowired
     public PersonService personService;
+    
+    /**
+     * Internationalization bundle factory.
+     */
+    @Autowired
+    private IBundleFactory bundleFactory;
 
     /**
      * Constructor.
@@ -97,6 +110,23 @@ public class ViewDiscussionsController extends CMSPortlet {
      */
     @RenderMapping
     public String view(RenderRequest request, RenderResponse response) throws PortletException {
+        
+        
+        List<PortletPathItem> pathItems = new ArrayList<PortletPathItem>();
+        
+        // Internationalization bundle
+        Bundle bundle = this.bundleFactory.getBundle(request.getLocale());
+        
+        
+        // Set root breadcrumb
+        Map<String, String> rootRenderParams = new HashMap<String, String>();
+        PortletPathItem rootPpi = new PortletPathItem(rootRenderParams, bundle.getString("DISCUSSION_DISCUSSIONS_TITLE_ALL"));
+        pathItems.add(rootPpi);
+      
+
+        request.setAttribute(Constants.PORTLET_ATTR_PORTLET_PATH, pathItems);
+
+        
         return "view";
     }
 
@@ -108,31 +138,15 @@ public class ViewDiscussionsController extends CMSPortlet {
      * @param response action response
      * @param sortId sort property identifier request parameter
      * @param alt alternative sort indicator request parameter
-     * @param form trash form model attribute
+     * @param form discussions form model attribute
      */
     @ActionMapping("sort")
     public void sort(ActionRequest request, ActionResponse response, @RequestParam("sortId") String sortId, @RequestParam("alt") String alt,
-            @ModelAttribute("trashForm") DiscussionsForm form) throws PortletException {
+            @ModelAttribute("discussionsForm") DiscussionsForm form) throws PortletException {
         // Portal controller context
         PortalControllerContext portalControllerContext = new PortalControllerContext(this.portletContext, request, response);
 
         this.service.sort(portalControllerContext, form, DiscussionsFormSort.fromId(sortId), BooleanUtils.toBoolean(alt));
-    }
-
-
-    /**
-     * Empty trash action mapping.
-     *
-     * @param request action request
-     * @param response action response
-     * @param form trash form model attribute
-     */
-    @ActionMapping("delete-all")
-    public void emptyTrash(ActionRequest request, ActionResponse response, @ModelAttribute("trashForm") DiscussionsForm form) throws PortletException {
-        // Portal controller context
-        PortalControllerContext portalControllerContext = new PortalControllerContext(this.portletContext, request, response);
-
-        this.service.emptyTrash(portalControllerContext, form);
     }
 
 
@@ -142,95 +156,26 @@ public class ViewDiscussionsController extends CMSPortlet {
      * @param request action request
      * @param response action response
      * @param identifiers selection identifiers request parameter
-     * @param form trash form model attribute
+     * @param form discussions form model attribute
      */
     @ActionMapping("delete")
     public void delete(ActionRequest request, ActionResponse response, @RequestParam("identifiers") String[] identifiers,
-            @ModelAttribute("trashForm") DiscussionsForm form) throws PortletException {
+            @ModelAttribute("discussionsForm") DiscussionsForm form) throws PortletException {
         // Portal controller context
         PortalControllerContext portalControllerContext = new PortalControllerContext(this.portletContext, request, response);
 
-        this.service.delete(portalControllerContext, form, identifiers);
+        this.service.deleteDiscussions(portalControllerContext, form, identifiers);
     }
 
 
-    /**
-     * Send a mail to all users (test)
-     *
-     * @param request action request
-     * @param response action response
-     * @param identifiers selection identifiers request parameter
-     * @param form trash form model attribute
-     */
-    @ActionMapping("new-discussion-users")
-    public void newDiscussionPersonsTest(ActionRequest request, ActionResponse response) throws PortletException {
-        // Portal controller context
-        PortalControllerContext portalControllerContext = new PortalControllerContext(this.portletContext, request, response);
-
-
-        Map<String, String> variables = new HashMap<>();
-
-        // Add all persons
-        Person criteria = this.personService.getEmptyPerson();
-        List<Person> persons = personService.findByCriteria(criteria);
-
-        String target = "";
-        for (Person person : persons) {
-            target += "/" + person.getUid();
-        }
-
-        variables.put("osivia.discussion.target.type", "USERS");
-        variables.put("osivia.discussion.target.id", target);
-        variables.put("message", "hello !"+ target);
-        try {
-            variables = NuxeoServiceFactory.getFormsService().start(portalControllerContext, DiscussionRepository.MODEL_ID, variables);
-        } catch (Exception e) {
-            System.out.println(e);
-        }
-    }
-
-    /**
-     * Send a mail to a group (test)
-     *
-     * @param request action request
-     * @param response action response
-     * @param identifiers selection identifiers request parameter
-     * @param form trash form model attribute
-     */
-    @ActionMapping("new-discussion-publication")
-    public void newDiscussionPublicationTest(ActionRequest request, ActionResponse response) throws PortletException {
-        // Portal controller context
-//        PortalControllerContext portalControllerContext = new PortalControllerContext(this.portletContext, request, response);
-//
-//
-//        Map<String, String> variables = new HashMap<>();
-//        variables.put("message", "hello PUB/ID1 !");
-//        variables.put("osivia.discussion.target.type", "PUB");
-//        variables.put("osivia.discussion.target.id", "ID1");
-//
-//        try {
-//            variables = NuxeoServiceFactory.getFormsService().start(portalControllerContext, TrashRepository.MODEL_ID, variables);
-//        } catch (Exception e) {
-//            System.out.println(e);
-//        }
-        
-        
-        DiscussionCreation discussion = new DiscussionCreation();
-        discussion.setMessage("discussion LOCAL_COPY/ID1");
-        discussion.setType("LOCAL_COPY");
-        discussion.setTarget("ID1");
-        
-        PortalControllerContext portalControllerContext = new PortalControllerContext(portletContext, request, response);
-        this.service.createDiscussion(portalControllerContext, discussion);
-    }
-
-
+    
+    
     /**
      * Get discussions form model attribute.
      *
      * @param request portlet request
      * @param response portlet response
-     * @return trash form
+     * @return discussions form
      */
     @ModelAttribute("discussionsForm")
     public DiscussionsForm getDiscussionsForm(PortletRequest request, PortletResponse response) throws PortletException {
@@ -249,12 +194,15 @@ public class ViewDiscussionsController extends CMSPortlet {
      * @param indexes selected row indexes
      */
     @ResourceMapping("toolbar")
-    public void getToolbar(ResourceRequest request, ResourceResponse response, @RequestParam("indexes") String indexes) throws PortletException, IOException {
+    public void getToolbar(ResourceRequest request, ResourceResponse response, @RequestParam("indexes") String indexes, @ModelAttribute("discussionsForm") DiscussionsForm form) throws PortletException, IOException {
+        
+        
+        
         // Portal controller context
         PortalControllerContext portalControllerContext = new PortalControllerContext(this.portletContext, request, response);
 
         // Toolbar
-        Element toolbar = this.service.getToolbar(portalControllerContext, Arrays.asList(StringUtils.split(StringUtils.trimToEmpty(indexes), ",")));
+        Element toolbar = this.service.getToolbar(portalControllerContext, Arrays.asList(StringUtils.split(StringUtils.trimToEmpty(indexes), ",")), form);
 
         // Content type
         response.setContentType("text/html");

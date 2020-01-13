@@ -10,33 +10,30 @@ import org.springframework.stereotype.Component;
 import fr.toutatice.portail.cms.nuxeo.api.INuxeoCommand;
 import fr.toutatice.portail.cms.nuxeo.api.NuxeoQueryFilter;
 import fr.toutatice.portail.cms.nuxeo.api.NuxeoQueryFilterContext;
-import fr.toutatice.portail.cms.nuxeo.api.forms.IFormsService;
 
 /**
- * Get Discussions
- * 
+ * Get Discussion Nuxeo command.
+ *
  * @author Jean-Sébastien Steux
  * @see INuxeoCommand
  */
+
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-public class GetDiscussionsByParticipantCommand implements INuxeoCommand {
 
-    /** The participant. */
-    private String participant;
+public class GetLocalPublicationsCommand implements INuxeoCommand {
+
+
+
+    String rootPath;
     
-    /** The current user. */
-    private String currentUser;
-
     /**
      * Constructor.
      * 
-     * @param basePath base path
+
      */
-    public GetDiscussionsByParticipantCommand(String currentUser, String participant) {
-        super();
-        this.currentUser = currentUser;
-        this.participant = participant;
+    public GetLocalPublicationsCommand( String rootPath) {
+       this.rootPath = rootPath;
 
     }
 
@@ -46,22 +43,28 @@ public class GetDiscussionsByParticipantCommand implements INuxeoCommand {
      */
     @Override
     public Object execute(Session nuxeoSession) throws Exception {
+        // Query
         StringBuilder query = new StringBuilder();
 
-        
-        query.append("disc:participants/* = '"+currentUser+"' AND disc:participants/* = '"+participant+"'");
+        query.append("ecm:path STARTSWITH '").append(this.rootPath).append("' ");
 
+        query.append("AND ( ");
+        // copied into personal space (readers)        
+        query.append("(mtz:sourceWebId IS NOT NULL) ");
+        // copied from personal space (author)
+        query.append(" OR (mtz:enable IS NOT NULL) ");  
+        query.append(" )");        
         // Query filter
         NuxeoQueryFilterContext queryFilterContext = new NuxeoQueryFilterContext(NuxeoQueryFilterContext.STATE_LIVE);
         String filteredRequest = NuxeoQueryFilter.addPublicationFilter(queryFilterContext, query.toString());
-        
+
         // Operation request
         OperationRequest request = nuxeoSession.newRequest("Document.QueryES");
-        request.set(Constants.HEADER_NX_SCHEMAS, "dublincore, toutatice, discussion");
-        request.set("query", filteredRequest.toString());
+        request.set(Constants.HEADER_NX_SCHEMAS, "dublincore, toutatice, mutualization");
+        request.set("query", filteredRequest);
 
         return request.execute();
-      }
+    }
 
 
     /**
@@ -71,6 +74,7 @@ public class GetDiscussionsByParticipantCommand implements INuxeoCommand {
     public String getId() {
         StringBuilder builder = new StringBuilder();
         builder.append(this.getClass().getName());
+
         return builder.toString();
     }
 

@@ -12,7 +12,7 @@ import org.springframework.web.context.WebApplicationContext;
 /**
  * Discussions form java-bean.
  * 
- * @author Cédric Krommenhoek
+ * @author Jean Sébastien Steux
  */
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
@@ -20,8 +20,8 @@ import org.springframework.web.context.WebApplicationContext;
 @RequestLifeCycle
 public class DiscussionsForm {
 
-    /** Trashed documents. */
-    private List<DiscussionDocument> trashedDocuments;
+    /** Discussions documents. */
+    private List<DiscussionDocument> documents;
     /** Sort property. */
     private DiscussionsFormSort sort;
     /** Alternative sort indicator. */
@@ -38,22 +38,23 @@ public class DiscussionsForm {
     }
 
 
+
     /**
-     * Getter for trashedDocuments.
-     * 
-     * @return the trashedDocuments
+     * Gets the documents.
+     *
+     * @return the documents
      */
-    public List<DiscussionDocument> getTrashedDocuments() {
-        return trashedDocuments;
+    public List<DiscussionDocument> getDocuments() {
+        return documents;
     }
 
     /**
-     * Setter for trashedDocuments.
-     * 
-     * @param trashedDocuments the trashedDocuments to set
+     * Sets the documents.
+     *
+     * @param discussion documents
      */
-    public void setTrashedDocuments(List<DiscussionDocument> trashedDocuments) {
-        this.trashedDocuments = trashedDocuments;
+    public void setDocuments(List<DiscussionDocument> discussionsDocuments) {
+        this.documents = discussionsDocuments;
     }
 
     public DiscussionsFormSort getSort() {

@@ -36,7 +36,7 @@ public class DiscussionComparator implements Comparator<DiscussionDocument> {
      * Constructor.
      *
      * @param sort sort property
-     * @param alt  alternative sort indicator
+     * @param alt alternative sort indicator
      */
     public DiscussionComparator(DiscussionsFormSort sort, boolean alt) {
         super();
@@ -57,11 +57,31 @@ public class DiscussionComparator implements Comparator<DiscussionDocument> {
         } else if (document2 == null) {
             result = 1;
         } else if (DiscussionsFormSort.DATE.equals(this.sort)) {
-            // Date
-            result = document1.getLastModified().compareTo(document2.getLastModified());
-        }  else {
-            // Title
-            result = document1.getTitle().compareToIgnoreCase(document2.getTitle());
+            // Date can be null (ie. no messages)
+            if (document1.getLastModified() == null) {
+                if (document2.getLastModified() == null)
+                    result = 0;
+                else
+                    result = -1;
+            } else {
+                if (document2.getLastModified() == null)
+                    result = 1;
+                else
+                    result = document1.getLastModified().compareTo(document2.getLastModified());
+            }
+        } else {
+            // Title can be null (ie. no participant)
+            if (document1.getTitle() == null) {
+                if (document1.getTitle() == null)
+                    result = 0;
+                else
+                    result = -1;
+            } else {
+                if (document2.getTitle() == null)
+                    result = 1;
+                else
+                    result = document1.getTitle().compareTo(document2.getTitle());
+            }
 
         }
 
@@ -74,5 +94,4 @@ public class DiscussionComparator implements Comparator<DiscussionDocument> {
     }
 
 
-  
 }

@@ -281,8 +281,6 @@
 
                         </div>
                     </div>
-
-
                     <div class="d-flex">
                         <portlet:actionURL name="link-activation" var="deactivationUrl">
                             <portlet:param name="activate" value="false"/>
@@ -375,7 +373,9 @@
                     </li>
                 </ul>
 
-                <a href="#" class="card-link text-mutualized-dark">
+                <c:set var="discussionUrl"><ttc:discussion publicationId="${document.properties['ttc:webid']}" /></c:set>
+
+                <a href="${discussionUrl}" class="card-link text-mutualized-dark no-ajax-link">
                     <span><op:translate key="DOCUMENT_MUTUALIZATION_CONTACT_READERS"/></span>
                 </a>
             </div>
@@ -389,16 +389,7 @@
             <div class="card-body">
                 <p class="card-text"><op:translate key="DOCUMENT_COPIED_INFORMATION"/></p>
 
-                <c:set var="discussionUrl"><ttc:discussion participant="${document.properties['mtz:sourceAuthor']}" /></c:set>
-                <c:if test="${not empty discussionUrl}">
-	                <p class="card-text">
-	                    <c:set var="discussionUrl"><ttc:discussion participant="${document.properties['mtz:sourceAuthor']}" /></c:set>
-	                
-	                    <a href="${discussionUrl}" class="text-mutualized-dark">
-	                        <span><op:translate key="DOCUMENT_COPIED_CONTACT_AUTHOR"/></span>
-	                    </a>
-	                </p>
-                </c:if>	                
+          
 
                 <c:choose>
                     <c:when test="${empty source}">
@@ -406,6 +397,14 @@
                     </c:when>
 
                     <c:otherwise>
+                    
+		                <c:set var="discussionUrl"><ttc:discussion participant="${source.properties['dc:creator']}" /></c:set>
+	                    <p class="card-text">
+	                        <a href="${discussionUrl}" class="text-mutualized-dark">
+	                            <span><op:translate key="DOCUMENT_COPIED_CONTACT_AUTHOR"/></span>
+	                        </a>
+	                    </p>
+                                     
                         <ttc:documentLink document="${source}" var="sourceLink" permalink="true"/>
                         <p class="card-text">
                             <a href="${sourceLink.url}" class="text-mutualized-dark no-ajax-link">

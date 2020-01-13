@@ -21,7 +21,7 @@
             </portlet:actionURL>
 
             <a href="${url}">
-                <span><op:translate key="TRASH_HEADER_DOCUMENT"/></span>
+                <span><op:translate key="DISCUSSION_HEADER_TITLE"/></span>
 
                 <c:if test="${discussionsForm.sort.id eq 'document'}">
                     <small class="d-inline-block align-text-bottom">

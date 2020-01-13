@@ -3,6 +3,7 @@ package fr.index.cloud.ens.mutualization.portlet.service;
 import fr.index.cloud.ens.mutualization.portlet.model.MutualizationForm;
 import fr.index.cloud.ens.mutualization.portlet.model.VocabularyItem;
 import fr.index.cloud.ens.mutualization.portlet.repository.MutualizationRepository;
+import fr.toutatice.portail.cms.nuxeo.api.discussions.DiscussionHelper;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import org.apache.commons.lang.BooleanUtils;
@@ -334,6 +335,9 @@ public class MutualizationServiceImpl implements MutualizationService {
         String documentPath = this.getDocumentPath(portalControllerContext);
 
         this.repository.enableMutualization(portalControllerContext, form, documentPath, MUTUALIZED_SPACE_PATH);
+        
+        // Reset cache used for discussions
+        DiscussionHelper.resetLocalPublications(portalControllerContext);
 
         // Notification
         String message;
@@ -357,6 +361,9 @@ public class MutualizationServiceImpl implements MutualizationService {
         String documentPath = this.getDocumentPath(portalControllerContext);
 
         this.repository.disableMutualization(portalControllerContext, documentPath, MUTUALIZED_SPACE_PATH);
+        
+        // Reset cache used for discussions
+        DiscussionHelper.resetLocalPublications(portalControllerContext);
 
         // Notification
         String message = bundle.getString("MUTUALIZATION_DISABLE_MESSAGE_SUCCESS");

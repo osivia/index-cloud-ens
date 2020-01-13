@@ -20,26 +20,21 @@ import java.util.List;
  */
 public interface DiscussionService {
 
-    /**
-     * Task identifier.
-     */
-    String TASK_ID = "TRASH";
-
-
+ 
     /**
      * Get dicussions form.
      *
      * @param portalControllerContext portal controller context
-     * @return trash form
+     * @return discussions form
      */
     DiscussionsForm getDiscussionsForm(PortalControllerContext portalControllerContext) throws PortletException;
 
 
     /**
-     * Sort trash form.
+     * Sort discussions form.
      *
      * @param portalControllerContext portal controller context
-     * @param form                    trash form
+     * @param form                    discussion form
      * @param sort                    sort property
      * @param alt                     alternative sort indicator
      */
@@ -47,32 +42,14 @@ public interface DiscussionService {
 
 
     /**
-     * Empty trash.
-     *
-     * @param portalControllerContext portal controller context
-     * @param form                    trash form
-     */
-    void emptyTrash(PortalControllerContext portalControllerContext, DiscussionsForm form) throws PortletException;
-
-    /**
      * Create new Discussion
      *
      * @param portalControllerContext portal controller context
-     * @param form                    trash form
+     * @param form                    discussion bean
      */
     void createDiscussion(PortalControllerContext portalControllerContext, DiscussionCreation discution) throws PortletException;
 
  
-
-    /**
-     * Delete selected items.
-     *
-     * @param portalControllerContext portal controller context
-     * @param form                    trash form
-     * @param identifiers             selection identifiers
-     */
-    void delete(PortalControllerContext portalControllerContext, DiscussionsForm form, String[] identifiers) throws PortletException;
-
 
   
 
@@ -83,7 +60,7 @@ public interface DiscussionService {
      * @param indexes                 selected row indexes
      * @return DOM element
      */
-    Element getToolbar(PortalControllerContext portalControllerContext, List<String> indexes) throws PortletException, IOException;
+    Element getToolbar(PortalControllerContext portalControllerContext, List<String> indexes, DiscussionsForm form) throws PortletException, IOException;
 
    
 
@@ -97,7 +74,7 @@ public interface DiscussionService {
      * @throws PortletException the portlet exception
      */
     
-    DetailForm getDetailForm(PortalControllerContext portalControllerContext, String id, String recipient, String anchor) throws PortletException;
+    DetailForm getDetailForm(PortalControllerContext portalControllerContext, String id, String participant, String publicationId, String anchor) throws PortletException;
 
 
     /**
@@ -120,6 +97,30 @@ public interface DiscussionService {
      * @throws PortletException the portlet exception
      */
     void deleteMessage(PortalControllerContext portalControllerContext, DetailForm form, String idMessage) throws PortletException;
+
+
+    /**
+     * Delete discussions.
+     *
+     * @param portalControllerContext the portal controller context
+     * @param form the form
+     * @param identifiers the identifiers
+     * @throws PortletException the portlet exception
+     */
+    void deleteDiscussions(PortalControllerContext portalControllerContext, DiscussionsForm form, String[] identifiers) throws PortletException;
+
+
+
+    /**
+     * Delete discussion.
+     *
+     * @param portalControllerContext the portal controller context
+     * @param form the form
+     * @throws PortletException the portlet exception
+     */
+    void deleteDiscussion(PortalControllerContext portalControllerContext, DetailForm form) throws PortletException;
+
+
 
 
 

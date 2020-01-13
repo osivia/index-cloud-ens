@@ -427,7 +427,8 @@ $JQry(function() {
 									params.properties.levelCode = $JQry('#pubLevelCode').val();
 									params.properties.levelName = $JQry('#pubLevelName').val();									
 									params.properties.subjectCode = $JQry('#pubSubjectCode').val();
-									params.properties.subjectName = $JQry('#pubSubjectName').val();									
+									params.properties.subjectName = $JQry('#pubSubjectName').val();	
+									params.properties.documentType = $JQry('#pubDocumentType').val();										
 									$JQry
 											.ajax({
 												type : "POST",

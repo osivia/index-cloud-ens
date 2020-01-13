@@ -1,3 +1,4 @@
+<%@ taglib uri="http://java.sun.com/portlet_2_0" prefix="portlet" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="op" uri="http://www.osivia.org/jsp/taglib/osivia-portal" %>
 <%@ taglib prefix="ttc" uri="http://www.toutatice.fr/jsp/taglib/toutatice" %>
@@ -7,7 +8,7 @@
 
 
 <c:choose>
-    <c:when test="${empty discussionsForm.trashedDocuments}">
+    <c:when test="${empty discussionsForm.documents}">
         <div class="portal-table-row-group">
             <div class="portal-table-row">
                 <div class="portal-table-cell">
@@ -20,34 +21,41 @@
     </c:when>
 
     <c:otherwise>
-        <div class="portal-table-row-group portal-table-selectable popover-container">
-            <c:forEach var="trashedDocument" items="${discussionsForm.trashedDocuments}">
-                <div class="portal-table-row portal-table-selectable-filter"
-                     >
+        <div class="portal-table-row-group portal-table-selectable">
+            <c:forEach var="document" items="${discussionsForm.documents}">
+                <div class="portal-table-row portal-table-selectable-filter" data-double-click-target=".portal-table-cell a">
+                
                     <%--Document--%>
                     <div class="portal-table-cell" data-column="document">
                         <div class="portal-table-cell-inner" data-column="document">
                             <div class="d-flex align-items-center">
-                                <span>${trashedDocument.title}</span>
+								<portlet:renderURL var="detailUrl">
+								    <portlet:param name="view" value="detail" />
+								    <portlet:param name="id" value="${document.webId}"/>
+								    <portlet:param name="anchor" value="newMessage"/>
+								</portlet:renderURL>
+                                <span><a class="no-ajax-link" href="${detailUrl}">${document.title}</a></span>
                             </div>
                         </div>
                     </div>
 
                     <%--Date--%>
-                    <div class="portal-table-cell" data-column="date">
+                    <div class="portal-table-cell"  data-column="date">
                         <div class="portal-table-cell-inner" data-column="date">
-                            <div class="d-flex flex-wrap overflow-hidden">
-                                <div class="text-truncate">
-                                    <span><op:formatRelativeDate
-                                            value="${trashedDocument.lastModified}"/></span>
-                                </div>
-                                <div class="text-truncate">
-                                    <small><op:translate key="DISCUSSION_BY_LAST_CONTRIBUTOR"/></small>
-                                    <small><ttc:user
-                                            name="${trashedDocument.lastContributor}"
-                                            linkable="false"/></small>
-                                </div>
-                            </div>
+                            <c:if test="${not empty document.lastModified}">
+	                            <div class="d-flex flex-column flex-wrap overflow-hidden">
+	                                <div class="text-truncate">
+	                                    <span><op:formatRelativeDate
+	                                            value="${document.lastModified}"/></span>
+	                                </div>
+	                                <div class="text-truncate">
+	                                    <small><op:translate key="DISCUSSION_BY_LAST_CONTRIBUTOR"/></small>
+	                                    <small><ttc:user
+	                                            name="${document.lastContributor}"
+	                                            linkable="false"/></small>
+	                                </div>
+	                            </div>
+                            </c:if>
                         </div>
                     </div>
 

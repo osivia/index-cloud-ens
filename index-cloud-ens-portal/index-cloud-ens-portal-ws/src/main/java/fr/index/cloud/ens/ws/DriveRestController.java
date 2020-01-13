@@ -777,7 +777,9 @@ public class DriveRestController {
         String standardSubject = convertSubjectQualifier(ctx, docId, clientId, requestProperties.get("subjectCode"), requestProperties.get("subjectName"));
         if (standardSubject != null)
             properties.put("subject", standardSubject);
-
+        String documentType = requestProperties.get("documentType");
+        if( StringUtils.isNotEmpty(documentType))
+            properties.put("documentType", documentType);
         return properties;
     }
 
