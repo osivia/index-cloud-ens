@@ -143,6 +143,10 @@ public class CloudEnsPlugin extends AbstractPluginPortlet {
         // Quick access
         ListTemplate quickAccessList = new ListTemplate("quick-access", bundle.getString("LIST_TEMPLATE_QUICK_ACCESS"), "*");
         templates.put(quickAccessList.getKey(), quickAccessList);
+
+        // Mutualization space summary
+        ListTemplate mutualizationSpaceSummaryList = new ListTemplate("mutualization-space-summary", bundle.getString("LIST_TEMPLATE_MUTUALIZATION_SPACE_SUMMARY"), "*");
+        templates.put(mutualizationSpaceSummaryList.getKey(), mutualizationSpaceSummaryList);
     }
 
 

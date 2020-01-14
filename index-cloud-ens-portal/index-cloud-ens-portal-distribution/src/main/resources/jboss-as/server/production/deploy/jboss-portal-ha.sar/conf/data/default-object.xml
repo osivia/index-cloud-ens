@@ -335,6 +335,51 @@ return nuxeoRequest.toString();</value>
                     </properties>
                     <height>0</height>
                 </window>
+
+                <window>
+                    <window-name>toutatice-portail-cms-nuxeo-viewListPortletInstance_1579022231583</window-name>
+                    <instance-ref>toutatice-portail-cms-nuxeo-viewListPortletInstance</instance-ref>
+                    <region>col-2</region>
+                    <properties>
+                        <property>
+                            <name>portal.windowContentType</name>
+                            <value>portlet</value>
+                        </property>
+                        <property>
+                            <name>osivia.title</name>
+                            <value>Dernières publications</value>
+                        </property>
+                        <property>
+                            <name>theme.order</name>
+                            <value>0</value>
+                        </property>
+                        <property>
+                            <name>osivia.ajaxLink</name>
+                            <value>1</value>
+                        </property>
+                        <property>
+                            <name>osivia.hideDecorators</name>
+                            <value>1</value>
+                        </property>
+                        <property>
+                            <name>osivia.nuxeoRequest</name>
+                            <value>ecm:path STARTSWITH '/default-domain/communaute' ORDER BY dc:modified DESC</value>
+                        </property>
+                        <property>
+                            <name>osivia.cms.style</name>
+                            <value>mutualization-space-summary</value>
+                        </property>
+                        <property>
+                            <name>theme.dyna.partial_refresh_enabled</name>
+                            <value>true</value>
+                        </property>
+                        <property>
+                            <name>osivia.cms.maxItems</name>
+                            <value>8</value>
+                        </property>
+                    </properties>
+                    <height>0</height>
+                </window>
             </page>
 
             <page>
