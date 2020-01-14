@@ -114,25 +114,12 @@
         <globalVariablesReferences/>
         <actions>
           <action>
-            <filtersList>
-              <filter>
-                <filterId><![CDATA[SET_ACTOR]]></filterId>
-                <filterPath><![CDATA[0]]></filterPath>
-                <filterName><![CDATA[Droit à l'utilisateur anonyme sur la tâche]]></filterName>
-                <filterInstanceId><![CDATA[SET_ACTOR0]]></filterInstanceId>
-                <argumentsList>
-                  <argument>
-                    <argumentName><![CDATA[actor]]></argumentName>
-                    <argumentType><![CDATA[TEXT]]></argumentType>
-                    <argumentValue><![CDATA[utilisateur-invité]]></argumentValue>
-                  </argument>
-                </argumentsList>
-              </filter>
+           <filtersList>
               <filter>
                 <filterId><![CDATA[SendMailFilter]]></filterId>
-                <filterPath><![CDATA[1]]></filterPath>
+                <filterPath><![CDATA[2]]></filterPath>
                 <filterName><![CDATA[Envoi e-mail de confirmation]]></filterName>
-                <filterInstanceId><![CDATA[SendMailFilter1]]></filterInstanceId>
+                <filterInstanceId><![CDATA[SendMailFilter2]]></filterInstanceId>
                 <argumentsList>
                   <argument>
                     <argumentName><![CDATA[body]]></argumentName>
@@ -164,6 +151,32 @@ ${task:link("Confirmer mon adresse e-mail")}]]></argumentValue>
                     <argumentName><![CDATA[mailObject]]></argumentName>
                     <argumentType><![CDATA[TEXT]]></argumentType>
                     <argumentValue><![CDATA[Votre compte a été créé mais il reste une étape.]]></argumentValue>
+                  </argument>
+                </argumentsList>
+              </filter>
+              <filter>
+                <filterId><![CDATA[ADD_ACTOR]]></filterId>
+                <filterPath><![CDATA[1]]></filterPath>
+                <filterName><![CDATA[]]></filterName>
+                <filterInstanceId><![CDATA[ADD_ACTOR1]]></filterInstanceId>
+                <argumentsList>
+                  <argument>
+                    <argumentName><![CDATA[actor]]></argumentName>
+                    <argumentType><![CDATA[TEXT]]></argumentType>
+                    <argumentValue><![CDATA[members]]></argumentValue>
+                  </argument>
+                </argumentsList>
+              </filter>
+              <filter>
+                <filterId><![CDATA[SET_ACTOR]]></filterId>
+                <filterPath><![CDATA[0]]></filterPath>
+                <filterName><![CDATA[Droit à l'utilisateur anonyme sur la tâche]]></filterName>
+                <filterInstanceId><![CDATA[SET_ACTOR0]]></filterInstanceId>
+                <argumentsList>
+                  <argument>
+                    <argumentName><![CDATA[actor]]></argumentName>
+                    <argumentType><![CDATA[TEXT]]></argumentType>
+                    <argumentValue><![CDATA[utilisateur-invité]]></argumentValue>
                   </argument>
                 </argumentsList>
               </filter>

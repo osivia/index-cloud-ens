@@ -2580,7 +2580,7 @@ return nuxeoRequest.toString();</value>
 &#13;
 StringBuilder nuxeoRequest = new StringBuilder();&#13;
 nuxeoRequest.append("ecm:primaryType IN ('File', 'Picture', 'Audio', 'Video') ");&#13;
-nuxeoRequest.append("AND ecm:path STARTSWITH '/default-domain/UserWorkspaces' ");&#13;
+nuxeoRequest.append("AND ecm:path STARTSWITH '"+userWorkspacePath+"' ");&#13;
 &#13;
 // Search&#13;
 String search = StringUtils.join(params.get("search"), " ");&#13;
