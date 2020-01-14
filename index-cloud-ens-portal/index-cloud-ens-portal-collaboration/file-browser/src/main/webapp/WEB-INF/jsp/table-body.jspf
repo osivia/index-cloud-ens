@@ -25,9 +25,7 @@
         <div class="portal-table-row-group">
             <div class="portal-table-row">
                 <div class="portal-table-cell">
-                    <div class="portal-table-cell-inner">
-                        <span class="text-muted"><op:translate key="FILE_BROWSER_EMPTY"/></span>
-                    </div>
+                    <span class="text-muted"><op:translate key="FILE_BROWSER_EMPTY"/></span>
                 </div>
             </div>
         </div>

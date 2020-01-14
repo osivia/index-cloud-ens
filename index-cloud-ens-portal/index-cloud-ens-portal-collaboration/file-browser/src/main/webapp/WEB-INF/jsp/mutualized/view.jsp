@@ -12,15 +12,13 @@
     <%@ include file="toolbar.jspf" %>
 
     <%--Table--%>
-    <div class="portal-table-container">
-        <div class="portlet-filler">
-            <div class="portal-table">
-                <%--Header--%>
-                <%@ include file="table-header.jspf" %>
+    <div class="portal-table">
+        <%--Header--%>
+        <%@ include file="table-header.jspf" %>
 
-                <%--Body--%>
-                <%@ include file="table-body.jspf" %>
-            </div>
+        <div class="portlet-filler">
+            <%--Body--%>
+            <%@ include file="table-body.jspf" %>
         </div>
     </div>
 </div>

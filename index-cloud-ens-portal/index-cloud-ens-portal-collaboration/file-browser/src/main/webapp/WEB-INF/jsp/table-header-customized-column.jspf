@@ -1,18 +1,17 @@
+<portlet:actionURL name="sort" copyCurrentRenderParameters="true" var="url">
+    <portlet:param name="field" value="${form.customizedColumn.id}"/>
+    <portlet:param name="alt" value="${form.criteria.field.id eq form.customizedColumn.id and not form.criteria.alt}"/>
+</portlet:actionURL>
+
+
 <div class="portal-table-cell" data-column="customized-column">
-    <div class="portal-table-cell-inner" data-column="customized-column">
-        <portlet:actionURL name="sort" copyCurrentRenderParameters="true" var="url">
-            <portlet:param name="field" value="${form.customizedColumn.id}"/>
-            <portlet:param name="alt" value="${form.criteria.field.id eq form.customizedColumn.id and not form.criteria.alt}"/>
-        </portlet:actionURL>
+    <a href="${url}">
+        <span><op:translate key="${form.customizedColumn.key}"/></span>
 
-        <a href="${url}">
-            <span><op:translate key="${form.customizedColumn.key}"/></span>
-
-            <c:if test="${form.criteria.field.id eq form.customizedColumn.id}">
-                <small class="d-inline-block align-text-bottom">
-                    <i class="glyphicons glyphicons-arrow-${form.criteria.alt ? 'up' : 'down'}"></i>
-                </small>
-            </c:if>
-        </a>
-    </div>
+        <c:if test="${form.criteria.field.id eq form.customizedColumn.id}">
+            <small class="d-inline-block align-text-bottom">
+                <i class="glyphicons glyphicons-arrow-${form.criteria.alt ? 'up' : 'down'}"></i>
+            </small>
+        </c:if>
+    </a>
 </div>

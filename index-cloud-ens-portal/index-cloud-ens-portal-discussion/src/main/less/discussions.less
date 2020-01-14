@@ -5,10 +5,30 @@
 
 .discussions {
     [data-column="document"] {
-        width: 100%;
+        flex-grow: 1;
     }
     [data-column="date"] {
         width: 200px;
     }
 
+
+    .portal-table-row {
+        position: relative;
+    }
+
+    .discussions-shadowbox {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        z-index: 1;
+        visibility: hidden;
+    }
+
+    .ui-selected {
+        .discussions-shadowbox {
+            visibility: visible;
+        }
+    }
 }

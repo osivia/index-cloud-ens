@@ -12,9 +12,7 @@
         <div class="portal-table-row-group">
             <div class="portal-table-row">
                 <div class="portal-table-cell">
-                    <div class="portal-table-cell-inner">
-                        <span class="text-muted"><op:translate key="DISCUSSION_EMPTY_MESSAGE"/></span>
-                    </div>
+                    <span class="text-muted"><op:translate key="DISCUSSION_EMPTY_MESSAGE"/></span>
                 </div>
             </div>
         </div>
@@ -27,50 +25,47 @@
                 
                     <%--Document--%>
                     <div class="portal-table-cell" data-column="document">
-                        <div class="portal-table-cell-inner" data-column="document">
-                            <div class="d-flex align-items-center">
-								<portlet:renderURL var="detailUrl">
-								    <portlet:param name="view" value="detail" />
-								    <portlet:param name="id" value="${document.webId}"/>
-								    <portlet:param name="anchor" value="newMessage"/>
-								</portlet:renderURL>
-                                <span><a class="no-ajax-link" href="${detailUrl}">${document.title}</a></span>
-                            </div>
+                        <div class="d-flex align-items-center">
+                            <portlet:renderURL var="detailUrl">
+                                <portlet:param name="view" value="detail" />
+                                <portlet:param name="id" value="${document.webId}"/>
+                                <portlet:param name="anchor" value="newMessage"/>
+                            </portlet:renderURL>
+                            <span><a class="no-ajax-link" href="${detailUrl}">${document.title}</a></span>
                         </div>
                     </div>
 
                     <%--Date--%>
                     <div class="portal-table-cell"  data-column="date">
-                        <div class="portal-table-cell-inner" data-column="date">
-                            <c:if test="${not empty document.lastModified}">
-	                            <div class="d-flex flex-column flex-wrap overflow-hidden">
-	                                <div class="text-truncate">
-	                                    <span><op:formatRelativeDate
-	                                            value="${document.lastModified}"/></span>
-	                                </div>
-	                                <div class="text-truncate">
-	                                    <small><op:translate key="DISCUSSION_BY_LAST_CONTRIBUTOR"/></small>
-	                                    <small><ttc:user
-	                                            name="${document.lastContributor}"
-	                                            linkable="false"/></small>
-	                                </div>
-	                            </div>
-                            </c:if>
-                        </div>
+                        <c:if test="${not empty document.lastModified}">
+                            <div class="d-flex flex-column flex-wrap overflow-hidden">
+                                <div class="text-truncate">
+                                    <span><op:formatRelativeDate
+                                            value="${document.lastModified}"/></span>
+                                </div>
+                                <div class="text-truncate">
+                                    <small><op:translate key="DISCUSSION_BY_LAST_CONTRIBUTOR"/></small>
+                                    <small><ttc:user
+                                            name="${document.lastContributor}"
+                                            linkable="false"/></small>
+                                </div>
+                            </div>
+                        </c:if>
                     </div>
 
           
 
                     <%--Checkbox--%>
                     <div class="portal-table-cell" data-column="checkbox">
-                        <div class="portal-table-cell-inner" data-column="checkbox">
-                            <div class="portal-table-checkbox">
-                                <a href="javascript:" class="no-ajax-link" title="${checkboxTitle}">
-                                    <i class="glyphicons glyphicons-basic-square-empty"></i>
-                                </a>
-                            </div>
+                        <div class="portal-table-checkbox">
+                            <a href="javascript:" class="no-ajax-link" title="${checkboxTitle}">
+                                <i class="glyphicons glyphicons-basic-square-empty"></i>
+                            </a>
                         </div>
                     </div>
+
+                    <%--Draggable--%>
+                    <div class="discussions-shadowbox portal-table-selectable-cancel"></div>
                 </div>
             </c:forEach>
         </div>

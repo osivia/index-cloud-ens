@@ -1,13 +1,3 @@
-<%--Column group--%>
-<div class="portal-table-column-group">
-    <div class="portal-table-column" data-column="title"></div>
-    <div class="portal-table-column" data-column="customized-column"></div>
-    <div class="portal-table-column" data-column="last-modification"></div>
-    <div class="portal-table-column" data-column="file-size"></div>
-</div>
-
-
-<%--Header--%>
 <div class="portal-table-header-group">
     <%--Title--%>
     <%@ include file="../table-header-title.jspf" %>
