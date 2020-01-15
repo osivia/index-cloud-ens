@@ -293,6 +293,8 @@ $JQry(function() {
 									params.properties.levelName = $JQry('#uploadMDLevelName').val();
 									params.properties.subjectCode = $JQry('#uploadMDSubjectCode').val();
 									params.properties.subjectName = $JQry('#uploadMDSubjectName').val();									
+									params.properties.documentType = $JQry('#uploadDocumentType').val();									
+							
 
 									data.append("uploadInfos", JSON
 											.stringify(params));
