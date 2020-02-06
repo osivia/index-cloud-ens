@@ -155,6 +155,30 @@ $JQry(function() {
             $element.data("loaded", true);
         }
     });
+    
+    
+    
+    $JQry("#logout").each(function(index, element) {
+
+		const queryString = window.location.search;
+		const urlParams = new URLSearchParams(queryString);
+		const redirection = urlParams.get('redirection');
+
+		
+		if( redirection != null)	{
+			// Consider portal redirection as an ordinary app
+			var $disconnection = $JQry("#disconnection");
+			console.log( "redirection " +$disconnection.data("redirection"));
+			console.log( "redirection " +$disconnection.data("apps") );
+			$disconnection.data("apps", $disconnection.data("apps") + "|" + $disconnection.data("redirection"));
+			$disconnection.data("redirection", redirection);
+		}
+		
+		
+		logout();
+		
+
+	});
 
 });
 
@@ -173,4 +197,6 @@ function select2LoadFailure( request, errorType ) {
 		request.defaultFailure();
            
 }
+
+
 

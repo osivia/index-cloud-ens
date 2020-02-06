@@ -16,8 +16,7 @@
 <script type='text/javascript' src='/osivia-portal-custom-web-assets/js/jquery-integration.min.js'></script>
 <script type='text/javascript' src='/osivia-portal-custom-web-assets/components/jquery-ui/jquery-ui-1.11.3.min.js'></script>
 <link rel='stylesheet' href='/osivia-portal-custom-web-assets/components/jquery-ui/jquery-ui-1.11.3.min.css'>
-<script type='text/javascript'
-	src='/osivia-portal-custom-web-assets/components/jquery-mobile/jquery.mobile.custom.min.js'></script>
+<script type='text/javascript'	src='/osivia-portal-custom-web-assets/components/jquery-mobile/jquery.mobile.custom.min.js'></script>
 <link rel="stylesheet" href="/index-cloud-ens-charte/css/cloud-ens.css" />
 
 <script src='/osivia-portal-custom-web-assets/components/bootstrap/js/bootstrap.bundle.min.js'></script>
@@ -55,11 +54,14 @@
 								<div class="card-body">
 									<fieldset>
 										<legend class="text-center">
-											<span class="text-uppercase font-weight-bold">Identification</span>
+											<span class="text-uppercase font-weight-bold">Authentification</span>
 										</legend>
+										<p class="text-center text-muted">
+											<span>L'authentification sur le Cloud PRONOTE est requise.
+											</span>
+										</p>
 
-
-									    <c:if test="${not empty param.authentication_error}">
+										<c:if test="${not empty param.authentication_error}">
 									        <div id="msg" class="invalid-feedback d-block my-3 text-center">Mauvais identifiant / mot de passe.</div>
 									    </c:if>
 									    <c:if test="${not empty param.authorization_error}">
@@ -67,7 +69,7 @@
 									    </c:if>
 
 
-										<div class="px-5 mt-3">
+										<div>
 
 											<div class="form-group">
                                                 <label for="username" class="sr-only"><span class="accesskey">A</span>dresse mail:</label>
@@ -85,15 +87,16 @@
 									</fieldset>
 								</div>
 
-								<div>
-									<button type="submit" name="submit" class="btn btn-secondary btn-lg btn-block rounded-0" accesskey="l"
-										tabindex="6">
-										<span class="text-uppercase font-weight-bold">Valider</span>
-									</button>
-								</div>
+                                <div class="col-md-auto align-self-end">
+                                    <div class="text-right m-2">
+                                        <button type="submit" name="submit" class="btn btn-secondary">
+                                            <span class="text-uppercase font-weight-bold">Valider</span>
+                                        </button>
+                                    </div>
+                                </div>
+
 							</div>
 
-							<div></div>
 						</form>
 					</div>
 				</div>

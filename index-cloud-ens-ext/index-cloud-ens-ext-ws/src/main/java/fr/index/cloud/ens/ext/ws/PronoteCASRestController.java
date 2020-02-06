@@ -5,6 +5,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -25,10 +26,8 @@ public class PronoteCASRestController {
     public HttpEntity<byte[]>  serviceValidate(HttpServletRequest request, HttpServletResponse response, @RequestParam(value = "service", required = true) String service, @RequestParam(value = "ticket", required = true) String ticket) throws Exception {
 
         String user = "";
-        if("LB".equals(ticket))
-            user = "lbillon";
-        if("JSS".equals(ticket))
-            user = "jsteux";
+        if(!StringUtils.isEmpty(ticket))
+            user = ticket;
         
         String xml="";
         
