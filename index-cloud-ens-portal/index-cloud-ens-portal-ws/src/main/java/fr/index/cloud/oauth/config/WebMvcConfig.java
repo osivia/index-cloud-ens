@@ -6,12 +6,15 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.http.MediaType;
+import org.springframework.security.authentication.InsufficientAuthenticationException;
 import org.springframework.web.accept.ContentNegotiationManagerFactoryBean;
+import org.springframework.web.servlet.HandlerExceptionResolver;
 import org.springframework.web.servlet.View;
 import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.config.annotation.DefaultServletHandlerConfigurer;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
+import org.springframework.web.servlet.handler.SimpleMappingExceptionResolver;
 import org.springframework.web.servlet.view.ContentNegotiatingViewResolver;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import org.springframework.web.servlet.view.json.MappingJackson2JsonView;
@@ -50,4 +53,28 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
 	public void configureDefaultServletHandling(DefaultServletHandlerConfigurer configurer) {
 		configurer.enable();
 	}
+	
+	@Bean
+    HandlerExceptionResolver errorHandler () {
+        SimpleMappingExceptionResolver s =
+                  new SimpleMappingExceptionResolver();
+
+//        //exception to view name mapping
+//        Properties p = new Properties();
+//        p.setProperty(NullPointerException.class.getName(), "npeView");
+//        p.setProperty(OrderIdNotValidException.class.getName(),
+//                      "OrderIdNotValidView");
+//        s.setExceptionMappings(p);
+
+//        //mapping status code with view response.
+//        s.addStatusCode("npeView", 404);
+
+        //setting default error view
+        s.setExcludedExceptions(InsufficientAuthenticationException.class);
+        s.setDefaultErrorView("defaultErrorView");
+        //setting default status code
+        s.setDefaultStatusCode(400);
+
+        return s;
+    }
 }
