@@ -9,6 +9,7 @@ import org.osivia.portal.api.internationalization.IBundleFactory;
 import org.osivia.portal.api.internationalization.IInternationalizationService;
 import org.osivia.portal.api.locator.Locator;
 import org.osivia.portal.api.notifications.INotificationsService;
+import org.osivia.portal.api.tasks.ITasksService;
 import org.osivia.portal.api.urls.IPortalUrlFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
@@ -135,6 +136,16 @@ public class PersonCreationPortletConfiguration {
     @Bean
     public UserPreferencesService getUserPreferencesService() {
         return DirServiceFactory.getService(UserPreferencesService.class);
+    }
+    
+    /**
+     * Get tasks service.
+     * 
+     * @return tasks service
+     */
+    @Bean
+    public ITasksService getTasksService() {
+        return Locator.findMBean(ITasksService.class, ITasksService.MBEAN_NAME);
     }
 
 }

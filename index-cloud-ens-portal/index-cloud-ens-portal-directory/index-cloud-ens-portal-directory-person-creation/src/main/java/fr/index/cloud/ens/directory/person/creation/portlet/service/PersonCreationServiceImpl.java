@@ -4,6 +4,7 @@
 package fr.index.cloud.ens.directory.person.creation.portlet.service;
 
 import fr.index.cloud.ens.directory.person.creation.portlet.model.PersonCreationForm;
+import fr.toutatice.portail.cms.nuxeo.api.NuxeoController;
 import fr.toutatice.portail.cms.nuxeo.api.forms.FormFilterException;
 import fr.toutatice.portail.cms.nuxeo.api.forms.IFormsService;
 import org.apache.commons.collections.CollectionUtils;
@@ -16,11 +17,13 @@ import org.dom4j.Element;
 import org.jboss.portal.core.controller.ControllerContext;
 import org.jboss.portal.core.model.portal.Page;
 import org.jboss.portal.core.model.portal.Portal;
+import org.nuxeo.ecm.automation.client.model.Document;
 import org.osivia.directory.v2.model.preferences.UserPreferences;
 import org.osivia.directory.v2.service.PersonUpdateService;
 import org.osivia.directory.v2.service.preferences.UserPreferencesService;
 import org.osivia.portal.api.Constants;
 import org.osivia.portal.api.PortalException;
+import org.osivia.portal.api.cms.EcmDocument;
 import org.osivia.portal.api.context.PortalControllerContext;
 import org.osivia.portal.api.directory.v2.model.Person;
 import org.osivia.portal.api.html.DOM4JUtils;
@@ -28,12 +31,14 @@ import org.osivia.portal.api.internationalization.Bundle;
 import org.osivia.portal.api.internationalization.IBundleFactory;
 import org.osivia.portal.api.notifications.INotificationsService;
 import org.osivia.portal.api.notifications.NotificationsType;
+import org.osivia.portal.api.tasks.ITasksService;
 import org.osivia.portal.api.urls.IPortalUrlFactory;
 import org.osivia.portal.api.urls.PortalUrlType;
 import org.osivia.portal.api.windows.PortalWindow;
 import org.osivia.portal.api.windows.WindowFactory;
 import org.osivia.portal.core.context.ControllerContextAdapter;
 import org.osivia.portal.core.portalobjects.PortalObjectUtils;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.Errors;
@@ -86,6 +91,10 @@ public class PersonCreationServiceImpl implements PersonCreationService {
     @Autowired
     private UserPreferencesService userPreferencesService;
 
+    
+    /** Tasks service. */
+    @Autowired
+    private ITasksService tasksService;
 
     @Override
     public void validatePasswordRules(Errors errors, String field, String password) {
@@ -306,6 +315,18 @@ public class PersonCreationServiceImpl implements PersonCreationService {
         try {
             this.userPreferencesService.saveUserPreferences(portalControllerContext, userPreferences);
         } catch (PortalException e) {
+            throw new PortletException(e);
+        }
+  
+
+         // Nuxeo controller
+         NuxeoController nuxeoController = new NuxeoController(portalControllerContext);
+         Document task = nuxeoController.getDocumentContext( nuxeoController.getContentPath()).getDenormalizedDocument();
+     
+        // Close procedure
+        try {
+            this.formsService.proceed(portalControllerContext, task, "verify", null);
+        } catch (PortalException | FormFilterException e) {
             throw new PortletException(e);
         }
     }
