@@ -9,6 +9,8 @@ import fr.index.cloud.ens.directory.person.creation.portlet.model.validation.Per
 import fr.index.cloud.ens.directory.person.creation.portlet.service.PersonCreationService;
 import fr.index.cloud.ens.directory.person.renew.portlet.controller.RenewPasswordForm;
 import fr.toutatice.portail.cms.nuxeo.api.CMSPortlet;
+
+import org.apache.commons.lang.BooleanUtils;
 import org.apache.commons.lang.StringUtils;
 import org.dom4j.Element;
 import org.dom4j.io.HTMLWriter;
@@ -22,6 +24,7 @@ import org.osivia.portal.api.windows.WindowFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -65,15 +68,29 @@ public class PersonCreationController extends CMSPortlet {
 
     @Autowired
     private PersonCreationService service;
+    
+    public static String MODEL_RELOADED = "creation.person.reload";
 
     @RenderMapping
-    public String view(RenderRequest request, RenderResponse response) {
+    public String view(RenderRequest request, RenderResponse response, ModelMap model) throws PersonCreationInvalidTokenException {
 
         // Get logger person
         Person person = (Person) request.getAttribute(Constants.ATTR_LOGGED_PERSON_2);
         if (person != null) {
             return "view-logged";
         } else {
+            // create new form in case of initialization
+            PersonCreationForm form = (PersonCreationForm) model.get("form");
+            if (form != null) {
+                PortalControllerContext portalControllerContext = new PortalControllerContext(this.portletContext, request, response);
+                HttpServletRequest servletRequest = portalControllerContext.getHttpServletRequest();
+                if (servletRequest != null) {
+                    if (servletRequest.getParameter("init") != null) {
+                      reloadForm(portalControllerContext, request, form);
+                    }
+                }
+            }
+
 
             PersonCreationForm.CreationStep currentStep = getCurrentStep(request, response);
             return "view-" + currentStep.name().toLowerCase();
@@ -121,10 +138,33 @@ public class PersonCreationController extends CMSPortlet {
         PersonCreationForm.CreationStep currentStep = getCurrentStep(request, response);
 
         if (currentStep != PersonCreationForm.CreationStep.CONFIRM) {
+            reloadForm(portalControllerContext,request, form);
+        } else {
+            // If the user is logged, he will be redirected
+            // But form is evaluated, so don't call proceed otherwise the procedure is lost
+            Person person = (Person) request.getAttribute(Constants.ATTR_LOGGED_PERSON_2);
+            if (person == null) {
+                 service.proceedRegistration(portalControllerContext);
+            }
+        }
+
+        return form;
+    }
+
+    private void reloadForm(PortalControllerContext portalControllerContext, PortletRequest request, PersonCreationForm form) throws PersonCreationInvalidTokenException {
+        HttpServletRequest servletRequest = portalControllerContext.getHttpServletRequest();
 
 
-            HttpServletRequest servletRequest = portalControllerContext.getHttpServletRequest();
-            if (servletRequest != null) {
+        if (servletRequest != null) {
+            if (!BooleanUtils.isTrue((Boolean) request.getAttribute(MODEL_RELOADED))) {
+                form.setAcceptTermsOfService(Boolean.FALSE);
+                form.setConfirmpassword("");
+                form.setFirstname("");
+                form.setLastname("");
+                form.setMail("");
+                form.setNewpassword("");
+                form.setNickname("");
+
                 String token = servletRequest.getParameter("token");
 
                 ITokenService tokenService = Locator.findMBean(ITokenService.class, ITokenService.MBEAN_NAME);
@@ -138,13 +178,11 @@ public class PersonCreationController extends CMSPortlet {
                     throw new PersonCreationInvalidTokenException();
 
                 }
+                request.setAttribute(MODEL_RELOADED, true);
             }
-        } else {
-            service.proceedRegistration(portalControllerContext);
         }
-
-        return form;
     }
+
 
     @ActionMapping(name = "submitForm")
     public void submitForm(ActionRequest request, ActionResponse response, @Validated @ModelAttribute("form") PersonCreationForm form, BindingResult result,

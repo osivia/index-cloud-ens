@@ -254,7 +254,7 @@ public class UserRestController {
         String url = "/portal/portal/default/create-account/";
 
         String publicHost = System.getProperty("osivia.tasks.host");
-        url = publicHost + url + "?displayContext=uncluttered&token=" + webToken;
+        url = publicHost + url + "?init=true&displayContext=uncluttered&token=" + webToken;
         returnObject.put("url", url);
 		
 	}
