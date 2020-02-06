@@ -21,6 +21,30 @@ public class CustomizedPersonEditionForm extends PersonEditionForm {
      * Nickname.
      */
     private String nickname;
+    
+    /** Uid. */
+    private String uid;
+    
+
+
+    
+    /**
+     * Getter for uid.
+     * @return the uid
+     */
+    public String getUid() {
+        return uid;
+    }
+
+
+    
+    /**
+     * Setter for uid.
+     * @param uid the uid to set
+     */
+    public void setUid(String uid) {
+        this.uid = uid;
+    }
 
 
     /**

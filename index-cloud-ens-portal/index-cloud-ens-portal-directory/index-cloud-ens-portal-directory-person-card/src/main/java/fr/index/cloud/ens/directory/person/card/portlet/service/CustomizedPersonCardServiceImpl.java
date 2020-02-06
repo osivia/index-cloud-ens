@@ -39,6 +39,10 @@ public class CustomizedPersonCardServiceImpl extends PersonCardServiceImpl {
             // Nickname
             String nickname = person.getDisplayName();
             customizedForm.setNickname(nickname);
+            
+            // Uid
+            String uid = person.getUid();
+            customizedForm.setUid(uid);
         }
     }
 

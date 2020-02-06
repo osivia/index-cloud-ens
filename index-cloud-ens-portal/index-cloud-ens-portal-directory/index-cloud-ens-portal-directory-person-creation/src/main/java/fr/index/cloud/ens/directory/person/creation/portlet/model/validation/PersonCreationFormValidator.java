@@ -123,6 +123,14 @@ public class PersonCreationFormValidator implements Validator {
                 errors.rejectValue("mail", "alreadyactive");
             }
         }
+        
+        // A nick name must be unique
+        Person searchByNickname = this.personService.getEmptyPerson();
+        searchByNickname.setDisplayName(form.getNickname());
+        List<Person> findByNickname = personService.findByCriteria(searchByNickname);
+        if (findByNickname.size() > 0) {
+                errors.rejectValue("nickname", "alreadyactive");
+        }
 
         if (StringUtils.isNotBlank(form.getNewpassword()) && StringUtils.isNotBlank(form.getConfirmpassword())
                 && !StringUtils.equals(form.getNewpassword(), form.getConfirmpassword())) {
