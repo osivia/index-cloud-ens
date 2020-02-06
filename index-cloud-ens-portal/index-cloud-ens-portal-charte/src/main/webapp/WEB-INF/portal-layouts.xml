@@ -95,5 +95,15 @@
             <region name="col-1" />
         </regions>
     </layout>
+    
+    
+    <layout>
+        <name>logout</name>
+        <uri>/layouts/logout/index.jsp</uri>
+        <uri state="maximized">/layouts/logout/maximized.jsp</uri>
+        <regions>
+            <region name="col-1" />        
+        </regions>
+    </layout>
 
 </layouts>

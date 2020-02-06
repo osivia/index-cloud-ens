@@ -1270,6 +1270,23 @@ return nuxeoRequest.toString();</value>
                     <height>0</height>
                 </window>
             </page>
+            
+           <page>
+              <page-name>logout</page-name>
+              <display-name xml:lang="fr">Logout</display-name>
+              <properties>
+                <property>
+                  <name>layout.id</name>
+                  <value>logout</value>
+                </property>
+              </properties>
+              <security-constraint>
+                <policy-permission>
+                  <action-name>view</action-name>
+                  <unchecked/>
+                </policy-permission>
+              </security-constraint>
+             </page>
 
             <page>
                 <page-name>templates</page-name>
