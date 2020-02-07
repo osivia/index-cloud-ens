@@ -5,6 +5,8 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.osivia.portal.api.locator.Locator;
+import org.osivia.portal.api.tokens.ITokenService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
@@ -42,6 +44,7 @@ import fr.index.cloud.ens.application.api.Application;
 import fr.index.cloud.ens.application.api.IApplicationService;
 import fr.index.cloud.oauth.authentication.PortalUserDetailService;
 import fr.index.cloud.oauth.tokenStore.IPortalTokenStore;
+import fr.index.cloud.oauth.tokenStore.PortalAuthorizationCodeStore;
 import fr.index.cloud.oauth.tokenStore.PortalTokenStore;
 import fr.index.security.oauth.approval.PronoteApprovalHandler;
 import fr.index.security.oauth.approval.PronoteApprovalStore;
@@ -125,6 +128,7 @@ public class OAuth2ServerConfig {
         
         @Autowired
         IApplicationService applicationService;
+        
 
 
         public ClientDetailsService clientDetailsService() {
@@ -179,7 +183,8 @@ public class OAuth2ServerConfig {
 
         @Override
         public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
-            endpoints.tokenStore(tokenStore).userApprovalHandler(userApprovalHandler).authenticationManager(authenticationManager);
+            ITokenService tokenService = Locator.findMBean(ITokenService.class, ITokenService.MBEAN_NAME);
+            endpoints.tokenStore(tokenStore).userApprovalHandler(userApprovalHandler).authenticationManager(authenticationManager).authorizationCodeServices( new PortalAuthorizationCodeStore( tokenService));
         }
 
         @Override
