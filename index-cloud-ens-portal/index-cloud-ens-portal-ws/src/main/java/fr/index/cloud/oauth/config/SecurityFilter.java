@@ -54,6 +54,9 @@ public class SecurityFilter implements Filter {
         if ("OPTIONS".equalsIgnoreCase(request.getMethod())) {
             response.setStatus(HttpServletResponse.SC_OK);
         } else {
+            
+            boolean continueFilter = true;
+            
             // Avoid session-fixation hacks
             if( request.getRequestURI().endsWith("/oauth/token"))    {
                 HttpSession session = ((HttpServletRequest) req).getSession(false);
@@ -61,7 +64,23 @@ public class SecurityFilter implements Filter {
                     ((HttpServletRequest) req).getSession(false).invalidate();
                 }
             }
-            chain.doFilter(req, res);
+            
+            // Avoid session-fixation hacks
+            if( request.getRequestURI().endsWith("/oauth/authorize"))    {
+                HttpSession session = ((HttpServletRequest) req).getSession(false);
+                if( session != null)    {
+                    if( session.getAttribute("displayAuthorize") != null)  {
+                        if( !"true".equals(request.getParameter("user_oauth_approval")))    {
+                            ((HttpServletRequest) req).getSession(false).invalidate();
+
+                        }
+                    }                    
+                }
+            }      
+            
+            
+            if( continueFilter)
+                chain.doFilter(req, res);
         }
 
      }

@@ -4,6 +4,8 @@
 <% session.setAttribute("displayAuthorize", System.currentTimeMillis()); %>
 
 
+
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -59,34 +61,48 @@
 											<legend class="text-center text-muted">
 												<span class="text-uppercase font-weight-bold">Autorisations</span>
 											</legend>
-											
-		                                    <c:forEach items="${scopes}" var="scope" varStatus="status">
-		                                        <c:set var="approved">
-		                                            <c:if test="${scope.value}"> checked</c:if>
-		                                        </c:set>
-		                                        <c:set var="denied">
-		                                            <c:if test="${!scope.value}"> checked</c:if>
-		                                        </c:set>
-		
-		                                        <div class="form-group p-2">
-		                                                    <input id="approved-${status.index}" type="checkbox" name="${scope.key}" value="true"
-		                                                                class="form-check-input" ${scope.value ? 'checked' : ''}> 
-		                                                
-		                                                    <label> <c:choose>
-		                                                            <c:when test="${scope.key eq 'scope.drive'}">
-		                                                                J'autorise l'application <b><c:out value="${clientName}"/></b> &agrave; acc&eacute;der &agrave; mes fichiers
-		                                                            </c:when>
-		                                                            <c:otherwise>J'autorise l'application <b><c:out value="${clientName}"/></b> &agrave; ${scope.key}</c:otherwise>
-		                                                        </c:choose>
-		                                                    </label>
-		                                        </div>
-		                                    </c:forEach>											
-											
+											<p class="text-center">
+		                                        <span>J'autorise l'application <b><c:out value="${clientName}"/></b> &agrave;
+		                                        </span>
+                                            </p>
 										</fieldset>
 									</div>
 
 
+									<c:forEach items="${scopes}" var="scope" varStatus="status">
+										<c:set var="approved">
+											<c:if test="${scope.value}"> checked</c:if>
+										</c:set>
+										<c:set var="denied">
+											<c:if test="${!scope.value}"> checked</c:if>
+										</c:set>
 
+										<div class="form-group">
+											<div class="card mx-3">
+												<div class="card-body text-center">
+													<label> <c:choose>
+															<c:when test="${scope.key eq 'scope.drive'}">
+																<b>Acc&eacute;der &agrave; mes fichiers</b>
+															</c:when>
+															<c:otherwise>${scope.key}</c:otherwise>
+														</c:choose>
+													</label>
+													<div>
+														<div class="form-check form-check-inline">
+															<input id="approved-${status.index}" type="radio" name="${scope.key}" value="true"
+																class="form-check-input" ${scope.value ? 'checked' : ''}> <label for="approved-${status.index}"
+																class="form-check-label">Approuver</label>
+														</div>
+														<div class="form-check form-check-inline">
+															<input id="denied-${status.index}" type="radio" name="${scope.key}" value="false"
+																class="form-check-input" ${scope.value ? '' : 'checked'}> <label for="denied-${status.index}"
+																class="form-check-label">Refuser</label>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</c:forEach>
 
 		                            <div class="col-md-auto align-self-end">
 		                                 <div class="text-right m-2">
