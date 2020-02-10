@@ -18,13 +18,13 @@
 
     <properties>
         <!-- Toutatice -->
-        <toutatice.version>4.9-SNAPSHOT</toutatice.version>
+        <toutatice.version>4.9.2</toutatice.version>
 
         <!-- Directory -->
-        <directory.version>4.9-SNAPSHOT</directory.version>
+        <directory.version>4.9.3</directory.version>
 
         <!-- Collaboration -->
-        <collaboration.version>4.9-SNAPSHOT</collaboration.version>
+        <collaboration.version>4.9.2</collaboration.version>
 
         <!-- Other services -->
         <tasks.version>4.9.2</tasks.version>
@@ -36,7 +36,7 @@
 
 
         <!-- Identity SSO -->
-        <identity-sso.version>3.0.13-SNAPSHOT</identity-sso.version>
+        <identity-sso.version>3.0.13</identity-sso.version>
 
         <!-- Java Melody -->
         <java-melody.version>1.2</java-melody.version>
