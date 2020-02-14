@@ -106,7 +106,9 @@ public class EtablissementService implements IApplicationService {
                 if (statusService.isReady(pronoteEtablissementCheckUrl)) {
                     boolean error = false;
                     long begin = System.currentTimeMillis();                    
-                    String codeEtablissement = clientID.substring(PRONOTE_CLIENT_PREFIX.length());
+                    //String codeEtablissement = clientID.substring(PRONOTE_CLIENT_PREFIX.length());
+                    
+                    String codeEtablissement = clientID;
                     try {
                         // Check etablissement
 
