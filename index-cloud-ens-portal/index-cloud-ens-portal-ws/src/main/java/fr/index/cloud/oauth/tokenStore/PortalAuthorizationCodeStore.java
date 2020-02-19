@@ -4,11 +4,14 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.osivia.portal.api.tokens.ITokenService;
 import org.springframework.security.oauth2.common.exceptions.InvalidGrantException;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.security.oauth2.provider.code.AuthorizationCodeServices;
+
 
 
 /**
@@ -19,6 +22,10 @@ import org.springframework.security.oauth2.provider.code.AuthorizationCodeServic
 public class PortalAuthorizationCodeStore implements AuthorizationCodeServices {
 
     protected final ConcurrentHashMap<String, String> authorizationCodeStore = new ConcurrentHashMap<String, String>();
+    
+
+    /** The logger. */
+    protected static Log logger = LogFactory.getLog(PortalAuthorizationCodeStore.class);
 
     ITokenService tokenService;
 
@@ -38,7 +45,13 @@ public class PortalAuthorizationCodeStore implements AuthorizationCodeServices {
             String jsonData = new ObjectMapper().writeValueAsString(datas);
             Map<String, String> map = new HashMap<String, String>();
             map.put("value", jsonData);
+            
+
+            
             code = this.tokenService.generateToken(map);
+            if( logger.isDebugEnabled())    {
+                logger.debug("createAuthorizationCode " + code + "-> " +jsonData);
+            }            
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -49,11 +62,22 @@ public class PortalAuthorizationCodeStore implements AuthorizationCodeServices {
     @Override
     public OAuth2Authentication consumeAuthorizationCode(String code) throws InvalidGrantException {
 
+        if( logger.isDebugEnabled())    {
+            logger.debug("consumeAuthorizationCode " + code);
+        }
+        
         OAuth2Authentication auth = null;
 
         try {
             Map<String, String> map = this.tokenService.validateToken(code);
+            
+            
             if (map != null) {
+                
+                if( logger.isDebugEnabled())    {
+                    logger.debug("consumeAuthorizationCode " + code + "-> " +map.get("value"));
+                }   
+                
                 String jsonData = map.get("value");
                 if (jsonData != null) {
                     PortalRefreshTokenAuthenticationDatas datas = new ObjectMapper().readValue(jsonData, PortalRefreshTokenAuthenticationDatas.class);

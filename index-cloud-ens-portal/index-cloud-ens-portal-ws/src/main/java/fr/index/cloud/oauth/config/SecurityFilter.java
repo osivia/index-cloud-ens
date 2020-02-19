@@ -14,6 +14,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.osivia.portal.api.portlet.AnnotationPortletApplicationContext;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
@@ -22,6 +24,7 @@ import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
 import fr.index.cloud.ens.ws.portlet.WSUtilPortlet;
+import fr.index.cloud.oauth.tokenStore.PortalAuthorizationCodeStore;
 
 /**
  * Implements web security 
@@ -34,6 +37,9 @@ import fr.index.cloud.ens.ws.portlet.WSUtilPortlet;
 @Component
 @Order(Ordered.HIGHEST_PRECEDENCE)
 public class SecurityFilter implements Filter {
+    
+    /** The logger. */
+    protected static Log logger = LogFactory.getLog(SecurityFilter.class);
     
     
     public FilterConfig filterConfig;
@@ -65,14 +71,18 @@ public class SecurityFilter implements Filter {
                 }
             }
             
-            // Avoid session-fixation hacks
+            // /oauth/authorize must be accessed just one time par login
+            // if not, the user must reauthenticate for security reason
             if( request.getRequestURI().endsWith("/oauth/authorize"))    {
                 HttpSession session = ((HttpServletRequest) req).getSession(false);
                 if( session != null)    {
                     if( session.getAttribute("displayAuthorize") != null)  {
                         if( !"true".equals(request.getParameter("user_oauth_approval")))    {
                             ((HttpServletRequest) req).getSession(false).invalidate();
-
+                            if( logger.isDebugEnabled())    {
+                                logger.debug("invalidateSession ");
+                            }
+                            
                         }
                     }                    
                 }
