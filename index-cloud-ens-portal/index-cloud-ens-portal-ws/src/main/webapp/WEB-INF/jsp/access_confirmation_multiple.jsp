@@ -1,5 +1,6 @@
 <%@ taglib prefix="authz" uri="http://www.springframework.org/security/tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib uri="http://www.osivia.org/jsp/taglib/osivia-portal" prefix="op"%>
 
 <% session.setAttribute("displayAuthorize", System.currentTimeMillis()); %>
 
@@ -7,7 +8,7 @@
 
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 
 <head>
 <meta charset="UTF-8">
@@ -18,14 +19,15 @@
 
 <meta name="application-name" content="Cloud Index Education">
 
-<script type='text/javascript' src='/osivia-portal-custom-web-assets/components/jquery/jquery-1.12.4.min.js'></script>
-<script type='text/javascript' src='/osivia-portal-custom-web-assets/js/jquery-integration.min.js'></script>
-<script type='text/javascript' src='/osivia-portal-custom-web-assets/components/jquery-ui/jquery-ui-1.11.3.min.js'></script>
-<link rel='stylesheet' href='/osivia-portal-custom-web-assets/components/jquery-ui/jquery-ui-1.11.3.min.css'>
-<script type='text/javascript'
-	src='/osivia-portal-custom-web-assets/components/jquery-mobile/jquery.mobile.custom.min.js'></script>
-<link rel="stylesheet" href="/index-cloud-ens-charte/css/cloud-ens.css" />
-<script src='/osivia-portal-custom-web-assets/components/bootstrap/js/bootstrap.bundle.min.js'></script>
+
+<op:resourceAdapter directive="<script type='text/javascript' src='/osivia-portal-custom-web-assets/components/jquery/jquery-1.12.4.min.js'></script>" />
+<op:resourceAdapter directive="<script type='text/javascript' src='/osivia-portal-custom-web-assets/js/jquery-integration.min.js'></script>" />
+<op:resourceAdapter directive="<script type='text/javascript' src='/osivia-portal-custom-web-assets/components/jquery-ui/jquery-ui-1.11.3.min.js'></script>" />
+<op:resourceAdapter directive="<link rel='stylesheet' href='/osivia-portal-custom-web-assets/components/jquery-ui/jquery-ui-1.11.3.min.css'>" />
+<op:resourceAdapter directive="<script type='text/javascript'   src='/osivia-portal-custom-web-assets/components/jquery-mobile/jquery.mobile.custom.min.js'></script>" />
+<op:resourceAdapter directive="<link rel='stylesheet' href='/index-cloud-ens-charte/css/cloud-ens.css' />" />
+<op:resourceAdapter directive="<script src='/osivia-portal-custom-web-assets/components/bootstrap/js/bootstrap.bundle.min.js'></script>" />
+
 </head>
 
 <body id="login" class="vh-100 overflow-hidden d-flex flex-column uncluttered">
