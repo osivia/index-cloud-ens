@@ -52,6 +52,8 @@ public class MutualizationFormValidator implements Validator {
         if (CollectionUtils.isEmpty(form.getSubjects())) {
             errors.rejectValue("subjects", "empty");
         }
+        
+        form.setSuggestedKeywords(form.getKeywords());
     }
 
 }

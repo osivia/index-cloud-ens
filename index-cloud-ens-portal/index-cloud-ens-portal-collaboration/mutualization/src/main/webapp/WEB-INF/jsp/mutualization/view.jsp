@@ -36,6 +36,7 @@
     <%--Keywords--%>
     <div class="form-group required">
         <form:label path="keywords"><op:translate key="MUTUALIZATION_KEYWORDS"/></form:label>
+        <small class="form-text text-muted pb-1"><op:translate key="MUTUALIZATION_KEYWORDS_SEPARATE"/></small> 
         <form:select path="keywords" cssClass="form-control select2 select2-default" cssErrorClass="form-control is-invalid select2 select2-default" data-tags="true" data-no-results="${select2NoResults}">
             <form:options items="${form.suggestedKeywords}" />
         </form:select>
