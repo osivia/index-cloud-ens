@@ -9,6 +9,8 @@ import javax.portlet.PortletException;
 
 import org.osivia.portal.api.context.PortalControllerContext;
 
+import fr.index.cloud.ens.ws.beans.MetadataClassifier;
+
 /**
  * Conversion from local property to BCN property
  * 
@@ -27,7 +29,7 @@ public interface IConversionService {
      * @return the string
      */
 
-    String convert(PortalControllerContext ctx, String docId, String clientId, String field, String key, String label);
+    String convert(PortalControllerContext ctx, String docId, String clientId, String field, MetadataClassifier metadata);
    
     /**
      * Check if the patch is correct

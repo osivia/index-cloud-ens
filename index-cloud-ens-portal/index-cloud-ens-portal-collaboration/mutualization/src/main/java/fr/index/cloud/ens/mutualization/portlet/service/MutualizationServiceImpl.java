@@ -110,7 +110,17 @@ public class MutualizationServiceImpl implements MutualizationService {
 
         // Keywords
         Set<String> keywords = new HashSet<>(this.getPropertyList(properties, MutualizationRepository.KEYWORDS_PROPERTY));
-        keywords.addAll(this.repository.getDocumentAncestors(portalControllerContext, path));
+        
+        if( enable == false)    {
+            // keyword suggestions (only on new mutualization)
+            keywords.addAll(this.repository.getDocumentAncestors(portalControllerContext, path));
+            PropertyList metaKeywords = document.getProperties().getList( "idxcl:keywords");
+            if( metaKeywords != null)   {
+                for(Object keyword:metaKeywords.list())
+                    keywords.add((String) keyword);
+            }
+        }
+       
         form.setSuggestedKeywords(keywords);
         form.setKeywords(keywords);
 

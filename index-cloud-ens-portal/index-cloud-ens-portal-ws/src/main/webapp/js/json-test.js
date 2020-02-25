@@ -288,12 +288,8 @@ $JQry(function() {
 
 									var params = {};
 									params.parentId = $JQry('#folderId').val();
-									params.properties = {};
-									params.properties.levelCode = $JQry('#uploadMDLevelCode').val();
-									params.properties.levelName = $JQry('#uploadMDLevelName').val();
-									params.properties.subjectCode = $JQry('#uploadMDSubjectCode').val();
-									params.properties.subjectName = $JQry('#uploadMDSubjectName').val();									
-									params.properties.documentType = $JQry('#uploadDocumentType').val();									
+									params.properties = buildProperties();
+							
 							
 
 									data.append("uploadInfos", JSON
@@ -422,15 +418,15 @@ $JQry(function() {
 								.click(function() {
 									var params = {};
 									params.shareUrl = $JQry('#shareUrl').val();
-									params.schoolYear = $JQry('#schoolYear').val();
-									params.pubGroup = $JQry('#pubGroup').val();									
-									params.pubContext = $JQry('#pubContext').val();									
-									params.properties = {};
-									params.properties.levelCode = $JQry('#pubLevelCode').val();
-									params.properties.levelName = $JQry('#pubLevelName').val();									
-									params.properties.subjectCode = $JQry('#pubSubjectCode').val();
-									params.properties.subjectName = $JQry('#pubSubjectName').val();	
-									params.properties.documentType = $JQry('#pubDocumentType').val();										
+									params.schoolYear = "2019"
+									params.pubContext = "CPLC_CahierDeTexteContenu";	
+									var pubGroups = [];
+									pubGroups[0] = "3A";
+									pubGroups[1] = "4A";
+									params.pubGroups = pubGroups;									
+																		
+									params.properties = buildProperties();
+									
 									$JQry
 											.ajax({
 												type : "POST",
@@ -813,6 +809,48 @@ function base64url(source) {
 
 	return encodedSource;
 }
+
+function buildProperties() {
+
+	var properties = {};
+	properties.documentType = "4";
+	
+	var levels = [];
+	var level = {};
+	level.name = "4EME";
+	var codes = [];
+	codes[0] = "22122231016";
+	level.codes = codes;
+	levels[0] = level;
+	
+	var level = {};
+	level.name = "3EME";
+	var codes = [];
+	codes[0] = "21160010026";
+	codes[1] = "24340010002";
+	level.codes = codes;
+	levels[1] = level;
+	
+	properties.levels= levels;
+	
+	
+	var subject = {};
+	subject.name = "ESPAGNOL LV2";
+	var codes = [];
+	codes[0] = "030602";
+	subject.codes = codes;
+	
+	properties.subject= subject;
+	
+	var keywords = [];
+	keywords[0] = "hh";
+	keywords[1] = "ii";
+	
+	properties.keywords= keywords;
+	
+	return properties
+}
+
 
 function init() {
     var code = null,

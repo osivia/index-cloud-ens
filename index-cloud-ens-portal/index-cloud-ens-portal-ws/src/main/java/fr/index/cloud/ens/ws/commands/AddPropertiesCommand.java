@@ -16,7 +16,8 @@ import org.nuxeo.ecm.automation.client.model.PropertyList;
 import org.nuxeo.ecm.automation.client.model.PropertyMap;
 import org.osivia.portal.api.cms.IDGenerator;
 
-import fr.index.cloud.ens.ws.beans.PublishBean;
+
+import fr.index.cloud.ens.ws.beans.UpdatedProperties;
 import fr.toutatice.portail.cms.nuxeo.api.INuxeoCommand;
 
 /**
@@ -35,13 +36,13 @@ public class AddPropertiesCommand implements INuxeoCommand {
 
     
     /** meta-datas */
-    Map<String, String> qualifiers;
+    UpdatedProperties qualifiers;
     
   
     /**
      * Constructor.
      */
-    public AddPropertiesCommand(Document doc,  Map<String, String> qualifiers) {
+    public AddPropertiesCommand(Document doc, UpdatedProperties qualifiers) {
         super();
         this.doc = doc;
         this.qualifiers = qualifiers;
@@ -58,28 +59,39 @@ public class AddPropertiesCommand implements INuxeoCommand {
          
         PropertyMap properties = new PropertyMap();        
         
-         
+        
+        /* Levels */
         PropertyList levels = doc.getProperties().getList( "idxcl:levels");
         if( levels == null)
             levels = new PropertyList();
         
-        if( CommandUtils.addToList( levels, qualifiers.get("level")))
+        if( CommandUtils.addMultipleItemsToList( levels, qualifiers.getLevels()))
             properties.set("idxcl:levels", CommandUtils.convertToString(levels));
         
+        /* Subject */
         PropertyList subjects = doc.getProperties().getList( "idxcl:subjects");
         if( subjects == null)
             subjects = new PropertyList();
         
-        if( CommandUtils.addToList( subjects, qualifiers.get("subject")))
+        if( CommandUtils.addToList( subjects, qualifiers.getSubject()))
             properties.set("idxcl:subjects", CommandUtils.convertToString(subjects));     
         
+        /* Document type */
         PropertyList documentTypes = doc.getProperties().getList( "idxcl:documentTypes");
         if( documentTypes == null)
             documentTypes = new PropertyList();
         
-        if( CommandUtils.addToList( documentTypes, qualifiers.get("documentType")))
-            properties.set("idxcl:documentTypes", CommandUtils.convertToString(documentTypes));     
-  
+        if( CommandUtils.addToList( documentTypes, qualifiers.getDocumentType()))
+            properties.set("idxcl:documentTypes", CommandUtils.convertToString(documentTypes));    
+        
+        /* keywords */
+        PropertyList keywords = doc.getProperties().getList( "idxcl:keywords");
+        if( keywords == null)
+            keywords = new PropertyList();
+        
+        if( CommandUtils.addMultipleItemsToList( keywords, qualifiers.getKeywords()))
+            properties.set("idxcl:keywords", CommandUtils.convertToString(keywords));    
+ 
         
         if( properties.size() > 0)  {
             // Operation request

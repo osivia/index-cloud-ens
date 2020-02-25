@@ -1,5 +1,6 @@
 package fr.index.cloud.ens.ws.beans;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -15,14 +16,59 @@ public class PublishBean {
  
     
     /** The pub group. */
-    private String pubGroup;    
+    private List<String> pubGroups;    
     
+    
+    /**
+     * Getter for pubGroups.
+     * @return the pubGroups
+     */
+    public List<String> getPubGroups() {
+        return pubGroups;
+    }
+
+
+
+    
+    /**
+     * Setter for pubGroups.
+     * @param pubGroups the pubGroups to set
+     */
+    public void setPubGroups(List<String> pubGroups) {
+        this.pubGroups = pubGroups;
+    }
+
+
     /** The pub context. */
     private String pubContext;    
     
     /** The pub school yeard. */
-    private String pubSchoolYear;        
+    private String schoolYear;        
     
+
+
+
+    
+    /**
+     * Getter for schoolYear.
+     * @return the schoolYear
+     */
+    public String getSchoolYear() {
+        return schoolYear;
+    }
+
+
+
+
+    
+    /**
+     * Setter for schoolYear.
+     * @param schoolYear the schoolYear to set
+     */
+    public void setSchoolYear(String schoolYear) {
+        this.schoolYear = schoolYear;
+    }
+
 
 
 
@@ -46,24 +92,6 @@ public class PublishBean {
 		this.shareUrl = shareUrl;
 	}
 
-    
-    /**
-     * Getter for pubGroup.
-     * @return the pubGroup
-     */
-    public String getPubGroup() {
-        return pubGroup;
-    }
-
-
-    
-    /**
-     * Setter for pubGroup.
-     * @param pubGroup the pubGroup to set
-     */
-    public void setPubGroup(String pubGroup) {
-        this.pubGroup = pubGroup;
-    }
 
 
     
@@ -86,44 +114,32 @@ public class PublishBean {
 
     
     
-    /**
-     * Getter for pubSchoolYear.
-     * @return the pubSchoolYear
-     */
-    public String getPubSchoolYear() {
-        return pubSchoolYear;
-    }
-
-
-    
-    /**
-     * Setter for pubSchoolYear.
-     * @param pubSchoolYear the pubSchoolYear to set
-     */
-    public void setPubSchoolYear(String pubSchoolYear) {
-        this.pubSchoolYear = pubSchoolYear;
-    }
 
 
     /** The properties. */
-    // Classifiers
-    Map<String,String> properties;
+    // 
+    DocumentProperties properties;
+
+
     
-   
     /**
      * Getter for properties.
      * @return the properties
      */
-    public Map<String, String> getProperties() {
+    public DocumentProperties getProperties() {
         return properties;
     }
+
 
     
     /**
      * Setter for properties.
      * @param properties the properties to set
      */
-    public void setProperties(Map<String, String> properties) {
+    public void setProperties(DocumentProperties properties) {
         this.properties = properties;
     }
+    
+   
+
 }

@@ -41,14 +41,15 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 
-import fr.index.cloud.ens.ext.conversion.ConversionRepository;
 import fr.index.cloud.ens.ext.conversion.IConversionService;
-import fr.index.cloud.ens.ext.etb.EtablissementService;
 import fr.index.cloud.ens.ws.beans.CreateFolderBean;
 import fr.index.cloud.ens.ws.beans.CreateUserBean;
 import fr.index.cloud.ens.ws.beans.GetSharedUrlBean;
 import fr.index.cloud.ens.ws.beans.PublishBean;
+import fr.index.cloud.ens.ws.beans.MetadataClassifier;
+import fr.index.cloud.ens.ws.beans.DocumentProperties;
 import fr.index.cloud.ens.ws.beans.UnpublishBean;
+import fr.index.cloud.ens.ws.beans.UpdatedProperties;
 import fr.index.cloud.ens.ws.beans.UploadBean;
 import fr.index.cloud.ens.ws.commands.AddPropertiesCommand;
 import fr.index.cloud.ens.ws.commands.CreateFolderCommand;
@@ -433,7 +434,7 @@ public class DriveRestController {
             // set qualifiers
             // retrieve doc webId
             doc = wrapContentFetching(nuxeoController, doc.getPath());
-            Map<String, String> properties = parseProperties(ctx, doc.getProperties().getString(PROP_TTC_WEBID), clientId, uploadBean.getProperties());
+            UpdatedProperties properties = parseProperties(ctx, doc.getProperties().getString(PROP_TTC_WEBID), clientId, uploadBean.getProperties());
             INuxeoCommand updateCommand = new AddPropertiesCommand(doc, properties);
             nuxeoController.executeNuxeoCommand(updateCommand);
 
@@ -620,15 +621,18 @@ public class DriveRestController {
 
             // Execute publish
             INuxeoCommand command = new PublishCommand(currentDoc, publishBean, clientId);
+            
 
             @SuppressWarnings("unchecked")
             Map<String, String> returnMap = (Map<String, String>) nuxeoController.executeNuxeoCommand(command);
-
+            
             // set qualifiers
-            Map<String, String> properties = parseProperties(wsCtx, currentDoc.getProperties().getString(PROP_TTC_WEBID), clientId,
+            UpdatedProperties properties = parseProperties(wsCtx, currentDoc.getProperties().getString(PROP_TTC_WEBID), clientId,
                     publishBean.getProperties());
             INuxeoCommand updateCommand = new AddPropertiesCommand(currentDoc, properties);
             nuxeoController.executeNuxeoCommand(updateCommand);
+
+
 
             // Prepare results
             returnObject.put("pubId", returnMap.get("pubId"));
@@ -636,6 +640,7 @@ public class DriveRestController {
             // Force cache initialisation
             NuxeoDocumentContext ctx = nuxeoController.getDocumentContext(currentDoc.getPath());
             ctx.reload();
+            
 
         } catch (Exception e) {
             returnObject = errorMgr.handleDefaultExceptions(wsCtx, e);
@@ -768,19 +773,38 @@ public class DriveRestController {
     }
 
 
-    private Map<String, String> parseProperties(PortalControllerContext ctx, String docId, String clientId, Map<String, String> requestProperties) {
+    private UpdatedProperties parseProperties(PortalControllerContext ctx, String docId, String clientId, DocumentProperties requestProperties) {
         // set qualifiers
-        Map<String, String> properties = new HashMap<String, String>();
-        String standardLevel = convertLevelQualifier(ctx, docId, clientId, requestProperties.get("levelCode"), requestProperties.get("levelName"));
-        if (standardLevel != null)
-            properties.put("level", standardLevel);
-        String standardSubject = convertSubjectQualifier(ctx, docId, clientId, requestProperties.get("subjectCode"), requestProperties.get("subjectName"));
-        if (standardSubject != null)
-            properties.put("subject", standardSubject);
-        String documentType = requestProperties.get("documentType");
+        UpdatedProperties updatedProperties = new UpdatedProperties();
+        
+        if(  requestProperties.getLevels() != null) {
+            List<String> levels = new ArrayList<>();
+            for(MetadataClassifier level : requestProperties.getLevels())   {
+                String standardLevel = convertLevelQualifier(ctx, docId, clientId, level);
+                if (standardLevel != null)  {
+                    levels.add(standardLevel);
+                }
+            }
+            if( levels.size() > 0)
+                updatedProperties.setLevels(levels);            
+        }
+
+        if(  requestProperties.getSubject() != null)    {
+            String standardSubject = convertSubjectQualifier(ctx, docId, clientId, requestProperties.getSubject());
+            if (standardSubject != null)
+                updatedProperties.setSubject(standardSubject);
+        }
+        
+        String documentType = requestProperties.getDocumentType();
         if( StringUtils.isNotEmpty(documentType))
-            properties.put("documentType", documentType);
-        return properties;
+            updatedProperties.setDocumentType(documentType); 
+        
+        if(  requestProperties.getKeywords() != null) {
+            if( requestProperties.getKeywords().size() > 0)
+                updatedProperties.setKeywords(requestProperties.getKeywords());
+        }
+        
+        return updatedProperties;
     }
 
     /**
@@ -789,8 +813,8 @@ public class DriveRestController {
      * @param pronoteQualifier
      * @return the supported qualifier, or null
      */
-    private String convertLevelQualifier(PortalControllerContext ctx, String docId, String clientId, String pronoteCode, String pronoteLabel) {
-        return conversionService.convert(ctx, docId, clientId, "L", pronoteCode, pronoteLabel);
+    private String convertLevelQualifier(PortalControllerContext ctx, String docId, String clientId, MetadataClassifier level) {
+        return conversionService.convert(ctx, docId, clientId, "L", level);
     }
 
     /**
@@ -799,8 +823,8 @@ public class DriveRestController {
      * @param pronoteQualifier
      * @return the supported qualifier, or null
      */
-    private String convertSubjectQualifier(PortalControllerContext ctx, String docId, String clientId, String pronoteCode, String pronoteLabel) {
-        return conversionService.convert(ctx, docId, clientId, "S", pronoteCode, pronoteLabel);
+    private String convertSubjectQualifier(PortalControllerContext ctx, String docId, String clientId,  MetadataClassifier subject) {
+        return conversionService.convert(ctx, docId, clientId, "S", subject);
     }
 
     /**

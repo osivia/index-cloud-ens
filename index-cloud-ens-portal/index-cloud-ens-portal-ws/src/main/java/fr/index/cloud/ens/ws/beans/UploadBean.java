@@ -10,7 +10,7 @@ import java.util.Map;
 public class UploadBean {
     private String parentId;
     
-    Map<String,String> properties;
+    DocumentProperties properties;
 
      
     /**
@@ -36,7 +36,7 @@ public class UploadBean {
      * Getter for properties.
      * @return the properties
      */
-    public Map<String, String> getProperties() {
+    public DocumentProperties getProperties() {
         return properties;
     }
 
@@ -45,7 +45,7 @@ public class UploadBean {
      * Setter for properties.
      * @param properties the properties to set
      */
-    public void setProperties(Map<String, String> properties) {
+    public void setProperties(DocumentProperties properties) {
         this.properties = properties;
     }
 }

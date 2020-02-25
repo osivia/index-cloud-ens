@@ -2,6 +2,8 @@
     targetNamespace="http://www.nuxeo.org/ecm/schemas/resourceSharing/"
     xmlns:xs="http://www.w3.org/2001/XMLSchema"
     xmlns:nxs="http://www.nuxeo.org/ecm/schemas/resourceSharing/">
+    
+    <xs:include schemaLocation="base.xsd"/>    
  
     <xs:element name="linkId" type="xs:string" />
     <xs:element name="format" type="xs:string" />    
@@ -20,7 +22,7 @@
 	<xs:complexType name="shareTarget">
 		<xs:sequence>
 			<xs:element name="pubId" type="xs:string" />
-			<xs:element name="pubGroup" type="xs:string" />
+            <xs:element name="pubGroups" type="nxs:stringList"/>            
 			<xs:element name="pubContext" type="xs:string" />
 			<xs:element name="pubSchoolYear" type="xs:string" />		
 			<xs:element name="pubOrganization" type="xs:string" />

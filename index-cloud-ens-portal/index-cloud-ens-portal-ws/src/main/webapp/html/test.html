@@ -154,33 +154,6 @@
 						</div>
 				
 
-						<div class="form-group">
-							<label for="level">schoolYear</label> <input name="schoolYear"
-								class="form-control" id="schoolYear" />
-						</div>
-						<div class="form-group">
-							<label for="level">pubGroup</label> <input name="pubGroup"
-								class="form-control" id="pubGroup" />
-						</div>	
-						<div class="form-group">
-							<label for="level">pubContext</label> <input name="pubContext"
-								class="form-control" id="pubContext" />
-						</div>							
-						<div class="form-group">
-							<label for="level">Niveau</label> <input name="levelCode"
-								class="form-control" id="pubLevelCode" /><input name="levelName"
-								class="form-control" id="pubLevelName" />
-						</div>
-						<div class="form-group">
-							<label for="level">Matière</label> <input name="subjectCode"
-								class="form-control" id="pubSubjectCode" /><input name="subjectName"
-								class="form-control" id="pubSubjectName" />
-						</div>	
-						<div class="form-group">
-                            <label for="level">Type de document</label> <input name="documentType"
-                                class="form-control" id="pubDocumentType"" />
-                        </div>  
-
 						<input
 							type="button" class="btn btn-primary" value="Publish"
 							id="btnPubSubmit" />
@@ -205,31 +178,10 @@
             <h3>Drive.upload</h3>
 
             <form method="POST" enctype="multipart/form-data"
-                  id="fileUploadMetadataForm">
-                <div class="form-group">
-                    <label for="level">Niveau</label> 
-                    <input name="levelCode"  class="form-control" id="uploadMDLevelCode"/>
-                    <input name="levelName"  class="form-control" id="uploadMDLevelName"/>
-                </div>
-                <div class="form-group">
-                    <label for="level">Matière</label> 
-                    <input name="subjectCode"  class="form-control" id="uploadMDSubjectCode"/>
-                    <input name="subjectName"  class="form-control" id="uploadMDSubjectName"/>                    
-                </div>
-                    <div class="form-group">
-                            <label for="type">Type de document</label> <input name="documentType"
-                                class="form-control" id="uploadDocumentType"" />
-                        </div>                 
-                
-                
-                
-                <input type="hidden" name="folderId" id="folderId"/>
-            </form>
-
-            <form method="POST" enctype="multipart/form-data"
                   id="fileUploadForm">
-
-                <input type="file" name="file" class="btn"/> <input type="button"
+                <input type="hidden" name="folderId" id="folderId"/>
+                <input type="file" name="file" class="btn"/>
+                 <input type="button"
                                                                     class="btn btn-primary" value="Submit"
                                                                     id="btnUploadSubmit"/>
             </form>

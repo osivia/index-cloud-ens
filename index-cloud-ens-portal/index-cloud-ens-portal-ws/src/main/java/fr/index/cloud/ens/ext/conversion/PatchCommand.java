@@ -16,7 +16,7 @@ import org.nuxeo.ecm.automation.client.model.PropertyList;
 import org.nuxeo.ecm.automation.client.model.PropertyMap;
 import org.osivia.portal.api.cms.IDGenerator;
 
-import fr.index.cloud.ens.ws.beans.PublishBean;
+
 import fr.index.cloud.ens.ws.commands.CommandUtils;
 import fr.toutatice.portail.cms.nuxeo.api.INuxeoCommand;
 

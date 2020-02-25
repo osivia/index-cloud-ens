@@ -7,5 +7,5 @@
     <xs:element name="documentTypes" type="nxs:stringList"/>
     <xs:element name="levels" type="nxs:stringList"/>
     <xs:element name="subjects" type="nxs:stringList"/>
-
+    <xs:element name="keywords" type="nxs:stringList"/>
 </xs:schema>

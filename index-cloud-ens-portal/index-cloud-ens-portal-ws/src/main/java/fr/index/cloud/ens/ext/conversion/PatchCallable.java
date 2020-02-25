@@ -57,7 +57,7 @@ public class PatchCallable implements Callable<Integer> {
                 Document currentDoc = controller.getDocumentContext(path).getDocument();
 
                 String resultCode = conversionService.convertBatch(conversionRecords, patchRecord.getDocId(), patchRecord.getEtablissement(),
-                        patchRecord.getField(), patchRecord.getPublishCode(), patchRecord.getPublishLabel());
+                        patchRecord.getField(), patchRecord.getPublishMetaData());
 
                 String listName = null;
 

@@ -2,6 +2,7 @@ package fr.index.cloud.ens.metadata;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -65,6 +66,7 @@ public class UpdateMetadata {
 
     @OperationMethod(collector = DocumentModelCollector.class)
     public DocumentModel run(DocumentModel doc) throws Exception {
+
         DocumentModel updatedDoc = execute(this.session, doc, this.properties, targetAction, targetIndex, targetValue, this.save);
         return updatedDoc;
     }
@@ -104,8 +106,23 @@ public class UpdateMetadata {
 
                 if (value2 instanceof Serializable && value2 instanceof List<?>) {
                     List<Map<String, Object>> complexList = (List<Map<String, Object>>) value2;
+                    
+                    HashMap<String, Object> targetMap = new HashMap<String, Object>(targetValue);
 
-                    complexList.add(new HashMap<String, Object>(targetValue));
+                    // Need to convert from string to arrayList
+                    
+                    String pubGroups = targetValue.get("pubGroups");
+                    if( pubGroups != null) {
+                        List<String> normalizedPubGroups = new ArrayList<>();
+                        String[] toks = pubGroups.split(",");
+                        for(int i=0;i < toks.length; i++)   {
+                            normalizedPubGroups.add(toks[i]);
+                        }
+                        targetMap.put("pubGroups", normalizedPubGroups);
+                        
+                    }
+                    
+                    complexList.add(targetMap);
 
                     document.setPropertyValue(TARGET_XPATH, (Serializable) complexList);
                 } else {

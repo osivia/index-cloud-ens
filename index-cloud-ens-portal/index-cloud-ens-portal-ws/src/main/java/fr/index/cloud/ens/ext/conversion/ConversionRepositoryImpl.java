@@ -27,6 +27,7 @@ import org.springframework.stereotype.Repository;
 import fr.index.cloud.ens.conversion.admin.ConversionAdminForm;
 import fr.index.cloud.ens.conversion.admin.ConversionAdminService;
 import fr.index.cloud.ens.ws.DriveRestController;
+import fr.index.cloud.ens.ws.beans.MetadataClassifier;
 import fr.toutatice.portail.cms.nuxeo.api.NuxeoController;
 import fr.toutatice.portail.cms.nuxeo.api.NuxeoException;
 import fr.toutatice.portail.cms.nuxeo.api.services.NuxeoCommandContext;
@@ -273,8 +274,12 @@ public class ConversionRepositoryImpl implements ConversionRepository {
                 record.setDocId(tokens[0]);
                 record.setEtablissement(tokens[1]);
                 record.setField(tokens[2]);
-                record.setPublishCode(tokens[3]);
-                record.setPublishLabel(tokens[4]);
+                
+                MetadataClassifier metadata = new MetadataClassifier();
+                metadata.setCodes(convertToList(tokens[3]));
+                metadata.setName(tokens[4]);
+                record.setPublishMetaData(metadata);
+                 
                 record.setResultCode(tokens[5]);
 
                 records.add(record);
@@ -292,6 +297,14 @@ public class ConversionRepositoryImpl implements ConversionRepository {
         return records;
     }
     
+    
+    private List<String> convertToList(String codes){
 
-
+        List<String> codesList = new ArrayList<>();
+        String[] toks = codes.split(",");
+        for(int i=0;i < toks.length; i++)   {
+            codesList.add(toks[i]);
+        }
+        return codesList;
+    }
 }

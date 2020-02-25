@@ -191,36 +191,41 @@
                                 </div>
 
                                 <div class="modal-body">
-                                    <table class="table">
+                                    <table class="table-responsive">
                                         <thead class="thead-light">
                                         <tr>
-                                            <th scope="col"><op:translate
+                                            <th class="w-25"><op:translate
                                                     key="SHARED_TARGET_REFERENCES_ORGANIZATION"/></th>
-                                            <th scope="col"><op:translate key="SHARED_TARGET_REFERENCES_DATE"/></th>
-                                            <th scope="col"><op:translate key="SHARED_TARGET_REFERENCES_GROUP"/></th>
-                                            <th scope="col"><op:translate key="SHARED_TARGET_REFERENCES_CONTEXT"/></th>
+                                            <th class="w-25"><op:translate key="SHARED_TARGET_REFERENCES_DATE"/></th>
+                                            <th class="w-25"><op:translate key="SHARED_TARGET_REFERENCES_GROUP"/></th>
+                                            <th class="w-25"><op:translate key="SHARED_TARGET_REFERENCES_CONTEXT"/></th>
                                         </tr>
                                         </thead>
                                         <tbody>
                                         <c:forEach var="target" items="${targets}">
                                             <c:set var="pubOrganization" value="${target.pubOrganization}"/>
                                             <c:set var="pubDate" value="${target.pubDate}"/>
-                                            <c:set var="pubGroup" value="${target.pubGroup}"/>
+                                            <c:set var="pubGroups" value="${target.pubGroups}"/>
                                             <c:set var="pubContext" value="${target.pubContext}"/>
 
                                             <tr>
-                                                <td><c:if test="${not empty pubOrganization}">
+                                                <td class="align-top"><c:if test="${not empty pubOrganization}">
                                                     <op:oauth2ClientDetail clientId="${pubOrganization}" var="client"/>
                                                     ${client.title}
                                                 </c:if></td>
-                                                <td><c:if test="${not empty pubDate}">
+                                                <td class="align-top"><c:if test="${not empty pubDate}">
                                                     <fmt:formatDate value="${pubDate}" type="date" dateStyle="long"/>
                                                 </c:if></td>
-                                                <td><c:if test="${not empty pubGroup}">
+                                                <td class="align-top"><c:if test="${not empty pubGroups}">
+                                                <ul class="list-inline"> 
+								                    <c:forEach var="group" items="${pubGroups}">
+								                        <li class="list-inline-item">${group}</li>
+								                    </c:forEach>
+								                </ul>
                                                     ${target.pubGroup}
                                                 </c:if></td>
-                                                <td><c:if test="${not empty pubContext}">
-                                                    ${target.pubContext}
+                                                <td class="align-top"><c:if test="${not empty pubContext}">
+                                                    <ttc:vocabularyLabel name="idx_pub_context" key="${target.pubContext}"/>
                                                 </c:if></td>
                                             </tr>
                                         </c:forEach>

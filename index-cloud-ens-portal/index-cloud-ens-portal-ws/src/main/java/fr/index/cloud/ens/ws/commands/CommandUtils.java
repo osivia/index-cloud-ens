@@ -1,5 +1,7 @@
 package fr.index.cloud.ens.ws.commands;
 
+import java.util.List;
+
 import org.apache.commons.lang.StringUtils;
 import org.nuxeo.ecm.automation.client.model.PropertyList;
 
@@ -29,6 +31,29 @@ public class CommandUtils {
 
         return inserted;
     }
+    
+    
+    /**
+     * Adds  to list.
+     *
+     * @param properties the properties
+     * @param item the item
+     * @return true, if successful
+     */
+    public static boolean addMultipleItemsToList(PropertyList properties, List<String> items) {
+
+        boolean inserted = false;
+
+        // Insert items
+        if (items != null) {
+            for (String item:items) {
+                inserted = inserted | addToList(properties, item);
+            }
+        }
+
+        return inserted;
+    }
+    
 
 
     /**

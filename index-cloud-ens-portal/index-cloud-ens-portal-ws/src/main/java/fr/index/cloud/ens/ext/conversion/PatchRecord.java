@@ -1,6 +1,8 @@
 package fr.index.cloud.ens.ext.conversion;
 
+import java.util.List;
 
+import fr.index.cloud.ens.ws.beans.MetadataClassifier;
 
 /**
  * The Class PatchRecord.
@@ -9,9 +11,7 @@ public class PatchRecord {
     
     /** The field. */
     String docId;
-    
-    
-
+ 
 
     /** The field. */
     String field;
@@ -19,12 +19,28 @@ public class PatchRecord {
     /** The etablissement. */
     String etablissement;
     
-    /** The publish code. */
-    String publishCode;
+    /** The publish meta data. */
+    MetadataClassifier publishMetaData;
     
-    /** The publish label. */
-    String publishLabel;
     
+    /**
+     * Getter for publishMetaData.
+     * @return the publishMetaData
+     */
+    public MetadataClassifier getPublishMetaData() {
+        return publishMetaData;
+    }
+
+    
+    /**
+     * Setter for publishMetaData.
+     * @param publishMetaData the publishMetaData to set
+     */
+    public void setPublishMetaData(MetadataClassifier publishMetaData) {
+        this.publishMetaData = publishMetaData;
+    }
+
+
     /** The result code. */
     String resultCode;
     
@@ -60,37 +76,7 @@ public class PatchRecord {
         this.etablissement = etablissement;
     }
     
-    /**
-     * Getter for publishCode.
-     * @return the publishCode
-     */
-    public String getPublishCode() {
-        return publishCode;
-    }
-    
-    /**
-     * Setter for publishCode.
-     * @param publishCode the publishCode to set
-     */
-    public void setPublishCode(String publishCode) {
-        this.publishCode = publishCode;
-    }
-    
-    /**
-     * Getter for publishLabel.
-     * @return the publishLabel
-     */
-    public String getPublishLabel() {
-        return publishLabel;
-    }
-    
-    /**
-     * Setter for publishLabel.
-     * @param publishLabel the publishLabel to set
-     */
-    public void setPublishLabel(String publishLabel) {
-        this.publishLabel = publishLabel;
-    }
+
     
     /**
      * Getter for resultCode.

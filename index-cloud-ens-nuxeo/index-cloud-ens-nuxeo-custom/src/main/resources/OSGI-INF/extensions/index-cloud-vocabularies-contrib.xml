@@ -45,6 +45,19 @@
             <cacheTimeout>3600</cacheTimeout>
             <cacheMaxSize>1000</cacheMaxSize>
         </directory>
+        
+        <!--Subjects-->
+        <directory name="idx_pub_context">
+            <schema>xvocabulary</schema>
+            <dataSource>java:/nxsqldirectory</dataSource>
+            <table>vocabulary_index_pub_context</table>
+            <idField>id</idField>
+            <autoincrementIdField>false</autoincrementIdField>
+            <createTablePolicy>always</createTablePolicy>
+            <dataFile>vocabularies/pub-context.csv</dataFile>
+            <cacheTimeout>3600</cacheTimeout>
+            <cacheMaxSize>1000</cacheMaxSize>
+        </directory>
 
     </extension>
 

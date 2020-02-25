@@ -16,6 +16,7 @@ import org.nuxeo.ecm.automation.client.model.PropertyList;
 import org.nuxeo.ecm.automation.client.model.PropertyMap;
 import org.osivia.portal.api.cms.IDGenerator;
 
+
 import fr.index.cloud.ens.ws.beans.PublishBean;
 import fr.toutatice.portail.cms.nuxeo.api.INuxeoCommand;
 
@@ -71,10 +72,14 @@ public class PublishCommand implements INuxeoCommand {
         targetValue.set("pubId", pubId);
         
 
+        if( organization != null)
         targetValue.set("pubOrganization", organization);
-        targetValue.set("pubGroup", publishBean.getPubGroup());   
-        targetValue.set("pubContext",publishBean.getPubContext());
-        targetValue.set("pubSchoolYear",publishBean.getPubSchoolYear());
+        if( publishBean.getPubGroups() != null)
+        targetValue.set("pubGroups", StringUtils.trimToNull(StringUtils.join(publishBean.getPubGroups(), ",")));  
+        if( publishBean.getPubContext() != null)
+            targetValue.set("pubContext",publishBean.getPubContext());
+        if( publishBean.getSchoolYear() != null)
+            targetValue.set("pubSchoolYear",publishBean.getSchoolYear());
         
         targetValue.set("pubDate", new Date(System.currentTimeMillis()));
         

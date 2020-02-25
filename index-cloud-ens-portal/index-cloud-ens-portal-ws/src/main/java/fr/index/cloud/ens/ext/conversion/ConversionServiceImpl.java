@@ -27,6 +27,7 @@ import org.springframework.stereotype.Service;
 
 import fr.index.cloud.ens.ext.etb.EtablissementService;
 import fr.index.cloud.ens.ws.DriveRestController;
+import fr.index.cloud.ens.ws.beans.MetadataClassifier;
 import fr.toutatice.portail.cms.nuxeo.api.NuxeoController;
 import fr.toutatice.portail.cms.nuxeo.api.services.NuxeoCommandContext;
 
@@ -94,11 +95,11 @@ public class ConversionServiceImpl implements IConversionService {
 
 
     @Override
-    public String convert(PortalControllerContext ctx, String docId, String clientId, String field, String key, String label) {
+    public String convert(PortalControllerContext ctx, String docId, String clientId, String field, MetadataClassifier metadata) {
 
         String resultCode = null;
 
-        if (StringUtils.isNotEmpty(key) || StringUtils.isNotEmpty(label)) {
+        if (metadata.getCodes().size() > 0 || StringUtils.isNotEmpty(metadata.getName())) {
             try {
                 List<ConversionRecord> records = conversionRepository.getRecords(ctx);
 
@@ -106,7 +107,7 @@ public class ConversionServiceImpl implements IConversionService {
 
                     String etablissement = clientId.substring(EtablissementService.PRONOTE_CLIENT_PREFIX.length());
 
-                    resultCode = convertBatch(records, docId, etablissement, field, key, label);
+                    resultCode = convertBatch(records, docId, etablissement, field, metadata);
                 }
 
             } catch (PortletException e) {
@@ -129,14 +130,16 @@ public class ConversionServiceImpl implements IConversionService {
      * @param label the label
      * @return the string
      */
-    protected String convertBatch(List<ConversionRecord> records, String docId, String etablissementId, String field, String key, String label) {
+    protected String convertBatch(List<ConversionRecord> records, String docId, String etablissementId, String field, MetadataClassifier metadata) {
 
         String resultCode = null;
 
 
-        resultCode = convertInternal(records, etablissementId, field, key, label);
+        resultCode = convertInternal(records, etablissementId, field, metadata);
 
-        conversionlogger.info(dateFormat.format(new Date()) + ";" + docId + ";" + etablissementId + ";" + field + ";" + key + ";" + label + ";"
+        String codes = StringUtils.trimToNull(StringUtils.join(metadata.getCodes(), ","));    
+            
+        conversionlogger.info(dateFormat.format(new Date()) + ";" + docId + ";" + etablissementId + ";" + field + ";" + codes + ";" + metadata.getName()+ ";"
                 + (resultCode != null ? resultCode : ""));
 
         return resultCode;
@@ -153,23 +156,23 @@ public class ConversionServiceImpl implements IConversionService {
      * @param label the label
      * @return the string
      */
-    private String convertInternal(List<ConversionRecord> records, String etablissement, String field, String key, String label) {
+    private String convertInternal(List<ConversionRecord> records, String etablissement, String field, MetadataClassifier metadata) {
         String resultCode = null;
 
         if (records != null) {
 
             // ETB + CODE
-            resultCode = checkCode(records, etablissement, field, key, true);
+            resultCode = checkCode(records, etablissement, field, metadata.getCodes(), true);
             // ETB + LABEL
             if (resultCode == null)
-                resultCode = checkLabel(records, etablissement, field, label, true);
+                resultCode = checkLabel(records, etablissement, field, metadata.getName(), true);
 
             // NO ETB + CODE
             if (resultCode == null)
-                resultCode = checkCode(records, etablissement, field, key, false);
+                resultCode = checkCode(records, etablissement, field, metadata.getCodes(), false);
             // NO ETB + LABEL
             if (resultCode == null)
-                resultCode = checkLabel(records, etablissement, field, label, false);
+                resultCode = checkLabel(records, etablissement, field,  metadata.getName(), false);
 
         }
         return resultCode;
@@ -189,62 +192,63 @@ public class ConversionServiceImpl implements IConversionService {
      * @param checkCode the check code
      * @return the string
      */
-    private String checkCode(List<ConversionRecord> records, String etablissement, String field, String code, boolean includeEtb) {
+    private String checkCode(List<ConversionRecord> records, String etablissement, String field, List<String> codes, boolean includeEtb) {
 
         String resultCode = null;
         String famille = null;
 
-        if (StringUtils.isNotBlank(code)) {
+        for (String code : codes) {
 
-            if ("L".equals(field)) {
-                // On retient les 4 premiers caractères du niveau
-                if (code.length() > LEVEL_MEFSTAT4_LG) {
-                    code = code.substring(0, LEVEL_MEFSTAT4_LG);
-                }
-            }
+            if (resultCode == null && StringUtils.isNotEmpty(code)) {
 
-            if ("S".equals(field)) {
-                // On supprime les caractères d’espacement en début de code (TrimLeft)
-                code = code.replaceAll("^\\s+", "");
-                // On ne prend que les 6 premiers caractères qui restent
-                if (code.length() > SUBJECT_LG)
-                    code = code.substring(SUBJECT_LG);
-                // Si le code comporte moins de 6 caractères, on remplit de ‘0’ le début.
-                if (code.length() < SUBJECT_LG)
-                    code = StringUtils.leftPad(code, SUBJECT_LG, "0");
-                // Et enfin on remplace les 2 derniers caractères (sensés correspondre à la modalité d’enseignement) par des ‘0’
-                code = code.substring(0, SUBJECT_LG - 2);
-                code = StringUtils.rightPad(code, SUBJECT_LG, "0");
-                famille = code.substring(0, 2);
-            }
-
-
-            for (ConversionRecord record : records) {
-                if ((!includeEtb && StringUtils.isEmpty(record.getEtablissement()))
-                        || (includeEtb && StringUtils.equals(record.getEtablissement(), etablissement))) {
-
-                    if (StringUtils.equals(record.getPublishCode(), code)) {
-                        resultCode = record.getResultCode();
-                        break;
+                if ("L".equals(field)) {
+                    // On retient les 4 premiers caractères du niveau
+                    if (code.length() > LEVEL_MEFSTAT4_LG) {
+                        code = code.substring(0, LEVEL_MEFSTAT4_LG);
                     }
                 }
-            }
 
-            // Si non trouvé, recherche par famille
-            if (resultCode == null && StringUtils.isNotEmpty(famille)) {
+                if ("S".equals(field)) {
+                    // On supprime les caractères d’espacement en début de code (TrimLeft)
+                    code = code.replaceAll("^\\s+", "");
+                    // On ne prend que les 6 premiers caractères qui restent
+                    if (code.length() > SUBJECT_LG)
+                        code = code.substring(SUBJECT_LG);
+                    // Si le code comporte moins de 6 caractères, on remplit de ‘0’ le début.
+                    if (code.length() < SUBJECT_LG)
+                        code = StringUtils.leftPad(code, SUBJECT_LG, "0");
+                    // Et enfin on remplace les 2 derniers caractères (sensés correspondre à la modalité d’enseignement) par des ‘0’
+                    code = code.substring(0, SUBJECT_LG - 2);
+                    code = StringUtils.rightPad(code, SUBJECT_LG, "0");
+                    famille = code.substring(0, 2);
+                }
+
+
                 for (ConversionRecord record : records) {
                     if ((!includeEtb && StringUtils.isEmpty(record.getEtablissement()))
                             || (includeEtb && StringUtils.equals(record.getEtablissement(), etablissement))) {
 
-                        if (StringUtils.equals(record.getPublishCode(), famille)) {
+                        if (StringUtils.equals(record.getPublishCode(), code)) {
                             resultCode = record.getResultCode();
                             break;
                         }
                     }
                 }
+
+                // Si non trouvé, recherche par famille
+                if (resultCode == null && StringUtils.isNotEmpty(famille)) {
+                    for (ConversionRecord record : records) {
+                        if ((!includeEtb && StringUtils.isEmpty(record.getEtablissement()))
+                                || (includeEtb && StringUtils.equals(record.getEtablissement(), etablissement))) {
+
+                            if (StringUtils.equals(record.getPublishCode(), famille)) {
+                                resultCode = record.getResultCode();
+                                break;
+                            }
+                        }
+                    }
+                }
             }
-
-
         }
 
         return resultCode;
