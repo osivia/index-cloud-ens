@@ -45,7 +45,7 @@
         <springframework-ldap.version>2.1.0.RELEASE</springframework-ldap.version>
 
         <!-- REST -->
-        <jackson.version>2.7.3</jackson.version>
+        <jackson.version>2.10.1</jackson.version>
 
         <!-- JBoss -->
         <jboss-portal.version>2.7.2</jboss-portal.version>

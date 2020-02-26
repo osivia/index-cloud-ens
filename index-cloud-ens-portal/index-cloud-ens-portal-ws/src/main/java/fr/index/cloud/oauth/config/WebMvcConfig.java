@@ -1,6 +1,8 @@
 package fr.index.cloud.oauth.config;
 
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -11,6 +13,7 @@ import org.springframework.web.accept.ContentNegotiationManagerFactoryBean;
 import org.springframework.web.servlet.HandlerExceptionResolver;
 import org.springframework.web.servlet.View;
 import org.springframework.web.servlet.ViewResolver;
+import org.springframework.web.servlet.config.annotation.ContentNegotiationConfigurer;
 import org.springframework.web.servlet.config.annotation.DefaultServletHandlerConfigurer;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
@@ -33,6 +36,8 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
 		ContentNegotiationManagerFactoryBean contentNegotiationManager = new ContentNegotiationManagerFactoryBean();
 		contentNegotiationManager.addMediaType("json", MediaType.APPLICATION_JSON);
 
+	
+
 		InternalResourceViewResolver viewResolver = new InternalResourceViewResolver();
 		viewResolver.setPrefix("/WEB-INF/jsp/");
 		viewResolver.setSuffix(".jsp");
@@ -47,6 +52,17 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
 		return contentViewResolver;
 	}
 
+	
+
+    @Override
+    public void configureContentNegotiation(
+         ContentNegotiationConfigurer configurer) {
+        final Map<String, String> parameterMap = new HashMap<String, String>();
+        parameterMap.put("charset", "utf-8");
+
+        configurer.defaultContentType(new MediaType(
+          MediaType.APPLICATION_JSON, parameterMap));
+    }
 	
 
 	@Override
