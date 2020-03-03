@@ -61,6 +61,19 @@ public class PurgeCommand implements INuxeoCommand {
 
     }
 
+    public Document getUserProfile(Session automationSession, String userId) throws Exception {
+
+        OperationRequest newRequest = automationSession.newRequest("Services.GetToutaticeUserProfile");
+        newRequest.set("username", userId);
+
+        Document refDoc = (Document) newRequest.execute();
+
+        Document doc = (Document) automationSession.newRequest("Document.FetchLiveDocument").setHeader(Constants.HEADER_NX_SCHEMAS, "*").set("value", refDoc)
+                .execute();
+
+        return doc;
+
+    }
    
 
     /**
@@ -81,8 +94,19 @@ public class PurgeCommand implements INuxeoCommand {
         while (!personsToDelete.isEmpty()) {
 
             for (Person p : personsToDelete) {
-
+                
+  
                 LOGGER.warn("deleting " + p.getUid());
+  
+                String profilePath = getUserProfile(nuxeoSession, p.getUid()).getPath();
+                String workspacePath = profilePath.substring(0, profilePath.lastIndexOf('/'));
+                
+                // Operation request
+                OperationRequest request = nuxeoSession.newRequest("Document.Delete");
+                request.setInput(new PathRef(workspacePath));
+                request.execute();
+                
+                
                 personService.delete(p);
 
             }

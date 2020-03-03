@@ -26,6 +26,7 @@ import org.nuxeo.ecm.automation.client.model.Document;
 import org.osivia.directory.v2.model.ext.WorkspaceRole;
 import org.osivia.directory.v2.service.PersonUpdateService;
 import org.osivia.directory.v2.service.WorkspaceService;
+import org.osivia.directory.v2.service.preferences.UserPreferencesService;
 import org.osivia.portal.api.PortalException;
 import org.osivia.portal.api.cache.services.CacheInfo;
 import org.osivia.portal.api.context.PortalControllerContext;
@@ -73,6 +74,9 @@ public class GeneratorRepositoryImpl implements GeneratorRepository {
     private final Properties properties;
     @Autowired
     private PersonUpdateService personService;
+    /** User preferences service. */
+    @Autowired
+    private UserPreferencesService userPreferencesService;
 
     /**
      * Constructor.
@@ -172,9 +176,15 @@ public class GeneratorRepositoryImpl implements GeneratorRepository {
         nuxeoController.setAsynchronousCommand(true);
 
         Locale locale = nuxeoController.getRequest().getLocale();
+        
+        PortalWindow window = WindowFactory.getWindow(portalControllerContext.getRequest());
+        String termsOfService = window.getPageProperty("osivia.services.cgu.level");
 
         Fairy fairy = Fairy.create(locale);
-        nuxeoController.executeNuxeoCommand(new GenerateCommand(configuration, personService,fairy, exampleFile, USERID_PREFIX));
+        nuxeoController.executeNuxeoCommand(new GenerateCommand( configuration, personService,  termsOfService, fairy, exampleFile, USERID_PREFIX));
+        
+        
+      
 
     }
 

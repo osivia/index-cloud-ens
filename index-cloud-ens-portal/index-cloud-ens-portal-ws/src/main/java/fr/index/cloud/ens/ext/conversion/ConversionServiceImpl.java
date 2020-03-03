@@ -98,8 +98,14 @@ public class ConversionServiceImpl implements IConversionService {
     public String convert(PortalControllerContext ctx, String docId, String clientId, String field, MetadataClassifier metadata) {
 
         String resultCode = null;
+        
+        MetadataClassifier normalizedMetadata = new MetadataClassifier();
+        normalizedMetadata.setCodes(metadata.getCodes() != null ? metadata.getCodes() : new ArrayList<String>());
+        normalizedMetadata.setName(metadata.getName() != null ? metadata.getName() : "");
+      
+        
 
-        if (metadata.getCodes().size() > 0 || StringUtils.isNotEmpty(metadata.getName())) {
+        if (normalizedMetadata.getCodes().size() > 0 || StringUtils.isNotEmpty(normalizedMetadata.getName())) {
             try {
                 List<ConversionRecord> records = conversionRepository.getRecords(ctx);
 
@@ -107,7 +113,7 @@ public class ConversionServiceImpl implements IConversionService {
 
                     String etablissement = clientId.substring(EtablissementService.PRONOTE_CLIENT_PREFIX.length());
 
-                    resultCode = convertBatch(records, docId, etablissement, field, metadata);
+                    resultCode = convertBatch(records, docId, etablissement, field, normalizedMetadata);
                 }
 
             } catch (PortletException e) {

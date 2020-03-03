@@ -2,6 +2,7 @@ package fr.index.cloud.ens.generator;
 
 import org.osivia.directory.v2.service.PersonUpdateService;
 import org.osivia.directory.v2.service.WorkspaceService;
+import org.osivia.directory.v2.service.preferences.UserPreferencesService;
 import org.osivia.portal.api.directory.v2.DirServiceFactory;
 import org.osivia.portal.api.internationalization.IBundleFactory;
 import org.osivia.portal.api.internationalization.IInternationalizationService;
@@ -95,5 +96,16 @@ public class GeneratorConfig {
     @Bean
     public WorkspaceService getWorkspaceService() {
     	return DirServiceFactory.getService(WorkspaceService.class);
+    }
+    
+
+    /**
+     * Get user preferences service.
+     *
+     * @return user preferences service
+     */
+    @Bean
+    public UserPreferencesService getUserPreferencesService() {
+        return DirServiceFactory.getService(UserPreferencesService.class);
     }
 }

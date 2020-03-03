@@ -12,11 +12,17 @@ import org.nuxeo.ecm.automation.client.OperationRequest;
 import org.nuxeo.ecm.automation.client.Session;
 import org.nuxeo.ecm.automation.client.adapters.DocumentService;
 import org.nuxeo.ecm.automation.client.model.Blob;
+import org.nuxeo.ecm.automation.client.model.DocRef;
 import org.nuxeo.ecm.automation.client.model.Document;
 import org.nuxeo.ecm.automation.client.model.FileBlob;
+import org.nuxeo.ecm.automation.client.model.IdRef;
 import org.nuxeo.ecm.automation.client.model.PathRef;
 import org.nuxeo.ecm.automation.client.model.PropertyMap;
+import org.osivia.directory.v2.model.preferences.UserPreferences;
 import org.osivia.directory.v2.service.PersonUpdateService;
+import org.osivia.directory.v2.service.preferences.UserPreferencesService;
+import org.osivia.portal.api.PortalException;
+import org.osivia.portal.api.context.PortalControllerContext;
 import org.osivia.portal.api.directory.v2.model.Person;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -47,6 +53,9 @@ public class GenerateCommand implements INuxeoCommand {
     private PersonUpdateService personService;
 
 
+    private String termsOfService ;
+
+
     /**
      * Constructor.
      *
@@ -55,13 +64,16 @@ public class GenerateCommand implements INuxeoCommand {
      * @param exampleFile
      * @param userId userId
      */
-    public GenerateCommand(Configuration configuration, PersonUpdateService personService, Fairy fairy, URL exampleFile, String userPrefix) {
+    public GenerateCommand(Configuration configuration, PersonUpdateService personService, String termsOfService, Fairy fairy, URL exampleFile, String userPrefix) {
         super();
+
         this.configuration = configuration;
         this.fairy = fairy;
         this.realPath = exampleFile;
         this.userPrefix = userPrefix;
         this.personService = personService;
+
+        this.termsOfService = termsOfService ;
 
 
     }
@@ -122,9 +134,14 @@ public class GenerateCommand implements INuxeoCommand {
 
 
             Person createUser = createUser(userId);
+            
 
-            String workspacePath = getUserProfile(nuxeoSession, userId).getPath();
-            String path = workspacePath.substring(0, workspacePath.lastIndexOf('/')) + "/documents";
+
+
+            String profilePath = getUserProfile(nuxeoSession, userId).getPath();
+            String path = profilePath.substring(0, profilePath.lastIndexOf('/')) + "/documents";
+            
+
 
 
             // LOGGER.debug("Adding user " + createUser.getCn());
@@ -133,6 +150,16 @@ public class GenerateCommand implements INuxeoCommand {
 
 
             DocumentService documentService = nuxeoSession.getAdapter(DocumentService.class);
+            
+            // update terms of services
+            PropertyMap properties = new PropertyMap();
+            properties.set("ttc_userprofile:termsOfService", termsOfService);
+            DocRef docRef = new PathRef(profilePath);
+            documentService.update(docRef, properties);
+            
+            
+            
+            
 
             Document docRoot = documentService.getDocument(new PathRef(path));
 
