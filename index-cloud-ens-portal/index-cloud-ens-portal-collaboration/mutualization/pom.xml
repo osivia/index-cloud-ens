@@ -5,7 +5,7 @@
     <parent>
         <artifactId>index-cloud-ens-portal-collaboration-parent</artifactId>
         <groupId>fr.index.cloud.ens.portal.collaboration</groupId>
-        <version>1.3-SNAPSHOT</version>
+        <version>1.3-RC3</version>
     </parent>
 
     <artifactId>index-cloud-ens-portal-mutualization</artifactId>
