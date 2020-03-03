@@ -12,6 +12,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import javax.portlet.PortletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang.StringUtils;
 import org.codehaus.jackson.map.ObjectMapper;
@@ -168,6 +169,23 @@ public class DriveRestController {
      * @throws Exception
      */
     public static NuxeoController getNuxeocontroller(HttpServletRequest request, Principal principal) throws Exception {
+        
+        
+        /* On controle à minima que la session correspond bien au Principal 
+         * (les cookies ne sont pas réinitialisés)
+         */
+        
+        HttpSession session = ((HttpServletRequest) request).getSession(false);
+        
+        if (session != null && principal != null) {
+            String sessionPrincipal = (String) session.getAttribute("osivia.principal");
+            if (!StringUtils.equals(sessionPrincipal, principal.getName())) {
+                session.invalidate();
+                session = ((HttpServletRequest) request).getSession(true);
+                session.setAttribute("osivia.principal", principal.getName());
+            }
+
+        }
 
 
         NuxeoController nuxeoController = new NuxeoController(portletContext);
