@@ -63,6 +63,7 @@ public class SecurityFilter implements Filter {
             
             boolean continueFilter = true;
             
+            
             // Avoid session-fixation hacks
             if( request.getRequestURI().endsWith("/oauth/token"))    {
                 HttpSession session = ((HttpServletRequest) req).getSession(false);
@@ -89,8 +90,9 @@ public class SecurityFilter implements Filter {
             }      
             
             
-            if( continueFilter)
-                chain.doFilter(req, res);
+            if( continueFilter) {
+                chain.doFilter(new CheckJSONCompatibilityHeader(request), res);
+            }
         }
 
      }
