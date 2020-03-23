@@ -38,11 +38,13 @@ import org.springframework.security.oauth2.provider.approval.UserApprovalHandler
 import org.springframework.security.oauth2.provider.client.BaseClientDetails;
 import org.springframework.security.oauth2.provider.request.DefaultOAuth2RequestFactory;
 import org.springframework.security.oauth2.provider.token.ConsumerTokenServices;
+import org.springframework.security.oauth2.provider.token.TokenEnhancer;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 
 import fr.index.cloud.ens.application.api.Application;
 import fr.index.cloud.ens.application.api.IApplicationService;
 import fr.index.cloud.oauth.authentication.PortalUserDetailService;
+import fr.index.cloud.oauth.enhancer.AccessTokenEnhancer;
 import fr.index.cloud.oauth.tokenStore.IPortalTokenStore;
 import fr.index.cloud.oauth.tokenStore.PortalAuthorizationCodeStore;
 import fr.index.cloud.oauth.tokenStore.PortalTokenStore;
@@ -83,7 +85,7 @@ public class OAuth2ServerConfig {
             http
                     // Since we want the protected resources to be accessible in the UI as well we need
                     // session creation to be allowed (it's disabled by default in 2.0.6)
-                    .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED).and().requestMatchers()
+                    .sessionManagement().sessionFixation().none().sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED).and().requestMatchers()
                     .antMatchers("/rest/Drive.**", "/rest/Admin.**", "/rest/User.getProfile", "/oauth/users/**", "/oauth/clients/**", "/me").and().authorizeRequests()
                     .antMatchers("/rest/User.getProfile").access("#oauth2.hasScope('drive')")
                     .antMatchers("/rest/Drive.**").access("#oauth2.hasScope('drive')")
@@ -129,7 +131,6 @@ public class OAuth2ServerConfig {
         @Autowired
         IApplicationService applicationService;
         
-
 
         public ClientDetailsService clientDetailsService() {
             return new ClientDetailsService() {
@@ -180,11 +181,13 @@ public class OAuth2ServerConfig {
         public TokenStore tokenStore() {
               return new PortalTokenStore();
         }
+        
+
 
         @Override
         public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
             ITokenService tokenService = Locator.findMBean(ITokenService.class, ITokenService.MBEAN_NAME);
-            endpoints.tokenStore(tokenStore).userApprovalHandler(userApprovalHandler).authenticationManager(authenticationManager).authorizationCodeServices( new PortalAuthorizationCodeStore( tokenService));
+            endpoints.tokenEnhancer(new AccessTokenEnhancer()).tokenStore(tokenStore).userApprovalHandler(userApprovalHandler).authenticationManager(authenticationManager).authorizationCodeServices( new PortalAuthorizationCodeStore( tokenService));
         }
 
         @Override
@@ -201,6 +204,8 @@ public class OAuth2ServerConfig {
 
         @Autowired
         private IPortalTokenStore tokenStore;
+        
+
 
         @Bean
         public ApprovalStore approvalStore() throws Exception {

@@ -20,14 +20,17 @@ import fr.index.cloud.oauth.tokenStore.PortalAuthorizationCodeStore;
  * It's due to oAuth2 librairies  ...
  * for exemple, the DefaultOAuth2ExceptionRenderer.class won't reply an applicative code
  */
-public class CheckJSONCompatibilityHeader extends HttpServletRequestWrapper {
+public class CheckHeaderCompatibility extends HttpServletRequestWrapper {
 
     /** The logger. */
-    protected static Log logger = LogFactory.getLog(CheckJSONCompatibilityHeader.class);
+    protected static Log logger = LogFactory.getLog(CheckHeaderCompatibility.class);
+    
+    private String defaultContentType = null;
     
 
-    public CheckJSONCompatibilityHeader(HttpServletRequest request) {
+    public CheckHeaderCompatibility(HttpServletRequest request, String defaultContentType) {
         super(request);
+        this.defaultContentType = defaultContentType;
     }
     
     /**
@@ -54,12 +57,15 @@ public class CheckJSONCompatibilityHeader extends HttpServletRequestWrapper {
         
         if( mustTransform) {
             if( logger.isDebugEnabled())    {
-                logger.debug("add application/json to header");
+                if( defaultContentType != null)
+                    logger.debug("add "+defaultContentType+" to header");
             }
             
             List<String> values = new ArrayList<String>();
-            values.add("application/json");
-            return Collections.enumeration(values);
+            if(defaultContentType != null) {
+                values.add(defaultContentType);
+                return Collections.enumeration(values);
+            }
         }          
 
         return super.getHeaders(name);
@@ -72,8 +78,10 @@ public class CheckJSONCompatibilityHeader extends HttpServletRequestWrapper {
     public String getHeader(String name) {
         String value = super.getHeader(name);
         if ("Accept".equals(name)) {
-            if (value == null || ("*/*".equals(value)))
-                value = "application/json";
+            if (value == null || ("*/*".equals(value))) {
+                if( defaultContentType != null)
+                    value = defaultContentType;
+            }
         }
         return value;
     }

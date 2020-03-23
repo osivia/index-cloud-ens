@@ -69,8 +69,20 @@ public class PortalAuthorizationCodeStore implements AuthorizationCodeServices {
         OAuth2Authentication auth = null;
 
         try {
-            Map<String, String> map = this.tokenService.validateToken(code);
+            int nbTries = 0;
+            Map<String, String> map = null;
             
+            do {
+                map = this.tokenService.validateToken(code);
+                nbTries++;
+                
+                if (map == null) {
+                    // Update is asynchronous on cluster
+                    Thread.sleep(500L);
+                }
+
+            } while ( (map == null) && (nbTries < 5));
+
             
             if (map != null) {
                 

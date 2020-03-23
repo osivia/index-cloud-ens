@@ -8,6 +8,8 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.portlet.PortletContext;
 import javax.servlet.http.HttpServletRequest;
@@ -15,6 +17,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.nuxeo.ecm.automation.client.model.Document;
 import org.nuxeo.ecm.automation.client.model.Documents;
@@ -62,7 +66,7 @@ import fr.index.cloud.ens.ws.commands.GetUserProfileCommand;
 import fr.index.cloud.ens.ws.commands.PublishCommand;
 import fr.index.cloud.ens.ws.commands.UnpublishCommand;
 import fr.index.cloud.ens.ws.commands.UploadFileCommand;
-
+import fr.index.cloud.oauth.config.SecurityFilter;
 import fr.toutatice.portail.cms.nuxeo.api.INuxeoCommand;
 import fr.toutatice.portail.cms.nuxeo.api.NuxeoController;
 import fr.toutatice.portail.cms.nuxeo.api.NuxeoException;
@@ -99,6 +103,9 @@ public class DriveRestController {
 
 
     public static PortletContext portletContext;
+    
+    /** Logger. */
+    private static final Log logger = LogFactory.getLog(DriveRestController.class);
 
 
     Map<String, String> levelQualifier = null;
@@ -120,6 +127,8 @@ public class DriveRestController {
      */
     @Autowired
     IConversionService conversionService;
+    
+
 
     /**
      * Wraps the doc. fetching according to the WS error handling
@@ -162,6 +171,8 @@ public class DriveRestController {
     }
 
 
+
+    
     /**
      * Get a nuxeoController associated to the current user
      * 
@@ -171,20 +182,34 @@ public class DriveRestController {
     public static NuxeoController getNuxeocontroller(HttpServletRequest request, Principal principal) throws Exception {
         
         
+        HttpSession session = ((HttpServletRequest) request).getSession(false);
+        
+        if( logger.isDebugEnabled()) {
+            if (session == null) {
+                logger.debug("session is null");
+            }   else    {
+                logger.debug("session =" + session.getId());
+                String sessionPrincipal = (String) session.getAttribute("osivia.principal");
+                logger.debug("sessionPrincipal " + sessionPrincipal);
+            }
+        }
+        
         /* On controle à minima que la session correspond bien au Principal 
-         * (les cookies ne sont pas réinitialisés)
+         * (pb. de cookie sur l'appelant)
          */
         
-        HttpSession session = ((HttpServletRequest) request).getSession(false);
         
         if (session != null && principal != null) {
             String sessionPrincipal = (String) session.getAttribute("osivia.principal");
-            if (!StringUtils.equals(sessionPrincipal, principal.getName())) {
+            if ( sessionPrincipal != null && !StringUtils.equals(sessionPrincipal, principal.getName())) {
+                
+                logger.warn("Session is desynchronized. It is invalidated.");
+                
                 session.invalidate();
                 session = ((HttpServletRequest) request).getSession(true);
-                session.setAttribute("osivia.principal", principal.getName());
             }
-
+            
+            session.setAttribute("osivia.principal", principal.getName());
         }
 
 
