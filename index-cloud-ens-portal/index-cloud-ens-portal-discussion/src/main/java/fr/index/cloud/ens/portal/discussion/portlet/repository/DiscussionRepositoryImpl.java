@@ -158,14 +158,17 @@ public class DiscussionRepositoryImpl implements DiscussionRepository {
             Documents publications = (Documents) nuxeoController.executeNuxeoCommand(new GetLocalPublicationsCommand(rootPath));
             for(Document document: publications) {
                 String webId;
+                
+                // for author
+                webId = document.getProperties().getString("ttc:webid");
+                webIds.add(webId);               
+                
                 // for reader
                 String sourceId = document.getProperties().getString("mtz:sourceWebId");
                 if( StringUtils.isNotEmpty(sourceId))   {
-                    webId = sourceId;
-                } else
-                    // for author
-                    webId = document.getProperties().getString("ttc:webid");
-                 webIds.add(webId);
+                    webIds.add(webId);
+                } 
+                 webIds.add(sourceId);
             }
             
             // Build titles
