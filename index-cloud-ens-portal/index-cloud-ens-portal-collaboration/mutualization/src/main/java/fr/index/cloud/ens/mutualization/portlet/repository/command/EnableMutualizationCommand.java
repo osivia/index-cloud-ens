@@ -4,6 +4,7 @@ import fr.index.cloud.ens.mutualization.portlet.model.MutualizationForm;
 import fr.index.cloud.ens.mutualization.portlet.repository.MutualizationRepository;
 import fr.toutatice.portail.cms.nuxeo.api.INuxeoCommand;
 import org.apache.commons.lang.StringUtils;
+import org.nuxeo.ecm.automation.client.OperationRequest;
 import org.nuxeo.ecm.automation.client.Session;
 import org.nuxeo.ecm.automation.client.adapters.DocumentService;
 import org.nuxeo.ecm.automation.client.model.DocRef;
@@ -72,9 +73,17 @@ public class EnableMutualizationCommand implements INuxeoCommand {
         properties.set(MutualizationRepository.DOCUMENT_TYPES_PROPERTY, StringUtils.trimToNull(StringUtils.join(this.form.getDocumentTypes(), ",")));
         properties.set(MutualizationRepository.LEVELS_PROPERTY, StringUtils.trimToNull(StringUtils.join(this.form.getLevels(), ",")));
         properties.set(MutualizationRepository.SUBJECTS_PROPERTY, StringUtils.trimToNull(StringUtils.join(this.form.getSubjects(), ",")));
+        
+        
 
-        // Updated document
-        Document updatedDocument = documentService.update(document, properties);
+        // Operation request
+        OperationRequest request = nuxeoSession.newRequest("Index.UpdateMetadata");
+        request.setInput(document);
+        request.set("properties", properties);     
+            
+             
+        Document updatedDocument = (Document) request.execute();   
+
 
         return documentService.publish(updatedDocument, section, true);
     }

@@ -88,8 +88,17 @@ public class UpdateMetadata {
 
     protected DocumentModel execute(CoreSession session, DocumentModel document, Properties properties,  String targetAction, String targetIndex, Properties targetValue, boolean save) throws ClientException, IOException, DocumentException {
 
-        if( properties != null)
+        // In silent mode, Document must be checkouted explicitly
+        // otherwise publication erases modification (probably during checking)
+        
+        if( !document.isCheckedOut())
+            document.checkOut();
+        
+        
+        if( properties != null) {
             DocumentHelper.setProperties(session, document, properties);
+
+        }
         
         if( removeFormat) {
             // Remove comple property
