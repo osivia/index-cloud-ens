@@ -18,8 +18,8 @@
 
 <main class="d-flex flex-column flex-grow-1 overflow-auto">
     <div class="container-fluid d-flex flex-column flex-grow-1 overflow-hidden">
-        <div class="row  overflow-hidden">
-            <div class="col-auto d-flex flex-column mh-100 border-right">
+        <div class="row flex-grow-1 overflow-hidden">
+            <div class="col-auto d-flex flex-column mh-100 border-right ui-resizable">
                 <div class="row flex-grow-1 overflow-hidden">
                     <div id="drawer" class="col d-flex flex-column mh-100 overflow-hidden">
                         <div class="row flex-grow-1 overflow-auto">
