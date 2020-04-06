@@ -83,8 +83,20 @@
                         </li>
                     </c:if>
 
-                    <%--User menu--%>
-                    <li class="nav-item mt-2 mt-md-0 dropdown">
+                    <c:set var="url" value="${requestScope['osivia.my-account.url']}"/>
+
+                    <%--User menu (= xs)--%>
+                    <c:if test="${not empty url}">                  
+                        <li class="nav-item mt-2 mt-md-0 dropdown d-sm-none">
+                            <a href="${url}" class="nav-link">
+                                <i class="glyphicons glyphicons-basic-id-badge"></i>
+                                <span><op:translate key="TOOLBAR_USER_ACCOUNT"/></span>
+                            </a>
+                        </li>
+                    </c:if>                      
+
+                    <%--User menu (> xs)--%>
+                    <li class="nav-item mt-2 mt-md-0 dropdown d-none d-sm-block">
                         <a href="javascript:" class="nav-link dropdown-toggle" data-toggle="dropdown">
                             <c:choose>
                                 <c:when test="${empty requestScope['osivia.toolbar.person']}">
@@ -103,7 +115,6 @@
                             <div class="dropdown-header d-lg-none">${empty requestScope['osivia.toolbar.person'] ? requestScope['osivia.toolbar.principal'] : requestScope['osivia.toolbar.person'].cn}</div>
 
                             <%--User account--%>
-                            <c:set var="url" value="${requestScope['osivia.my-account.url']}"/>
                             <c:if test="${not empty url}">
                                 <a href="${url}" class="dropdown-item">
                                     <i class="glyphicons glyphicons-basic-id-badge"></i>
@@ -112,6 +123,9 @@
                             </c:if>
                         </div>
                     </li>
+                    
+
+                    
 
                     <%--Logout--%>
                     <li class="nav-item mt-2 mt-md-0">
