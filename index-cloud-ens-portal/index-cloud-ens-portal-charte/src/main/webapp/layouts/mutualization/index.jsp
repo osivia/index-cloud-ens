@@ -43,7 +43,7 @@
             <div class="col-md d-flex flex-column mh-100">
                 <%@include file="../includes/breadcrumb.jspf" %>
 
-                <div class="row flex-grow-1 pt-4 overflow-auto">
+                <div class="row flex-grow-1 pt-4 overflow-auto mh-100">
                     <div class="col">
                         <p:region regionName="top"/>
 

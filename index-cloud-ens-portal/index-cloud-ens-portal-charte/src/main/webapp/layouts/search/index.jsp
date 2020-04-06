@@ -21,10 +21,10 @@
         <div class="row flex-grow-1 overflow-hidden">
             <%@include file="../includes/nav.jspf" %>
 
-            <div class="col-md d-flex flex-column mh-100">
+            <div class="col-md d-flex flex-column mh-100 overflow-hidden">
                 <%@include file="../includes/breadcrumb.jspf" %>
 
-                <div class="row flex-grow-1 pt-4 overflow-auto">
+                <div class="row flex-grow-1 pt-4 overflow-auto mh-100">
                     <div class="col mh-100">
                         <div class="row">
                             <div class="col">
