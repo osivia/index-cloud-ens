@@ -17,6 +17,9 @@
 
 .portal-table-header-group {
   display: flex;
+  
+  // Hack iphone
+  min-height: 40px;
 
   border-bottom: {
     style: solid;

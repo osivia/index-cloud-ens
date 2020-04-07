@@ -24,7 +24,7 @@
 </head>
 
 
-<body class="vh-100 overflow-hidden d-flex flex-column">
+<body class="fullheight overflow-hidden d-flex flex-column">
 
 <header>
     <nav class="navbar navbar-expand navbar-light">

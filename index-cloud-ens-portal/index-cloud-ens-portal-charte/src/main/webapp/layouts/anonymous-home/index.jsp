@@ -13,7 +13,7 @@
 </head>
 
 
-<body class="vh-100 overflow-hidden d-flex flex-column">
+<body class="fullheight overflow-hidden d-flex flex-column">
 
 <%@include file="../includes/header.jspf" %>
 

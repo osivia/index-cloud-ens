@@ -198,5 +198,11 @@ function select2LoadFailure( request, errorType ) {
            
 }
 
+function setDocHeight() {
+	document.documentElement.style.setProperty('--vh', `${window.innerHeight/100}px`);
+	};
 
+setDocHeight();
+addEventListener('resize', setDocHeight)
+addEventListener('orientationchange', setDocHeight)	
 

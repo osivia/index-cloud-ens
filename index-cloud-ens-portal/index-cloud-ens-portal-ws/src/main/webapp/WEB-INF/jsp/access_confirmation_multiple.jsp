@@ -30,7 +30,7 @@
 
 </head>
 
-<body id="login" class="vh-100 overflow-hidden d-flex flex-column uncluttered">
+<body id="login" class="fullheight overflow-hidden d-flex flex-column uncluttered">
 
 	<div id="container" class="d-flex flex-column flex-grow-1 overflow-auto">
 		<header>
