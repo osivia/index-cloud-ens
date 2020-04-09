@@ -9,11 +9,6 @@
 
                 <p class="card-text"><op:translate key="createaccount.send.message"/></p>
 
-                <div class="text-right">
-                    <a href="javascript:" class="btn btn-secondary no-ajax-link" onclick="window.close();">
-                        <span><op:translate key="CLOSE"/></span>
-                    </a>
-                </div>
             </div>
         </div>
     </div>
