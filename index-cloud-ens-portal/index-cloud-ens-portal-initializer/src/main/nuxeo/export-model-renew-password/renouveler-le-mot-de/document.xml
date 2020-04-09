@@ -137,7 +137,7 @@
                   <argument>
                     <argumentName><![CDATA[mailObject]]></argumentName>
                     <argumentType><![CDATA[TEXT]]></argumentType>
-                    <argumentValue><![CDATA[Renouvellement de votre mot de passe]]></argumentValue>
+                    <argumentValue><![CDATA[${portal:translate("WORKFLOW_RENEW_PASSWORD_TITLE")}]]></argumentValue>
                   </argument>
                   <argument>
                     <argumentName><![CDATA[continue]]></argumentName>
@@ -152,17 +152,13 @@
                   <argument>
                     <argumentName><![CDATA[body]]></argumentName>
                     <argumentType><![CDATA[TEXTAREA]]></argumentType>
-                    <argumentValue><![CDATA[Bonjour,
-
-Une demande de changement de mot de passe a été faite pour votre compte.
-
-Vous pouvez définir un nouveau mot de passe en suivant ce lien : 
-${task:link("Renouveler")}]]></argumentValue>
+                    <argumentValue><![CDATA[${portal:translate("WORKFLOW_RENEW_PASSWORD_MSG")}
+${task:link(portal:translate("WORKFLOW_RENEW_PASSWORD_LINK"))}]]></argumentValue>
                   </argument>
                   <argument>
                     <argumentName><![CDATA[mailFrom]]></argumentName>
                     <argumentType><![CDATA[TEXT]]></argumentType>
-                    <argumentValue><![CDATA[contact@osivia.org]]></argumentValue>
+                    <argumentValue><![CDATA[]]></argumentValue>
                   </argument>
                 </argumentsList>
               </filter>

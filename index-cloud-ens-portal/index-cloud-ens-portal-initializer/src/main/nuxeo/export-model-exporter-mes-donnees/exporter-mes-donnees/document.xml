@@ -175,7 +175,7 @@
       <step>
         <closable><![CDATA[true]]></closable>
         <notifiable><![CDATA[true]]></notifiable>
-        <stringMsg><![CDATA[L'export de vos données personnelles est prêt. Vous pouvez le retrouver dans la page Mon Compte.]]></stringMsg>
+        <stringMsg><![CDATA[${portal:translate("WORKFLOW_EXPORT_DONE")}]]></stringMsg>
         <actionIdClosable><![CDATA[20]]></actionIdClosable>
         <index><![CDATA[2]]></index>
         <endStepMsg><![CDATA[]]></endStepMsg>

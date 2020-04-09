@@ -97,7 +97,7 @@
         <stringMsg><![CDATA[${document:linkWithText(taskPath,taskName)}]]></stringMsg>
         <actionIdClosable><![CDATA[]]></actionIdClosable>
         <index><![CDATA[0]]></index>
-        <endStepMsg><![CDATA[Un lien de confirmation vous a été envoyé à l'adresse mail indiquée. Vous pouvez maintenant fermer cette fenêtre.]]></endStepMsg>
+        <endStepMsg><![CDATA[${portal:translate("WORKFLOW_SIGNUP_MSG")}]]></endStepMsg>
         <acquitable><![CDATA[false]]></acquitable>
         <actionIdNo><![CDATA[]]></actionIdNo>
         <initAction>
@@ -124,18 +124,13 @@
                   <argument>
                     <argumentName><![CDATA[body]]></argumentName>
                     <argumentType><![CDATA[TEXTAREA]]></argumentType>
-                    <argumentValue><![CDATA[Bonjour 
-
-Vous vous êtes inscrit sur le portail Cloud enseignant d'Index Education.
-
-Il vous reste à valider votre adresse e-mail en cliquant sur le lien ci-dessous :
-
-${task:link("Confirmer mon adresse e-mail")}]]></argumentValue>
+                    <argumentValue><![CDATA[${portal:translate("WORKFLOW_SIGNUP_MAIL_CONTENT")}
+${task:link(portal:translate("WORKFLOW_SIGNUP_LINK"))}]]></argumentValue>
                   </argument>
                   <argument>
                     <argumentName><![CDATA[mailFrom]]></argumentName>
                     <argumentType><![CDATA[TEXT]]></argumentType>
-                    <argumentValue><![CDATA[noreply@osivia.com]]></argumentValue>
+                    <argumentValue><![CDATA[]]></argumentValue>
                   </argument>
                   <argument>
                     <argumentName><![CDATA[continue]]></argumentName>
@@ -150,7 +145,7 @@ ${task:link("Confirmer mon adresse e-mail")}]]></argumentValue>
                   <argument>
                     <argumentName><![CDATA[mailObject]]></argumentName>
                     <argumentType><![CDATA[TEXT]]></argumentType>
-                    <argumentValue><![CDATA[Votre compte a été créé mais il reste une étape.]]></argumentValue>
+                    <argumentValue><![CDATA[${portal:translate("WORKFLOW_SIGNUP_MAIL_TITLE")}]]></argumentValue>
                   </argument>
                 </argumentsList>
               </filter>
@@ -194,7 +189,7 @@ ${task:link("Confirmer mon adresse e-mail")}]]></argumentValue>
         <stringMsg><![CDATA[${document:linkWithText(taskPath,taskName)}]]></stringMsg>
         <actionIdClosable><![CDATA[]]></actionIdClosable>
         <index><![CDATA[1]]></index>
-        <endStepMsg><![CDATA[Votre e-mail a été confirmé. Vous pouvez maintenant vous connecter avec vos identifiants.]]></endStepMsg>
+        <endStepMsg><![CDATA[${portal:translate("WORKFLOW_SIGNUP_CONFIRMATION")}]]></endStepMsg>
         <acquitable><![CDATA[false]]></acquitable>
         <actionIdNo><![CDATA[]]></actionIdNo>
         <initAction>
