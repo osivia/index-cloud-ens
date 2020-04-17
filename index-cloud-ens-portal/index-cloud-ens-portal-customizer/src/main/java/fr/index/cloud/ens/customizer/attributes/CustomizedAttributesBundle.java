@@ -217,13 +217,15 @@ public class CustomizedAttributesBundle implements IAttributesBundle {
         }
         // User workspace URL
         String userWorkspaceUrl;
-        if ((userWorkspace != null) && StringUtils.isNotEmpty(userWorkspace.getCmsPath())) {
-            // User workspace URL
-            userWorkspaceUrl = this.portalUrlFactory.getCMSUrl(portalControllerContext, null, userWorkspace.getCmsPath(), null, null, null, null, null,
-                    null, null);
-        } else {
+
+        // User workspace URL
+        try {
+            userWorkspaceUrl = this.portalUrlFactory.getMyWorkspaceUrl(portalControllerContext);
+        } catch (PortalException e) {
             userWorkspaceUrl = null;
+            this.log.error("Unable to get user workspace url.", e.fillInStackTrace());
         }
+
         attributes.put(USER_WORKSPACE_URL, userWorkspaceUrl);
 
 

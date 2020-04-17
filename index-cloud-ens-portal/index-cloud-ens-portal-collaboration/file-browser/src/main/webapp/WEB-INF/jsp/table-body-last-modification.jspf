@@ -1,0 +1,19 @@
+<div class="portal-table-cell" data-column="last-modification">
+    <div class="d-flex flex-wrap overflow-hidden">
+        <span class="text-truncate mr-3"><fmt:formatDate type = "both" 
+         dateStyle = "short" timeStyle = "short" value = "${item.lastModification}" />
+        </span>
+        <span class="text-truncate">
+            <c:choose>
+                <c:when test="${item.lastContributor ne pageContext.request.remoteUser}">
+                    <span><ttc:user name="${item.lastContributor}" linkable="false"/></span>
+                </c:when>
+
+                <c:when test="${not fn:startsWith(item.document.path, '/default-domain/UserWorkspaces/')}">
+                    <span class="text-muted"><op:translate
+                            key="FILE_BROWSER_CONTRIBUTOR_CURRENT_USER"/></span>
+                </c:when>
+            </c:choose>
+        </span>
+    </div>
+</div>
