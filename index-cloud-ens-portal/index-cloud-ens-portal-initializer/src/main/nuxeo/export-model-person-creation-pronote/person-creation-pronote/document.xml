@@ -130,7 +130,7 @@ ${task:link(portal:translate("WORKFLOW_SIGNUP_LINK"))}]]></argumentValue>
                   <argument>
                     <argumentName><![CDATA[mailFrom]]></argumentName>
                     <argumentType><![CDATA[TEXT]]></argumentType>
-                    <argumentValue><![CDATA[]]></argumentValue>
+                    <argumentValue><![CDATA[no-reply@index-education.fr]]></argumentValue>
                   </argument>
                   <argument>
                     <argumentName><![CDATA[continue]]></argumentName>
