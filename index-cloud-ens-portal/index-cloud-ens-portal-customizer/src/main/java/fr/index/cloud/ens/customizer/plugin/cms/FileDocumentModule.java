@@ -9,10 +9,15 @@ import fr.toutatice.portail.cms.nuxeo.api.domain.DocumentDTO;
 import fr.toutatice.portail.cms.nuxeo.api.domain.RemotePublishedDocumentDTO;
 import fr.toutatice.portail.cms.nuxeo.api.portlet.PortletModule;
 import fr.toutatice.portail.cms.nuxeo.api.services.dao.DocumentDAO;
+
+
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.nuxeo.ecm.automation.client.model.Document;
 import org.nuxeo.ecm.automation.client.model.Documents;
+import org.nuxeo.ecm.automation.client.model.PropertyMap;
 import org.osivia.portal.api.Constants;
 import org.osivia.portal.api.PortalException;
 import org.osivia.portal.api.cms.Permissions;
@@ -22,8 +27,14 @@ import org.osivia.portal.api.urls.IPortalUrlFactory;
 import org.osivia.portal.api.urls.PortalUrlType;
 import org.osivia.portal.api.windows.PortalWindow;
 import org.osivia.portal.api.windows.WindowFactory;
+import org.osivia.portal.core.cms.CMSBinaryContent;
 
 import javax.portlet.*;
+
+import java.io.FileInputStream;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -42,6 +53,9 @@ public class FileDocumentModule extends PortletModule {
      */
     private static final String MUTUALIZED_SPACE_PATH = System.getProperty("config.mutualized.path");
 
+    
+    /** Logger. */
+    private static final Log LOGGER = LogFactory.getLog(FileDocumentModule.class);
 
     /**
      * Portal URL factory.
@@ -124,7 +138,43 @@ public class FileDocumentModule extends PortletModule {
                 // Source
                 DocumentDTO source = this.getSource(nuxeoController, documentContext);
                 request.setAttribute("source", source);
+                
+
+                
             }
+            
+            getMimeTypeSpecificLinks(request, nuxeoController, documentContext);
+        }
+    }
+
+
+    /**
+     * Gets the mime type specific links.
+     *
+     * @param request the request
+     * @param nuxeoController the nuxeo controller
+     * @param documentContext the document context
+     * @return the mime type specific links
+     */
+    private void getMimeTypeSpecificLinks(RenderRequest request, NuxeoController nuxeoController, NuxeoDocumentContext documentContext) {
+        Document document = documentContext.getDocument();
+        if ("File".equals(documentContext.getDocument().getType())) {
+
+            PropertyMap map = document.getProperties().getMap("file:content");
+
+            String mimeType = map.getString("mime-type");
+            if ("application/index-qcm+xml".equals(mimeType)) {
+
+                String createFileLink = nuxeoController.createFileLink(document, "file:content");
+                try {
+                    createFileLink = URLEncoder.encode(createFileLink, "UTF-8");
+                    request.setAttribute("QCMUrl", createFileLink);
+                } catch (UnsupportedEncodingException e) {
+                    // Don't block on a link
+                    LOGGER.error("Link on " + map.getString("name") + " generates " + e.getMessage());
+                }
+            }
+
         }
     }
 

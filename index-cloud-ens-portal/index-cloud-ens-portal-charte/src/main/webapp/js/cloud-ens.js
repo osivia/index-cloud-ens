@@ -206,3 +206,10 @@ setDocHeight();
 addEventListener('resize', setDocHeight)
 addEventListener('orientationchange', setDocHeight)	
 
+// End of qcm
+function onFinish() {
+	var element = document.getElementById('qcmPlayer')
+	if (element != null) {
+		element.contentWindow.location.reload();
+	}	
+}

@@ -222,6 +222,19 @@
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-dependency-plugin</artifactId>
                         <executions>
+                        
+                            <execution>
+                                <id>import-dependencies</id>
+                                <phase>generate-resources</phase>
+                                <goals>
+                                    <goal>copy-dependencies</goal>
+                                </goals>
+                                <configuration>
+                                    <includeGroupIds>
+                                        net.bull.javamelody
+                                    </includeGroupIds>
+                                </configuration>
+                            </execution>                        
                             <execution>
                                 <id>unpack</id>
                                 <phase>generate-resources</phase>

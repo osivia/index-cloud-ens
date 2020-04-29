@@ -95,6 +95,11 @@
                 <exclude>jboss-as/server/production/conf/jboss-log4j.*</exclude>
             </excludes>
         </fileSet>
+        
+        <fileSet>
+            <outputDirectory>${artifactId}-${dest-env}-${project.version}/jboss-as/server/production/lib</outputDirectory>
+            <directory>target/dependency</directory>
+        </fileSet>        
     </fileSets>
 
 
