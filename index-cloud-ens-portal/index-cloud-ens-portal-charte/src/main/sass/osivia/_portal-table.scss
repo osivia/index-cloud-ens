@@ -18,8 +18,8 @@
 .portal-table-header-group {
   display: flex;
   
-  // Hack iphone
-  min-height: 40px;
+  // must be displayed, even in portlet-filler mode
+  flex-shrink: 0;
 
   border-bottom: {
     style: solid;
