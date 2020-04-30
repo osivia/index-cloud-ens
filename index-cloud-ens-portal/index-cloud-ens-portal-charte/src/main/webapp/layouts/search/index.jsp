@@ -26,7 +26,7 @@
 
                 <div class="row flex-grow-1 pt-4 overflow-auto mh-100">
                     <div class="col mh-100">
-                        <div class="row">
+                        <div class="row flex-shrink-0">
                             <div class="col">
                                 <p:region regionName="top"/>
                             </div>
