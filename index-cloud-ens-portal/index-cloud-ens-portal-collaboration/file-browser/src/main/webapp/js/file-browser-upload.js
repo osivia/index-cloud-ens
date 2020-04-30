@@ -17,6 +17,7 @@ $JQry(function () {
                 var messageErrorSize = $target.data("error-size");
 
                 $target.removeClass("d-none");
+                $target.addClass("d-flex");                  
 
                 data.context = $JQry(document.createElement("li"));
                 data.context.appendTo($files);
@@ -87,6 +88,7 @@ $JQry(function () {
                 var url = $target.data("callback-url");
 
                 $target.addClass("d-none");
+                $target.removeClass("d-flex");                  
 
                 // Refresh
                 updatePortletContent(this, url);
@@ -103,6 +105,8 @@ $JQry(function () {
             var $form = $target.closest(".file-browser-upload");
 
             $form.addClass("d-none");
+            $form.removeClass("d-flex");              
+            
         });
 
 

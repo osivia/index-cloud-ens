@@ -8,13 +8,13 @@
 
 
 <form:form action="${uploadUrl}" method="post" enctype="multipart/form-data" modelAttribute="form"
-           cssClass="file-browser-upload d-none" data-callback-url="${callbackUrl}"
+           cssClass="file-browser-upload d-none mh-100" data-callback-url="${callbackUrl}"
            data-max-file-size="${form.maxFileSize}" data-warning-replace="${replaceWarning}"
            data-warning-replace-pronote="${replacePronoteWarning}" data-error-size="${sizeError}">
     <form:input type="file" path="upload" multiple="multiple" cssClass="d-none"/>
 
     <div class="card">
-        <div class="card-body">
+        <div class="card-body   d-flex flex-column">
                 <%--Buttons--%>
             <div class="form-group fileupload-buttonbar">
                 <button type="button" class="btn btn-primary mr-2 start">
@@ -34,7 +34,7 @@
             </div>
 
                 <%--Files--%>
-            <ul class="list-unstyled file-browser-upload-files files"></ul>
+            <ul class="list-unstyled file-browser-upload-files files mh-100 overflow-auto flex-column"></ul>
         </div>
     </div>
 </form:form>
