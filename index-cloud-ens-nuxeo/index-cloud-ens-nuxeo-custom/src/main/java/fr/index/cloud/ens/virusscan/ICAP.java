@@ -57,10 +57,11 @@ class ICAP implements Callable<ICAPResult> {
      * @throws IOException
      * @throws ICAPException
      */
-    public ICAP(String serverIP, int port, String icapService, InputStream fileInStream, long fileSize) throws IOException, ICAPException {
+    public ICAP(String serverIP, int port, String icapService, String originalFilename, InputStream fileInStream, long fileSize) throws IOException, ICAPException {
         this.icapService = icapService;
         this.serverIP = serverIP;
         this.port = port;
+        this.originalFilename = originalFilename;
 
         this.fileInStream = fileInStream;
         this.fileSize = fileSize;
@@ -78,6 +79,9 @@ class ICAP implements Callable<ICAPResult> {
      */
     private void initConnection() throws UnknownHostException, IOException, ICAPException {
 
+        if (log.isDebugEnabled())
+            log.debug("initConnection" );     
+        
         Socket client = new Socket();
         client.connect(new InetSocketAddress(serverIP, port), SOCKET_TIMEOUT);
 
@@ -126,14 +130,20 @@ class ICAP implements Callable<ICAPResult> {
     public ICAPResult call() throws ICAPException, UnknownHostException, IOException {
         try {
             initConnection();
+            
+            
+            if (log.isDebugEnabled())
+                log.debug("call");     
 
             // First part of header
             String resHeader = "GET /" + originalFilename + " HTTP/1.1\r\nHost: " + serverIP + ":" + port + "\r\n\r\n";
             String resBody = resHeader + "HTTP/1.1 200 OK\r\nTransfer-Encoding: chunked\r\nContent-Length: " + fileSize + "\r\n\r\n";
 
-            int previewSize = stdPreviewSize;
-            if (fileSize < stdPreviewSize) {
-                previewSize = (int) fileSize;
+            int previewSize = (int) fileSize;
+            
+            
+            if (stdPreviewSize > 0 && previewSize > stdPreviewSize) {
+                previewSize = stdPreviewSize;
             }
 
             String requestBuffer = "RESPMOD icap://" + serverIP + "/" + icapService + " ICAP/" + VERSION + "\r\n" + "Host: " + serverIP + "\r\n"
@@ -142,6 +152,10 @@ class ICAP implements Callable<ICAPResult> {
                     + Integer.toHexString(previewSize) + "\r\n";
 
             sendString(requestBuffer);
+            
+            
+            if (log.isDebugEnabled())
+                log.debug("requestBuffer sent : " + new String(requestBuffer));     
 
             // Sending preview or, if smaller than previewSize, the whole file.
             byte[] chunk = new byte[previewSize];
@@ -154,6 +168,10 @@ class ICAP implements Callable<ICAPResult> {
             } else if (previewSize != 0) {
                 sendString("0\r\n\r\n", true);
             }
+            
+            
+            if (log.isDebugEnabled())
+                log.debug("preview sent");     
 
             // Parse the response! It might not be "100 continue"
             // if fileSize<previewSize, then this is acutally the respond
@@ -161,7 +179,7 @@ class ICAP implements Callable<ICAPResult> {
             Map<String, String> responseMap = new HashMap<String, String>();
             int status;
 
-            if (fileSize > previewSize) {
+            if (fileSize >= stdPreviewSize) {
                 String parseMe = getHeader(ICAPTERMINATOR);
                 
                 
@@ -192,7 +210,7 @@ class ICAP implements Callable<ICAPResult> {
 
 
             // Sending remaining part of file
-            if (fileSize > previewSize) {
+            if (fileSize < stdPreviewSize) {
                 byte[] buffer = new byte[STD_SEND_LENGTH];
                 while ((fileInStream.read(buffer)) != -1) {
                     sendString(Integer.toHexString(buffer.length) + "\r\n");
@@ -248,7 +266,7 @@ class ICAP implements Callable<ICAPResult> {
         String virus = null;
         int iBegin = response.indexOf(begin);
         if (iBegin != -1)    {
-            int iEnd = response.indexOf(end, iBegin);
+            int iEnd = response.indexOf(end, iBegin + begin.length());
             if( iEnd != -1) {
                 virus = response.substring( iBegin + begin.length(), iEnd);
             }
@@ -301,15 +319,24 @@ class ICAP implements Callable<ICAPResult> {
         byte[] endofheader = terminator.getBytes(StandardCharsetsUTF8);
         byte[] buffer = new byte[STD_RECEIVE_LENGTH];
 
+        if (log.isDebugEnabled())
+            log.debug("getHeader begin");     
+        
         int n;
         int offset = 0;
         // STD_RECEIVE_LENGTH-offset is replaced by '1' to not receive the next (HTTP) header.
         while ((offset < STD_RECEIVE_LENGTH) && ((n = in.read(buffer, offset, 1)) != -1)) { // first part is to secure against DOS
             offset += n;
+
             if (offset > endofheader.length + 13) { // 13 is the smallest possible message "ICAP/1.0 xxx "
                 byte[] lastBytes = Arrays.copyOfRange(buffer, offset - endofheader.length, offset);
                 if (Arrays.equals(endofheader, lastBytes)) {
+                    
+                    if (log.isDebugEnabled())
+                        log.debug("getHeader end : " + new String(buffer));     
+                    
                     return new String(buffer, 0, offset, StandardCharsetsUTF8);
+                      
                 }
             }
         }

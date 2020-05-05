@@ -97,16 +97,23 @@ public class ScanChecker {
 
                 String ICAPHost = Framework.getProperty("index.antivirus.icap.host");
                 String ICAPPort = Framework.getProperty("index.antivirus.icap.port");
+           
 
                 if (StringUtils.isNotEmpty(ICAPHost) && StringUtils.isNotEmpty(ICAPPort)) {
+                    
+                    String ICAPService = Framework.getProperty("index.antivirus.icap.service");
+                    if( ICAPService == null)
+                        ICAPService = "";
                     
                     if (waitingForServerRestart == 0 || System.currentTimeMillis() > waitingForServerRestart + 60000) {
                         waitingForServerRestart = 0;
 
-                        ICAP icap = new ICAP(ICAPHost, Integer.parseInt(ICAPPort), "avscan", bHolder.getBlob().getStream(), bHolder.getBlob().getLength());
+                        ICAP icap = new ICAP(ICAPHost, Integer.parseInt(ICAPPort), ICAPService, bHolder.getBlob().getFilename(), bHolder.getBlob().getStream(), bHolder.getBlob().getLength());
 
                         Future<ICAPResult> future = getThreadPool().submit(icap);
 
+
+                        
                         ICAPResult result = future.get(timeout, TimeUnit.SECONDS);
 
                         if (result != null) {
