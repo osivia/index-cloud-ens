@@ -92,9 +92,15 @@ public class ErrorMgr {
         String token = null;
         boolean logError = true;
 
-        String contentId = "";
+        String searchIdentifier = "";
 
         int returnCode = ErrorMgr.ERR_INTERNAL;
+        
+        if( e instanceof NotFoundException) {
+            logError = false;
+            searchIdentifier = ((GenericException) e).getSearchIdentifier();
+            returnCode = ErrorMgr.ERR_NOT_FOUND;
+        }
 
         if (e instanceof GenericException) {
             if (((GenericException) e).getE() instanceof NuxeoException) {
@@ -102,20 +108,20 @@ public class ErrorMgr {
                 if (nxe.getErrorCode() == NuxeoException.ERROR_NOTFOUND) {
                     returnCode = ErrorMgr.ERR_NOT_FOUND;
                     logError = false;
-                    if (contentId != null)
-                        contentId = ((GenericException) e).getContentId();
+                    if (searchIdentifier != null)
+                        searchIdentifier = ((GenericException) e).getSearchIdentifier();
                 } else if (nxe.getErrorCode() == NuxeoException.ERROR_FORBIDDEN) {
                     returnCode = ErrorMgr.ERR_FORBIDDEN;
                     logError = false;
-                    if (contentId != null)                    
-                        contentId = ((GenericException) e).getContentId();
+                    if (searchIdentifier != null)                    
+                        searchIdentifier = ((GenericException) e).getSearchIdentifier();
                 }
             }
         }
 
         String errorMessage = ErrorMgr.getErrorMsg(returnCode);
-        if( contentId != null)  {
-            errorMessage = errorMessage.replaceAll("\\{id\\}", contentId);
+        if( searchIdentifier != null)  {
+            errorMessage = errorMessage.replaceAll("\\{id\\}", searchIdentifier);
         }
 
         if (logError) {

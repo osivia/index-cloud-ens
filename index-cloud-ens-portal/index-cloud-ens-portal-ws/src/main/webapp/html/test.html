@@ -179,7 +179,21 @@
 
             <form method="POST" enctype="multipart/form-data"
                   id="fileUploadForm">
-                <input type="hidden" name="folderId" id="folderId"/>
+                  
+                    <div class="form-group">
+                        <label for="folderId"">folderId</label> <input name="folderId"
+                                                                    class="form-control" id="folderId"/>
+                    </div>  
+                    <div class="form-group">
+                        <label for="uploadParentFullName"">parentFullName</label> <input name="uploadParentFullName"
+                                                                    class="form-control" id="uploadParentFullName"/>
+                    </div>                      
+                    <div class="form-group">
+                        <label for="uploadActionIfExists"">actionIfExists</label> <input name="uploadActionIfExists"
+                                                                    class="form-control" id="uploadActionIfExists"/>
+                    </div>                                        
+                
+                
                 <input type="file" name="file" class="btn"/>
                  <input type="button"
                                                                     class="btn btn-primary" value="Submit"
@@ -200,6 +214,17 @@
                            class="btn btn-primary" value="Créer" id="btnCreateFolder"/>
                 </form>
             </div>
+            
+            <h3>getTree </h3>
+	        <div>
+	            <div id="treeFiles"></div>
+                    <div class="form-group">
+                        <label for="getTreeFullName"">FullName</label> <input name="getTreeFullName"
+                                                                    class="form-control" id="getTreeFullName"/>
+                    </div>  	            
+	            <input type="button"
+	                   class="btn btn-primary" value="Display" id="btnGetTree"/>
+	        </div>        
         </div>
     </div>
 </div>

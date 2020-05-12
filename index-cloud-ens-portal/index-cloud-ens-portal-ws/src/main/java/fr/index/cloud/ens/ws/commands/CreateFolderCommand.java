@@ -47,7 +47,7 @@ public class CreateFolderCommand implements INuxeoCommand {
         PropertyMap properties = new PropertyMap();
         properties.set("dc:title", folderName);
 
-        Document folder = documentService.createDocument(parent, "Folder", folderName, properties);
+        Document folder = documentService.createDocument(parent, "Folder", folderName, properties,true);
 
         return folder;
     }

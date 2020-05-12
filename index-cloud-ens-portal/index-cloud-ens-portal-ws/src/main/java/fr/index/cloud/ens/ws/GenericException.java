@@ -12,36 +12,30 @@ public class GenericException extends Exception {
     private static final long serialVersionUID = -7558437064829642698L;
     
     Throwable e;
-    String contentId;
+    String searchIdentifier;
 
-    public GenericException(Throwable e, String path) {
+    public GenericException(Throwable e, String searchIdentifier) {
         super();
         this.e = e;
         
-        if( path.startsWith(IWebIdService.FETCH_PATH_PREFIX))    {
-            this.contentId = path.substring(IWebIdService.FETCH_PATH_PREFIX.length());
-        }
+        if( searchIdentifier.startsWith(IWebIdService.FETCH_PATH_PREFIX))    {
+            this.searchIdentifier = searchIdentifier.substring(IWebIdService.FETCH_PATH_PREFIX.length());
+        }   else
+            this.searchIdentifier = searchIdentifier;
          
     }
+    
 
     /**
      * Getter for contentId.
      * 
      * @return the contentId
      */
-    public String getContentId() {
-        return contentId;
+    public String getSearchIdentifier() {
+        return searchIdentifier;
     }
 
-    /**
-     * Setter for contentId.
-     * 
-     * @param contentId the contentId to set
-     */
-    public void setContentId(String contentId) {
-        this.contentId = contentId;
-    }
-
+   
     /**
      * Getter for e.
      * 

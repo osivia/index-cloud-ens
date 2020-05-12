@@ -62,6 +62,7 @@ import fr.index.cloud.ens.ws.commands.FetchByPubIdCommand;
 import fr.index.cloud.ens.ws.commands.FetchByTitleCommand;
 import fr.index.cloud.ens.ws.commands.FolderGetChildrenCommand;
 import fr.index.cloud.ens.ws.commands.GetSharedUrlCommand;
+import fr.index.cloud.ens.ws.commands.GetTreeCommand;
 import fr.index.cloud.ens.ws.commands.GetUserProfileCommand;
 import fr.index.cloud.ens.ws.commands.PublishCommand;
 import fr.index.cloud.ens.ws.commands.UnpublishCommand;
@@ -86,6 +87,7 @@ import fr.toutatice.portail.cms.nuxeo.api.services.dao.DocumentDAO;
 public class DriveRestController {
 
 
+    private static final String FILE_NAME_PATTERN = "([^/\\\\:*?\\\"<>|])*";
     private static final String PROP_TTC_WEBID = "ttc:webid";
     private static final String PROP_SHARE_LINK = "rshr:linkId";
     private static final String PROP_ENABLE_LINK = "rshr:enabledLink";
@@ -100,6 +102,12 @@ public class DriveRestController {
     public static final String DRIVE_TYPE_FILE = "file";
     public static final String DRIVE_TYPE_FOLDER = "folder";
     public static final String DRIVE_TYPE_ROOT = "root";
+
+    public static final String FOLDER_SEPARATOR = "/";
+    public static final String PATH_SEPARATOR = "/";
+    
+    public static final int ERR_UPLOAD_INVALID_ACTION = 1;
+    public static final int ERR_UPLOAD_INVALID_CHARACTER = 2;
 
 
     public static PortletContext portletContext;
@@ -238,24 +246,31 @@ public class DriveRestController {
      * @throws Exception
      */
 
-    private Map<String, Object> initContent(HttpServletRequest request, Document doc, String type, boolean mainObject) {
+    private Map<String, Object> initContent(HttpServletRequest request, String rootPath, Document doc, boolean mainObject, String path) {
 
         Map<String, Object> contents = new LinkedHashMap<>();
+ 
+        if (mainObject)
+            contents.put("returnCode", ErrorMgr.ERR_OK);
+        
+        if( path != null)
+            contents.put("path", path);
         
         PropertyList facets = doc.getFacets();
         
+        String type;
+        if (doc.getPath().equals(rootPath))
+            type = DRIVE_TYPE_ROOT;
+        else if (facets.list().contains("Folderish"))
+            type = DRIVE_TYPE_FOLDER;
+        else
+            type = DRIVE_TYPE_FILE;
         
-
-        if (mainObject)
-            contents.put("returnCode", ErrorMgr.ERR_OK);
-
+        
         contents.put("type", type);
         contents.put("id", doc.getProperties().getString(PROP_TTC_WEBID));
         contents.put("title", doc.getTitle());
-
-
-
-
+        
         /* link */
         if (!facets.list().contains("Folderish"))    {
             
@@ -314,8 +329,8 @@ public class DriveRestController {
     }
 
 
-    private Map<String, Object> initContent(HttpServletRequest request, Document doc, String type) {
-        return initContent(request, doc, type, false);
+    private Map<String, Object> initContent(HttpServletRequest request, String rootPath, Document doc) {
+        return initContent(request, rootPath, doc, false, null);
     }
 
 
@@ -368,8 +383,7 @@ public class DriveRestController {
         Map<String, Object> returnObject;
 
         try {
-            Document userWorkspace = (Document) nuxeoController.executeNuxeoCommand(new GetUserProfileCommand(principal.getName()));
-            String rootPath = userWorkspace.getPath().substring(0, userWorkspace.getPath().lastIndexOf('/')) + "/documents";
+            String rootPath = getRootPath (nuxeoController, principal);
 
             String path = null;
             if (id != null)
@@ -381,15 +395,8 @@ public class DriveRestController {
             Document currentDoc = wrapContentFetching(nuxeoController, path);
             PropertyList facets = currentDoc.getFacets();
 
-            String type;
-            if (currentDoc.getPath().equals(rootPath))
-                type = DRIVE_TYPE_ROOT;
-            else if (facets.list().contains("Folderish"))
-                type = DRIVE_TYPE_FOLDER;
-            else
-                type = DRIVE_TYPE_FILE;
 
-            returnObject = initContent(request, currentDoc, type, true);
+            returnObject = initContent(request,rootPath, currentDoc, true, null);
 
             // Get hierarchy
 
@@ -398,12 +405,7 @@ public class DriveRestController {
 
             while (hierarchyPath.contains(rootPath)) {
                 Document hierarchyDoc = nuxeoController.getDocumentContext(hierarchyPath).getDocument();
-                String hierarchyType = hierarchyDoc.getType();
-                if (hierarchyPath.equals(rootPath))
-                    hierarchyType = DRIVE_TYPE_ROOT;
-                else
-                    hierarchyType = hierarchyDoc.getType().toLowerCase();
-                hierarchy.add(0, initContent(request, hierarchyDoc, hierarchyType));
+                hierarchy.add(0, initContent(request, rootPath, hierarchyDoc));
 
                 // next parent
                 hierarchyPath = hierarchyPath.substring(0, hierarchyPath.lastIndexOf('/'));
@@ -420,7 +422,7 @@ public class DriveRestController {
                 Documents children = (Documents) nuxeoController.executeNuxeoCommand(new FolderGetChildrenCommand(currentDoc));
 
                 for (Document doc : children.list()) {
-                    childrenList.add(initContent(request, doc, doc.getType().toLowerCase()));
+                    childrenList.add(initContent(request, rootPath, doc));
                 }
 
             }
@@ -433,7 +435,213 @@ public class DriveRestController {
 
     }
 
+    
+    
+    
+    
+    
+    
+    
 
+    /**
+     * Get content datas for the specified id
+     * 
+     * @param request
+     * @param response
+     * @param id
+     * @param principal
+     * @return
+     * @throws Exception
+     */
+
+    @RequestMapping(value = "/Drive.treeList", method = RequestMethod.GET)
+    @ResponseStatus(HttpStatus.OK)
+
+    public Map<String, Object> getTree(HttpServletRequest request, HttpServletResponse response, @RequestParam(value = "path", required = false) String fullPathByTitle,
+            Principal principal) throws Exception {
+
+        
+        WSPortalControllerContext ctx = new WSPortalControllerContext(request, response, principal);
+
+        Map<String, Object> returnObject = new LinkedHashMap<>();
+        returnObject.put("returnCode", ErrorMgr.ERR_OK);
+
+        try {
+            NuxeoController nuxeoController = getNuxeocontroller(request, principal);
+            
+            // Get root
+            String rootPath = getRootPath(nuxeoController, principal);
+            Document rootDoc = wrapContentFetching(nuxeoController, rootPath);
+            
+            
+            Document baseDoc;
+            String baseTitlePath ;
+            
+            
+            // Normalize search string (remove last slash)
+            if( StringUtils.isNotEmpty(fullPathByTitle))    {
+                if( fullPathByTitle.endsWith(PATH_SEPARATOR))
+                    fullPathByTitle = fullPathByTitle.substring(0, fullPathByTitle.length() -1 );
+            }
+                
+            
+            if( StringUtils.isNotEmpty(fullPathByTitle)) {   
+                baseDoc = prepareFolder(nuxeoController,  rootDoc, fullPathByTitle, false);
+                baseTitlePath = fullPathByTitle;
+            }
+            else    {
+                baseDoc = rootDoc;
+                baseTitlePath = "/";
+            }
+  
+
+            // Get current doc
+
+            List<Map<String, Object>> childrenList = new ArrayList<>();
+
+            // Add childrens
+            Map<String, Document> children = (Map<String, Document>) nuxeoController.executeNuxeoCommand(new GetTreeCommand(baseDoc.getPath()));
+            
+             
+
+            for (String path : children.keySet()) {
+
+                String childTitlePath = "";
+                String remainingpath = path;
+                
+                while (remainingpath.length() > baseDoc.getPath().length()) {
+                    // Search parents
+                    Document hierarchyDoc = children.get(remainingpath);
+                    if( hierarchyDoc == null) {
+                           throw new RuntimeException("Inconsistent hierarchy");
+                    }
+                    
+                    if( childTitlePath.length() > 0)    
+                        childTitlePath = PATH_SEPARATOR + childTitlePath;
+                    
+                    childTitlePath = hierarchyDoc.getTitle() + childTitlePath;
+                    
+                    int lastSlash = remainingpath.lastIndexOf(PATH_SEPARATOR);
+                    if( lastSlash == -1) {
+                        throw new RuntimeException("Inconsistent hierarchy");
+                    }
+                    remainingpath = remainingpath.substring(0, lastSlash);
+                }
+                
+                Document doc = children.get(path);
+                
+                // Add base title
+                if( childTitlePath.length() > 0) {
+                    if( !baseTitlePath.endsWith(PATH_SEPARATOR) )
+                        childTitlePath = PATH_SEPARATOR + childTitlePath;
+                }
+                
+                childTitlePath = baseTitlePath +  childTitlePath;
+                
+                childrenList.add(initContent(request, rootPath, doc, false, childTitlePath));
+            }
+
+
+            returnObject.put("items", childrenList);
+
+        } catch (Exception e) {
+            returnObject = errorMgr.handleDefaultExceptions(ctx, e);
+        }
+
+        
+        
+        return returnObject;
+
+    }
+    
+    
+    
+    
+    
+    
+
+    /**
+     * Gets the root path.
+     *
+     * @param nuxeoController the nuxeo controller
+     * @param principal the principal
+     * @return the root path
+     */
+    private String getRootPath(NuxeoController nuxeoController, Principal principal) {
+        Document userWorkspace = (Document) nuxeoController.executeNuxeoCommand(new GetUserProfileCommand(principal.getName()));
+        String rootPath = userWorkspace.getPath().substring(0, userWorkspace.getPath().lastIndexOf('/')) + "/documents";
+        return rootPath;
+    }
+
+    
+    
+
+
+    /**
+     * Get folder by title on several levels (and creates it if necessary)
+     *
+     * @param nuxeoController the nuxeo controller
+     * @param parentDoc the parent doc
+     * @param titleFullPath the title full path
+     * @param createIfNeeded the create if needed
+     * @return the document
+     * @throws NotFoundException the not found exception
+     */
+    private Document prepareFolder(NuxeoController nuxeoController, Document parentDoc, String titleFullPath, boolean createIfNeeded) throws NotFoundException   {
+        return prepareRecursiveFolder( nuxeoController, parentDoc,  titleFullPath,   createIfNeeded, titleFullPath) ;
+    }
+    
+
+    
+    /**
+     * Prepare folder by title (and creates it if necessary)
+     *
+     * @param nuxeoController the nuxeo controller
+     * @param parentDoc the parent doc
+     * @param titleFullPath the title full path
+     * @param createIfNeeded the create if needed
+     * @param remainingPath the remaining path
+     * @return the document
+     * @throws NotFoundException the not found exception
+     */
+    private Document prepareRecursiveFolder(NuxeoController nuxeoController, Document parentDoc, String titleFullPath,   boolean createIfNeeded, String remainingPath) throws NotFoundException   {
+
+        if( !remainingPath.startsWith(FOLDER_SEPARATOR))
+            throw new IllegalArgumentException("path must start with '"+FOLDER_SEPARATOR+"'");
+        
+        // Remove first slash
+        remainingPath = remainingPath.substring(1);
+        
+        // Extract current tile
+        String currentTitle;
+        int idxTitle = remainingPath.indexOf(FOLDER_SEPARATOR);
+        if( idxTitle != -1)
+            currentTitle = remainingPath.substring(0, idxTitle);
+        else
+            currentTitle = remainingPath;
+        
+        // Recompute remaining path
+        remainingPath = remainingPath.substring(currentTitle.length());
+        
+        INuxeoCommand checkCmd = new FetchByTitleCommand(parentDoc, currentTitle);
+        Documents docs = (Documents) nuxeoController.executeNuxeoCommand(checkCmd);
+        if (docs.size() == 0) {
+            if( createIfNeeded) {
+                // Create subfolder
+                INuxeoCommand command = new CreateFolderCommand(parentDoc, currentTitle);
+                parentDoc = (Document) nuxeoController.executeNuxeoCommand(command);   
+            }   else    {
+                throw new NotFoundException("titleFullPath");
+            }
+        } else 
+            parentDoc = docs.get(0);
+        
+        if( remainingPath.length() > 0 )
+            return prepareRecursiveFolder(nuxeoController,  parentDoc, titleFullPath, createIfNeeded,remainingPath );
+        else
+            return parentDoc;
+    }
+    
     /**
      * Upload a file to the current folder
      * 
@@ -457,29 +665,74 @@ public class DriveRestController {
         returnObject.put("returnCode", ErrorMgr.ERR_OK);
 
         try {
-
-            NuxeoController nuxeoController = getNuxeocontroller(request, principal);
+           NuxeoController nuxeoController = getNuxeocontroller(request, principal);
 
             UploadBean uploadBean = new ObjectMapper().readValue(fileUpload, UploadBean.class);
 
-            // Get parent doc
-            Document parentDoc = wrapContentFetching(nuxeoController, IWebIdService.FETCH_PATH_PREFIX + uploadBean.getParentId());
+            /* Get folder (creates if none) */
 
-            // Get the OAuth2 client ID
+            Document parentDoc;
+
+            if (StringUtils.isNotEmpty(uploadBean.getParentPath())) {
+                // Check name
+                if (!checkFileName(uploadBean.getParentPath().replaceAll(FOLDER_SEPARATOR, "")) )
+                    return errorMgr.getErrorResponse(ERR_UPLOAD_INVALID_CHARACTER, "Parent path contains invalid characters");
+                
+                // Check parent hierarchy
+                String rootPath = getRootPath(nuxeoController, principal);
+                Document rootDoc = wrapContentFetching(nuxeoController, rootPath);
+                parentDoc = prepareFolder(nuxeoController, rootDoc, uploadBean.getParentPath(), true);
+
+            } else {
+                // Get parent doc
+                parentDoc = wrapContentFetching(nuxeoController, IWebIdService.FETCH_PATH_PREFIX + uploadBean.getParentId());
+            }
+
+            /* Get the OAuth2 client ID */
+
             Authentication a = SecurityContextHolder.getContext().getAuthentication();
             String clientId = ((OAuth2Authentication) a).getOAuth2Request().getClientId();
 
 
-            // Execute import
-            INuxeoCommand command = new UploadFileCommand(parentDoc.getId(), file);
-            Document doc = (Document) nuxeoController.executeNuxeoCommand(command);
+            if (!StringUtils.isEmpty(uploadBean.getIfFileExists()) && !StringUtils.equalsIgnoreCase(UploadBean.ACTION_IGNORE, uploadBean.getIfFileExists())
+                    && !StringUtils.equalsIgnoreCase(UploadBean.ACTION_OVERWRITE, uploadBean.getIfFileExists())
+                    && !StringUtils.equalsIgnoreCase(UploadBean.ACTION_RENAME, uploadBean.getIfFileExists()))
+                return errorMgr.getErrorResponse(ERR_UPLOAD_INVALID_ACTION, "parameter onFileExists is incorrect :" + uploadBean.getIfFileExists());
 
-            // set qualifiers
-            // retrieve doc webId
-            doc = wrapContentFetching(nuxeoController, doc.getPath());
-            UpdatedProperties properties = parseProperties(ctx, doc.getProperties().getString(PROP_TTC_WEBID), clientId, uploadBean.getProperties());
-            INuxeoCommand updateCommand = new AddPropertiesCommand(doc, properties);
-            nuxeoController.executeNuxeoCommand(updateCommand);
+
+            boolean doUpload = true;
+             
+            // Check file name
+            if (!checkFileName(file.getOriginalFilename()) )
+                return errorMgr.getErrorResponse(ERR_UPLOAD_INVALID_CHARACTER, "File name contains invalid characters");            
+
+            if (StringUtils.isEmpty(uploadBean.getIfFileExists()) || StringUtils.equalsIgnoreCase(UploadBean.ACTION_IGNORE, uploadBean.getIfFileExists())) {
+                // If file exists and ignore, do nothing
+                INuxeoCommand checkCmd = new FetchByTitleCommand(parentDoc, file.getOriginalFilename());
+                Documents docs = (Documents) nuxeoController.executeNuxeoCommand(checkCmd);
+                if (docs.size() > 0) {
+                    doUpload = false;
+                }
+            }
+
+            if (doUpload) {
+                // Execute import
+                boolean overwrite = StringUtils.equalsIgnoreCase(UploadBean.ACTION_OVERWRITE, uploadBean.getIfFileExists());
+                INuxeoCommand command = new UploadFileCommand(parentDoc.getId(), file, overwrite);
+                Document doc = (Document) nuxeoController.executeNuxeoCommand(command);
+                
+
+
+                // set qualifiers
+                // retrieve doc webId
+                doc = wrapContentFetching(nuxeoController, doc.getPath());
+                UpdatedProperties properties = parseProperties(ctx, doc.getProperties().getString(PROP_TTC_WEBID), clientId, uploadBean.getProperties());
+                INuxeoCommand updateCommand = new AddPropertiesCommand(doc, properties);
+                nuxeoController.executeNuxeoCommand(updateCommand);
+                
+                returnObject.put("contentId", doc.getProperties().getString(PROP_TTC_WEBID));
+            }
+
 
         } catch (Exception e) {
             returnObject = errorMgr.handleDefaultExceptions(ctx, e);
@@ -487,6 +740,28 @@ public class DriveRestController {
 
 
         return returnObject;
+    }
+
+    
+    
+    
+    
+    
+
+    /**
+     * Check file name.
+     *
+     * @param fileName the file name
+     * @return true, if successful
+     */
+    private boolean checkFileName(String fileName) {
+        // illegal characters : /\:*?<>!
+         Pattern pattern = Pattern.compile(FILE_NAME_PATTERN);
+        if (!pattern.matcher(fileName).matches()) {
+            return false;
+        }
+        
+        return true;
     }
 
 
@@ -531,11 +806,18 @@ public class DriveRestController {
                 // Execute creation
                 INuxeoCommand command = new CreateFolderCommand(parentDoc, createFolderBean.getFolderName());
 
-                @SuppressWarnings("unchecked")
-                Document folder = (Document) nuxeoController.executeNuxeoCommand(command);
+                nuxeoController.executeNuxeoCommand(command);
 
+                // we must fetch the document to get the webId (not present in the returned document)
+                INuxeoCommand loadCmd = new FetchByTitleCommand(parentDoc, createFolderBean.getFolderName());
+                Documents createdDocs = (Documents) nuxeoController.executeNuxeoCommand(loadCmd);
+                if (createdDocs.size() == 1) {
+                    returnObject.put("folderId", createdDocs.get(0).getProperties().getString(PROP_TTC_WEBID));                   
+                }
+                else
+                    throw new Exception("can't fetch created folder. createdDocs.size = "+ createdDocs.size());
+                
 
-                returnObject.put("folderId", folder.getProperties().getString(PROP_TTC_WEBID));
             }
 
 

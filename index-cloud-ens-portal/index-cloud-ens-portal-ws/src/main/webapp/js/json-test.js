@@ -265,7 +265,67 @@ function drive(id) {
 
 }
 
+function getTree(path) {
+	var url = oauth.params.resourceUrl+"/Drive.treeList";
 
+	if (typeof path !== 'undefined') {
+		url = url + "?path=" + path;
+	}
+
+	$JQry
+			.ajax({
+				type : "GET",
+				url : url,
+				headers : {
+					'Content-Type' : undefined,
+					"Authorization" : "Bearer " + oauth.getToken()
+				},
+				contentType : false,
+				cache : false,
+				timeout : 600000,
+				success : function(jsonData) {
+					if (jsonData.returnCode != 0)
+						$JQry.notify("Error #"+jsonData.returnCode, "error");
+					else {
+						var list = '';
+
+						if (jsonData.items !== undefined) {
+							for (var i = 0; i < jsonData.items.length; i++) {
+								list = list + '<div class="row">';
+								var child = jsonData.items[i];
+								list = list
+										+ '<div class="col-lg-5"> <a  href="javascript:drive(\''
+										+ child.id + '\')" >' + child.title
+										+ "</a></div>";
+								list = list + '<div class="col-lg-2">';
+								if (child.fileSize !== undefined) {
+									list = list
+											+ humanFileSize(child.fileSize,
+													true);
+								}
+								list = list + '</div>';
+								list = list
+										+ '<div class="col-lg-4">'
+										+ new Date(child.lastModified)
+												.toLocaleString()
+										+ "</div>";
+								
+
+								
+								list = list + "</div>";
+							}
+						}
+
+						$JQry('#treeFiles').html(list);
+						
+					}
+				},
+				error : function(xhr, status, e) {
+					alert(e);
+				}
+			});
+
+}
 
 
 
@@ -288,6 +348,8 @@ $JQry(function() {
 
 									var params = {};
 									params.parentId = $JQry('#folderId').val();
+									params.parentPath = $JQry('#uploadParentFullName').val();
+									params.ifFileExists = $JQry('#uploadActionIfExists').val();
 									params.properties = buildProperties();
 							
 							
@@ -562,7 +624,16 @@ $JQry(function() {
 	
 	
 
+	$JQry("#btnGetTree").each(function(index, element) {
 
+		var $element = $JQry(element);
+		$element.click(function() {
+			var treePath = $JQry('#getTreeFullName').val();
+			getTree(treePath);
+		});
+	});
+	
+	
 	
 	
 	$JQry("#btnUserProfile").each(function(index, element) {

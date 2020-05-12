@@ -41,11 +41,11 @@ public class UploadFileCommand implements INuxeoCommand {
     /**
      * Constructor.
      */
-    public UploadFileCommand(String parentId, MultipartFile file) {
+    public UploadFileCommand(String parentId, MultipartFile file, boolean overwrite) {
         super();
         this.parentId = parentId;
         this.file = file;
-        this.overwite = true;
+        this.overwite = overwrite;
 
     }
 
