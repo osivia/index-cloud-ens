@@ -1,0 +1,49 @@
+$border-width: 3px;
+
+
+.index-tab {
+  display: inline-block;
+
+  padding: $nav-link-padding-y $nav-link-padding-x;
+
+  border-bottom-style: solid;
+  border-width: $border-width;
+  border-color: transparent;
+
+  i {
+    margin-right: map_get($spacers, 1);
+
+    color: $white;
+  }
+
+  &:hover, &:focus {
+    text-decoration: none;
+  }
+
+  @media (min-width: map_get($grid-breakpoints, "sm")) {
+    margin-bottom: -$border-width;
+  }
+}
+
+
+@each $color, $value in $theme-colors {
+  .index-tab-#{$color} {
+    color: $value;
+
+    i {
+      background-color: $value;
+    }
+
+    &:hover, &:focus {
+      color: darken($value, $emphasized-link-hover-darken-percentage);
+
+      i {
+        background-color: darken($value, $emphasized-link-hover-darken-percentage);;
+      }
+    }
+
+    &.active {
+      border-color: $value;
+    }
+  }
+}

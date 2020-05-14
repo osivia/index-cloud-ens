@@ -40,3 +40,18 @@
     }
   }
 }
+
+
+#toolbar {
+  .navbar-collapse {
+    padding: $navbar-padding-y $navbar-padding-x;
+
+    background-color: $gray-100;
+
+    @media (min-width: map_get($grid-breakpoints, "md")) {
+      padding: 0;
+
+      background-color: unset;
+    }
+  }
+}

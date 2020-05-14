@@ -19,14 +19,24 @@
 
     <%--Brand--%>
     <a href="${requestScope['osivia.home.url']}" class="navbar-brand py-0">
-        <img alt="${requestScope['osivia.header.application.name']}" src="${contextPath}/img/logo-cloud-pronote.png" class="my-n2" height="50">
+        <img alt="${requestScope['osivia.header.application.name']}"
+             src="${contextPath}/img/logo-cloud-pronote-large.png" class="my-n2" height="50">
     </a>
 
-    <%--Navbar toggler--%>
-    <button type="button" class="btn btn-outline-secondary d-md-none" data-toggle="collapse" data-target="#navbar">
-        <span><op:translate key="NAVBAR_TOGGLER"/></span>
-        <i class="glyphicons glyphicons-basic-set-down"></i>
-    </button>
+    <ul class="navbar-nav d-md-none flex-row">
+        <%--Tasks--%>
+        <li class="nav-item">
+            <%@include file="toolbar-tasks.jspf" %>
+        </li>
+
+        <%--Navbar toggler--%>
+        <li class="nav-item ml-3">
+            <button type="button" class="btn btn-outline-secondary" data-toggle="collapse" data-target="#navbar">
+                <span><op:translate key="NAVBAR_TOGGLER"/></span>
+                <i class="glyphicons glyphicons-basic-set-down"></i>
+            </button>
+        </li>
+    </ul>
 
     <div id="navbar" class="collapse navbar-collapse">
         <%--Administration--%>
@@ -39,7 +49,8 @@
         <ul class="navbar-nav flex-sm-row justify-content-center align-items-center mt-sm-2 mt-md-0 mr-md-auto">
             <c:forEach var="navItem" items="${requestScope['osivia.nav.items']}" varStatus="status">
                 <li class="nav-item mt-2 mt-sm-0 ${status.last ? '' : 'mr-sm-3'}">
-                    <a href="${navItem.url}" class="btn btn-${navItem.color} ${empty navItem.url ? 'disabled' : ''} ${navItem.active ? 'active' : ''}">
+                    <a href="${navItem.url}"
+                       class="index-tab index-tab-${navItem.color} ${empty navItem.url ? 'disabled' : ''} ${navItem.active ? 'active' : ''}">
                         <i class="${navItem.icon}"></i>
                         <strong class="text-uppercase"><op:translate key="${navItem.key}"/></strong>
                     </a>
@@ -61,42 +72,22 @@
 
                 <c:otherwise>
                     <%--Tasks--%>
-                    <c:if test="${not empty requestScope['osivia.toolbar.tasks.url']}">
-                        <c:set var="title"><op:translate key="NOTIFICATION_TASKS"/></c:set>
-                        <li class="nav-item mt-2 mt-md-0">
-                            <a href="javascript:"
-                               class="nav-link ${requestScope['osivia.toolbar.tasks.count'] gt 0 ? 'text-warning' : ''}"
-                               data-target="#osivia-modal" data-load-url="${requestScope['osivia.toolbar.tasks.url']}"
-                               data-load-callback-function="tasksModalCallback" data-title="${title}" data-footer="true">
-                                <c:choose>
-                                    <c:when test="${requestScope['osivia.toolbar.tasks.count'] gt 0}">
-                                        <i class="glyphicons glyphicons-basic-bell-ringing"></i>
-                                    </c:when>
+                    <li class="nav-item d-none d-md-block">
+                        <%@ include file="toolbar-tasks.jspf" %>
+                    </li>
 
-                                    <c:otherwise>
-                                        <i class="glyphicons glyphicons-basic-bell"></i>
-                                    </c:otherwise>
-                                </c:choose>
-
-                                <span class="d-md-none">${title}</span>
-                            </a>
-                        </li>
-                    </c:if>
-
+                    <%--User menu (=< sm)--%>
                     <c:set var="url" value="${requestScope['osivia.my-account.url']}"/>
-
-                    <%--User menu (= xs)--%>
-                    <c:if test="${not empty url}">                  
-                        <li class="nav-item mt-2 mt-md-0 dropdown d-sm-none">
+                    <c:if test="${not empty url}">
+                        <li class="nav-item mt-2 mt-md-0 dropdown d-md-none">
                             <a href="${url}" class="nav-link">
                                 <i class="glyphicons glyphicons-basic-id-badge"></i>
                                 <span><op:translate key="TOOLBAR_USER_ACCOUNT"/></span>
                             </a>
                         </li>
-                    </c:if>                      
-
-                    <%--User menu (> xs)--%>
-                    <li class="nav-item mt-2 mt-md-0 dropdown d-none d-sm-block">
+                    </c:if>
+                    <%--User menu (> sm)--%>
+                    <li class="nav-item mt-2 mt-md-0 dropdown d-none d-md-block">
                         <a href="javascript:" class="nav-link dropdown-toggle" data-toggle="dropdown">
                             <c:choose>
                                 <c:when test="${empty requestScope['osivia.toolbar.person']}">
@@ -105,7 +96,8 @@
                                 </c:when>
 
                                 <c:otherwise>
-                                    <img class="avatar" src="${requestScope['osivia.toolbar.person'].avatar.url}" alt="">
+                                    <img class="avatar" src="${requestScope['osivia.toolbar.person'].avatar.url}"
+                                         alt="">
                                     <span class="d-md-none d-lg-inline">${requestScope['osivia.toolbar.person'].cn}</span>
                                 </c:otherwise>
                             </c:choose>
@@ -114,7 +106,7 @@
                         <div class="dropdown-menu dropdown-menu-right">
                             <div class="dropdown-header d-lg-none">${empty requestScope['osivia.toolbar.person'] ? requestScope['osivia.toolbar.principal'] : requestScope['osivia.toolbar.person'].cn}</div>
 
-                            <%--User account--%>
+                                <%--User account--%>
                             <c:if test="${not empty url}">
                                 <a href="${url}" class="dropdown-item">
                                     <i class="glyphicons glyphicons-basic-id-badge"></i>
@@ -123,9 +115,7 @@
                             </c:if>
                         </div>
                     </li>
-                    
 
-                    
 
                     <%--Logout--%>
                     <li class="nav-item mt-2 mt-md-0">

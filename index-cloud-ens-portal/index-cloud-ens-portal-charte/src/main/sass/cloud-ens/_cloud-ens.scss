@@ -1,10 +1,12 @@
 @import "../bootstrap/bootstrap";
 @import "../bootstrap3-compatibility/compatibility";
 @import "../osivia/osivia";
+
 @import "font/montserrat";
 @import "layout";
 @import "list/quick-access";
+@import "mobile";
 @import "portlet";
 @import "portlet-styles";
+@import "tab";
 @import "uncluttered";
-@import "mobile";
