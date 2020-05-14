@@ -26,11 +26,11 @@
         <directory.version>4.9.3</directory.version>
 
         <!-- Collaboration -->
-         <collaboration.version>4.9.3-RC3</collaboration.version> 
- <!--       <collaboration.version>4.9-SNAPSHOT</collaboration.version> -->
+         <!--<collaboration.version>4.9.3-RC3</collaboration.version>-->
+        <collaboration.version>4.9-SNAPSHOT</collaboration.version>
 
         <!-- Other services -->
-        <tasks.version>4.9.2</tasks.version>
+        <tasks.version>4.9-SNAPSHOT</tasks.version>
         <procedure.version>4.9</procedure.version>
         <cgu.version>4.9.1</cgu.version>
 
