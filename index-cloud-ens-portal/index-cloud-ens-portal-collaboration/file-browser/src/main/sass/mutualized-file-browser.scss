@@ -2,6 +2,11 @@
 
 
 @include media-breakpoint-down("md") {
+  [data-column="last-modification"] {
+    display: flex !important;
+    width: 160px !important;
+  }
+
   [data-column="author"] {
     display: none !important;
   }
