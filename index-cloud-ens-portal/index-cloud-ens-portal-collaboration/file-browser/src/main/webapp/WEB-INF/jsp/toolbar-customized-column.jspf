@@ -1,4 +1,4 @@
-<div class="dropdown d-none d-md-block ml-2">
+<div class="dropdown d-none d-lg-block ml-2">
     <button type="button" class="btn btn-outline-secondary btn-sm dropdown-toggle" data-toggle="dropdown">
         <i class="glyphicons glyphicons-basic-cogwheel"></i>
     </button>
