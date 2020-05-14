@@ -1,16 +1,23 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://www.osivia.org/jsp/taglib/osivia-portal" prefix="op" %>
 
-<%@ page contentType="text/html" isELIgnored="false"%>
+<%@ page contentType="text/html" isELIgnored="false" %>
 
 
-<c:set var="breadcrumb" value="${requestScope['osivia.breadcrumb']}" />
-<c:set var="activeSavedSearch" value="${requestScope['osivia.saved-search.active']}" />
+<c:set var="breadcrumb" value="${requestScope['osivia.breadcrumb']}"/>
+<c:set var="activeSavedSearch" value="${requestScope['osivia.saved-search.active']}"/>
 
 
 <nav>
-    <h2 class="sr-only"><op:translate key="BREADCRUMB_TITLE" /></h2>
+    <h2 class="sr-only"><op:translate key="BREADCRUMB_TITLE"/></h2>
     <ol class="breadcrumb mb-0 px-0">
+        <li class="breadcrumb-item breadcrumb-home">
+            <a href="${requestScope['osivia.home.url']}" class="text-secondary">
+                <i class="glyphicons glyphicons-basic-home"></i>
+                <span class="sr-only"><op:translate key="HOME"/></span>
+            </a>
+        </li>
+
         <c:choose>
             <c:when test="${empty activeSavedSearch}">
                 <c:forEach var="child" items="${breadcrumb.children}" varStatus="status">
@@ -22,11 +29,12 @@
                         <c:when test="${status.last and not empty breadcrumb.menu}">
                             <li class="breadcrumb-item active">
                                 <div class="dropdown">
-                                    <a href="javascript:;" class="text-secondary dropdown-toggle" data-toggle="dropdown">
+                                    <a href="javascript:;" class="text-secondary dropdown-toggle"
+                                       data-toggle="dropdown">
                                         <span>${child.name}</span>
                                     </a>
 
-                                    <c:out value="${breadcrumb.menu}" escapeXml="false" />
+                                    <c:out value="${breadcrumb.menu}" escapeXml="false"/>
                                 </div>
                             </li>
                         </c:when>
