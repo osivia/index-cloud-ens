@@ -1,0 +1,22 @@
+@import "../../../../../index-cloud-ens-portal-charte/src/main/sass/cloud-ens/variables";
+
+
+.file-browser-thumbnail {
+  &.ui-selecting {
+    background-color: theme-color-level("info", $alert-bg-level);
+    border-color: theme-color-level("info", $alert-border-level) !important;
+
+    &, a {
+      color: theme-color-level("info", $alert-color-level);
+    }
+  }
+
+  &.ui-selected {
+    background-color: $primary;
+    border-color: darken($primary, 5%) !important;
+
+    &, a, a:hover, a:focus {
+      color: $white !important;
+    }
+  }
+}
