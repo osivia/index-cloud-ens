@@ -1,9 +1,0 @@
-@import "../osivia/variables";
-
-
-.portlet-titlebar-title {
-  &:not(.card-title) {
-    color: $text-muted;
-    font-size: $font-size-base;
-  }
-}

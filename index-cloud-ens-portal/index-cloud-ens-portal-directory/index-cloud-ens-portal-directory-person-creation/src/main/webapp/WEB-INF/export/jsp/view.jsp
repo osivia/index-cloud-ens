@@ -11,14 +11,13 @@
 <portlet:actionURL name="exportData" var="exportDataUrl" copyCurrentRenderParameters="true"/>
 
 
-<op:translate key="exportaccount.info" />
+<p><op:translate key="exportaccount.info" /></p>
 
 <div class="export-account">
 	<form:form action="${exportDataUrl}" method="post" modelAttribute="form"  enctype="multipart/form-data" role="form" >
 	
 		<c:if test="${empty form.exports}">
-			<op:translate key="exportaccount.empty"/>
-			
+			<p class="text-muted"><op:translate key="exportaccount.empty"/></p>
 		</c:if>
 	
 		<ul>
@@ -27,20 +26,20 @@
 				
 					<c:choose>
 						<c:when test="${export.value.status eq 'RUNNING'}">
-							<op:translate key="exportaccount.running"/>
+							<p><op:translate key="exportaccount.running"/></p>
 						</c:when>
 						<c:when test="${export.value.status eq 'DONE'}">
 							<portlet:resourceURL id="download" var="downloadUrl">
 								<portlet:param name="file" value="${export.value.zipFilename}"/>
 							</portlet:resourceURL>
-							
-							<a href="${downloadUrl}"><op:translate key="exportaccount.action.download"/></a>
-							
 							<portlet:actionURL name="remove" var="removeUrl">
 								<portlet:param name="uuid" value="${export.key}"/>
 							</portlet:actionURL>
-							
-							<a href="${removeUrl}" class="text-danger"><op:translate key="exportaccount.action.delete"/></a>
+
+							<p>
+								<a href="${downloadUrl}"><op:translate key="exportaccount.action.download"/></a>
+								<a href="${removeUrl}" class="text-danger"><op:translate key="exportaccount.action.delete"/></a>
+							</p>
 						</c:when>
 					</c:choose>
 				</li>

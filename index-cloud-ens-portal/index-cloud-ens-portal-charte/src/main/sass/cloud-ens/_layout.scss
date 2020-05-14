@@ -1,11 +1,11 @@
 @function vh($quantity) {
- @return calc(var(--vh, 1vh) * #{$quantity});
+  @return calc(var(--vh, 1vh) * #{$quantity});
 }
 
 .fullheight {
   height: 100%;
   height: 100vh;
-  height: calc(var(--vh, 1vh) * 100); 
+  height: calc(var(--vh, 1vh) * 100);
 }
 
 
@@ -52,6 +52,15 @@
       padding: 0;
 
       background-color: unset;
+    }
+  }
+}
+
+
+.drawer-toggle-button {
+  body:not([data-drawer="true"]) & {
+    > li {
+      display: none !important;
     }
   }
 }

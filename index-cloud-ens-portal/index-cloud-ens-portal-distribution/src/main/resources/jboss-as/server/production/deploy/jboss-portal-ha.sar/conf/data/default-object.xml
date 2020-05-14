@@ -347,7 +347,7 @@ return nuxeoRequest.toString();</value>
                         </property>
                         <property>
                             <name>osivia.title</name>
-                            <value>Dernières publications</value>
+                            <value>Dernières publications du cloud mutualisé</value>
                         </property>
                         <property>
                             <name>theme.order</name>

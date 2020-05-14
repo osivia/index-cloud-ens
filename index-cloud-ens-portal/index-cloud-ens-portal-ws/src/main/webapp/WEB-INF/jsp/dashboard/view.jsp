@@ -18,9 +18,7 @@
 	
 <c:choose>	
 	<c:when test="${empty dashboard.applications}">
-	<div class="d-flex">	
-        	<span><op:translate key="DASHBOARD_EMPTY_MESSAGE"/></span>
-	</div>      	
+	    <p class="text-muted"><op:translate key="DASHBOARD_EMPTY_MESSAGE"/></p>
     </c:when>
 	
 	<c:otherwise>
