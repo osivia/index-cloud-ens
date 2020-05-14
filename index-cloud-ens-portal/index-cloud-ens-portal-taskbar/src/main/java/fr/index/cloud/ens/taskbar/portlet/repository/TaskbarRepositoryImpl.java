@@ -10,23 +10,18 @@ import fr.toutatice.portail.cms.nuxeo.api.cms.NuxeoDocumentContext;
 import fr.toutatice.portail.cms.nuxeo.api.cms.NuxeoPermissions;
 import fr.toutatice.portail.cms.nuxeo.api.services.INuxeoCustomizer;
 import fr.toutatice.portail.cms.nuxeo.api.services.INuxeoService;
-import fr.toutatice.portail.cms.nuxeo.api.services.tag.INuxeoTagService;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.BooleanUtils;
 import org.apache.commons.lang.StringUtils;
-import org.dom4j.Element;
 import org.jboss.portal.theme.impl.render.dynamic.DynaRenderOptions;
 import org.nuxeo.ecm.automation.client.model.Document;
 import org.osivia.directory.v2.model.preferences.UserPreferences;
 import org.osivia.directory.v2.model.preferences.UserSavedSearch;
 import org.osivia.directory.v2.service.preferences.UserPreferencesService;
-import org.osivia.portal.api.Constants;
 import org.osivia.portal.api.PortalException;
 import org.osivia.portal.api.cms.DocumentType;
-import org.osivia.portal.api.cms.FileMimeType;
 import org.osivia.portal.api.cms.VirtualNavigationUtils;
 import org.osivia.portal.api.context.PortalControllerContext;
-import org.osivia.portal.api.html.DOM4JUtils;
 import org.osivia.portal.api.internationalization.Bundle;
 import org.osivia.portal.api.internationalization.IBundleFactory;
 import org.osivia.portal.api.taskbar.ITaskbarService;
@@ -214,14 +209,6 @@ public class TaskbarRepositoryImpl implements TaskbarRepository {
                         dropdownItems.add(dropdownItem);
                     }
                 }
-
-                for (String mimeType : Arrays.asList("application/vnd.openxmlformats-officedocument.wordprocessingml.document", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "application/vnd.openxmlformats-officedocument.presentationml.presentation")) {
-                    AddDropdownItem dropdownItem = this.generateLiveDocumentDropdownItem(nuxeoController, bundle, parentPath, mimeType);
-
-                    if (dropdownItem != null) {
-                        dropdownItems.add(dropdownItem);
-                    }
-                }
             } else {
                 dropdownItems = null;
             }
@@ -282,60 +269,6 @@ public class TaskbarRepositoryImpl implements TaskbarRepository {
             dropdownItem.setDisplayName(displayName);
             dropdownItem.setUrl(url);
             dropdownItem.setModalTitle(modalTitle);
-        }
-
-        return dropdownItem;
-    }
-
-
-    /**
-     * Generate live document dropdown item.
-     *
-     * @param nuxeoController Nuxeo controller
-     * @param bundle          internationalization bundle
-     * @param parentPath      parent document path
-     * @param mimeType        MIME type
-     * @return dropdown item
-     */
-    private AddDropdownItem generateLiveDocumentDropdownItem(NuxeoController nuxeoController, Bundle bundle, String parentPath, String mimeType) throws PortletException, IOException {
-        // Dropdown item
-        AddDropdownItem dropdownItem;
-
-        // Nuxeo customizer
-        INuxeoCustomizer nuxeoCustomizer = this.nuxeoService.getCMSCustomizer();
-        // Tag service
-        INuxeoTagService tagService = this.nuxeoService.getTagService();
-        // File MIME type
-        FileMimeType fileMimeType = nuxeoCustomizer.getFileMimeType(mimeType);
-
-        if (fileMimeType == null) {
-            dropdownItem = null;
-        } else {
-            // Customized icon
-            Element customizedIcon = tagService.getMimeTypeIcon(nuxeoController, mimeType, null);
-            // Display name
-            String displayName = bundle.getString("TASKBAR_ADD_" + StringUtils.upperCase(fileMimeType.getExtension()));
-
-            // Window properties
-            Map<String, String> properties = new HashMap<>();
-            properties.put("osivia.services.document.creation.type", mimeType);
-            properties.put(Constants.WINDOW_PROP_URI, parentPath);
-            properties.put(DynaRenderOptions.PARTIAL_REFRESH_ENABLED, String.valueOf(true));
-            properties.put("osivia.ajaxLink", "1");
-
-            // URL
-            String url;
-            try {
-                url = this.portalUrlFactory.getStartPortletUrl(nuxeoController.getPortalCtx(), LIVE_DOCUMENT_CREATION_PORTLET_INSTANCE, properties, PortalUrlType.MODAL);
-            } catch (PortalException e) {
-                throw new PortletException(e);
-            }
-
-            // Task
-            dropdownItem = this.applicationContext.getBean(AddDropdownItem.class);
-            dropdownItem.setCustomizedIcon(DOM4JUtils.write(customizedIcon));
-            dropdownItem.setDisplayName(displayName);
-            dropdownItem.setUrl(url);
         }
 
         return dropdownItem;
