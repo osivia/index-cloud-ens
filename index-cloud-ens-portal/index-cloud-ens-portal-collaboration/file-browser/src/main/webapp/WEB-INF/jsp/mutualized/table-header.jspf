@@ -3,11 +3,11 @@
     <%@ include file="../table-header-title.jspf" %>
 
     <%--Customized column--%>
-    <%@ include file="../table-header-customized-column.jspf"%>
+    <%@ include file="../table-header-customized-column.jspf" %>
 
     <%--Last modification--%>
     <%@ include file="../table-header-last-modification.jspf" %>
 
-    <%--File size--%>
-    <%@ include file="../table-header-file-size.jspf" %>
+    <%--Author--%>
+    <%@ include file="table-header-author.jspf" %>
 </div>

@@ -6,8 +6,8 @@
     <%@ include file="../table-body-customized-column.jspf" %>
 
     <%--Last modification--%>
-    <%@ include file="../table-body-last-modification.jspf" %>
+    <%@ include file="table-body-last-modification.jspf" %>
 
-    <%--File size--%>
-    <%@ include file="../table-body-file-size.jspf" %>
+    <%--Author--%>
+    <%@ include file="table-body-author.jspf" %>
 </div>

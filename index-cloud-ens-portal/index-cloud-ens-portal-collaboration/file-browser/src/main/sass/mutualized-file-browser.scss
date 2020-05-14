@@ -1,6 +1,25 @@
 @import "../../../../../index-cloud-ens-portal-charte/src/main/sass/cloud-ens/variables";
 
 
+@include media-breakpoint-down("md") {
+  [data-column="author"] {
+    display: none !important;
+  }
+}
+
+@include media-breakpoint-between("md", "xl") {
+  [data-column="author"] {
+    width: 150px;
+  }
+}
+
+@include media-breakpoint-up("xl") {
+  [data-column="author"] {
+    width: 200px;
+  }
+}
+
+
 .portal-table-row:not(.hover-0) {
   &:hover {
     background-color: $mutualized-lighter;

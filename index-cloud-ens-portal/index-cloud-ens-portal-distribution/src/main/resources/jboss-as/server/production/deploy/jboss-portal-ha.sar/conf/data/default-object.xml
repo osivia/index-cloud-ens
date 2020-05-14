@@ -1683,6 +1683,43 @@ return nuxeoRequest.toString();</value>
                         </properties>
                         <height>0</height>
                     </window>
+
+                    <window>
+                        <window-name>index-cloud-ens-file-browser-filter-eraser-instance_1589469571873</window-name>
+                        <instance-ref>index-cloud-ens-file-browser-filter-eraser-instance</instance-ref>
+                        <region>nav</region>
+                        <properties>
+                            <property>
+                                <name>portal.windowContentType</name>
+                                <value>portlet</value>
+                            </property>
+                            <property>
+                                <name>osivia.hideTitle</name>
+                                <value>1</value>
+                            </property>
+                            <property>
+                                <name>theme.order</name>
+                                <value>5</value>
+                            </property>
+                            <property>
+                                <name>osivia.ajaxLink</name>
+                                <value>1</value>
+                            </property>
+                            <property>
+                                <name>osivia.hideDecorators</name>
+                                <value>1</value>
+                            </property>
+                            <property>
+                                <name>osivia.hideEmptyPortlet</name>
+                                <value>1</value>
+                            </property>
+                            <property>
+                                <name>theme.dyna.partial_refresh_enabled</name>
+                                <value>true</value>
+                            </property>
+                        </properties>
+                        <height>0</height>
+                    </window>
                 </page>
 
                 <page>
