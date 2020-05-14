@@ -35,10 +35,8 @@ public enum MutualizedFileBrowserSortEnum implements MutualizedFileBrowserSortFi
      * Last modification sort.
      */
     LAST_MODIFICATION("last-modification", "dc:modified"),
-    /**
-     * File size sort.
-     */
-    FILE_SIZE("file-size", "common:size");
+    /** Author sort. */
+    AUTHOR("author", "dc:lastContributor");
 
 
     /**
