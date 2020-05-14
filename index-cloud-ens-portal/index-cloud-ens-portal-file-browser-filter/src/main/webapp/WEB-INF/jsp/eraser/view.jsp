@@ -9,8 +9,8 @@
 <portlet:actionURL name="erase" var="url"/>
 
 
-<p class="text-secondary">
-    <a href="${url}" class="text-reset">
-        <small><op:translate key="FILTER_ERASE"/></small>
+<p class="mt-4">
+    <a href="${url}" class="btn btn-primary btn-block">
+        <span><op:translate key="FILTER_ERASE"/></span>
     </a>
 </p>
