@@ -44,14 +44,22 @@
 
 #toolbar {
   .navbar-collapse {
+    margin-top: map_get($spacers, 1);
     padding: $navbar-padding-y $navbar-padding-x;
 
     background-color: $gray-100;
+    border-style: solid;
+    border-width: $border-width;
+    border-color: $border-color;
+
+    @include border-radius();
 
     @media (min-width: map_get($grid-breakpoints, "md")) {
+      margin-top: 0;
       padding: 0;
 
       background-color: unset;
+      border-style: none;
     }
   }
 }

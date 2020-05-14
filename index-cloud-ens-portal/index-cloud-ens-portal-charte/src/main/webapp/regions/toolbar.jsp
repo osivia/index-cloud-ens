@@ -48,7 +48,7 @@
 
         <ul class="navbar-nav flex-sm-row justify-content-center align-items-center mt-sm-2 mt-md-0 mr-md-auto">
             <c:forEach var="navItem" items="${requestScope['osivia.nav.items']}" varStatus="status">
-                <li class="nav-item mt-2 mt-sm-0 ${status.last ? '' : 'mr-sm-3'}">
+                <li class="nav-item ${status.first ? '' : 'mt-2 mt-sm-0'} ${status.last ? '' : 'mr-sm-3'}">
                     <a href="${navItem.url}"
                        class="index-tab index-tab-${navItem.color} ${empty navItem.url ? 'disabled' : ''} ${navItem.active ? 'active' : ''}">
                         <i class="${navItem.icon}"></i>
