@@ -5,6 +5,8 @@ $border-width: 3px;
   display: inline-block;
 
   padding: $nav-link-padding-y $nav-link-padding-x;
+  
+  font-size: $font-size-base * 1.10 ;
 
   border-bottom-style: solid;
   border-width: $border-width;

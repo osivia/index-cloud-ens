@@ -12,6 +12,31 @@ import fr.index.cloud.ens.generator.model.Configuration;
  * @author Cédric Krommenhoek
  */
 public interface GeneratorRepository {
+    
+    /**
+     * Enable property.
+     */
+    String ENABLE_PROPERTY = "mtz:enable";
+    /**
+     * Title property.
+     */
+    String TITLE_PROPERTY = "mtz:title";
+    /**
+     * Keywords property.
+     */
+    String KEYWORDS_PROPERTY = "mtz:keywords";
+    /**
+     * Document types property.
+     */
+    String DOCUMENT_TYPES_PROPERTY = "idxcl:documentTypes";
+    /**
+     * Levels property.
+     */
+    String LEVELS_PROPERTY = "idxcl:levels";
+    /**
+     * Subjects property.
+     */
+    String SUBJECTS_PROPERTY = "idxcl:subjects";
 
     /**
      * Get generator configuration.

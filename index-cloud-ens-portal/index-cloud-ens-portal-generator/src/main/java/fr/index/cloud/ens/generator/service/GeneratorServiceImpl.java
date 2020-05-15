@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import fr.index.cloud.ens.generator.model.Configuration;
 import fr.index.cloud.ens.generator.repository.GeneratorRepository;
 
+
 /**
  * Generator service implementation.
  *

@@ -10,6 +10,6 @@
     <%--Brand--%>
     <a class="navbar-brand d-none d-md-inline-block mx-auto py-0" href="${requestScope['osivia.home.url']}">
         <img alt="${requestScope['osivia.header.application.name']}" src="${contextPath}/img/logo-cloud-pronote-large.png"
-             class="my-n2" height="50">
+             height="50">
     </a>
 </nav>

@@ -6,6 +6,7 @@ import java.io.File;
 import java.net.URL;
 import java.util.Random;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.nuxeo.ecm.automation.client.Constants;
 import org.nuxeo.ecm.automation.client.OperationRequest;
@@ -43,7 +44,6 @@ public class GenerateCommand implements INuxeoCommand {
     /** Generator configuration. */
     private final Configuration configuration;
 
-
     private String userPrefix;
 
     private URL realPath;
@@ -52,7 +52,8 @@ public class GenerateCommand implements INuxeoCommand {
 
     private PersonUpdateService personService;
 
-
+    private static int MAX_PUBS_BY_USER = 1;
+    
     private String termsOfService ;
 
 
@@ -129,6 +130,8 @@ public class GenerateCommand implements INuxeoCommand {
 
         for (int iUser = 1; iUser <= configuration.getNbOfUsers(); iUser++) {
             
+            int nbPublications = 0;
+            
             String userId = userPrefix + iUser;
             LOGGER.debug("Adding user  " + userId);
 
@@ -142,13 +145,6 @@ public class GenerateCommand implements INuxeoCommand {
             String path = profilePath.substring(0, profilePath.lastIndexOf('/')) + "/documents";
             
 
-
-
-            // LOGGER.debug("Adding user " + createUser.getCn());
-            // Document userWorkspace = (Document) nuxeoController.executeNuxeoCommand(new GetUserProfileCommand(createUser.getUid()));
-            // String rootPath = userWorkspace.getPath().substring(0, userWorkspace.getPath().lastIndexOf('/')) + "/documents";
-
-
             DocumentService documentService = nuxeoSession.getAdapter(DocumentService.class);
             
             // update terms of services
@@ -158,9 +154,7 @@ public class GenerateCommand implements INuxeoCommand {
             documentService.update(docRef, properties);
             
             
-            
-            
-
+ 
             Document docRoot = documentService.getDocument(new PathRef(path));
 
 
@@ -179,7 +173,7 @@ public class GenerateCommand implements INuxeoCommand {
 
                     for (int k = 0; k < configuration.getNbOfSubItems(); k++) {
 
-                        createFile(documentService, userId,subfolder, Integer.toString(fileId));
+                        nbPublications = createAndPublishFile(documentService, nuxeoSession, userId,subfolder, Integer.toString(fileId), nbPublications);
                         fileId = fileId + 1;
                     }
 
@@ -187,11 +181,11 @@ public class GenerateCommand implements INuxeoCommand {
 
                 for (int k = 0; k < configuration.getNbOfSubItems(); k++) {
 
-                    createFile(documentService, userId, folder, Integer.toString(fileId));
+                    nbPublications = createAndPublishFile(documentService,nuxeoSession, userId, folder, Integer.toString(fileId), nbPublications);
+                   
                     fileId = fileId + 1;
 
                 }
-
 
             }
 
@@ -200,12 +194,26 @@ public class GenerateCommand implements INuxeoCommand {
         return null;
     }
 
+    
+    private int createAndPublishFile(DocumentService documentService,Session nuxeoSession, String userId, Document folder, String id, int nbPublications) throws Exception  {
+        
+        Document file = createFile(documentService, userId,folder, id);
+        
+        if( nbPublications < MAX_PUBS_BY_USER) {
+            nbPublications++;
+            mutualize(nuxeoSession, documentService, file);
+        }
+        return nbPublications;
+    }
+    
+    
 
-    private void createFile(DocumentService documentService, String userId, Document folder, String id) throws Exception {
+    private Document createFile(DocumentService documentService, String userId, Document folder, String id) throws Exception {
         PropertyMap properties;
 
         properties = new PropertyMap();
-        properties.set("dc:title", "fichier-tmc-" + userId + "-" + id);
+        String title = "fichier-tmc-" + userId + "-" + id;
+        properties.set("dc:title", title);
         String user = userId;
         properties.set("dc:creator", user);
 
@@ -217,9 +225,44 @@ public class GenerateCommand implements INuxeoCommand {
         // String filepath = Thread.currentThread().getContextClassLoader().getResource(realPath).getPath();
         Blob attachmentBlob = new FileBlob(new File(realPath.getFile()));
         documentService.setBlob(file, attachmentBlob, "file:content");
-
+        
+        return file;
 
     }
+    
+    private void mutualize(Session nuxeoSession, DocumentService documentService, Document file)  throws Exception    {
+        // Mutualize
+        // Document reference
+        DocRef document = new PathRef(file.getPath());
+        // Publication section reference
+        DocRef section = new PathRef("/default-domain/communaute");
+
+
+        // Updated properties
+        PropertyMap properties = new PropertyMap();
+        properties.set(GeneratorRepository.ENABLE_PROPERTY, true);
+        properties.set(GeneratorRepository.TITLE_PROPERTY, file.getTitle());
+        properties.set(GeneratorRepository.KEYWORDS_PROPERTY, file.getTitle()+",tmc");
+        properties.set(GeneratorRepository.DOCUMENT_TYPES_PROPERTY, "4");
+        properties.set(GeneratorRepository.LEVELS_PROPERTY, "1");
+        properties.set(GeneratorRepository.SUBJECTS_PROPERTY, "10");
+        
+        
+
+        // Operation request
+        OperationRequest request = nuxeoSession.newRequest("Index.UpdateMetadata");
+        request.setInput(document);
+        request.set("properties", properties);     
+            
+             
+        
+        Document updatedDocument = (Document) request.execute();   
+
+
+        documentService.publish(updatedDocument, section, true);
+    }
+    
+    
 
 
     private Document createFolder(DocumentService documentService, String userId, Document docRoot, String id) throws Exception {
