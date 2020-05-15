@@ -4,7 +4,7 @@ $border-width: 3px;
 .index-tab {
   display: inline-block;
 
-  padding: $nav-link-padding-y $nav-link-padding-x;
+  padding: $nav-link-padding-y / 2 0;
   
   font-size: $font-size-base * 1.10 ;
 
