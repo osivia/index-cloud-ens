@@ -158,7 +158,7 @@ ${task:link(portal:translate("WORKFLOW_RENEW_PASSWORD_LINK"))}]]></argumentValue
                   <argument>
                     <argumentName><![CDATA[mailFrom]]></argumentName>
                     <argumentType><![CDATA[TEXT]]></argumentType>
-                    <argumentValue><![CDATA[no-reply@index-education.fr]]></argumentValue>
+                    <argumentValue><![CDATA[]]></argumentValue>
                   </argument>
                 </argumentsList>
               </filter>
