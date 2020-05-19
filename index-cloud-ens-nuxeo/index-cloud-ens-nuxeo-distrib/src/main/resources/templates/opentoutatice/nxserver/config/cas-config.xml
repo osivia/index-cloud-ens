@@ -61,7 +61,6 @@
         <authenticationChain>
             <plugins>
                 <plugin>CAS2_AUTH</plugin>
-                <plugin>BASIC_AUTH</plugin>
             </plugins>
         </authenticationChain>
     </extension>
