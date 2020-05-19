@@ -137,14 +137,8 @@
             <version>${cgu.version}</version>
             <type>war</type>
         </dependency>
-        
-        <dependency>
-        	<groupId>org.osivia.services</groupId>
-			<artifactId>osivia-services-onlyoffice</artifactId>
-			<version>${onlyoffice.version}</version>
-			<type>war</type>
-		</dependency>   
-		
+   
+
 		<dependency>
         	<groupId>org.osivia.services</groupId>
 			<artifactId>osivia-services-document-creation</artifactId>
