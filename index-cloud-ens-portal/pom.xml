@@ -18,8 +18,8 @@
 
     <properties>
         <!-- Toutatice -->
-        <toutatice.version>4.9.3-RC5</toutatice.version> 
-<!--        <toutatice.version>4.9-SNAPSHOT</toutatice.version>   -->
+<!--         <toutatice.version>4.9.3-RC5</toutatice.version> -->
+       <toutatice.version>4.9-SNAPSHOT</toutatice.version>   
 
 
         <!-- Directory -->
@@ -31,7 +31,10 @@
 
         <!-- Other services -->
         <tasks.version>4.9-SNAPSHOT</tasks.version>
-        <procedure.version>4.9</procedure.version>
+        
+        <!-- <procedure.version>4.9</procedure.version> -->
+        <procedure.version>4.9-SNAPSHOT</procedure.version>
+        
         <cgu.version>4.9.1</cgu.version>
 
         <document-creation.version>4.7.14-RC2</document-creation.version>

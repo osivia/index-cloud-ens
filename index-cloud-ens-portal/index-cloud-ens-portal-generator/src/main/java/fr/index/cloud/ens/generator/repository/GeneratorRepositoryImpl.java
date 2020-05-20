@@ -66,6 +66,8 @@ public class GeneratorRepositoryImpl implements GeneratorRepository {
     private static final String NB_FOLDERS = "generator.nbOfRootFolers";
     private static final String NB_SUBFOLDERS = "generator.nbOfSubFolers";
     private static final String NB_SUBITEMS = "generator.nbOfSubItems";
+    private static final String NB_MAX_PUB = "generator.maxPubByUsers";   
+    
     
     private String USERID_PREFIX = "utilisateur-";
 
@@ -117,6 +119,8 @@ public class GeneratorRepositoryImpl implements GeneratorRepository {
         int nbOfSubFolers = NumberUtils.toInt(StringUtils.defaultIfEmpty(window.getProperty(NB_SUBFOLDERS), this.properties.getProperty(NB_SUBFOLDERS)));
 
         int nbOfSubItems = NumberUtils.toInt(StringUtils.defaultIfEmpty(window.getProperty(NB_SUBITEMS), this.properties.getProperty(NB_SUBITEMS)));
+        
+        int maxPubByUsers = NumberUtils.toInt(StringUtils.defaultIfEmpty(window.getProperty(NB_MAX_PUB), this.properties.getProperty(NB_MAX_PUB)));
 
         // Configuration
         Configuration configuration = new Configuration();
@@ -125,7 +129,7 @@ public class GeneratorRepositoryImpl implements GeneratorRepository {
         configuration.setNbOfRootFolers(nbOfRootFolers);
         configuration.setNbOfSubFolers(nbOfSubFolers);
         configuration.setNbOfSubItems(nbOfSubItems);
-
+        configuration.setMaxPubByUsers(maxPubByUsers);
 
         return configuration;
     }

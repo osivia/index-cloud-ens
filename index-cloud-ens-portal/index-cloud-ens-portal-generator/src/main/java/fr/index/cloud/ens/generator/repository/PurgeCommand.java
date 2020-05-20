@@ -130,7 +130,7 @@ public class PurgeCommand implements INuxeoCommand {
             
             // Nuxeo request
             StringBuilder nuxeoRequest = new StringBuilder();
-            nuxeoRequest.append("ecm:path STARTSWITH '/default-domain/communaute' AND dc:title ILIKE 'fichier-tmc%'");
+            nuxeoRequest.append("ecm:path STARTSWITH '/default-domain/communaute' ");
 
             LOGGER.warn("searching " + nuxeoRequest.toString());
 

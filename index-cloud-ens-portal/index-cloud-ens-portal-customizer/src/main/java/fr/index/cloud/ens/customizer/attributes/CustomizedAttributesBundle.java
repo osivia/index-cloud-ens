@@ -145,7 +145,7 @@ public class CustomizedAttributesBundle implements IAttributesBundle {
 
         // SSO applications
         this.applications = new ArrayList<>();
-        this.applications.add(NuxeoConnectionProperties.getPublicBaseUri().toString().concat("/logout"));
+        //this.applications.add(NuxeoConnectionProperties.getPublicBaseUri().toString().concat("/logout"));
         this.applications.add(System.getProperty("cas.logout"));
 
         // Portal URL factory

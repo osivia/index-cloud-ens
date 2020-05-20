@@ -17,8 +17,26 @@ public class Configuration {
 
     private Integer nbOfSubItems;
 
+    private Integer maxPubByUsers;
+	
+    /**
+     * Getter for maxPubByUsers.
+     * @return the maxPubByUsers
+     */
+    public Integer getMaxPubByUsers() {
+        return maxPubByUsers;
+    }
 
-	/**
+    
+    /**
+     * Setter for maxPubByUsers.
+     * @param maxPubByUsers the maxPubByUsers to set
+     */
+    public void setMaxPubByUsers(Integer maxPubByUsers) {
+        this.maxPubByUsers = maxPubByUsers;
+    }
+
+    /**
 	 * @return the nbOfUsers
 	 */
 	public Integer getNbOfUsers() {

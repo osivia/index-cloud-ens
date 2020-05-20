@@ -213,3 +213,32 @@ function onFinish() {
 		element.contentWindow.location.reload();
 	}	
 }
+
+
+
+
+
+
+/*
+
+$JQry(document).ready(function(){
+	if (localStorage.scrollPos != undefined)	{
+		filler = $JQry(".portlet-filler").first();
+		if( filler != undefined)	{
+			//filler.scrollTop(9000);
+			console.log("restore scroll "+localStorage.scrollPos);
+			filler.scrollTop(localStorage.scrollPos);
+		}
+	}
+});
+
+
+	addEventListener("beforeunload", function (event) {
+		filler = $JQry(".portlet-filler").first();
+		if( filler != undefined)	{
+			console.log("savescroll "+filler.scrollTop());
+			localStorage.setItem("scrollPos", filler.scrollTop());
+		}	
+	});
+
+*/

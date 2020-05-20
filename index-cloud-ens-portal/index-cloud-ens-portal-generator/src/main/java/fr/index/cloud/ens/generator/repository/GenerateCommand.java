@@ -52,7 +52,6 @@ public class GenerateCommand implements INuxeoCommand {
 
     private PersonUpdateService personService;
 
-    private static int MAX_PUBS_BY_USER = 1;
     
     private String termsOfService ;
 
@@ -199,7 +198,7 @@ public class GenerateCommand implements INuxeoCommand {
         
         Document file = createFile(documentService, userId,folder, id);
         
-        if( nbPublications < MAX_PUBS_BY_USER) {
+        if( nbPublications < configuration.getMaxPubByUsers()) {
             nbPublications++;
             mutualize(nuxeoSession, documentService, file);
         }
