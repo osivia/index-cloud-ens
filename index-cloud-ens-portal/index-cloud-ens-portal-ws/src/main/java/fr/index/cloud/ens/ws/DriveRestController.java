@@ -109,6 +109,9 @@ public class DriveRestController {
     public static final int ERR_UPLOAD_INVALID_ACTION = 1;
     public static final int ERR_UPLOAD_INVALID_CHARACTER = 2;
 
+    public static final int ERR_CREATE_FOLDER_ALREADY_EXISTS = 1;
+    public static final int ERR_CREATE_FOLDER_EMPTY_NAME = 2;   
+    
 
     public static PortletContext portletContext;
     
@@ -795,29 +798,32 @@ public class DriveRestController {
             Document parentDoc = wrapContentFetching(nuxeoController, path);
 
 
-            // Check if already exist
-            INuxeoCommand checkCmd = new FetchByTitleCommand(parentDoc, createFolderBean.getFolderName());
-            Documents docs = (Documents) nuxeoController.executeNuxeoCommand(checkCmd);
+            if (StringUtils.isEmpty(createFolderBean.getFolderName()))
+                returnObject = errorMgr.getErrorResponse(ERR_CREATE_FOLDER_EMPTY_NAME, "The folder name is empty");
+            else {
+                // Check if already exist
+                INuxeoCommand checkCmd = new FetchByTitleCommand(parentDoc, createFolderBean.getFolderName());
+                Documents docs = (Documents) nuxeoController.executeNuxeoCommand(checkCmd);
 
-            if (docs.size() > 0) {
-                returnObject = errorMgr.getErrorResponse(1, "This folder already exists");
-            } else {
+                if (docs.size() > 0) {
+                    returnObject = errorMgr.getErrorResponse(ERR_CREATE_FOLDER_ALREADY_EXISTS, "This folder already exists");
+                } else {
 
-                // Execute creation
-                INuxeoCommand command = new CreateFolderCommand(parentDoc, createFolderBean.getFolderName());
+                    // Execute creation
+                    INuxeoCommand command = new CreateFolderCommand(parentDoc, createFolderBean.getFolderName());
 
-                nuxeoController.executeNuxeoCommand(command);
+                    nuxeoController.executeNuxeoCommand(command);
 
-                // we must fetch the document to get the webId (not present in the returned document)
-                INuxeoCommand loadCmd = new FetchByTitleCommand(parentDoc, createFolderBean.getFolderName());
-                Documents createdDocs = (Documents) nuxeoController.executeNuxeoCommand(loadCmd);
-                if (createdDocs.size() == 1) {
-                    returnObject.put("folderId", createdDocs.get(0).getProperties().getString(PROP_TTC_WEBID));                   
+                    // we must fetch the document to get the webId (not present in the returned document)
+                    INuxeoCommand loadCmd = new FetchByTitleCommand(parentDoc, createFolderBean.getFolderName());
+                    Documents createdDocs = (Documents) nuxeoController.executeNuxeoCommand(loadCmd);
+                    if (createdDocs.size() == 1) {
+                        returnObject.put("folderId", createdDocs.get(0).getProperties().getString(PROP_TTC_WEBID));
+                    } else
+                        throw new Exception("can't fetch created folder. createdDocs.size = " + createdDocs.size());
+
+
                 }
-                else
-                    throw new Exception("can't fetch created folder. createdDocs.size = "+ createdDocs.size());
-                
-
             }
 
 

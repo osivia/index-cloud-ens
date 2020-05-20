@@ -163,7 +163,7 @@ public class FileDocumentModule extends PortletModule {
             PropertyMap map = document.getProperties().getMap("file:content");
 
             String mimeType = map.getString("mime-type");
-            if ("application/index-qcm+xml".equals(mimeType)) {
+            if ( StringUtils.contains(mimeType, "application/index-qcm+xml")) {
 
                 String createFileLink = nuxeoController.createFileLink(document, "file:content");
                 try {
