@@ -34,8 +34,6 @@ public class MimeTypeListener implements EventListener {
     private static final Log log = LogFactory.getLog(MimeTypeListener.class);
 
 
-
-
     @Override
     public void handleEvent(Event event) throws ClientException {
 
@@ -82,16 +80,18 @@ public class MimeTypeListener implements EventListener {
         // BlobHolder is defined for document having file
         BlobHolder bHolder = docToScan.getAdapter(BlobHolder.class);
         try {
+            if (bHolder != null && bHolder.getBlob() != null) {
 
-            if (bHolder.getBlob().getFilename().endsWith(".xml")) {
-                DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+                if (bHolder.getBlob().getFilename().endsWith(".xml")) {
+                    DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 
-                DocumentBuilder builder = factory.newDocumentBuilder();
-                Document document = builder.parse(bHolder.getBlob().getStream());
+                    DocumentBuilder builder = factory.newDocumentBuilder();
+                    Document document = builder.parse(bHolder.getBlob().getStream());
 
-                Element root = document.getDocumentElement();
-                if ("quiz".equals(root.getNodeName()))
-                    bHolder.getBlob().setMimeType("application/index-qcm+xml");
+                    Element root = document.getDocumentElement();
+                    if ("quiz".equals(root.getNodeName()))
+                        bHolder.getBlob().setMimeType("application/index-qcm+xml");
+                }
             }
         } catch (Exception e) {
             // Don't raise exception
