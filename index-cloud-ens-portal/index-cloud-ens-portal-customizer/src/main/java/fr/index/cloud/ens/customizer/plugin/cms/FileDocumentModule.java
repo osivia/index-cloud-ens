@@ -139,7 +139,10 @@ public class FileDocumentModule extends PortletModule {
                 DocumentDTO source = this.getSource(nuxeoController, documentContext);
                 request.setAttribute("source", source);
                 
-
+                if( source != null) {
+                    boolean desynchronizeFromSource = isDesynchronizedFromSource(nuxeoController, documentContext, source);
+                    request.setAttribute("desynchronizedFromSource", desynchronizeFromSource);                   
+                }
                 
             }
             
@@ -347,16 +350,35 @@ public class FileDocumentModule extends PortletModule {
 
 
         // Desynchronized indicator
-        boolean desynchronized;
+        boolean desynchronized = false;
 
-        if (mutualizedDocument == null) {
-            desynchronized = false;
-        } else {
+        if (mutualizedDocument != null) {
+
             // Publication infos
+            
             NuxeoPublicationInfos publicationInfos = documentContext.getPublicationInfos();
-
-            desynchronized = !StringUtils.equals(mutualizedDocument.getVersionLabel(), publicationInfos.getLiveVersion());
-        }
+            
+            // Check if version is different
+            if( !StringUtils.equals(mutualizedDocument.getVersionLabel(), publicationInfos.getLiveVersion()))   {
+            
+                // check if digest is different
+                NuxeoController nuxeoController = new NuxeoController(portalControllerContext);
+                nuxeoController.setDisplayLiveVersion("0");
+                
+                String publishedDocumentPath = mutualizedDocument.getPath();
+                if (!StringUtils.startsWith(publishedDocumentPath, "/")) {
+                    publishedDocumentPath = "/" + publishedDocumentPath;
+                }
+                
+                NuxeoDocumentContext mutualizedDocumentContext = nuxeoController.getDocumentContext(publishedDocumentPath);
+                Document mutualizedDoc = mutualizedDocumentContext.getDocument();
+                
+                
+                if(!StringUtils.equals(getDigest(document.getDocument()),getDigest( mutualizedDoc))) {
+                    desynchronized = true;
+                }
+           }
+         }
 
         return desynchronized;
     }
@@ -395,7 +417,34 @@ public class FileDocumentModule extends PortletModule {
         return source;
     }
 
+    
+    
+    private boolean  isDesynchronizedFromSource( NuxeoController nuxeoController, NuxeoDocumentContext documentContext, DocumentDTO source)  {
+        boolean desynchronized = false;
+        
+        Document document = documentContext.getDocument();
+  
+        // Check version
+        if( !StringUtils.equals(document.getProperties().getString("mtz:sourceVersion"), source.getDocument().getVersionLabel() ))   {
+            // Check digest
+            if( !StringUtils.equals(document.getProperties().getString("mtz:sourceDigest"), getDigest(source.getDocument()))) {
+                desynchronized = true;
+            }
+        }
+        return desynchronized;
+     }
 
+    
+    private String getDigest( Document source) {
+        String sourceDigest = null;
+        PropertyMap sourceMap = source.getProperties().getMap("file:content");
+        if( sourceMap != null)
+         sourceDigest = sourceMap.getString("digest");    
+        return sourceDigest;
+
+    }
+
+    
     /**
      * Get document path.
      *

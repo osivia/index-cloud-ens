@@ -417,7 +417,9 @@
                             </a>
                         </p>
 
-                        <c:if test="${document.properties['mtz:sourceVersion'] ne source.document.versionLabel}">
+
+		                <%--Desynchronized indicator--%>
+		                <c:if test="${desynchronizedFromSource}">
                             <p class="card-text text-muted">
                                 <small><op:translate key="DOCUMENT_COPIED_NEW_VERSION_FOUND"/></small>
                             </p>

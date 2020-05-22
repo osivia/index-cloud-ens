@@ -74,6 +74,13 @@ public class MutualizationCopyDuplicateCommand extends MutualizationCopyCommand 
         properties.set("mtz:sourceWebId", this.getSource().getString("ttc:webid"));
         // Source version
         properties.set("mtz:sourceVersion", this.getSource().getVersionLabel());
+        
+        // Source digest
+        PropertyMap sourceMap = this.getSource().getProperties().getMap("file:content");
+        if( sourceMap != null)  {
+         properties.set("mtz:sourceDigest", sourceMap.getString("digest"));
+        }
+        
         // Keywords
         properties.set("mtz:keywords", this.getListProperty("mtz:keywords"));
         // Document types

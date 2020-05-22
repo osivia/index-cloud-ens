@@ -69,6 +69,12 @@ public class MutualizationCopyReplaceCommand extends MutualizationCopyCommand {
 
         // Source version
         properties.set("mtz:sourceVersion", this.getSource().getVersionLabel());
+        
+        // Source digest
+        PropertyMap sourceMap = this.getSource().getProperties().getMap("file:content");
+        if( sourceMap != null)  {
+         properties.set("mtz:sourceDigest", sourceMap.getString("digest"));
+        }
 
         return properties;
     }

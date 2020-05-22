@@ -124,7 +124,12 @@ public class MutualizationRepositoryImpl implements MutualizationRepository {
         // Nuxeo command
         INuxeoCommand command = this.applicationContext.getBean(EnableMutualizationCommand.class, form, documentPath, mutualizedSpacePath);
 
-        nuxeoController.executeNuxeoCommand(command);
+        Document publishedDocument = (Document) nuxeoController.executeNuxeoCommand(command);
+        
+        // Update detail view in mutualized space
+        nuxeoController.setDisplayLiveVersion("0");
+        NuxeoDocumentContext mutualizedDocumentContext = nuxeoController.getDocumentContext(publishedDocument.getPath());
+        mutualizedDocumentContext.reload();
     }
 
 

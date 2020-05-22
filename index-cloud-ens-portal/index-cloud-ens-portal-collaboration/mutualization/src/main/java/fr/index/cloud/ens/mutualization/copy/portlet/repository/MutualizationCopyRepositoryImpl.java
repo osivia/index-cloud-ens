@@ -107,11 +107,16 @@ public class MutualizationCopyRepositoryImpl implements MutualizationCopyReposit
         NuxeoController nuxeoController = new NuxeoController(portalControllerContext);
 
         // Source document
-        Document source = this.getDocument(nuxeoController, form.getDocumentPath());
+        // must be refreshed to  synchronized digest with documentService.getBlob
+        Document source = this.getRefreshedDocument(nuxeoController, form.getDocumentPath());
 
         // Nuxeo command
         INuxeoCommand command = this.applicationContext.getBean(MutualizationCopyReplaceCommand.class, source, targetId);
         nuxeoController.executeNuxeoCommand(command);
+        
+        // Reload local cache (update local view)
+        Document target = nuxeoController.fetchDocument(targetId);
+        nuxeoController.getDocumentContext(target.getPath()).reload();
     }
 
 
@@ -121,7 +126,9 @@ public class MutualizationCopyRepositoryImpl implements MutualizationCopyReposit
         NuxeoController nuxeoController = new NuxeoController(portalControllerContext);
 
         // Source document
-        Document source = this.getDocument(nuxeoController, form.getDocumentPath());
+        // must be refreshed to  synchronized digest with documentService.getBlob
+        
+        Document source = this.getRefreshedDocument(nuxeoController, form.getDocumentPath());
 
         // Nuxeo command
         INuxeoCommand command = this.applicationContext.getBean(MutualizationCopyDuplicateCommand.class, source, form.getTargetPath());
@@ -142,5 +149,16 @@ public class MutualizationCopyRepositoryImpl implements MutualizationCopyReposit
 
         return documentContext.getDocument();
     }
+    
+    
+    private Document getRefreshedDocument(NuxeoController nuxeoController, String path) {
+        // Document context
+        NuxeoDocumentContext documentContext = nuxeoController.getDocumentContext(path);
+        
+        documentContext.reload();
+
+        return documentContext.getDocument();
+    }
+    
 
 }
