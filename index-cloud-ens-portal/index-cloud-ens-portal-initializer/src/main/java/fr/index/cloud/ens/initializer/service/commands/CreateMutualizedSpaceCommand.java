@@ -37,28 +37,43 @@ public class CreateMutualizedSpaceCommand implements INuxeoCommand {
     public Object execute(Session nuxeoSession) throws Exception {
         // Document service
         DocumentService documentService = nuxeoSession.getAdapter(DocumentService.class);
-
-        // Domain
-        Document domain = documentService.getDocument(new PathRef("/default-domain"));
-
-        // Mutualized space
-        URL mutualizedSpaceUrl = this.getClass().getResource("/docs/mutualized-space/export-mutualized-space.zip");
-        File mutualizedSpaceFile = new File(mutualizedSpaceUrl.getFile());
-        Blob mutualizedSpaceBlob = new FileBlob(mutualizedSpaceFile);
-
-        OperationRequest operationRequest = nuxeoSession.newRequest("FileManager.Import").setInput(mutualizedSpaceBlob);
-        operationRequest.setContextProperty("currentDocument", domain);
-        operationRequest.set("overwite", String.valueOf(true));
-        operationRequest.execute();
-
-
-        // Mass publication
-        Documents documents = documentService.query("SELECT * FROM Document WHERE ecm:path STARTSWITH '/default-domain/communaute' AND ecm:primaryType <> 'PortalSite'");
-        for (Document document : documents) {
-            this.log.info("Publish document : " + document.getPath());
-
-            operationRequest = nuxeoSession.newRequest("Document.SetOnLineOperation").setInput(document);
+        
+        
+        Document community = null;
+        
+        try {
+        // community is NOT overwrited !!
+         community = documentService.getDocument(new PathRef("/default-domain/communaute"));
+        } catch( Exception e)   {
+            //
+        }
+        
+        if( community == null) {
+        
+            // Domain
+            Document domain = documentService.getDocument(new PathRef("/default-domain"));
+            
+            //
+    
+            // Mutualized space
+            URL mutualizedSpaceUrl = this.getClass().getResource("/docs/mutualized-space/export-mutualized-space.zip");
+            File mutualizedSpaceFile = new File(mutualizedSpaceUrl.getFile());
+            Blob mutualizedSpaceBlob = new FileBlob(mutualizedSpaceFile);
+    
+            OperationRequest operationRequest = nuxeoSession.newRequest("FileManager.Import").setInput(mutualizedSpaceBlob);
+            operationRequest.setContextProperty("currentDocument", domain);
+            operationRequest.set("overwite", String.valueOf(true));
             operationRequest.execute();
+    
+    
+            // Mass publication
+            Documents documents = documentService.query("SELECT * FROM Document WHERE ecm:path STARTSWITH '/default-domain/communaute' AND ecm:primaryType <> 'PortalSite'");
+            for (Document document : documents) {
+                this.log.info("Publish document : " + document.getPath());
+    
+                operationRequest = nuxeoSession.newRequest("Document.SetOnLineOperation").setInput(document);
+                operationRequest.execute();
+            }
         }
 
         return null;

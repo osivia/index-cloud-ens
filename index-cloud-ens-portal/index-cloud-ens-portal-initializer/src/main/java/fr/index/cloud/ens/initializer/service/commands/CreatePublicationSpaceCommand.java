@@ -41,29 +41,43 @@ public class CreatePublicationSpaceCommand implements INuxeoCommand {
         // Document service
         DocumentService documentService = nuxeoSession.getAdapter(DocumentService.class);
 
-        // Domain
-        Document domain = documentService.getDocument(new PathRef("/default-domain"));
 
-        // Publication space
-        URL publicationSpaceUrl = this.getClass().getResource("/docs/publication-space/export-publication-space.zip");
-        File publicationSpaceFile = new File(publicationSpaceUrl.getFile());
-        Blob publicationSpaceBlob = new FileBlob(publicationSpaceFile);
+        Document publicationSpace = null;
 
-        OperationRequest operationRequest = nuxeoSession.newRequest("FileManager.Import").setInput(publicationSpaceBlob);
-        operationRequest.setContextProperty("currentDocument", domain);
-        operationRequest.set("overwite", String.valueOf(true));
-        operationRequest.execute();
-
-
-        // Mass publication
-        Documents documents = documentService.query("SELECT * FROM Document WHERE ecm:path STARTSWITH '/default-domain/publication-space' AND ecm:primaryType <> 'PortalSite'");
-        for (Document document : documents) {
-            this.log.info("Publish document : " + document.getPath());
-
-            operationRequest = nuxeoSession.newRequest("Document.SetOnLineOperation").setInput(document);
-            operationRequest.execute();
+        try {
+            // publication Space is NOT overwrited !!
+            publicationSpace = documentService.getDocument(new PathRef("/default-domain/publication-space"));
+        } catch (Exception e) {
+            //
         }
 
+        if (publicationSpace == null) {
+
+
+            // Domain
+            Document domain = documentService.getDocument(new PathRef("/default-domain"));
+
+            // Publication space
+            URL publicationSpaceUrl = this.getClass().getResource("/docs/publication-space/export-publication-space.zip");
+            File publicationSpaceFile = new File(publicationSpaceUrl.getFile());
+            Blob publicationSpaceBlob = new FileBlob(publicationSpaceFile);
+
+            OperationRequest operationRequest = nuxeoSession.newRequest("FileManager.Import").setInput(publicationSpaceBlob);
+            operationRequest.setContextProperty("currentDocument", domain);
+            operationRequest.set("overwite", String.valueOf(true));
+            operationRequest.execute();
+
+
+            // Mass publication
+            Documents documents = documentService
+                    .query("SELECT * FROM Document WHERE ecm:path STARTSWITH '/default-domain/publication-space' AND ecm:primaryType <> 'PortalSite'");
+            for (Document document : documents) {
+                this.log.info("Publish document : " + document.getPath());
+
+                operationRequest = nuxeoSession.newRequest("Document.SetOnLineOperation").setInput(document);
+                operationRequest.execute();
+            }
+        }
         return null;
     }
 
