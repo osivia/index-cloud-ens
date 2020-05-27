@@ -18,8 +18,8 @@
 
     <properties>
         <!-- Toutatice -->
-<!--  <toutatice.version>4.9.3-RC6</toutatice.version> -->
-      <toutatice.version>4.9-SNAPSHOT</toutatice.version>  
+  <toutatice.version>4.9.3-RC7</toutatice.version> 
+<!--      <toutatice.version>4.9-SNAPSHOT</toutatice.version>  -->
 
 
         <!-- Directory -->
