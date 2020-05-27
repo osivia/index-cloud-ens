@@ -1,5 +1,6 @@
 package fr.index.cloud.ens.ws;
 
+import java.io.FileInputStream;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.Date;
@@ -12,10 +13,13 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import javax.portlet.PortletContext;
+import javax.servlet.ServletException;
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -29,6 +33,7 @@ import org.osivia.portal.api.cache.services.CacheInfo;
 import org.osivia.portal.api.context.PortalControllerContext;
 import org.osivia.portal.api.directory.v2.model.Person;
 import org.osivia.portal.api.tokens.ITokenService;
+import org.osivia.portal.core.cms.CMSBinaryContent;
 import org.osivia.portal.core.web.IWebIdService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -71,6 +76,7 @@ import fr.index.cloud.oauth.config.SecurityFilter;
 import fr.toutatice.portail.cms.nuxeo.api.INuxeoCommand;
 import fr.toutatice.portail.cms.nuxeo.api.NuxeoController;
 import fr.toutatice.portail.cms.nuxeo.api.NuxeoException;
+import fr.toutatice.portail.cms.nuxeo.api.ResourceUtil;
 import fr.toutatice.portail.cms.nuxeo.api.cms.NuxeoDocumentContext;
 import fr.toutatice.portail.cms.nuxeo.api.domain.DocumentDTO;
 import fr.toutatice.portail.cms.nuxeo.api.services.INuxeoService;
@@ -441,7 +447,59 @@ public class DriveRestController {
     
     
     
-    
+    /**
+     * Download file
+     * 
+     * @param request
+     * @param response
+     * @param id
+     * @param principal
+     * @return
+     * @throws Exception
+     */
+
+    @SuppressWarnings("deprecation")
+    @RequestMapping(value = "/Drive.download", method = RequestMethod.GET)
+    @ResponseStatus(HttpStatus.OK)
+
+    public void download(HttpServletRequest request, HttpServletResponse response, @RequestParam(value = "id", required = true) String id,
+            Principal principal) throws Exception {
+        WSPortalControllerContext ctx = new WSPortalControllerContext(request, response, principal);
+        NuxeoController nuxeoController = getNuxeocontroller(request, principal);
+        
+        ServletOutputStream output = response.getOutputStream();
+
+     
+        try {
+            nuxeoController.setStreamingSupport(false);
+            String path = IWebIdService.FETCH_PATH_PREFIX + id;
+
+            CMSBinaryContent content = nuxeoController.fetchFileContent(path, "file:content");
+
+            response.setContentType(content.getMimeType());
+            response.setHeader("Content-Disposition", "attachment; "+"filename=\"" + content.getName() + "\"");
+            response.setHeader("Content-Length", String.valueOf(content.getFileSize()));
+
+            ResourceUtil.copy(new FileInputStream(content.getFile()), response.getOutputStream(), 4096);            
+          
+        }  catch (NuxeoException e) {
+            if (e.getErrorCode() == NuxeoException.ERROR_NOTFOUND) {
+                response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+            } else if (e.getErrorCode() == NuxeoException.ERROR_FORBIDDEN) {
+                response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+            } else if (e.getErrorCode() == NuxeoException.ERROR_UNAVAILAIBLE) {
+                throw new ServletException(e);
+            }
+        } catch (Exception e) {
+            String token = errorMgr.logError(ctx, e);      
+
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, token);   
+        } finally {
+            IOUtils.closeQuietly(output);
+        }
+
+    }
+
     
     
     

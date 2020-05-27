@@ -144,7 +144,7 @@ public class ErrorMgr {
      * @param principal
      * @return
      */
-    private String logError(WSPortalControllerContext ctx, Exception e) {
+    public String logError(WSPortalControllerContext ctx, Exception e) {
 
 
         String token = this.logContext.createContext(ctx, "portal", null);
@@ -171,5 +171,9 @@ public class ErrorMgr {
         return token;
     }
 
+    
+    
+    
+    
 
 }

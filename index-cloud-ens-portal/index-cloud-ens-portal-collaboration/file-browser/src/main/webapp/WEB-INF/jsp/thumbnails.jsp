@@ -73,8 +73,8 @@
                                             </c:when>
                                         
                                             <c:when test="${item.document.type.name eq 'Picture'}">
-                                                <c:set var="url"><ttc:documentLink document="${item.document}" picture="true" displayContext="Small" /></c:set>
-                                                <img src="${url}" alt="" class="picture">
+                                                <c:set var="pictureUrl"><ttc:documentLink document="${item.document}" picture="true" displayContext="Small" /></c:set>
+                                                <img src="${pictureUrl}" alt="" class="picture">
                                             </c:when>
                                         
                                             <c:otherwise>

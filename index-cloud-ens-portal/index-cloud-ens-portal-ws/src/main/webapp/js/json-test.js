@@ -327,6 +327,31 @@ function getTree(path) {
 
 }
 
+function download() {
+	var url = oauth.params.resourceUrl+"/Drive.download";
+	url = url + "?id=" + $JQry('#contentId').val();;
+
+
+	$JQry
+			.ajax({
+				type : "GET",
+				url : url,
+				headers : {
+					'Content-Type' : undefined,
+					"Authorization" : "Bearer " + oauth.getToken()
+				},
+				contentType : false,
+				cache : false,
+				timeout : 600000,
+				success : function() {
+					alert("ok");
+				},
+				error : function(xhr, status, e) {
+					alert(e);
+				}
+			});
+
+}
 
 
 
@@ -634,6 +659,13 @@ $JQry(function() {
 	});
 	
 	
+	$JQry("#btnDownload").each(function(index, element) {
+
+		var $element = $JQry(element);
+		$element.click(function() {
+			download();
+		});
+	});
 	
 	
 	$JQry("#btnUserProfile").each(function(index, element) {
