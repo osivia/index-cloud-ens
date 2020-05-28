@@ -217,28 +217,39 @@ function onFinish() {
 
 
 
-
-
-/*
+/* 
+ * Restore cursor positions on file browser 
+ * 
+ * (back button)
+ */
 
 $JQry(document).ready(function(){
-	if (localStorage.scrollPos != undefined)	{
+	var key = "scrollPos/" + window.location.href;
+	
+	if (localStorage.getItem(key) != undefined)	{
 		filler = $JQry(".portlet-filler").first();
 		if( filler != undefined)	{
-			//filler.scrollTop(9000);
-			console.log("restore scroll "+localStorage.scrollPos);
-			filler.scrollTop(localStorage.scrollPos);
+			filler.scrollTop(localStorage.getItem(key));
+			localStorage.removeItem(key)
 		}
 	}
 });
 
+var isOnIOS = navigator.userAgent.match(/iPad/i)|| navigator.userAgent.match(/iPhone/i);
+var eventName = isOnIOS ? "pagehide" : "beforeunload";
 
-	addEventListener("beforeunload", function (event) {
-		filler = $JQry(".portlet-filler").first();
+
+addEventListener(eventName, function (event) {
+	filler = $JQry(".portlet-filler").first();
+
+	// Should work in any case
+	// But validate on filebrowser first
+	
+	if (filler.parents('.file-browser').length) {
 		if( filler != undefined)	{
-			console.log("savescroll "+filler.scrollTop());
-			localStorage.setItem("scrollPos", filler.scrollTop());
+			var key = "scrollPos/" + window.location.href;			
+			localStorage.setItem(key, filler.scrollTop());
 		}	
-	});
+	}	
+});
 
-*/
