@@ -47,7 +47,7 @@
 
                     <c:when test="${task.fancytree}">
                         <div class="fancytree overflow-hidden">
-                            <ul>
+                            <ul class="d-none">
                                 <li class="${task.active ? 'current' : (task.searchLocation ? 'search-location' : '')}"
                                     data-retain="${task.selected}"
                                     data-acceptedtypes="${fn:join(task.acceptedTypes, ',')}"
