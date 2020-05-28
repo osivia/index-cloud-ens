@@ -47,14 +47,14 @@
 
                     <c:when test="${task.fancytree}">
                         <div class="fancytree overflow-hidden">
-                            <ul class="d-none">
+                            <ul class="ml-4">
                                 <li class="${task.active ? 'current' : (task.searchLocation ? 'search-location' : '')}"
                                     data-retain="${task.selected}"
                                     data-acceptedtypes="${fn:join(task.acceptedTypes, ',')}"
                                     data-expanded="${task.selected}" data-folder="${task.folder}"
                                     data-lazy="${task.lazy}" data-current="${task.active}" data-id="${task.id}"
                                     data-path="${task.path}">
-                                    <a href="${task.url}" class="no-ajax-link">
+                                    <a href="${task.url}" class="no-ajax-link pl-0">
                                         <span>${task.displayName}</span>
                                     </a>
 

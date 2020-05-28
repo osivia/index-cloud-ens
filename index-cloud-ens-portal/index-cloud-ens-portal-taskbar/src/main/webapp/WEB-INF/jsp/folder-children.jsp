@@ -9,10 +9,15 @@
 
 
 <c:if test="${not empty folder.children}">
-    <ul>
+    <ul class="ml-0">
         <c:forEach var="child" items="${folder.children}">
             <li class="${child.active ? 'current' : (child.searchLocation ? 'search-location' : '')}" data-retain="${child.selected}" data-acceptedtypes="${fn:join(child.acceptedTypes, ',')}" data-expanded="${child.selected}" data-folder="${child.folder}" data-lazy="${child.lazy}" data-current="${child.active}" data-id="${child.id}" data-path="${child.path}">
-                <a href="${child.url}" class="no-ajax-link">
+                <c:if test="${not parent.selected}">
+                    <c:set var="hideStyle" value="d-none" scope="page" />
+                </c:if>
+                
+                
+                <a href="${child.url}" class="no-ajax-link ${hideStyle} pl-3">
                     <span>${child.displayName}</span>
                 </a>
             
