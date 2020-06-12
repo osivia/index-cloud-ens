@@ -40,6 +40,7 @@ import org.osivia.portal.core.cms.CMSItem;
 import org.osivia.portal.core.cms.CMSServiceCtx;
 import org.osivia.portal.core.cms.NavigationItem;
 
+import fr.index.cloud.ens.ws.DriveRestController;
 import fr.toutatice.portail.cms.nuxeo.api.INuxeoCommand;
 import fr.toutatice.portail.cms.nuxeo.api.NuxeoQueryFilter;
 import fr.toutatice.portail.cms.nuxeo.api.NuxeoQueryFilterContext;
@@ -48,12 +49,12 @@ import fr.toutatice.portail.cms.nuxeo.api.domain.INavigationAdapterModule;
 
 
 /**
- * Return all trr items.
+ * Search items.
  *
  * @author jeanseb
  * @see INuxeoCommand
  */
-public class GetTreeCommand implements INuxeoCommand {
+public class SearchCommand implements INuxeoCommand {
 
     /** Default navigation schemas. */
     private static final String TREE_SCHEMAS = "dublincore, common, toutatice, file, resourceSharing";
@@ -62,12 +63,17 @@ public class GetTreeCommand implements INuxeoCommand {
     /** Parent path. */
     private final String basePath;
 
+    /** The type. */
+    private final String type;
+    
+    /** The mime type. */
+    private final String mimeType;
 
 
-
-    public GetTreeCommand(String basePath) {
+    public SearchCommand(String basePath, String type, String mimeType) {
         this.basePath = basePath;
-
+        this.type = type;
+        this.mimeType = mimeType;
     }
 
 
@@ -82,10 +88,23 @@ public class GetTreeCommand implements INuxeoCommand {
         OperationRequest operationRequest = session.newRequest("Document.Query");
 
         // Nuxeo query clause
-        StringBuilder clause = new StringBuilder();
-        clause.append("((ecm:path STARTSWITH '");
-        clause.append(basePath + "/");
-        clause.append("') or (ecm:path = '"+basePath+"'))");
+        String clause = "((ecm:path STARTSWITH '"+basePath + "/') OR (ecm:path = '"+basePath+"'))";
+        
+       
+        if( StringUtils.isNotEmpty(type))   {
+            if( DriveRestController.DRIVE_TYPE_FOLDER.equals(type)) {
+                clause  = clause + " AND ( ecm:primaryType = 'Folder' )";
+            }
+            else if( DriveRestController.DRIVE_TYPE_FILE.equals(type))  {
+                clause  = clause + " AND ( ecm:mixinType <> 'Folderish' )";                
+            }
+        }   
+        
+        if( StringUtils.isNotEmpty(mimeType))   {
+            clause  = clause + " AND (file:content/mime-type='"+mimeType+"' ) ";
+        }
+        
+          
 
         // Nuxeo query filter
         NuxeoQueryFilterContext filter = NuxeoQueryFilterContext.CONTEXT_LIVE;

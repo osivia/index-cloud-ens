@@ -265,12 +265,29 @@ function drive(id) {
 
 }
 
-function getTree(path) {
-	var url = oauth.params.resourceUrl+"/Drive.treeList";
+function addParameter (queryString, parameterName, parameterValue)	{
+	if( parameterValue === undefined || parameterValue == "-")
+		return queryString;
+	
+	if( queryString.length == 0)
+		queryString += "?";
+	else
+		queryString += "&";	
+	
+	queryString = queryString + parameterName + "=" + parameterValue;
+	
+	return queryString;
+}
 
-	if (typeof path !== 'undefined') {
-		url = url + "?path=" + path;
-	}
+function search(path, type, mimeType) {
+	var url = oauth.params.resourceUrl+"/Drive.search";
+	
+	var queryString = "";
+	queryString = addParameter (queryString, "path", path);
+	queryString = addParameter (queryString, "type", type);
+	queryString = addParameter (queryString, "mimeType", mimeType);
+
+	url = url+queryString;
 
 	$JQry
 			.ajax({
@@ -654,7 +671,9 @@ $JQry(function() {
 		var $element = $JQry(element);
 		$element.click(function() {
 			var treePath = $JQry('#getTreeFullName').val();
-			getTree(treePath);
+			var treeType = $JQry('#getType').val();
+			var treeMimeType = $JQry('#getMimeType').val();
+			search(treePath, treeType, treeMimeType);
 		});
 	});
 	
