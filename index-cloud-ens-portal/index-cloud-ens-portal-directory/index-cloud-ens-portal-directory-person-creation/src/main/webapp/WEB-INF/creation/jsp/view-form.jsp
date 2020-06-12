@@ -84,8 +84,6 @@
                                             <form:errors path="newpassword" cssClass="invalid-feedback"/>
                                         </div>
 
-                                        <div data-password-information-placeholder
-                                             data-url="${passwordInformationUrl}"></div>
                                     </div>
                                 </spring:bind>
 
@@ -99,6 +97,10 @@
                                         <form:errors path="confirmpassword" cssClass="invalid-feedback"/>
                                     </div>
                                 </spring:bind>
+                                
+
+                                        <div data-password-information-placeholder
+                                             data-url="${passwordInformationUrl}"></div>                                
                             </div>
                         </div>
 
@@ -109,17 +111,19 @@
                                 <div class="form-check">
                                     <form:checkbox id="${namespace}-accept-terms-of-service" path="acceptTermsOfService"
                                                    cssClass="form-check-input" cssErrorClass="form-check-input is-invalid"/>
-                                    <form:label for="${namespace}-accept-terms-of-service" path="acceptTermsOfService"
-                                                cssClass="form-check-label"><op:translate
-                                            key="createaccount.form.acceptTermsOfService"/></form:label>
-                                    <form:errors path="acceptTermsOfService" cssClass="invalid-feedback" />
-                                    <div class="mt-1">
-                                        <c:set var="title"><op:translate key="createaccount.form.termsOfService"/></c:set>
-                                        <a href="javascript:" class="no-ajax-link" data-target="#osivia-modal"
-                                           data-load-url="${termsOfServiceUrl}" data-title="${title}" data-footer="true">
-                                            <span><op:translate key="createaccount.form.viewTermsOfService"/></span>
-                                        </a>
-                                    </div>
+                                                   
+                                     <form:label for="${namespace}-accept-terms-of-service" path="acceptTermsOfService"
+                                                cssClass="form-check-label">
+                                            <op:translate
+                                            key="createaccount.form.acceptTermsOfService.beforeLink"/>   
+                                            <a href="javascript:" class="no-ajax-link" data-target="#osivia-modal"
+                                                data-load-url="${termsOfServiceUrl}" data-title="${title}" data-footer="true">
+                                                <span><op:translate key="createaccount.form.acceptTermsOfService.link"/></span>
+                                            </a>
+                                            <op:translate
+                                            key="createaccount.form.acceptTermsOfService.afterLink"/> 
+                                     </form:label>              
+                                    
                                 </div>
                             </div>
 

@@ -11,12 +11,6 @@
 <nav>
     <h2 class="sr-only"><op:translate key="BREADCRUMB_TITLE"/></h2>
     <ol class="breadcrumb mb-0 px-0">
-        <li class="breadcrumb-item breadcrumb-home">
-            <a href="${requestScope['osivia.home.url']}" class="text-secondary">
-                <i class="glyphicons glyphicons-basic-home"></i>
-                <span class="sr-only"><op:translate key="HOME"/></span>
-            </a>
-        </li>
 
         <c:choose>
             <c:when test="${empty activeSavedSearch}">

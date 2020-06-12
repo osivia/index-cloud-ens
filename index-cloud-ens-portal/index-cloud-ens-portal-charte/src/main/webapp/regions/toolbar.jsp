@@ -20,8 +20,11 @@
     <%--Brand--%>
     <a href="${requestScope['osivia.home.url']}" class="navbar-brand py-0">
         <img alt="${requestScope['osivia.header.application.name']}"
-             src="${contextPath}/img/logo-cloud-pronote-large.png" class="my-n2" height="50">
+             src="${contextPath}/img/logo-cloud-pronote-large.png" class="my-n2" height="32">
     </a>
+    
+
+    
 
     <ul class="navbar-nav d-md-none flex-row">
         <%--Tasks--%>
@@ -47,6 +50,14 @@
         </ul>
 
         <ul class="navbar-nav flex-sm-row justify-content-center align-items-center mt-sm-2 mt-md-0 mr-md-auto">
+        
+	        <li class="nav-item mr-3">
+	            <a href="${requestScope['osivia.home.url']}" class="index-home">
+	                <i class="glyphicons glyphicons-basic-home"></i>
+	                <span class="sr-only"><op:translate key="HOME"/></span>
+	            </a>
+	        </li>
+        
             <c:forEach var="navItem" items="${requestScope['osivia.nav.items']}" varStatus="status">
                 <li class="nav-item ${status.first ? '' : 'mt-2 mt-sm-0'} ${status.last ? '' : 'mr-sm-3'}">
                     <a href="${navItem.url}"

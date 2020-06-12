@@ -1,5 +1,9 @@
 $border-width: 3px;
 
+.index-home {
+  font-size: $font-size-base * 1.10 ;
+  color: $navbar-light-color;
+}
 
 .index-tab {
   display: inline-block;

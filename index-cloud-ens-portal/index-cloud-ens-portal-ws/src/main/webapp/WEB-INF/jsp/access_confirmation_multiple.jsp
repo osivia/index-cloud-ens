@@ -40,7 +40,7 @@
 					<nav class="navbar navbar-expand navbar-light">
 
 						<a class="navbar-brand d-none d-md-inline-block mx-auto py-0" href="/portal"> <img alt="Cloud PRONOTE"
-							src="/index-cloud-ens-charte/img/logo-cloud-pronote.png" class="my-n2" height="50">
+							src="/index-cloud-ens-charte/img/logo-cloud-pronote-large.png" height="32">
 						</a>
 					</nav>
 				</div>
