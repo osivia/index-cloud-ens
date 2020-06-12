@@ -66,10 +66,11 @@ import fr.index.cloud.ens.ws.commands.CreateFolderCommand;
 import fr.index.cloud.ens.ws.commands.FetchByPubIdCommand;
 import fr.index.cloud.ens.ws.commands.FetchByTitleCommand;
 import fr.index.cloud.ens.ws.commands.FolderGetChildrenCommand;
+import fr.index.cloud.ens.ws.commands.GetHierarchyCommand;
 import fr.index.cloud.ens.ws.commands.GetSharedUrlCommand;
-import fr.index.cloud.ens.ws.commands.GetTreeCommand;
 import fr.index.cloud.ens.ws.commands.GetUserProfileCommand;
 import fr.index.cloud.ens.ws.commands.PublishCommand;
+import fr.index.cloud.ens.ws.commands.SearchCommand;
 import fr.index.cloud.ens.ws.commands.UnpublishCommand;
 import fr.index.cloud.ens.ws.commands.UploadFileCommand;
 import fr.index.cloud.oauth.config.SecurityFilter;
@@ -118,6 +119,8 @@ public class DriveRestController {
     public static final int ERR_CREATE_FOLDER_ALREADY_EXISTS = 1;
     public static final int ERR_CREATE_FOLDER_EMPTY_NAME = 2;   
     
+    public static final int ERR_SEARCH_INCORRECT_PATH = 1;
+    public static final int ERR_SEARCH_INCORRECT_TYPE = 2;   
 
     public static PortletContext portletContext;
     
@@ -283,6 +286,16 @@ public class DriveRestController {
         /* link */
         if (!facets.list().contains("Folderish"))    {
             
+            PropertyMap fileContent = doc.getProperties().getMap("file:content");
+            
+            // MIME type
+            if (fileContent != null) {
+                String mimeType = fileContent.getString("mime-type");
+                contents.put("mimeType",mimeType);
+            }
+
+            
+            
             if (doc.getProperties().get("common:size") != null) {
                 long size = doc.getProperties().getLong("common:size");
                 contents.put("fileSize", size);
@@ -308,7 +321,7 @@ public class DriveRestController {
     
     
             // Digest
-            PropertyMap fileContent = doc.getProperties().getMap("file:content");
+           
             if (fileContent != null) {
                 contents.put("hash", fileContent.getString("digest"));
             }
@@ -502,23 +515,26 @@ public class DriveRestController {
 
     
     
+   
     
-
+    
     /**
-     * Get content datas for the specified id
-     * 
-     * @param request
-     * @param response
-     * @param id
-     * @param principal
-     * @return
-     * @throws Exception
+     * Get content datas for the specified id.
+     *
+     * @param request the request
+     * @param response the response
+     * @param fullPathByTitle the full path by title
+     * @param type the type
+     * @param mimeType the mime type
+     * @param principal the principal
+     * @return the map
+     * @throws Exception the exception
      */
 
-    @RequestMapping(value = "/Drive.treeList", method = RequestMethod.GET)
+    @RequestMapping(value = "/Drive.search", method = RequestMethod.GET)
     @ResponseStatus(HttpStatus.OK)
 
-    public Map<String, Object> getTree(HttpServletRequest request, HttpServletResponse response, @RequestParam(value = "path", required = false) String fullPathByTitle,
+    public Map<String, Object> search(HttpServletRequest request, HttpServletResponse response, @RequestParam(value = "path", required = false) String fullPathByTitle, @RequestParam(value = "type", required = false) String type, @RequestParam(value = "mimeType", required = false) String mimeType, 
             Principal principal) throws Exception {
 
         
@@ -539,12 +555,17 @@ public class DriveRestController {
             String baseTitlePath ;
             
             
-            // Normalize search string (remove last slash)
+            // Normalize search string 
             if( StringUtils.isNotEmpty(fullPathByTitle))    {
+                
+                if( !fullPathByTitle.startsWith(PATH_SEPARATOR))
+                    return errorMgr.getErrorResponse(ERR_SEARCH_INCORRECT_PATH, "The path is not correct");
+                
+                // remove last slash               
                 if( fullPathByTitle.endsWith(PATH_SEPARATOR))
                     fullPathByTitle = fullPathByTitle.substring(0, fullPathByTitle.length() -1 );
             }
-                
+
             
             if( StringUtils.isNotEmpty(fullPathByTitle)) {   
                 baseDoc = prepareFolder(nuxeoController,  rootDoc, fullPathByTitle, false);
@@ -555,39 +576,25 @@ public class DriveRestController {
                 baseTitlePath = "/";
             }
   
-
-            // Get current doc
-
+            // control the type
+            if( StringUtils.isNotEmpty(type))   {
+                if( (! DriveRestController.DRIVE_TYPE_FOLDER.equals(type)) && (! DriveRestController.DRIVE_TYPE_FILE.equals(type)))  {          
+                     return errorMgr.getErrorResponse(ERR_SEARCH_INCORRECT_TYPE, "This type is not supported");                
+                    }
+            }
+            
+    
             List<Map<String, Object>> childrenList = new ArrayList<>();
 
-            // Add childrens
-            Map<String, Document> children = (Map<String, Document>) nuxeoController.executeNuxeoCommand(new GetTreeCommand(baseDoc.getPath()));
+            // Get full hierarchy
+            Map<String, Document> hierarchyDocs = (Map<String, Document>) nuxeoController.executeNuxeoCommand(new GetHierarchyCommand(baseDoc.getPath()));
             
-             
+            // Get search results
+            Map<String, Document> children = (Map<String, Document>) nuxeoController.executeNuxeoCommand(new SearchCommand(baseDoc.getPath(), type, mimeType));           
 
             for (String path : children.keySet()) {
 
-                String childTitlePath = "";
-                String remainingpath = path;
-                
-                while (remainingpath.length() > baseDoc.getPath().length()) {
-                    // Search parents
-                    Document hierarchyDoc = children.get(remainingpath);
-                    if( hierarchyDoc == null) {
-                           throw new RuntimeException("Inconsistent hierarchy");
-                    }
-                    
-                    if( childTitlePath.length() > 0)    
-                        childTitlePath = PATH_SEPARATOR + childTitlePath;
-                    
-                    childTitlePath = hierarchyDoc.getTitle() + childTitlePath;
-                    
-                    int lastSlash = remainingpath.lastIndexOf(PATH_SEPARATOR);
-                    if( lastSlash == -1) {
-                        throw new RuntimeException("Inconsistent hierarchy");
-                    }
-                    remainingpath = remainingpath.substring(0, lastSlash);
-                }
+                String childTitlePath = getFullTitle(baseDoc.getPath(), hierarchyDocs, path);
                 
                 Document doc = children.get(path);
                 
@@ -614,10 +621,43 @@ public class DriveRestController {
         return returnObject;
 
     }
+
+
+    /**
+     * Gets the full title (including hierarchy)
+     *
+     * @param basePath the base path
+     * @param hierarchyDocs the hierarchy docs
+     * @param path the path
+     * @return the full title
+     */
     
-    
-    
-    
+    private String getFullTitle(String basePath, Map<String, Document> hierarchyDocs, String path) {
+        
+        String childTitlePath = "";
+        String remainingpath = path;
+        
+          
+        while (remainingpath.length() > basePath.length()) {
+            // Search parents
+            Document hierarchyDoc = hierarchyDocs.get(remainingpath);
+            if( hierarchyDoc == null) {
+                   throw new RuntimeException("Inconsistent hierarchy");
+            }
+            
+            if( childTitlePath.length() > 0)    
+                childTitlePath = PATH_SEPARATOR + childTitlePath;
+            
+            childTitlePath = hierarchyDoc.getTitle() + childTitlePath;
+            
+            int lastSlash = remainingpath.lastIndexOf(PATH_SEPARATOR);
+            if( lastSlash == -1) {
+                throw new RuntimeException("Inconsistent hierarchy");
+            }
+            remainingpath = remainingpath.substring(0, lastSlash);
+        }
+        return childTitlePath;
+    }
     
     
 
