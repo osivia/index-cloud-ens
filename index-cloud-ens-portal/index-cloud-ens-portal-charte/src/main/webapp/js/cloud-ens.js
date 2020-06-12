@@ -223,14 +223,34 @@ function onFinish() {
  * (back button)
  */
 
+
+function readCookie(name) {
+    // Escape regexp special characters (thanks kangax!)
+    name = name.replace(/([.*+?^=!:${}()|[\]\/\\])/g, '\\$1');
+
+    var regex = new RegExp('(?:^|;)\\s?' + name + '=(.*?)(?:;|$)','i'),
+    
+    match = document.cookie.match(regex);
+
+    return match && unescape(match[1]); 
+}
+
+//Get unique key per session/location
+function getScrollKey() {
+	var session = readCookie("PORTALSESSIONID");
+	if( session == null)
+		session = "";
+	key = session + "/scroll/" +  window.location.href;
+	return key;
+}
+
 $JQry(document).ready(function(){
-	var key = "scrollPos/" + window.location.href;
-	
-	if (localStorage.getItem(key) != undefined)	{
+	var key = getScrollKey();
+	if (sessionStorage.getItem(key) != undefined)	{
 		filler = $JQry(".portlet-filler").first();
 		if( filler != undefined)	{
-			filler.scrollTop(localStorage.getItem(key));
-			localStorage.removeItem(key)
+			filler.scrollTop(sessionStorage.getItem(key));
+			sessionStorage.removeItem(key)
 		}
 	}
 });
@@ -241,14 +261,12 @@ var eventName = isOnIOS ? "pagehide" : "beforeunload";
 
 addEventListener(eventName, function (event) {
 	filler = $JQry(".portlet-filler").first();
-
 	// Should work in any case
 	// But validate on filebrowser first
-	
 	if (filler.parents('.file-browser').length) {
 		if( filler != undefined)	{
-			var key = "scrollPos/" + window.location.href;			
-			localStorage.setItem(key, filler.scrollTop());
+			var key = getScrollKey();			
+			sessionStorage.setItem(key, filler.scrollTop());
 		}	
 	}	
 });
