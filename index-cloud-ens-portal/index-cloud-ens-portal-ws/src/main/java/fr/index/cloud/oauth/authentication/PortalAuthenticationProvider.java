@@ -1,9 +1,14 @@
 package fr.index.cloud.oauth.authentication;
 
+import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
+import javax.security.auth.login.FailedLoginException;
+
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.time.DateUtils;
 import org.osivia.directory.v2.service.PersonUpdateService;
 import org.osivia.portal.api.context.PortalControllerContext;
 import org.osivia.portal.api.directory.v2.model.Person;
@@ -50,8 +55,20 @@ public class PortalAuthenticationProvider implements AuthenticationProvider {
                 criteria.setMail(name);
                
                 List<Person> persons = personUpdateService.findByCriteria(criteria);
-                if( persons.size() == 1)
+                if( persons.size() == 1)    {
+                    
+                    Person person = persons.get(0);
+                    if( person.getValidity() != null) {
+                    
+                    // if portalPersonExternal = FALSE, portalPersonValidity should be after current day
+                        if (person.getValidity().before(new Date())) {
+                            throw new FailedLoginException("Account has expired");
+                        }
+
+                    }
+                    
                     uid = persons.get(0).getUid();
+                }
             }
             
             found = personUpdateService.verifyPassword(uid, password);
