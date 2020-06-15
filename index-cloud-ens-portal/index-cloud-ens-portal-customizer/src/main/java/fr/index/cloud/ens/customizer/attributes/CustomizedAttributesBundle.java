@@ -28,6 +28,8 @@ import org.osivia.portal.api.locator.Locator;
 import org.osivia.portal.api.theming.IAttributesBundle;
 import org.osivia.portal.api.urls.IPortalUrlFactory;
 import org.osivia.portal.core.cms.*;
+import org.osivia.portal.core.profils.IProfilManager;
+import org.osivia.portal.core.profils.ProfilBean;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.xml.XMLConstants;
@@ -89,6 +91,17 @@ public class CustomizedAttributesBundle implements IAttributesBundle {
      * Mutualized space path environment property.
      */
     private static final String MUTUALIZED_SPACE_PATH_PROPERTY = "config.mutualized.path";
+    
+    
+    /**
+     * Default member page
+     */
+    private static final String DEFAULT_MEMBER_PAGE = "osivia.default.memberPage";
+    
+    /**
+     * Default member page url
+     */
+    private static final String DEFAULT_MEMBER_PAGE_URL = "osivia.default.memberPageUrl";
 
     /**
      * Singleton instance.
@@ -122,6 +135,9 @@ public class CustomizedAttributesBundle implements IAttributesBundle {
      * User preferences service.
      */
     private UserPreferencesService userPreferencesService;
+    
+    /** Profile manager. */
+    private final IProfilManager profileManager;
 
 
     /**
@@ -142,6 +158,9 @@ public class CustomizedAttributesBundle implements IAttributesBundle {
         this.names.add(INDEX_EDUCATION_URL_KEY);
         this.names.add(HIDE_FIRST_BREADCRUMB_ITEM);
         this.names.add(ACTIVE_SAVED_SEARCH);
+        this.names.add(DEFAULT_MEMBER_PAGE);
+        this.names.add(DEFAULT_MEMBER_PAGE_URL);        
+   
 
         // SSO applications
         this.applications = new ArrayList<>();
@@ -154,6 +173,8 @@ public class CustomizedAttributesBundle implements IAttributesBundle {
         this.cmsServiceLocator = Locator.findMBean(ICMSServiceLocator.class, ICMSServiceLocator.MBEAN_NAME);
         // User preferences service
         this.userPreferencesService = DirServiceFactory.getService(UserPreferencesService.class);
+        // Profile manager
+        this.profileManager = Locator.findMBean(IProfilManager.class, "osivia:service=ProfilManager");        
     }
 
 
@@ -228,6 +249,20 @@ public class CustomizedAttributesBundle implements IAttributesBundle {
 
         attributes.put(USER_WORKSPACE_URL, userWorkspaceUrl);
 
+        
+        // User profile
+        ProfilBean profile = this.profileManager.getProfilPrincipalUtilisateur();
+        if( profile != null && profile.getDefaultPageName() != null)    {
+            if( page.getName().equals(profile.getDefaultPageName()))  {
+                attributes.put( DEFAULT_MEMBER_PAGE, true);
+            }
+        }
+        
+        attributes.put(DEFAULT_MEMBER_PAGE_URL, "/portal/auth");
+
+        
+        // Portal default page
+        Page portalDefaultPage = portal.getDefaultPage();
 
         // Mutualized space
         String mutualizedSpacePath = System.getProperty(MUTUALIZED_SPACE_PATH_PROPERTY);

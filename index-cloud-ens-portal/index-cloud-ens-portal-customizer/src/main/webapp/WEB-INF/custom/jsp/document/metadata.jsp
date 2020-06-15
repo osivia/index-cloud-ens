@@ -22,10 +22,10 @@
 
             <%--Keywords--%>
             <c:if test="${readOnly and not empty document.properties['mtz:keywords']}">
-                <p class="card-text mb-0"><op:translate key="DOCUMENT_MUTUALIZATION_KEYWORDS"/></p>
-                <ul class="list-inline">
+                <label><op:translate key="DOCUMENT_MUTUALIZATION_KEYWORDS"/></label>
+                <ul class="field-display-rendered ">
                     <c:forEach var="keyword" items="${document.properties['mtz:keywords']}">
-                        <li class="list-inline-item">${keyword}</li>
+                        <li class="field-display-list-item"><span class="field-display-text">${keyword}</span></li>
                     </c:forEach>
                 </ul>
             </c:if>
@@ -34,10 +34,10 @@
             <c:set var="levels" value="${document.properties['idxcl:levels']}"/>
             <c:choose>
                 <c:when test="${readOnly}">
-                    <p class="card-text mb-0"><op:translate key="DOCUMENT_METADATA_LEVEL_LABEL"/></p>
-                    <ul class="list-inline">
+                    <label><op:translate key="DOCUMENT_METADATA_LEVEL_LABEL"/></label>
+                    <ul class="field-display-rendered">
                         <c:forEach var="level" items="${levels}">
-                            <li class="list-inline-item"><ttc:vocabularyLabel name="idx_level" key="${level}"/></li>
+                            <li class="field-display-list-item"><span class="field-display-text"><ttc:vocabularyLabel name="idx_level" key="${level}"/><span> </li>
                         </c:forEach>
                     </ul>
                 </c:when>
@@ -73,10 +73,10 @@
             <c:set var="subjects" value="${document.properties['idxcl:subjects']}"/>
             <c:choose>
                 <c:when test="${readOnly}">
-                    <p class="card-text mb-0"><op:translate key="DOCUMENT_METADATA_SUBJECT_LABEL"/></p>
-                    <ul class="list-inline">
+                    <label><op:translate key="DOCUMENT_METADATA_SUBJECT_LABEL"/></label>
+                    <ul class="field-display-rendered">
                         <c:forEach var="subject" items="${subjects}">
-                            <li class="list-inline-item"><ttc:vocabularyLabel name="idx_subject" key="${subject}"/></li>
+                            <li class="field-display-list-item"><span class="field-display-text"><ttc:vocabularyLabel name="idx_subject" key="${subject}"/></span></li>
                         </c:forEach>
                     </ul>
                 </c:when>
@@ -114,11 +114,11 @@
             <c:set var="documentTypes" value="${document.properties['idxcl:documentTypes']}"/>
             <c:choose>
                 <c:when test="${readOnly}">
-                    <p class="card-text mb-0"><op:translate key="DOCUMENT_METADATA_DOCUMENT_TYPE_LABEL"/></p>
-                    <ul class="list-inline">
+                    <label><op:translate key="DOCUMENT_METADATA_DOCUMENT_TYPE_LABEL"/></label>
+                    <ul class="field-display-rendered">
                         <c:forEach var="documentType" items="${documentTypes}">
-                            <li class="list-inline-item"><ttc:vocabularyLabel name="idx_document_type"
-                                                                              key="${documentType}"/></li>
+                            <li class="field-display-list-item"><span class="field-display-text"><ttc:vocabularyLabel name="idx_document_type"
+                                                                              key="${documentType}"/></span></li>
                         </c:forEach>
                     </ul>
                 </c:when>

@@ -51,8 +51,11 @@
 
         <ul class="navbar-nav flex-sm-row justify-content-center align-items-center mt-sm-2 mt-md-0 mr-md-auto">
         
+        
+ 
+            
 	        <li class="nav-item mr-3">
-	            <a href="${requestScope['osivia.home.url']}" class="index-home">
+	            <a href="${requestScope['osivia.default.memberPageUrl']}" class="index-home ${requestScope['osivia.default.memberPage'] ? 'active' : ''}">
 	                <i class="glyphicons glyphicons-basic-home"></i>
 	                <span class="sr-only"><op:translate key="HOME"/></span>
 	            </a>

@@ -1,8 +1,21 @@
-$border-width: 3px;
+$tabs-border-width: 3px;
 
 .index-home {
+
+  padding: $nav-link-padding-y / 2 0;
+
   font-size: $font-size-base * 1.10 ;
   color: $navbar-light-color;
+  
+  
+  border-bottom-style: solid;
+  border-width: $tabs-border-width;
+  border-color: transparent;
+
+  
+  &.active {
+      border-color: $navbar-light-color;
+    }
 }
 
 .index-tab {
@@ -13,7 +26,7 @@ $border-width: 3px;
   font-size: $font-size-base * 1.10 ;
 
   border-bottom-style: solid;
-  border-width: $border-width;
+  border-width: $tabs-border-width;
   border-color: transparent;
 
   i {
@@ -27,7 +40,7 @@ $border-width: 3px;
   }
 
   @media (min-width: map_get($grid-breakpoints, "sm")) {
-    margin-bottom: -$border-width;
+    margin-bottom: -$tabs-border-width;
   }
 }
 

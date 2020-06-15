@@ -15,7 +15,7 @@
     </div>
 
     <div class="text-right">
-        <button type="button" class="btn btn-primary btn-sm" onclick="javascript:saveSearch(this)">
+        <button type="submit" class="btn btn-primary btn-sm" onclick="javascript:saveSearch(this)">
             <span><op:translate key="SAVE"/></span>
         </button>
     </div>
