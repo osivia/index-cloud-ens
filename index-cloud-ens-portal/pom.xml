@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
@@ -18,29 +19,20 @@
 
     <properties>
         <!-- Toutatice -->
-<!--   <toutatice.version>4.9.3-RC7</toutatice.version> -->
-     <toutatice.version>4.9-SNAPSHOT</toutatice.version>
-
+        <toutatice.version>4.9.3-RC7</toutatice.version>
 
         <!-- Directory -->
         <directory.version>4.9.3</directory.version>
 
         <!-- Collaboration -->
-         <collaboration.version>4.9.3-RC6</collaboration.version>
-<!--        <collaboration.version>4.9-SNAPSHOT</collaboration.version> -->
+        <collaboration.version>4.9.3-RC6</collaboration.version>
 
         <!-- Other services -->
-<!--      <tasks.version>4.9-SNAPSHOT</tasks.version> -->
-
-         <tasks.version>4.9.3</tasks.version>       
-        <procedure.version>4.9.1</procedure.version> 
-<!--         <procedure.version>4.9-SNAPSHOT</procedure.version>-->
-        
+        <tasks.version>4.9.3</tasks.version>
+        <procedure.version>4.9.1</procedure.version>
         <cgu.version>4.9.1</cgu.version>
-
         <document-creation.version>4.7.14-RC2</document-creation.version>
         <onlyoffice.version>4.7.14-RC2</onlyoffice.version>
-
 
         <!-- Identity SSO -->
         <identity-sso.version>3.0.13</identity-sso.version>
@@ -83,7 +75,7 @@
 
 
     <modules>
-        <module>index-cloud-ens-portal-antivirus</module>	
+        <module>index-cloud-ens-portal-antivirus</module>
         <module>index-cloud-ens-portal-charte</module>
         <module>index-cloud-ens-portal-customizer</module>
         <module>index-cloud-ens-portal-directory</module>
@@ -96,7 +88,7 @@
         <module>index-cloud-ens-portal-distribution</module>
         <module>index-cloud-ens-portal-ws</module>
         <module>index-cloud-ens-portal-generator</module>
-        <module>index-cloud-ens-portal-discussion</module>		
+        <module>index-cloud-ens-portal-discussion</module>
     </modules>
 
 
