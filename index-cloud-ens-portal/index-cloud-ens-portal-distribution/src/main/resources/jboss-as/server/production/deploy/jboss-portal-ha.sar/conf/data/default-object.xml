@@ -253,7 +253,7 @@
                 <window>
                     <window-name>index-cloud-ens-saved-searches-instance_1567605355591</window-name>
                     <instance-ref>index-cloud-ens-saved-searches-instance</instance-ref>
-                    <region>col-1</region>
+                    <region>col-1-1</region>
                     <properties>
                         <property>
                             <name>osivia.hideDecorators</name>
@@ -269,7 +269,7 @@
                         </property>
                         <property>
                             <name>theme.order</name>
-                            <value>1</value>
+                            <value>0</value>
                         </property>
                     </properties>
                     <height>0</height>
@@ -278,7 +278,7 @@
                 <window>
                     <window-name>toutatice-portail-cms-nuxeo-viewListPortletInstance_1556902653408</window-name>
                     <instance-ref>toutatice-portail-cms-nuxeo-viewListPortletInstance</instance-ref>
-                    <region>col-1</region>
+                    <region>col-1-top</region>
                     <properties>
                         <property>
                             <name>portal.windowContentType</name>

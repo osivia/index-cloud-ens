@@ -27,7 +27,21 @@
             </div>
 
             <div class="col-lg-8 d-flex flex-column mh-100 py-4">
-                <p:region regionName="col-1"/>
+                <p:region regionName="col-1-top"/>
+
+                <div class="row">
+                    <div class="col-sm">
+                        <p:region regionName="col-1-1"/>
+                    </div>
+
+                    <div class="col-sm">
+                        <p:region regionName="col-1-2"/>
+                    </div>
+
+                    <div class="col-sm">
+                        <p:region regionName="col-1-3"/>
+                    </div>
+                </div>
             </div>
 
             <div class="col-lg-4 d-flex flex-column mh-100 py-4 bg-mutualized-lighter">

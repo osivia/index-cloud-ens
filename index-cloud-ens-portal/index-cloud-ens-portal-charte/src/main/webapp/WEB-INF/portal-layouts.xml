@@ -42,8 +42,10 @@
         <uri>/layouts/home/index.jsp</uri>
         <uri state="maximized">/layouts/without-nav/maximized.jsp</uri>
         <regions>
-            <region name="contextualized-search" />
-            <region name="col-1" />
+            <region name="col-1-top" />
+            <region name="col-1-1" />
+            <region name="col-1-2" />
+            <region name="col-1-3" />
             <region name="col-2" />
         </regions>
     </layout>
