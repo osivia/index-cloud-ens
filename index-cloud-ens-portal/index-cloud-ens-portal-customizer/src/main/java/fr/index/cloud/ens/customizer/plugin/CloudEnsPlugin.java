@@ -147,6 +147,10 @@ public class CloudEnsPlugin extends AbstractPluginPortlet {
         // Mutualization space summary
         ListTemplate mutualizationSpaceSummaryList = new ListTemplate("mutualization-space-summary", bundle.getString("LIST_TEMPLATE_MUTUALIZATION_SPACE_SUMMARY"), "*");
         templates.put(mutualizationSpaceSummaryList.getKey(), mutualizationSpaceSummaryList);
+
+        // My publications
+        ListTemplate myPublicationsList = new ListTemplate("my-publications", bundle.getString("LIST_TEMPLATE_MY_PUBLICATIONS"), "*");
+        templates.put(myPublicationsList.getKey(), myPublicationsList);
     }
 
 
