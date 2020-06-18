@@ -331,11 +331,14 @@ public class DiscussionRepositoryImpl implements DiscussionRepository {
             // - not deleted
 
             String newAuthor = null;
+            String lastMessage = null;
+            
             for (int iMessage = discussion.getMessages().size() - 1; iMessage > readId && newAuthor == null; iMessage--) {
                 String author = discussion.getMessages().get(iMessage).getAuthor();
                 if (author != null && !author.equals(portalControllerContext.getHttpServletRequest().getRemoteUser())) {
                     if (!discussion.getMessages().get(iMessage).isDeleted()) {
                         newAuthor = author;
+                        lastMessage = discussion.getMessages().get(iMessage).getContent();
                     }
                 }
             }
@@ -343,7 +346,11 @@ public class DiscussionRepositoryImpl implements DiscussionRepository {
             if (newAuthor != null) {
                 Map<String, String> properties = new HashMap<String, String>();
                 properties.put("author", newAuthor);
-
+                properties.put("message", lastMessage);
+                properties.put("pubTitle", discussion.getTitle());
+                properties.put("pubTarget", discussion.getTarget());
+                properties.put("pubType", discussion.getType());                
+                
                 tasks.add(new CustomTask(discussion.getDocument().getTitle(), discussion.getDocument(), properties));
             }
 

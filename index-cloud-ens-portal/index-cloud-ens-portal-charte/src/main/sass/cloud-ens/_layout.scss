@@ -72,3 +72,19 @@
     }
   }
 }
+
+
+.home-fixed-block {
+// to avoid double scroll bars in mobile mode
+  @media (min-width: map_get($grid-breakpoints, "md") ) {
+    overflow: auto;
+    max-height: 500px;
+    padding-right: 2px;    
+  }
+  
+  .home-fixed-block-item {
+    min-height: 85px;
+  }
+}
+
+

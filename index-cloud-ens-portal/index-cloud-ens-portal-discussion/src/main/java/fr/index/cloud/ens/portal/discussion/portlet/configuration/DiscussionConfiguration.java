@@ -27,7 +27,7 @@ import org.springframework.web.servlet.view.JstlView;
  * @author Jean-Sébastien Steux
  */
 @Configuration
-@ComponentScan(basePackages = "fr.index.cloud.ens.portal.discussion")
+@ComponentScan(basePackages = "fr.index.cloud.ens.portal.discussion.portlet")
 public class DiscussionConfiguration {
 
     /**
