@@ -45,6 +45,8 @@
         <%--Administration--%>
         <ul class="navbar-nav d-none d-md-flex mr-3">
             <li class="nav-item">
+            </li>
+            <li class="nav-item">
                 <c:out value="${requestScope['osivia.toolbar.administrationContent']}" escapeXml="false"/>
             </li>
         </ul>

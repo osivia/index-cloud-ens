@@ -86,6 +86,7 @@
                     <name>osivia.services.cgu.level</name>
                     <value>1</value>
                 </property>
+             
             </properties>
         </context>
     </deployment>
@@ -155,6 +156,10 @@
                     <name>osivia.liste_styles</name>
                     <value>no-gutter-left</value>
                 </property>
+                <property>
+                    <name>osivia.portal.admin.page</name>
+                    <value>/default/admin</value>
+                </property>                  
             </properties>
 
             <security-constraint>
@@ -336,75 +341,79 @@ return nuxeoRequest.toString();</value>
                     <height>0</height>
                 </window>
 
-            <window>
-                <window-name>toutatice-portail-cms-nuxeo-viewListPortletInstance_1592390618132</window-name>
-                <instance-ref>toutatice-portail-cms-nuxeo-viewListPortletInstance</instance-ref>
-                <region>col-1-2</region>
-                <properties>
-                  <property>
-                    <name>portal.windowContentType</name>
-                    <value>portlet</value>
-                  </property>
-                  <property>
-                    <name>osivia.cms.displayLiveVersion</name>
-                    <value>1</value>
-                  </property>
-                  <property>
-                    <name>osivia.bootstrapPanelStyle</name>
-                    <value>false</value>
-                  </property>
-                  <property>
-                    <name>osivia.title</name>
-                    <value>Mes documents mutualisés</value>
-                  </property>
-                  <property>
-                    <name>osivia.maximized.cms.url</name>
-                    <value>false</value>
-                  </property>
-                  <property>
-                    <name>theme.order</name>
-                    <value>0</value>
-                  </property>
-                  <property>
-                    <name>osivia.ajaxLink</name>
-                    <value>1</value>
-                  </property>
-                  <property>
-                    <name>osivia.hideDecorators</name>
-                    <value>1</value>
-                  </property>
-                  <property>
-                    <name>osivia.mobileCollapse</name>
-                    <value>false</value>
-                  </property>
-                  <property>
-                    <name>osivia.nuxeoRequest</name>
-                    <value>StringBuilder nuxeoRequest = new StringBuilder();&#13;
+               <window>
+                    <window-name>toutatice-portail-cms-nuxeo-viewListPortletInstance_1592390618132</window-name>
+                    <instance-ref>toutatice-portail-cms-nuxeo-viewListPortletInstance</instance-ref>
+                    <region>col-1-2</region>
+                    <properties>
+                      <property>
+                        <name>portal.windowContentType</name>
+                        <value>portlet</value>
+                      </property>
+                      <property>
+                        <name>osivia.cms.displayLiveVersion</name>
+                        <value>1</value>
+                      </property>
+                      <property>
+                        <name>osivia.bootstrapPanelStyle</name>
+                        <value>false</value>
+                      </property>
+                      <property>
+                        <name>osivia.title</name>
+                        <value>Mes documents mutualisés</value>
+                      </property>
+                      <property>
+                        <name>osivia.maximized.cms.url</name>
+                        <value>false</value>
+                      </property>
+                      <property>
+                        <name>osivia.cacheDeactivation</name>
+                        <value>1</value>
+                      </property>
+                      <property>
+                        <name>theme.order</name>
+                        <value>0</value>
+                      </property>
+                      <property>
+                        <name>osivia.ajaxLink</name>
+                        <value>1</value>
+                      </property>
+                      <property>
+                        <name>osivia.hideDecorators</name>
+                        <value>1</value>
+                      </property>
+                      <property>
+                        <name>osivia.mobileCollapse</name>
+                        <value>false</value>
+                      </property>
+                      <property>
+                        <name>osivia.nuxeoRequest</name>
+            <value>StringBuilder nuxeoRequest = new StringBuilder();&#13;
 nuxeoRequest.append("ecm:path STARTSWITH '").append(userWorkspacePath).append("' ");&#13;
 nuxeoRequest.append("AND ecm:primaryType IN ('File', 'Picture', 'Audio', 'Video', 'Note') ");&#13;
 nuxeoRequest.append("AND mtz:enable = 1");&#13;
 nuxeoRequest.append("ORDER BY dc:title ASC");&#13;
 return nuxeoRequest.toString();</value>
-                  </property>
-                  <property>
-                    <name>osivia.layout.item.id</name>
-                    <value/>
-                  </property>
-                  <property>
-                    <name>osivia.cms.style</name>
-                    <value>my-publications</value>
-                  </property>
-                  <property>
-                    <name>theme.dyna.partial_refresh_enabled</name>
-                    <value>true</value>
-                  </property>
-                  <property>
-                    <name>osivia.beanShell</name>
-                    <value>on</value>
-                  </property>
-                </properties>
-                <height>0</height>
-              </window>
+                      </property>
+                      <property>
+                        <name>osivia.layout.item.id</name>
+                        <value/>
+                      </property>
+                      <property>
+                        <name>osivia.cms.style</name>
+                        <value>my-publications</value>
+                      </property>
+                      <property>
+                        <name>theme.dyna.partial_refresh_enabled</name>
+                        <value>true</value>
+                      </property>
+                      <property>
+                        <name>osivia.beanShell</name>
+                        <value>on</value>
+                      </property>
+                    </properties>
+                    <height>0</height>
+                </window>
                 
                 <window>
                     <window-name>index-cloud-ens-discussion-unread-instance_1592324891318</window-name>
@@ -487,6 +496,49 @@ return nuxeoRequest.toString();</value>
                         <property>
                             <name>osivia.cms.maxItems</name>
                             <value>8</value>
+                        </property>
+                    </properties>
+                    <height>0</height>
+                </window>
+            </page>
+        
+            <page>
+                <page-name>admin</page-name>
+                <display-name xml:lang="fr">Administration</display-name>
+                <properties />
+                <security-constraint />
+                <window>
+                    <window-name>osivia-services-procedure-portletInstance_1511346200826</window-name>
+                    <instance-ref>osivia-services-procedure-portletInstance</instance-ref>
+                    <region>col-1</region>
+                    <properties>
+                        <property>
+                            <name>osivia.hideDecorators</name>
+                            <value>1</value>
+                        </property>
+                        <property>
+                            <name>portal.windowContentType</name>
+                            <value>portlet</value>
+                        </property>
+                        <property>
+                            <name>osivia.bootstrapPanelStyle</name>
+                            <value>true</value>
+                        </property>
+                        <property>
+                            <name>osivia.title</name>
+                            <value>Modélisation des procédures</value>
+                        </property>
+                        <property>
+                            <name>osivia.hideEmptyPortlet</name>
+                            <value>1</value>
+                        </property>
+                        <property>
+                            <name>theme.order</name>
+                            <value>0</value>
+                        </property>
+                        <property>
+                            <name>osivia.services.procedure.procedurePath</name>
+                            <value>/default-domain/procedures</value>
                         </property>
                     </properties>
                     <height>0</height>
