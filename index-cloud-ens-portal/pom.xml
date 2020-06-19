@@ -19,13 +19,14 @@
 
     <properties>
         <!-- Toutatice -->
-        <toutatice.version>4.9.3-RC7</toutatice.version>
+        <!-- <toutatice.version>4.9.3-RC7</toutatice.version>-->
+        <toutatice.version>4.9-SNAPSHOT</toutatice.version>
 
         <!-- Directory -->
         <directory.version>4.9.3</directory.version>
 
         <!-- Collaboration -->
-        <collaboration.version>4.9.3-RC6</collaboration.version>
+        <collaboration.version>4.9-SNAPSHOT</collaboration.version>
 
         <!-- Other services -->
         <tasks.version>4.9.3</tasks.version>
