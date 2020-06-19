@@ -11,102 +11,108 @@ $JQry(function () {
                 var $target = $JQry(event.target);
                 var $files = $target.find(".file-browser-upload-files");
                 var $browser = $target.closest(".file-browser");
-                var maxFileSize = $target.data("max-file-size");
-                var messageWarningReplace = $target.data("warning-replace");
-                var messageWarningReplacePronote = $target.data("warning-replace-pronote");
-                var messageErrorSize = $target.data("error-size");
 
                 $target.removeClass("d-none");
-                $target.addClass("d-flex");                  
 
-                data.context = $JQry(document.createElement("li"));
-                data.context.appendTo($files);
+                data.context = $JQry("<li></li>").addClass("list-group-item").appendTo($files);
 
                 $JQry.each(data.files, function (index, file) {
-                    var $file = $JQry(document.createElement("p"));
-                    $file.appendTo(data.context);
-
-                    // Text
-                    var $text = $JQry(document.createElement("span"));
-                    $text.appendTo($file);
+                    var $items = $browser.find("[data-text=\"" + file.name + "\"]");
 
                     // File name
-                    var $fileName = $JQry(document.createElement("span"));
-                    $fileName.text(file.name);
-                    $fileName.appendTo($text);
+                    $JQry("<p></p>").addClass("mb-2").text(file.name).appendTo(data.context);
 
-                    if (file.size > maxFileSize) {
+                    // Row
+                    var $row = $JQry("<div></div>").addClass("row no-gutters align-items-center").appendTo(data.context);
+
+                    // Progress
+                    $JQry("<div></div>").addClass("col").append($JQry("<div></div>").addClass("progress").append($JQry("<div></div>").addClass("progress-bar"))).appendTo($row);
+
+                    if (file.size > $target.data("max-file-size")) {
                         // Error
-                        var $error = $JQry(document.createElement("strong"));
-                        $error.addClass("text-danger");
-                        $error.text(messageErrorSize);
-                        $error.appendTo($text);
-                    } else {
-                        var $row = $browser.find("[data-text=\"" + file.name + "\"]");
-
-                        if ($row.length) {
-                            // Warning
-                            var $warning = $JQry(document.createElement("span"));
-                            if ($row.data("pronote")) {
-                                $warning.addClass("badge badge-danger");
-                                $warning.text(messageWarningReplacePronote);
-                            } else {
-                                $warning.addClass("badge badge-warning");
-                                $warning.text(messageWarningReplace);
-                            }
-                            $warning.appendTo($text);
+                        $JQry("<span></span>").addClass("badge badge-danger ml-2").text($target.data("error-size")).appendTo(data.context.find("p").first());
+                        file.error = true;
+                    } else if ($items.length) {
+                        // Warning
+                        if ($items.data("pronote")) {
+                            $JQry("<span></span>").addClass("badge badge-danger ml-2").text($target.data("warning-replace-pronote")).appendTo(data.context.find("p").first());
+                        } else {
+                            $JQry("<span></span>").addClass("badge badge-warning ml-2").text($target.data("warning-replace")).appendTo(data.context.find("p").first());
                         }
+                        file.warning = true;
 
-                        if (!index) {
-                            // Start
-                            var $start = $JQry(document.createElement("button"));
-                            $start.attr("type", "button");
-                            $start.addClass("start d-none");
-                            $start.click(function () {
-                                data.submit(event);
-                            });
-                            $start.appendTo($file);
-                        }
-                    }
-
-                    if (!index) {
-                        // Cancel
-                        var $cancel = $JQry(document.createElement("button"));
-                        $cancel.attr("type", "button");
-                        $cancel.addClass("cancel btn btn-link btn-sm");
-                        $cancel.append($JQry(document.createElement("i")).addClass("glyphicons glyphicons-remove"));
-                        $cancel.click(function (event) {
+                        // Buttons
+                        var $buttons = $JQry("<div></div>").addClass("col-auto").appendTo($row);
+                        // Start button
+                        var $start = $JQry("<button></button>").attr("type", "button").addClass("btn btn-outline-secondary btn-sm ml-2 start").text($target.data("label-start")).appendTo($buttons);
+                        $start.click(function () {
+                            file.warning = false;
+                            data.submit(event);
+                        });
+                        // Cancel button
+                        var $cancel = $JQry("<button></button>").attr("type", "button").addClass("btn btn-outline-secondary btn-sm ml-2 cancel").text($target.data("label-cancel")).appendTo($buttons);
+                        $cancel.click(function () {
                             data.abort();
-                        })
-                        $cancel.appendTo($file);
+
+                            var $target = $JQry(event.target);
+
+                            if (!$target.find("li").length) {
+                                $target.addClass("d-none");
+
+                                // Refresh
+                                updatePortletContent(this, $target.data("callback-url"));
+                            }
+                        });
                     }
                 });
+
+                data.submit();
+            },
+
+            submit: function (event, data) {
+                var result = true;
+                $JQry.each(data.files, function (index, file) {
+                    if (file.error || file.warning) {
+                        return result = false;
+                    }
+                });
+                return result;
+            },
+
+            send: function (event, data) {
+                var result = true;
+                $JQry.each(data.files, function (index, file) {
+                    if (file.error || file.warning) {
+                        return result = false;
+                    }
+                });
+                return result;
             },
 
             stop: function (event, data) {
                 var $target = $JQry(event.target);
-                var url = $target.data("callback-url");
 
-                $target.addClass("d-none");
-                $target.removeClass("d-flex");                  
+                if (!$target.find("li").length) {
+                    $target.addClass("d-none");
 
-                // Refresh
-                updatePortletContent(this, url);
+                    // Refresh
+                    updatePortletContent(this, $target.data("callback-url"));
+                }
             },
 
-            progressall: function (event, data) {
-                var progress = parseInt(data.loaded / data.total * 100, 10) + "%";
-                $JQry(".file-browser .progress-bar").css("width", progress);
+            progress: function (event, data) {
+                var progress = parseInt((data.loaded / data.total) * 100, 10) + "%";
+                var $bar = data.context.find(".progress-bar");
+                $bar.css("width", progress);
+                $bar.text(progress);
             }
         });
 
-        $upload.find(".fileupload-buttonbar button[type=reset]").click(function (event) {
-            var $target = $JQry(event.target);
-            var $form = $target.closest(".file-browser-upload");
 
-            $form.addClass("d-none");
-            $form.removeClass("d-flex");              
-            
+        $upload.find(".fileupload-buttonbar button.cancel").click(function (event) {
+            var $target = $JQry(event.target);
+
+            $target.closest("form").find(".file-browser-upload-files button.cancel").click();
         });
 
 

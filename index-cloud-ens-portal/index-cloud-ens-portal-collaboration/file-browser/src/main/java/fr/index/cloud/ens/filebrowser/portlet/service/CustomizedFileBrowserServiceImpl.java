@@ -10,12 +10,15 @@ import org.apache.commons.lang.StringUtils;
 import org.nuxeo.ecm.automation.client.model.Document;
 import org.nuxeo.ecm.automation.client.model.PropertyList;
 import org.osivia.portal.api.context.PortalControllerContext;
+import org.osivia.services.workspace.filebrowser.portlet.model.FileBrowserForm;
 import org.osivia.services.workspace.filebrowser.portlet.model.FileBrowserSortField;
 import org.osivia.services.workspace.filebrowser.portlet.model.FileBrowserWindowProperties;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 
 import javax.portlet.PortletException;
+import javax.portlet.PortletRequest;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -119,4 +122,15 @@ public class CustomizedFileBrowserServiceImpl extends AbstractFileBrowserService
         return CustomizedFileBrowserSortEnum.DOCUMENT_TYPE;
     }
 
+
+    @Override
+    public void upload(PortalControllerContext portalControllerContext, FileBrowserForm form) throws PortletException, IOException {
+        // Portlet request
+        PortletRequest request = portalControllerContext.getRequest();
+
+        super.upload(portalControllerContext, form);
+
+        // Prevent Ajax refresh
+//        request.setAttribute("osivia.ajax.preventRefresh", true);
+    }
 }
