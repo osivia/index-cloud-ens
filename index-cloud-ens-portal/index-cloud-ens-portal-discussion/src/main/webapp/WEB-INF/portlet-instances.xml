@@ -17,4 +17,19 @@
             </security-constraint>
         </instance>
     </deployment>
+    <deployment>
+        <if-exists>overwrite</if-exists>
+        <instance>
+            <display-name xml:lang="en">Index - discussion - unread messages</display-name>
+            <display-name xml:lang="fr">Index - discussion - messages non lus</display-name>
+            <instance-id>index-cloud-ens-discussion-unread-instance</instance-id>
+            <portlet-ref>index-cloud-ens-discussion-unread</portlet-ref>
+            <security-constraint>
+                <policy-permission>
+                    <action-name>view</action-name>
+                    <unchecked />
+                </policy-permission>
+            </security-constraint>
+        </instance>
+    </deployment>    
 </deployments>

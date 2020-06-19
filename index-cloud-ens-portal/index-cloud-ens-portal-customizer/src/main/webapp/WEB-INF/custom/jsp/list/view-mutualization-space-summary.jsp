@@ -9,7 +9,7 @@
     <c:forEach var="document" items="${documents}">
         <div class="card mb-2">
             <div class="card-body">
-                <h3 class="card-title h5 mb-1">
+                <h3 class="card-title h5 mb-1 text-truncate">
                     <%--Icon--%>
                     <span><ttc:icon document="${document}"/></span>
 
