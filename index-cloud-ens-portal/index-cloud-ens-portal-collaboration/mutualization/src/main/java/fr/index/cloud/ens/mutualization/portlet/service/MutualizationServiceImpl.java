@@ -4,6 +4,8 @@ import fr.index.cloud.ens.mutualization.portlet.model.MutualizationForm;
 import fr.index.cloud.ens.mutualization.portlet.model.VocabularyItem;
 import fr.index.cloud.ens.mutualization.portlet.repository.MutualizationRepository;
 import fr.toutatice.portail.cms.nuxeo.api.discussions.DiscussionHelper;
+import fr.toutatice.portail.cms.nuxeo.api.domain.DocumentDTO;
+import fr.toutatice.portail.cms.nuxeo.api.services.dao.DocumentDAO;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import org.apache.commons.lang.BooleanUtils;
@@ -76,6 +78,13 @@ public class MutualizationServiceImpl implements MutualizationService {
      */
     @Autowired
     private INotificationsService notificationsService;
+    
+
+    /**
+     * Document DAO.
+     */
+    @Autowired
+    private DocumentDAO documentDao;
 
 
     /**
@@ -103,9 +112,11 @@ public class MutualizationServiceImpl implements MutualizationService {
         // Enable indicator
         boolean enable = BooleanUtils.isTrue(properties.getBoolean(MutualizationRepository.ENABLE_PROPERTY));
         form.setEnable(enable);
+        
+        DocumentDTO documentDto = this.documentDao.toDTO(document);
 
         // Title
-        String title = document.getString(MutualizationRepository.TITLE_PROPERTY, document.getTitle());
+        String title = document.getString(MutualizationRepository.TITLE_PROPERTY, documentDto.getDisplayTitle());
         form.setTitle(title);
 
         // Keywords
