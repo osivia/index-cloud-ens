@@ -76,7 +76,7 @@ public class GetPublicationsTitle implements INuxeoCommand {
 
         // Operation request
         OperationRequest operationRequest = nuxeoSession.newRequest("Document.QueryES");
-        operationRequest.setHeader(Constants.HEADER_NX_SCHEMAS, "dublincore,toutatice");
+        operationRequest.setHeader(Constants.HEADER_NX_SCHEMAS, "dublincore,toutatice,file");
         operationRequest.set("query", "SELECT * FROM Document WHERE " + filteredRequest);
 
         // Results

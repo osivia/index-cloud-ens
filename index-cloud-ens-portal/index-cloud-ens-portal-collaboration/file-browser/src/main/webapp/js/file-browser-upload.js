@@ -59,8 +59,10 @@ $JQry(function () {
                             if (!$target.find("li").length) {
                                 $target.addClass("d-none");
 
-                                // Refresh
-                                updatePortletContent(this, $target.data("callback-url"));
+                                if( $target.data("upload-ended") === true)	{
+                                	// Refresh
+                                	updatePortletContent(this, $target.data("callback-url"));
+                                }
                             }
                         });
                     }
@@ -98,6 +100,8 @@ $JQry(function () {
                     // Refresh
                     updatePortletContent(this, $target.data("callback-url"));
                 }
+                
+                $target.data("upload-ended", true);
             },
 
             progress: function (event, data) {

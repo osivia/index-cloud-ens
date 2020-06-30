@@ -17,6 +17,7 @@ import org.springframework.web.context.WebApplicationContext;
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class DetailForm {
+
     
     /**
      * Constructor.
@@ -29,14 +30,10 @@ public class DetailForm {
     private String id;
     
     
-    /** The participant. */
-    private String participant;
 
     /** The author. */
     private String author;
 
-    /** The id. */
-    private String publicationId;
 
     /** The new message. */
     private String newMessage;
@@ -46,6 +43,7 @@ public class DetailForm {
     private boolean loaded;
     
     
+
     /** The document. */
     private DiscussionDocument document;
     
@@ -53,8 +51,33 @@ public class DetailForm {
     /** The anchor. */
     private String anchor;
  
+    /** The options. */
+    private Options options;  
     
     
+    /**
+     * Getter for options.
+     * @return the options
+     */
+    public Options getOptions() {
+        return options;
+    }
+
+
+
+
+    
+    /**
+     * Setter for options.
+     * @param options the options to set
+     */
+    public void setOptions(Options options) {
+        this.options = options;
+    }
+
+
+
+
     /**
      * Getter for anchor.
      * @return the anchor
@@ -170,52 +193,11 @@ public class DetailForm {
     }
 
     
-    
-    
-    
-    /**
-     * Getter for participant.
-     * @return the participant
-     */
-    public String getParticipant() {
-        return participant;
-    }
+   
 
 
 
 
-    
-    /**
-     * Setter for participant.
-     * @param participant the participant to set
-     */
-    public void setParticipant(String participant) {
-        this.participant = participant;
-    }
-
-
-
-
-    
-    /**
-     * Getter for publicationId.
-     * @return the publicationId
-     */
-    public String getPublicationId() {
-        return publicationId;
-    }
-
-
-
-
-    
-    /**
-     * Setter for publicationId.
-     * @param publicationId the publicationId to set
-     */
-    public void setPublicationId(String publicationId) {
-        this.publicationId = publicationId;
-    }
 
     
 }

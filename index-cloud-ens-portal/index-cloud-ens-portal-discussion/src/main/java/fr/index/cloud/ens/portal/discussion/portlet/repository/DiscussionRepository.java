@@ -6,6 +6,7 @@ import java.util.Set;
 
 import javax.portlet.PortletException;
 
+import org.nuxeo.ecm.automation.client.model.Document;
 import org.osivia.portal.api.PortalException;
 import org.osivia.portal.api.cms.EcmDocument;
 import org.osivia.portal.api.context.PortalControllerContext;
@@ -14,6 +15,7 @@ import org.osivia.portal.api.tasks.CustomTask;
 import fr.index.cloud.ens.portal.discussion.portlet.model.DetailForm;
 import fr.index.cloud.ens.portal.discussion.portlet.model.DiscussionCreation;
 import fr.index.cloud.ens.portal.discussion.portlet.model.DiscussionDocument;
+import fr.index.cloud.ens.portal.discussion.portlet.model.PublicationUse;
 import fr.toutatice.portail.cms.nuxeo.api.NuxeoController;
 import fr.toutatice.portail.cms.nuxeo.api.forms.IFormsService;
 
@@ -57,8 +59,9 @@ public interface DiscussionRepository {
      *
      * @param portalControllerContext portal controller context
      * @param discution create bean
+     * @return 
      */
-    void createDiscussion(PortalControllerContext portalControllerContext, DiscussionCreation discution) throws PortletException;
+    Document createDiscussion(PortalControllerContext portalControllerContext, DiscussionCreation discution) throws PortletException;
 
 
 
@@ -80,7 +83,7 @@ public interface DiscussionRepository {
      * @return the discussion
      * @throws PortletException the portlet exception
      */
-    DiscussionDocument getDiscussion(PortalControllerContext portalControllerContext, String id) throws PortletException;
+    DiscussionDocument getDiscussion(PortalControllerContext portalControllerContext, DetailForm form) throws PortletException;
 
 
     /**
@@ -104,15 +107,19 @@ public interface DiscussionRepository {
     void checkUserReadPreference(PortalControllerContext portalControllerContext, String id, int lastMessageId) throws PortletException;
 
 
+
+
     /**
      * Gets the discussion by participant.
      *
      * @param portalControllerContext the portal controller context
      * @param participant the participant
+     * @param joinConversation the join conversation
      * @return the discussion by participant
      * @throws PortletException the portlet exception
      */
-    DiscussionDocument getDiscussionByParticipant(PortalControllerContext portalControllerContext, String participant) throws PortletException;
+    DiscussionDocument getDiscussionByParticipant(PortalControllerContext portalControllerContext, String participant, String publicationId,
+            boolean joinConversation) throws PortletException;
 
 
 
@@ -130,15 +137,19 @@ public interface DiscussionRepository {
 
 
 
+
+
     /**
      * Gets the discussion by publication.
      *
      * @param portalControllerContext the portal controller context
      * @param publicationId the publication id
+     * @param joinConversation the join conversation
      * @return the discussion by publication
      * @throws PortletException the portlet exception
      */
-    DiscussionDocument getDiscussionByPublication(PortalControllerContext portalControllerContext, String publicationId) throws PortletException;
+    DiscussionDocument getDiscussionByPublication(PortalControllerContext portalControllerContext, String publicationId, boolean joinConversation)
+            throws PortletException;
 
 
 
@@ -150,7 +161,26 @@ public interface DiscussionRepository {
      * @return the local publication discussions web id
      * @throws PortalException the portal exception
      */
-    Map<String, String> getLocalPublicationDiscussionsWebId(PortalControllerContext portalControllerContext) throws PortalException;
+
+
+    Map<String, PublicationUse> getLocalPublicationDiscussionsWebId(PortalControllerContext portalControllerContext, String adminModeId) throws PortalException;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

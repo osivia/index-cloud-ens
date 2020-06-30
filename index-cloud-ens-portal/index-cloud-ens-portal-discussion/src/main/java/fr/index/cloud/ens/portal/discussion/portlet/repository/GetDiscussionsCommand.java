@@ -1,5 +1,8 @@
 package fr.index.cloud.ens.portal.discussion.portlet.repository;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Map;
 import java.util.Set;
 
 import org.nuxeo.ecm.automation.client.Constants;
@@ -10,6 +13,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import fr.index.cloud.ens.portal.discussion.portlet.model.DiscussionDocument;
+import fr.index.cloud.ens.portal.discussion.portlet.model.PublicationUse;
 import fr.toutatice.portail.cms.nuxeo.api.INuxeoCommand;
 import fr.toutatice.portail.cms.nuxeo.api.NuxeoQueryFilter;
 import fr.toutatice.portail.cms.nuxeo.api.NuxeoQueryFilterContext;
@@ -29,14 +33,17 @@ public class GetDiscussionsCommand implements INuxeoCommand {
 
 
     String user;
-    Set<String> webIds;
+    Map<String, PublicationUse> webIds;
+    // Date format
+    
+    private static DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
     
     /**
      * Constructor.
      * 
 
      */
-    public GetDiscussionsCommand( String user, Set<String> webIds) {
+    public GetDiscussionsCommand( String user, Map<String, PublicationUse> webIds) {
        this.user = user;
        this.webIds = webIds;
 
@@ -52,13 +59,21 @@ public class GetDiscussionsCommand implements INuxeoCommand {
         // Query
         StringBuilder query = new StringBuilder();
 
-        for (String webId: webIds) {
+        for (String webId: webIds.keySet()) {
             if( query.length() == 0) 
                 query.append(" ( ");
             else
                 query.append(" OR ");
             
-            query.append("( disc:type = '"+DiscussionDocument.TYPE_USER_COPY+"' AND disc:target = '"+webId+"' )");
+            String localUseDate = "";
+            PublicationUse pubUse = webIds.get(webId);
+            
+            // Only discussion that contains message newer than local copy
+            if( pubUse.getLastRecopy() != null) {
+                localUseDate = " AND dc:modified > TIMESTAMP '"+dateFormat.format(pubUse.getLastRecopy())+ "'";
+            }
+            
+            query.append("( disc:type = '"+DiscussionDocument.TYPE_USER_COPY+"' AND disc:target = '"+webId+"' "+localUseDate+")");
         }
         
         if( query.length() > 0)

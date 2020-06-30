@@ -33,29 +33,6 @@ public class DiscussionMessage {
     /** The removal date. */
     private Date removalDate;
        
-    /** The hidden. */
-    private boolean discussionDeleted;
-    
-
-    
-    /**
-     * Getter for discussionDeleted.
-     * @return the discussionDeleted
-     */
-    public boolean isDiscussionDeleted() {
-        return discussionDeleted;
-    }
-
-
-    
-    /**
-     * Setter for discussionDeleted.
-     * @param discussionDeleted the discussionDeleted to set
-     */
-    public void setDiscussionDeleted(boolean discussionDeleted) {
-        this.discussionDeleted = discussionDeleted;
-    }
-
 
     /**
      * Getter for author.

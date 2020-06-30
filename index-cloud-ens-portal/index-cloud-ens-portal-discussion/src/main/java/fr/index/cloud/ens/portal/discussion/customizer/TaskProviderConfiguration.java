@@ -4,6 +4,8 @@ import org.osivia.directory.v2.service.preferences.UserPreferencesService;
 import org.osivia.portal.api.cache.services.ICacheService;
 import org.osivia.portal.api.directory.v2.DirServiceFactory;
 import org.osivia.portal.api.directory.v2.service.PersonService;
+import org.osivia.portal.api.internationalization.IBundleFactory;
+import org.osivia.portal.api.internationalization.IInternationalizationService;
 import org.osivia.portal.api.locator.Locator;
 import org.osivia.portal.api.status.IStatusService;
 import org.osivia.portal.api.tasks.ITasksService;
@@ -13,6 +15,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.ResourceBundleMessageSource;
+
+import fr.toutatice.portail.cms.nuxeo.api.services.dao.DocumentDAO;
 
 
 
@@ -93,5 +97,38 @@ public class TaskProviderConfiguration  {
     }
 
 
+    /**
+     * Get document DAO.
+     *
+     * @return document DAO
+     */
+    @Bean
+    public DocumentDAO getDocumentDao() {
+        return DocumentDAO.getInstance();
+    }
+
+    
+    /**
+     * Get internationalization service.
+     *
+     * @return internationalization service
+     */
+    @Bean
+    public IInternationalizationService getInternationalizationService() {
+        return Locator.findMBean(IInternationalizationService.class, IInternationalizationService.MBEAN_NAME);
+    }
+
+
+    
+    /**
+     * Get internationalization bundle factory.
+     *
+     * @param internationalizationService internationalization service
+     * @return internationalization bundle factory
+     */
+    @Bean
+    public IBundleFactory getBundleFactory(IInternationalizationService internationalizationService) {
+        return internationalizationService.getBundleFactory(this.getClass().getClassLoader());
+    }
 
 }

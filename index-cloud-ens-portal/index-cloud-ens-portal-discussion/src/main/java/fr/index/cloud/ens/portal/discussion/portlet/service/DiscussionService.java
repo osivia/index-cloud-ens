@@ -8,6 +8,7 @@ import fr.index.cloud.ens.portal.discussion.portlet.model.DetailForm;
 import fr.index.cloud.ens.portal.discussion.portlet.model.DiscussionCreation;
 import fr.index.cloud.ens.portal.discussion.portlet.model.DiscussionsForm;
 import fr.index.cloud.ens.portal.discussion.portlet.model.DiscussionsFormSort;
+import fr.index.cloud.ens.portal.discussion.portlet.model.Options;
 
 import javax.portlet.PortletException;
 import java.io.IOException;
@@ -47,9 +48,7 @@ public interface DiscussionService {
      * @param portalControllerContext portal controller context
      * @param form                    discussion bean
      */
-    void createDiscussion(PortalControllerContext portalControllerContext, DiscussionCreation discution) throws PortletException;
-
- 
+    void createDiscussion(PortalControllerContext portalControllerContext, Options options, DiscussionCreation discution) throws PortletException;
 
   
 
@@ -64,18 +63,19 @@ public interface DiscussionService {
 
    
 
+
+
+
     /**
-     * Get detail form.
+     * Gets the detail form.
      *
-     * @param portalControllerContext portal controller context
-     * @param id the id
-     * @param anchor the anchor
-     * @return detail form
+     * @param portalControllerContext the portal controller context
+     * @param options the options
+     * @return the detail form
      * @throws PortletException the portlet exception
      */
-    
-    DetailForm getDetailForm(PortalControllerContext portalControllerContext, String id, String participant, String publicationId, String anchor) throws PortletException;
-
+    DetailForm     getDetailForm(PortalControllerContext portalControllerContext, String mode, String id, String participant, String publicationId, String messageId)
+            throws PortletException;
 
     /**
      * Adds the new message.
@@ -119,6 +119,23 @@ public interface DiscussionService {
      * @throws PortletException the portlet exception
      */
     void deleteDiscussion(PortalControllerContext portalControllerContext, DetailForm form) throws PortletException;
+
+
+    /**
+     * Report message.
+     *
+     * @param portalControllerContext the portal controller context
+     * @param form the form
+     * @param messageId the message id
+     * @throws PortletException the portlet exception
+     */
+    void reportMessage(PortalControllerContext portalControllerContext, DetailForm form, String messageId) throws PortletException;
+
+
+
+
+
+
 
 
 

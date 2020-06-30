@@ -3,9 +3,12 @@ package fr.index.cloud.ens.portal.discussion.portlet.repository;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
+import org.nuxeo.ecm.automation.client.Constants;
+import org.nuxeo.ecm.automation.client.OperationRequest;
 import org.nuxeo.ecm.automation.client.Session;
 import org.nuxeo.ecm.automation.client.adapters.DocumentService;
 import org.nuxeo.ecm.automation.client.model.DocRef;
+import org.nuxeo.ecm.automation.client.model.Document;
 import org.nuxeo.ecm.automation.client.model.PropertyMap;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
@@ -54,7 +57,16 @@ public class CreateDiscussionCommand implements INuxeoCommand  {
         properties.set("disc:participants", StringUtils.trimToNull(StringUtils.join(discussion.getParticipants(), ",")));
        
 
-        return documentService.createDocument(parent, "Discussion", null, properties);
+        Document document = documentService.createDocument(parent, "Discussion", null, properties, true);
+        
+        
+        // fetch webId
+        OperationRequest request = nuxeoSession.newRequest("Document.FetchLiveDocument");
+        request.setHeader(Constants.HEADER_NX_SCHEMAS, "*");
+        request.set("value", document.getPath());
+        document = (Document) request.execute();
+        
+        return document;
     }
 
 

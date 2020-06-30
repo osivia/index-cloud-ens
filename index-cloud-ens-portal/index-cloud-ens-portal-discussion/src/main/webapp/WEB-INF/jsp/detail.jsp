@@ -14,26 +14,30 @@
 <portlet:actionURL name="deleteDiscussion" var="deleteDiscussionUrl" copyCurrentRenderParameters="true"/>
 <c:set var="deleteDiscussionConfirmationModalId" value="${namespace}-delete-confirmation"/>
 
-
-<div class="d-flex flex-column mb-1">
-     <div>
-        <a href="javascript:" class="btn btn-outline-secondary btn-sm mr-1 no-ajax-link" data-toggle="modal" data-target="#deleteDiscussionConfirmationModalId">
-            <i class="glyphicons glyphicons-basic-bin"></i>
-            <span class="d-none d-md-inline"><op:translate key="DISCUSSION_DELETE_CURRENT"/></span>
-        </a>
-     
-     </div>
-</div>
-
+<c:if test="${ not (detailForm.options.mode eq  'admin') }">
+	<div class="d-flex flex-column mb-1">
+	     <div>
+	        <a href="javascript:" class="btn btn-outline-secondary btn-sm mr-1 no-ajax-link" data-toggle="modal" data-target="#deleteDiscussionConfirmationModalId">
+	            <i class="glyphicons glyphicons-basic-bin"></i>
+	            <span class="d-none d-md-inline"><op:translate key="DISCUSSION_DELETE_CURRENT"/></span>
+	        </a>
+	     
+	     </div>
+	</div>
+</c:if>
 
 <div class="portlet-filler d-flex flex-column pr-1">
 
 <c:set var="deleteMessageConfirmationModalId" value="${namespace}-delete-confirmation"/>
+<c:set var="reportMessageConfirmationModalId" value="${namespace}-report-confirmation"/>
 
 
 <portlet:actionURL name="deleteMessage" var="deleteMessageUrl" copyCurrentRenderParameters="true"/>
+<portlet:actionURL name="reportMessage" var="reportMessageUrl" copyCurrentRenderParameters="true"/>
 <portlet:actionURL name="addMessage" var="addMessageUrl" copyCurrentRenderParameters="true" />
 
+
+<div class="discussion-messages">
 
 <form:form action="${addMessageUrl}" method="post" modelAttribute="detailForm" cssClass="form-horizontal">
 
@@ -49,91 +53,88 @@
 </c:if>
 
 
-<div class="discussion-messages">
+
 
 
 <c:forEach var="message" items="${detailForm.document.messages}">
-    <c:if test="${not message.discussionDeleted}">
-       <c:if test="${detailForm.author eq message.author}">
-		  <div class="row ">
-	                <div class="col-10">
-	                         <div class="text-right text-muted small mb-1">
-	                               <fmt:formatDate value="${message.date}" type="date" dateStyle="long"/>  
-	                         
-		                         <c:if test="${not message.deleted}">
-		 	                        <span>
-		                                <%--Delete--%>
-			                         <a href="javascript:" style="margin-top: -6px" class="btn btn-sm ml-1 no-ajax-link glyphicons glyphicons-basic-bin text-muted float-right" data-toggle="modal"
-			                            data-target="#${deleteMessageConfirmationModalId}"
-			                            data-message-id="${message.id}">
-			                             
-			                         </a>
-			                        </span> 
-                        
-		                        </c:if>
-                                </div>	
-                               <c:if test="${not message.deleted}">
-                                        <div class="border rounded mb-2 p-3 bg-info text-white">
-                                                ${message.content}
-                                        </div>                          
-                                </c:if>
-	                       <c:if test="${message.deleted}">
-	                                <div class="border rounded mb-2 p-3 bg-info text-white">
-	                                        <span><op:translate  key="DISCUSSION_MESSAGE_DELETED"/></span>
-	                                </div>                                 
-	                        </c:if> 
-	                </div>
-	        </div>
-        </c:if>
+
+    <c:if test="${not message.deleted}">
+    
+       <div class="row" id="msg-${message.id}">
+            <c:if test="${detailForm.author eq message.author}">
+
+                <div class="col-10">
+                         <div class="text-right text-muted small mb-1">
+                               <fmt:formatDate value="${message.date}" type="date" dateStyle="long"/>  
+                         </div>	
+                             <div class="border rounded mb-2 p-3 bg-info text-white">
+                                     ${message.content}
+                             </div>                             
+                </div>
+            </c:if>
         
-         <c:if test="${detailForm.author ne message.author}">
-                <div class="row ">
+            <c:if test="${detailForm.author ne message.author}">
+            
+                        <c:set var="messageBackgroundColor">${ detailForm.options.mode eq  'admin' && message.id eq detailForm.options.messageId ? "bg-warning" : "bg-light" }</c:set>
+                        
                         <div class="offset-2  col-10">
                                  <div class="text-right text-muted small mb-1">
                                         <fmt:formatDate value="${message.date}" type="date" dateStyle="long"/> - <ttc:user name="${message.author}" linkable="false"/> 
-                                     
+                                        <span>
+                                             <c:if test="${ not (detailForm.options.mode eq  'admin') }">                                        
+			                                     <%--Report--%>
+			                                     <a href="javascript:" style="margin-top: -6px" class="btn btn-sm ml-1 no-ajax-link glyphicons glyphicons-warning-sign text-muted float-right" data-toggle="modal"
+			                                        data-target="#${reportMessageConfirmationModalId}"
+			                                        data-message-id="${message.id}">
+			                                     </a>
+                                            </c:if>
+		                                     <c:if test="${ detailForm.options.mode eq  'admin'}">
+				                                <%--Delete--%>
+				                                 <a href="javascript:" style="margin-top: -6px" class="btn btn-sm ml-1 no-ajax-link glyphicons glyphicons-basic-bin text-muted float-right" data-toggle="modal"
+				                                    data-target="#${deleteMessageConfirmationModalId}"
+				                                    data-message-id="${message.id}">
+				                                     
+				                                 </a>		                                     
+						                     </c:if>
+                                        </span> 	                                     
+
                                  </div>                                        
-                                 <c:if test="${not message.deleted}">
-                                        <div class="border rounded mb-2 p-3 bg-light">
-                                                ${message.content}
-                                        </div>                          
-                                </c:if>
-                               <c:if test="${message.deleted}">
-                                        <div class="border rounded mb-2 p-3 bg-light">
-                                                <span class="text-muted"><op:translate  key="DISCUSSION_MESSAGE_DELETED"/></span>
-                                        </div>                                 
-                                </c:if> 
-                                
-                        </div>
-                </div>
-        </c:if>
-        
+
+                                 <div class="border rounded mb-2 p-3 ${messageBackgroundColor}">
+                                         ${message.content}
+                                 </div>  
+                                                         
+                             </div>
+              </c:if>
+        </div>
     </c:if>
         
-</c:forEach>
+    </c:forEach>
 	
-	<div class="row ">
-                <div class="col-10 text-right">
-                        <div class="mt-2">
-                                <c:set var="placeholder"><op:translate key="DISCUSSION_NEW_MESSAGE_PLACEHOLDER" /></c:set>
-                                <form:textarea path="newMessage" rows="3" cssClass="form-control" placeholder="${placeholder}" />
-                         </div>
-                </div>
-                
-                <div class="col-2 d-flex align-items-center pl-0">
-                        <div class="m-auto">
-                        
-                        <button type="submit" class="btn btn-primary glyphicons glyphicons glyphicons-basic-send">
-                                <span class="d-none d-lg-inline"><op:translate key="DISCUSSION_SEND" /></span>
-                         </button>
-
-                        </div>
-                </div>
-        </div>
+	<c:if test="${ not (detailForm.options.mode eq  'admin') }">
+		<div class="row ">
+	                <div class="col-10 text-right">
+	                        <div class="mt-2">
+	                                <c:set var="placeholder"><op:translate key="DISCUSSION_NEW_MESSAGE_PLACEHOLDER" /></c:set>
+	                                <form:textarea path="newMessage" rows="3" cssClass="form-control" placeholder="${placeholder}" />
+	                         </div>
+	                </div>
+	                
+	                <div class="col-2 d-flex align-items-center pl-0">
+	                        <div class="m-auto">
+	                        
+	                        <button type="submit" class="btn btn-primary glyphicons glyphicons glyphicons-basic-send">
+	                                <span class="d-none d-lg-inline"><op:translate key="DISCUSSION_SEND" /></span>
+	                         </button>
+	
+	                        </div>
+	                </div>
+	    </div>
+    </c:if>
         
 
-</form:form>
 
+</form:form>
 
 
 
@@ -153,7 +154,7 @@
                 <div class="modal-body">
                     <p><op:translate key="DISCUSSION_DELETE_MESSAGE_CONFIRMATION_MODAL_DETAIL"/></p>
                     <form action="${deleteMessageUrl}" method="post">
-                        <input type="hidden" name="messageId">
+                        <input type="hidden" name="messageIndice">
                         <input type="submit" class="d-none">
                     </form>
                 </div>
@@ -167,6 +168,42 @@
                     <%--Delete--%>
                     <button type="button" class="btn btn-primary" data-submit>
                         <span><op:translate key="DISCUSSION_DELETE"/></span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+  <%--Report modal confirmation--%>
+    <div id="${reportMessageConfirmationModalId}" class="modal fade" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title"><op:translate
+                            key="DISCUSSION_REPORT_MESSAGE_CONFIRMATION_MODAL_BODY"/></h5>
+                    <button type="button" class="close" data-dismiss="modal">
+                        <span>&times;</span>
+                    </button>
+                </div>
+
+                <div class="modal-body">
+                    <p><op:translate key="DISCUSSION_REPORT_MESSAGE_CONFIRMATION_MODAL_DETAIL"/></p>
+                    <form action="${reportMessageUrl}" method="post">
+                        <input type="hidden" name="messageIndice">
+                        <input type="submit" class="d-none">
+                    </form>
+                </div>
+
+                <div class="modal-footer">
+                    <%--Cancel--%>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                        <span><op:translate key="CANCEL"/></span>
+                    </button>
+
+                    <%--Delete--%>
+                    <button type="button" class="btn btn-primary" data-submit>
+                        <span><op:translate key="DISCUSSION_REPORT"/></span>
                     </button>
                 </div>
             </div>
@@ -204,6 +241,6 @@
     </div>
 
 </div>
-
 </div>
+
 

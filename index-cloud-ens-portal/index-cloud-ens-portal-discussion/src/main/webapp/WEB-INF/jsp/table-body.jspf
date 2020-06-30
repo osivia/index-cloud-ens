@@ -25,13 +25,14 @@
                 
                     <%--Document--%>
                     <div class="portal-table-cell" data-column="document">
-                        <div class="d-flex align-items-center">
+                        <div class="text-truncate">
                             <portlet:renderURL var="detailUrl">
                                 <portlet:param name="view" value="detail" />
                                 <portlet:param name="id" value="${document.webId}"/>
                                 <portlet:param name="anchor" value="newMessage"/>
                             </portlet:renderURL>
-                            <span><a class="no-ajax-link" href="${detailUrl}">${document.title}</a></span>
+                            <strong><a class="no-ajax-link" href="${detailUrl}">${document.title}</a></strong>
+                            <div class="text-truncate text-muted pl-3">${document.lastMessageExtract}</div>
                         </div>
                     </div>
 

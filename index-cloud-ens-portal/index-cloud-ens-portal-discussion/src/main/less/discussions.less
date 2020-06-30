@@ -6,11 +6,21 @@
 .discussions {
     [data-column="document"] {
         flex-grow: 1;
+        flex-shrink: 1;
+        overflow: hidden;    
     }
+    
     [data-column="date"] {
         width: 200px;
     }
-
+    
+    @media (max-width: 767px) {
+    
+        [data-column="date"] {
+            display: none;
+        }
+    
+    }    
 
     .portal-table-row {
         position: relative;
@@ -32,3 +42,6 @@
         }
     }
 }
+
+
+

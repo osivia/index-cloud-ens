@@ -39,6 +39,12 @@ public class DiscussionDocument {
 
     /** The last contributor. */
     private String lastContributor;
+    
+    /** The last message. */
+    private String lastMessageExtract;    
+
+
+
 
     /** The web id. */
     private String webId;
@@ -113,7 +119,7 @@ public class DiscussionDocument {
                 message.setDate(messageProp.getDate("date"));
                 message.setAuthor(messageProp.getString("author"));
                 message.setId(Integer.toString(i));
-                message.setDiscussionDeleted(false);
+
 
                 // Removed messages
 
@@ -168,9 +174,12 @@ public class DiscussionDocument {
             if (!getMessages().get(iMessage).isDeleted()) {
                 lastContributor = getMessages().get(iMessage).getAuthor();
                 lastModified = getMessages().get(iMessage).getDate();
+                lastMessageExtract = getMessages().get(iMessage).getContent();
+                int firstLigneEnd = lastMessageExtract.toLowerCase().indexOf("<br>");
+                if( firstLigneEnd != -1)
+                    lastMessageExtract = lastMessageExtract.substring(0, firstLigneEnd);
             }
         }
-        
         String deletedMessageId = userProperties.get(getDeletedKey(webId));
         if (deletedMessageId != null) {
 
@@ -178,11 +187,6 @@ public class DiscussionDocument {
 
             if (getMessages().size() <= deleteMsgId + 1) {
                 markAsDeleted = true;
-            }
-
-            // mark messages as not displayable
-            for (int iMessage = 0; iMessage <= deleteMsgId; iMessage++) {
-                getMessages().get(iMessage).setDiscussionDeleted(true);
             }
         }
 
@@ -196,9 +200,10 @@ public class DiscussionDocument {
      * 
      * @param document document DTO
      */
-    public DiscussionDocument(Map<String, String> userProperties, PersonService personService, String currentUser, String title, List<String> participants) {
+    public DiscussionDocument(Map<String, String> userProperties, PersonService personService, String currentUser, String title, List<String> participants, String target) {
         this.messages = new ArrayList<DiscussionMessage>();
         this.participants = participants;
+        this.target = target;
         this.title = title;
      }
 
@@ -316,4 +321,12 @@ public class DiscussionDocument {
     }
 
 
+    
+    /**
+     * Getter for lastMessage.
+     * @return the lastMessage
+     */
+    public String getLastMessageExtract() {
+        return lastMessageExtract;
+    }
 }

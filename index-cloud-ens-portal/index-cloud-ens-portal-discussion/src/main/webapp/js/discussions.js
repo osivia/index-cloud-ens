@@ -12,7 +12,7 @@ $JQry(function() {
                 var $button = $JQry(event.relatedTarget);
                 var $modal = $JQry(event.currentTarget);
 
-                $modal.find("input[name=messageId]").val($button.data("message-id"));
+                $modal.find("input[name=messageIndice]").val($button.data("message-id"));
                 $modal.find("input[name=displayName]").val($button.data("display-name"));
             });
 

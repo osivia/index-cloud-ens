@@ -1,26 +1,33 @@
 package fr.index.cloud.ens.portal.discussion.portlet.service;
 
 
+
 import fr.index.cloud.ens.portal.discussion.portlet.model.DetailForm;
 import fr.index.cloud.ens.portal.discussion.portlet.model.DiscussionMessage;
 import fr.index.cloud.ens.portal.discussion.portlet.model.DiscussionCreation;
 import fr.index.cloud.ens.portal.discussion.portlet.model.DiscussionsForm;
 import fr.index.cloud.ens.portal.discussion.portlet.model.DiscussionsFormSort;
+import fr.index.cloud.ens.portal.discussion.portlet.model.Options;
 import fr.index.cloud.ens.portal.discussion.portlet.model.DiscussionDocument;
 import fr.index.cloud.ens.portal.discussion.portlet.model.comparator.DiscussionComparator;
 import fr.index.cloud.ens.portal.discussion.portlet.repository.DiscussionRepository;
 import fr.index.cloud.ens.portal.discussion.portlet.repository.DiscussionRepositoryImpl;
 import fr.index.cloud.ens.portal.discussion.util.ApplicationContextProvider;
 import fr.toutatice.portail.cms.nuxeo.api.domain.DocumentDTO;
+import fr.toutatice.portail.cms.nuxeo.api.forms.IFormsService;
+import fr.toutatice.portail.cms.nuxeo.api.services.NuxeoServiceFactory;
+
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang.ArrayUtils;
+import org.apache.commons.lang.BooleanUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.math.NumberUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.dom4j.Element;
 import org.jboss.portal.theme.impl.render.dynamic.DynaRenderOptions;
+import org.nuxeo.ecm.automation.client.model.Document;
 import org.osivia.portal.api.Constants;
 import org.osivia.portal.api.PortalException;
 import org.osivia.portal.api.context.PortalControllerContext;
@@ -36,6 +43,7 @@ import org.osivia.portal.api.notifications.NotificationsType;
 import org.osivia.portal.api.panels.PanelPlayer;
 import org.osivia.portal.api.tasks.ITasksService;
 import org.osivia.portal.api.urls.IPortalUrlFactory;
+import org.osivia.portal.core.constants.InternalConstants;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
@@ -54,6 +62,8 @@ import java.util.*;
  */
 @Service
 public class DiscussionServiceImpl implements DiscussionService, ApplicationContextAware {
+
+    private static final String ADMINISTRATORS = "Administrators";
 
     /**
      * Portlet repository.
@@ -96,6 +106,9 @@ public class DiscussionServiceImpl implements DiscussionService, ApplicationCont
     /** The logger. */
     protected static Log logger = LogFactory.getLog(DiscussionServiceImpl.class);
     
+    /** model identifier. */
+    public static final String MODEL_ID = IFormsService.FORMS_WEB_ID_PREFIX + "report-message";
+    
     /**
      * Constructor.
      */
@@ -134,18 +147,20 @@ public class DiscussionServiceImpl implements DiscussionService, ApplicationCont
     /**
      * {@inheritDoc}
      */
-    @Override
-    public DetailForm getDetailForm(PortalControllerContext portalControllerContext, String id, String participant, String publicationId, String anchor) throws PortletException {
+
+    private DetailForm getDetailForm(PortalControllerContext portalControllerContext, Options options) throws PortletException {
         // Discussion form
         DetailForm form = this.applicationContext.getBean(DetailForm.class);
 
         if (!form.isLoaded()) {
 
-            form.setId(id);
-            form.setParticipant(participant);
+            form.setId(options.getId());
             form.setAuthor(portalControllerContext.getRequest().getRemoteUser());
-            form.setPublicationId(publicationId );
-            form.setAnchor(anchor);
+            if( options.getMessageId() != null)
+                form.setAnchor("msg-"+ options.getMessageId());
+            else
+                form.setAnchor("newMessage");  
+            form.setOptions(options);
 
             updateModel(portalControllerContext, form);
 
@@ -155,6 +170,41 @@ public class DiscussionServiceImpl implements DiscussionService, ApplicationCont
         return form;
     }
 
+    
+    @Override
+    public DetailForm getDetailForm(PortalControllerContext portalControllerContext, String mode, String id, String participant, String publicationId,  String messageId) throws PortletException {
+        // Discussion form
+        
+        Options options = (Options) portalControllerContext.getRequest().getPortletSession().getAttribute("options");
+        
+    
+        // if id changes, options must be renewed (ie access from list)
+        if( options == null || ((id != null) && (!id.equals(options.getId())))) {
+            options = new Options();
+            
+            portalControllerContext.getRequest().getPortletSession().setAttribute("options", options);
+           
+             Boolean isAdministrator = (Boolean) portalControllerContext.getRequest().getAttribute(InternalConstants.ADMINISTRATOR_INDICATOR_ATTRIBUTE_NAME);
+    
+            if( BooleanUtils.isTrue(isAdministrator))
+                options.setAdministrator(true);
+            else
+                options.setAdministrator(false);
+    
+            
+            if( Options.MODE_ADMIN.equals(mode) && options.isAdministrator())
+                options.setMode(mode );    
+            
+            options.setId(id);
+            options.setParticipant(participant);
+            options.setPublicationId(publicationId);
+            options.setMessageId(messageId);
+
+        }
+        
+        return getDetailForm(portalControllerContext, options);
+    }   
+    
 
     /**
      * Update model.
@@ -171,22 +221,26 @@ public class DiscussionServiceImpl implements DiscussionService, ApplicationCont
 
         if (form.getId() != null) {
             // Reading by id (default)
-            doc = this.repository.getDiscussion(portalControllerContext, form.getId());
-        } else if (form.getParticipant() != null) {
+            doc = this.repository.getDiscussion(portalControllerContext, form);
+        } else if (form.getOptions().getParticipant() != null) {
             // Reading by participant
             List<String> participants = new ArrayList<String>();
             participants.add(portalControllerContext.getRequest().getRemoteUser());
-            participants.add(form.getParticipant());
-            doc = this.repository.getDiscussionByParticipant(portalControllerContext, form.getParticipant());
+            participants.add(form.getOptions().getParticipant());
+            doc = this.repository.getDiscussionByParticipant(portalControllerContext, form.getOptions().getParticipant(), form.getOptions().getPublicationId(), false);
             form.setId(doc.getWebId());
-        } else if (form.getPublicationId () != null) {
-            doc = this.repository.getDiscussionByPublication(portalControllerContext, form.getPublicationId());
+        } else if (form.getOptions().getPublicationId()  != null) {
+            doc = this.repository.getDiscussionByPublication(portalControllerContext, form.getOptions().getPublicationId(), false);
             form.setId(doc.getWebId());            
         }
         
         // Check security after document has been loaded
         if( doc != null) {
             boolean checked = false;
+            
+            if( form.getOptions().isAdministrator())  {
+                checked = true;
+            }
             
             List<String> participants = doc.getParticipants();
             if( participants != null && participants.contains(portalControllerContext.getRequest().getRemoteUser()))   {
@@ -195,7 +249,7 @@ public class DiscussionServiceImpl implements DiscussionService, ApplicationCont
             
             if( StringUtils.equals(doc.getType(), DiscussionDocument.TYPE_USER_COPY)    ) {
                 try {
-                    if(this.repository.getLocalPublicationDiscussionsWebId(portalControllerContext).containsKey(doc.getTarget())) {
+                    if(this.repository.getLocalPublicationDiscussionsWebId(portalControllerContext, null).containsKey(doc.getTarget())) {
                         checked = true;
                     }
                 } catch (PortalException e) {
@@ -612,8 +666,10 @@ public class DiscussionServiceImpl implements DiscussionService, ApplicationCont
 
 
     @Override
-    public void createDiscussion(PortalControllerContext portalControllerContext, DiscussionCreation discution) throws PortletException {
-        this.repository.createDiscussion(portalControllerContext, discution);
+    public void createDiscussion(PortalControllerContext portalControllerContext, Options options, DiscussionCreation discution) throws PortletException {
+        
+        Document document = this.repository.createDiscussion(portalControllerContext, discution);
+        options.setId(document.getProperties().getString("ttc:webid"));
 
     }
 
@@ -632,9 +688,9 @@ public class DiscussionServiceImpl implements DiscussionService, ApplicationCont
 
         // Create discussion if necessary
         if (form.getId() == null) {
-            if (StringUtils.isNotEmpty(form.getParticipant())) {
+            if (StringUtils.isNotEmpty(form.getOptions().getParticipant())) {
                 saveNewDiscussionByParticpant(portalControllerContext, form);
-            } else if( StringUtils.isNotEmpty(form.getPublicationId())) {
+            } else if( StringUtils.isNotEmpty(form.getOptions().getPublicationId() )) {
                 saveNewDiscussionByPublication(portalControllerContext, form);
             } else
                 throw new PortletException("no participant nor publication. Can't create discussion");
@@ -668,11 +724,14 @@ public class DiscussionServiceImpl implements DiscussionService, ApplicationCont
 
         DiscussionCreation discussion = new DiscussionCreation();
         List<String> participants = new ArrayList<>();
-        participants.add(form.getParticipant());
+        participants.add(form.getOptions().getParticipant());
         participants.add(portalControllerContext.getRequest().getRemoteUser());
         discussion.setParticipants(participants);
+        
+        discussion.setTarget(form.getOptions().getPublicationId());
 
-        createDiscussion(portalControllerContext, discussion);
+        createDiscussion(portalControllerContext, form.getOptions(), discussion);
+        form.setId(form.getOptions().getId());
         
         updateModel(portalControllerContext, form);
     }
@@ -690,9 +749,10 @@ public class DiscussionServiceImpl implements DiscussionService, ApplicationCont
 
         DiscussionCreation discussion = new DiscussionCreation();
         discussion.setType("USER_COPY");
-        discussion.setTarget(form.getPublicationId());
+        discussion.setTarget(form.getOptions().getPublicationId() );
 
-        createDiscussion(portalControllerContext, discussion);
+        createDiscussion(portalControllerContext, form.getOptions(), discussion);
+        form.setId(form.getOptions().getId());        
         
         updateModel(portalControllerContext, form);
     }
@@ -713,6 +773,35 @@ public class DiscussionServiceImpl implements DiscussionService, ApplicationCont
 
         // Notification
         String message = bundle.getString("DISCUSSION_MESSAGE_SUCCESS_DELETE_MESSAGE");
+        this.notificationsService.addSimpleNotification(portalControllerContext, message, NotificationsType.SUCCESS);
+
+    }
+    
+    
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void reportMessage(PortalControllerContext portalControllerContext, DetailForm form, String messageId) throws PortletException {
+        // Internationalization bundle
+        Bundle bundle = this.bundleFactory.getBundle(portalControllerContext.getRequest().getLocale());
+
+        Map<String, String> variables = new HashMap<>();
+       
+        variables.put("discussionId",  form.getId());
+        variables.put("messageId",  messageId); 
+        variables.put("userId",  portalControllerContext.getRequest().getRemoteUser()); 
+  
+
+        try {
+            variables = NuxeoServiceFactory.getFormsService().start(portalControllerContext, MODEL_ID, variables);
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+
+       
+        // Notification
+        String message = bundle.getString("DISCUSSION_MESSAGE_SUCCESS_REPORT_MESSAGE");
         this.notificationsService.addSimpleNotification(portalControllerContext, message, NotificationsType.SUCCESS);
 
     }

@@ -113,6 +113,39 @@ public class UnreadConfiguration {
     }
 
 
+    /**
+     * Get document DAO.
+     *
+     * @return document DAO
+     */
+    @Bean
+    public DocumentDAO getDocumentDao() {
+        return DocumentDAO.getInstance();
+    }
+
+    
+    /**
+     * Get internationalization service.
+     *
+     * @return internationalization service
+     */
+    @Bean
+    public IInternationalizationService getInternationalizationService() {
+        return Locator.findMBean(IInternationalizationService.class, IInternationalizationService.MBEAN_NAME);
+    }
+
+
+    
+    /**
+     * Get internationalization bundle factory.
+     *
+     * @param internationalizationService internationalization service
+     * @return internationalization bundle factory
+     */
+    @Bean
+    public IBundleFactory getBundleFactory(IInternationalizationService internationalizationService) {
+        return internationalizationService.getBundleFactory(this.getClass().getClassLoader());
+    }
     
 }
 

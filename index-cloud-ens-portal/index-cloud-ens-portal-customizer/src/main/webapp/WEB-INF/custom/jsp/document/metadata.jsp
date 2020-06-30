@@ -403,7 +403,7 @@
 
                     <c:otherwise>
                     
-		                <c:set var="discussionUrl"><ttc:discussion participant="${source.properties['dc:creator']}" /></c:set>
+		                <c:set var="discussionUrl"><ttc:discussion participant="${source.properties['dc:creator']}" publicationId="${document.properties['mtz:sourceWebId']}" /></c:set>
 	                    <p class="card-text">
 	                        <a href="${discussionUrl}" class="text-mutualized-dark">
 	                            <span><op:translate key="DOCUMENT_COPIED_CONTACT_AUTHOR"/></span>

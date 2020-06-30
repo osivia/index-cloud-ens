@@ -78,9 +78,9 @@
                                             </c:when>
                                         
                                             <c:otherwise>
-                                                <span class="file-browser-thumbnail-empty-preview">
-                                                    <i class="glyphicons glyphicons-basic-file"></i>
-                                                </span>
+                                                <div class="file-browser-thumbnail-icon-preview">
+                                                    <ttc:icon document="${item.document}" />
+                                                </div>
                                             </c:otherwise>
                                         </c:choose>
                                     </div>
