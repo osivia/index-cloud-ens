@@ -78,7 +78,7 @@
 // to avoid double scroll bars in mobile mode
   @media (min-width: map_get($grid-breakpoints, "md") ) {
     overflow: auto;
-    max-height: 500px;
+    max-height: 100%;
     padding-right: 2px;    
   }
   

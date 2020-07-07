@@ -34,8 +34,8 @@
 
                         <c:otherwise>
                             <div class="card-img-top embed-responsive-item d-flex align-items-center justify-content-center text-white bg-light">
-                                <i class="glyphicons glyphicons-basic-file"></i>
-                            </div>
+									<ttc:icon document="${document}" />
+							</div>
                         </c:otherwise>
                     </c:choose>
                 </div>
