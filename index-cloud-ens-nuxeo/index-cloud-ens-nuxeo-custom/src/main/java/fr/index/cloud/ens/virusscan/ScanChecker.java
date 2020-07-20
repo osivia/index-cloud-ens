@@ -105,10 +105,10 @@ public class ScanChecker {
                     if( ICAPService == null)
                         ICAPService = "";
                     
-                    if (waitingForServerRestart == 0 || System.currentTimeMillis() > waitingForServerRestart + 60000) {
+                    if (waitingForServerRestart == 0 || System.currentTimeMillis() > waitingForServerRestart + 60000 ) {
                         waitingForServerRestart = 0;
 
-                        ICAP icap = new ICAP(ICAPHost, Integer.parseInt(ICAPPort), ICAPService, bHolder.getBlob().getFilename(), bHolder.getBlob().getStream(), bHolder.getBlob().getLength());
+                        ICAP icap = new ICAP(ICAPHost, Integer.parseInt(ICAPPort), ICAPService, docToScan.getName(), bHolder.getBlob().getStream(), bHolder.getBlob().getLength());
 
                         Future<ICAPResult> future = getThreadPool().submit(icap);
 
