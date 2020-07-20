@@ -147,7 +147,7 @@ public class ScanChecker {
 
                 if (e instanceof TimeoutException) {
                     // Timeout -> no stack
-                    log.warn("Timeout during scan of " + bHolder.getBlob().getFilename() + " . File is put in quarantine .");
+                    log.warn("Timeout during scan of " +  bHolder.getFilePath() + " . File is put in quarantine .");
                     mustLogError = false;
                 }
 
@@ -155,7 +155,7 @@ public class ScanChecker {
                     ExecutionException exec = (ExecutionException) e;
                     if (exec.getCause() instanceof UnknownHostException || exec.getCause() instanceof IOException) {
                         // IO error -> no stack
-                        log.error("Error during scan of " + bHolder.getBlob().getFilename() + " : " + exec.getCause().toString()
+                        log.error("Error during scan of " + bHolder.getFilePath() + " : " + exec.getCause().toString()
                                 + ".  File is put in quarantine.");
 
                         waitingForServerRestart = System.currentTimeMillis();
@@ -165,7 +165,7 @@ public class ScanChecker {
 
                 if (mustLogError)
                     // all other errors : stack for easier diagnostic
-                    log.error("Error during scan of " + bHolder.getBlob().getFilename() + " . File is put in quarantine .", e);
+                    log.error("Error during scan of " +  bHolder.getFilePath() + " . File is put in quarantine .", e);
             }
 
 

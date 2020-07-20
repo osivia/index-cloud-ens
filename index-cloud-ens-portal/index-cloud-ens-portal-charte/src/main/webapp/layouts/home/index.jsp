@@ -26,7 +26,7 @@
                 </div>
             </div>
 
-			<div class="portlet-filler row mh-100 px-3">
+			<div class="portlet-filler flex-grow-1 row mh-100 px-3">
 
 				<div class="col-lg-8 d-flex flex-column home-fixed-block pt-4 pr-3 overflow-hidden">
 					<p:region regionName="col-1-top" />
