@@ -99,6 +99,12 @@ public class PersonExportBatch extends AbstractBatch {
         return null;
     }
 
+    
+    @Override
+    public boolean isRunningOnMasterOnly() {
+        return false;
+    }
+    
     /*
      * (non-Javadoc)
      * 
