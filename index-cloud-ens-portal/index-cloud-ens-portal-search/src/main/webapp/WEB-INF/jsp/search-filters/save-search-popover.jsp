@@ -6,7 +6,10 @@
 <c:set var="namespace"><portlet:namespace/></c:set>
 
 
-<form>
+
+
+
+<form onsubmit="javascript:saveSearch(this); return false;">
     <%--Display name--%>
     <div class="form-group mb-2">
         <label for="${namespace}-save-search-display-name"><op:translate key="SAVED_SEARCH_DISPLAY_NAME"/></label>
@@ -15,7 +18,7 @@
     </div>
 
     <div class="text-right">
-        <button type="submit" class="btn btn-primary btn-sm" onclick="javascript:saveSearch(this)">
+        <button type="submit" class="btn btn-primary btn-sm">
             <span><op:translate key="SAVE"/></span>
         </button>
     </div>

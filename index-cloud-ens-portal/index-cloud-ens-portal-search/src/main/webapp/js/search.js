@@ -23,9 +23,8 @@ function searchOptionsLoadCallback(formId) {
 }
 
 
-function saveSearch(button) {
-	var $button = $JQry(button);
-	var $popoverForm = $button.closest("form");
+function saveSearch(popoverForm) {
+	var $popoverForm = $JQry(popoverForm);
 	var displayName = $popoverForm.find("input[type=text]").val();
 	var $container = $popoverForm.closest(".search-filters-container");
 	var $form = $container.children("form");
