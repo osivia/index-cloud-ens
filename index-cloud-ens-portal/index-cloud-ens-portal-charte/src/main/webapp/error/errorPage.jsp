@@ -5,7 +5,14 @@
 
 <c:set var="contextPath" value="${pageContext.request.contextPath}"/>
 
+
+
 <c:set var="brand"><op:translate key="BRAND"/></c:set>
+<c:choose>
+	<c:when test="${not empty param['httpCode']}">
+        <op:status code="${param['httpCode']}"  /> 
+	</c:when>
+</c:choose>
 
 
 <html>
