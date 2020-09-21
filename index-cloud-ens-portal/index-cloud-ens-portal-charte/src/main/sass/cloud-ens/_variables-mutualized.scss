@@ -1,15 +1,7 @@
 @import "variables-base";
 
 
-$primary: $mutualized-dark;
-$primary-lighter: $mutualized-lighter;
-
-$theme-colors: map-merge(
-                (
-                        "primary-lighter": $primary-lighter
-                ),
-                $theme-colors
-);
+$primary: $orange-500;
 
 
 @import "../bootstrap/functions";

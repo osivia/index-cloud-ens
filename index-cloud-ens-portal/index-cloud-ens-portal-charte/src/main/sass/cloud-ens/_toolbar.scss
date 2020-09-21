@@ -1,0 +1,53 @@
+#toolbar {
+  .navbar {
+    height: 70px;
+
+    font-size: 0.9375rem; // 15px;
+
+    .avatar {
+      height: 2.25rem;
+      width: 2.25rem;
+
+      margin-right: map_get($spacers, 2);
+
+      border: {
+        style: solid;
+        width: .1rem;
+        color: $white;
+        radius: 50%;
+      }
+      object-fit: contain;
+    }
+  }
+
+
+  .index-tab {
+    display: flex;
+    align-items: center;
+
+    font-size: 1.0625rem; // 17px
+
+    &:hover, &:focus {
+      text-decoration: none;
+    }
+
+    &:not(.index-tab-home) {
+      i {
+        margin-right: map_get($spacers, 2);
+      }
+    }
+
+    > * {
+      padding: map_get($spacers, 1) 0;
+    }
+
+    &.active {
+      > span, &.index-tab-home > i {
+        border-bottom: {
+          style: solid;
+          width: map_get($spacers, 1);
+        };
+      }
+    }
+  }
+}

@@ -298,7 +298,7 @@ public class CustomizedAttributesBundle implements IAttributesBundle {
         userWorkspaceNavItem.setUrl(userWorkspaceUrl);
         userWorkspaceNavItem.setIcon("glyphicons glyphicons-basic-user-rounded");
         userWorkspaceNavItem.setKey("TOOLBAR_USER_WORKSPACE");
-        userWorkspaceNavItem.setColor("cloud-dark");
+        userWorkspaceNavItem.setColor("green");
         userWorkspaceNavItem.setActive((userWorkspace != null) && StringUtils.equals(basePath, userWorkspace.getCmsPath()));
         navItems.add(userWorkspaceNavItem);
 
@@ -307,7 +307,7 @@ public class CustomizedAttributesBundle implements IAttributesBundle {
         mutualizedSpaceNavItem.setUrl(mutualizedSpaceUrl);
         mutualizedSpaceNavItem.setIcon("glyphicons glyphicons-basic-share");
         mutualizedSpaceNavItem.setKey("TOOLBAR_COMMUNITY_WORKSPACE");
-        mutualizedSpaceNavItem.setColor("mutualized-dark");
+        mutualizedSpaceNavItem.setColor("orange");
         mutualizedSpaceNavItem.setActive(StringUtils.equals(basePath, mutualizedSpacePath));
         navItems.add(mutualizedSpaceNavItem);
 
