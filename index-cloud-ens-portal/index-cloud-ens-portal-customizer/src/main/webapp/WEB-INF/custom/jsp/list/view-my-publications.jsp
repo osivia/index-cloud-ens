@@ -5,55 +5,89 @@
 <%@ page isELIgnored="false"%>
 
 
-<div class="list-my-publications home-fixed-block">
+<div class="list-my-publications">
 	<c:choose>
 		<c:when test="${empty documents}">
 			<span class="text-muted"><op:translate key="DOCUMENT_NO_MUTUALIZATION" /></span>
 		</c:when>
 
 		<c:otherwise>
-
-
 			<c:forEach var="document" items="${documents}">
-				<div class="card mb-2 home-fixed-block-item">
-					<div class="card-body">
-						<h3 class="card-title h5 mb-1 text-truncate">
-							<%--Icon--%>
-							<span><ttc:icon document="${document}" /></span>
+				<div class="card card-custom card-custom-border-left card-custom-${document.properties['mtz:enable'] ? 'orange' : 'green'} mb-3">
+					<div class="card-body py-3">
+						<%--Badges--%>
+						<div class="card-custom-badges">
+							<%--PRONOTE indicator--%>
+							<c:if test="${not empty document.properties['rshr:targets']}">
+								<img src="/index-cloud-ens-charte/img/pronote-indicator.png" alt="PRONOTE" height="15">
+							</c:if>
 
-							<%--Title--%>
-							<c:set var="url">
-								<ttc:documentLink document="${document}" />
-							</c:set>
-							<a href="${url}" class="stretched-link no-ajax-link"> <span><ttc:title document="${document}"
-										linkable="false" /></span>
-							</a>
-						</h3>
+							<%--Mutualized document--%>
+							<c:if test="${document.properties['mtz:enable']}">
+								<i class="glyphicons glyphicons-basic-share text-orange"></i>
+							</c:if>
+						</div>
 
+						<div class="d-flex align-items-center">
+							<div class="mr-3">
+								<%--Icon--%>
+								<div class="card-custom-icon">
+									<ttc:icon document="${document}" />
+								</div>
+							</div>
 
-						<ul class="card-text list-inline">
-							<%--Views--%>
-							<li class="list-inline-item"><i class="glyphicons glyphicons-basic-eye"></i> <strong>${document.properties['mtz:views']}</strong>
-								<c:choose>
-									<c:when test="${empty document.properties['mtz:views'] or document.properties['mtz:views'] le 1}">
-										<span><op:translate key="DOCUMENT_MUTUALIZATION_VIEW" /></span>
-									</c:when>
-									<c:otherwise>
-										<span><op:translate key="DOCUMENT_MUTUALIZATION_VIEWS" /></span>
-									</c:otherwise>
-								</c:choose></li>
+							<div class="flex-grow-1 flex-shrink-1">
+								<%--Title--%>
+								<h3 class="card-title mb-0 text-truncate">
+									<c:set var="url"><ttc:documentLink document="${document}" /></c:set>
+									<a href="${url}" title="${document.title}" class="stretched-link text-black text-decoration-none no-ajax-link">
+										<span>${document.title}</span>
+									</a>
+								</h3>
 
-							<%--Downloads--%>
-							<li class="list-inline-item"><i class="glyphicons glyphicons-basic-save"></i> <strong>${document.properties['mtz:downloads']}</strong>
-								<c:choose>
-									<c:when test="${empty document.properties['mtz:downloads'] or document.properties['mtz:downloads'] le 1}">
-										<span><op:translate key="DOCUMENT_MUTUALIZATION_DOWNLOAD" /></span>
-									</c:when>
-									<c:otherwise>
-										<span><op:translate key="DOCUMENT_MUTUALIZATION_DOWNLOADS" /></span>
-									</c:otherwise>
-								</c:choose></li>
-						</ul>
+								<c:if test="${not empty document.properties['dc:modified']}">
+									<div class="text-truncate">
+										<small class="text-muted">
+											<span><op:translate key="LIST_TEMPLATE_QUICK_ACCESS_MODIFIED_ON"/></span>
+											<span><op:formatRelativeDate value="${document.properties['dc:modified']}" tooltip="false"/></span>
+										</small>
+									</div>
+								</c:if>
+							</div>
+						</div>
+
+						<%--Informations--%>
+						<div class="card-custom-informations">
+							<ul class="list-inline mb-0 text-muted">
+								<%--Views--%>
+								<li class="list-inline-item">
+									<i class="glyphicons glyphicons-basic-eye"></i>
+									<strong class="text-black">${document.properties['mtz:views']}</strong>
+									<c:choose>
+										<c:when test="${empty document.properties['mtz:views'] or document.properties['mtz:views'] le 1}">
+											<span><op:translate key="DOCUMENT_MUTUALIZATION_VIEW" /></span>
+										</c:when>
+										<c:otherwise>
+											<span><op:translate key="DOCUMENT_MUTUALIZATION_VIEWS" /></span>
+										</c:otherwise>
+									</c:choose>
+								</li>
+
+								<%--Downloads--%>
+								<li class="list-inline-item">
+									<i class="glyphicons glyphicons-basic-cloud-download"></i>
+									<strong class="text-black">${document.properties['mtz:downloads']}</strong>
+									<c:choose>
+										<c:when test="${empty document.properties['mtz:downloads'] or document.properties['mtz:downloads'] le 1}">
+											<span><op:translate key="DOCUMENT_MUTUALIZATION_DOWNLOAD" /></span>
+										</c:when>
+										<c:otherwise>
+											<span><op:translate key="DOCUMENT_MUTUALIZATION_DOWNLOADS" /></span>
+										</c:otherwise>
+									</c:choose>
+								</li>
+							</ul>
+						</div>
 					</div>
 				</div>
 			</c:forEach>

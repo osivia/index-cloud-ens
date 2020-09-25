@@ -32,6 +32,7 @@ $document-type-flat-size: #{$line-height-base * 2}em;
     // Size
     &[data-display] {
       padding: $border-radius-sm;
+
       @include border-radius($border-radius-sm);
 
       &[data-size="1"] {
@@ -41,19 +42,19 @@ $document-type-flat-size: #{$line-height-base * 2}em;
       }
       &[data-size="2"] {
         &::before {
-          font-size: .8em;
+          font-size: .7em;
         }
       }
 
       &[data-size="3"] {
         &::before {
-          font-size: .7em;
+          font-size: .5em;
         }
       }
 
       &[data-size="4"] {
         &::before {
-          font-size: .6em;
+          font-size: .4em;
         }
       }
     }

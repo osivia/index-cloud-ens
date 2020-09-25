@@ -1,14 +1,22 @@
 $gray-600: #686868;
 $gray-800: #3d3d3d;
+$black: #000;
 
 $green-100: #e9eee4;
 $green-500: #a5d17b;
 $green-700: #5e7447;
+$green-300: mix($green-100, $green-500);
+$green-200: mix($green-100, $green-300);
+$green-600: mix($green-500, $green-700);
 
 $orange-100: #f6ebe6;
 $orange-500: #ff9d7e;
 $orange-700: #c1451f;
+$orange-300: mix($orange-100, $orange-500);
+$orange-200: mix($orange-100, $orange-300);
+$orange-600: mix($orange-500, $orange-700);
 
+$purple: #6d69a8;
 $red: #ff5a5a;
 
 $uncluttered-toolbar-bg: #ffffff;
@@ -22,7 +30,8 @@ $colors: (
         "green-dark": $green-700,
         "orange-light": $orange-100,
         "orange": $orange-500,
-        "orange-dark": $orange-700
+        "orange-dark": $orange-700,
+        "black": $black
 );
 
 $theme-colors: (
@@ -32,9 +41,16 @@ $theme-colors: (
         "orange-light": $orange-100,
         "orange": $orange-500,
         "orange-dark": $orange-700,
-        "red": $red
+        "red": $red,
+        "black": $black
 );
 
+$body-color: #000;
 
-$font-size-base: .875rem; // 14px
+
 $font-family-base: "Montserrat", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+$font-size-base: .875rem; // 14px
+
+$headings-font-weight: 700;
+
+$small-font-size: 85%;

@@ -35,7 +35,14 @@
 }
 
 
+.portlet-container {
+  margin-bottom: map-get($spacers, 5);
+}
+
+
 .portlet-titlebar-title {
+  margin-bottom: map-get($spacers, 3);
+
   font-size: 0.875rem; // 14px;
 
   .bg-green-light & {

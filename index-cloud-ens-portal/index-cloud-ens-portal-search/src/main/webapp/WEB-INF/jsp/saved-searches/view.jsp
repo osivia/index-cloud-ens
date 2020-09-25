@@ -9,16 +9,20 @@
     </c:when>
 
     <c:otherwise>
-        <div class="list-group">
-            <c:forEach var="savedSearch" items="${form.savedSearches}">
-                <portlet:actionURL name="search" var="url">
-                    <portlet:param name="id" value="${savedSearch.id}"/>
-                </portlet:actionURL>
+        <c:forEach var="savedSearch" items="${form.savedSearches}">
+            <portlet:actionURL name="search" var="url">
+                <portlet:param name="id" value="${savedSearch.id}"/>
+            </portlet:actionURL>
 
-                <a href="${url}" class="list-group-item list-group-item-action">
-                    <span>${savedSearch.displayName}</span>
-                </a>
-            </c:forEach>
-        </div>
+            <div class="card card-custom card-custom-gray mb-3">
+                <div class="card-body py-3">
+                    <div class="text-truncate">
+                        <a href="${url}" title="${savedSearch.displayName}" class="stretched-link text-black text-decoration-none">
+                            <strong>${savedSearch.displayName}</strong>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </c:forEach>
     </c:otherwise>
 </c:choose>
