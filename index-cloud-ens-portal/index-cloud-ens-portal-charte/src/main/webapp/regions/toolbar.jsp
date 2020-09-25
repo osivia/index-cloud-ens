@@ -7,17 +7,40 @@
 <c:set var="contextPath" value="${pageContext.request.contextPath}"/>
 
 
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+<nav class="navbar navbar-expand-md navbar-dark bg-dark">
+    <%--Drawer toggle button--%>
+    <ul class="navbar-nav d-md-none mr-3 drawer-toggle-button">
+        <li class="nav-item">
+            <a href="javascript:toggleDrawer()" class="nav-link" data-toggle="drawer">
+                <i class="glyphicons glyphicons-basic-menu"></i>
+                <span class="sr-only"><op:translate key="TOOLBAR_OPEN_NAVIGATION_MENU"/></span>
+            </a>
+        </li>
+    </ul>
+
+
     <%--Brand--%>
     <a href="${requestScope['osivia.home.url']}" class="navbar-brand py-0">
-        <img alt="${requestScope['osivia.header.application.name']}" src="${contextPath}/img/logo-cloud-pronote-large.png" height="45">
+        <img alt="${requestScope['osivia.header.application.name']}"
+             src="${contextPath}/img/logo-cloud-pronote-toolbar.png" height="45">
     </a>
 
 
-    <div class="collapse navbar-collapse">
+    <%--Navbar toggler--%>
+    <div class="navbar-nav d-md-none">
+        <a href="javascript:" class="navbar-link text-light text-decoration-none" data-toggle="collapse" data-target="#toolbar-navbar-collapse">
+            <span><op:translate key="NAVBAR_TOGGLER"/></span>
+            <i class="glyphicons glyphicons-basic-set-down"></i>
+        </a>
+    </div>
+
+
+    <%--Navbar collapse--%>
+    <div id="toolbar-navbar-collapse" class="collapse navbar-collapse mt-3 mt-md-0">
         <c:choose>
             <c:when test="${empty requestScope['osivia.toolbar.principal']}">
-                <div class="navbar-nav ml-auto">
+                <%--Login--%>
+                <div class="navbar-nav ml-md-auto">
                     <a href="${requestScope['osivia.toolbar.loginURL']}" class="nav-link text-light">
                         <i class="glyphicons glyphicons-basic-user-rounded h4 mb-0 align-middle"></i>
                         <span><op:translate key="TOOLBAR_LOGIN"/></span>
@@ -27,23 +50,23 @@
 
             <c:otherwise>
                 <%--Administration--%>
-                <ul class="navbar-nav mr-3">
+                <ul class="navbar-nav mr-md-3">
                     <li class="nav-item">
                         <c:out value="${requestScope['osivia.toolbar.administrationContent']}" escapeXml="false"/>
                     </li>
                 </ul>
 
                 <%--Navigation--%>
-                <ul class="navbar-nav justify-content-center flex-grow-1 mr-3">
-                    <li class="nav-item">
+                <ul class="index-tabs navbar-nav align-items-md-center flex-grow-1 mr-md-3">
+                    <li class="nav-item mb-1 mb-md-0 flex-shrink-0">
                         <a href="${requestScope['osivia.default.memberPageUrl']}" class="index-tab index-tab-home text-light ${requestScope['osivia.default.memberPage'] ? 'active' : ''}">
                             <i class="glyphicons glyphicons-basic-home"></i>
-                            <span class="sr-only"><op:translate key="HOME"/></span>
+                            <span class="d-md-none"><op:translate key="HOME"/></span>
                         </a>
                     </li>
 
                     <c:forEach var="navItem" items="${requestScope['osivia.nav.items']}" varStatus="status">
-                        <li class="nav-item ml-4">
+                        <li class="nav-item mb-1 mb-md-0 ml-md-4">
                             <a href="${navItem.url}" class="index-tab text-${navItem.color} ${empty navItem.url ? 'disabled' : ''} ${navItem.active ? 'active' : ''}">
                                 <i class="${navItem.icon}"></i>
                                 <span><op:translate key="${navItem.key}"/></span>
@@ -52,24 +75,25 @@
                     </c:forEach>
                 </ul>
 
-                <ul class="navbar-nav align-items-center">
+                <ul class="navbar-nav align-items-md-center flex-shrink-0">
                     <%--Tasks--%>
-                    <li class="nav-item mr-2">
+                    <li class="nav-item mr-md-2">
                         <%@ include file="toolbar-tasks.jspf" %>
                     </li>
 
                     <%--User--%>
-                    <li class="nav-item mr-2">
+                    <li class="nav-item mr-md-2">
                         <a href="${requestScope['osivia.my-account.url']}" class="nav-link d-flex align-items-center text-light">
                             <c:choose>
                                 <c:when test="${empty requestScope['osivia.toolbar.person']}">
                                     <i class="glyphicons glyphicons-basic-user h4 mb-0 mr-2 align-middle"></i>
-                                    <span>${requestScope['osivia.toolbar.principal']}</span>
+                                    <span class="text-user">${requestScope['osivia.toolbar.principal']}</span>
                                 </c:when>
 
                                 <c:otherwise>
-                                    <img class="avatar" src="${requestScope['osivia.toolbar.person'].avatar.url}" alt="">
-                                    <span>${requestScope['osivia.toolbar.person'].cn}</span>
+                                    <img class="avatar" src="${requestScope['osivia.toolbar.person'].avatar.url}"
+                                         alt="">
+                                    <span class="text-user">${requestScope['osivia.toolbar.person'].cn}</span>
                                 </c:otherwise>
                             </c:choose>
                         </a>
@@ -79,7 +103,7 @@
                     <li class="nav-item">
                         <a href="javascript:" onclick="logout()" class="nav-link text-red">
                             <i class="glyphicons glyphicons-basic-power"></i>
-                            <span class="sr-only"><op:translate key="TOOLBAR_LOGOUT"/></span>
+                            <span class="d-md-none"><op:translate key="TOOLBAR_LOGOUT"/></span>
                         </a>
                     </li>
                 </ul>

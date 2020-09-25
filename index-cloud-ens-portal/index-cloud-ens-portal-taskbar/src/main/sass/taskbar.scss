@@ -10,7 +10,7 @@
         right: .1em;
       }
 
-      @include border-radius;
+      @include border-radius();
 
       &:hover {
         background-color: $light;
@@ -28,10 +28,10 @@
     }
 
     &.search-location {
-      background-color: $blue-lighter;
+      //background-color: $blue-lighter;
 
       &:hover {
-        background-color: darken($blue-lighter, 5%);
+        //background-color: darken($blue-lighter, 5%);
       }
     }
   }

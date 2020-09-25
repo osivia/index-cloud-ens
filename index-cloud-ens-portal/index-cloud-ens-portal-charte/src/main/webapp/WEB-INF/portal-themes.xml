@@ -5,13 +5,13 @@
         <name>cloud-ens-charte</name>
 
         <!-- Favicon -->
-        <link rel="icon" type="image/png" href="/img/favicon.png"/>
+        <link rel="icon" type="image/png" href="/img/favicon.ico"/>
 
         <!-- CSS -->
         <link rel="stylesheet" href="/css/cloud-ens.css"/>
 
         <!-- JavaScript -->
-        <script type="text/javascript" src="/js/cloud-ens.js"></script>
+        <script type="text/javascript" src="/js/cloud-ens.js"/>
     </theme>
 
 
@@ -19,12 +19,12 @@
         <name>cloud-ens-charte-mutualized</name>
 
         <!-- Favicon -->
-        <link rel="icon" type="image/png" href="/img/favicon.png"/>
+        <link rel="icon" type="image/png" href="/img/favicon.ico"/>
 
         <!-- CSS -->
         <link rel="stylesheet" href="/css/cloud-ens-mutualized.css"/>
 
         <!-- JavaScript -->
-        <script type="text/javascript" src="/js/cloud-ens.js"></script>
+        <script type="text/javascript" src="/js/cloud-ens.js"/>
     </theme>
 </themes>

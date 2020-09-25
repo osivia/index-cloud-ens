@@ -26,7 +26,7 @@
 
     <meta http-equiv="default-style" content="Cloud-ens">
 
-    <link rel="icon" type="image/png" href="${contextPath}/img/favicon.png"/>
+    <link rel="icon" type="image/png" href="${contextPath}/img/favicon.ico"/>
     <link rel="stylesheet" href="${contextPath}/css/cloud-ens.css" title="Cloud-ens"/>
 </head>
 
