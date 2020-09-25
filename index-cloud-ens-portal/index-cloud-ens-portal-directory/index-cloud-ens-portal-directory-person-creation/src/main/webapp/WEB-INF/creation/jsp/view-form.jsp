@@ -75,15 +75,15 @@
 
                                     <%--Password--%>
                                 <spring:bind path="newpassword">
-                                    <div class="form-group required">
+                                    <div class="form-group required password-control">
                                         <div class="mb-2">
                                             <form:label path="newpassword" cssClass="text-secondary"><op:translate
                                                     key="createaccount.form.newpassword"/></form:label>
-                                            <form:password path="newpassword" cssClass="form-control"
-                                                           cssErrorClass="form-control is-invalid"/>
+                                            <form:password path="newpassword" showPassword="true" cssClass="form-control"
+                                                           cssErrorClass="form-control is-invalid" data-password-control-url="${passwordInformationUrl}"/>
                                             <form:errors path="newpassword" cssClass="invalid-feedback"/>
                                         </div>
-
+               
                                     </div>
                                 </spring:bind>
 
@@ -92,15 +92,21 @@
                                     <div class="form-group required">
                                         <form:label path="confirmpassword" cssClass="text-secondary"><op:translate
                                                 key="createaccount.form.confirmpassword"/></form:label>
-                                        <form:password path="confirmpassword" cssClass="form-control"
+                                        <form:password path="confirmpassword" showPassword="true" cssClass="form-control"
                                                        cssErrorClass="form-control is-invalid"/>
                                         <form:errors path="confirmpassword" cssClass="invalid-feedback"/>
                                     </div>
                                 </spring:bind>
                                 
 
-                                        <div data-password-information-placeholder
-                                             data-url="${passwordInformationUrl}"></div>                                
+                                                                        
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md">
+                                <div data-password-information-placeholder
+                                             data-url="${passwordInformationUrl}"></div>                        
                             </div>
                         </div>
 
@@ -110,7 +116,7 @@
                                     <%--Terms of service--%>
                                 <div class="form-check">
                                     <form:checkbox id="${namespace}-accept-terms-of-service" path="acceptTermsOfService"
-                                                   cssClass="form-check-input" cssErrorClass="form-check-input is-invalid"/>
+                                                   cssClass="form-check-input"/>
                                                    
                                      <form:label for="${namespace}-accept-terms-of-service" path="acceptTermsOfService"
                                                 cssClass="form-check-label">
@@ -122,9 +128,25 @@
                                             </a>
                                             <op:translate
                                             key="createaccount.form.acceptTermsOfService.afterLink"/> 
-                                     </form:label>              
+                                     </form:label>   
+                                     
                                     
                                 </div>
+  
+  
+                                 <c:set var="termsOfServiceHasBindError">
+                                    <form:errors path="acceptTermsOfService"/>
+                                </c:set>
+                                
+                                <c:if test="${not empty termsOfServiceHasBindError}">
+                                    <div class="form-group">
+                                        <span class="d-block invalid-feedback"><span><op:translate key="createaccount.error.terms"/></span></span>
+                                    </div>  
+                                </c:if>   
+                                                                 
+                                 
+                                
+                                
                             </div>
 
                             <div class="col-md-auto align-self-end">
@@ -171,3 +193,5 @@
         </div>
     </div>
 </div>
+
+
