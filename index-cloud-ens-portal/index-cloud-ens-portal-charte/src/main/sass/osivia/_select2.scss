@@ -1,11 +1,8 @@
-@import "variables";
-
-
 .select2-container--bootstrap4 {
   .select2-selection {
     display: block;
     width: 100%;
-    height: $input-height;
+
     padding: $input-padding-y $input-padding-x;
     font-family: $input-font-family;
     @include font-size($input-font-size);
@@ -30,11 +27,12 @@
 
 
     &.select2-selection--single {
-
+      height: $input-height;
     }
 
     &.select2-selection--multiple {
       height: auto;
+      min-height: $input-height;
 
       padding-top: calc(#{$input-padding-y - .1rem} - #{$border-width});
       padding-bottom: 0;
@@ -42,7 +40,7 @@
   }
 
 
-  &.select2-container--focus {
+  &.select2-container--open, &.select2-container--focus {
     .select2-selection {
       color: $input-focus-color;
       background-color: $input-focus-bg;

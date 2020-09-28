@@ -3,6 +3,7 @@ package fr.index.cloud.ens.taskbar.portlet.repository;
 import fr.index.cloud.ens.taskbar.portlet.model.*;
 import fr.index.cloud.ens.taskbar.portlet.model.comparator.FolderTaskComparator;
 import fr.index.cloud.ens.taskbar.portlet.model.comparator.SavedSearchComparator;
+import fr.index.cloud.ens.taskbar.portlet.repository.command.LoadVocabularyCommand;
 import fr.index.cloud.ens.taskbar.portlet.repository.command.MoveDocumentsCommand;
 import fr.toutatice.portail.cms.nuxeo.api.INuxeoCommand;
 import fr.toutatice.portail.cms.nuxeo.api.NuxeoController;
@@ -10,6 +11,8 @@ import fr.toutatice.portail.cms.nuxeo.api.cms.NuxeoDocumentContext;
 import fr.toutatice.portail.cms.nuxeo.api.cms.NuxeoPermissions;
 import fr.toutatice.portail.cms.nuxeo.api.services.INuxeoCustomizer;
 import fr.toutatice.portail.cms.nuxeo.api.services.INuxeoService;
+import fr.toutatice.portail.cms.nuxeo.api.services.NuxeoCommandContext;
+import net.sf.json.JSONArray;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.BooleanUtils;
 import org.apache.commons.lang.StringUtils;
@@ -19,6 +22,7 @@ import org.osivia.directory.v2.model.preferences.UserPreferences;
 import org.osivia.directory.v2.model.preferences.UserSavedSearch;
 import org.osivia.directory.v2.service.preferences.UserPreferencesService;
 import org.osivia.portal.api.PortalException;
+import org.osivia.portal.api.cache.services.CacheInfo;
 import org.osivia.portal.api.cms.DocumentType;
 import org.osivia.portal.api.cms.VirtualNavigationUtils;
 import org.osivia.portal.api.context.PortalControllerContext;
@@ -36,6 +40,7 @@ import org.springframework.stereotype.Repository;
 import javax.portlet.*;
 import java.io.IOException;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Taskbar portlet repository implementation.
@@ -548,7 +553,6 @@ public class TaskbarRepositoryImpl implements TaskbarRepository {
 
                 // Task
                 ServiceTask task = this.applicationContext.getBean(ServiceTask.class);
-                task.setIcon("glyphicons glyphicons-basic-filter");
                 task.setDisplayName(savedSearch.getDisplayName());
                 task.setUrl(actionUrl.toString());
                 task.setActive(StringUtils.equals(activeSavedSearch, String.valueOf(savedSearch.getId())));
@@ -654,6 +658,21 @@ public class TaskbarRepositoryImpl implements TaskbarRepository {
         // Nuxeo command
         INuxeoCommand command = this.applicationContext.getBean(MoveDocumentsCommand.class, sourceIds, targetId);
         nuxeoController.executeNuxeoCommand(command);
+    }
+
+
+    @Override
+    public JSONArray loadVocabulary(PortalControllerContext portalControllerContext, String vocabularyName) {
+        // Nuxeo controller
+        NuxeoController nuxeoController = new NuxeoController(portalControllerContext);
+        nuxeoController.setCacheTimeOut(TimeUnit.HOURS.toMillis(1));
+        nuxeoController.setAuthType(NuxeoCommandContext.AUTH_TYPE_SUPERUSER);
+        nuxeoController.setCacheType(CacheInfo.CACHE_SCOPE_PORTLET_CONTEXT);
+
+        // Nuxeo command
+        INuxeoCommand command = this.applicationContext.getBean(LoadVocabularyCommand.class, vocabularyName);
+
+        return (JSONArray) nuxeoController.executeNuxeoCommand(command);
     }
 
 }

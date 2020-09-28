@@ -2,7 +2,7 @@
     <div class="row flex-grow-1 flex-nowrap">
         <div id="drawer" class="col d-flex flex-column overflow-auto bg-light shadow">
             <div class="row flex-grow-1 flex-nowrap">
-                <div class="col overflow-auto">
+                <div class="col overflow-auto pt-5">
                     <p:region regionName="nav"/>
                 </div>
             </div>

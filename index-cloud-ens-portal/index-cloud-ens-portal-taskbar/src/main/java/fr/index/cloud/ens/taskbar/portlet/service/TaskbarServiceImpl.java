@@ -8,6 +8,7 @@ import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.MapUtils;
+import org.apache.commons.lang.CharEncoding;
 import org.apache.commons.lang.StringUtils;
 import org.osivia.directory.v2.model.preferences.UserSavedSearch;
 import org.osivia.portal.api.Constants;
@@ -26,7 +27,6 @@ import org.osivia.portal.api.taskbar.TaskbarTask;
 import org.osivia.portal.api.urls.IPortalUrlFactory;
 import org.osivia.portal.api.windows.PortalWindow;
 import org.osivia.portal.api.windows.WindowFactory;
-import org.osivia.portal.core.page.PageProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
@@ -35,6 +35,9 @@ import javax.portlet.ActionResponse;
 import javax.portlet.PortletException;
 import javax.portlet.PortletRequest;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.text.Normalizer;
 import java.util.*;
 
 /**
@@ -181,27 +184,25 @@ public class TaskbarServiceImpl implements TaskbarService {
         if (trash != null) {
             tasks.add(this.createTask(portalControllerContext, basePath, bundle, activeId, trash));
         }
-        // Filters title
-        Task filtersTitle = this.applicationContext.getBean(FiltersTitleTask.class);
-        tasks.add(filtersTitle);
-        // Advanced search
-        TaskbarTask advancedSearch = this.extractVirtualStaple(portalControllerContext, navigationTasks, "SEARCH_FILTERS");
-        if (advancedSearch != null) {
-            Task task = this.createTask(portalControllerContext, basePath, bundle, activeId, advancedSearch);
-            SearchTask searchTask = this.applicationContext.getBean(SearchTask.class);
-            searchTask.setUrl(task.getUrl());
-            tasks.add(searchTask);
-        }
         // Recent items
         TaskbarTask recentItems = this.extractVirtualStaple(portalControllerContext, navigationTasks, "RECENT_ITEMS");
         if (recentItems != null) {
             tasks.add(this.createTask(portalControllerContext, basePath, bundle, activeId, recentItems));
         }
+        // Search
+        SearchTask searchTask = this.applicationContext.getBean(SearchTask.class);
+        tasks.add(searchTask);
+        // Advanced search
+        TaskbarTask advancedSearch = this.extractVirtualStaple(portalControllerContext, navigationTasks, "SEARCH_FILTERS");
+        if (advancedSearch != null) {
+            searchTask.setAdvancedSearch(this.createTask(portalControllerContext, basePath, bundle, activeId, advancedSearch));
+        }
+        // Filters
+        FiltersTask filters = this.applicationContext.getBean(FiltersTask.class);
+        tasks.add(filters);
         // Saved searches
         List<Task> savedSearches = this.repository.getSavedSearchesTasks(portalControllerContext, activeSavedSearch);
-        if (CollectionUtils.isNotEmpty(savedSearches)) {
-            tasks.addAll(savedSearches);
-        }
+        filters.setSavedSearches(savedSearches);
 
 
         // Taskbar
@@ -209,6 +210,17 @@ public class TaskbarServiceImpl implements TaskbarService {
         taskbar.setTasks(tasks);
 
         return taskbar;
+    }
+
+
+    @Override
+    public TaskbarSearchForm getTaskbarSearchForm(PortalControllerContext portalControllerContext) throws PortletException {
+        // Search form
+        TaskbarSearchForm searchForm = this.applicationContext.getBean(TaskbarSearchForm.class);
+
+        // TODO
+
+        return searchForm;
     }
 
 
@@ -431,6 +443,15 @@ public class TaskbarServiceImpl implements TaskbarService {
 
 
     @Override
+    public void resetSearchFilters(PortalControllerContext portalControllerContext) {
+        // Action response
+        ActionResponse response = (ActionResponse) portalControllerContext.getResponse();
+
+        response.setRenderParameter("selectors", StringUtils.EMPTY);
+    }
+
+
+    @Override
     public String getSavedSearchUrl(PortalControllerContext portalControllerContext, int id) throws PortletException {
         // Saved search
         UserSavedSearch savedSearch = this.repository.getSavedSearch(portalControllerContext, id);
@@ -553,6 +574,168 @@ public class TaskbarServiceImpl implements TaskbarService {
             }
         }
         return value;
+    }
+
+
+    @Override
+    public JSONArray loadVocabulary(PortalControllerContext portalControllerContext, String vocabularyName, String filter) throws PortletException, IOException {
+        // Vocabulary JSON array
+        JSONArray array = this.repository.loadVocabulary(portalControllerContext, vocabularyName);
+
+        // Select2 results
+        JSONArray results;
+        if ((array == null) || (array.isEmpty())) {
+            results = new JSONArray();
+        } else {
+            results = this.parseVocabulary(array, filter);
+        }
+
+        return results;
+    }
+
+
+    /**
+     * Parse vocabulary JSON array with filter.
+     *
+     * @param jsonArray JSON array
+     * @param filter    filter, may be null
+     * @return results
+     */
+    private JSONArray parseVocabulary(JSONArray jsonArray, String filter) throws IOException {
+        Map<String, TaskbarSearchVocabularyItem> items = new HashMap<>(jsonArray.size());
+        Set<String> rootItems = new LinkedHashSet<>();
+
+        boolean multilevel = false;
+
+        for (Object object : jsonArray) {
+            JSONObject jsonObject = (JSONObject) object;
+
+            String key = jsonObject.getString("key");
+            String value = jsonObject.getString("value");
+            String parent = null;
+            if (jsonObject.containsKey("parent")) {
+                parent = jsonObject.getString("parent");
+            }
+            boolean matches = this.matchesVocabularyItem(value, filter);
+
+            TaskbarSearchVocabularyItem item = items.get(key);
+            if (item == null) {
+                item = this.applicationContext.getBean(TaskbarSearchVocabularyItem.class, key);
+                items.put(key, item);
+            }
+            item.setValue(value);
+            item.setParent(parent);
+            if (matches) {
+                item.setMatches(true);
+                item.setDisplayed(true);
+            }
+
+            if (StringUtils.isEmpty(parent)) {
+                rootItems.add(key);
+            } else {
+                multilevel = true;
+
+                TaskbarSearchVocabularyItem parentItem = items.get(parent);
+                if (parentItem == null) {
+                    parentItem = this.applicationContext.getBean(TaskbarSearchVocabularyItem.class, parent);
+                    items.put(parent, parentItem);
+                }
+                parentItem.getChildren().add(key);
+
+                if (item.isDisplayed()) {
+                    while (parentItem != null) {
+                        parentItem.setDisplayed(true);
+
+                        if (StringUtils.isEmpty(parentItem.getParent())) {
+                            parentItem = null;
+                        } else {
+                            parentItem = items.get(parentItem.getParent());
+                        }
+                    }
+                }
+            }
+        }
+
+
+        JSONArray results = new JSONArray();
+        this.generateVocabularyChildren(items, results, rootItems, multilevel, 1, null);
+
+        return results;
+    }
+
+
+    /**
+     * Check if value matches filter.
+     *
+     * @param value  vocabulary item value
+     * @param filter filter
+     * @return true if value matches filter
+     */
+    private boolean matchesVocabularyItem(String value, String filter) throws UnsupportedEncodingException {
+        boolean matches = true;
+
+        if (filter != null) {
+            // Decoded value
+            String decodedValue = URLDecoder.decode(value, CharEncoding.UTF_8);
+            // Diacritical value
+            String diacriticalValue = Normalizer.normalize(decodedValue, Normalizer.Form.NFD).replaceAll("\\p{IsM}+", StringUtils.EMPTY);
+
+            // Filter
+            String[] splittedFilters = StringUtils.split(filter, "*");
+            for (String splittedFilter : splittedFilters) {
+                // Diacritical filter
+                String diacriticalFilter = Normalizer.normalize(splittedFilter, Normalizer.Form.NFD).replaceAll("\\p{IsM}+", StringUtils.EMPTY);
+
+                if (!StringUtils.containsIgnoreCase(diacriticalValue, diacriticalFilter)) {
+                    matches = false;
+                    break;
+                }
+            }
+        }
+
+        return matches;
+    }
+
+
+    /**
+     * Generate vocabulary children.
+     *
+     * @param items     vocabulary items
+     * @param jsonArray results JSON array
+     * @param children  children
+     * @param optgroup  options group presentation indicator
+     * @param level     depth level
+     * @param parentId  parent identifier
+     */
+    private void generateVocabularyChildren(Map<String, TaskbarSearchVocabularyItem> items, JSONArray jsonArray, Set<String> children, boolean optgroup, int level, String parentId) throws UnsupportedEncodingException {
+        for (String child : children) {
+            TaskbarSearchVocabularyItem item = items.get(child);
+            if ((item != null) && item.isDisplayed()) {
+                // Identifier
+                String id;
+                if (StringUtils.isEmpty(parentId)) {
+                    id = item.getKey();
+                } else {
+                    id = parentId + "/" + item.getKey();
+                }
+
+                JSONObject object = new JSONObject();
+                object.put("id", id);
+                object.put("text", URLDecoder.decode(item.getValue(), CharEncoding.UTF_8));
+                object.put("optgroup", optgroup);
+                object.put("level", level);
+
+                if (!item.isMatches()) {
+                    object.put("disabled", true);
+                }
+
+                jsonArray.add(object);
+
+                if (!item.getChildren().isEmpty()) {
+                    this.generateVocabularyChildren(items, jsonArray, item.getChildren(), false, level + 1, id);
+                }
+            }
+        }
     }
 
 }

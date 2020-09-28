@@ -1,25 +1,13 @@
 @import "../../../../index-cloud-ens-portal-charte/src/main/sass/cloud-ens/variables";
+@import "../../../../index-cloud-ens-portal-charte/src/main/sass/osivia/glyphicons/mixins";
+
 
 .taskbar {
-  > ul > li {
-    > a {
-      padding: {
-        top: .1em;
-        bottom: .1em;
-        left: calc(1.25em + .25rem);
-        right: .1em;
-      }
-
-      @include border-radius();
-
-      &:hover {
-        background-color: $light;
-      }
-    }
-  }
-
   .fancytree-node {
-    &:not(.current) {
+    margin-bottom: map-get($spacers, 3);
+    padding: 0;
+
+    &, &.current {
       color: $secondary;
 
       &:hover {
@@ -27,11 +15,184 @@
       }
     }
 
-    &.search-location {
-      //background-color: $blue-lighter;
+    .fancytree-expander, .fancytree-icon, .fancytree-custom-icon {
+      margin-right: 0;
+
+      &, &.glyphicons::before {
+        width: $glyphicons-size;
+        height: $glyphicons-size;
+      }
+    }
+
+    .fancytree-expander {
+      font-size: $small-font-size;
+    }
+
+    .fancytree-icon {
+      margin-left: map-get($spacers, 1);
+    }
+
+    &.current {
+      .fancytree-icon {
+        color: $green-500;
+      }
 
       &:hover {
-        //background-color: darken($blue-lighter, 5%);
+        .fancytree-icon {
+          color: darken($green-500, $emphasized-link-hover-darken-percentage);
+        }
+      }
+    }
+
+    .fancytree-title {
+      margin-left: map-get($spacers, 2);
+
+      color: $black;
+      font-weight: $font-weight-bold;
+    }
+  }
+
+
+  .btn-link {
+    &:hover, &:focus {
+      color: $white !important;
+      background-color: $green-500;
+    }
+  }
+
+
+  .card-custom {
+    .card-body {
+      padding: .75rem;
+    }
+  }
+
+
+  .form-control {
+    height: 3rem;
+
+    padding: {
+      top: .75rem;
+      bottom: .75rem;
+    }
+
+    border-style: none;
+
+    &::placeholder {
+      font-size: $small-font-size;
+    }
+  }
+
+  .input-group-text {
+    background-color: $white;
+    border-style: none;
+  }
+
+  .select2-container--bootstrap4 {
+    .select2-selection {
+      position: relative;
+      min-height: 3rem;
+
+      padding-top: .5rem;
+      padding-right: 1.75rem;
+
+      border-style: none;
+
+      &::after {
+        $glyphicons-url: glyphicons-url("basic", 796, "set-down");
+
+        content: "";
+        position: absolute;
+        top: 0;
+        right: .5rem;
+
+        display: flex;
+        align-items: center;
+        height: 3rem;
+        width: $glyphicons-size;
+
+        margin: {
+          top: auto;
+          bottom: auto;
+        }
+
+        background-color: currentColor;
+        font-size: $small-font-size;
+
+        mask-position: center;
+        -webkit-mask-position: center;
+        mask-repeat: no-repeat;
+        -webkit-mask-repeat: no-repeat;
+        mask-size: contain;
+        -webkit-mask-size: contain;
+        mask-image: url("#{$glyphicons-url}");
+        -webkit-mask-image: url("#{$glyphicons-url}");
+      }
+    }
+
+    .select2-search__field {
+      margin: {
+        top: .25rem !important;
+        bottom: .25rem !important;
+      }
+
+      &::placeholder {
+        font-size: $small-font-size;
+      }
+    }
+
+    .select2-selection__choice {
+      display: flex;
+      align-items: center;
+
+      height: 2rem;
+      min-width: 0;
+
+      margin-bottom: .25rem;
+      margin-right: .5rem;
+      padding: 0 .5rem;
+
+      color: $white;
+      background-color: $green-700;
+      border: {
+        style: none;
+        radius: 50rem;
+      }
+
+      &:hover {
+        background-color: darken($green-700, $emphasized-link-hover-darken-percentage);
+      }
+
+      .select2-selection__choice__remove {
+        display: flex;
+        align-items: center;
+        flex-shrink: 0;
+        order: 2;
+
+        margin-right: -.25rem;
+        padding: .25rem;
+
+        color: $white;
+        font-size: 0; // Hide default cross symbol
+
+        @include glyphicons-mask(glyphicons-url("basic", 599, "menu-close"));
+
+        &::before {
+          content: "";
+
+          height: $glyphicons-size;
+          width: $glyphicons-size;
+
+          mask-position: center;
+          -webkit-mask-position: center;
+          mask-repeat: no-repeat;
+          -webkit-mask-repeat: no-repeat;
+          mask-size: contain;
+          -webkit-mask-size: contain;
+
+          background-color: currentColor;
+          font-size: .65rem;
+        }
       }
     }
   }

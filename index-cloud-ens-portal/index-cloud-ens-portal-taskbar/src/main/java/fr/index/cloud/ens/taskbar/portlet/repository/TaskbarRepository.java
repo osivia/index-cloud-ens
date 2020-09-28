@@ -4,6 +4,7 @@ import fr.index.cloud.ens.taskbar.portlet.model.AddDropdownItem;
 import fr.index.cloud.ens.taskbar.portlet.model.FolderTask;
 import fr.index.cloud.ens.taskbar.portlet.model.Task;
 import fr.index.cloud.ens.taskbar.portlet.model.TaskbarWindowProperties;
+import net.sf.json.JSONArray;
 import org.osivia.directory.v2.model.preferences.UserSavedSearch;
 import org.osivia.portal.api.context.PortalControllerContext;
 import org.osivia.portal.api.taskbar.TaskbarTask;
@@ -110,5 +111,15 @@ public interface TaskbarRepository {
      * @param targetId                target identifier
      */
     void moveDocuments(PortalControllerContext portalControllerContext, List<String> sourceIds, String targetId) throws PortletException;
+
+
+    /**
+     * Load vocabulary.
+     *
+     * @param portalControllerContext portal controller context
+     * @param vocabularyName          vocabulary name
+     * @return vocabulary JSON array
+     */
+    JSONArray loadVocabulary(PortalControllerContext portalControllerContext, String vocabularyName) throws PortletException;
 
 }

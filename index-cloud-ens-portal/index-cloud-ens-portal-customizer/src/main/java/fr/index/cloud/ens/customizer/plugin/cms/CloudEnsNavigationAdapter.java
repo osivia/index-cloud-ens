@@ -17,7 +17,6 @@ import org.osivia.portal.api.internationalization.IInternationalizationService;
 import org.osivia.portal.api.locator.Locator;
 import org.osivia.portal.core.cms.*;
 
-import javax.portlet.PortletContext;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -114,21 +113,38 @@ public class CloudEnsNavigationAdapter implements INavigationAdapterModule {
             // User workspace
             CMSItem userWorkspace = this.getUserWorkspace(portalControllerContext);
             if ((userWorkspace != null) && StringUtils.equals(navigationItem.getCmsPath(), userWorkspace.getCmsPath())) {
-                // Internationalization bundle
-                Bundle bundle = this.bundleFactory.getBundle(portalControllerContext.getHttpServletRequest().getLocale());
-
-                // Title
-                String title = bundle.getString("TOOLBAR_USER_WORKSPACE");
-
-                // Update navigation item properties
-                navigationItem.getProperties().put("displayName", title);
-                navigationItem.getProperties().put("title", title);
-
-                // Update navigation item document
-                Document document = (Document) navigationItem.getNativeItem();
-                document.set("dc:title", title);
+                this.renameUserRootDocument(portalControllerContext, navigationItem);
+            }
+        } else if (navigationItem.getType() != null && "Folder".equals(navigationItem.getType().getName()) && StringUtils.endsWith(navigationItem.getCmsPath(), "/documents")) {
+            // User workspace
+            CMSItem userWorkspace = this.getUserWorkspace(portalControllerContext);
+            if ((userWorkspace != null) && StringUtils.equals(navigationItem.getCmsPath(), userWorkspace.getCmsPath() + "/documents")) {
+                this.renameUserRootDocument(portalControllerContext, navigationItem);
             }
         }
+    }
+    
+
+    /**
+     * Rename user root document.
+     *
+     * @param portalControllerContext portal controller context
+     * @param navigationItem          navigation item
+     */
+    private void renameUserRootDocument(PortalControllerContext portalControllerContext, CMSItem navigationItem) {
+        // Internationalization bundle
+        Bundle bundle = this.bundleFactory.getBundle(portalControllerContext.getHttpServletRequest().getLocale());
+
+        // Title
+        String title = bundle.getString("TOOLBAR_USER_WORKSPACE");
+
+        // Update navigation item properties
+        navigationItem.getProperties().put("displayName", title);
+        navigationItem.getProperties().put("title", title);
+
+        // Update navigation item document
+        Document document = (Document) navigationItem.getNativeItem();
+        document.set("dc:title", title);
     }
 
 

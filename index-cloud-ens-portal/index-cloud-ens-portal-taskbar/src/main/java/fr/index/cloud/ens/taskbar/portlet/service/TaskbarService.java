@@ -1,6 +1,7 @@
 package fr.index.cloud.ens.taskbar.portlet.service;
 
 import fr.index.cloud.ens.taskbar.portlet.model.Taskbar;
+import fr.index.cloud.ens.taskbar.portlet.model.TaskbarSearchForm;
 import fr.index.cloud.ens.taskbar.portlet.model.TaskbarWindowProperties;
 import net.sf.json.JSONArray;
 import org.osivia.portal.api.context.PortalControllerContext;
@@ -50,6 +51,15 @@ public interface TaskbarService {
 
 
     /**
+     * Get taskbar search form.
+     *
+     * @param portalControllerContext portal controller context
+     * @return search form
+     */
+    TaskbarSearchForm getTaskbarSearchForm(PortalControllerContext portalControllerContext) throws PortletException;
+
+
+    /**
      * Drop.
      *
      * @param portalControllerContext portal controller context
@@ -57,6 +67,14 @@ public interface TaskbarService {
      * @param targetId                target identifier
      */
     void drop(PortalControllerContext portalControllerContext, List<String> sourceIds, String targetId) throws PortletException;
+
+
+    /**
+     * Reset search filters.
+     *
+     * @param portalControllerContext portal controller context
+     */
+    void resetSearchFilters(PortalControllerContext portalControllerContext) throws PortletException;
 
 
     /**
@@ -77,5 +95,16 @@ public interface TaskbarService {
      * @return JSON array
      */
     JSONArray getFolderChildren(PortalControllerContext portalControllerContext, String path) throws PortletException;
+
+
+    /**
+     * Load select2 vocabulary.
+     *
+     * @param portalControllerContext portal controller context
+     * @param vocabularyName          vocabulary name
+     * @param filter                  select2 filter
+     * @return select2 results JSON array
+     */
+    JSONArray loadVocabulary(PortalControllerContext portalControllerContext, String vocabularyName, String filter) throws PortletException, IOException;
 
 }

@@ -54,11 +54,11 @@ public abstract class Task {
 
 
     /**
-     * Check if task is filters title.
+     * Check if task is filters.
      *
-     * @return true if task is filters title
+     * @return true if task is filters
      */
-    public boolean isFiltersTitle() {
+    public boolean isFilters() {
         return false;
     }
 

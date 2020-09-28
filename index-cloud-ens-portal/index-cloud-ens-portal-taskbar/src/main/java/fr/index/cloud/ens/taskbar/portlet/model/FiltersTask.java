@@ -4,40 +4,41 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 /**
- * Search task.
+ * Filters title task.
  *
  * @author Cédric Krommenhoek
  * @see Task
  */
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-public class SearchTask extends Task {
+public class FiltersTask extends Task {
 
-    /**
-     * Advanced search.
-     */
-    private Task advancedSearch;
+    // Saved searches
+    private List<Task> savedSearches;
 
 
     /**
      * Constructor.
      */
-    public SearchTask() {
+    public FiltersTask() {
         super();
     }
 
 
     @Override
-    public boolean isSearch() {
+    public boolean isFilters() {
         return true;
     }
 
-    public Task getAdvancedSearch() {
-        return advancedSearch;
+
+    public List<Task> getSavedSearches() {
+        return savedSearches;
     }
 
-    public void setAdvancedSearch(Task advancedSearch) {
-        this.advancedSearch = advancedSearch;
+    public void setSavedSearches(List<Task> savedSearches) {
+        this.savedSearches = savedSearches;
     }
 }

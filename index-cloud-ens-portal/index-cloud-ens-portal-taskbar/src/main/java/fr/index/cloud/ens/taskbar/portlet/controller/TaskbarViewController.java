@@ -1,6 +1,7 @@
 package fr.index.cloud.ens.taskbar.portlet.controller;
 
 import fr.index.cloud.ens.taskbar.portlet.model.Taskbar;
+import fr.index.cloud.ens.taskbar.portlet.model.TaskbarSearchForm;
 import fr.index.cloud.ens.taskbar.portlet.service.TaskbarService;
 import net.sf.json.JSONArray;
 import org.apache.commons.lang.StringUtils;
@@ -32,6 +33,7 @@ public class TaskbarViewController {
     /**
      * Portlet context.
      */
+    @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
     @Autowired
     private PortletContext portletContext;
 
@@ -82,6 +84,21 @@ public class TaskbarViewController {
 
 
     /**
+     * Reset search filters action mapping.
+     *
+     * @param request  action request
+     * @param response action response
+     */
+    @ActionMapping("reset")
+    public void resetSearchFilters(ActionRequest request, ActionResponse response) throws PortletException {
+        // Portal controller context
+        PortalControllerContext portalControllerContext = new PortalControllerContext(portletContext, request, response);
+
+        this.service.resetSearchFilters(portalControllerContext);
+    }
+
+
+    /**
      * Search action mapping.
      *
      * @param request  action request
@@ -125,6 +142,32 @@ public class TaskbarViewController {
 
 
     /**
+     * Load levels select2 vocabulary resource mapping.
+     *
+     * @param request        resource request
+     * @param response       resource response
+     * @param vocabularyName vocabulary name request parameter
+     * @param filter         select2 filter request parameter
+     */
+    @ResourceMapping("load-vocabulary")
+    public void loadLevels(ResourceRequest request, ResourceResponse response, @RequestParam("vocabulary") String vocabularyName, @RequestParam(name = "filter", required = false) String filter) throws PortletException, IOException {
+        // Portal controller context
+        PortalControllerContext portalControllerContext = new PortalControllerContext(portletContext, request, response);
+
+        // Select2 results
+        JSONArray results = this.service.loadVocabulary(portalControllerContext, vocabularyName, filter);
+
+        // Content type
+        response.setContentType("application/json");
+
+        // Content
+        PrintWriter printWriter = new PrintWriter(response.getPortletOutputStream());
+        printWriter.write(results.toString());
+        printWriter.close();
+    }
+
+
+    /**
      * Get taskbar model attribute.
      *
      * @param request  portlet request
@@ -137,6 +180,22 @@ public class TaskbarViewController {
         PortalControllerContext portalControllerContext = new PortalControllerContext(portletContext, request, response);
 
         return this.service.getTaskbar(portalControllerContext);
+    }
+
+
+    /**
+     * Get taskbar search form model attribute.
+     *
+     * @param request  portlet request
+     * @param response portlet response
+     * @return search form
+     */
+    @ModelAttribute("searchForm")
+    public TaskbarSearchForm getSearchForm(PortletRequest request, PortletResponse response) throws PortletException {
+        // Portal controller context
+        PortalControllerContext portalControllerContext = new PortalControllerContext(portletContext, request, response);
+
+        return this.service.getTaskbarSearchForm(portalControllerContext);
     }
 
 }
