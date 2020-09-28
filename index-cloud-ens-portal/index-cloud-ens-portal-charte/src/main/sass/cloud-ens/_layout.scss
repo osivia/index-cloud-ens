@@ -25,6 +25,13 @@
 }
 
 
+#drawer {
+  @media (min-width: map_get($grid-breakpoints, "md")) {
+    z-index: 1;
+  }
+}
+
+
 .background-clouds {
   background: {
     image: url("/index-cloud-ens-charte/img/background-clouds.png");

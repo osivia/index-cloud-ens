@@ -23,27 +23,27 @@
 <main class="d-flex flex-column flex-grow-1 overflow-auto">
 	<div class="container-fluid d-flex flex-column flex-grow-1">
 		<div class="row flex-lg-grow-1 flex-lg-nowrap overflow-auto">
-			<div class="col-lg-9 d-lg-flex flex-column overflow-auto p-md-5 bg-green-light background-clouds">
+			<div class="col-lg-9 d-lg-flex flex-column overflow-auto py-4 p-md-5 bg-green-light background-clouds">
 				<p:region regionName="col-1-top" />
 
 				<div class="row flex-lg-grow-1 flex-lg-nowrap">
-					<div class="col-lg-3 d-lg-flex flex-column overflow-auto">
+					<div class="col-lg-3 overflow-auto">
 						<p:region regionName="col-1-1" />
 					</div>
 
-					<div class="col-lg-4 d-lg-flex flex-column overflow-auto">
+					<div class="col-lg-4 overflow-auto">
 						<p:region regionName="col-1-2" />
 					</div>
 
-					<div class="col-lg-5 d-lg-flex flex-column overflow-auto">
+					<div class="col-lg-5 overflow-auto">
 						<p:region regionName="col-1-3" />
 					</div>
 				</div>
 			</div>
 
-			<div class="col-lg-3 d-lg-flex flex-column p-md-4 bg-orange-light shadow">
+			<div class="col-lg-3 d-lg-flex flex-column py-4 p-md-4 bg-orange-light shadow">
 				<div class="row flex-lg-grow-1 flex-lg-nowrap">
-					<div class="col d-lg-flex flex-column overflow-auto">
+					<div class="col overflow-auto">
 						<p:region regionName="col-2" />
 					</div>
 				</div>

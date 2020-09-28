@@ -17,32 +17,12 @@
 <%@include file="../includes/header.jspf" %>
 
 <main class="d-flex flex-column flex-grow-1 overflow-auto">
-    <div class="container-fluid d-flex flex-column flex-grow-1 overflow-hidden">
-        <div class="row flex-grow-1 overflow-hidden">
+    <div class="container-fluid d-flex flex-column flex-grow-1">
+        <div class="row flex-grow-1 flex-nowrap overflow-auto">
             <%@include file="../includes/nav.jspf" %>
 
-            <div class="col-md d-flex flex-column mh-100 overflow-hidden">
-                <%@include file="../includes/breadcrumb.jspf" %>
-
-                <div class="row flex-grow-1 pt-4 overflow-auto mh-100">
-                    <div class="col">
-                        <p:region regionName="top"/>
-
-                        <div class="row">
-                            <div class="col-md d-flex flex-column">
-                                <div class="flex-grow-1">
-                                    <p:region regionName="col-1"/>
-                                </div>
-                            </div>
-
-                            <div class="col-md d-flex flex-column">
-                                <div class="flex-grow-1">
-                                    <p:region regionName="col-2"/>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+            <div class="col-md d-md-flex flex-column overflow-auto py-4 p-md-5 bg-green-light background-clouds">
+                <p:region regionName="top"/>
             </div>
         </div>
     </div>
