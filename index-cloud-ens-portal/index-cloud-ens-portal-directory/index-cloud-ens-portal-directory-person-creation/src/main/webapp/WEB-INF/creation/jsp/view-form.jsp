@@ -18,7 +18,7 @@
 
 <div class="create-account">
     <div class="row">
-        <div class="col-lg-8">
+        <div class="col-lg-8  m-auto">
             <div class="card bg-blue-lighter shadow-lg create-account">
                 <div class="card-body">
                     <h3 class="card-title text-center text-uppercase font-weight-bold"><op:translate
@@ -75,15 +75,15 @@
 
                                     <%--Password--%>
                                 <spring:bind path="newpassword">
-                                    <div class="form-group required">
+                                    <div class="form-group required password-control">
                                         <div class="mb-2">
                                             <form:label path="newpassword" cssClass="text-secondary"><op:translate
                                                     key="createaccount.form.newpassword"/></form:label>
-                                            <form:password path="newpassword" cssClass="form-control"
-                                                           cssErrorClass="form-control is-invalid"/>
+                                            <form:password path="newpassword" showPassword="true" cssClass="form-control"
+                                                           cssErrorClass="form-control is-invalid" data-password-control-url="${passwordInformationUrl}"/>
                                             <form:errors path="newpassword" cssClass="invalid-feedback"/>
                                         </div>
-
+               
                                     </div>
                                 </spring:bind>
 
@@ -92,15 +92,21 @@
                                     <div class="form-group required">
                                         <form:label path="confirmpassword" cssClass="text-secondary"><op:translate
                                                 key="createaccount.form.confirmpassword"/></form:label>
-                                        <form:password path="confirmpassword" cssClass="form-control"
+                                        <form:password path="confirmpassword" showPassword="true" cssClass="form-control"
                                                        cssErrorClass="form-control is-invalid"/>
                                         <form:errors path="confirmpassword" cssClass="invalid-feedback"/>
                                     </div>
                                 </spring:bind>
                                 
 
-                                        <div data-password-information-placeholder
-                                             data-url="${passwordInformationUrl}"></div>                                
+                                                                        
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md">
+                                <div data-password-information-placeholder
+                                             data-url="${passwordInformationUrl}"></div>                        
                             </div>
                         </div>
 
@@ -110,7 +116,7 @@
                                     <%--Terms of service--%>
                                 <div class="form-check">
                                     <form:checkbox id="${namespace}-accept-terms-of-service" path="acceptTermsOfService"
-                                                   cssClass="form-check-input" cssErrorClass="form-check-input is-invalid"/>
+                                                   cssClass="form-check-input"/>
                                                    
                                      <form:label for="${namespace}-accept-terms-of-service" path="acceptTermsOfService"
                                                 cssClass="form-check-label">
@@ -122,9 +128,25 @@
                                             </a>
                                             <op:translate
                                             key="createaccount.form.acceptTermsOfService.afterLink"/> 
-                                     </form:label>              
+                                     </form:label>   
+                                     
                                     
                                 </div>
+  
+  
+                                 <c:set var="termsOfServiceHasBindError">
+                                    <form:errors path="acceptTermsOfService"/>
+                                </c:set>
+                                
+                                <c:if test="${not empty termsOfServiceHasBindError}">
+                                    <div class="form-group">
+                                        <span class="d-block invalid-feedback"><span><op:translate key="createaccount.error.terms"/></span></span>
+                                    </div>  
+                                </c:if>   
+                                                                 
+                                 
+                                
+                                
                             </div>
 
                             <div class="col-md-auto align-self-end">
@@ -141,12 +163,13 @@
                 </div>
             </div>
         </div>
-
-        <div class="col-lg-4 d-flex flex-column py-4">
-            <div class="card bg-blue-lighter rounded-0 my-auto">
-                <div class="card-body">
+     </div>
+     <div class="row mt-3">
+        <div class="col-lg-8  m-auto">
+            <div class="row">
+                <div class="col-auto d-flex">
                     <%--RGPD--%>
-                    <div class="d-flex justify-content-end">
+                    <div class="d-flex my-auto">
                         <h2 class="d-flex align-items-center h4 bg-blue-dark py-1 px-2 mb-3">
                             <span class="text-blue-light font-weight-bolder mr-2">RGPD</span>
                             <span class="text-white">
@@ -154,8 +177,9 @@
                             </span>
                         </h2>
                     </div>
-
-                    <p class="mb-1">Utiliser le Cloud PRONOTE c'est&nbsp;:</p>
+                </div>
+                <div class="col-md">
+                    <p class="mb-1"><strong>Utiliser le Cloud PRONOTE c'est&nbsp;:</strong></p>
                     <ul class="pl-3">
                         <li class="mb-1">avoir la garantie de rester propri&eacute;taire de vos documents</li>
                         <li class="mb-1">pouvoir cl&ocirc;turer votre compte &agrave; tout moment</li>
@@ -171,3 +195,5 @@
         </div>
     </div>
 </div>
+
+

@@ -6,13 +6,19 @@ $JQry(function() {
         var $element = $JQry(element);
 
         if (!$element.data("loaded")) {
-            updatePasswordRulesInformation();
+
 
             $element.on("input", function(event) {
                 // Clear timer
                 clearTimeout(passwordRulesInformationTimer);
 
-                passwordRulesInformationTimer = setTimeout(updatePasswordRulesInformation, 200);
+                passwordRulesInformationTimer = setTimeout(function()	{
+                    var $controlPasswrod = $JQry(".password-control");
+                    var $placeholder = $controlPasswrod.find("[data-password-control-url]");
+                    
+                    $placeholder.popover('show');
+                	
+                }, 500);
             });
 
             $element.data("loaded", true);
@@ -21,7 +27,8 @@ $JQry(function() {
 
 
     function updatePasswordRulesInformation() {
-        var $placeholder = $JQry(".create-account [data-password-information-placeholder]");
+        var $controlPasswrod = $JQry(".password-control");
+        var $placeholder = $controlPasswrod.find("[data-password-control-url]");
         var $input = $JQry(".create-account input[name=newpassword]");
 
         // Abort previous AJAX request
@@ -39,9 +46,65 @@ $JQry(function() {
             },
             dataType: "html",
             success : function(data, status, xhr) {
-                $placeholder.html(data);
+                $placeholder.data('bs.popover').options.content = data;
             }
         });
     }
 
 });
+
+
+
+$JQry(function() {
+	var $controlPasswrod = $JQry(".password-control");
+	var $input = $JQry(".create-account input[name=newpassword]");
+
+	if (!$controlPasswrod.data("loaded")) {
+		// Location popover
+		$controlPasswrod.find("[data-password-control-url]").popover({
+			content: function () {
+				var $this = $JQry(this);
+				var result;
+				
+				jQuery.ajax({
+					url: $this.data("password-control-url"),
+					async: false,
+					cache: true,
+					headers: {
+						"Cache-Control": "max-age=0, public"
+					},
+					data: {
+						password: $input.val()
+					},
+					dataType: "html",
+					success: function (data, status, xhr) {
+						result = data;
+					}
+				});
+
+				return result;
+			},
+			html: true,
+			placement: function () {
+				if( window.innerWidth < 768)
+					return "auto";
+				else
+					return "left";
+			},
+			trigger: "focus"
+		});
+
+
+		// Loaded indicator
+		$controlPasswrod.data("loaded", true);
+	}
+
+});
+
+
+
+
+
+
+
+

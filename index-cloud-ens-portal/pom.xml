@@ -21,7 +21,8 @@
         <toutatice.version>4.9-SNAPSHOT</toutatice.version>
 
         <!-- Directory -->
-        <directory.version>4.9.3</directory.version>
+        <directory.version>4.9-SNAPSHOT</directory.version>
+<!-- <directory.version>4.9.3</directory.version>   -->    
 
         <!-- Collaboration -->
         <collaboration.version>4.9.3-RC7</collaboration.version>
