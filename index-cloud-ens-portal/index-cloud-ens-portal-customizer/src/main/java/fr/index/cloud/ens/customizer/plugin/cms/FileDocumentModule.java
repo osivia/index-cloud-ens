@@ -9,14 +9,13 @@ import fr.toutatice.portail.cms.nuxeo.api.domain.DocumentDTO;
 import fr.toutatice.portail.cms.nuxeo.api.domain.RemotePublishedDocumentDTO;
 import fr.toutatice.portail.cms.nuxeo.api.portlet.PortletModule;
 import fr.toutatice.portail.cms.nuxeo.api.services.dao.DocumentDAO;
-
-
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.nuxeo.ecm.automation.client.model.Document;
 import org.nuxeo.ecm.automation.client.model.Documents;
+import org.nuxeo.ecm.automation.client.model.PropertyList;
 import org.nuxeo.ecm.automation.client.model.PropertyMap;
 import org.osivia.portal.api.Constants;
 import org.osivia.portal.api.PortalException;
@@ -27,13 +26,9 @@ import org.osivia.portal.api.urls.IPortalUrlFactory;
 import org.osivia.portal.api.urls.PortalUrlType;
 import org.osivia.portal.api.windows.PortalWindow;
 import org.osivia.portal.api.windows.WindowFactory;
-import org.osivia.portal.core.cms.CMSBinaryContent;
 
 import javax.portlet.*;
-
-import java.io.FileInputStream;
 import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -96,6 +91,8 @@ public class FileDocumentModule extends PortletModule {
         if (StringUtils.isNotBlank(path)) {
             // Document context
             NuxeoDocumentContext documentContext = nuxeoController.getDocumentContext(path);
+            // Document
+            Document document = documentContext.getDocument();
             // Publication infos
             NuxeoPublicationInfos publicationInfos = documentContext.getPublicationInfos();
 
@@ -143,7 +140,13 @@ public class FileDocumentModule extends PortletModule {
                     boolean desynchronizeFromSource = isDesynchronizedFromSource(nuxeoController, documentContext, source);
                     request.setAttribute("desynchronizedFromSource", desynchronizeFromSource);                   
                 }
-                
+
+                // Keywords
+                PropertyList keywordsProperty = document.getProperties().getList("mtz:keywords");
+                if ((keywordsProperty != null) && !keywordsProperty.isEmpty()) {
+                    String keywords = StringUtils.join(keywordsProperty.list(), ", ");
+                    request.setAttribute("keywords", keywords);
+                }
             }
             
             getMimeTypeSpecificLinks(request, nuxeoController, documentContext);

@@ -1,0 +1,75 @@
+.select2-container--bootstrap4 {
+  .select2-search__field {
+    margin: {
+      top: .25rem !important;
+      bottom: .25rem !important;
+    }
+
+    &::placeholder {
+      font-size: $small-font-size;
+    }
+  }
+
+  .select2-selection__choice {
+    display: flex;
+    align-items: center;
+
+    height: 2rem;
+    min-width: 0;
+
+    margin-bottom: .25rem;
+    margin-right: .5rem;
+    padding: 0 .5rem;
+
+    color: $white;
+    background-color: $green-700;
+    border: {
+      style: none;
+      radius: 50rem;
+    }
+    font-size: .8125rem; // 13px
+
+    &:hover {
+      background-color: darken($green-700, $emphasized-link-hover-darken-percentage);
+    }
+
+    .select2-selection__choice__remove {
+      display: flex;
+      align-items: center;
+      flex-shrink: 0;
+      order: 2;
+
+      margin-right: -.25rem;
+      padding: .25rem;
+
+      color: $white;
+      font-size: 0; // Hide default cross symbol
+
+      @include glyphicons-mask(glyphicons-url("basic", 599, "menu-close"));
+
+      &::before {
+        content: "";
+
+        height: $glyphicons-size;
+        width: $glyphicons-size;
+
+        mask-position: center;
+        -webkit-mask-position: center;
+        mask-repeat: no-repeat;
+        -webkit-mask-repeat: no-repeat;
+        mask-size: contain;
+        -webkit-mask-size: contain;
+
+        background-color: currentColor;
+        font-size: .65rem;
+      }
+    }
+  }
+
+
+  &, &.select2-container--open, &.select2-container--focus {
+    .select2-inline-edition-container, .select2-search__field {
+      background-color: transparent;
+    }
+  }
+}

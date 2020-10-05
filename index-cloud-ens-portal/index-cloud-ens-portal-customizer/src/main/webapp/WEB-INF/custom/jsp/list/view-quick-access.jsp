@@ -16,7 +16,7 @@
                 <c:otherwise><c:set var="display" value="d-none"/></c:otherwise>
             </c:choose>
 
-            <div class="card card-custom card-custom-border-bottom card-custom-${document.properties['mtz:enable'] ? 'orange' : 'green'} ${display} shadow">
+            <div class="card card-custom card-custom-border-bottom card-custom-hover card-custom-${document.properties['mtz:enable'] ? 'orange' : 'green'} ${display} shadow">
                 <div class="card-body">
                     <%--Badges--%>
                     <div class="card-custom-badges">

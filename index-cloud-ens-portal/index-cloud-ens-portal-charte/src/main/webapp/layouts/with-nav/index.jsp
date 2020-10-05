@@ -21,7 +21,7 @@
         <div class="row flex-grow-1 flex-nowrap overflow-auto">
             <%@include file="../includes/nav.jspf" %>
 
-            <div class="col-md d-md-flex flex-column overflow-auto py-4 p-md-5 bg-green-light background-clouds">
+            <div class="col-md d-md-flex flex-column overflow-auto py-4 px-md-5 pt-md-5 pb-md-3 bg-green-light background-clouds">
                 <p:region regionName="top"/>
             </div>
         </div>

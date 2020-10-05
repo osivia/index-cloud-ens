@@ -29,6 +29,12 @@ import java.util.List;
 public class CloudEnsNavigationAdapter implements INavigationAdapterModule {
 
     /**
+     * Mutualized space path.
+     */
+    private static final String MUTUALIZED_SPACE_PATH = System.getProperty("config.mutualized.path");
+
+
+    /**
      * Log.
      */
     private final Log log;
@@ -106,37 +112,40 @@ public class CloudEnsNavigationAdapter implements INavigationAdapterModule {
 
     @Override
     public void adaptNavigationItem(PortalControllerContext portalControllerContext, CMSItem navigationItem) {
-        if (navigationItem.getType() != null && "Workspace".equals(navigationItem.getType().getName())) {
+        if ((navigationItem.getType() != null) && "Workspace".equals(navigationItem.getType().getName())) {
             // Virtual staples are not implemented in partial loading mode
             navigationItem.getProperties().put("partialLoading", "0");
 
             // User workspace
             CMSItem userWorkspace = this.getUserWorkspace(portalControllerContext);
             if ((userWorkspace != null) && StringUtils.equals(navigationItem.getCmsPath(), userWorkspace.getCmsPath())) {
-                this.renameUserRootDocument(portalControllerContext, navigationItem);
+                this.renameDocument(portalControllerContext, navigationItem, "TOOLBAR_USER_WORKSPACE");
             }
-        } else if (navigationItem.getType() != null && "Folder".equals(navigationItem.getType().getName()) && StringUtils.endsWith(navigationItem.getCmsPath(), "/documents")) {
+        } else if ((navigationItem.getType() != null) && "Folder".equals(navigationItem.getType().getName()) && StringUtils.endsWith(navigationItem.getCmsPath(), "/documents")) {
             // User workspace
             CMSItem userWorkspace = this.getUserWorkspace(portalControllerContext);
             if ((userWorkspace != null) && StringUtils.equals(navigationItem.getCmsPath(), userWorkspace.getCmsPath() + "/documents")) {
-                this.renameUserRootDocument(portalControllerContext, navigationItem);
+                this.renameDocument(portalControllerContext, navigationItem, "TOOLBAR_USER_WORKSPACE");
             }
+        } else if ((navigationItem.getType() != null) && "PortalSite".equals(navigationItem.getType().getName()) && StringUtils.equals(MUTUALIZED_SPACE_PATH, StringUtils.removeEnd(navigationItem.getCmsPath(), ".proxy"))) {
+            this.renameDocument(portalControllerContext, navigationItem, "TOOLBAR_COMMUNITY_WORKSPACE");
         }
     }
-    
+
 
     /**
-     * Rename user root document.
+     * Rename document.
      *
      * @param portalControllerContext portal controller context
      * @param navigationItem          navigation item
+     * @param titleKey                document title internationalization key
      */
-    private void renameUserRootDocument(PortalControllerContext portalControllerContext, CMSItem navigationItem) {
+    private void renameDocument(PortalControllerContext portalControllerContext, CMSItem navigationItem, String titleKey) {
         // Internationalization bundle
         Bundle bundle = this.bundleFactory.getBundle(portalControllerContext.getHttpServletRequest().getLocale());
 
         // Title
-        String title = bundle.getString("TOOLBAR_USER_WORKSPACE");
+        String title = bundle.getString(titleKey);
 
         // Update navigation item properties
         navigationItem.getProperties().put("displayName", title);

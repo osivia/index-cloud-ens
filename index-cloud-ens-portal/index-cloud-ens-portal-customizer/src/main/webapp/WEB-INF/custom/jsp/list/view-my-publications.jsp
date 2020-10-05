@@ -13,7 +13,7 @@
 
 		<c:otherwise>
 			<c:forEach var="document" items="${documents}">
-				<div class="card card-custom card-custom-border-left card-custom-${document.properties['mtz:enable'] ? 'orange' : 'green'} mb-3">
+				<div class="card card-custom card-custom-border-left card-custom-hover card-custom-${document.properties['mtz:enable'] ? 'orange' : 'green'} mb-3">
 					<div class="card-body py-3">
 						<%--Badges--%>
 						<div class="card-custom-badges">

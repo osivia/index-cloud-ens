@@ -7,7 +7,7 @@
 
 <div class="list-mutualization-space-summary">
     <c:forEach var="document" items="${documents}">
-        <div class="card card-custom card-custom-border-left card-custom-${document.properties['mtz:enable'] ? 'orange' : 'green'} mb-3">
+        <div class="card card-custom card-custom-border-left card-custom-hover card-custom-${document.properties['mtz:enable'] ? 'orange' : 'green'} mb-3">
             <div class="card-body py-3">
                 <%--Badges--%>
                 <div class="card-custom-badges">
@@ -23,7 +23,7 @@
                 </div>
 
                 <div class="d-flex align-items-center">
-                    <div class="mr-3">
+                    <div class="flex-shrink-0 mr-3">
                         <%--Icon--%>
                         <div class="card-custom-icon">
                             <ttc:icon document="${document}" />
@@ -52,7 +52,7 @@
 
                 <%--Informations--%>
                 <div class="card-custom-informations">
-                    <ul class="list-inline mb-0 text-muted">
+                    <ul class="list-inline mb-0 text-secondary">
                         <%--Views--%>
                         <li class="list-inline-item">
                             <i class="glyphicons glyphicons-basic-eye"></i>

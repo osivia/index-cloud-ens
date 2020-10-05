@@ -8,10 +8,9 @@
 <c:set var="activeSavedSearch" value="${requestScope['osivia.saved-search.active']}"/>
 
 
-<nav>
+<nav class="d-none d-md-block">
     <h2 class="sr-only"><op:translate key="BREADCRUMB_TITLE"/></h2>
-    <ol class="breadcrumb mb-0 px-0">
-
+    <ol class="breadcrumb">
         <c:choose>
             <c:when test="${empty activeSavedSearch}">
                 <c:forEach var="child" items="${breadcrumb.children}" varStatus="status">
@@ -20,28 +19,15 @@
                             <%--Hide user workspace home--%>
                         </c:when>
 
-                        <c:when test="${status.last and not empty breadcrumb.menu}">
-                            <li class="breadcrumb-item active">
-                                <div class="dropdown">
-                                    <a href="javascript:;" class="text-secondary dropdown-toggle"
-                                       data-toggle="dropdown">
-                                        <span>${child.name}</span>
-                                    </a>
-
-                                    <c:out value="${breadcrumb.menu}" escapeXml="false"/>
-                                </div>
-                            </li>
-                        </c:when>
-
                         <c:when test="${status.last}">
                             <li class="breadcrumb-item active">
-                                <span class="text-secondary">${child.name}</span>
+                                <span>${child.name}</span>
                             </li>
                         </c:when>
 
                         <c:otherwise>
                             <li class="breadcrumb-item">
-                                <a href="${child.url}" class="text-secondary">${child.name}</a>
+                                <a href="${child.url}" class="text-green-dark">${child.name}</a>
                             </li>
                         </c:otherwise>
                     </c:choose>
@@ -50,7 +36,7 @@
 
             <c:otherwise>
                 <li class="breadcrumb-item active">
-                    <span class="text-secondary">${activeSavedSearch}</span>
+                    <span>${activeSavedSearch}</span>
                 </li>
             </c:otherwise>
         </c:choose>

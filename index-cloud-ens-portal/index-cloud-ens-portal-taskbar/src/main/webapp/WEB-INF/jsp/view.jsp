@@ -98,7 +98,7 @@
                                 <c:otherwise>
                                     <div id="${namespace}-filters" class="collapse show ml-4">
                                         <c:forEach var="savedSearch" items="${task.savedSearches}">
-                                            <div class="card card-custom card-custom-gray my-3">
+                                            <div class="card card-custom card-custom-hover card-custom-gray my-3">
                                                 <div class="card-body">
                                                     <div class="text-truncate">
                                                         <a href="${savedSearch.url}"
@@ -136,7 +136,7 @@
                                 <portlet:actionURL var="resetUrl" name="reset"/>
                                 <div class="d-flex justify-content-end my-3">
                                     <a href="${resetUrl}"
-                                       class="btn btn-link btn-sm text-secondary text-decoration-none text-truncate">
+                                       class="btn btn-link btn-link-hover-green btn-sm text-secondary text-truncate">
                                         <i class="glyphicons glyphicons-basic-reload"></i>
                                         <strong><op:translate key="TASKBAR_RESET_SEARCH"/></strong>
                                     </a>
@@ -205,7 +205,7 @@
                                 <c:if test="${not empty task.advancedSearch}">
                                     <div class="d-flex justify-content-end">
                                         <a href="${task.advancedSearch.url}"
-                                           class="btn btn-link btn-sm text-secondary text-decoration-none text-truncate no-ajax-link">
+                                           class="btn btn-link btn-link-hover-green btn-sm text-secondary text-truncate no-ajax-link">
                                             <i class="glyphicons glyphicons-basic-search"></i>
                                             <strong><op:translate key="TASKBAR_ADVANCED_SEARCH"/></strong>
                                         </a>

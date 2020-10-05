@@ -24,9 +24,12 @@
     }
   }
 
+
   &.card-custom-green {
-    &:hover {
-      background-color: $green-200;
+    &.card-custom-hover {
+      &:hover {
+        background-color: $green-200;
+      }
     }
 
     > * {
@@ -35,8 +38,10 @@
   }
 
   &.card-custom-orange {
-    &:hover {
-      background-color: $orange-200;
+    &.card-custom-hover {
+      &:hover {
+        background-color: $orange-200;
+      }
     }
 
     > * {
@@ -45,10 +50,13 @@
   }
 
   &.card-custom-gray {
-    &:hover {
-      background-color: $gray-100;
+    &.card-custom-hover {
+      &:hover {
+        background-color: $gray-100;
+      }
     }
   }
+
 
   .card-title {
     font-size: 1rem; // 16px

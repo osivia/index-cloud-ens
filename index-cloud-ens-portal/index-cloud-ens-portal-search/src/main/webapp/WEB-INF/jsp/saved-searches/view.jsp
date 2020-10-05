@@ -14,7 +14,7 @@
                 <portlet:param name="id" value="${savedSearch.id}"/>
             </portlet:actionURL>
 
-            <div class="card card-custom card-custom-gray mb-3">
+            <div class="card card-custom card-custom-hover card-custom-gray mb-3">
                 <div class="card-body py-3">
                     <div class="text-truncate">
                         <a href="${url}" title="${savedSearch.displayName}" class="stretched-link text-black text-decoration-none">
