@@ -488,7 +488,7 @@
  <!-- Supervisor -->
 
  <category name="PORTAL_SUPERVISOR" additivity="false">
-      <priority value="DEBUG"/>
+      <priority value="INFO"/>
       <appender-ref ref="PORTAL_SUPERVISOR_APPENDER"/>
    </category>
 
