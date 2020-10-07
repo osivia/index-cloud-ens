@@ -40,7 +40,10 @@
                      data-text="${item.title}"
                      data-accepted-types="${item.acceptedTypes}"
                      data-double-click-target=".file-browser-draggable a"
-                     data-pronote="${item.pronote}">
+                     data-pronote="${item.pronote}" data-mutualized="${item.mutualized}">
+                        <%--Checkbox--%>
+                    <%@ include file="table-body-checkbox.jspf" %>
+
                         <%--Title--%>
                     <%@ include file="table-body-title.jspf" %>
 
@@ -57,9 +60,6 @@
 
                         <%--File size--%>
                     <%@ include file="table-body-file-size.jspf" %>
-
-                        <%--Checkbox--%>
-                    <%@ include file="table-body-checkbox.jspf" %>
 
                         <%--Draggable--%>
                     <c:if test="${item.document.type.editable}">

@@ -2,10 +2,12 @@
 
 
 <div class="portal-table-cell" data-column="title">
-    <span><ttc:icon document="${item.document}" style="${item.folderish ? 'flat' : 'flat-inverse'}"/></span>
+    <div class="card-custom-icon mr-3 ${item.folderish ? 'text-black' : ''}">
+        <ttc:icon document="${item.document}" />
+    </div>
 
     <div class="file-browser-draggable text-truncate mr-auto">
-        <span><ttc:title document="${item.document}"/></span>
+        <strong><ttc:title document="${item.document}"/></strong>
     </div>
 
     <%--PRONOTE indicator--%>
@@ -20,7 +22,7 @@
     <c:if test="${item.mutualized}">
         <c:set var="title"><op:translate key="FILE_BROWSER_MUTUALIZED_INDICATOR"/></c:set>
         <div class="mx-2">
-            <span class="text-mutualized-dark" title="${title}">
+            <span class="text-orange" title="${title}">
                 <i class="glyphicons glyphicons-basic-share"></i>
             </span>
         </div>

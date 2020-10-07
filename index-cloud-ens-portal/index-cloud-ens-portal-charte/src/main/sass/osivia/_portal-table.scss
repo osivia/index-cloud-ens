@@ -85,11 +85,11 @@
     background-color: $primary;
     border-color: darken($primary, 5%);
 
-    &, a:not(.btn), [class^="text"], .text-muted {
+    &, a:not(.btn) {
       position: relative;
       z-index: 2;
 
-      color: $white !important;
+      color: $white;
     }
   }
 }

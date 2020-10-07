@@ -5,12 +5,15 @@ import fr.index.cloud.ens.directory.service.preferences.CustomizedUserPreference
 import fr.index.cloud.ens.filebrowser.commons.portlet.model.AbstractFileBrowserForm;
 import fr.index.cloud.ens.filebrowser.commons.portlet.model.AbstractFileBrowserItem;
 import fr.index.cloud.ens.filebrowser.commons.portlet.model.AbstractFileBrowserSortField;
+import fr.index.cloud.ens.filebrowser.portlet.model.CustomizedFileBrowserForm;
+import fr.toutatice.portail.cms.nuxeo.api.cms.NuxeoDocumentContext;
 import fr.toutatice.portail.cms.nuxeo.api.domain.DocumentDTO;
 import org.apache.commons.lang.StringUtils;
 import org.nuxeo.ecm.automation.client.model.Document;
 import org.osivia.portal.api.PortalException;
 import org.osivia.portal.api.context.PortalControllerContext;
 import org.osivia.services.workspace.filebrowser.portlet.model.FileBrowserSortField;
+import org.osivia.services.workspace.filebrowser.portlet.repository.FileBrowserRepository;
 import org.osivia.services.workspace.filebrowser.portlet.service.FileBrowserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
@@ -34,6 +37,12 @@ public abstract class AbstractFileBrowserServiceImpl extends FileBrowserServiceI
      */
     @Autowired
     private ApplicationContext applicationContext;
+
+    /**
+     * Portlet repository.
+     */
+    @Autowired
+    private FileBrowserRepository repository;
 
     /**
      * User preferences service.
@@ -85,6 +94,18 @@ public abstract class AbstractFileBrowserServiceImpl extends FileBrowserServiceI
                 customizedColumn = this.getDefaultCustomizedColumn();
             }
             form.setCustomizedColumn(customizedColumn);
+
+            // Current document title
+            String path = form.getPath();
+            if ((form instanceof CustomizedFileBrowserForm) && StringUtils.isNotEmpty(path)) {
+                CustomizedFileBrowserForm customizedForm = (CustomizedFileBrowserForm) form;
+
+                // Current document context
+                NuxeoDocumentContext documentContext = this.repository.getDocumentContext(portalControllerContext, path);
+
+                String title = documentContext.getDocument().getTitle();
+                customizedForm.setTitle(title);
+            }
 
             // Initialized indicator
             form.setInitialized(true);

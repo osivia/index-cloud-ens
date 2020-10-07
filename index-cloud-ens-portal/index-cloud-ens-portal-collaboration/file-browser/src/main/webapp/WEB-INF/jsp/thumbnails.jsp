@@ -22,14 +22,16 @@
                         <c:set var="url"><ttc:documentLink document="${item.document}" /></c:set>
 
                         <div class="col">
-                            <div class="file-browser-thumbnail file-browser-selectable-filter file-browser-droppable" data-id="${item.document.id}" 
+                            <div class="file-browser-thumbnail file-browser-selectable-filter file-browser-droppable" data-id="${item.document.id}"
                                     data-type="${item.document.type.name}" data-text="${item.title}" data-accepted-types="${item.acceptedTypes}"
                                     data-double-click-target=".file-browser-draggable a">
                                 <%--Title--%>
                                 <div class="file-browser-thumbnail-title">
                                     <div class="text-truncate file-browser-draggable">
                                         <span class="mr-1"><ttc:icon document="${item.document}" /></span>
-                                        <a href="${url}" title="${item.document.title}" class="text-dark no-ajax-link">${item.document.title}</a>
+                                        <a href="${url}" title="${item.document.title}" class="text-black no-ajax-link">
+                                            <strong>${item.document.title}</strong>
+                                        </a>
                                     </div>
                                 </div>
                                 
@@ -62,7 +64,7 @@
                         <div class="col">
                             <div class="file-browser-thumbnail file-browser-selectable-filter" data-id="${item.document.id}" 
                                     data-type="${item.document.type.name}" data-text="${item.title}"
-                                    data-double-click-target=".file-browser-draggable a">
+                                    data-double-click-target=".file-browser-draggable a" data-mutualized="${item.mutualized}">
                                 <%--Preview--%>
                                 <div class="file-browser-thumbnail-preview-container">
                                     <div class="file-browser-thumbnail-preview">
@@ -78,7 +80,7 @@
                                             </c:when>
                                         
                                             <c:otherwise>
-                                                <div class="file-browser-thumbnail-icon-preview">
+                                                <div class="file-browser-thumbnail-icon-preview card-custom-icon card-custom-icon-lg">
                                                     <ttc:icon document="${item.document}" />
                                                 </div>
                                             </c:otherwise>
@@ -89,8 +91,9 @@
                                 <%--Title--%>
                                 <div class="file-browser-thumbnail-title">
                                     <div class="text-truncate file-browser-draggable">
-                                        <span class="mr-1"><ttc:icon document="${item.document}" /></span>
-                                        <a href="${url}" title="${item.document.title}" class="text-dark no-ajax-link">${item.document.title}</a>
+                                        <a href="${url}" title="${item.document.title}" class="text-black no-ajax-link">
+                                            <strong>${item.document.title}</strong>
+                                        </a>
                                     </div>
                                 </div>
                                 

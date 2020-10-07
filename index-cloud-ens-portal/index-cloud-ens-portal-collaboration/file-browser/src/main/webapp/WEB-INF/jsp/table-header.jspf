@@ -1,4 +1,7 @@
 <div class="portal-table-header-group">
+    <%--Checkbox--%>
+    <%@ include file="table-header-checkbox.jspf" %>
+
     <%--Title--%>
     <%@ include file="table-header-title.jspf" %>
 
@@ -15,7 +18,4 @@
 
     <%--File size--%>
     <%@ include file="table-header-file-size.jspf" %>
-
-    <%--Checkbox--%>
-    <%@ include file="table-header-checkbox.jspf" %>
 </div>

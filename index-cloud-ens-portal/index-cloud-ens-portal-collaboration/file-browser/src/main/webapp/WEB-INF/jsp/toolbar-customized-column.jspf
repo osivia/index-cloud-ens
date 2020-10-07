@@ -1,9 +1,9 @@
 <div class="dropdown d-none d-lg-block ml-2">
-    <button type="button" class="btn btn-outline-secondary btn-sm dropdown-toggle" data-toggle="dropdown">
+    <button type="button" class="btn btn-link btn-link-hover-green btn-sm text-secondary bg-white dropdown-toggle" data-toggle="dropdown">
         <i class="glyphicons glyphicons-basic-cogwheel"></i>
     </button>
 
-    <div class="dropdown-menu">
+    <div class="dropdown-menu dropdown-menu-right">
         <h6 class="dropdown-header"><op:translate key="FILE_BROWSER_TOOLBAR_CUSTOMIZED_COLUMNS_HEADER"/></h6>
 
         <c:forEach var="column" items="${customizedColumns}">

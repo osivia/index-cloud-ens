@@ -7,9 +7,11 @@ import fr.index.cloud.ens.filebrowser.portlet.model.CustomizedFileBrowserItem;
 import fr.index.cloud.ens.filebrowser.portlet.model.CustomizedFileBrowserSortEnum;
 import org.apache.commons.lang.BooleanUtils;
 import org.apache.commons.lang.StringUtils;
+import org.dom4j.Element;
 import org.nuxeo.ecm.automation.client.model.Document;
 import org.nuxeo.ecm.automation.client.model.PropertyList;
 import org.osivia.portal.api.context.PortalControllerContext;
+import org.osivia.portal.api.html.DOM4JUtils;
 import org.osivia.services.workspace.filebrowser.portlet.model.FileBrowserForm;
 import org.osivia.services.workspace.filebrowser.portlet.model.FileBrowserSortField;
 import org.osivia.services.workspace.filebrowser.portlet.model.FileBrowserWindowProperties;
@@ -19,9 +21,7 @@ import org.springframework.stereotype.Service;
 import javax.portlet.PortletException;
 import javax.portlet.PortletRequest;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 /**
  * File browser customized portlet service implementation.
@@ -118,19 +118,53 @@ public class CustomizedFileBrowserServiceImpl extends AbstractFileBrowserService
 
 
     @Override
-    protected AbstractFileBrowserSortField getDefaultCustomizedColumn() {
-        return CustomizedFileBrowserSortEnum.DOCUMENT_TYPE;
+    protected void addToolbarItem(Element toolbar, String url, String target, String title, String icon) {
+        // Base HTML classes
+        String baseHtmlClasses = "btn btn-link btn-link-hover-green text-green-dark btn-sm mr-1";
+
+        // Item
+        Element item;
+        if (StringUtils.isEmpty(url)) {
+            item = DOM4JUtils.generateLinkElement("#", null, null, baseHtmlClasses + " disabled", null, icon);
+        } else {
+            // Data attributes
+            Map<String, String> data = new HashMap<>();
+
+            if ("#osivia-modal".equals(target)) {
+                data.put("target", "#osivia-modal");
+                data.put("load-url", url);
+                data.put("title", title);
+
+                url = "javascript:";
+                target = null;
+            } else if ("modal".equals(target)) {
+                data.put("toggle", "modal");
+
+                target = null;
+            }
+
+            item = DOM4JUtils.generateLinkElement(url, target, null, baseHtmlClasses + " no-ajax-link", null, icon);
+
+            // Title
+            DOM4JUtils.addAttribute(item, "title", title);
+
+            // Data attributes
+            for (Map.Entry<String, String> entry : data.entrySet()) {
+                DOM4JUtils.addDataAttribute(item, entry.getKey(), entry.getValue());
+            }
+        }
+
+        // Text
+        Element text = DOM4JUtils.generateElement("span", "d-none d-lg-inline", title);
+        item.add(text);
+
+        toolbar.add(item);
     }
 
 
     @Override
-    public void upload(PortalControllerContext portalControllerContext, FileBrowserForm form) throws PortletException, IOException {
-        // Portlet request
-        PortletRequest request = portalControllerContext.getRequest();
-
-        super.upload(portalControllerContext, form);
-
-        // Prevent Ajax refresh
-//        request.setAttribute("osivia.ajax.preventRefresh", true);
+    protected AbstractFileBrowserSortField getDefaultCustomizedColumn() {
+        return CustomizedFileBrowserSortEnum.DOCUMENT_TYPE;
     }
+
 }

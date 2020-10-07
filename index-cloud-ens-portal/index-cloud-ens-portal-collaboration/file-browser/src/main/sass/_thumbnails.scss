@@ -2,26 +2,55 @@
 
 
 .file-browser-thumbnail {
-  &.ui-selecting {
-    background-color: theme-color-level("info", $alert-bg-level);
-    border-color: theme-color-level("info", $alert-border-level) !important;
+  margin-bottom: map-get($spacers, 3);
 
-    &, a {
-      color: theme-color-level("info", $alert-color-level);
+  background-color: $white;
+  border-style: none;
+
+  .file-browser-files & {
+    border-bottom: {
+      style: solid;
+      width: 17px;
+      color: $green-500;
+    }
+
+    &[data-mutualized="true"] {
+      border-bottom-color: $orange-500;
     }
   }
 
-  &.ui-selected {
-    background-color: $primary;
-    border-color: darken($primary, 5%) !important;
+  &:hover, &.ui-selecting, &.ui-selected {
+    background-color: $green-200;
+  }
 
-    &, a, a:hover, a:focus {
-      color: $white !important;
+  &[data-mutualized="true"] {
+    &:hover, &.ui-selecting, &.ui-selected {
+      background-color: $orange-200;
     }
   }
+
+
+
+  //&.ui-selecting {
+  //  background-color: theme-color-level("info", $alert-bg-level);
+  //  border-color: theme-color-level("info", $alert-border-level) !important;
+  //
+  //  &, a {
+  //    color: theme-color-level("info", $alert-color-level);
+  //  }
+  //}
+  //
+  //&.ui-selected {
+  //  background-color: $primary;
+  //  border-color: darken($primary, 5%) !important;
+  //
+  //  &, a, a:hover, a:focus {
+  //    color: $white !important;
+  //  }
+  //}
 }
 
-.file-browser-thumbnail-icon-preview {
-    color: #999;
-    font-size: 80px;
-}
+//.file-browser-thumbnail-icon-preview {
+//    color: #999;
+//    font-size: 80px;
+//}

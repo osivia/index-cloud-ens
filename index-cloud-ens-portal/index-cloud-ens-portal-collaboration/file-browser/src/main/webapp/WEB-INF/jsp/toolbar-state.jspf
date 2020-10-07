@@ -1,0 +1,41 @@
+<%--@elvariable id="form" type="fr.index.cloud.ens.filebrowser.portlet.model.CustomizedFileBrowserForm"--%>
+<div>
+    <c:choose>
+        <c:when test="${empty form.items}"><c:set var="text"><op:translate
+                key="FILE_BROWSER_TOOLBAR_STATE_NO_ITEM"/></c:set></c:when>
+        <c:when test="${fn:length(form.items) eq 1}"><c:set var="text"><op:translate
+                key="FILE_BROWSER_TOOLBAR_STATE_ONE_ITEM"/></c:set></c:when>
+        <c:otherwise><c:set var="text"><op:translate key="FILE_BROWSER_TOOLBAR_STATE_N_ITEMS"
+                                                     args="${fn:length(form.items)}"/></c:set></c:otherwise>
+    </c:choose>
+
+    <span class="text-secondary-light">- ${text}${view eq 'thumbnails' or form.listMode ? ',' : ''}</span>
+
+    <c:if test="${view eq 'thumbnails' or form.listMode}">
+        <div class="dropdown d-inline">
+            <a href="javascript:" class="dropdown-toggle text-secondary-light no-ajax-link" data-toggle="dropdown">
+                    <span>
+                        <c:choose>
+                            <c:when test="${empty form.items or fn:length(form.items) eq 1}"><op:translate
+                                    key="FILE_BROWSER_TOOLBAR_STATE_SORTED_BY"/></c:when>
+                            <c:otherwise><op:translate key="FILE_BROWSER_TOOLBAR_STATE_SORTED_BY_N_ITEMS"/></c:otherwise>
+                        </c:choose>
+                    </span>
+                <span class="text-lowercase"><op:translate key="${form.criteria.field.key}"/></span>
+            </a>
+
+            <div class="dropdown-menu">
+                <c:forEach var="field" items="${sortFields}">
+                    <portlet:actionURL name="sort" copyCurrentRenderParameters="true" var="url">
+                        <portlet:param name="field" value="${field.id}"/>
+                        <portlet:param name="alt" value="false"/>
+                    </portlet:actionURL>
+
+                    <a href="${url}" class="dropdown-item ${form.criteria.field eq field ? 'active' : ''}">
+                        <span><op:translate key="${field.key}"/></span>
+                    </a>
+                </c:forEach>
+            </div>
+        </div>
+    </c:if>
+</div>

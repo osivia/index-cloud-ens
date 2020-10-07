@@ -19,6 +19,10 @@ import org.springframework.web.context.WebApplicationContext;
 @Refreshable
 public class CustomizedFileBrowserForm extends AbstractFileBrowserForm {
 
+    /** Title. */
+    private String title;
+
+
     /**
      * Constructor.
      */
@@ -26,4 +30,12 @@ public class CustomizedFileBrowserForm extends AbstractFileBrowserForm {
         super();
     }
 
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
 }

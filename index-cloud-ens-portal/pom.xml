@@ -22,10 +22,9 @@
 
         <!-- Directory -->
         <directory.version>4.9-SNAPSHOT</directory.version>
-<!-- <directory.version>4.9.3</directory.version>   -->    
 
         <!-- Collaboration -->
-        <collaboration.version>4.9.3-RC7</collaboration.version>
+        <collaboration.version>4.9-SNAPSHOT</collaboration.version>
 
         <!-- Other services -->
         <tasks.version>4.9.4</tasks.version>

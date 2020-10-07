@@ -1,4 +1,5 @@
 @import "../../../../../index-cloud-ens-portal-charte/src/main/sass/cloud-ens/variables";
+@import "../../../../../index-cloud-ens-portal-charte/src/main/sass/osivia/glyphicons/mixins";
 
 
 @include media-breakpoint-down("md") {
@@ -16,5 +17,120 @@
 @include media-breakpoint-up("xl") {
   [data-column="customized-column"] {
     width: 200px;
+  }
+}
+
+
+.portal-table {
+  border-bottom-style: none;
+}
+
+
+.portal-table-header-group {
+  padding-left: 10px;
+
+  border-bottom-style: none;
+  font-size: .6875rem; // 11px;
+
+  &, a {
+    &, i {
+      color: $gray-500;
+    }
+  }
+
+  a {
+    &:hover, &:focus {
+      &, i {
+        color: darken($gray-500, $emphasized-link-hover-darken-percentage);
+      }
+    }
+  }
+
+  portal-table-checkbox {
+    margin-bottom: -.1rem;
+  }
+
+  .portal-table-cell {
+    &[data-column="title"] {
+      a {
+        margin-left: calc(48px + 1rem);
+      }
+    }
+  }
+}
+
+.portal-table-row {
+  &, &.ui-selecting, &.ui-selected {
+    .portal-table-cell {
+      font-size: .6875rem; // 11px;
+
+      &, a {
+        color: $gray-600;
+      }
+
+      a {
+        &:hover, &:focus {
+          color: darken($gray-600, $emphasized-link-hover-darken-percentage);
+        }
+      }
+
+      &[data-column="title"] {
+        font-size: $font-size-base;
+
+        a {
+          color: $black !important;
+        }
+      }
+    }
+  }
+}
+
+
+.portal-table-row {
+  margin: {
+    top: .1rem;
+    bottom: .1rem;
+  }
+
+  background-color: $white;
+  border: {
+    left: {
+      style: solid;
+      width: 10px;
+    }
+    radius: $border-radius;
+  }
+
+  &:hover, &.ui-selecting, &.ui-selected {
+    background-color: $green-200;
+  }
+
+  &, &.ui-selecting, &.ui-selected {
+    border-color: $green-500;
+  }
+
+  &[data-mutualized="true"] {
+    &:hover, &.ui-selecting, &.ui-selected {
+      background-color: $orange-200;
+    }
+
+    &, &.ui-selecting, &.ui-selected {
+      border-color: $orange-500;
+    }
+  }
+
+  .portal-table-cell {
+    border-bottom-style: none;
+  }
+}
+
+
+.portal-table-checkbox {
+  font-size: $font-size-base;
+
+  .ui-selecting &, .ui-selected &, .checked {
+    .glyphicons-basic-square-empty {
+      @include glyphicons-mask(glyphicons-url("basic", 153, "square-checkbox"));
+    }
   }
 }
