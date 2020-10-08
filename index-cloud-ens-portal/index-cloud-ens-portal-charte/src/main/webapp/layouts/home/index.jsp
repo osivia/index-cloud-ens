@@ -24,7 +24,7 @@
 	<div class="container-fluid d-flex flex-column flex-grow-1">
 		<div class="row flex-lg-grow-1 flex-lg-nowrap overflow-auto">
 			<div class="col-lg-9 d-lg-flex flex-column overflow-auto py-4 px-md-5 pt-md-5 pb-md-3 bg-green-light background-clouds">
-				<div class="mb-md-5">
+				<div class="mb-md-4">
 					<p:region regionName="col-1-top" />
 				</div>
 
@@ -43,7 +43,7 @@
 				</div>
 			</div>
 
-			<div class="col-lg-3 d-lg-flex flex-column py-4 p-md-4 bg-orange-light shadow">
+			<div class="col-lg-3 d-lg-flex flex-column py-4 px-md-4 bg-orange-light shadow">
 				<div class="row flex-lg-grow-1 flex-lg-nowrap">
 					<div class="col overflow-auto">
 						<p:region regionName="col-2" />

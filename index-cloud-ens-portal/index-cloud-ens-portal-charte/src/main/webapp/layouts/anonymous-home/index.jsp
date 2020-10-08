@@ -18,14 +18,8 @@
 <%@include file="../includes/header.jspf" %>
 
 <main class="d-flex flex-column flex-grow-1 overflow-auto bg-green-light background-clouds">
-    <div class="container d-flex flex-column flex-grow-1 justify-content-center">
-        <div id="drawer" class="d-md-none">
-            <p:region regionName="drawer-header"/>
-        </div>
-
-        <div class="p-2 p-md-5">
-            <p:region regionName="col-1"/>
-        </div>
+    <div class="container d-flex flex-column flex-grow-1 flex-shrink-0 justify-content-center py-4">
+        <p:region regionName="col-1"/>
     </div>
 </main>
 

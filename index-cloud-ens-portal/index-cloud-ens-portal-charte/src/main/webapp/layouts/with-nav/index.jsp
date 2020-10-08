@@ -18,11 +18,21 @@
 
 <main class="d-flex flex-column flex-grow-1 overflow-auto">
     <div class="container-fluid d-flex flex-column flex-grow-1">
-        <div class="row flex-grow-1 flex-nowrap overflow-auto">
+        <div class="row flex-grow-1 flex-nowrap">
             <%@include file="../includes/nav.jspf" %>
 
-            <div class="col-md d-md-flex flex-column overflow-auto py-4 px-md-5 pt-md-5 pb-md-3 bg-green-light background-clouds">
+            <div class="col d-md-flex flex-column overflow-auto py-4 px-md-5 pt-md-5 pb-md-3 bg-green-light background-clouds">
                 <p:region regionName="top"/>
+
+                <div class="row">
+                    <div class="col-md">
+                        <p:region regionName="col-1"/>
+                    </div>
+
+                    <div class="col-md">
+                        <p:region regionName="col-2"/>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

@@ -50,7 +50,7 @@
   }
 
   @media (min-width: map_get($grid-breakpoints, "md")) {
-    margin-bottom: 0;
+    margin-bottom: map-get($spacers, 3);
   }
 }
 

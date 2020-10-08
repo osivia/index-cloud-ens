@@ -9,6 +9,8 @@
             <region name="nav" />
             <region name="nav-bottom" />
             <region name="top" />
+            <region name="col-1" />
+            <region name="col-2" />
         </regions>
     </layout>
 
@@ -32,7 +34,6 @@
         </regions>
     </layout>
 
-
     <layout>
         <name>cloud-ens-home</name>
         <uri>/layouts/home/index.jsp</uri>
@@ -47,27 +48,12 @@
     </layout>
 
     <layout>
-        <name>cloud-ens-search</name>
-        <uri>/layouts/search/index.jsp</uri>
-        <uri state="maximized">/layouts/with-nav/maximized.jsp</uri>
-        <regions>
-            <region name="nav" />
-            <region name="nav-bottom" />
-            <region name="top" />
-            <region name="top-aux" />
-            <region name="col-1" />
-        </regions>
-    </layout>
-
-    <layout>
         <name>cloud-ens-mutualization</name>
         <uri>/layouts/mutualization/index.jsp</uri>
         <uri state="maximized">/layouts/mutualization/maximized.jsp</uri>
         <regions>
             <region name="nav" />
             <region name="top" />
-            <region name="col-1" />
-            <region name="col-2" />
         </regions>
     </layout>
 
@@ -90,25 +76,14 @@
             <region name="col-1" />
         </regions>
     </layout>
-    
-    
+
     <layout>
         <name>logout</name>
         <uri>/layouts/logout/index.jsp</uri>
-        <uri state="maximized">/layouts/logout/maximized.jsp</uri>
+        <uri state="maximized">/layouts/without-nav/maximized.jsp</uri>
         <regions>
             <region name="col-1" />        
         </regions>
     </layout>
-    
-     <layout>
-        <name>test</name>
-        <uri>/layouts/test/index.jsp</uri>
-        <uri state="maximized">/layouts/logout/maximized.jsp</uri>
-        <regions>
-            <region name="col-1" />        
-        </regions>
-    </layout>
-    
 
 </layouts>

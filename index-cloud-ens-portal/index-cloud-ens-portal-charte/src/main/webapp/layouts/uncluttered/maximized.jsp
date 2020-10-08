@@ -12,15 +12,15 @@
 </head>
 
 
-<body class="fullheight overflow-hidden d-flex flex-column uncluttered" data-page-header="true">
+<body class="fullheight overflow-hidden d-flex flex-column">
 
 <header>
     <%--Simple toolbar--%>
     <p:region regionName="simple-toolbar" />
 </header>
 
-<main class="d-flex flex-column flex-grow-1 overflow-auto">
-    <div class="container my-auto py-4">
+<main class="d-flex flex-column flex-grow-1 overflow-auto bg-green-light background-clouds">
+    <div class="container d-flex flex-column flex-grow-1 flex-shrink-0 justify-content-center py-4">
         <p:region regionName="maximized"/>
     </div>
 </main>

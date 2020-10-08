@@ -6,10 +6,10 @@
 <c:set var="contextPath" value="${pageContext.request.contextPath}"/>
 
 
-<nav class="navbar navbar-expand navbar-light">
+<nav class="navbar navbar-expand-md navbar-dark bg-dark">
     <%--Brand--%>
-    <a class="navbar-brand d-none d-md-inline-block mx-auto py-0" href="${requestScope['osivia.home.url']}">
-        <img alt="${requestScope['osivia.header.application.name']}" src="${contextPath}/img/logo-cloud-pronote-large.png"
-             height="32">
+    <a href="${requestScope['osivia.home.url']}" class="navbar-brand mx-auto py-0">
+        <img alt="${requestScope['osivia.header.application.name']}"
+             src="${contextPath}/img/logo-cloud-pronote-toolbar.png" height="45">
     </a>
 </nav>

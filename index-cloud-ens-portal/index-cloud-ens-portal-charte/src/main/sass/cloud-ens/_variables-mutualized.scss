@@ -1,7 +1,17 @@
 @import "variables-base";
 
 
+$primary-light: $orange-100;
 $primary: $orange-500;
+$primary-dark: $orange-700;
+
+$theme-colors: map-merge(
+                (
+                        "primary-light": $primary-light,
+                        "primary-dark": $primary-dark
+                ),
+                $theme-colors
+);
 
 
 @import "../bootstrap/functions";

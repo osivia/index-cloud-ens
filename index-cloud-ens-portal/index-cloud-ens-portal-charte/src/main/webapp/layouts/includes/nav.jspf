@@ -7,13 +7,11 @@
                 </div>
             </div>
 
-            <div class="row flex-shrink-0">
-                <div class="col">
-                    <hr>
+            <div class="flex-shrink-0">
+                <hr>
 
-                    <div class="mb-md-5">
-                        <p:region regionName="nav-bottom"/>
-                    </div>
+                <div class="mb-md-5">
+                    <p:region regionName="nav-bottom"/>
                 </div>
             </div>
         </div>

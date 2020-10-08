@@ -27,7 +27,7 @@
 
                         <c:otherwise>
                             <li class="breadcrumb-item">
-                                <a href="${child.url}" class="text-green-dark">${child.name}</a>
+                                <a href="${child.url}">${child.name}</a>
                             </li>
                         </c:otherwise>
                     </c:choose>

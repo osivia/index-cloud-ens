@@ -17,37 +17,27 @@
 <%@include file="../includes/header.jspf" %>
 
 <main class="d-flex flex-column flex-grow-1 overflow-auto">
-    <div class="container-fluid d-flex flex-column flex-grow-1 overflow-hidden">
-        <div class="row flex-grow-1 overflow-hidden">
-            <div class="col-auto d-flex flex-column mh-100 border-right ui-resizable">
-                <div class="row flex-grow-1 overflow-hidden">
-                    <div id="drawer" class="col d-flex flex-column mh-100 overflow-hidden">
-                        <div class="row flex-grow-1 overflow-auto">
-                            <div class="col pt-2 pb-4">
-                                <div class="row">
-                                    <div class="col mb-3 bg-primary-lighter">
-                                        <div class="py-1 text-center">
-                                            <strong><op:translate key="LAYOUT_MUTUALIZATION_NAV_TITLE"/></strong>
-                                        </div>
-                                    </div>
-                                </div>
+    <div class="container-fluid d-flex flex-column flex-grow-1">
+        <div class="row flex-grow-1 flex-nowrap overflow-auto">
+            <op:resizable cssClass="col-auto d-md-flex flex-column" minWidth="250">
+                <div class="row flex-grow-1 flex-nowrap">
+                    <div id="drawer" class="col d-flex flex-column overflow-auto bg-light shadow">
+                        <div class="py-4 py-md-5">
+                            <p class="text-center">
+                                <strong><op:translate key="LAYOUT_MUTUALIZATION_NAV_TITLE"/></strong>
+                            </p>
 
-                                <p:region regionName="nav"/>
-                            </div>
+                            <p:region regionName="nav"/>
                         </div>
                     </div>
                 </div>
-            </div>
+            </op:resizable>
 
+            <div class="col-md d-md-flex flex-column overflow-auto py-4 px-md-5 pt-md-5 pb-md-3 bg-orange-light background-clouds">
+                <%--Breadcrumb--%>
+                <p:region regionName="breadcrumb"/>
 
-            <div class="col-md d-flex flex-column mh-100">
-                <%@include file="../includes/breadcrumb.jspf" %>
-
-                <div class="row flex-grow-1 pt-4 overflow-auto mh-100">
-                    <div class="col">
-                        <p:region regionName="maximized"/>
-                    </div>
-                </div>
+                <p:region regionName="maximized"/>
             </div>
         </div>
     </div>

@@ -35,11 +35,6 @@ $colors: (
 
 $secondary-light: $gray-500;
 
-$uncluttered-toolbar-bg: #ffffff;
-$uncluttered-body-bg-left: #68cda3;
-$uncluttered-body-bg-center: #67b898;
-$uncluttered-body-bg-right: #81c896;
-
 $theme-colors: (
         "secondary-light": $secondary-light,
         "green-light": $green-100,
@@ -71,6 +66,4 @@ $breadcrumb-padding-y: 0;
 $breadcrumb-padding-x: 0;
 $breadcrumb-margin-bottom: 3rem;
 $breadcrumb-bg: transparent;
-$breadcrumb-divider-color: $green-700;
-$breadcrumb-active-color: $green-700;
 $breadcrumb-divider: quote(">");

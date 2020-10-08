@@ -12,25 +12,16 @@
 </head>
 
 
-<body class="fullheight overflow-hidden d-flex flex-column" data-page-header="true">
+<body class="fullheight overflow-hidden d-flex flex-column">
 
 <%@include file="../includes/header.jspf" %>
 
-<main class="d-flex flex-column flex-grow-1 overflow-auto">
-    <div class="container-fluid d-flex flex-column flex-grow-1 overflow-hidden">
-        <%@include file="../includes/breadcrumb.jspf" %>
+<main class="d-flex flex-column flex-grow-1 overflow-auto bg-green-light background-clouds">
+    <div class="container-fluid d-flex flex-column flex-grow-1 flex-shrink-0 py-4">
+        <%--Breadcrumb--%>
+        <p:region regionName="breadcrumb"/>
 
-        <div class="row flex-grow-1 pt-4 overflow-auto">
-            <div id="drawer" class="col d-flex d-md-none flex-column mh-100 overflow-hidden">
-                <div class="row flex-column">
-                    <p:region regionName="drawer-header"/>
-                </div>
-            </div>
-
-            <div class="col">
-                <p:region regionName="maximized"/>
-            </div>
-        </div>
+        <p:region regionName="top"/>
     </div>
 </main>
 

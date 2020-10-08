@@ -16,16 +16,9 @@
 
 <%@include file="../includes/header.jspf" %>
 
-<main class="d-flex flex-column flex-grow-1 overflow-auto">
-    <div class="container-fluid d-flex flex-column flex-grow-1">
-        <div class="row flex-grow-1">
-            <div id="drawer" class="col d-flex d-md-none flex-column mh-100 overflow-hidden">
-                <div class="row flex-column">
-                    <p:region regionName="logout"/>
-                </div>
-            </div>
-
-        </div>
+<main class="d-flex flex-column flex-grow-1 overflow-auto bg-green-light background-clouds">
+    <div class="container-fluid d-flex flex-column flex-grow-1 flex-shrink-0 py-4">
+        <p:region regionName="logout"/>
     </div>
 </main>
 
