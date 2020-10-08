@@ -47,7 +47,7 @@
         <%--Copy--%>
         <c:if test="${readOnly and not empty copyUrl}">
             <c:set var="title"><op:translate key="DOCUMENT_FILE_TOOLBAR_COPY"/></c:set>
-            <a href="javascript:" title="${title}" class="btn btn-link btn-link-hover-green btn-sm mb-1 ml-2 text-green-dark no-ajax-link" data-target="#osivia-modal" data-load-url="${copyUrl}" data-title="${title}">
+            <a href="javascript:" title="${title}" class="btn btn-link btn-link-hover-primary btn-sm mb-1 ml-2 text-primary-dark no-ajax-link" data-target="#osivia-modal" data-load-url="${copyUrl}" data-title="${title}">
                 <i class="glyphicons glyphicons-basic-copy-duplicate"></i>
                 <span class="d-none d-md-inline">${title}</span>
             </a>
@@ -71,7 +71,7 @@
                     <c:set var="title"><op:translate key="DOCUMENT_FILE_TOOLBAR_SHARED_LINK_ACTIVATE"/></c:set>
                 </c:otherwise>
             </c:choose>
-            <a href="${activationUrl}" title="${title}" class="btn btn-link btn-link-hover-green btn-sm mb-1 ml-2 text-green-dark">
+            <a href="${activationUrl}" title="${title}" class="btn btn-link btn-link-hover-primary btn-sm mb-1 ml-2 text-primary-dark">
                 <i class="${icon}"></i>
                 <span class="d-none d-md-inline">${title}</span>
             </a>
@@ -81,7 +81,7 @@
         <c:if test="${document.type.file}">
             <c:set var="url"><ttc:documentLink document="${document}" displayContext="download"/></c:set>
             <c:set var="title"><op:translate key="DOWNLOAD"/></c:set>
-            <a href="${url}" target="_blank" title="${title}" class="btn btn-link btn-link-hover-green btn-sm mb-1 ml-2 text-green-dark no-ajax-link">
+            <a href="${url}" target="_blank" title="${title}" class="btn btn-link btn-link-hover-primary btn-sm mb-1 ml-2 text-primary-dark no-ajax-link">
                 <i class="glyphicons glyphicons-basic-arrow-thin-down"></i>
                 <span class="d-none d-md-inline">${title}</span>
             </a>
@@ -90,7 +90,7 @@
         <%--Rename--%>
         <c:if test="${not readOnly and not empty renameUrl}">
             <c:set var="title"><op:translate key="DOCUMENT_RENAME"/></c:set>
-            <a href="javascript:" title="${title}" class="btn btn-link btn-link-hover-green btn-sm mb-1 ml-2 text-green-dark no-ajax-link" data-target="#osivia-modal"
+            <a href="javascript:" title="${title}" class="btn btn-link btn-link-hover-primary btn-sm mb-1 ml-2 text-primary-dark no-ajax-link" data-target="#osivia-modal"
                data-load-url="${renameUrl}" data-title="${title}">
                 <i class="glyphicons glyphicons-basic-square-edit"></i>
                 <span class="d-none d-md-inline">${title}</span>
@@ -100,7 +100,7 @@
         <%--Edit--%>
         <c:if test="${not readOnly and not empty editUrl}">
             <c:set var="title"><op:translate key="DOCUMENT_EDIT"/></c:set>
-            <a href="javascript:" title="${title}" class="btn btn-link btn-link-hover-green btn-sm mb-1 ml-2 text-green-dark no-ajax-link" data-target="#osivia-modal"
+            <a href="javascript:" title="${title}" class="btn btn-link btn-link-hover-primary btn-sm mb-1 ml-2 text-primary-dark no-ajax-link" data-target="#osivia-modal"
                data-load-url="${editUrl}" data-title="${title}">
                 <i class="glyphicons glyphicons-basic-refresh"></i>
                 <span class="d-none d-md-inline">${title}</span>
@@ -110,7 +110,7 @@
         <%--Delete--%>
         <c:if test="${not readOnly and not empty deleteUrl}">
             <c:set var="title"><op:translate key="DELETE"/></c:set>
-            <a href="javascript:" title="${title}" class="btn btn-link btn-link-hover-green btn-sm mb-1 ml-2 text-green-dark no-ajax-link" data-target="#osivia-modal" data-load-url="${deleteUrl}" data-title="${title}">
+            <a href="javascript:" title="${title}" class="btn btn-link btn-link-hover-primary btn-sm mb-1 ml-2 text-primary-dark no-ajax-link" data-target="#osivia-modal" data-load-url="${deleteUrl}" data-title="${title}">
                 <i class="glyphicons glyphicons-basic-bin"></i>
                 <span class="d-none d-md-inline">${title}</span>
             </a>
