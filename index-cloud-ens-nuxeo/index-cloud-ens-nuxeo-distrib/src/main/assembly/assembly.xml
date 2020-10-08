@@ -185,7 +185,9 @@
                 <include>com.auth0:java-jwt:jar:3.3.0</include>
                 <include>com.fasterxml.jackson.core:jackson-core:jar:2.9.2</include>
                 <include>com.fasterxml.jackson.core:jackson-databind:jar:2.9.2</include>
-				<include>com.fasterxml.jackson.core:jackson-annotations:jar:2.9.2</include>                
+				<include>com.fasterxml.jackson.core:jackson-annotations:jar:2.9.2</include>  
+				
+				<include>com.phloc:phloc-commons:jar:4.3.2</include>      
 			</includes>
 		</dependencySet>
 	</dependencySets>
