@@ -1,9 +1,0 @@
-<%--@elvariable id="form" type="fr.index.cloud.ens.filebrowser.portlet.model.CustomizedFileBrowserForm"--%>
-<c:if test="${not empty form.title}">
-    <div class="mb-2 mr-2">
-        <span class="text-green mr-2">
-            <i class="glyphicons glyphicons-basic-folder"></i>
-        </span>
-        <strong class="text-green-dark">${form.title}</strong>
-    </div>
-</c:if>

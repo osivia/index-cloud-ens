@@ -1,5 +1,5 @@
 <%--@elvariable id="form" type="fr.index.cloud.ens.filebrowser.portlet.model.CustomizedFileBrowserForm"--%>
-<div>
+<div class="d-flex">
     <c:choose>
         <c:when test="${empty form.items}"><c:set var="text"><op:translate
                 key="FILE_BROWSER_TOOLBAR_STATE_NO_ITEM"/></c:set></c:when>
@@ -9,11 +9,18 @@
                                                      args="${fn:length(form.items)}"/></c:set></c:otherwise>
     </c:choose>
 
-    <span class="text-secondary-light">- ${text}${view eq 'thumbnails' or form.listMode ? ',' : ''}</span>
+    <div class="text-secondary-light">
+        <span class="text-green mr-2">
+            <i class="glyphicons glyphicons-basic-folder"></i>
+        </span>
+        <strong class="text-green-dark">${form.title}</strong>
+        <span>-</span>
+        <span>${text}</span>
+    </div>
 
     <c:if test="${view eq 'thumbnails' or form.listMode}">
         <div class="dropdown d-inline">
-            <a href="javascript:" class="dropdown-toggle text-secondary-light no-ajax-link" data-toggle="dropdown">
+            <a href="javascript:" class="btn btn-link btn-link-hover-orange btn-sm text-secondary-light bg-white ml-2 dropdown-toggle no-ajax-link" data-toggle="dropdown">
                     <span>
                         <c:choose>
                             <c:when test="${empty form.items or fn:length(form.items) eq 1}"><op:translate
@@ -24,7 +31,7 @@
                 <span class="text-lowercase"><op:translate key="${form.criteria.field.key}"/></span>
             </a>
 
-            <div class="dropdown-menu">
+            <div class="dropdown-menu dropdown-menu-right">
                 <c:forEach var="field" items="${sortFields}">
                     <portlet:actionURL name="sort" copyCurrentRenderParameters="true" var="url">
                         <portlet:param name="field" value="${field.id}"/>

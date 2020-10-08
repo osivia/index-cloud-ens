@@ -6,7 +6,7 @@
     <%@ include file="../table-body-customized-column.jspf" %>
 
     <%--Last modification--%>
-    <%@ include file="table-body-last-modification.jspf" %>
+    <%@ include file="../table-body-last-modification.jspf" %>
 
     <%--Author--%>
     <%@ include file="table-body-author.jspf" %>

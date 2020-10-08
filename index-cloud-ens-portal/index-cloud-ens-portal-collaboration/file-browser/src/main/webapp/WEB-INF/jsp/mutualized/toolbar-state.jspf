@@ -1,4 +1,5 @@
-<div class="d-none d-sm-block text-dark ml-2 pt-1">
+<%--@elvariable id="form" type="fr.index.cloud.ens.filebrowser.mutualized.portlet.model.MutualizedFileBrowserForm"--%>
+<div class="d-flex align-items-center">
     <c:choose>
         <c:when test="${form.total eq 0}"><c:set var="text"><op:translate
                 key="FILE_BROWSER_TOOLBAR_STATE_NO_ITEM"/></c:set></c:when>
@@ -8,13 +9,20 @@
                                                      args="${form.total}"/></c:set></c:otherwise>
     </c:choose>
 
-    <strong>${text}</strong><span>,</span>
+    <div class="text-secondary-light mb-1">
+        <span class="mr-2">
+            <i class="glyphicons glyphicons-basic-search"></i>
+        </span>
+        <strong class="text-orange-dark"><op:translate key="FILE_BROWSER_TOOLBAR_TITLE_SEARCH"/></strong>
+        <span>-</span>
+        <span>${text}</span>
+    </div>
 
-    <div class="dropdown d-inline">
-        <a href="javascript:" class="dropdown-toggle text-reset no-ajax-link" data-toggle="dropdown">
+    <div class="dropdown">
+        <a href="javascript:" class="btn btn-link btn-link-hover-orange btn-sm text-secondary-light bg-white ml-2 dropdown-toggle no-ajax-link" data-toggle="dropdown">
                 <span>
                     <c:choose>
-                        <c:when test="${form.total le 1}"><op:translate
+                        <c:when test="${empty form.items or fn:length(form.items) eq 1}"><op:translate
                                 key="FILE_BROWSER_TOOLBAR_STATE_SORTED_BY"/></c:when>
                         <c:otherwise><op:translate key="FILE_BROWSER_TOOLBAR_STATE_SORTED_BY_N_ITEMS"/></c:otherwise>
                     </c:choose>

@@ -1,5 +1,0 @@
-<div class="portal-table-cell" data-column="last-modification">
-    <div class="d-flex flex-wrap overflow-hidden">
-        <span class="text-truncate"><op:formatRelativeDate value="${item.lastModification}" tooltip="false" /></span>
-    </div>
-</div>

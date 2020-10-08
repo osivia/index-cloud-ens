@@ -25,8 +25,12 @@
 }
 
 
-.portal-table-row:not(.hover-0) {
-  &:hover {
-    //background-color: $mutualized-lighter;
+.portal-table-row {
+  &:hover, &.ui-selecting, &.ui-selected {
+    background-color: $orange-200;
+  }
+
+  &, &.ui-selecting, &.ui-selected {
+    border-color: $orange-500;
   }
 }

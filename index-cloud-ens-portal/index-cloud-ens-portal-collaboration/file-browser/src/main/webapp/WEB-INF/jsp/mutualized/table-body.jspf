@@ -13,12 +13,8 @@
 
 <c:choose>
     <c:when test="${empty form.items}">
-        <div class="portal-table-row-group">
-            <div class="portal-table-row hover-0">
-                <div class="portal-table-cell">
-                    <span class="text-muted"><op:translate key="FILE_BROWSER_EMPTY"/></span>
-                </div>
-            </div>
+        <div class="text-center">
+            <span class="text-muted"><op:translate key="FILE_BROWSER_EMPTY"/></span>
         </div>
     </c:when>
 

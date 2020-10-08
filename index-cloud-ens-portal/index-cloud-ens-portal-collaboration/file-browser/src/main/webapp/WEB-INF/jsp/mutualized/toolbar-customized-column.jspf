@@ -1,5 +1,5 @@
 <div class="dropdown d-none d-lg-block ml-2">
-    <button type="button" class="btn btn-link btn-link-hover-green btn-sm text-secondary bg-white dropdown-toggle" data-toggle="dropdown">
+    <button type="button" class="btn btn-link btn-link-hover-orange btn-sm text-secondary bg-white dropdown-toggle" data-toggle="dropdown">
         <i class="glyphicons glyphicons-basic-cogwheel"></i>
         <span class="sr-only"><op:translate key="FILE_BROWSER_TOOLBAR_CUSTOMIZED_COLUMNS_HEADER"/></span>
     </button>
