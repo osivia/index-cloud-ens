@@ -9,6 +9,7 @@
 
 
 <portlet:actionURL name="drop" var="dropUrl"/>
+<portlet:actionURL name="search" var="searchUrl"/>
 
 <portlet:resourceURL id="lazy-loading" var="lazyLoadingUrl"/>
 
@@ -90,18 +91,22 @@
                                         key="TASKBAR_FILTERS"/></strong>
                             </a>
 
-                            <c:choose>
-                                <c:when test="${empty task.savedSearches}">
-                                    <p class="text-secondary"><op:translate key="TASKBAR_SAVED_SEARCHES_EMPTY"/></p>
-                                </c:when>
+                            <div id="${namespace}-filters" class="collapse show ml-4">
+                                <c:choose>
+                                    <c:when test="${empty task.savedSearches}">
+                                        <p class="my-3 text-secondary"><op:translate
+                                                key="TASKBAR_SAVED_SEARCHES_EMPTY"/></p>
+                                    </c:when>
 
-                                <c:otherwise>
-                                    <div id="${namespace}-filters" class="collapse show ml-4">
+                                    <c:otherwise>
                                         <c:forEach var="savedSearch" items="${task.savedSearches}">
                                             <div class="card card-custom card-custom-hover card-custom-gray my-3">
                                                 <div class="card-body">
                                                     <div class="text-truncate">
-                                                        <a href="${savedSearch.url}"
+                                                        <portlet:actionURL name="saved-search" var="url">
+                                                            <portlet:param name="id" value="${savedSearch.url}"/>
+                                                        </portlet:actionURL>
+                                                        <a href="${url}"
                                                            class="stretched-link ${savedSearch.active ? 'text-green' : 'text-black'} text-decoration-none no-ajax-link">
                                                             <strong>${savedSearch.displayName}</strong>
                                                         </a>
@@ -109,9 +114,9 @@
                                                 </div>
                                             </div>
                                         </c:forEach>
-                                    </div>
-                                </c:otherwise>
-                            </c:choose>
+                                    </c:otherwise>
+                                </c:choose>
+                            </div>
                         </div>
                     </c:when>
 
@@ -143,63 +148,81 @@
                                 </div>
 
                                 <%--@elvariable id="searchForm" type="fr.index.cloud.ens.taskbar.portlet.model.TaskbarSearchForm"--%>
-                                <form:form action="${submitUrl}" method="post" modelAttribute="searchForm">
-                                    <%--Keywords--%>
-                                    <c:set var="placeholder"><op:translate key="TASKBAR_SEARCH_KEYWORDS"/></c:set>
-                                    <div class="form-group">
-                                        <form:label path="keywords" cssClass="sr-only">${placeholder}</form:label>
-                                        <div class="input-group">
-                                            <form:input path="keywords" cssClass="form-control" placeholder="${placeholder}"/>
-                                            <div class="input-group-append">
+                                    <form:form action="${searchUrl}" method="post" modelAttribute="searchForm">
+                                        <%--Keywords--%>
+                                        <c:set var="placeholder"><op:translate key="TASKBAR_SEARCH_KEYWORDS"/></c:set>
+                                        <div class="form-group">
+                                            <form:label path="keywords" cssClass="sr-only">${placeholder}</form:label>
+                                            <div class="input-group">
+                                                <form:input path="keywords" type="search" cssClass="form-control"
+                                                            placeholder="${placeholder}"/>
+                                                <div class="input-group-append">
                                                 <span class="input-group-text">
                                                     <i class="glyphicons glyphicons-basic-search"></i>
                                                 </span>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
 
-                                    <%--Document type--%>
-                                    <portlet:resourceURL id="load-vocabulary" var="loadUrl">
-                                        <portlet:param name="vocabulary" value="idx_document_type"/>
-                                    </portlet:resourceURL>
-                                    <c:set var="placeholder"><op:translate key="TASKBAR_SEARCH_DOCUMENT_TYPE"/></c:set>
-                                    <div class="form-group">
-                                        <form:label path="documentType" cssClass="sr-only">${placeholder}</form:label>
-                                        <form:select path="documentType" cssClass="form-control select2 select2-default" data-placeholder="${placeholder}" data-url="${loadUrl}" data-searching="${select2Searching}" data-no-results="${select2NoResults}">
-                                            <c:forEach var="item" items="${searchForm.documentType}">
-                                                <form:option value="${item}">${item}</form:option>
-                                            </c:forEach>
-                                        </form:select>
-                                    </div>
+                                        <%--Document type--%>
+                                        <portlet:resourceURL id="load-vocabulary" var="loadUrl">
+                                            <portlet:param name="vocabulary" value="idx_document_type"/>
+                                        </portlet:resourceURL>
+                                        <c:set var="placeholder"><op:translate
+                                                key="TASKBAR_SEARCH_DOCUMENT_TYPE"/></c:set>
+                                        <div class="form-group">
+                                            <form:label path="documentTypes"
+                                                        cssClass="sr-only">${placeholder}</form:label>
+                                            <form:select path="documentTypes"
+                                                         cssClass="form-control select2 select2-default"
+                                                         data-placeholder="${placeholder}" data-url="${loadUrl}"
+                                                         data-searching="${select2Searching}"
+                                                         data-no-results="${select2NoResults}">
+                                                <c:forEach var="item" items="${searchForm.documentTypes}">
+                                                    <form:option value="${item}"><ttc:vocabularyLabel
+                                                            name="idx_document_type" key="${item}"/></form:option>
+                                                </c:forEach>
+                                            </form:select>
+                                        </div>
 
-                                    <%--Level--%>
-                                    <portlet:resourceURL id="load-vocabulary" var="loadUrl">
-                                        <portlet:param name="vocabulary" value="idx_level"/>
-                                    </portlet:resourceURL>
-                                    <c:set var="placeholder"><op:translate key="TASKBAR_SEARCH_LEVEL"/></c:set>
-                                    <div class="form-group">
-                                        <form:label path="level" cssClass="sr-only">${placeholder}</form:label>
-                                        <form:select path="level" cssClass="form-control select2 select2-default" data-placeholder="${placeholder}" data-url="${loadUrl}" data-searching="${select2Searching}" data-no-results="${select2NoResults}">
-                                            <c:forEach var="item" items="${searchForm.level}">
-                                                <form:option value="${item}">${item}</form:option>
-                                            </c:forEach>
-                                        </form:select>
-                                    </div>
+                                        <%--Level--%>
+                                        <portlet:resourceURL id="load-vocabulary" var="loadUrl">
+                                            <portlet:param name="vocabulary" value="idx_level"/>
+                                        </portlet:resourceURL>
+                                        <c:set var="placeholder"><op:translate key="TASKBAR_SEARCH_LEVEL"/></c:set>
+                                        <div class="form-group">
+                                            <form:label path="levels" cssClass="sr-only">${placeholder}</form:label>
+                                            <form:select path="levels" cssClass="form-control select2 select2-default"
+                                                         data-placeholder="${placeholder}" data-url="${loadUrl}"
+                                                         data-searching="${select2Searching}"
+                                                         data-no-results="${select2NoResults}">
+                                                <c:forEach var="item" items="${searchForm.levels}">
+                                                    <form:option value="${item}"><ttc:vocabularyLabel name="idx_level"
+                                                                                                      key="${item}"/></form:option>
+                                                </c:forEach>
+                                            </form:select>
+                                        </div>
 
-                                    <%--Subject--%>
-                                    <portlet:resourceURL id="load-vocabulary" var="loadUrl">
-                                        <portlet:param name="vocabulary" value="idx_subject"/>
-                                    </portlet:resourceURL>
-                                    <c:set var="placeholder"><op:translate key="TASKBAR_SEARCH_SUBJECT"/></c:set>
-                                    <div class="form-group">
-                                        <form:label path="subject" cssClass="sr-only">${placeholder}</form:label>
-                                        <form:select path="subject" cssClass="form-control select2 select2-default" data-placeholder="${placeholder}" data-url="${loadUrl}" data-searching="${select2Searching}" data-no-results="${select2NoResults}">
-                                            <c:forEach var="item" items="${searchForm.subject}">
-                                                <form:option value="${item}">${item}</form:option>
-                                            </c:forEach>
-                                        </form:select>
-                                    </div>
-                                </form:form>
+                                        <%--Subject--%>
+                                        <portlet:resourceURL id="load-vocabulary" var="loadUrl">
+                                            <portlet:param name="vocabulary" value="idx_subject"/>
+                                        </portlet:resourceURL>
+                                        <c:set var="placeholder"><op:translate key="TASKBAR_SEARCH_SUBJECT"/></c:set>
+                                        <div class="form-group">
+                                            <form:label path="subjects" cssClass="sr-only">${placeholder}</form:label>
+                                            <form:select path="subjects" cssClass="form-control select2 select2-default"
+                                                         data-placeholder="${placeholder}" data-url="${loadUrl}"
+                                                         data-searching="${select2Searching}"
+                                                         data-no-results="${select2NoResults}">
+                                                <c:forEach var="item" items="${searchForm.subjects}">
+                                                    <form:option value="${item}"><ttc:vocabularyLabel name="idx_subject"
+                                                                                                      key="${item}"/></form:option>
+                                                </c:forEach>
+                                            </form:select>
+                                        </div>
+
+                                        <input type="submit" class="d-none">
+                                    </form:form>
 
                                 <%--Advanced search--%>
                                 <c:if test="${not empty task.advancedSearch}">

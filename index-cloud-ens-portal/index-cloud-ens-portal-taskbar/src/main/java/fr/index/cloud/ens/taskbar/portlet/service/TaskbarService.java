@@ -22,6 +22,31 @@ public interface TaskbarService {
      */
     String PATH_WINDOW_PROPERTY = "osivia.taskbar.path";
 
+    /**
+     * Selectors parameter.
+     */
+    String SELECTORS_PARAMETER = "selectors";
+    /**
+     * Keywords selector identifier.
+     */
+    String KEYWORDS_SELECTOR_ID = "keywords";
+    /**
+     * Document types selector identifier.
+     */
+    String DOCUMENT_TYPES_SELECTOR_ID = "documentTypes";
+    /**
+     * Levels selector identifier.
+     */
+    String LEVELS_SELECTOR_ID = "levels";
+    /**
+     * Subjects selector identifier.
+     */
+    String SUBJECTS_SELECTOR_ID = "subjects";
+    /**
+     * Location selector identifier.
+     */
+    String LOCATION_SELECTOR_ID = "location";
+
 
     /**
      * Get window properties.
@@ -73,8 +98,18 @@ public interface TaskbarService {
      * Reset search filters.
      *
      * @param portalControllerContext portal controller context
+     * @param searchForm              search form
      */
-    void resetSearchFilters(PortalControllerContext portalControllerContext) throws PortletException;
+    void resetSearchFilters(PortalControllerContext portalControllerContext, TaskbarSearchForm searchForm) throws PortletException;
+
+
+    /**
+     * Search.
+     *
+     * @param portalControllerContext portal controller context
+     * @param searchForm              search form
+     */
+    void search(PortalControllerContext portalControllerContext, TaskbarSearchForm searchForm) throws PortletException;
 
 
     /**

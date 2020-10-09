@@ -6,6 +6,7 @@ import fr.index.cloud.ens.taskbar.portlet.service.TaskbarService;
 import net.sf.json.JSONArray;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.math.NumberUtils;
+import org.apache.commons.logging.LogFactory;
 import org.osivia.portal.api.context.PortalControllerContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -90,23 +91,39 @@ public class TaskbarViewController {
      * @param response action response
      */
     @ActionMapping("reset")
-    public void resetSearchFilters(ActionRequest request, ActionResponse response) throws PortletException {
+    public void resetSearchFilters(ActionRequest request, ActionResponse response, @ModelAttribute("searchForm") TaskbarSearchForm searchForm) throws PortletException {
         // Portal controller context
         PortalControllerContext portalControllerContext = new PortalControllerContext(portletContext, request, response);
 
-        this.service.resetSearchFilters(portalControllerContext);
+        this.service.resetSearchFilters(portalControllerContext, searchForm);
     }
 
 
     /**
      * Search action mapping.
      *
+     * @param request    action request
+     * @param response   action response
+     * @param searchForm search form model attribute
+     */
+    @ActionMapping("search")
+    public void search(ActionRequest request, ActionResponse response, @ModelAttribute("searchForm") TaskbarSearchForm searchForm) throws PortletException {
+        // Portal controller context
+        PortalControllerContext portalControllerContext = new PortalControllerContext(this.portletContext, request, response);
+
+        this.service.search(portalControllerContext, searchForm);
+    }
+
+
+    /**
+     * Saved search action mapping.
+     *
      * @param request  action request
      * @param response action response
      * @param id       saved search identifier request parameter
      */
-    @ActionMapping("search")
-    public void search(ActionRequest request, ActionResponse response, @RequestParam("id") String id) throws PortletException, IOException {
+    @ActionMapping("saved-search")
+    public void savedSearch(ActionRequest request, ActionResponse response, @RequestParam("id") String id) throws PortletException, IOException {
         // Portal controller context
         PortalControllerContext portalControllerContext = new PortalControllerContext(this.portletContext, request, response);
 

@@ -17,12 +17,12 @@ public class TaskbarSearchForm {
 
     /** Keywords. */
     private String keywords;
-    /** Document type. */
-    private List<String> documentType;
-    /** Level. */
-    private List<String> level;
-    /** Subject. */
-    private List<String> subject;
+    /** Document types. */
+    private List<String> documentTypes;
+    /** Levels. */
+    private List<String> levels;
+    /** Subjects. */
+    private List<String> subjects;
 
 
     /**
@@ -41,27 +41,27 @@ public class TaskbarSearchForm {
         this.keywords = keywords;
     }
 
-    public List<String> getDocumentType() {
-        return documentType;
+    public List<String> getDocumentTypes() {
+        return documentTypes;
     }
 
-    public void setDocumentType(List<String> documentType) {
-        this.documentType = documentType;
+    public void setDocumentTypes(List<String> documentTypes) {
+        this.documentTypes = documentTypes;
     }
 
-    public List<String> getLevel() {
-        return level;
+    public List<String> getLevels() {
+        return levels;
     }
 
-    public void setLevel(List<String> level) {
-        this.level = level;
+    public void setLevels(List<String> levels) {
+        this.levels = levels;
     }
 
-    public List<String> getSubject() {
-        return subject;
+    public List<String> getSubjects() {
+        return subjects;
     }
 
-    public void setSubject(List<String> subject) {
-        this.subject = subject;
+    public void setSubjects(List<String> subjects) {
+        this.subjects = subjects;
     }
 }

@@ -37,8 +37,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Repository;
 
-import javax.portlet.*;
-import java.io.IOException;
+import javax.portlet.PortletException;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
@@ -55,10 +54,6 @@ public class TaskbarRepositoryImpl implements TaskbarRepository {
      * Document edition portlet instance.
      */
     private static final String DOCUMENT_EDITION_PORTLET_INSTANCE = "osivia-services-document-edition-instance";
-    /**
-     * Live document creation portlet instance.
-     */
-    private static final String LIVE_DOCUMENT_CREATION_PORTLET_INSTANCE = "osivia-services-document-creation-portletInstance";
 
 
     /**
@@ -162,7 +157,7 @@ public class TaskbarRepositoryImpl implements TaskbarRepository {
 
 
     @Override
-    public List<AddDropdownItem> generateAddDropdownItems(PortalControllerContext portalControllerContext) throws PortletException, IOException {
+    public List<AddDropdownItem> generateAddDropdownItems(PortalControllerContext portalControllerContext) throws PortletException {
         // Nuxeo controller
         NuxeoController nuxeoController = new NuxeoController(portalControllerContext);
 
@@ -514,16 +509,6 @@ public class TaskbarRepositoryImpl implements TaskbarRepository {
 
     @Override
     public List<Task> getSavedSearchesTasks(PortalControllerContext portalControllerContext, String activeSavedSearch) throws PortletException {
-        // Portlet response
-        PortletResponse portletResponse = portalControllerContext.getResponse();
-        // MIME response
-        MimeResponse mimeResponse;
-        if (portletResponse instanceof MimeResponse) {
-            mimeResponse = (MimeResponse) portletResponse;
-        } else {
-            mimeResponse = null;
-        }
-
         // User preferences
         UserPreferences userPreferences;
         try {
@@ -537,24 +522,19 @@ public class TaskbarRepositoryImpl implements TaskbarRepository {
 
         // Tasks
         List<Task> tasks;
-        if ((mimeResponse == null) || CollectionUtils.isEmpty(savedSearches)) {
+        if (CollectionUtils.isEmpty(savedSearches)) {
             tasks = null;
         } else {
             tasks = new ArrayList<>(savedSearches.size());
 
             // Sort
-            Collections.sort(savedSearches, this.savedSearchComparator);
+            savedSearches.sort(this.savedSearchComparator);
 
             for (UserSavedSearch savedSearch : savedSearches) {
-                // Action URL
-                PortletURL actionUrl = mimeResponse.createActionURL();
-                actionUrl.setParameter(ActionRequest.ACTION_NAME, "search");
-                actionUrl.setParameter("id", String.valueOf(savedSearch.getId()));
-
                 // Task
                 ServiceTask task = this.applicationContext.getBean(ServiceTask.class);
                 task.setDisplayName(savedSearch.getDisplayName());
-                task.setUrl(actionUrl.toString());
+                task.setUrl(String.valueOf(savedSearch.getId()));
                 task.setActive(StringUtils.equals(activeSavedSearch, String.valueOf(savedSearch.getId())));
 
                 tasks.add(task);
@@ -625,7 +605,7 @@ public class TaskbarRepositoryImpl implements TaskbarRepository {
     @Override
     public UserSavedSearch getSavedSearch(PortalControllerContext portalControllerContext, int id) throws PortletException {
         // User preferences
-        UserPreferences userPreferences = null;
+        UserPreferences userPreferences;
         try {
             userPreferences = this.userPreferencesService.getUserPreferences(portalControllerContext);
         } catch (PortalException e) {
