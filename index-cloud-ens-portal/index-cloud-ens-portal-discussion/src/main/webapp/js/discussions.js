@@ -1,7 +1,7 @@
 
 
 $JQry(function() {
-    $JQry(".discussion-messages").each(function(index, element) {
+    $JQry(".discussion").each(function(index, element) {
         var $element = $JQry(element);
 
         if (!$element.data("loaded")) {

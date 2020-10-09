@@ -1,5 +1,6 @@
 package fr.index.cloud.ens.portal.discussion.portlet.model;
 
+import java.util.Date;
 import java.util.List;
 
 import org.osivia.portal.api.portlet.Refreshable;
@@ -54,7 +55,36 @@ public class DetailForm {
     /** The options. */
     private Options options;  
     
+    /** The today. */
+    private Date today;
     
+    
+    
+    /**
+     * Getter for today.
+     * @return the today
+     */
+    public Date getToday() {
+        return today;
+    }
+
+
+
+
+
+    
+    /**
+     * Setter for today.
+     * @param today the today to set
+     */
+    public void setToday(Date today) {
+        this.today = today;
+    }
+
+
+
+
+
     /**
      * Getter for options.
      * @return the options

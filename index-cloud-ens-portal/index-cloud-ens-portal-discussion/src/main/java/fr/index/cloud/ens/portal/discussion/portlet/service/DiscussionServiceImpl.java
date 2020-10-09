@@ -154,12 +154,22 @@ public class DiscussionServiceImpl implements DiscussionService, ApplicationCont
 
         if (!form.isLoaded()) {
 
+         // today    
+            Calendar date = new GregorianCalendar();
+            // reset hour, minutes, seconds and millis
+            date.set(Calendar.HOUR_OF_DAY, 0);
+            date.set(Calendar.MINUTE, 0);
+            date.set(Calendar.SECOND, 0);
+            date.set(Calendar.MILLISECOND, 0);
+            
+            form.setToday(date.getTime());
+            
             form.setId(options.getId());
             form.setAuthor(portalControllerContext.getRequest().getRemoteUser());
             if( options.getMessageId() != null)
                 form.setAnchor("msg-"+ options.getMessageId());
             else
-                form.setAnchor("newMessage");  
+                form.setAnchor("last-message");  
             form.setOptions(options);
 
             updateModel(portalControllerContext, form);
@@ -677,10 +687,6 @@ public class DiscussionServiceImpl implements DiscussionService, ApplicationCont
     @Override
     public void addMessage(PortalControllerContext portalControllerContext, DetailForm form) throws PortletException {
         
-        if( StringUtils.isEmpty(form.getNewMessage()))  {
-            form.setAnchor("newMessage");
-            return;
-        }
 
         // Internationalization bundle
         Bundle bundle = this.bundleFactory.getBundle(portalControllerContext.getRequest().getLocale());
@@ -703,7 +709,7 @@ public class DiscussionServiceImpl implements DiscussionService, ApplicationCont
         updateModel(portalControllerContext, form);
 
         form.setNewMessage(null);
-        form.setAnchor("newMessage");
+        form.setAnchor("last-message");
 
         // Notification
         String message = bundle.getString("DISCUSSION_MESSAGE_SUCCESS_ADD_NEW_MESSAGE");

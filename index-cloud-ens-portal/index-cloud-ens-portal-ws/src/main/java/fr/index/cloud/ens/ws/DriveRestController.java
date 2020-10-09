@@ -669,8 +669,15 @@ public class DriveRestController {
      * @return the root path
      */
     private String getRootPath(NuxeoController nuxeoController, Principal principal) {
-        Document userWorkspace = (Document) nuxeoController.executeNuxeoCommand(new GetUserProfileCommand(principal.getName()));
-        String rootPath = userWorkspace.getPath().substring(0, userWorkspace.getPath().lastIndexOf('/')) + "/documents";
+        HttpServletRequest request = nuxeoController.getServletRequest();
+        HttpSession session = request.getSession(false);
+        
+        String rootPath = (String) session.getAttribute("osivia.rootPath");
+        if( rootPath == null)   {
+            Document userWorkspace = (Document) nuxeoController.executeNuxeoCommand(new GetUserProfileCommand(principal.getName()));
+            rootPath = userWorkspace.getPath().substring(0, userWorkspace.getPath().lastIndexOf('/')) + "/documents";
+            session.setAttribute("osivia.rootPath", rootPath);
+        }
         return rootPath;
     }
 
