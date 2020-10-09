@@ -85,13 +85,13 @@
 
         <%--Disable--%>
         <c:if test="${form.enable}">
-            <a href="${disableUrl}" class="btn  btn-mutualized-dark ml-2">
+            <a href="${disableUrl}" class="btn btn-orange-dark ml-2">
                 <span><op:translate key="MUTUALIZATION_DISABLE"/></span>
             </a>
         </c:if>
 
         <%--Enable--%>
-        <button type="submit" class="btn  btn-mutualized-dark ml-2">
+        <button type="submit" class="btn btn-orange-dark ml-2">
             <span>
                 <c:choose>
                     <c:when test="${form.enable}"><op:translate key="MUTUALIZATION_UPDATE"/></c:when>

@@ -359,13 +359,7 @@
                         <div class="mb-1">
                             <small class="text-secondary"><op:translate
                                     key="DOCUMENT_MUTUALIZATION_FORMAT"/></small>
-                            <strong>
-                                <c:choose>
-                                    <c:when test="${document.properties['rshr:format'] eq 'native'}"><op:translate
-                                            key="SHARED_FORMAT_NATIVE"/></c:when>
-                                    <c:otherwise><op:translate key="SHARED_FORMAT_PDF"/></c:otherwise>
-                                </c:choose>
-                            </strong>
+                            <span>&ndash;</span>
                         </div>
 
                             <%--Keywords--%>
@@ -435,10 +429,9 @@
 
 
     <c:if test="${not readOnly and not empty document.properties['mtz:sourceWebId']}">
-        <div class="card mb-3 bg-mutualized-lighter border-mutualized-dark">
-            <div class="card-body">
+        <div class="card card-custom card-custom-border-left card-custom-orange mb-3">
+            <div class="card-body py-3">
                 <p class="card-text"><op:translate key="DOCUMENT_COPIED_INFORMATION"/></p>
-
 
                 <c:choose>
                     <c:when test="${empty source}">
@@ -447,23 +440,21 @@
                     </c:when>
 
                     <c:otherwise>
-
                         <c:set var="discussionUrl"><ttc:discussion
                                 participant="${source.properties['dc:creator']}"
                                 publicationId="${document.properties['mtz:sourceWebId']}"/></c:set>
                         <p class="card-text">
-                            <a href="${discussionUrl}" class="text-mutualized-dark">
+                            <a href="${discussionUrl}" class="btn btn-link btn-link-hover-orange btn-sm text-orange-dark">
                                 <span><op:translate key="DOCUMENT_COPIED_CONTACT_AUTHOR"/></span>
                             </a>
                         </p>
 
                         <ttc:documentLink document="${source}" var="sourceLink" permalink="true"/>
                         <p class="card-text">
-                            <a href="${sourceLink.url}" class="text-mutualized-dark no-ajax-link">
+                            <a href="${sourceLink.url}" class="btn btn-link btn-link-hover-orange btn-sm text-orange-dark no-ajax-link">
                                 <span><op:translate key="DOCUMENT_COPIED_VIEW_SOURCE"/></span>
                             </a>
                         </p>
-
 
                         <%--Desynchronized indicator--%>
                         <c:if test="${desynchronizedFromSource}">
