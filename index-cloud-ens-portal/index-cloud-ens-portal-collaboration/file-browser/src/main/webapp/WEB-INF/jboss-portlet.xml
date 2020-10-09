@@ -13,8 +13,8 @@
         <header-content>
             <link rel="stylesheet" href="/css/file-browser.min.css" />
             <link rel="stylesheet" href="/css/customized-file-browser.css" />
-            <script type="text/javascript" src="/js/file-browser.js"></script>
-            <script type="text/javascript" src="/js/file-browser-upload.js"></script>
+            <script type="text/javascript" src="/js/file-browser.js"/>
+            <script type="text/javascript" src="/js/file-browser-upload.js"/>
 
             <!-- jQuery File Upload -->
             <link rel="stylesheet" type="text/css" href="/components/jquery-file-upload-9.28.0/css/jquery.fileupload.css" />
@@ -37,7 +37,7 @@
             <link rel="stylesheet" href="/css/file-browser.min.css" />
             <link rel="stylesheet" href="/css/customized-file-browser.css" />
             <link rel="stylesheet" href="/css/mutualized-file-browser.css" />
-            <script type="text/javascript" src="/js/mutualized-file-browser.js"></script>
+            <script type="text/javascript" src="/js/mutualized-file-browser.js"/>
         </header-content>
     </portlet>
 

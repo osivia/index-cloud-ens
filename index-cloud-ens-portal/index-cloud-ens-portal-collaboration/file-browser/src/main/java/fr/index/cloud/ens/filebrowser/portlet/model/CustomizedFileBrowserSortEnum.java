@@ -32,10 +32,6 @@ public enum CustomizedFileBrowserSortEnum implements AbstractFileBrowserSortFiel
      */
     SUBJECT("subject", false, true),
     /**
-     * Location sort.
-     */
-    LOCATION("location", true),
-    /**
      * Last modification sort.
      */
     LAST_MODIFICATION("last-modification"),

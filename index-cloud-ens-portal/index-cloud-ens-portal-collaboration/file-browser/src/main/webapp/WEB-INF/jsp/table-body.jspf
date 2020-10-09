@@ -46,11 +46,6 @@
                         <%--Customized column--%>
                     <%@ include file="table-body-customized-column.jspf" %>
 
-                        <%--Location--%>
-                    <c:if test="${form.listMode}">
-                        <%@ include file="table-body-location.jspf" %>
-                    </c:if>
-
                         <%--Last modification--%>
                     <%@ include file="table-body-last-modification.jspf" %>
 

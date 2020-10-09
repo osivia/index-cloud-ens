@@ -43,9 +43,9 @@ public interface TaskbarService {
      */
     String SUBJECTS_SELECTOR_ID = "subjects";
     /**
-     * Location selector identifier.
+     * Active saved search selector identifier.
      */
-    String LOCATION_SELECTOR_ID = "location";
+    String ACTIVE_SAVED_SEARCH_ID = "activeSavedSearch";
 
 
     /**
@@ -113,13 +113,23 @@ public interface TaskbarService {
 
 
     /**
+     * Get advanced search URL.
+     *
+     * @param portalControllerContext portal controller context
+     * @return URL
+     */
+    String getAdvancedSearchUrl(PortalControllerContext portalControllerContext) throws PortletException;
+
+
+    /**
      * Get saved search URL.
      *
      * @param portalControllerContext portal controller context
+     * @param searchForm              search form
      * @param id                      saved search identifier
      * @return URL
      */
-    String getSavedSearchUrl(PortalControllerContext portalControllerContext, int id) throws PortletException;
+    String getSavedSearchUrl(PortalControllerContext portalControllerContext, TaskbarSearchForm searchForm, int id) throws PortletException;
 
 
     /**

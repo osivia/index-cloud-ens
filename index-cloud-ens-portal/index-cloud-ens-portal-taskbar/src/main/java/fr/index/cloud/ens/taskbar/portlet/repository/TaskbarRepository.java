@@ -56,10 +56,9 @@ public interface TaskbarRepository {
      * @param portalControllerContext portal controller context
      * @param basePath                base path
      * @param path                    task path
-     * @param searchPath              search path, may be null
      * @return task
      */
-    Task generateFolderTask(PortalControllerContext portalControllerContext, String basePath, String path, String searchPath) throws PortletException;
+    Task generateFolderTask(PortalControllerContext portalControllerContext, String basePath, String path) throws PortletException;
 
 
     /**
@@ -68,10 +67,9 @@ public interface TaskbarRepository {
      * @param portalControllerContext portal controller context
      * @param basePath                base path
      * @param path                    folder path
-     * @param searchPath              search path, may be null
      * @return folder children
      */
-    SortedSet<FolderTask> getFolderChildren(PortalControllerContext portalControllerContext, String basePath, String path, String searchPath) throws PortletException;
+    SortedSet<FolderTask> getFolderChildren(PortalControllerContext portalControllerContext, String basePath, String path) throws PortletException;
 
 
     /**

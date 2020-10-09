@@ -57,7 +57,7 @@
                     <c:when test="${task.fancytree}">
                         <div class="fancytree overflow-hidden">
                             <ul class="ml-4">
-                                <li class="${task.active ? 'current' : (task.searchLocation ? 'search-location' : '')}"
+                                <li class="${task.active ? 'current' : ''}"
                                     data-retain="${task.selected}"
                                     data-acceptedtypes="${fn:join(task.acceptedTypes, ',')}"
                                     data-expanded="${task.selected}" data-folder="${task.folder}"
@@ -225,15 +225,13 @@
                                     </form:form>
 
                                 <%--Advanced search--%>
-                                <c:if test="${not empty task.advancedSearch}">
-                                    <div class="d-flex justify-content-end">
-                                        <a href="${task.advancedSearch.url}"
-                                           class="btn btn-link btn-link-hover-green btn-sm text-secondary text-truncate no-ajax-link">
-                                            <i class="glyphicons glyphicons-basic-search"></i>
-                                            <strong><op:translate key="TASKBAR_ADVANCED_SEARCH"/></strong>
-                                        </a>
-                                    </div>
-                                </c:if>
+                                <div class="d-flex justify-content-end">
+                                    <portlet:actionURL name="advanced-search" var="url"/>
+                                    <a href="${url}" class="btn btn-link btn-link-hover-green btn-sm text-secondary text-truncate no-ajax-link">
+                                        <i class="glyphicons glyphicons-basic-search"></i>
+                                        <strong><op:translate key="TASKBAR_ADVANCED_SEARCH"/></strong>
+                                    </a>
+                                </div>
                             </div>
                         </div>
                     </c:when>

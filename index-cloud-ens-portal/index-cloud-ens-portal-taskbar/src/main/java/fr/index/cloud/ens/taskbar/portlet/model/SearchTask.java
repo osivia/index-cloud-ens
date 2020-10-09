@@ -15,12 +15,6 @@ import org.springframework.stereotype.Component;
 public class SearchTask extends Task {
 
     /**
-     * Advanced search.
-     */
-    private Task advancedSearch;
-
-
-    /**
      * Constructor.
      */
     public SearchTask() {
@@ -33,11 +27,4 @@ public class SearchTask extends Task {
         return true;
     }
 
-    public Task getAdvancedSearch() {
-        return advancedSearch;
-    }
-
-    public void setAdvancedSearch(Task advancedSearch) {
-        this.advancedSearch = advancedSearch;
-    }
 }

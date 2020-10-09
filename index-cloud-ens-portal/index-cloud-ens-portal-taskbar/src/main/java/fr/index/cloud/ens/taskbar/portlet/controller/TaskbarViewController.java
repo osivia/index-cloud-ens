@@ -6,7 +6,6 @@ import fr.index.cloud.ens.taskbar.portlet.service.TaskbarService;
 import net.sf.json.JSONArray;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.math.NumberUtils;
-import org.apache.commons.logging.LogFactory;
 import org.osivia.portal.api.context.PortalControllerContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -87,8 +86,9 @@ public class TaskbarViewController {
     /**
      * Reset search filters action mapping.
      *
-     * @param request  action request
-     * @param response action response
+     * @param request    action request
+     * @param response   action response
+     * @param searchForm search form model attribute
      */
     @ActionMapping("reset")
     public void resetSearchFilters(ActionRequest request, ActionResponse response, @ModelAttribute("searchForm") TaskbarSearchForm searchForm) throws PortletException {
@@ -116,19 +116,37 @@ public class TaskbarViewController {
 
 
     /**
-     * Saved search action mapping.
+     * Advanced search action mapping.
      *
      * @param request  action request
      * @param response action response
-     * @param id       saved search identifier request parameter
      */
-    @ActionMapping("saved-search")
-    public void savedSearch(ActionRequest request, ActionResponse response, @RequestParam("id") String id) throws PortletException, IOException {
+    @ActionMapping("advanced-search")
+    public void advancedSearch(ActionRequest request, ActionResponse response) throws PortletException, IOException {
         // Portal controller context
         PortalControllerContext portalControllerContext = new PortalControllerContext(this.portletContext, request, response);
 
         // Redirection
-        String url = this.service.getSavedSearchUrl(portalControllerContext, NumberUtils.toInt(id));
+        String url = this.service.getAdvancedSearchUrl(portalControllerContext);
+        response.sendRedirect(url);
+    }
+
+
+    /**
+     * Saved search action mapping.
+     *
+     * @param request    action request
+     * @param response   action response
+     * @param id         saved search identifier request parameter
+     * @param searchForm search form model attribute
+     */
+    @ActionMapping("saved-search")
+    public void savedSearch(ActionRequest request, ActionResponse response, @RequestParam("id") String id, @ModelAttribute("searchForm") TaskbarSearchForm searchForm) throws PortletException, IOException {
+        // Portal controller context
+        PortalControllerContext portalControllerContext = new PortalControllerContext(this.portletContext, request, response);
+
+        // Redirection
+        String url = this.service.getSavedSearchUrl(portalControllerContext, searchForm, NumberUtils.toInt(id));
         response.sendRedirect(url);
     }
 

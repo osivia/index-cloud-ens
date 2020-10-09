@@ -5,6 +5,9 @@ import fr.index.cloud.ens.filebrowser.commons.portlet.service.AbstractFileBrowse
 import fr.index.cloud.ens.filebrowser.portlet.model.CustomizedFileBrowserForm;
 import fr.index.cloud.ens.filebrowser.portlet.model.CustomizedFileBrowserItem;
 import fr.index.cloud.ens.filebrowser.portlet.model.CustomizedFileBrowserSortEnum;
+import fr.toutatice.portail.cms.nuxeo.api.PageSelectors;
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang.BooleanUtils;
 import org.apache.commons.lang.StringUtils;
 import org.dom4j.Element;
@@ -12,7 +15,6 @@ import org.nuxeo.ecm.automation.client.model.Document;
 import org.nuxeo.ecm.automation.client.model.PropertyList;
 import org.osivia.portal.api.context.PortalControllerContext;
 import org.osivia.portal.api.html.DOM4JUtils;
-import org.osivia.services.workspace.filebrowser.portlet.model.FileBrowserForm;
 import org.osivia.services.workspace.filebrowser.portlet.model.FileBrowserSortField;
 import org.osivia.services.workspace.filebrowser.portlet.model.FileBrowserWindowProperties;
 import org.springframework.context.annotation.Primary;
@@ -20,7 +22,6 @@ import org.springframework.stereotype.Service;
 
 import javax.portlet.PortletException;
 import javax.portlet.PortletRequest;
-import java.io.IOException;
 import java.util.*;
 
 /**
@@ -34,6 +35,11 @@ import java.util.*;
 @Primary
 public class CustomizedFileBrowserServiceImpl extends AbstractFileBrowserServiceImpl implements CustomizedFileBrowserService {
 
+    /**
+     * Selector identifiers.
+     */
+    public static final List<String> SELECTOR_IDENTIFIERS = Arrays.asList(KEYWORDS_SELECTOR_ID, DOCUMENT_TYPES_SELECTOR_ID, LEVELS_SELECTOR_ID, LEVELS_SELECTOR_ID);
+
 
     /**
      * Constructor.
@@ -46,6 +52,28 @@ public class CustomizedFileBrowserServiceImpl extends AbstractFileBrowserService
     @Override
     public CustomizedFileBrowserForm getForm(PortalControllerContext portalControllerContext) throws PortletException {
         return (CustomizedFileBrowserForm) super.getForm(portalControllerContext);
+    }
+
+
+    @Override
+    protected boolean isListMode(PortalControllerContext portalControllerContext) {
+        // Portlet request
+        PortletRequest request = portalControllerContext.getRequest();
+        // Window properties
+        FileBrowserWindowProperties windowProperties = this.getWindowProperties(portalControllerContext);
+        // Selectors
+        Map<String, List<String>> selectors = PageSelectors.decodeProperties(request.getParameter(SELECTORS_PARAMETER));
+
+        boolean listMode = BooleanUtils.isTrue(windowProperties.getListMode());
+        if (!listMode && MapUtils.isNotEmpty(selectors)) {
+            Iterator<String> iterator = SELECTOR_IDENTIFIERS.iterator();
+            while (!listMode && iterator.hasNext()) {
+                String id = iterator.next();
+                listMode = CollectionUtils.isNotEmpty(selectors.get(id));
+            }
+        }
+        
+        return listMode;
     }
 
 
@@ -107,7 +135,7 @@ public class CustomizedFileBrowserServiceImpl extends AbstractFileBrowserService
         FileBrowserSortField field;
         if (windowProperties.getDefaultSortField() != null) {
             field = this.getSortField(portalControllerContext, windowProperties.getDefaultSortField(), false);
-        } else if (BooleanUtils.isTrue(windowProperties.getListMode())) {
+        } else if (this.isListMode(portalControllerContext)) {
             field = CustomizedFileBrowserSortEnum.RELEVANCE;
         } else {
             field = CustomizedFileBrowserSortEnum.TITLE;

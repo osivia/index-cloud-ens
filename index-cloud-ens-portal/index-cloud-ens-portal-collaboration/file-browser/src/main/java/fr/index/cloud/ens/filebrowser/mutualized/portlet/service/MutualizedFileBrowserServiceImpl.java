@@ -291,7 +291,7 @@ public class MutualizedFileBrowserServiceImpl extends AbstractFileBrowserService
 
 
     @Override
-    public void savePosition(PortalControllerContext portalControllerContext, MutualizedFileBrowserForm form, int pageIndex) throws PortletException {
+    public void savePosition(PortalControllerContext portalControllerContext, MutualizedFileBrowserForm form, int pageIndex) {
         // Portlet request
         PortletRequest request = portalControllerContext.getRequest();
         // Action response

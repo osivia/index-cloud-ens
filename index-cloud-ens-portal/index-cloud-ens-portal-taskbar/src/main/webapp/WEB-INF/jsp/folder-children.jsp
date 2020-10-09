@@ -11,7 +11,7 @@
 <c:if test="${not empty folder.children}">
     <ul class="ml-0">
         <c:forEach var="child" items="${folder.children}">
-            <li class="${child.active ? 'current' : (child.searchLocation ? 'search-location' : '')}" data-retain="${child.selected}" data-acceptedtypes="${fn:join(child.acceptedTypes, ',')}" data-expanded="${child.selected}" data-folder="${child.folder}" data-lazy="${child.lazy}" data-current="${child.active}" data-id="${child.id}" data-path="${child.path}">
+            <li class="${child.active ? 'current' : ''}" data-retain="${child.selected}" data-acceptedtypes="${fn:join(child.acceptedTypes, ',')}" data-expanded="${child.selected}" data-folder="${child.folder}" data-lazy="${child.lazy}" data-current="${child.active}" data-id="${child.id}" data-path="${child.path}">
                 
                 <c:if test="${not parent.selected}">
                     <c:set var="hideStyle" value="d-none" scope="page" />

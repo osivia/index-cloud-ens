@@ -31,6 +31,7 @@ public class MutualizedFileBrowserController extends AbstractFileBrowserControll
     /**
      * Portlet context.
      */
+    @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
     @Autowired
     private PortletContext portletContext;
 

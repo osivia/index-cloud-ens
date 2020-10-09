@@ -45,10 +45,6 @@ public class FolderTask extends Task {
      * Accepted types.
      */
     private String[] acceptedTypes;
-    /**
-     * Search location indicator.
-     */
-    private boolean searchLocation;
 
 
     /**
@@ -189,13 +185,5 @@ public class FolderTask extends Task {
      */
     public void setAcceptedTypes(String[] acceptedTypes) {
         this.acceptedTypes = acceptedTypes;
-    }
-
-    public boolean isSearchLocation() {
-        return searchLocation;
-    }
-
-    public void setSearchLocation(boolean searchLocation) {
-        this.searchLocation = searchLocation;
     }
 }

@@ -8,11 +8,6 @@
     <%--Customized column--%>
     <%@ include file="table-header-customized-column.jspf"%>
 
-    <%--Location--%>
-    <c:if test="${form.listMode}">
-        <%@ include file="table-header-location.jspf" %>
-    </c:if>
-
     <%--Last modification--%>
     <%@ include file="table-header-last-modification.jspf" %>
 

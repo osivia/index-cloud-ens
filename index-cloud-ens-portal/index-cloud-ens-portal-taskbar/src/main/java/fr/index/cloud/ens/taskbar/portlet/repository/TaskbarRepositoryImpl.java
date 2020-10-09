@@ -138,6 +138,7 @@ public class TaskbarRepositoryImpl implements TaskbarRepository {
         return basePath;
     }
 
+
     @Override
     public List<TaskbarTask> getNavigationTasks(PortalControllerContext portalControllerContext, String basePath) throws PortletException {
         // Navigation tasks
@@ -276,7 +277,7 @@ public class TaskbarRepositoryImpl implements TaskbarRepository {
 
 
     @Override
-    public Task generateFolderTask(PortalControllerContext portalControllerContext, String basePath, String path, String searchPath) throws PortletException {
+    public Task generateFolderTask(PortalControllerContext portalControllerContext, String basePath, String path) throws PortletException {
         // Nuxeo controller
         NuxeoController nuxeoController = new NuxeoController(portalControllerContext);
 
@@ -299,10 +300,10 @@ public class TaskbarRepositoryImpl implements TaskbarRepository {
         }
 
         // Folder task
-        FolderTask task = this.getFolderTask(portalControllerContext, currentNavigationPath, searchPath, navigationItem);
+        FolderTask task = this.getFolderTask(portalControllerContext, currentNavigationPath, navigationItem);
 
         // Children
-        this.generateFolderChildren(nuxeoController, basePath, task, searchPath);
+        this.generateFolderChildren(nuxeoController, basePath, task);
 
         return task;
     }
@@ -316,7 +317,7 @@ public class TaskbarRepositoryImpl implements TaskbarRepository {
      * @param navigationItem          navigation item
      * @return task
      */
-    private FolderTask getFolderTask(PortalControllerContext portalControllerContext, String currentNavigationPath, String searchPath, CMSItem navigationItem) {
+    private FolderTask getFolderTask(PortalControllerContext portalControllerContext, String currentNavigationPath, CMSItem navigationItem) {
         FolderTask task = this.applicationContext.getBean(FolderTask.class);
 
         // Document type
@@ -347,7 +348,7 @@ public class TaskbarRepositoryImpl implements TaskbarRepository {
         task.setActive(active);
 
         // Selected indicator
-        boolean selected = this.isSelected(path, currentNavigationPath, searchPath);
+        boolean selected = this.isSelected(path, currentNavigationPath);
         task.setSelected(selected);
 
         // Folder indicator
@@ -362,32 +363,26 @@ public class TaskbarRepositoryImpl implements TaskbarRepository {
         String[] acceptedTypes = this.getAcceptedTypes(navigationItem);
         task.setAcceptedTypes(acceptedTypes);
 
-        // Search location indicator
-        boolean searchLocation = StringUtils.equals(searchPath, path);
-        task.setSearchLocation(searchLocation);
-
         return task;
     }
 
 
     /**
      * Generate folder children.
-     *
-     * @param nuxeoController Nuxeo controller
+     *  @param nuxeoController Nuxeo controller
      * @param basePath        base path
      * @param parent          parent folder
-     * @param searchPath      search path, may be null
      */
-    private void generateFolderChildren(NuxeoController nuxeoController, String basePath, FolderTask parent, String searchPath) throws PortletException {
+    private void generateFolderChildren(NuxeoController nuxeoController, String basePath, FolderTask parent) throws PortletException {
         // Children
-        SortedSet<FolderTask> children = this.getFolderChildren(nuxeoController, basePath, parent.getPath(), searchPath);
+        SortedSet<FolderTask> children = this.getFolderChildren(nuxeoController, basePath, parent.getPath());
         parent.setChildren(children);
 
         if (CollectionUtils.isNotEmpty(children)) {
             for (FolderTask child : children) {
                 // Children
                 if (child.isSelected() || !child.isLazy()) {
-                    this.generateFolderChildren(nuxeoController, basePath, child, searchPath);
+                    this.generateFolderChildren(nuxeoController, basePath, child);
                 }
             }
         }
@@ -395,11 +390,11 @@ public class TaskbarRepositoryImpl implements TaskbarRepository {
 
 
     @Override
-    public SortedSet<FolderTask> getFolderChildren(PortalControllerContext portalControllerContext, String basePath, String path, String searchPath) throws PortletException {
+    public SortedSet<FolderTask> getFolderChildren(PortalControllerContext portalControllerContext, String basePath, String path) throws PortletException {
         // Nuxeo controller
         NuxeoController nuxeoController = new NuxeoController(portalControllerContext);
 
-        return this.getFolderChildren(nuxeoController, basePath, path, searchPath);
+        return this.getFolderChildren(nuxeoController, basePath, path);
     }
 
 
@@ -409,10 +404,9 @@ public class TaskbarRepositoryImpl implements TaskbarRepository {
      * @param nuxeoController Nuxeo controller
      * @param basePath        base path
      * @param folderPath      folder path
-     * @param searchPath      search path, may be null
      * @return folder children
      */
-    private SortedSet<FolderTask> getFolderChildren(NuxeoController nuxeoController, String basePath, String folderPath, String searchPath) throws PortletException {
+    private SortedSet<FolderTask> getFolderChildren(NuxeoController nuxeoController, String basePath, String folderPath) throws PortletException {
         // Portal controller context
         PortalControllerContext portalControllerContext = nuxeoController.getPortalCtx();
 
@@ -443,7 +437,7 @@ public class TaskbarRepositoryImpl implements TaskbarRepository {
             children = new TreeSet<>(this.folderTaskComparator);
 
             for (CMSItem navigationItem : navigationItems) {
-                FolderTask child = getFolderTask(portalControllerContext, currentNavigationPath, searchPath, navigationItem);
+                FolderTask child = getFolderTask(portalControllerContext, currentNavigationPath, navigationItem);
 
                 children.add(child);
             }
@@ -458,11 +452,10 @@ public class TaskbarRepositoryImpl implements TaskbarRepository {
      *
      * @param path                  path
      * @param currentNavigationPath current navigation path
-     * @param searchPath            search path, may be null
      * @return true if path is a parent of current navigation path
      */
-    private boolean isSelected(String path, String currentNavigationPath, String searchPath) {
-        return this.startsWith(currentNavigationPath, path) || this.startsWith(searchPath, path);
+    private boolean isSelected(String path, String currentNavigationPath) {
+        return this.startsWith(currentNavigationPath, path);
     }
 
 

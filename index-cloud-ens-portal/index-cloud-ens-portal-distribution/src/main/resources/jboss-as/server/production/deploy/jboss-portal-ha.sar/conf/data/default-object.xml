@@ -1930,6 +1930,7 @@ return nuxeoRequest.toString();</value>
                         </properties>
                         <height>0</height>
                     </window>
+
                     <window>
                         <window-name>osivia-services-workspace-quota-instance_1567782310685</window-name>
                         <instance-ref>osivia-services-workspace-quota-instance</instance-ref>
@@ -1981,6 +1982,10 @@ return nuxeoRequest.toString();</value>
                             <name>layout.id</name>
                             <value>cloud-ens-with-nav</value>
                         </property>
+                        <property>
+                            <name>osivia.cms.propagateSelectors</name>
+                            <value>1</value>
+                        </property>
                     </properties>
 
                     <security-constraint/>
@@ -2031,7 +2036,6 @@ return nuxeoRequest.toString();</value>
                                 <name>osivia.file-browser.nxql</name>
                                 <value>StringBuilder nuxeoRequest = new StringBuilder();&#13;
 nuxeoRequest.append("ecm:parentId = '").append(navigationPubInfos.getLiveId()).append("' ");&#13;
-&#13;
 return nuxeoRequest.toString();</value>
                             </property>
                             <property>
@@ -2116,76 +2120,6 @@ return nuxeoRequest.toString();</value>
                     </properties>
 
                     <security-constraint/>
-
-                    <window>
-                        <window-name>index-cloud-ens-search-instance_1562314905380</window-name>
-                        <instance-ref>index-cloud-ens-search-instance</instance-ref>
-                        <region>top</region>
-                        <properties>
-                            <property>
-                                <name>portal.windowContentType</name>
-                                <value>portlet</value>
-                            </property>
-                            <property>
-                                <name>osivia.hideTitle</name>
-                                <value>1</value>
-                            </property>
-                            <property>
-                                <name>theme.order</name>
-                                <value>0</value>
-                            </property>
-                            <property>
-                                <name>osivia.search.view</name>
-                                <value>autosubmit</value>
-                            </property>
-                            <property>
-                                <name>osivia.ajaxLink</name>
-                                <value>1</value>
-                            </property>
-                            <property>
-                                <name>osivia.hideDecorators</name>
-                                <value>1</value>
-                            </property>
-                            <property>
-                                <name>theme.dyna.partial_refresh_enabled</name>
-                                <value>true</value>
-                            </property>
-                        </properties>
-                        <height>0</height>
-                    </window>
-
-                    <window>
-                        <window-name>index-cloud-ens-search-instance_1572337507142</window-name>
-                        <instance-ref>index-cloud-ens-search-instance</instance-ref>
-                        <region>top</region>
-                        <properties>
-                            <property>
-                                <name>portal.windowContentType</name>
-                                <value>portlet</value>
-                            </property>
-                            <property>
-                                <name>osivia.title</name>
-                                <value>Rappel des filtres</value>
-                            </property>
-                            <property>
-                                <name>osivia.hideTitle</name>
-                                <value>1</value>
-                            </property>
-                            <property>
-                                <name>theme.order</name>
-                                <value>0</value>
-                            </property>
-                            <property>
-                                <name>osivia.search.view</name>
-                                <value>reminder</value>
-                            </property>
-                            <property>
-                                <name>osivia.hideDecorators</name>
-                                <value>1</value>
-                            </property>
-                        </properties>
-                        <height>0</height>
-                    </window>
 
                     <window>
                         <window-name>index-cloud-ens-taskbar-instance_1560502743858</window-name>
@@ -2362,87 +2296,6 @@ return nuxeoRequest.toString();</value>
                     </window>
 
                     <window>
-                        <window-name>index-cloud-ens-search-instance_1562314905380</window-name>
-                        <instance-ref>index-cloud-ens-search-instance</instance-ref>
-                        <region>col-1</region>
-                        <properties>
-                            <property>
-                                <name>portal.windowContentType</name>
-                                <value>portlet</value>
-                            </property>
-                            <property>
-                                <name>osivia.title</name>
-                                <value>Champ de recherche</value>
-                            </property>
-                            <property>
-                                <name>osivia.hideTitle</name>
-                                <value>1</value>
-                            </property>
-                            <property>
-                                <name>theme.order</name>
-                                <value>0</value>
-                            </property>
-                            <property>
-                                <name>osivia.search.view</name>
-                                <value>autosubmit</value>
-                            </property>
-                            <property>
-                                <name>osivia.ajaxLink</name>
-                                <value>1</value>
-                            </property>
-                            <property>
-                                <name>osivia.hideDecorators</name>
-                                <value>1</value>
-                            </property>
-                            <property>
-                                <name>theme.dyna.partial_refresh_enabled</name>
-                                <value>true</value>
-                            </property>
-                        </properties>
-                        <height>0</height>
-                    </window>
-
-                    <window>
-                        <window-name>index-cloud-ens-search-instance_1567155109496</window-name>
-                        <instance-ref>index-cloud-ens-search-instance</instance-ref>
-                        <region>top-aux</region>
-                        <properties>
-                            <property>
-                                <name>portal.windowContentType</name>
-                                <value>portlet</value>
-                            </property>
-                            <property>
-                                <name>osivia.title</name>
-                                <value>Filtres de recherche</value>
-                            </property>
-                            <property>
-                                <name>osivia.hideTitle</name>
-                                <value>1</value>
-                            </property>
-                            <property>
-                                <name>theme.order</name>
-                                <value>0</value>
-                            </property>
-                            <property>
-                                <name>osivia.search.view</name>
-                                <value>button</value>
-                            </property>
-                            <property>
-                                <name>osivia.ajaxLink</name>
-                                <value>1</value>
-                            </property>
-                            <property>
-                                <name>osivia.hideDecorators</name>
-                                <value>1</value>
-                            </property>
-                            <property>
-                                <name>theme.dyna.partial_refresh_enabled</name>
-                                <value>true</value>
-                            </property>
-                        </properties>
-                        <height>0</height>
-                    </window>
-                    <window>
                         <window-name>osivia-services-workspace-quota-instance_1567782310685</window-name>
                         <instance-ref>osivia-services-workspace-quota-instance</instance-ref>
                         <region>nav-bottom</region>
@@ -2479,13 +2332,12 @@ return nuxeoRequest.toString();</value>
                                 <name>osivia.cacheID</name>
                                 <value>quota</value>
                             </property>
-
                         </properties>
                         <height>0</height>
                     </window>
                 </page>
 
-                <page>
+                <!--<page>
                     <page-name>search-filters</page-name>
                     <display-name xml:lang="fr">Filtres de recherche</display-name>
 
@@ -2617,7 +2469,7 @@ return nuxeoRequest.toString();</value>
                         <height>0</height>
                     </window>
 
-                </page>
+                </page>-->
 
                 <page>
                     <page-name>rgpd</page-name>

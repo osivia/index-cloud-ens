@@ -10,6 +10,7 @@ import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.CharEncoding;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang.StringUtils;
+import org.jboss.portal.theme.impl.render.dynamic.DynaRenderOptions;
 import org.osivia.directory.v2.model.preferences.UserSavedSearch;
 import org.osivia.portal.api.Constants;
 import org.osivia.portal.api.PortalException;
@@ -27,6 +28,7 @@ import org.osivia.portal.api.taskbar.TaskbarTask;
 import org.osivia.portal.api.urls.IPortalUrlFactory;
 import org.osivia.portal.api.windows.PortalWindow;
 import org.osivia.portal.api.windows.WindowFactory;
+import org.osivia.portal.core.page.PageProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
@@ -153,7 +155,7 @@ public class TaskbarServiceImpl implements TaskbarService {
 
         // Active saved search
         String activeSavedSearch;
-        List<String> savedSearchValues = selectors.get("active-saved-search");
+        List<String> savedSearchValues = selectors.get(ACTIVE_SAVED_SEARCH_ID);
         if (CollectionUtils.isEmpty(savedSearchValues)) {
             activeSavedSearch = null;
         } else {
@@ -192,11 +194,6 @@ public class TaskbarServiceImpl implements TaskbarService {
         // Search
         SearchTask searchTask = this.applicationContext.getBean(SearchTask.class);
         tasks.add(searchTask);
-        // Advanced search
-        TaskbarTask advancedSearch = this.extractVirtualStaple(portalControllerContext, navigationTasks, "SEARCH_FILTERS");
-        if (advancedSearch != null) {
-            searchTask.setAdvancedSearch(this.createTask(portalControllerContext, bundle, activeId, advancedSearch));
-        }
         // Filters
         FiltersTask filters = this.applicationContext.getBean(FiltersTask.class);
         tasks.add(filters);
@@ -222,7 +219,19 @@ public class TaskbarServiceImpl implements TaskbarService {
 
         // Search form
         TaskbarSearchForm searchForm = this.applicationContext.getBean(TaskbarSearchForm.class);
+        this.fillTaskbarSearchForm(searchForm, selectors);
 
+        return searchForm;
+    }
+
+
+    /**
+     * Fill taskbar search form.
+     *
+     * @param searchForm search form
+     * @param selectors  selectors
+     */
+    private void fillTaskbarSearchForm(TaskbarSearchForm searchForm, Map<String, List<String>> selectors) {
         // Keywords
         String keywords = StringUtils.join(selectors.get(KEYWORDS_SELECTOR_ID), " ");
         searchForm.setKeywords(StringEscapeUtils.escapeHtml(keywords)); // Don't forget to escape HTML to avoid injection
@@ -238,8 +247,6 @@ public class TaskbarServiceImpl implements TaskbarService {
         // Subjects
         List<String> subjects = selectors.get(SUBJECTS_SELECTOR_ID);
         searchForm.setSubjects(subjects);
-
-        return searchForm;
     }
 
 
@@ -332,9 +339,6 @@ public class TaskbarServiceImpl implements TaskbarService {
      */
     private List<Task> createTasks(PortalControllerContext portalControllerContext, String basePath, Bundle bundle, String activeId,
                                    List<TaskbarTask> navigationTasks) throws PortletException {
-        // Search path
-        String searchPath = this.getSearchPath(portalControllerContext);
-
         List<Task> tasks;
 
         if (CollectionUtils.isEmpty(navigationTasks)) {
@@ -345,7 +349,7 @@ public class TaskbarServiceImpl implements TaskbarService {
             for (TaskbarTask navigationTask : navigationTasks) {
                 Task task;
                 if ("Folder".equals(navigationTask.getDocumentType())) {
-                    task = this.repository.generateFolderTask(portalControllerContext, basePath, navigationTask.getPath(), searchPath);
+                    task = this.repository.generateFolderTask(portalControllerContext, basePath, navigationTask.getPath());
                 } else {
                     task = this.createTask(portalControllerContext, bundle, activeId, navigationTask);
                 }
@@ -471,8 +475,11 @@ public class TaskbarServiceImpl implements TaskbarService {
         searchForm.setLevels(null);
         searchForm.setSubjects(null);
 
-        // Selectors
+        // Reset selectors
         response.setRenderParameter(SELECTORS_PARAMETER, StringUtils.EMPTY);
+
+        // Refresh other portlet model attributes
+        PageProperties.getProperties().setRefreshingPage(true);
     }
 
 
@@ -482,9 +489,6 @@ public class TaskbarServiceImpl implements TaskbarService {
         PortletRequest request = portalControllerContext.getRequest();
         // Action response
         ActionResponse response = (ActionResponse) portalControllerContext.getResponse();
-
-        // Prevent Ajax refresh
-        request.setAttribute("osivia.ajax.preventRefresh", true);
 
         // Selectors
         Map<String, List<String>> selectors = PageSelectors.decodeProperties(request.getParameter(SELECTORS_PARAMETER));
@@ -505,12 +509,49 @@ public class TaskbarServiceImpl implements TaskbarService {
         // Subjects
         selectors.put(SUBJECTS_SELECTOR_ID, searchForm.getSubjects());
 
+        // Active saved search
+        selectors.remove(ACTIVE_SAVED_SEARCH_ID);
+
         response.setRenderParameter(SELECTORS_PARAMETER, PageSelectors.encodeProperties(selectors));
+
+        // Prevent Ajax refresh
+        request.setAttribute("osivia.ajax.preventRefresh", true);
+        // Refresh other portlet model attributes
+        PageProperties.getProperties().setRefreshingPage(true);
     }
 
 
     @Override
-    public String getSavedSearchUrl(PortalControllerContext portalControllerContext, int id) throws PortletException {
+    public String getAdvancedSearchUrl(PortalControllerContext portalControllerContext) throws PortletException {
+        // Portlet request
+        PortletRequest request = portalControllerContext.getRequest();
+        // Internationalization bundle
+        Bundle bundle = this.bundleFactory.getBundle(request.getLocale());
+
+        // Portlet instance
+        String portletInstance = "index-cloud-ens-search-filters-instance";
+
+        // Window properties
+        Map<String, String> windowProperties = new HashMap<>();
+        windowProperties.put("osivia.title", bundle.getString("ADVANCED_SEARCH"));
+        windowProperties.put(DynaRenderOptions.PARTIAL_REFRESH_ENABLED, String.valueOf(true));
+        windowProperties.put("osivia.ajaxLink", String.valueOf(1));
+        windowProperties.put("osivia.back.reset", String.valueOf(true));
+
+        // URL
+        String url;
+        try {
+            url = this.portalUrlFactory.getStartPortletUrl(portalControllerContext, portletInstance, windowProperties);
+        } catch (PortalException e) {
+            throw new PortletException(e);
+        }
+
+        return url;
+    }
+
+
+    @Override
+    public String getSavedSearchUrl(PortalControllerContext portalControllerContext, TaskbarSearchForm searchForm, int id) throws PortletException {
         // Saved search
         UserSavedSearch savedSearch = this.repository.getSavedSearch(portalControllerContext, id);
 
@@ -532,9 +573,12 @@ public class TaskbarServiceImpl implements TaskbarService {
                 Map<String, List<String>> selectors = PageSelectors.decodeProperties(data);
 
                 // Add saved search selector value
-                selectors.put("active-saved-search", Collections.singletonList(String.valueOf(savedSearch.getId())));
+                selectors.put(ACTIVE_SAVED_SEARCH_ID, Collections.singletonList(String.valueOf(savedSearch.getId())));
 
                 parameters.put(SELECTORS_PARAMETER, PageSelectors.encodeProperties(selectors));
+
+                // Update model
+                this.fillTaskbarSearchForm(searchForm, selectors);
             }
 
             // CMS URL
@@ -556,11 +600,9 @@ public class TaskbarServiceImpl implements TaskbarService {
 
         // Base path
         String basePath = this.repository.getBasePath(portalControllerContext, windowProperties);
-        // Search path
-        String searchPath = this.getSearchPath(portalControllerContext);
 
         // Children
-        SortedSet<FolderTask> children = this.repository.getFolderChildren(portalControllerContext, basePath, path, searchPath);
+        SortedSet<FolderTask> children = this.repository.getFolderChildren(portalControllerContext, basePath, path);
 
         // JSON array
         JSONArray array = new JSONArray();
@@ -592,31 +634,6 @@ public class TaskbarServiceImpl implements TaskbarService {
         }
 
         return array;
-    }
-
-
-    /**
-     * Get search path.
-     *
-     * @param portalControllerContext portal controller context
-     * @return path, may be null
-     */
-    private String getSearchPath(PortalControllerContext portalControllerContext) {
-        // Portlet request
-        PortletRequest request = portalControllerContext.getRequest();
-        // Selectors
-        Map<String, List<String>> selectors = PageSelectors.decodeProperties(request.getParameter(SELECTORS_PARAMETER));
-
-        // Search path
-        String searchPath;
-        List<String> locationValues = selectors.get(LOCATION_SELECTOR_ID);
-        if (CollectionUtils.isEmpty(locationValues)) {
-            searchPath = null;
-        } else {
-            searchPath = locationValues.get(0);
-        }
-
-        return searchPath;
     }
 
 
