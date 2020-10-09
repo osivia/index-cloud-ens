@@ -21,7 +21,7 @@
         <%--Breadcrumb--%>
         <p:region regionName="breadcrumb"/>
 
-        <p:region regionName="top"/>
+        <p:region regionName="maximized"/>
     </div>
 </main>
 
