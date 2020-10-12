@@ -17,6 +17,8 @@ import org.springframework.web.context.WebApplicationContext;
  */
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+@Refreshable
+@RequestLifeCycle
 public class DetailForm {
 
     

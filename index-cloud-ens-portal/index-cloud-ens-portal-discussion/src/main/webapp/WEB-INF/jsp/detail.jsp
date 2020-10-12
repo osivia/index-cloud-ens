@@ -12,7 +12,11 @@
 <portlet:defineObjects />
 
 <portlet:actionURL name="deleteDiscussion" var="deleteDiscussionUrl" copyCurrentRenderParameters="true" />
+
+
 <c:set var="deleteDiscussionConfirmationModalId" value="${namespace}-delete-confirmation" />
+
+
 
 
 <div class="portlet-filler d-flex flex-column pr-1 flex-grow-1 discussion  col ">
@@ -56,8 +60,8 @@
 							<c:if test="${detailForm.author eq message.author}">
 
 
-								<div class="offset-2  col-10">
-									<div class="text-right text-muted small mb-1">
+								<div class="offset-2  col-10  mt-2">
+									<div class="text-right text-muted small">
 										<c:choose>
 											<c:when test="${message.date gt detailForm.today}">
 												<fmt:formatDate value="${message.date}" type="time" timeStyle="short" />
@@ -75,13 +79,9 @@
 
 								<c:set var="messageBackgroundColor">${ detailForm.options.mode eq  'admin' && message.id eq detailForm.options.messageId ? "bg-warning" : "bg-light" }</c:set>
 
-								<div class="col-10">
-									<div class="d-flex">
-										<div class=" text-muted small mb-1 mr-auto">
-											<ttc:user name="${message.author}" linkable="false" />
-										</div>
-
-										<div class="text-muted small mb-1">
+								<div class="col-10  mt-2">
+									<div class="d-flex flex-row-reverse">
+										<div class="text-muted small">
 
 
 											<c:choose>
@@ -113,8 +113,13 @@
 										</div>
 									</div>
 
-									<div class="border rounded mb-2 p-3 ${messageBackgroundColor}">${message.content}</div>
-
+									<div class="border rounded mb-2 p-3 ${messageBackgroundColor}">
+									    <div class="font-weight-bold my-1 text-info">
+                                            <ttc:user name="${message.author}" linkable="false" />
+                                        </div>
+									
+									   <p>${message.content}</p>
+                                    </div>
 								</div>
 							</c:if>
 						</div>

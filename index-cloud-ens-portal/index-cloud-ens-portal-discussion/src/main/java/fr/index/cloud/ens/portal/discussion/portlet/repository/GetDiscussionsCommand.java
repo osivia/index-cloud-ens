@@ -13,7 +13,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import fr.index.cloud.ens.portal.discussion.portlet.model.DiscussionDocument;
-import fr.index.cloud.ens.portal.discussion.portlet.model.PublicationUse;
+import fr.index.cloud.ens.portal.discussion.portlet.model.PublicationInfos;
 import fr.toutatice.portail.cms.nuxeo.api.INuxeoCommand;
 import fr.toutatice.portail.cms.nuxeo.api.NuxeoQueryFilter;
 import fr.toutatice.portail.cms.nuxeo.api.NuxeoQueryFilterContext;
@@ -33,7 +33,7 @@ public class GetDiscussionsCommand implements INuxeoCommand {
 
 
     String user;
-    Map<String, PublicationUse> webIds;
+    Map<String, PublicationInfos> webIds;
     // Date format
     
     private static DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
@@ -43,7 +43,7 @@ public class GetDiscussionsCommand implements INuxeoCommand {
      * 
 
      */
-    public GetDiscussionsCommand( String user, Map<String, PublicationUse> webIds) {
+    public GetDiscussionsCommand( String user, Map<String, PublicationInfos> webIds) {
        this.user = user;
        this.webIds = webIds;
 
@@ -66,7 +66,7 @@ public class GetDiscussionsCommand implements INuxeoCommand {
                 query.append(" OR ");
             
             String localUseDate = "";
-            PublicationUse pubUse = webIds.get(webId);
+            PublicationInfos pubUse = webIds.get(webId);
             
             // Only discussion that contains message newer than local copy
             if( pubUse.getLastRecopy() != null) {

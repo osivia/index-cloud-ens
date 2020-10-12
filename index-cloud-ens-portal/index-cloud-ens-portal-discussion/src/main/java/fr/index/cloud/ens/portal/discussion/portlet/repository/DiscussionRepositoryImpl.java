@@ -41,7 +41,7 @@ import fr.index.cloud.ens.portal.discussion.portlet.model.DetailForm;
 import fr.index.cloud.ens.portal.discussion.portlet.model.DiscussionCreation;
 import fr.index.cloud.ens.portal.discussion.portlet.model.DiscussionDocument;
 import fr.index.cloud.ens.portal.discussion.portlet.model.Options;
-import fr.index.cloud.ens.portal.discussion.portlet.model.PublicationUse;
+import fr.index.cloud.ens.portal.discussion.portlet.model.PublicationInfos;
 import fr.toutatice.portail.cms.nuxeo.api.INuxeoCommand;
 import fr.toutatice.portail.cms.nuxeo.api.NuxeoController;
 import fr.toutatice.portail.cms.nuxeo.api.discussions.DiscussionHelper;
@@ -144,13 +144,13 @@ public class DiscussionRepositoryImpl implements DiscussionRepository {
      * @throws PortalException the portal exception
      */
     @Override
-    public Map<String, PublicationUse> getLocalPublicationDiscussionsWebId(PortalControllerContext portalControllerContext, String adminModeId) throws PortalException {
+    public Map<String, PublicationInfos> getLocalPublicationDiscussionsWebId(PortalControllerContext portalControllerContext, String singleWebId) throws PortalException {
         // Tasks count
 
         HttpSession session = portalControllerContext.getHttpServletRequest().getSession();
 
         @SuppressWarnings("unchecked")
-        Map<String, PublicationUse> publicationsInfo = (Map<String, PublicationUse>) session.getAttribute(getCacheName(adminModeId));
+        Map<String, PublicationInfos> publicationsInfo = (Map<String, PublicationInfos>) session.getAttribute(getCacheName(singleWebId));
 
 
         // Refresh indicator
@@ -162,7 +162,7 @@ public class DiscussionRepositoryImpl implements DiscussionRepository {
             // Check class loader
             boolean checkClassPath = true;
             try {
-                for (PublicationUse values : publicationsInfo.values()) {
+                for (PublicationInfos values : publicationsInfo.values()) {
 
                 }
             } catch (ClassCastException e) {
@@ -234,32 +234,32 @@ public class DiscussionRepositoryImpl implements DiscussionRepository {
    
             }
 
-            if (adminModeId != null)
-                webIds.put(adminModeId, null);
+            if (singleWebId != null)
+                webIds.put(singleWebId, null);
 
             // Build titles
-            publicationsInfo = new ConcurrentHashMap<String, PublicationUse>();
+            publicationsInfo = new ConcurrentHashMap<String, PublicationInfos>();
 
             if (webIds.size() > 0) {
                 Documents publicationsTitle = (Documents) nuxeoController.executeNuxeoCommand(new GetPublicationsTitle(webIds.keySet()));
-                for (Document publicationTitle : publicationsTitle) {
-                    DocumentDTO documentDto = this.documentDao.toDTO(publicationTitle);
+                for (Document publication : publicationsTitle) {
+                    DocumentDTO documentDto = this.documentDao.toDTO(publication);
                     
-                    PublicationUse use = new PublicationUse(documentDto.getDisplayTitle());
+                    PublicationInfos use = new PublicationInfos(publication.getProperties().getString("ttc:webid"), documentDto.getDisplayTitle(), publication);
                     
-                    String copiedWebId = publicationTitle.getProperties().getString("ttc:webid");
+                    String copiedWebId = publication.getProperties().getString("ttc:webid");
                     if( copiedWebId != null)    {
                         if( webIds.get(copiedWebId) != null)    {
                             use.setLastRecopy(webIds.get(copiedWebId));
                         }
                     }
 
-                    publicationsInfo.put(publicationTitle.getProperties().getString("ttc:webid"), use);
+                    publicationsInfo.put(publication.getProperties().getString("ttc:webid"), use);
                 }
             }
 
 
-            session.setAttribute(getCacheName(adminModeId), publicationsInfo);
+            session.setAttribute(getCacheName(singleWebId), publicationsInfo);
             session.setAttribute(TIMESTAMP_ATTRIBUTE, System.currentTimeMillis());
         }
 
@@ -267,104 +267,13 @@ public class DiscussionRepositoryImpl implements DiscussionRepository {
     }
 
 
-    private String getCacheName(String adminModeId) {
-        return DiscussionHelper.ATTR_LOCAL_PUBLICATION_CACHE + "/" + adminModeId;
+    private String getCacheName(String singleWebId) {
+        return DiscussionHelper.ATTR_LOCAL_PUBLICATION_CACHE + "/" + singleWebId;
     }
 
 
-    /**
-     * Update title.
-     *
-     * @param personService the person service
-     * @param currentUser the current user
-     */
-    private String getTitleByParticipants(String currentUser, List<String> participants) {
-
-        String title = null;
-
-        if (participants != null) {
-            // Title
-            for (String name : participants) {
-                if (!StringUtils.equals(name, currentUser)) {
-                    Person person = personService.getPerson(name);
-                    if (person != null && person.getDisplayName() != null)
-                        title = person.getDisplayName();
-                }
-            }
-        }
-
-        return title;
-    }
 
 
-    /**
-     * Gets the title.
-     *
-     * @param portalControllerContext the portal controller context
-     * @param discussion the discussion
-     * @return the title
-     * @throws PortletException the portlet exception
-     */
-    private String getTitle(PortalControllerContext portalControllerContext, Document discussion, boolean adminMode) throws PortletException {
-        try {
-
-            String currentUser = portalControllerContext.getHttpServletRequest().getRemoteUser();
-            String target = discussion.getProperties().getString("disc:target");
-            
-            String title=null;
-
-            /* title by publication */
-            if (StringUtils.isNotEmpty(target)) {
-                Map<String, PublicationUse> publicationInfos;
-                if (adminMode)
-                    publicationInfos = getLocalPublicationDiscussionsWebId(portalControllerContext, target);
-                else
-                    publicationInfos = getLocalPublicationDiscussionsWebId(portalControllerContext, null);
-
-                if( publicationInfos.get(target) != null)   {
-                    title = publicationInfos.get(target).getTitle();
-                }
-           }
-
-            /* tile by participant */
-            
-            if( title == null)  {
-                PropertyList participantsProp = discussion.getProperties().getList("disc:participants");
-                List<String> participants = new ArrayList<>();
-                for (Object name : participantsProp.list()) {
-                    participants.add((String) name);
-                }
-
-                if (participants.size() > 0)
-                    title = getTitleByParticipants(currentUser, participants);
-            }
-            
-            
-            // Internationalization bundle
-            Bundle bundle = this.bundleFactory.getBundle(portalControllerContext.getHttpServletRequest().getLocale());
-            
-            // Généric title
-            if (title == null)
-                title = bundle.getString("DISCUSSION_DISCUSSIONS_TITLE_DETAIL");
-            
-            // Groupe suffix
-            String type = discussion.getProperties().getString("disc:type");
-            if (StringUtils.equals(type, DiscussionDocument.TYPE_USER_COPY))
-                title = title + " (" + bundle.getString("DISCUSSION_GROUP") + ")";
-            
-
-            return title;
-
-
-        } catch (PortalException e) {
-            throw new PortletException(e);
-        }
-    }
-
-
-    private String getTitle(PortalControllerContext portalControllerContext, Document discussion) throws PortletException {
-        return getTitle(portalControllerContext, discussion, false);
-    }
 
 
     /**
@@ -378,7 +287,7 @@ public class DiscussionRepositoryImpl implements DiscussionRepository {
         List<DiscussionDocument> discussions;
 
         try {
-             Map<String, PublicationUse> webIds = getLocalPublicationDiscussionsWebId(portalControllerContext, null);
+             Map<String, PublicationInfos> webIds = getLocalPublicationDiscussionsWebId(portalControllerContext, null);
             NuxeoController nuxeoController = getNuxeoController(portalControllerContext);
 
 
@@ -391,9 +300,10 @@ public class DiscussionRepositoryImpl implements DiscussionRepository {
             discussions = new ArrayList<>(documents.size());
 
             for (Document document : documents.list()) {
+                
 
-                DiscussionDocument discussion = new DiscussionDocument(getUserProperties(portalControllerContext), personService,
-                        portalControllerContext.getHttpServletRequest().getRemoteUser(), document, getTitle(portalControllerContext, document));
+                DiscussionDocument discussion = new DiscussionDocument(portalControllerContext, personService, bundleFactory,getUserProperties(portalControllerContext), 
+                        portalControllerContext.getHttpServletRequest().getRemoteUser(), document, getPublicationInfos(portalControllerContext, document));
                 if (discussion != null && !discussion.isMarkAsDeleted()) {
                     discussions.add(discussion);
                 }
@@ -559,13 +469,7 @@ public class DiscussionRepositoryImpl implements DiscussionRepository {
 
         String remoteUser = portalControllerContext.getRequest().getRemoteUser();
 
-        String title;
-        if (Options.MODE_ADMIN.equals(form.getOptions().getMode()))
-            title = getTitle(portalControllerContext, document, true);
-        else
-            title = getTitle(portalControllerContext, document);
-
-        DiscussionDocument discussion = new DiscussionDocument(getUserProperties(portalControllerContext), personService, remoteUser, document, title);
+        DiscussionDocument discussion = new DiscussionDocument(portalControllerContext, personService, bundleFactory, getUserProperties(portalControllerContext),  remoteUser, document,  getPublicationInfos(portalControllerContext, document));
 
         return discussion;
     }
@@ -609,19 +513,9 @@ public class DiscussionRepositoryImpl implements DiscussionRepository {
         participants.add(participant);
         participants.add(portalControllerContext.getRequest().getRemoteUser());
 
-        String title;
-
-        if (publicationId != null) {
-
-            title = getPublicationTitle(portalControllerContext, publicationId);
-        } else {
-            title = getTitleByParticipants(remoteUser, participants);
-        }
-        getPublicationTitle(portalControllerContext, publicationId);
-
-
+ 
         if (joinConversation == false) {
-            discussion = createDiscussionByParticipant(portalControllerContext, participants, remoteUser, publicationId, title);
+            discussion = createDiscussionByParticipant(portalControllerContext, participants, remoteUser, publicationId);
         } else {
 
             // Nuxeo command
@@ -631,12 +525,12 @@ public class DiscussionRepositoryImpl implements DiscussionRepository {
 
 
             if (docs.size() == 0) {
-                discussion = createDiscussionByParticipant(portalControllerContext, participants, remoteUser, publicationId, title);
+                discussion = createDiscussionByParticipant(portalControllerContext, participants, remoteUser, publicationId);
             } else if (docs.size() > 1) {
                 throw new PortletException("more than one discussion (" + remoteUser + "," + participant + ")");
             } else
-                discussion = new DiscussionDocument(getUserProperties(portalControllerContext), personService, remoteUser, docs.get(0),
-                        getTitle(portalControllerContext, docs.get(0)));
+                discussion = new DiscussionDocument(portalControllerContext, personService, bundleFactory, getUserProperties(portalControllerContext), remoteUser, docs.get(0),
+                         getPublicationInfos(portalControllerContext,  docs.get(0)));
         }
 
         return discussion;
@@ -653,10 +547,10 @@ public class DiscussionRepositoryImpl implements DiscussionRepository {
      * @throws PortletException the portlet exception
      */
     private DiscussionDocument createDiscussionByParticipant(PortalControllerContext portalControllerContext, List<String> participants, String remoteUser,
-            String publicationId, String title) throws PortletException {
+            String publicationId) throws PortletException {
         DiscussionDocument discussion;
 
-        discussion = new DiscussionDocument(getUserProperties(portalControllerContext), personService, remoteUser, title, participants, publicationId);
+        discussion = new DiscussionDocument(portalControllerContext, personService, bundleFactory, getUserProperties(portalControllerContext), remoteUser, participants, getPublicationInfos(portalControllerContext, publicationId));
         return discussion;
     }
 
@@ -678,44 +572,78 @@ public class DiscussionRepositoryImpl implements DiscussionRepository {
         Documents docs = (Documents) nuxeoController.executeNuxeoCommand(command);
 
 
-        String title = getPublicationTitle(portalControllerContext, publicationId);
-
         DiscussionDocument discussion;
         if (joinConversation == false) {
-            discussion = creationDiscussionByPublication(portalControllerContext, publicationId, remoteUser, title);
+            discussion = creationDiscussionByPublication(portalControllerContext, publicationId, remoteUser);
         } else {
 
 
             if (docs.size() == 0) {
-                discussion = creationDiscussionByPublication(portalControllerContext, publicationId, remoteUser, title);
+                discussion = creationDiscussionByPublication(portalControllerContext, publicationId, remoteUser);
             } else if (docs.size() > 1) {
                 throw new PortletException("more than one discussion by publication (" + publicationId + ")");
             } else
-                discussion = new DiscussionDocument(getUserProperties(portalControllerContext), personService, remoteUser, docs.get(0), title);
+                discussion = new DiscussionDocument(portalControllerContext, personService, bundleFactory,getUserProperties(portalControllerContext),  remoteUser, docs.get(0), getPublicationInfos(portalControllerContext, publicationId));
         }
 
         return discussion;
     }
 
 
-    private String getPublicationTitle(PortalControllerContext portalControllerContext, String publicationId) throws PortletException {
-        Map<String, PublicationUse> publications;
+    
+    
+    
+    
+
+
+
+    /**
+     * Gets the publication use.
+     *
+     * @param portalControllerContext the portal controller context
+     * @param publicationId the publication id
+     * @return the publication use
+     * @throws PortletException the portlet exception
+     */
+    private PublicationInfos getPublicationInfos(PortalControllerContext portalControllerContext, String publicationId) throws PortletException {
+        Map<String, PublicationInfos> publications;
         try {
-
-
+            // Search on local copies
             publications = getLocalPublicationDiscussionsWebId(portalControllerContext, null);
+
+
+            PublicationInfos pubUse = publications.get(publicationId);
+
+
+            if (pubUse == null) {
+                // Search per instance
+                publications = getLocalPublicationDiscussionsWebId(portalControllerContext, publicationId);
+                pubUse = publications.get(publicationId);
+            }
+
+
+            return pubUse;
+
         } catch (PortalException e) {
             throw new PortletException(e);
         }
 
-        PublicationUse pubUse = publications.get(publicationId);
-
-        String title;
-        if (pubUse != null)
-            title = pubUse.getTitle();
-        else
-            title = null;
-        return title;
+    }
+    
+    /**
+     * Gets the publication use.
+     *
+     * @param portalControllerContext the portal controller context
+     * @param publicationId the publication id
+     * @return the publication use
+     * @throws PortletException the portlet exception
+     */
+    private PublicationInfos getPublicationInfos(PortalControllerContext portalControllerContext, Document discussion) throws PortletException {
+        String target = discussion.getProperties().getString("disc:target");
+        if( StringUtils.isNotEmpty(target)) {
+            return getPublicationInfos( portalControllerContext, target);
+        }   else
+            return null;
     }
 
 
@@ -729,11 +657,10 @@ public class DiscussionRepositoryImpl implements DiscussionRepository {
      * @return the discussion document
      * @throws PortletException the portlet exception
      */
-    private DiscussionDocument creationDiscussionByPublication(PortalControllerContext portalControllerContext, String publicationId, String remoteUser,
-            String title) throws PortletException {
+    private DiscussionDocument creationDiscussionByPublication(PortalControllerContext portalControllerContext, String publicationId, String remoteUser) throws PortletException {
         DiscussionDocument discussion;
-        discussion = new DiscussionDocument(getUserProperties(portalControllerContext), personService, remoteUser, DiscussionDocument.TYPE_USER_COPY,
-                publicationId, title);
+        discussion = new DiscussionDocument(portalControllerContext, personService, bundleFactory, getUserProperties(portalControllerContext), remoteUser, DiscussionDocument.TYPE_USER_COPY,
+                 getPublicationInfos(portalControllerContext, publicationId));
         return discussion;
     }
 

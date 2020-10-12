@@ -467,4 +467,25 @@
             </div>
         </div>
     </c:if>
+
+    <c:if test="${readOnly}">
+        <div class="card card-custom card-custom-border-left card-custom-orange mb-3">
+            <div class="card-body py-3">
+ 
+                        <c:set var="discussionUrl"><ttc:discussion
+                                participant="${document.properties['dc:lastContributor']}"
+                                publicationId="${document.properties['ttc:webid']}"/></c:set>
+                        <p class="card-text">
+                            <a href="${discussionUrl}" class="btn btn-link btn-link-hover-orange btn-sm text-orange-dark">
+                                <span><op:translate key="DOCUMENT_COPIED_CONTACT_AUTHOR"/></span>
+                            </a>
+                        </p>
+                    
+
+            </div>
+        </div>
+    </c:if>
+    
+    
+  
 </div>

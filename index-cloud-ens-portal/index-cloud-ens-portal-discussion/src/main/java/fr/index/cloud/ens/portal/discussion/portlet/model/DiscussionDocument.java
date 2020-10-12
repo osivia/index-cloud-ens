@@ -9,8 +9,11 @@ import org.apache.commons.lang.StringUtils;
 import org.nuxeo.ecm.automation.client.model.Document;
 import org.nuxeo.ecm.automation.client.model.PropertyList;
 import org.nuxeo.ecm.automation.client.model.PropertyMap;
+import org.osivia.portal.api.context.PortalControllerContext;
 import org.osivia.portal.api.directory.v2.model.Person;
 import org.osivia.portal.api.directory.v2.service.PersonService;
+import org.osivia.portal.api.internationalization.Bundle;
+import org.osivia.portal.api.internationalization.IBundleFactory;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -51,10 +54,10 @@ public class DiscussionDocument {
     
 
     /** The target. */
-    private String target;
+    private final String target;
     
     /** The type. */
-    private String type;
+    private final String type;
     
 
     /** The participants. */
@@ -63,6 +66,10 @@ public class DiscussionDocument {
     /** The document. */
     private Document document;
 
+    /** The publication. */
+    private PublicationInfos publication;
+
+  
 
 
     /** The messages. */
@@ -93,6 +100,24 @@ public class DiscussionDocument {
         return markAsDeleted;
     }
 
+    
+    /**
+     * Getter for publication.
+     * @return the publication
+     */
+    public PublicationInfos getPublication() {
+        return publication;
+    }
+
+
+    
+    /**
+     * Setter for publication.
+     * @param publication the publication to set
+     */
+    public void setPublication(PublicationInfos publication) {
+        this.publication = publication;
+    }
 
     /**
      * Getter for messages.
@@ -147,26 +172,27 @@ public class DiscussionDocument {
     /**
      * Constructor.
      * 
-     * @param document document DTO
+     * @param discussion document DTO
      */
-    public DiscussionDocument(Map<String, String> userProperties, PersonService personService, String currentUser, Document document, String title) {
+    public DiscussionDocument(PortalControllerContext portalControllerContext, PersonService personService, IBundleFactory bundleFactory , Map<String, String> userProperties, String currentUser, Document discussion, PublicationInfos publicationInfos) {
 
-        id = document.getId();
-        path = document.getPath();
+        id = discussion.getId();
+        path = discussion.getPath();
 
-        webId = document.getString("ttc:webid");
-        PropertyList participantsProp = document.getProperties().getList("disc:participants");
+        webId = discussion.getString("ttc:webid");
+        PropertyList participantsProp = discussion.getProperties().getList("disc:participants");
         participants = new ArrayList<>();
         for (Object name : participantsProp.list()) {
             participants.add((String) name);
         }
         
-        target = document.getProperties().getString("disc:target");
-        type = document.getProperties().getString("disc:type");
-        this.title = title;
+        target = discussion.getProperties().getString("disc:target");
+        type = discussion.getProperties().getString("disc:type");
+        this.title = getTitle(portalControllerContext, personService, bundleFactory, participants, type, publicationInfos);
              
         
-        this.document = document;
+        this.document = discussion;
+        this.publication = publicationInfos;
 
 
         // last message
@@ -200,11 +226,16 @@ public class DiscussionDocument {
      * 
      * @param document document DTO
      */
-    public DiscussionDocument(Map<String, String> userProperties, PersonService personService, String currentUser, String title, List<String> participants, String target) {
+    public DiscussionDocument(PortalControllerContext portalControllerContext, PersonService personService, IBundleFactory bundleFactory, Map<String, String> userProperties, String currentUser, List<String> participants, PublicationInfos publication) {
         this.messages = new ArrayList<DiscussionMessage>();
         this.participants = participants;
-        this.target = target;
-        this.title = title;
+        if( publication != null)
+            this.target = publication.getTarget();
+        else
+            this.target = null;
+        this.type = null;
+        this.title = getTitle(portalControllerContext, personService, bundleFactory,  participants, type, publication);
+        this.publication = publication;        
      }
 
     
@@ -213,12 +244,16 @@ public class DiscussionDocument {
      * 
      * @param document document DTO
      */
-    public DiscussionDocument(Map<String, String> userProperties, PersonService personService, String currentUser, String type, String target, String publicationTitle) {
+    public DiscussionDocument(PortalControllerContext portalControllerContext, PersonService personService, IBundleFactory bundleFactory, Map<String, String> userProperties,  String currentUser, String type,  PublicationInfos publication) {
         this.messages = new ArrayList<DiscussionMessage>();
         
         this.type = type;
-        this.target = target;
-        this.title = publicationTitle;
+        if( publication != null)
+            this.target = publication.getTarget();
+        else
+            this.target = null;
+        this.title = getTitle(portalControllerContext, personService, bundleFactory, participants, type, publication);
+        this.publication = publication;        
 
     }
 
@@ -329,4 +364,78 @@ public class DiscussionDocument {
     public String getLastMessageExtract() {
         return lastMessageExtract;
     }
+    
+    
+
+    /**
+     * Gets the title.
+     *
+     * @param portalControllerContext the portal controller context
+     * @param discussion the discussion
+     * @return the title
+     * @throws PortletException the portlet exception
+     */
+    private String getTitle(PortalControllerContext portalControllerContext, PersonService personService, IBundleFactory bundleFactory , List<String> participants, String type, PublicationInfos publicationInfos) {
+
+
+            String currentUser = portalControllerContext.getHttpServletRequest().getRemoteUser();
+
+            
+            String title=null;
+
+            /* title by publication */
+            if ( publicationInfos != null) {
+                title = publicationInfos.getTitle();
+           }
+
+            /* tile by participant */
+            
+            if( title == null)  {
+               if (participants.size() > 0)
+                    title = getTitleByParticipants(personService, currentUser, participants);
+            }
+            
+            
+            // Internationalization bundle
+            Bundle bundle = bundleFactory.getBundle(portalControllerContext.getHttpServletRequest().getLocale());
+            
+            // Généric title
+            if (title == null)
+                title = bundle.getString("DISCUSSION_DISCUSSIONS_TITLE_DETAIL");
+            
+            // Groupe suffix
+            if (StringUtils.equals(type, DiscussionDocument.TYPE_USER_COPY))
+                title = title + " (" + bundle.getString("DISCUSSION_GROUP") + ")";
+            
+
+            return title;
+
+
+
+    }
+    
+    /**
+     * Update title.
+     *
+     * @param personService the person service
+     * @param currentUser the current user
+     */
+    private String getTitleByParticipants( PersonService personService, String currentUser, List<String> participants) {
+
+        String title = null;
+
+        if (participants != null) {
+            // Title
+            for (String name : participants) {
+                if (!StringUtils.equals(name, currentUser)) {
+                    Person person = personService.getPerson(name);
+                    if (person != null && person.getDisplayName() != null)
+                        title = person.getDisplayName();
+                }
+            }
+        }
+
+        return title;
+    }
+    
 }

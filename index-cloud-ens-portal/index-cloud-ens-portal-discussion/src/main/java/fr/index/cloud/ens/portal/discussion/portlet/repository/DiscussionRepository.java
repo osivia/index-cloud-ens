@@ -15,7 +15,7 @@ import org.osivia.portal.api.tasks.CustomTask;
 import fr.index.cloud.ens.portal.discussion.portlet.model.DetailForm;
 import fr.index.cloud.ens.portal.discussion.portlet.model.DiscussionCreation;
 import fr.index.cloud.ens.portal.discussion.portlet.model.DiscussionDocument;
-import fr.index.cloud.ens.portal.discussion.portlet.model.PublicationUse;
+import fr.index.cloud.ens.portal.discussion.portlet.model.PublicationInfos;
 import fr.toutatice.portail.cms.nuxeo.api.NuxeoController;
 import fr.toutatice.portail.cms.nuxeo.api.forms.IFormsService;
 
@@ -163,7 +163,7 @@ public interface DiscussionRepository {
      */
 
 
-    Map<String, PublicationUse> getLocalPublicationDiscussionsWebId(PortalControllerContext portalControllerContext, String adminModeId) throws PortalException;
+    Map<String, PublicationInfos> getLocalPublicationDiscussionsWebId(PortalControllerContext portalControllerContext, String adminModeId) throws PortalException;
 
 
 
