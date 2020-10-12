@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * Search filters form java-bean.
@@ -20,31 +21,19 @@ public class SearchFiltersForm {
      * Location.
      */
     private DocumentDTO location;
-    /**
-     * Modal indicator.
-     */
-    private boolean modal;
 
-    /**
-     * Level.
-     */
-    private String level;
-    /**
-     * Subject.
-     */
-    private String subject;
-    /**
-     * Document type.
-     */
-    private String documentType;
+    /** Keywords. */
+    private String keywords;
+    /** Document types. */
+    private List<String> documentTypes;
+    /** Levels. */
+    private List<String> levels;
+    /** Subjects. */
+    private List<String> subjects;
     /**
      * Location path.
      */
     private String locationPath;
-    /**
-     * Keywords.
-     */
-    private String keywords;
     /**
      * Size range.
      */
@@ -88,36 +77,36 @@ public class SearchFiltersForm {
         this.location = location;
     }
 
-    public boolean isModal() {
-        return modal;
+    public String getKeywords() {
+        return keywords;
     }
 
-    public void setModal(boolean modal) {
-        this.modal = modal;
+    public void setKeywords(String keywords) {
+        this.keywords = keywords;
     }
 
-    public String getLevel() {
-        return level;
+    public List<String> getDocumentTypes() {
+        return documentTypes;
     }
 
-    public void setLevel(String level) {
-        this.level = level;
+    public void setDocumentTypes(List<String> documentTypes) {
+        this.documentTypes = documentTypes;
     }
 
-    public String getSubject() {
-        return subject;
+    public List<String> getLevels() {
+        return levels;
     }
 
-    public void setSubject(String subject) {
-        this.subject = subject;
+    public void setLevels(List<String> levels) {
+        this.levels = levels;
     }
 
-    public String getDocumentType() {
-        return documentType;
+    public List<String> getSubjects() {
+        return subjects;
     }
 
-    public void setDocumentType(String documentType) {
-        this.documentType = documentType;
+    public void setSubjects(List<String> subjects) {
+        this.subjects = subjects;
     }
 
     public String getLocationPath() {
@@ -126,14 +115,6 @@ public class SearchFiltersForm {
 
     public void setLocationPath(String locationPath) {
         this.locationPath = locationPath;
-    }
-
-    public String getKeywords() {
-        return keywords;
-    }
-
-    public void setKeywords(String keywords) {
-        this.keywords = keywords;
     }
 
     public SearchFiltersSizeRange getSizeRange() {

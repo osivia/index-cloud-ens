@@ -167,7 +167,7 @@ public class SearchServiceImpl extends SearchCommonServiceImpl implements Search
                 reminder = new ArrayList<>();
 
                 // Displayed selectors
-                List<String> displayedSelectors = Arrays.asList(LEVEL_SELECTOR_ID, SUBJECT_SELECTOR_ID, DOCUMENT_TYPE_SELECTOR_ID, SIZE_AMOUNT_SELECTOR_ID, DATE_RANGE_SELECTOR_ID);
+                List<String> displayedSelectors = Arrays.asList(LEVELS_SELECTOR_ID, SUBJECTS_SELECTOR_ID, DOCUMENT_TYPES_SELECTOR_ID, SIZE_AMOUNT_SELECTOR_ID, DATE_RANGE_SELECTOR_ID);
 
                 for (Map.Entry<String, List<String>> selector : selectors.entrySet()) {
                     // Selector name
@@ -236,11 +236,11 @@ public class SearchServiceImpl extends SearchCommonServiceImpl implements Search
                         } else {
                             // Selector vocabulary
                             String vocabulary;
-                            if (LEVEL_SELECTOR_ID.equals(name)) {
+                            if (LEVELS_SELECTOR_ID.equals(name)) {
                                 vocabulary = "idx_level";
-                            } else if (SUBJECT_SELECTOR_ID.equals(name)) {
+                            } else if (SUBJECTS_SELECTOR_ID.equals(name)) {
                                 vocabulary = "idx_subject";
-                            } else if (DOCUMENT_TYPE_SELECTOR_ID.equals(name)) {
+                            } else if (DOCUMENT_TYPES_SELECTOR_ID.equals(name)) {
                                 vocabulary = "idx_document_type";
                             } else {
                                 vocabulary = null;
@@ -287,29 +287,8 @@ public class SearchServiceImpl extends SearchCommonServiceImpl implements Search
 
     @Override
     public String getOptionsUrl(PortalControllerContext portalControllerContext) throws PortletException {
-        // Portlet request
-        PortletRequest request = portalControllerContext.getRequest();
-
-        // Current window properties
-        SearchWindowProperties currentWindowProperties = this.getWindowProperties(portalControllerContext);
-
         // Search options window properties
         Map<String, String> properties = new HashMap<>();
-        properties.put(SearchFiltersService.MODAL_WINDOW_PROPERTY, String.valueOf(true));
-
-        if (SearchView.BUTTON.equals(currentWindowProperties.getView()) || SearchView.AUTOSUBMIT.equals(currentWindowProperties.getView())) {
-            // Selectors
-            String selectors = request.getParameter(SELECTORS_PARAMETER);
-            if (StringUtils.isNotEmpty(selectors)) {
-                properties.put(SearchFiltersService.SELECTORS_WINDOW_PROPERTY, selectors);
-            }
-        } else if (SearchView.INPUT.equals(currentWindowProperties.getView())) {
-            // Navigation path
-            String navigationPath = this.repository.getNavigationPath(portalControllerContext);
-            if (StringUtils.isNotEmpty(navigationPath)) {
-                properties.put(SearchFiltersService.NAVIGATION_PATH_WINDOW_PROPERTY, navigationPath);
-            }
-        }
 
         // URL
         String url;

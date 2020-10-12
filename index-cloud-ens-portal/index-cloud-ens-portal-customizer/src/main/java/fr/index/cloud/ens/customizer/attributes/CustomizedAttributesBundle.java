@@ -192,7 +192,7 @@ public class CustomizedAttributesBundle implements IAttributesBundle {
      * {@inheritDoc}
      */
     @Override
-    public void fill(RenderPageCommand renderPageCommand, PageRendition pageRendition, Map<String, Object> attributes) throws ControllerException {
+    public void fill(RenderPageCommand renderPageCommand, PageRendition pageRendition, Map<String, Object> attributes) {
         // Controller context
         ControllerContext controllerContext = renderPageCommand.getControllerContext();
         // Portal controller context
@@ -336,7 +336,7 @@ public class CustomizedAttributesBundle implements IAttributesBundle {
         }
         UserSavedSearch activeSavedSearch = null;
         if (MapUtils.isNotEmpty(selectors)) {
-            List<String> values = selectors.get("active-saved-search");
+            List<String> values = selectors.get("activeSavedSearch");
             if (CollectionUtils.isNotEmpty(values)) {
                 String value = values.get(0);
 

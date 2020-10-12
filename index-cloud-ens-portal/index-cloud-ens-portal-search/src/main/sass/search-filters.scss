@@ -1,0 +1,61 @@
+@import "../../../../index-cloud-ens-portal-charte/src/main/sass/cloud-ens/variables";
+@import "../../../../index-cloud-ens-portal-charte/src/main/sass/osivia/glyphicons/mixins";
+
+
+.search-filters-container {
+  > form {
+    .form-control {
+      border-style: none;
+
+      &::placeholder {
+        font-size: $small-font-size;
+      }
+    }
+
+    .input-group-text {
+      background-color: $white;
+      border-style: none;
+    }
+
+    .select2-container--bootstrap4 {
+      .select2-selection {
+        position: relative;
+
+        padding-right: 1.75rem;
+
+        border-style: none;
+
+        &::after {
+          $glyphicons-url: glyphicons-url("basic", 796, "set-down");
+
+          content: "";
+          position: absolute;
+          top: 0;
+          right: .5rem;
+
+          display: flex;
+          align-items: center;
+          height: 35px;
+          width: $glyphicons-size;
+
+          margin: {
+            top: auto;
+            bottom: auto;
+          }
+
+          background-color: currentColor;
+          font-size: $small-font-size;
+
+          mask-position: center;
+          -webkit-mask-position: center;
+          mask-repeat: no-repeat;
+          -webkit-mask-repeat: no-repeat;
+          mask-size: contain;
+          -webkit-mask-size: contain;
+          mask-image: url("#{$glyphicons-url}");
+          -webkit-mask-image: url("#{$glyphicons-url}");
+        }
+      }
+    }
+  }
+}

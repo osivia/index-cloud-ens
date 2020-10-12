@@ -11,7 +11,7 @@
         </transaction>
 
         <header-content>
-            <script type="text/javascript" src="/js/search.js"></script>
+            <script type="text/javascript" src="/js/search.js"/>
         </header-content>
     </portlet>
 
@@ -24,7 +24,8 @@
         </transaction>
 
         <header-content>
-            <script type="text/javascript" src="/js/search.js"></script>
+            <link rel="stylesheet" href="/css/search-filters.css" />
+            <script type="text/javascript" src="/js/search.js"/>
         </header-content>
     </portlet>
 

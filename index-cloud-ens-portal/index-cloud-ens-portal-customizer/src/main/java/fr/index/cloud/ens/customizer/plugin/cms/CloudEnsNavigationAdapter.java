@@ -79,7 +79,7 @@ public class CloudEnsNavigationAdapter implements INavigationAdapterModule {
 
 
     @Override
-    public Symlinks getSymlinks(PortalControllerContext portalControllerContext) throws CMSException {
+    public Symlinks getSymlinks(PortalControllerContext portalControllerContext) {
         // Symlinks
         Symlinks symlinks = new Symlinks();
 
@@ -94,14 +94,6 @@ public class CloudEnsNavigationAdapter implements INavigationAdapterModule {
             // Recent items
             Symlink recentItemsSymlink = this.virtualNavigationService.createSymlink(userWorkspace.getCmsPath(), null, CloudEnsConstants.ROOT_WORKSPACE_PATH + "/recent-items", null);
             symlinks.getLinks().add(recentItemsSymlink);
-
-            // Search
-            Symlink searchSymlink = this.virtualNavigationService.createSymlink(userWorkspace.getCmsPath(), null, CloudEnsConstants.ROOT_WORKSPACE_PATH + "/search", null);
-            symlinks.getLinks().add(searchSymlink);
-
-            // Search filters
-            Symlink searchFiltersSymlink = this.virtualNavigationService.createSymlink(userWorkspace.getCmsPath(), null, CloudEnsConstants.ROOT_WORKSPACE_PATH + "/search-filters", null);
-            symlinks.getLinks().add(searchFiltersSymlink);
         }
 
         symlinks.getPaths().add(CloudEnsConstants.ROOT_WORKSPACE_PATH);

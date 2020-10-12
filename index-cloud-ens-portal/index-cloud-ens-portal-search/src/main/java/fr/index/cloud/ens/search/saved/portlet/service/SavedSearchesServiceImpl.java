@@ -4,6 +4,7 @@ import fr.index.cloud.ens.search.common.portlet.service.SearchCommonServiceImpl;
 import fr.index.cloud.ens.search.saved.portlet.model.SavedSearchesForm;
 import fr.index.cloud.ens.search.saved.portlet.model.comparator.SavedSearchOrderComparator;
 import fr.index.cloud.ens.search.saved.portlet.repository.SavedSearchesRepository;
+import fr.toutatice.portail.cms.nuxeo.api.PageSelectors;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.osivia.directory.v2.model.preferences.UserSavedSearch;
@@ -68,7 +69,7 @@ public class SavedSearchesServiceImpl extends SearchCommonServiceImpl implements
         // Saved searches
         List<UserSavedSearch> savedSearches = this.repository.getSavedSearches(portalControllerContext);
         if (CollectionUtils.isNotEmpty(savedSearches)) {
-            Collections.sort(savedSearches, this.savedSearchOrderComparator);
+            savedSearches.sort(this.savedSearchOrderComparator);
         }
         form.setSavedSearches(savedSearches);
 
@@ -110,21 +111,37 @@ public class SavedSearchesServiceImpl extends SearchCommonServiceImpl implements
             }
         }
 
-        // Search path
-        String path = this.repository.getSearchPath(portalControllerContext);
-
         // URL
         String url;
-        if ((savedSearch == null) || StringUtils.isEmpty(path)) {
+        if (savedSearch == null) {
             url = null;
         } else {
             // Selectors
             String selectors = savedSearch.getData();
-
+            // Location
+            String location;
             // Page parameters
             Map<String, String> parameters = new HashMap<>(1);
-            if (StringUtils.isNotEmpty(selectors)) {
+
+            if (StringUtils.isEmpty(selectors)) {
+                location = null;
+            } else {
+                List<String> locations = PageSelectors.decodeProperties(selectors).get(LOCATION_SELECTOR_ID);
+                if (CollectionUtils.isEmpty(locations)) {
+                    location = null;
+                } else {
+                    location = locations.get(0);
+                }
+
                 parameters.put(SELECTORS_PARAMETER, selectors);
+            }
+
+            // Path
+            String path;
+            if (StringUtils.isEmpty(location)) {
+                path = this.repository.getUserWorkspacePath(portalControllerContext);
+            } else {
+                path = location;
             }
 
             // CMS URL

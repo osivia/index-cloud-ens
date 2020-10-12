@@ -5,7 +5,7 @@
 <%@ taglib prefix="op" uri="http://www.osivia.org/jsp/taglib/osivia-portal" %>
 <%@ taglib prefix="ttc" uri="http://www.toutatice.fr/jsp/taglib/toutatice" %>
 
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page contentType="text/html;charset=UTF-8" %>
 
 
 <portlet:actionURL name="drop" var="dropUrl"/>
@@ -22,6 +22,7 @@
 
 <div class="taskbar" data-drop-url="${dropUrl}" data-lazy-loading-url="${lazyLoadingUrl}">
     <ul class="list-unstyled">
+        <%--@elvariable id="taskbar" type="fr.index.cloud.ens.taskbar.portlet.model.Taskbar"--%>
         <c:forEach var="task" items="${taskbar.tasks}" varStatus="status">
             <li>
                 <c:choose>
@@ -157,9 +158,9 @@
                                                 <form:input path="keywords" type="search" cssClass="form-control"
                                                             placeholder="${placeholder}"/>
                                                 <div class="input-group-append">
-                                                <span class="input-group-text">
-                                                    <i class="glyphicons glyphicons-basic-search"></i>
-                                                </span>
+                                                    <span class="input-group-text">
+                                                        <i class="glyphicons glyphicons-basic-search"></i>
+                                                    </span>
                                                 </div>
                                             </div>
                                         </div>

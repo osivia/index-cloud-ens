@@ -26,6 +26,7 @@ public interface TaskbarService {
      * Selectors parameter.
      */
     String SELECTORS_PARAMETER = "selectors";
+
     /**
      * Keywords selector identifier.
      */
@@ -42,6 +43,11 @@ public interface TaskbarService {
      * Subjects selector identifier.
      */
     String SUBJECTS_SELECTOR_ID = "subjects";
+    /**
+     * Location selector identifier.
+     */
+    String LOCATION_SELECTOR_ID = "location";
+
     /**
      * Active saved search selector identifier.
      */

@@ -4,6 +4,7 @@ import fr.index.cloud.ens.search.common.portlet.service.SearchCommonServiceImpl;
 import fr.index.cloud.ens.search.filters.location.portlet.service.SearchFiltersLocationService;
 import fr.index.cloud.ens.search.filters.portlet.model.*;
 import fr.index.cloud.ens.search.filters.portlet.repository.SearchFiltersRepository;
+import fr.toutatice.portail.cms.nuxeo.api.NuxeoException;
 import fr.toutatice.portail.cms.nuxeo.api.PageSelectors;
 import fr.toutatice.portail.cms.nuxeo.api.cms.NuxeoDocumentContext;
 import fr.toutatice.portail.cms.nuxeo.api.domain.DocumentDTO;
@@ -11,7 +12,6 @@ import fr.toutatice.portail.cms.nuxeo.api.services.dao.DocumentDAO;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang.BooleanUtils;
 import org.apache.commons.lang.CharEncoding;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.math.NumberUtils;
@@ -27,8 +27,6 @@ import org.osivia.portal.api.internationalization.IBundleFactory;
 import org.osivia.portal.api.page.PageParametersEncoder;
 import org.osivia.portal.api.urls.IPortalUrlFactory;
 import org.osivia.portal.api.urls.PortalUrlType;
-import org.osivia.portal.api.windows.PortalWindow;
-import org.osivia.portal.api.windows.WindowFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
@@ -118,47 +116,32 @@ public class SearchFiltersServiceImpl extends SearchCommonServiceImpl implements
     public SearchFiltersForm getForm(PortalControllerContext portalControllerContext) throws PortletException {
         // Portlet request
         PortletRequest request = portalControllerContext.getRequest();
-        // Window
-        PortalWindow window = WindowFactory.getWindow(request);
+        // Selectors
+        Map<String, List<String>> selectors = PageSelectors.decodeProperties(request.getParameter(SELECTORS_PARAMETER));
 
         // Form
         SearchFiltersForm form = this.applicationContext.getBean(SearchFiltersForm.class);
 
-        // Modal indicator
-        boolean modal = BooleanUtils.toBoolean(window.getProperty(MODAL_WINDOW_PROPERTY));
-        form.setModal(modal);
-
-        // Selectors
-        Map<String, List<String>> selectors;
-        if (modal) {
-            selectors = PageSelectors.decodeProperties(window.getProperty(SELECTORS_WINDOW_PROPERTY));
-        } else {
-            selectors = PageSelectors.decodeProperties(request.getParameter(SELECTORS_PARAMETER));
-        }
-
-        // Level
-        String level = this.getSelectorValue(selectors, LEVEL_SELECTOR_ID);
-        form.setLevel(level);
-
-        // Subject
-        String subject = this.getSelectorValue(selectors, SUBJECT_SELECTOR_ID);
-        form.setSubject(subject);
-
-        // Document type
-        String documentType = this.getSelectorValue(selectors, DOCUMENT_TYPE_SELECTOR_ID);
-        form.setDocumentType(documentType);
-
-        // Location
-        String navigationPath = window.getProperty(NAVIGATION_PATH_WINDOW_PROPERTY);
-        if (StringUtils.isEmpty(navigationPath)) {
-            navigationPath = this.getSelectorValue(selectors, LOCATION_SELECTOR_ID);
-        }
-        form.setLocationPath(navigationPath);
-        this.updateLocation(portalControllerContext, form);
-
         // Keywords
         String keywords = this.getSelectorValue(selectors, KEYWORDS_SELECTOR_ID);
         form.setKeywords(keywords);
+
+        // Levels
+        List<String> levels = selectors.get(LEVELS_SELECTOR_ID);
+        form.setLevels(levels);
+
+        // Subjects
+        List<String> subjects = selectors.get(SUBJECTS_SELECTOR_ID);
+        form.setSubjects(subjects);
+
+        // Document types
+        List<String> documentTypes = selectors.get(DOCUMENT_TYPES_SELECTOR_ID);
+        form.setDocumentTypes(documentTypes);
+
+        // Location
+        String navigationPath = this.repository.getNavigationPath(portalControllerContext);
+        form.setLocationPath(navigationPath);
+        this.updateLocation(portalControllerContext, form);
 
         // Size range
         String sizeRangeSelector = this.getSelectorValue(selectors, SIZE_RANGE_SELECTOR_ID);
@@ -172,13 +155,13 @@ public class SearchFiltersServiceImpl extends SearchCommonServiceImpl implements
 
         // Size amount
         String sizeAmountSelector = this.getSelectorValue(selectors, SIZE_AMOUNT_SELECTOR_ID);
-        Float sizeAmout;
+        Float sizeAmount;
         if (StringUtils.isEmpty(sizeAmountSelector)) {
-            sizeAmout = null;
+            sizeAmount = null;
         } else {
-            sizeAmout = NumberUtils.toFloat(sizeAmountSelector);
+            sizeAmount = NumberUtils.toFloat(sizeAmountSelector);
         }
-        form.setSizeAmount(sizeAmout);
+        form.setSizeAmount(sizeAmount);
 
         // Size unit
         String sizeUnitSelector = this.getSelectorValue(selectors, SIZE_UNIT_SELECTOR_ID);
@@ -226,7 +209,13 @@ public class SearchFiltersServiceImpl extends SearchCommonServiceImpl implements
 
         // Document DTO
         DocumentDTO documentDto = this.getDocumentDto(portalControllerContext, path);
-        form.setLocation(documentDto);
+        if ((documentDto == null) && StringUtils.isNotEmpty(form.getLocationPath())) {
+            // Reset location path
+            form.setLocationPath(null);
+            this.updateLocation(portalControllerContext, form);
+        } else {
+            form.setLocation(documentDto);
+        }
     }
 
 
@@ -241,14 +230,26 @@ public class SearchFiltersServiceImpl extends SearchCommonServiceImpl implements
         // Document context
         NuxeoDocumentContext documentContext = this.repository.getDocumentContext(portalControllerContext, path);
 
-        return this.documentDao.toDTO(documentContext.getDocument());
+        DocumentDTO documentDto;
+        try {
+            documentDto = this.documentDao.toDTO(documentContext.getDocument());
+        } catch (NuxeoException e) {
+            documentDto = null;
+        }
+        
+        return documentDto;
     }
 
 
     @Override
     public String getSearchRedirectionUrl(PortalControllerContext portalControllerContext, SearchFiltersForm form) throws PortletException {
-        // Search path
-        String path = this.repository.getSearchPath(portalControllerContext);
+        // Redirection path
+        String path;
+        if (StringUtils.isEmpty(form.getLocationPath())) {
+            path = this.repository.getUserWorkspacePath(portalControllerContext);
+        } else {
+            path = form.getLocationPath();
+        }
 
         return this.getRedirectionUrl(portalControllerContext, form, path);
     }
@@ -278,7 +279,7 @@ public class SearchFiltersServiceImpl extends SearchCommonServiceImpl implements
             int id = max + 1;
 
             // Search data
-            String data = this.buildSelectorsParameter(portalControllerContext, form);
+            String data = this.buildSelectorsParameter(form);
 
             // Saved search
             UserSavedSearch savedSearch;
@@ -320,7 +321,7 @@ public class SearchFiltersServiceImpl extends SearchCommonServiceImpl implements
         } else {
             // Page parameters
             Map<String, String> parameters = new HashMap<>(1);
-            parameters.put(SELECTORS_PARAMETER, this.buildSelectorsParameter(portalControllerContext, form));
+            parameters.put(SELECTORS_PARAMETER, this.buildSelectorsParameter(form));
 
             // CMS URL
             url = this.portalUrlFactory.getCMSUrl(portalControllerContext, null, path, parameters, null, null, null, null,
@@ -334,42 +335,41 @@ public class SearchFiltersServiceImpl extends SearchCommonServiceImpl implements
     /**
      * Build selectors parameter.
      *
-     * @param portalControllerContext portal controller context
      * @param form                    search filters form
      * @return parameter
      */
-    private String buildSelectorsParameter(PortalControllerContext portalControllerContext, SearchFiltersForm form) {
+    private String buildSelectorsParameter(SearchFiltersForm form) {
         // Selectors
         Map<String, List<String>> selectors = new HashMap<>();
 
-        // Level
-        String level = form.getLevel();
-        if (StringUtils.isNotEmpty(level)) {
-            selectors.put(LEVEL_SELECTOR_ID, Collections.singletonList(level));
+        // Keywords
+        String keywords = form.getKeywords();
+        if (StringUtils.isNotEmpty(keywords)) {
+            selectors.put(KEYWORDS_SELECTOR_ID, Collections.singletonList(keywords));
         }
 
-        // Subject
-        String subject = form.getSubject();
-        if (StringUtils.isNotEmpty(subject)) {
-            selectors.put(SUBJECT_SELECTOR_ID, Collections.singletonList(subject));
+        // Levels
+        List<String> levels = form.getLevels();
+        if (CollectionUtils.isNotEmpty(levels)) {
+            selectors.put(LEVELS_SELECTOR_ID, levels);
         }
 
-        // Document type
-        String documentType = form.getDocumentType();
-        if (StringUtils.isNotEmpty(documentType)) {
-            selectors.put(DOCUMENT_TYPE_SELECTOR_ID, Collections.singletonList(documentType));
+        // Subjects
+        List<String> subjects = form.getSubjects();
+        if (CollectionUtils.isNotEmpty(subjects)) {
+            selectors.put(SUBJECTS_SELECTOR_ID, subjects);
+        }
+
+        // Document types
+        List<String> documentTypes = form.getDocumentTypes();
+        if (CollectionUtils.isNotEmpty(documentTypes)) {
+            selectors.put(DOCUMENT_TYPES_SELECTOR_ID, documentTypes);
         }
 
         // Location
         DocumentDTO location = form.getLocation();
         if (location != null) {
             selectors.put(LOCATION_SELECTOR_ID, Collections.singletonList(location.getPath()));
-        }
-
-        // Keywords
-        String keywords = form.getKeywords();
-        if (StringUtils.isNotEmpty(keywords)) {
-            selectors.put(KEYWORDS_SELECTOR_ID, Collections.singletonList(keywords));
         }
 
         // Size range
@@ -387,8 +387,8 @@ public class SearchFiltersServiceImpl extends SearchCommonServiceImpl implements
 
         // Computed size
         if (sizeAmount != null) {
-            Long computedSize = Math.round(new Double(sizeAmount) * Math.pow(UNIT_FACTOR, sizeUnit.getFactor()));
-            selectors.put(COMPUTED_SIZE_SELECTOR_ID, Collections.singletonList(computedSize.toString()));
+            long computedSize = Math.round(new Double(sizeAmount) * Math.pow(UNIT_FACTOR, sizeUnit.getFactor()));
+            selectors.put(COMPUTED_SIZE_SELECTOR_ID, Collections.singletonList(Long.toString(computedSize)));
         }
 
         // Date range
@@ -402,7 +402,7 @@ public class SearchFiltersServiceImpl extends SearchCommonServiceImpl implements
         }
 
         // Computed date
-        Date computedDate = this.getComputedDate(portalControllerContext, form);
+        Date computedDate = this.getComputedDate(form);
         if (computedDate != null) {
             selectors.put(COMPUTED_DATE_SELECTOR_ID, Collections.singletonList(this.formatDate(computedDate)));
         }
@@ -414,11 +414,10 @@ public class SearchFiltersServiceImpl extends SearchCommonServiceImpl implements
     /**
      * Get computed date.
      *
-     * @param portalControllerContext portal controller context
      * @param form                    search filters form
      * @return date
      */
-    private Date getComputedDate(PortalControllerContext portalControllerContext, SearchFiltersForm form) {
+    private Date getComputedDate(SearchFiltersForm form) {
         // Date range
         SearchFiltersDateRange dateRange = form.getDateRange();
 

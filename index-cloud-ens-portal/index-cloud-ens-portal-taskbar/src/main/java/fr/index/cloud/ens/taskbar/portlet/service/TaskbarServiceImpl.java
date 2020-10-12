@@ -555,30 +555,46 @@ public class TaskbarServiceImpl implements TaskbarService {
         // Saved search
         UserSavedSearch savedSearch = this.repository.getSavedSearch(portalControllerContext, id);
 
-        // Search path
-        String path = this.repository.getSearchPath(portalControllerContext);
-
         // URL
         String url;
-        if ((savedSearch == null) || StringUtils.isEmpty(path)) {
+        if (savedSearch == null) {
             url = null;
         } else {
             // Selectors data
             String data = savedSearch.getData();
+            // Location;
+            String location;
 
             // Page parameters
             Map<String, String> parameters = new HashMap<>(1);
-            if (StringUtils.isNotEmpty(data)) {
+            if (StringUtils.isEmpty(data)) {
+                location = null;
+            } else {
                 // Decoded selectors
                 Map<String, List<String>> selectors = PageSelectors.decodeProperties(data);
 
-                // Add saved search selector value
-                selectors.put(ACTIVE_SAVED_SEARCH_ID, Collections.singletonList(String.valueOf(savedSearch.getId())));
+                List<String> locations = selectors.get(LOCATION_SELECTOR_ID);
+                if (CollectionUtils.isEmpty(locations)) {
+                    location = null;
+                } else {
+                    location = locations.get(0);
+                }
 
                 parameters.put(SELECTORS_PARAMETER, PageSelectors.encodeProperties(selectors));
 
                 // Update model
                 this.fillTaskbarSearchForm(searchForm, selectors);
+            }
+
+            // Path
+            String path;
+            if (StringUtils.isEmpty(location)) {
+                // Window properties
+                TaskbarWindowProperties windowProperties = this.getWindowProperties(portalControllerContext);
+
+                path = this.repository.getBasePath(portalControllerContext, windowProperties);
+            } else {
+                path = location;
             }
 
             // CMS URL

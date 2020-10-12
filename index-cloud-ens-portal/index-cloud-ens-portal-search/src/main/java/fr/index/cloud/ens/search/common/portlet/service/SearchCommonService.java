@@ -17,25 +17,25 @@ public interface SearchCommonService {
     String SELECTORS_PARAMETER = "selectors";
 
     /**
-     * Level selector identifier.
+     * Keywords selector identifier.
      */
-    String LEVEL_SELECTOR_ID = "level";
+    String KEYWORDS_SELECTOR_ID = "keywords";
     /**
-     * Subject selector identifier.
+     * Document types selector identifier.
      */
-    String SUBJECT_SELECTOR_ID = "subject";
+    String DOCUMENT_TYPES_SELECTOR_ID = "documentTypes";
     /**
-     * Document type selector identifier.
+     * Levels selector identifier.
      */
-    String DOCUMENT_TYPE_SELECTOR_ID = "documentType";
+    String LEVELS_SELECTOR_ID = "levels";
+    /**
+     * Subjects selector identifier.
+     */
+    String SUBJECTS_SELECTOR_ID = "subjects";
     /**
      * Location selector identifier.
      */
     String LOCATION_SELECTOR_ID = "location";
-    /**
-     * Keywords selector identifier.
-     */
-    String KEYWORDS_SELECTOR_ID = "search";
     /**
      * Size range selector identifier.
      */

@@ -20,6 +20,7 @@
 </portlet:resourceURL>
 
 
+<%--@elvariable id="form" type="fr.index.cloud.ens.search.filters.location.portlet.model.SearchFiltersLocationForm"--%>
 <form:form action="${selectUrl}" method="post" modelAttribute="form" role="form">
     <%--Target path--%>
     <div class="form-group selector">

@@ -83,15 +83,6 @@ public interface TaskbarRepository {
 
 
     /**
-     * Get search path.
-     *
-     * @param portalControllerContext portal controller context
-     * @return path
-     */
-    String getSearchPath(PortalControllerContext portalControllerContext) throws PortletException;
-
-
-    /**
      * Get saved search.
      *
      * @param portalControllerContext portal controller context

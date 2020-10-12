@@ -25,69 +25,64 @@
 <c:set var="namespace"><portlet:namespace/></c:set>
 
 <c:set var="select2Searching"><op:translate key="SELECT2_SEARCHING"/></c:set>
+<c:set var="select2NoResults"><op:translate key="SELECT2_NO_RESULTS"/></c:set>
 
 
 <div class="search-filters-container">
+    <%--@elvariable id="form" type="fr.index.cloud.ens.search.filters.portlet.model.SearchFiltersForm"--%>
     <form:form action="${submitUrl}" method="post" modelAttribute="form">
-        <%--Level--%>
+        <%--Keywords--%>
         <div class="form-group row">
-            <form:label path="level" cssClass="col-md-3 col-form-label"><op:translate
-                    key="SEARCH_FILTERS_LEVEL_LABEL"/></form:label>
-            <div class="col-md-6">
-                <form:select path="level" cssClass="form-control select2 select2-default" data-url="${loadLevelsUrl}"
-                             data-searching="${select2Searching}">
-                    <c:choose>
-                        <c:when test="${empty form.level}">
-                            <form:option value=""><op:translate key="SEARCH_FILTERS_LEVEL_ALL"/></form:option>
-                        </c:when>
-
-                        <c:otherwise>
-                            <form:option value="${form.level}"><ttc:vocabularyLabel name="idx_level"
-                                                                                    key="${form.level}"/></form:option>
-                        </c:otherwise>
-                    </c:choose>
-                </form:select>
+            <form:label path="keywords" cssClass="col-md-3 col-form-label"><op:translate
+                    key="SEARCH_FILTERS_KEYWORDS_LABEL"/></form:label>
+            <div class="col-md-9">
+                <div class="input-group">
+                    <c:set var="placeholder"><op:translate key="SEARCH_FILTERS_KEYWORDS_PLACEHOLDER"/></c:set>
+                    <form:input path="keywords" cssClass="form-control" placeholder="${placeholder}"/>
+                    <div class="input-group-append">
+                        <span class="input-group-text">
+                            <i class="glyphicons glyphicons-basic-search"></i>
+                        </span>
+                    </div>
+                </div>
             </div>
         </div>
 
-        <%--Subject--%>
+        <%--Document types--%>
         <div class="form-group row">
-            <form:label path="subject" cssClass="col-md-3 col-form-label"><op:translate
-                    key="SEARCH_FILTERS_SUBJECT_LABEL"/></form:label>
-            <div class="col-md-6">
-                <form:select path="subject" cssClass="form-control select2 select2-default"
-                             data-url="${loadSubjectsUrl}"
-                             data-searching="${select2Searching}">
-                    <c:choose>
-                        <c:when test="${empty form.subject}">
-                            <form:option value=""><op:translate key="SEARCH_FILTERS_SUBJECT_ALL"/></form:option>
-                        </c:when>
-
-                        <c:otherwise>
-                            <form:option value="${form.subject}"><ttc:vocabularyLabel name="idx_subject"
-                                                                                      key="${form.subject}"/></form:option>
-                        </c:otherwise>
-                    </c:choose>
-                </form:select>
-            </div>
-        </div>
-
-        <%--Document type--%>
-        <div class="form-group row">
-            <form:label path="documentType" cssClass="col-md-3 col-form-label"><op:translate
+            <form:label path="documentTypes" cssClass="col-md-3 col-form-label"><op:translate
                     key="SEARCH_FILTERS_DOCUMENT_TYPE_LABEL"/></form:label>
             <div class="col-md-6">
-                <form:select path="documentType" cssClass="form-control select2 select2-default"
-                             data-url="${loadDocumentTypesUrl}" data-searching="${select2Searching}">
-                    <c:choose>
-                        <c:when test="${empty form.documentType}">
-                            <form:option value=""><op:translate key="SEARCH_FILTERS_DOCUMENT_TYPE_ALL"/></form:option>
-                        </c:when>
-                        <c:otherwise>
-                            <form:option value="${form.documentType}"><ttc:vocabularyLabel name="idx_document_type"
-                                                                                           key="${form.documentType}"/></form:option>
-                        </c:otherwise>
-                    </c:choose>
+                <form:select path="documentTypes" cssClass="form-control select2 select2-default" data-url="${loadDocumentTypesUrl}" data-searching="${select2Searching}" data-no-results="${select2NoResults}">
+                    <c:forEach var="documentType" items="${form.documentTypes}">
+                        <form:option value="${documentType}"><ttc:vocabularyLabel name="idx_document_type" key="${documentType}"/></form:option>
+                    </c:forEach>
+                </form:select>
+            </div>
+        </div>
+
+        <%--Levels--%>
+        <div class="form-group row">
+            <form:label path="levels" cssClass="col-md-3 col-form-label"><op:translate
+                    key="SEARCH_FILTERS_LEVEL_LABEL"/></form:label>
+            <div class="col-md-6">
+                <form:select path="levels" cssClass="form-control select2 select2-default" data-url="${loadLevelsUrl}" data-searching="${select2Searching}" data-no-results="${select2NoResults}">
+                    <c:forEach var="level" items="${form.levels}">
+                        <form:option value="${level}"><ttc:vocabularyLabel name="idx_level" key="${level}"/></form:option>
+                    </c:forEach>
+                </form:select>
+            </div>
+        </div>
+
+        <%--Subjects--%>
+        <div class="form-group row">
+            <form:label path="subjects" cssClass="col-md-3 col-form-label"><op:translate
+                    key="SEARCH_FILTERS_SUBJECT_LABEL"/></form:label>
+            <div class="col-md-6">
+                <form:select path="subjects" cssClass="form-control select2 select2-default" data-url="${loadSubjectsUrl}" data-searching="${select2Searching}" data-no-results="${select2NoResults}">
+                    <c:forEach var="subject" items="${form.subjects}">
+                        <form:option value="${subject}"><ttc:vocabularyLabel name="idx_subject" key="${subject}"/></form:option>
+                    </c:forEach>
                 </form:select>
             </div>
         </div>
@@ -97,37 +92,11 @@
             <form:label path="location" cssClass="col-md-3 col-form-label"><op:translate
                     key="SEARCH_FILTERS_LOCATION_LABEL"/></form:label>
             <div class="col-md-6">
-                <c:choose>
-                    <c:when test="${form.modal}">
-                        <p class="form-control-plaintext">
-                            <c:choose>
-                                <c:when test="${empty form.location}"><op:translate
-                                        key="SEARCH_FILTERS_LOCATION_ANYWHERE"/></c:when>
-                                <c:otherwise><ttc:title document="${form.location}" linkable="false"
-                                                        icon="true"/></c:otherwise>
-                            </c:choose>
-                        </p>
-                    </c:when>
-
-                    <c:otherwise>
-                        <a href="javascript:" class="btn btn-outline-primary" data-target="#osivia-modal"
-                           data-load-url="${locationUrl}" data-size="small"><ttc:title document="${form.location}"
-                                                                                       linkable="false" icon="true"/>
-                        </a>
-                    </c:otherwise>
-                </c:choose>
+                <a href="javascript:" class="btn btn-link btn-link-hover-primary text-primary-dark bg-white" data-target="#osivia-modal" data-load-url="${locationUrl}" data-size="small">
+                    <span><ttc:title document="${form.location}" linkable="false" icon="true"/></span>
+                </a>
             </div>
             <form:hidden path="locationPath"/>
-        </div>
-
-        <%--Keywords--%>
-        <div class="form-group row">
-            <form:label path="keywords" cssClass="col-md-3 col-form-label"><op:translate
-                    key="SEARCH_FILTERS_KEYWORDS_LABEL"/></form:label>
-            <div class="col-md-9">
-                <c:set var="placeholder"><op:translate key="SEARCH_FILTERS_KEYWORDS_PLACEHOLDER"/></c:set>
-                <form:input path="keywords" cssClass="form-control" placeholder="${placeholder}"/>
-            </div>
         </div>
 
         <%--Size--%>
@@ -183,20 +152,11 @@
         <div class="row">
             <div class="col-md-9 offset-md-3">
                 <div class="text-right">
-                    <c:if test="${not form.modal}">
-                        <%--Save search--%>
-                        <button type="button" class="btn btn-secondary"
-                                data-save-search-popover="${saveSearchPopoverUrl}">
-                            <span><op:translate key="SEARCH_FILTERS_SAVE"/></span>
-                        </button>
-                    </c:if>
-
-                    <c:if test="${form.modal}">
-                        <%--Cancel--%>
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">
-                            <span><op:translate key="CANCEL"/></span>
-                        </button>
-                    </c:if>
+                    <%--Save search--%>
+                    <button type="button" class="btn btn-secondary"
+                            data-save-search-popover="${saveSearchPopoverUrl}">
+                        <span><op:translate key="SEARCH_FILTERS_SAVE"/></span>
+                    </button>
 
                     <%--Submit--%>
                     <button type="submit" name="search" class="btn btn-primary">

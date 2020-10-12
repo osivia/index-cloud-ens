@@ -17,6 +17,15 @@ import java.io.IOException;
 public interface SearchFiltersRepository extends SearchCommonRepository {
 
     /**
+     * Get navigation path.
+     *
+     * @param portalControllerContext portal controller context
+     * @return navigation path
+     */
+    String getNavigationPath(PortalControllerContext portalControllerContext) throws PortletException;
+
+
+    /**
      * Get document context.
      *
      * @param portalControllerContext portal controller context

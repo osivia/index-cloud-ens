@@ -20,7 +20,7 @@
 
     <c:if test="${view eq 'thumbnails' or form.listMode}">
         <div class="dropdown">
-            <a href="javascript:" class="btn btn-link btn-link-hover-orange btn-sm text-secondary-light bg-white ml-2 dropdown-toggle no-ajax-link" data-toggle="dropdown">
+            <a href="javascript:" class="btn btn-link btn-link-hover-primary btn-sm text-secondary-light bg-white ml-2 dropdown-toggle no-ajax-link" data-toggle="dropdown">
                     <span>
                         <c:choose>
                             <c:when test="${empty form.items or fn:length(form.items) eq 1}"><op:translate

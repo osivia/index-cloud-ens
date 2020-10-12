@@ -23,19 +23,6 @@ public interface SearchFiltersService extends SearchCommonService {
      */
     String PORTLET_INSTANCE = "index-cloud-ens-search-filters-instance";
 
-    /**
-     * Modal indicator window property.
-     */
-    String MODAL_WINDOW_PROPERTY = "osivia.search.modal";
-    /**
-     * Navigation path window property.
-     */
-    String NAVIGATION_PATH_WINDOW_PROPERTY = "osivia.search.navigation-path";
-    /**
-     * Selectors window property.
-     */
-    String SELECTORS_WINDOW_PROPERTY = "osivia.search.selectors";
-
 
     /**
      * Get search filters form.

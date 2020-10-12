@@ -13,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Repository;
 
-import javax.portlet.PortletException;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -33,8 +32,25 @@ public class SearchFiltersRepositoryImpl extends SearchCommonRepositoryImpl impl
     private ApplicationContext applicationContext;
 
 
+    /**
+     * Constructor.
+     */
+    public SearchFiltersRepositoryImpl() {
+        super();
+    }
+
+
     @Override
-    public NuxeoDocumentContext getDocumentContext(PortalControllerContext portalControllerContext, String path) throws PortletException {
+    public String getNavigationPath(PortalControllerContext portalControllerContext) {
+        // Nuxeo controller
+        NuxeoController nuxeoController = new NuxeoController(portalControllerContext);
+
+        return nuxeoController.getNavigationPath();
+    }
+
+
+    @Override
+    public NuxeoDocumentContext getDocumentContext(PortalControllerContext portalControllerContext, String path) {
         // Nuxeo controller
         NuxeoController nuxeoController = new NuxeoController(portalControllerContext);
 
