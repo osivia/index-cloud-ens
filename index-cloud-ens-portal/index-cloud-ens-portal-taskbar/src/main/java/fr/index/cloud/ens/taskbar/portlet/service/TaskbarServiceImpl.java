@@ -518,6 +518,8 @@ public class TaskbarServiceImpl implements TaskbarService {
         request.setAttribute("osivia.ajax.preventRefresh", true);
         // Refresh other portlet model attributes
         PageProperties.getProperties().setRefreshingPage(true);
+        
+        request.setAttribute(Constants.PORTLET_ATTR_UNSET_MAX_MODE, String.valueOf(true));
     }
 
 
