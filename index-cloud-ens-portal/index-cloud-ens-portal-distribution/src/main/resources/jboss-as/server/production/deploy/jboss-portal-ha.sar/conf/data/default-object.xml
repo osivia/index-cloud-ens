@@ -1624,9 +1624,46 @@ return nuxeoRequest.toString();</value>
                     </window>
 
                     <window>
+                        <window-name>index-cloud-ens-search-eraser-instance_1589469571873</window-name>
+                        <instance-ref>index-cloud-ens-search-eraser-instance</instance-ref>
+                        <region>nav-1</region>
+                        <properties>
+                            <property>
+                                <name>portal.windowContentType</name>
+                                <value>portlet</value>
+                            </property>
+                            <property>
+                                <name>osivia.hideTitle</name>
+                                <value>1</value>
+                            </property>
+                            <property>
+                                <name>theme.order</name>
+                                <value>0</value>
+                            </property>
+                            <property>
+                                <name>osivia.ajaxLink</name>
+                                <value>1</value>
+                            </property>
+                            <property>
+                                <name>osivia.hideDecorators</name>
+                                <value>1</value>
+                            </property>
+                            <property>
+                                <name>osivia.hideEmptyPortlet</name>
+                                <value>1</value>
+                            </property>
+                            <property>
+                                <name>theme.dyna.partial_refresh_enabled</name>
+                                <value>true</value>
+                            </property>
+                        </properties>
+                        <height>0</height>
+                    </window>
+
+                    <window>
                         <window-name>toutatice-portail-cms-nuxeo-keywordsSelectorPortletInstance_1574418275740</window-name>
                         <instance-ref>toutatice-portail-cms-nuxeo-keywordsSelectorPortletInstance</instance-ref>
-                        <region>nav</region>
+                        <region>nav-1</region>
                         <properties>
                             <property>
                                 <name>portal.windowContentType</name>
@@ -1637,16 +1674,12 @@ return nuxeoRequest.toString();</value>
                                 <value>Mots clés</value>
                             </property>
                             <property>
-                                <name>osivia.libelle</name>
-                                <value>Mots clés</value>
-                            </property>
-                            <property>
                                 <name>osivia.hideTitle</name>
                                 <value>1</value>
                             </property>
                             <property>
                                 <name>theme.order</name>
-                                <value>0</value>
+                                <value>1</value>
                             </property>
                             <property>
                                 <name>osivia.selectorId</name>
@@ -1675,7 +1708,7 @@ return nuxeoRequest.toString();</value>
                     <window>
                         <window-name>toutatice-portail-cms-nuxeo-vocabulary-select2-instance_1574420373442</window-name>
                         <instance-ref>toutatice-portail-cms-nuxeo-vocabulary-select2-instance</instance-ref>
-                        <region>nav</region>
+                        <region>nav-1</region>
                         <properties>
                             <property>
                                 <name>osivia.selector.id</name>
@@ -1687,7 +1720,7 @@ return nuxeoRequest.toString();</value>
                             </property>
                             <property>
                                 <name>osivia.title</name>
-                                <value>Type de document</value>
+                                <value>Catégorie</value>
                             </property>
                             <property>
                                 <name>osivia.hideTitle</name>
@@ -1714,16 +1747,12 @@ return nuxeoRequest.toString();</value>
                                 <value>true</value>
                             </property>
                             <property>
-                                <name>osivia.selector.label</name>
-                                <value>Type</value>
-                            </property>
-                            <property>
                                 <name>osivia.selector.monoValued</name>
                                 <value>true</value>
                             </property>
                             <property>
                                 <name>osivia.selector.allLabel</name>
-                                <value>Tous</value>
+                                <value>Toutes les catégories</value>
                             </property>
                         </properties>
                         <height>0</height>
@@ -1732,7 +1761,7 @@ return nuxeoRequest.toString();</value>
                     <window>
                         <window-name>toutatice-portail-cms-nuxeo-vocabulary-select2-instance_1574421022476</window-name>
                         <instance-ref>toutatice-portail-cms-nuxeo-vocabulary-select2-instance</instance-ref>
-                        <region>nav</region>
+                        <region>nav-1</region>
                         <properties>
                             <property>
                                 <name>osivia.selector.id</name>
@@ -1771,16 +1800,12 @@ return nuxeoRequest.toString();</value>
                                 <value>true</value>
                             </property>
                             <property>
-                                <name>osivia.selector.label</name>
-                                <value>Niveau</value>
-                            </property>
-                            <property>
                                 <name>osivia.selector.monoValued</name>
                                 <value>true</value>
                             </property>
                             <property>
                                 <name>osivia.selector.allLabel</name>
-                                <value>Tous</value>
+                                <value>Tous niveaux</value>
                             </property>
                         </properties>
                         <height>0</height>
@@ -1789,7 +1814,7 @@ return nuxeoRequest.toString();</value>
                     <window>
                         <window-name>toutatice-portail-cms-nuxeo-vocabulary-select2-instance_1574421386413</window-name>
                         <instance-ref>toutatice-portail-cms-nuxeo-vocabulary-select2-instance</instance-ref>
-                        <region>nav</region>
+                        <region>nav-1</region>
                         <properties>
                             <property>
                                 <name>osivia.selector.id</name>
@@ -1828,53 +1853,12 @@ return nuxeoRequest.toString();</value>
                                 <value>true</value>
                             </property>
                             <property>
-                                <name>osivia.selector.label</name>
-                                <value>Matière</value>
-                            </property>
-                            <property>
                                 <name>osivia.selector.monoValued</name>
                                 <value>true</value>
                             </property>
                             <property>
                                 <name>osivia.selector.allLabel</name>
-                                <value>Toutes</value>
-                            </property>
-                        </properties>
-                        <height>0</height>
-                    </window>
-
-                    <window>
-                        <window-name>index-cloud-ens-file-browser-filter-eraser-instance_1589469571873</window-name>
-                        <instance-ref>index-cloud-ens-file-browser-filter-eraser-instance</instance-ref>
-                        <region>nav</region>
-                        <properties>
-                            <property>
-                                <name>portal.windowContentType</name>
-                                <value>portlet</value>
-                            </property>
-                            <property>
-                                <name>osivia.hideTitle</name>
-                                <value>1</value>
-                            </property>
-                            <property>
-                                <name>theme.order</name>
-                                <value>5</value>
-                            </property>
-                            <property>
-                                <name>osivia.ajaxLink</name>
-                                <value>1</value>
-                            </property>
-                            <property>
-                                <name>osivia.hideDecorators</name>
-                                <value>1</value>
-                            </property>
-                            <property>
-                                <name>osivia.hideEmptyPortlet</name>
-                                <value>1</value>
-                            </property>
-                            <property>
-                                <name>theme.dyna.partial_refresh_enabled</name>
-                                <value>true</value>
+                                <value>Toutes les matières</value>
                             </property>
                         </properties>
                         <height>0</height>
@@ -2045,9 +2029,14 @@ List documentTypes = params.get("documentTypes");&#13;
 List levels = params.get("levels");&#13;
 // Subjects&#13;
 List subjects = params.get("subjects");&#13;
+// Size&#13;
+List sizes = params.get("size");&#13;
+List sizeRanges = params.get("size-range");&#13;
+// Date&#13;
+List dates = params.get("date");&#13;
 &#13;
 StringBuilder nuxeoRequest = new StringBuilder();&#13;
-if (StringUtils.isEmpty(keywords) &amp;&amp; CollectionUtils.isEmpty(documentTypes) &amp;&amp; CollectionUtils.isEmpty(levels) &amp;&amp; CollectionUtils.isEmpty(subjects)) {&#13;
+if (StringUtils.isEmpty(keywords) &amp;&amp; CollectionUtils.isEmpty(documentTypes) &amp;&amp; CollectionUtils.isEmpty(levels) &amp;&amp; CollectionUtils.isEmpty(subjects) &amp;&amp; CollectionUtils.isEmpty(sizes) &amp;&amp; CollectionUtils.isEmpty(sizeRanges) &amp;&amp; CollectionUtils.isEmpty(dates)) {&#13;
 nuxeoRequest.append("ecm:parentId = '").append(navigationPubInfos.getLiveId()).append("' ");&#13;
 } else {&#13;
 nuxeoRequest.append("ecm:path STARTSWITH '").append(navigationPath).append("' ");&#13;
@@ -2080,6 +2069,14 @@ first ? first = false : nuxeoRequest.append("OR ");&#13;
 nuxeoRequest.append("idxcl:subjectsTree STARTSWITH '").append(subject).append("' ");&#13;
 }&#13;
 nuxeoRequest.append(") ");&#13;
+}&#13;
+&#13;
+if (CollectionUtils.isNotEmpty(sizes) &amp;&amp; CollectionUtils.isNotEmpty(sizeRanges)) {&#13;
+nuxeoRequest.append("AND file:content/length ").append("LESS".equals(sizeRanges.get(0)) ? "&lt;" : "&gt;").append(" ").append(sizes.get(0)).append(" ");&#13;
+}&#13;
+&#13;
+if (CollectionUtils.isNotEmpty(dates)) {&#13;
+nuxeoRequest.append("AND dc:modified &gt;= DATE '").append(dates.get(0)).append("' ");&#13;
 }&#13;
 &#13;
 return nuxeoRequest.toString();</value>

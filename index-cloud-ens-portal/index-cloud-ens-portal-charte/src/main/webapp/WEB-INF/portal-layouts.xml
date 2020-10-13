@@ -52,7 +52,8 @@
         <uri>/layouts/mutualization/index.jsp</uri>
         <uri state="maximized">/layouts/mutualization/maximized.jsp</uri>
         <regions>
-            <region name="nav" />
+            <region name="nav-1" />
+            <region name="nav-2" />
             <region name="top" />
         </regions>
     </layout>

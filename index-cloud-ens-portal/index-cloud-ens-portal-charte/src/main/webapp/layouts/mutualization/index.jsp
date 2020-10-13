@@ -24,10 +24,18 @@
                     <div id="drawer" class="col d-flex flex-column overflow-auto bg-light shadow">
                         <div class="py-4 py-md-5">
                             <p class="text-center">
-                                <strong><op:translate key="LAYOUT_MUTUALIZATION_NAV_TITLE"/></strong>
+                                <strong><op:translate key="LAYOUT_MUTUALIZATION_NAV_1_TITLE"/></strong>
                             </p>
 
-                            <p:region regionName="nav"/>
+                            <p:region regionName="nav-1"/>
+
+                            <hr class="my-4">
+
+                            <p class="text-center">
+                                <strong><op:translate key="LAYOUT_MUTUALIZATION_NAV_2_TITLE"/></strong>
+                            </p>
+
+                            <p:region regionName="nav-2"/>
                         </div>
                     </div>
                 </div>

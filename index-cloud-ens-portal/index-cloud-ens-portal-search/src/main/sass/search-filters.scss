@@ -36,13 +36,14 @@
           display: flex;
           align-items: center;
           height: 35px;
-          width: $glyphicons-size;
+          width: 1em;
 
           margin: {
             top: auto;
             bottom: auto;
           }
 
+          color: $gray-500;
           background-color: currentColor;
           font-size: $small-font-size;
 
