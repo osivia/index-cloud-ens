@@ -28,7 +28,7 @@
 	
 	        <%--Title--%>
 	        <div class="flex-shrink-1 mr-2 text-truncate">
-	            <strong>${publication.title}</strong>
+	            <strong>${publication.displayTitle}</strong>
 	        </div>
 	
 	        <%--Size--%>
