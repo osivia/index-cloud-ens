@@ -35,7 +35,9 @@
                                 <strong><op:translate key="LAYOUT_MUTUALIZATION_NAV_2_TITLE"/></strong>
                             </p>
 
-                            <p:region regionName="nav-2"/>
+                            <div class="ml-3">
+                                <p:region regionName="nav-2"/>
+                            </div>
                         </div>
                     </div>
                 </div>

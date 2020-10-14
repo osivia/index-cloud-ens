@@ -1,6 +1,5 @@
 package fr.index.cloud.ens.search.common.portlet.repository;
 
-import org.osivia.directory.v2.model.preferences.UserPreferences;
 import org.osivia.directory.v2.model.preferences.UserSavedSearch;
 import org.osivia.portal.api.context.PortalControllerContext;
 
@@ -39,20 +38,12 @@ public interface SearchCommonRepository {
 
 
     /**
-     * Get search filters path.
-     *
-     * @param portalControllerContext portal controller context
-     * @return path
-     */
-    String getSearchFiltersPath(PortalControllerContext portalControllerContext) throws PortletException;
-
-
-    /**
      * Get saved searches.
      *
      * @param portalControllerContext portal controller context
+     * @param categoryId              saved searches category identifier
      * @return saved searches
      */
-    List<UserSavedSearch> getSavedSearches(PortalControllerContext portalControllerContext) throws PortletException;
+    List<UserSavedSearch> getSavedSearches(PortalControllerContext portalControllerContext, String categoryId) throws PortletException;
 
 }

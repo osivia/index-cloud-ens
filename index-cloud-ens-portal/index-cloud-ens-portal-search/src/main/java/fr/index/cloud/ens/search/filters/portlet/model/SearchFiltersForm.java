@@ -21,6 +21,8 @@ public class SearchFiltersForm {
      * Location.
      */
     private DocumentDTO location;
+    /** Mutualized space indicator. */
+    private boolean mutualizedSpace;
 
     /** Keywords. */
     private String keywords;
@@ -75,6 +77,14 @@ public class SearchFiltersForm {
 
     public void setLocation(DocumentDTO location) {
         this.location = location;
+    }
+
+    public boolean isMutualizedSpace() {
+        return mutualizedSpace;
+    }
+
+    public void setMutualizedSpace(boolean mutualizedSpace) {
+        this.mutualizedSpace = mutualizedSpace;
     }
 
     public String getKeywords() {

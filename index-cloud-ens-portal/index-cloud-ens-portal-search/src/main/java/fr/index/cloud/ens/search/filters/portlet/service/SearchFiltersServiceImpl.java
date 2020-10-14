@@ -118,9 +118,15 @@ public class SearchFiltersServiceImpl extends SearchCommonServiceImpl implements
         PortletRequest request = portalControllerContext.getRequest();
         // Selectors
         Map<String, List<String>> selectors = PageSelectors.decodeProperties(request.getParameter(SELECTORS_PARAMETER));
+        // Navigation path
+        String navigationPath = this.repository.getNavigationPath(portalControllerContext);
 
         // Form
         SearchFiltersForm form = this.applicationContext.getBean(SearchFiltersForm.class);
+
+        // Mutualization space indicator
+        boolean mutualizedSpace = StringUtils.startsWith(navigationPath, MUTUALIZED_SPACE_PATH);
+        form.setMutualizedSpace(mutualizedSpace);
 
         // Keywords
         String keywords = this.getSelectorValue(selectors, KEYWORDS_SELECTOR_ID);
@@ -139,9 +145,10 @@ public class SearchFiltersServiceImpl extends SearchCommonServiceImpl implements
         form.setDocumentTypes(documentTypes);
 
         // Location
-        String navigationPath = this.repository.getNavigationPath(portalControllerContext);
-        form.setLocationPath(navigationPath);
-        this.updateLocation(portalControllerContext, form);
+        if (!mutualizedSpace) {
+            form.setLocationPath(navigationPath);
+            this.updateLocation(portalControllerContext, form);
+        }
 
         // Size range
         String sizeRangeSelector = this.getSelectorValue(selectors, SIZE_RANGE_SELECTOR_ID);
@@ -245,7 +252,9 @@ public class SearchFiltersServiceImpl extends SearchCommonServiceImpl implements
     public String getSearchRedirectionUrl(PortalControllerContext portalControllerContext, SearchFiltersForm form) throws PortletException {
         // Redirection path
         String path;
-        if (StringUtils.isEmpty(form.getLocationPath())) {
+        if (form.isMutualizedSpace()) {
+            path = MUTUALIZED_SPACE_PATH;
+        } else if (StringUtils.isEmpty(form.getLocationPath())) {
             path = this.repository.getUserWorkspacePath(portalControllerContext);
         } else {
             path = form.getLocationPath();
@@ -258,6 +267,14 @@ public class SearchFiltersServiceImpl extends SearchCommonServiceImpl implements
     @Override
     public String saveSearch(PortalControllerContext portalControllerContext, SearchFiltersForm form) throws PortletException {
         if (StringUtils.isNotBlank(form.getSavedSearchDisplayName())) {
+            // Saved search category identifier
+            String categoryId;
+            if (form.isMutualizedSpace()) {
+                categoryId = MUTUALIZED_SAVED_SEARCHES_CATEGORY_ID;
+            } else {
+                categoryId = StringUtils.EMPTY;
+            }
+
             // User preferences
             UserPreferences userPreferences;
             try {
@@ -266,17 +283,18 @@ public class SearchFiltersServiceImpl extends SearchCommonServiceImpl implements
                 throw new PortletException(e);
             }
             // Saved searches
-            List<UserSavedSearch> savedSearches = userPreferences.getSavedSearches();
+            List<UserSavedSearch> savedSearches = userPreferences.getSavedSearches(categoryId);
             if (CollectionUtils.isEmpty(savedSearches)) {
                 savedSearches = new ArrayList<>(1);
             }
 
             // Search identifier
-            int max = 0;
-            for (UserSavedSearch savedSearch : savedSearches) {
-                max = Math.max(max, savedSearch.getId());
+            int id;
+            try {
+                id = this.userPreferencesService.generateUserSavedSearchId(portalControllerContext, userPreferences);
+            } catch (PortalException e) {
+                throw new PortletException(e);
             }
-            int id = max + 1;
 
             // Search data
             String data = this.buildSelectorsParameter(form);
@@ -293,14 +311,11 @@ public class SearchFiltersServiceImpl extends SearchCommonServiceImpl implements
             savedSearches.add(savedSearch);
 
             // Update user preferences
-            userPreferences.setSavedSearches(savedSearches);
+            userPreferences.setSavedSearches(categoryId, savedSearches);
             userPreferences.setUpdated(true);
         }
 
-        // Search filters path
-        String path = this.repository.getSearchFiltersPath(portalControllerContext);
-
-        return this.getRedirectionUrl(portalControllerContext, form, path);
+        return this.getSearchRedirectionUrl(portalControllerContext, form);
     }
 
 

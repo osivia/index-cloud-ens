@@ -2,6 +2,7 @@ package fr.index.cloud.ens.search.saved.portlet.service;
 
 import fr.index.cloud.ens.search.common.portlet.service.SearchCommonService;
 import fr.index.cloud.ens.search.saved.portlet.model.SavedSearchesForm;
+import fr.index.cloud.ens.search.saved.portlet.model.SavedSearchesWindowProperties;
 import org.osivia.portal.api.context.PortalControllerContext;
 
 import javax.portlet.PortletException;
@@ -13,6 +14,30 @@ import javax.portlet.PortletException;
  * @see SearchCommonService
  */
 public interface SavedSearchesService extends SearchCommonService {
+
+    /**
+     * Saved searches category identifier.
+     */
+    String CATEGORY_ID_WINDOW_PROPERTY = "osivia.search.category-id";
+
+
+    /**
+     * Get window properties.
+     *
+     * @param portalControllerContext portal controller context
+     * @return window properties
+     */
+    SavedSearchesWindowProperties getWindowProperties(PortalControllerContext portalControllerContext) throws PortletException;
+
+
+    /**
+     * Set window properties.
+     *
+     * @param portalControllerContext portal controller context
+     * @param windowProperties        window properties
+     */
+    void setWindowProperties(PortalControllerContext portalControllerContext, SavedSearchesWindowProperties windowProperties) throws PortletException;
+
 
     /**
      * Get saved searches form.

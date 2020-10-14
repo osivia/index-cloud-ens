@@ -88,16 +88,18 @@
         </div>
 
         <%--Location--%>
-        <div class="form-group row">
-            <form:label path="location" cssClass="col-md-3 col-form-label"><op:translate
-                    key="SEARCH_FILTERS_LOCATION_LABEL"/></form:label>
-            <div class="col-md-6">
-                <a href="javascript:" class="btn btn-link btn-link-hover-primary text-primary-dark bg-white" data-target="#osivia-modal" data-load-url="${locationUrl}" data-size="small">
-                    <span><ttc:title document="${form.location}" linkable="false" icon="true"/></span>
-                </a>
+        <c:if test="${not form.mutualizedSpace}">
+            <div class="form-group row">
+                <form:label path="location" cssClass="col-md-3 col-form-label"><op:translate
+                        key="SEARCH_FILTERS_LOCATION_LABEL"/></form:label>
+                <div class="col-md-6">
+                    <a href="javascript:" class="btn btn-link btn-link-hover-primary text-primary-dark bg-white" data-target="#osivia-modal" data-load-url="${locationUrl}" data-size="small">
+                        <span><ttc:title document="${form.location}" linkable="false" icon="true"/></span>
+                    </a>
+                </div>
+                <form:hidden path="locationPath"/>
             </div>
-            <form:hidden path="locationPath"/>
-        </div>
+        </c:if>
 
         <%--Size--%>
         <div class="form-group row">

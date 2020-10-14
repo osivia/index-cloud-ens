@@ -5,10 +5,11 @@
 <%@ page isELIgnored="false" %>
 
 
-<portlet:actionURL var="searchFiltersUrl" name="search-filters"/>
+<portlet:actionURL var="url" name="search"/>
 
-
-<a href="${searchFiltersUrl}" class="btn btn-primary btn-sm">
-    <i class="glyphicons glyphicons-basic-search"></i>
-    <span class="d-none d-sm-inline"><op:translate key="SEARCH_FILTERS_DISPLAY"/></span>
-</a>
+<div class="d-flex justify-content-end">
+    <a href="${url}" class="btn btn-link btn-link-hover-primary btn-sm text-secondary text-truncate">
+        <i class="glyphicons glyphicons-basic-search"></i>
+        <strong><op:translate key="ADVANCED_SEARCH"/></strong>
+    </a>
+</div>

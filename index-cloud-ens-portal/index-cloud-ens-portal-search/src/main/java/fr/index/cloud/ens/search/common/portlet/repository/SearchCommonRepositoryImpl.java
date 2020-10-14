@@ -86,12 +86,6 @@ public class SearchCommonRepositoryImpl implements SearchCommonRepository {
     }
 
 
-    @Override
-    public String getSearchFiltersPath(PortalControllerContext portalControllerContext) throws PortletException {
-        return this.getTaskPath(portalControllerContext, SEARCH_FILTERS_TASK_ID);
-    }
-
-
     /**
      * Get task path.
      *
@@ -145,7 +139,7 @@ public class SearchCommonRepositoryImpl implements SearchCommonRepository {
 
 
     @Override
-    public List<UserSavedSearch> getSavedSearches(PortalControllerContext portalControllerContext) throws PortletException {
+    public List<UserSavedSearch> getSavedSearches(PortalControllerContext portalControllerContext, String categoryId) throws PortletException {
         // User preferences
         UserPreferences userPreferences;
         try {
@@ -159,7 +153,7 @@ public class SearchCommonRepositoryImpl implements SearchCommonRepository {
         if (userPreferences == null) {
             savedSearches = null;
         } else {
-            savedSearches = userPreferences.getSavedSearches();
+            savedSearches = userPreferences.getSavedSearches(categoryId);
         }
 
         return savedSearches;

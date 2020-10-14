@@ -13,6 +13,7 @@ import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.time.DateFormatUtils;
+import org.jboss.portal.theme.impl.render.dynamic.DynaRenderOptions;
 import org.nuxeo.ecm.automation.client.model.Document;
 import org.nuxeo.ecm.automation.client.model.PropertyList;
 import org.osivia.portal.api.Constants;
@@ -308,6 +309,8 @@ public class SearchServiceImpl extends SearchCommonServiceImpl implements Search
         PortletRequest request = portalControllerContext.getRequest();
         // Action response
         ActionResponse response = (ActionResponse) portalControllerContext.getResponse();
+        // Internationalization bundle
+        Bundle bundle = this.bundleFactory.getBundle(request.getLocale());
 
         // Current window properties
         SearchWindowProperties currentWindowProperties = this.getWindowProperties(portalControllerContext);
@@ -316,8 +319,6 @@ public class SearchServiceImpl extends SearchCommonServiceImpl implements Search
         String path;
         if (SearchView.INPUT.equals(currentWindowProperties.getView())) {
             path = this.repository.getSearchPath(portalControllerContext);
-        } else if (SearchView.BUTTON.equals(currentWindowProperties.getView())) {
-            path = this.repository.getSearchFiltersPath(portalControllerContext);
         } else {
             path = null;
         }
@@ -326,7 +327,7 @@ public class SearchServiceImpl extends SearchCommonServiceImpl implements Search
         // Search URL
         String url;
 
-        if (SearchView.INPUT.equals(currentWindowProperties.getView()) || SearchView.BUTTON.equals(currentWindowProperties.getView())) {
+        if (SearchView.INPUT.equals(currentWindowProperties.getView())) {
             if (StringUtils.isEmpty(path)) {
                 url = null;
             } else {
@@ -383,6 +384,22 @@ public class SearchServiceImpl extends SearchCommonServiceImpl implements Search
             PageProperties.getProperties().setRefreshingPage(true);
 
             request.setAttribute("osivia.ajax.preventRefresh", Constants.PORTLET_VALUE_ACTIVATE);
+        } else if (SearchView.BUTTON.equals(currentWindowProperties.getView())) {
+            // Portlet instance
+            String portletInstance = "index-cloud-ens-search-filters-instance";
+
+            // Window properties
+            Map<String, String> windowProperties = new HashMap<>();
+            windowProperties.put("osivia.title", bundle.getString("ADVANCED_SEARCH"));
+            windowProperties.put(DynaRenderOptions.PARTIAL_REFRESH_ENABLED, String.valueOf(true));
+            windowProperties.put("osivia.ajaxLink", String.valueOf(1));
+            windowProperties.put("osivia.back.reset", String.valueOf(true));
+
+            try {
+                url = this.portalUrlFactory.getStartPortletUrl(portalControllerContext, portletInstance, windowProperties);
+            } catch (PortalException e) {
+                throw new PortletException(e);
+            }
         } else {
             throw new PortletException("Unknown search view.");
         }

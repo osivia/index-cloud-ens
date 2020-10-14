@@ -2,6 +2,7 @@ package fr.index.cloud.ens.search.saved.portlet.service;
 
 import fr.index.cloud.ens.search.common.portlet.service.SearchCommonServiceImpl;
 import fr.index.cloud.ens.search.saved.portlet.model.SavedSearchesForm;
+import fr.index.cloud.ens.search.saved.portlet.model.SavedSearchesWindowProperties;
 import fr.index.cloud.ens.search.saved.portlet.model.comparator.SavedSearchOrderComparator;
 import fr.index.cloud.ens.search.saved.portlet.repository.SavedSearchesRepository;
 import fr.toutatice.portail.cms.nuxeo.api.PageSelectors;
@@ -10,6 +11,8 @@ import org.apache.commons.lang.StringUtils;
 import org.osivia.directory.v2.model.preferences.UserSavedSearch;
 import org.osivia.portal.api.context.PortalControllerContext;
 import org.osivia.portal.api.urls.IPortalUrlFactory;
+import org.osivia.portal.api.windows.PortalWindow;
+import org.osivia.portal.api.windows.WindowFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
@@ -62,12 +65,47 @@ public class SavedSearchesServiceImpl extends SearchCommonServiceImpl implements
 
 
     @Override
+    public SavedSearchesWindowProperties getWindowProperties(PortalControllerContext portalControllerContext) {
+        // Portlet request
+        PortletRequest request = portalControllerContext.getRequest();
+        // Window
+        PortalWindow window = WindowFactory.getWindow(request);
+
+        // Window properties
+        SavedSearchesWindowProperties windowProperties = this.applicationContext.getBean(SavedSearchesWindowProperties.class);
+
+        // Saved searches category identifier
+        String categoryId = StringUtils.trimToEmpty(window.getProperty(CATEGORY_ID_WINDOW_PROPERTY));
+        windowProperties.setCategoryId(categoryId);
+
+        return windowProperties;
+    }
+
+
+    @Override
+    public void setWindowProperties(PortalControllerContext portalControllerContext, SavedSearchesWindowProperties windowProperties) {
+        // Portlet request
+        PortletRequest request = portalControllerContext.getRequest();
+        // Window
+        PortalWindow window = WindowFactory.getWindow(request);
+
+        // Saved searches category identifier
+        window.setProperty(CATEGORY_ID_WINDOW_PROPERTY, StringUtils.trimToEmpty(windowProperties.getCategoryId()));
+    }
+
+
+    @Override
     public SavedSearchesForm getForm(PortalControllerContext portalControllerContext) throws PortletException {
+        // Window properties
+        SavedSearchesWindowProperties windowProperties = this.getWindowProperties(portalControllerContext);
+        // Saved searches category identifier
+        String categoryId = StringUtils.trimToEmpty(windowProperties.getCategoryId());
+
         // Form
         SavedSearchesForm form = this.applicationContext.getBean(SavedSearchesForm.class);
 
         // Saved searches
-        List<UserSavedSearch> savedSearches = this.repository.getSavedSearches(portalControllerContext);
+        List<UserSavedSearch> savedSearches = this.repository.getSavedSearches(portalControllerContext, categoryId);
         if (CollectionUtils.isNotEmpty(savedSearches)) {
             savedSearches.sort(this.savedSearchOrderComparator);
         }
@@ -96,6 +134,9 @@ public class SavedSearchesServiceImpl extends SearchCommonServiceImpl implements
 
     @Override
     public String getSavedSearchUrl(PortalControllerContext portalControllerContext, SavedSearchesForm form, int id) throws PortletException {
+        // Window properties
+        SavedSearchesWindowProperties windowProperties = this.getWindowProperties(portalControllerContext);
+
         // Saved searches
         List<UserSavedSearch> savedSearches = form.getSavedSearches();
 
@@ -138,7 +179,9 @@ public class SavedSearchesServiceImpl extends SearchCommonServiceImpl implements
 
             // Path
             String path;
-            if (StringUtils.isEmpty(location)) {
+            if (StringUtils.equals(MUTUALIZED_SAVED_SEARCHES_CATEGORY_ID, windowProperties.getCategoryId())) {
+                path = MUTUALIZED_SPACE_PATH;
+            } else if (StringUtils.isEmpty(location)) {
                 path = this.repository.getUserWorkspacePath(portalControllerContext);
             } else {
                 path = location;

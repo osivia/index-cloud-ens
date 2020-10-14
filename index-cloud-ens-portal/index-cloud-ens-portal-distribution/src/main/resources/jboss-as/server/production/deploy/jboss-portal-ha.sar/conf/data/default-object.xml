@@ -654,7 +654,7 @@ return nuxeoRequest.toString();</value>
                 </security-constraint>
 
                 <window>
-                    <window-name>toutatice-portail-cms-nuxeo-keywordsSelectorPortletInstance_1509110238686</window-name>
+                    <window-name>toutatice-portail-cms-nuxeo-keywordsSelectorPortletInstance_1509110238686keywordsSelectorPortletInstance_1509110238686</window-name>
                     <instance-ref>toutatice-portail-cms-nuxeo-keywordsSelectorPortletInstance</instance-ref>
                     <region>col-2</region>
                     <properties>
@@ -1323,8 +1323,49 @@ return nuxeoRequest.toString();</value>
                     <region>col-2</region>
                     <properties>
                         <property>
+                            <name>portal.windowContentType</name>
+                            <value>portlet</value>
+                        </property>
+                        <property>
+                            <name>osivia.bootstrapPanelStyle</name>
+                            <value>true</value>
+                        </property>
+                        <property>
+                            <name>osivia.title</name>
+                            <value>Mes filtres (Mes documents)</value>
+                        </property>
+                        <property>
+                            <name>theme.order</name>
+                            <value>0</value>
+                        </property>
+                        <property>
+                            <name>osivia.ajaxLink</name>
+                            <value>1</value>
+                        </property>
+                        <property>
                             <name>osivia.hideDecorators</name>
                             <value>1</value>
+                        </property>
+                        <property>
+                            <name>osivia.hideEmptyPortlet</name>
+                            <value>1</value>
+                        </property>
+                        <property>
+                            <name>theme.dyna.partial_refresh_enabled</name>
+                            <value>true</value>
+                        </property>
+                    </properties>
+                    <height>0</height>
+                </window>
+
+                <window>
+                    <window-name>osivia-services-user-saved-searches-administration-instance_1602684819915</window-name>
+                    <instance-ref>osivia-services-user-saved-searches-administration-instance</instance-ref>
+                    <region>col-2</region>
+                    <properties>
+                        <property>
+                            <name>osivia.user-saved-searches.category-id</name>
+                            <value>mutualized</value>
                         </property>
                         <property>
                             <name>portal.windowContentType</name>
@@ -1336,15 +1377,27 @@ return nuxeoRequest.toString();</value>
                         </property>
                         <property>
                             <name>osivia.title</name>
-                            <value>Mes filtres</value>
+                            <value>Mes filtres (Les documents mutualisés)</value>
+                        </property>
+                        <property>
+                            <name>theme.order</name>
+                            <value>1</value>
                         </property>
                         <property>
                             <name>osivia.ajaxLink</name>
                             <value>1</value>
                         </property>
                         <property>
-                            <name>theme.order</name>
-                            <value>0</value>
+                            <name>osivia.hideDecorators</name>
+                            <value>1</value>
+                        </property>
+                        <property>
+                            <name>osivia.hideEmptyPortlet</name>
+                            <value>1</value>
+                        </property>
+                        <property>
+                            <name>theme.dyna.partial_refresh_enabled</name>
+                            <value>true</value>
                         </property>
                     </properties>
                     <height>0</height>

@@ -12,6 +12,16 @@ import javax.portlet.PortletException;
 public interface SearchCommonService {
 
     /**
+     * Mutualized space path.
+     */
+    String MUTUALIZED_SPACE_PATH = System.getProperty("config.mutualized.path");
+
+    /**
+     * Mutualized saved searches category identifier.
+     */
+    String MUTUALIZED_SAVED_SEARCHES_CATEGORY_ID = "mutualized";
+
+    /**
      * Selectors parameter.
      */
     String SELECTORS_PARAMETER = "selectors";
