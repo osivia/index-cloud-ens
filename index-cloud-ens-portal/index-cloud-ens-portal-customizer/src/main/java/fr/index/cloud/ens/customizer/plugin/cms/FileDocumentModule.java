@@ -8,6 +8,7 @@ import fr.toutatice.portail.cms.nuxeo.api.cms.NuxeoPublicationInfos;
 import fr.toutatice.portail.cms.nuxeo.api.domain.DocumentDTO;
 import fr.toutatice.portail.cms.nuxeo.api.domain.RemotePublishedDocumentDTO;
 import fr.toutatice.portail.cms.nuxeo.api.portlet.PortletModule;
+import fr.toutatice.portail.cms.nuxeo.api.services.INuxeoCustomizer;
 import fr.toutatice.portail.cms.nuxeo.api.services.dao.DocumentDAO;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
@@ -19,6 +20,8 @@ import org.nuxeo.ecm.automation.client.model.PropertyList;
 import org.nuxeo.ecm.automation.client.model.PropertyMap;
 import org.osivia.portal.api.Constants;
 import org.osivia.portal.api.PortalException;
+import org.osivia.portal.api.cms.DocumentType;
+import org.osivia.portal.api.cms.FileMimeType;
 import org.osivia.portal.api.cms.Permissions;
 import org.osivia.portal.api.context.PortalControllerContext;
 import org.osivia.portal.api.locator.Locator;
@@ -28,6 +31,8 @@ import org.osivia.portal.api.windows.PortalWindow;
 import org.osivia.portal.api.windows.WindowFactory;
 
 import javax.portlet.*;
+
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.HashMap;
@@ -88,68 +93,83 @@ public class FileDocumentModule extends PortletModule {
         // Document path
         String path = getDocumentPath(nuxeoController);
 
-        if (StringUtils.isNotBlank(path)) {
-            // Document context
-            NuxeoDocumentContext documentContext = nuxeoController.getDocumentContext(path);
-            // Document
-            Document document = documentContext.getDocument();
-            // Publication infos
-            NuxeoPublicationInfos publicationInfos = documentContext.getPublicationInfos();
+        try {
 
-            if (publicationInfos.isPublished()) {
-                // Read only indicator
-                request.setAttribute("readOnly", true);
+            if (StringUtils.isNotBlank(path)) {
+                // Document context
+                NuxeoDocumentContext documentContext = nuxeoController.getDocumentContext(path);
+                // Document
+                Document document = documentContext.getDocument();
+                // Publication infos
+                NuxeoPublicationInfos publicationInfos = documentContext.getPublicationInfos();
 
-                // Copy
-                String copyUrl = this.getCopyUrl(portalControllerContext, path);
-                request.setAttribute("copyUrl", copyUrl);
 
-            } else if (ContextualizationHelper.isCurrentDocContextualized(portalControllerContext)) {
-                // Permissions
-                Permissions permissions = documentContext.getPermissions();
+                if (publicationInfos.isPublished()) {
+                    // Read only indicator
+                    request.setAttribute("readOnly", true);
 
-                // Mutualize URL
-                String mutualizeUrl = this.getMutualizeUrl(portalControllerContext, path);
-                request.setAttribute("mutualizeUrl", mutualizeUrl);
+                    // Copy
+                    String copyUrl = this.getCopyUrl(portalControllerContext, path);
+                    request.setAttribute("copyUrl", copyUrl);
 
-                if (permissions.isEditable()) {
-                    // Rename URL
-                    String renameUrl = this.getRenameUrl(portalControllerContext, path);
-                    request.setAttribute("renameUrl", renameUrl);
 
-                    // Edit URL
-                    String editUrl = this.getEditUrl(portalControllerContext, nuxeoController, path);
-                    request.setAttribute("editUrl", editUrl);
+                    if (!StringUtils.equals(document.getProperties().getString("dc:lastContributor"), request.getRemoteUser()))
+                        request.setAttribute("contactAuthor", true);
+
+
+
+                } else if (ContextualizationHelper.isCurrentDocContextualized(portalControllerContext)) {
+                    // Permissions
+                    Permissions permissions = documentContext.getPermissions();
+
+                    // Mutualize URL
+                    String mutualizeUrl = this.getMutualizeUrl(portalControllerContext, path);
+                    request.setAttribute("mutualizeUrl", mutualizeUrl);
+
+                    if (permissions.isEditable()) {
+                        // Rename URL
+                        String renameUrl = this.getRenameUrl(portalControllerContext, path);
+                        request.setAttribute("renameUrl", renameUrl);
+
+                        // Edit URL
+                        String editUrl = this.getEditUrl(portalControllerContext, nuxeoController, path);
+                        request.setAttribute("editUrl", editUrl);
+                    }
+
+                    if (permissions.isDeletable()) {
+                        // Delete URL
+                        String deleteUrl = this.getDeleteUrl(portalControllerContext, path);
+                        request.setAttribute("deleteUrl", deleteUrl);
+                    }
+
+                    // Desynchronized and format indicator
+                    this.applyPublicationRules(portalControllerContext, documentContext);
+
+
+                    // Source
+                    DocumentDTO source = this.getSource(nuxeoController, documentContext);
+                    request.setAttribute("source", source);
+
+                    if (source != null) {
+                        boolean desynchronizeFromSource = isDesynchronizedFromSource(nuxeoController, documentContext, source);
+                        request.setAttribute("desynchronizedFromSource", desynchronizeFromSource);
+                    }   
+
+                    // Keywords
+                    PropertyList keywordsProperty = document.getProperties().getList("mtz:keywords");
+                    if ((keywordsProperty != null) && !keywordsProperty.isEmpty()) {
+                        String keywords = StringUtils.join(keywordsProperty.list(), ", ");
+                        request.setAttribute("keywords", keywords);
+                    }
                 }
 
-                if (permissions.isDeletable()) {
-                    // Delete URL
-                    String deleteUrl = this.getDeleteUrl(portalControllerContext, path);
-                    request.setAttribute("deleteUrl", deleteUrl);
-                }
-
-                // Desynchronized indicator
-                boolean desynchronized = this.isDesynchronized(portalControllerContext, documentContext);
-                request.setAttribute("desynchronized", desynchronized);
-
-                // Source
-                DocumentDTO source = this.getSource(nuxeoController, documentContext);
-                request.setAttribute("source", source);
                 
-                if( source != null) {
-                    boolean desynchronizeFromSource = isDesynchronizedFromSource(nuxeoController, documentContext, source);
-                    request.setAttribute("desynchronizedFromSource", desynchronizeFromSource);                   
-                }
+                
 
-                // Keywords
-                PropertyList keywordsProperty = document.getProperties().getList("mtz:keywords");
-                if ((keywordsProperty != null) && !keywordsProperty.isEmpty()) {
-                    String keywords = StringUtils.join(keywordsProperty.list(), ", ");
-                    request.setAttribute("keywords", keywords);
-                }
+                getMimeTypeSpecificLinks(request, nuxeoController, documentContext);
             }
-            
-            getMimeTypeSpecificLinks(request, nuxeoController, documentContext);
+        } catch (Exception e) {
+            throw new PortletException(e);
         }
     }
 
@@ -311,13 +331,15 @@ public class FileDocumentModule extends PortletModule {
 
 
     /**
-     * Check if mutualized document is desynchronized.
+     * Application publication rules
+     *  - Check if mutualized document is desynchronized.
+     *  - get publication format
      *
      * @param portalControllerContext portal controller context
      * @param documentContext         document context
      * @return true if document is desynchronized
      */
-    private boolean isDesynchronized(PortalControllerContext portalControllerContext, NuxeoDocumentContext documentContext) {
+    private boolean applyPublicationRules(PortalControllerContext portalControllerContext, NuxeoDocumentContext documentContext) throws PortletException {
         // Portlet request
         PortletRequest request = portalControllerContext.getRequest();
 
@@ -354,38 +376,81 @@ public class FileDocumentModule extends PortletModule {
 
         // Desynchronized indicator
         boolean desynchronized = false;
+        DocumentDTO publicationDocument = null;
+        String publicationFormat = null;
 
         if (mutualizedDocument != null) {
 
-            // Publication infos
+            NuxeoController nuxeoController = new NuxeoController(portalControllerContext);
+            nuxeoController.setDisplayLiveVersion("0");
             
-            NuxeoPublicationInfos publicationInfos = documentContext.getPublicationInfos();
+         
             
-            // Check if version is different
-            if( !StringUtils.equals(mutualizedDocument.getVersionLabel(), publicationInfos.getLiveVersion()))   {
+            /* check if digest is different */
             
-                // check if digest is different
-                NuxeoController nuxeoController = new NuxeoController(portalControllerContext);
-                nuxeoController.setDisplayLiveVersion("0");
-                
-                String publishedDocumentPath = mutualizedDocument.getPath();
-                if (!StringUtils.startsWith(publishedDocumentPath, "/")) {
-                    publishedDocumentPath = "/" + publishedDocumentPath;
+            String publishedDocumentPath = mutualizedDocument.getPath();
+            if (!StringUtils.startsWith(publishedDocumentPath, "/")) {
+                publishedDocumentPath = "/" + publishedDocumentPath;
+            }
+            
+            NuxeoDocumentContext mutualizedDocumentContext = nuxeoController.getDocumentContext(publishedDocumentPath);
+            Document mutualizedDoc = mutualizedDocumentContext.getDocument();
+            
+            
+            if(!StringUtils.equals(getDigest(document.getDocument()),getDigest( mutualizedDoc))) {
+                desynchronized = true;
+            }
+
+            /* Get format */
+             
+            
+            // CMS customizer
+            INuxeoCustomizer customizer = nuxeoController.getNuxeoCMSService().getCMSCustomizer();
+
+            // Format
+            PropertyMap fileContent;
+            fileContent = mutualizedDoc.getProperties().getMap("file:content");
+
+            // File MIME type
+            if (fileContent != null) {
+                FileMimeType fileMimeType;
+                try {
+                    fileMimeType = customizer.getFileMimeType(fileContent.getString("mime-type"));
+                    if( fileMimeType != null)
+                        publicationFormat = fileMimeType.getDescription();                    
+                } catch (IOException e) {
+                    throw new PortletException (e);
                 }
-                
-                NuxeoDocumentContext mutualizedDocumentContext = nuxeoController.getDocumentContext(publishedDocumentPath);
-                Document mutualizedDoc = mutualizedDocumentContext.getDocument();
-                
-                
-                if(!StringUtils.equals(getDigest(document.getDocument()),getDigest( mutualizedDoc))) {
-                    desynchronized = true;
-                }
-           }
+             }
+            
+            publicationDocument = this.documentDao.toDTO(mutualizedDoc);
          }
+        
+        if( publicationFormat != null) 
+            request.setAttribute("publicationFormat", publicationFormat); 
+        
+        if( publicationDocument != null)
+            request.setAttribute("publicationDocument", publicationDocument);     
+        
+        
+        request.setAttribute("desynchronized", desynchronized);
 
         return desynchronized;
     }
 
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
 
     /**
      * Get source document DTO.

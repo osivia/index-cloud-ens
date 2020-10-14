@@ -79,7 +79,7 @@
 
 
 
-	<div class="row flex-grow-1 flex-nowrap">
+	<div class="row flex-nowrap">
 		<div class="col overflow-auto pt-4 py-md-2 mb-md-2">
 
 			<form:form action="${addMessageUrl}" method="post" modelAttribute="detailForm" cssClass="form-horizontal">
