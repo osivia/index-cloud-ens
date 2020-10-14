@@ -30,6 +30,7 @@ import org.nuxeo.ecm.automation.client.model.Document;
 import org.osivia.portal.api.Constants;
 import org.osivia.portal.api.PortalException;
 import org.osivia.portal.api.context.PortalControllerContext;
+import org.osivia.portal.api.directory.v2.model.Person;
 import org.osivia.portal.api.directory.v2.service.PersonService;
 import org.osivia.portal.api.html.AccessibilityRoles;
 import org.osivia.portal.api.html.DOM4JUtils;
@@ -68,7 +69,10 @@ public class UnreadServiceImpl implements UnreadService, ApplicationContextAware
     @Autowired
     private DiscussionRepository repository;
 
- 
+    /** Person service. */
+    @Autowired
+    private PersonService personService;
+
 
 
 
@@ -110,7 +114,6 @@ public class UnreadServiceImpl implements UnreadService, ApplicationContextAware
                 Document document = (Document) task.getInnerDocument();
                 
                 String url = DiscussionHelper.getDiscussionUrlById(portalControllerContext, document.getProperties().getString("ttc:webid"));
-                
                 messages.add(new Message( task, url));
             }
         } catch (PortalException e) {

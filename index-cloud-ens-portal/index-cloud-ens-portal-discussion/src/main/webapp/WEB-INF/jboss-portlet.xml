@@ -16,6 +16,22 @@
         </header-content>
     </portlet>
     
+    
+    <portlet>
+        <portlet-name>index-cloud-ens-discussion-unread</portlet-name>
+
+        <transaction>
+            <trans-attribute>Required</trans-attribute>
+        </transaction>
+        
+        <header-content>
+            <link rel="stylesheet" href="/css/discussions.min.css" />
+        
+            <script type="text/javascript" src="/js/discussions.js"></script>
+        </header-content>
+    </portlet>
+    
+    
 
     <service>
         <service-name>CustomizationModulesRepository</service-name>

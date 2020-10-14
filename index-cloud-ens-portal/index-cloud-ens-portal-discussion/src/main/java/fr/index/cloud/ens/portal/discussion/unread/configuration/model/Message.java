@@ -15,9 +15,14 @@ public class Message {
     private final String url;
 
 
+    
+    
+
+
+
+    
     /**
      * Getter for url.
-     * 
      * @return the url
      */
     public String getUrl() {
@@ -29,6 +34,7 @@ public class Message {
         super();
         this.url = url;
         this.task = task;
+
     }
 
 
@@ -41,5 +47,6 @@ public class Message {
         return task;
     }
 
+    
 
 }

@@ -4,6 +4,8 @@ import java.util.Date;
 
 import org.nuxeo.ecm.automation.client.model.Document;
 
+import fr.toutatice.portail.cms.nuxeo.api.domain.DocumentDTO;
+
 public class PublicationInfos {
     
     /** The target document. */
@@ -15,14 +17,21 @@ public class PublicationInfos {
     /** The title. */
     private final String title;    
     
+    /** The target DTO. */
+    private final DocumentDTO targetDTO;
+    
+    
+
+
     /** The last recopy. */
     Date    lastRecopy;
     
-    public PublicationInfos(String target, String title, Document targetDocument) {
+    public PublicationInfos(String target, String title, Document targetDocument, DocumentDTO targetDTO) {
         super();
         this.targetDocument = targetDocument;
         this.title = title;
         this.target = target;
+        this.targetDTO = targetDTO;
     }
 
 
@@ -67,6 +76,15 @@ public class PublicationInfos {
      */
     public Document getTargetDocument() {
         return targetDocument;
+    }
+    
+    
+    /**
+     * Getter for targetDTO.
+     * @return the targetDTO
+     */
+    public DocumentDTO getTargetDTO() {
+        return targetDTO;
     }
 
 }

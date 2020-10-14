@@ -16,8 +16,40 @@
 
 <c:set var="deleteDiscussionConfirmationModalId" value="${namespace}-delete-confirmation" />
 
+<c:if test="${not empty detailForm.document.publication.targetDTO}">
+    <c:set var="publication" value="${detailForm.document.publication.targetDTO}" />
 
-
+	<div class="d-flex justify-content-between flex-wrap">
+	    <div class="d-flex mt-1 mb-2">
+	        <%--Icon--%>
+	        <div class="flex-shrink-0 mr-2">
+	            <ttc:icon document="${publication}"/>
+	        </div>
+	
+	        <%--Title--%>
+	        <div class="flex-shrink-1 mr-2 text-truncate">
+	            <strong>${publication.title}</strong>
+	        </div>
+	
+	        <%--Size--%>
+	        <c:if test="${publication.type.file}">
+	            <c:set var="size" value="${publication.properties['file:content']['length']}"/>
+	            <div class="flex-shrink-0 mr-2">
+	                <small class="text-secondary"><ttc:fileSize size="${size}"/></small>
+	            </div>
+	        </c:if>
+	
+	        <%--Mutualized indicator--%>
+	        <c:if test="${publication.properties['mtz:enable']}">
+	            <div class="flex-shrink-0 mr-2">
+	                <span class="text-orange">
+	                    <i class="glyphicons glyphicons-basic-share"></i>
+	                </span>
+	            </div>
+	        </c:if>
+	    </div>
+	</div>    
+</c:if>
 
 <div class="portlet-filler d-flex flex-column pr-1 flex-grow-1 discussion  col ">
 
