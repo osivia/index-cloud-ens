@@ -1,9 +1,11 @@
 package fr.index.cloud.ens.search.common.portlet.repository;
 
+import net.sf.json.JSONArray;
 import org.osivia.directory.v2.model.preferences.UserSavedSearch;
 import org.osivia.portal.api.context.PortalControllerContext;
 
 import javax.portlet.PortletException;
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -45,5 +47,15 @@ public interface SearchCommonRepository {
      * @return saved searches
      */
     List<UserSavedSearch> getSavedSearches(PortalControllerContext portalControllerContext, String categoryId) throws PortletException;
+
+
+    /**
+     * Load vocabulary.
+     *
+     * @param portalControllerContext portal controller context
+     * @param vocabulary              vocabulary
+     * @return vocabulary JSON array
+     */
+    JSONArray loadVocabulary(PortalControllerContext portalControllerContext, String vocabulary) throws PortletException, IOException;
 
 }

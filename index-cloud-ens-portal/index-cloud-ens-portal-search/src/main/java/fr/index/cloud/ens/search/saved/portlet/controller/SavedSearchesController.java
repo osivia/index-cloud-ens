@@ -1,5 +1,6 @@
 package fr.index.cloud.ens.search.saved.portlet.controller;
 
+import fr.index.cloud.ens.search.common.portlet.controller.SearchCommonController;
 import fr.index.cloud.ens.search.saved.portlet.model.SavedSearchesForm;
 import fr.index.cloud.ens.search.saved.portlet.service.SavedSearchesService;
 import org.apache.commons.lang.math.NumberUtils;
@@ -19,10 +20,11 @@ import java.io.IOException;
  * Saved searches portlet controller.
  *
  * @author Cédric Krommenhoek
+ * @see SearchCommonController
  */
 @Controller
 @RequestMapping("VIEW")
-public class SavedSearchesController {
+public class SavedSearchesController extends SearchCommonController {
 
     /**
      * Portlet context.

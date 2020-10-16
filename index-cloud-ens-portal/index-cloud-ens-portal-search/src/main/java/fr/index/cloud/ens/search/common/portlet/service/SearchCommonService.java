@@ -1,8 +1,11 @@
 package fr.index.cloud.ens.search.common.portlet.service;
 
+import fr.index.cloud.ens.search.common.portlet.model.SearchFiltersVocabulary;
+import net.sf.json.JSONArray;
 import org.osivia.portal.api.context.PortalControllerContext;
 
 import javax.portlet.PortletException;
+import java.io.IOException;
 
 /**
  * Search common service interface.
@@ -84,5 +87,16 @@ public interface SearchCommonService {
      * @return path
      */
     String resolveViewPath(PortalControllerContext portalControllerContext, String name) throws PortletException;
+
+
+    /**
+     * Load select2 vocabulary.
+     *
+     * @param portalControllerContext portal controller context
+     * @param vocabulary              vocabulary
+     * @param filter                  select2 filter
+     * @return select2 results JSON array
+     */
+    JSONArray loadVocabulary(PortalControllerContext portalControllerContext, SearchFiltersVocabulary vocabulary, String filter) throws PortletException, IOException;
 
 }

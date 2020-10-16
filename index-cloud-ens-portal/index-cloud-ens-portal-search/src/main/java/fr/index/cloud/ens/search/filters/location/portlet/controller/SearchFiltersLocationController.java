@@ -1,5 +1,6 @@
 package fr.index.cloud.ens.search.filters.location.portlet.controller;
 
+import fr.index.cloud.ens.search.common.portlet.controller.SearchCommonController;
 import fr.index.cloud.ens.search.filters.location.portlet.model.SearchFiltersLocationForm;
 import fr.index.cloud.ens.search.filters.location.portlet.service.SearchFiltersLocationService;
 import org.osivia.portal.api.context.PortalControllerContext;
@@ -19,14 +20,16 @@ import java.io.PrintWriter;
  * Search filters location portlet controller.
  *
  * @author Cédric Krommenhoek
+ * @see SearchCommonController
  */
 @Controller
 @RequestMapping("VIEW")
-public class SearchFiltersLocationController {
+public class SearchFiltersLocationController extends SearchCommonController {
 
     /**
      * Portlet context.
      */
+    @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
     @Autowired
     private PortletContext portletContext;
 

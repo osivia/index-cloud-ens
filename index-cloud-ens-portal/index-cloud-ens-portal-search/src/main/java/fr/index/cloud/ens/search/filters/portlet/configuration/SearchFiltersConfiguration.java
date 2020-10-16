@@ -14,7 +14,7 @@ import org.springframework.web.servlet.view.JstlView;
  * @see SearchCommonConfiguration
  */
 @Configuration
-@ComponentScan(basePackages = "fr.index.cloud.ens.search.filters.portlet")
+@ComponentScan(basePackages = {"fr.index.cloud.ens.search.filters.portlet", "fr.index.cloud.ens.search.common.portlet"})
 public class SearchFiltersConfiguration extends SearchCommonConfiguration {
 
     /**

@@ -100,5 +100,28 @@
             </security-constraint>
         </instance>
     </deployment>
+
+
+    <deployment>
+        <if-exists>overwrite</if-exists>
+        <instance>
+            <display-name xml:lang="en">Cloud Ens - Search filters home settings</display-name>
+            <display-name xml:lang="fr">Cloud Ens - Paramétrage des filtres de recherche de l'accueil</display-name>
+            <instance-id>index-cloud-ens-search-filters-home-settings-instance</instance-id>
+            <portlet-ref>index-cloud-ens-search-filters-home-settings</portlet-ref>
+            <security-constraint>
+                <policy-permission>
+                    <action-name>view</action-name>
+                    <unchecked />
+                </policy-permission>
+            </security-constraint>
+            <preferences>
+                <preference>
+                    <name>hide</name>
+                    <value>true</value>
+                </preference>
+            </preferences>
+        </instance>
+    </deployment>
     
 </deployments>

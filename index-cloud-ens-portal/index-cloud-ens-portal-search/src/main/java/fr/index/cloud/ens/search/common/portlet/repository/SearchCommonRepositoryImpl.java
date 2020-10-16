@@ -1,21 +1,29 @@
 package fr.index.cloud.ens.search.common.portlet.repository;
 
+import fr.index.cloud.ens.search.common.portlet.repository.command.LoadVocabularyCommand;
+import fr.toutatice.portail.cms.nuxeo.api.INuxeoCommand;
+import fr.toutatice.portail.cms.nuxeo.api.NuxeoController;
+import fr.toutatice.portail.cms.nuxeo.api.services.NuxeoCommandContext;
+import net.sf.json.JSONArray;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.osivia.directory.v2.model.preferences.UserPreferences;
 import org.osivia.directory.v2.model.preferences.UserSavedSearch;
 import org.osivia.directory.v2.service.preferences.UserPreferencesService;
 import org.osivia.portal.api.PortalException;
+import org.osivia.portal.api.cache.services.CacheInfo;
 import org.osivia.portal.api.cms.VirtualNavigationUtils;
 import org.osivia.portal.api.context.PortalControllerContext;
 import org.osivia.portal.api.taskbar.ITaskbarService;
 import org.osivia.portal.api.taskbar.TaskbarTask;
 import org.osivia.portal.core.cms.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 
 import javax.portlet.PortletException;
 import java.util.Iterator;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Search common repository implementation.
@@ -23,7 +31,13 @@ import java.util.List;
  * @author Cédric Krommenhoek
  * @see SearchCommonRepository
  */
-public class SearchCommonRepositoryImpl implements SearchCommonRepository {
+public abstract class SearchCommonRepositoryImpl implements SearchCommonRepository {
+
+    /**
+     * Application context.
+     */
+    @Autowired
+    private ApplicationContext applicationContext;
 
     /**
      * CMS service locator.
@@ -157,6 +171,21 @@ public class SearchCommonRepositoryImpl implements SearchCommonRepository {
         }
 
         return savedSearches;
+    }
+
+
+    @Override
+    public JSONArray loadVocabulary(PortalControllerContext portalControllerContext, String vocabulary) {
+        // Nuxeo controller
+        NuxeoController nuxeoController = new NuxeoController(portalControllerContext);
+        nuxeoController.setCacheTimeOut(TimeUnit.HOURS.toMillis(1));
+        nuxeoController.setAuthType(NuxeoCommandContext.AUTH_TYPE_SUPERUSER);
+        nuxeoController.setCacheType(CacheInfo.CACHE_SCOPE_PORTLET_CONTEXT);
+
+        // Nuxeo command
+        INuxeoCommand command = this.applicationContext.getBean(LoadVocabularyCommand.class, vocabulary);
+
+        return (JSONArray) nuxeoController.executeNuxeoCommand(command);
     }
 
 }

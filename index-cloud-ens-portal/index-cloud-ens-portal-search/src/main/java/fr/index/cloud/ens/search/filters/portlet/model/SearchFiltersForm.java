@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Search filters form java-bean.
@@ -21,16 +22,26 @@ public class SearchFiltersForm {
      * Location.
      */
     private DocumentDTO location;
-    /** Mutualized space indicator. */
-    private boolean mutualizedSpace;
+    /**
+     * View.
+     */
+    private SearchFiltersView view;
 
-    /** Keywords. */
+    /**
+     * Keywords.
+     */
     private String keywords;
-    /** Document types. */
+    /**
+     * Document types.
+     */
     private List<String> documentTypes;
-    /** Levels. */
+    /**
+     * Levels.
+     */
     private List<String> levels;
-    /** Subjects. */
+    /**
+     * Subjects.
+     */
     private List<String> subjects;
     /**
      * Location path.
@@ -79,12 +90,12 @@ public class SearchFiltersForm {
         this.location = location;
     }
 
-    public boolean isMutualizedSpace() {
-        return mutualizedSpace;
+    public SearchFiltersView getView() {
+        return view;
     }
 
-    public void setMutualizedSpace(boolean mutualizedSpace) {
-        this.mutualizedSpace = mutualizedSpace;
+    public void setView(SearchFiltersView view) {
+        this.view = view;
     }
 
     public String getKeywords() {

@@ -2,6 +2,7 @@ package fr.index.cloud.ens.customizer.plugin;
 
 import fr.index.cloud.ens.customizer.plugin.cms.CloudEnsNavigationAdapter;
 import fr.index.cloud.ens.customizer.plugin.cms.FileDocumentModule;
+import fr.index.cloud.ens.customizer.plugin.cms.MutualizationSpaceSummaryListModule;
 import fr.index.cloud.ens.customizer.plugin.menubar.CloudEnsMenubarModule;
 import fr.index.cloud.ens.customizer.plugin.statistics.CloudEnsStatisticsModule;
 import fr.index.cloud.ens.customizer.plugin.tasks.CloudEnsTaskModule;
@@ -146,6 +147,7 @@ public class CloudEnsPlugin extends AbstractPluginPortlet {
 
         // Mutualization space summary
         ListTemplate mutualizationSpaceSummaryList = new ListTemplate("mutualization-space-summary", bundle.getString("LIST_TEMPLATE_MUTUALIZATION_SPACE_SUMMARY"), "*");
+        mutualizationSpaceSummaryList.setModule(new MutualizationSpaceSummaryListModule(this.getPortletContext()));
         templates.put(mutualizationSpaceSummaryList.getKey(), mutualizationSpaceSummaryList);
 
         // My publications

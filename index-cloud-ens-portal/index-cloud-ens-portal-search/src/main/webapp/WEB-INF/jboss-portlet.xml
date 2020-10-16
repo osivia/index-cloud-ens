@@ -56,4 +56,13 @@
         </transaction>
     </portlet>
 
+
+    <portlet>
+        <portlet-name>index-cloud-ens-search-filters-home-settings</portlet-name>
+
+        <transaction>
+            <trans-attribute>Required</trans-attribute>
+        </transaction>
+    </portlet>
+
 </portlet-app>

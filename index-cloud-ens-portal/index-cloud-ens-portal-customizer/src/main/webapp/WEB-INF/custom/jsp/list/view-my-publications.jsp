@@ -8,7 +8,7 @@
 <div class="list-my-publications">
 	<c:choose>
 		<c:when test="${empty documents}">
-			<span class="text-muted"><op:translate key="DOCUMENT_NO_MUTUALIZATION" /></span>
+			<span class="text-muted"><op:translate key="EMPTY" /></span>
 		</c:when>
 
 		<c:otherwise>

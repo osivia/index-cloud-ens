@@ -1,6 +1,7 @@
 package fr.index.cloud.ens.search.portlet.service;
 
 import fr.index.cloud.ens.search.common.portlet.service.SearchCommonServiceImpl;
+import fr.index.cloud.ens.search.filters.home.settings.portlet.service.SearchFiltersHomeSettingsService;
 import fr.index.cloud.ens.search.filters.portlet.service.SearchFiltersService;
 import fr.index.cloud.ens.search.portlet.model.SearchForm;
 import fr.index.cloud.ens.search.portlet.model.SearchView;
@@ -136,7 +137,6 @@ public class SearchServiceImpl extends SearchCommonServiceImpl implements Search
         // Search view
         SearchView view = windowProperties.getView();
         form.setView(view);
-
 
         // Search folder name
         Document document = this.repository.getDocument(portalControllerContext);
@@ -288,13 +288,24 @@ public class SearchServiceImpl extends SearchCommonServiceImpl implements Search
 
     @Override
     public String getOptionsUrl(PortalControllerContext portalControllerContext) throws PortletException {
+        // Window properties
+        SearchWindowProperties windowProperties = this.getWindowProperties(portalControllerContext);
+
+        // Search options portlet instance;
+        String instance;
+        if (SearchView.HOME_SETTINGS_BUTTON.equals(windowProperties.getView())) {
+            instance = SearchFiltersHomeSettingsService.PORTLET_INSTANCE;
+        } else {
+            instance = SearchFiltersService.PORTLET_INSTANCE;
+        }
+
         // Search options window properties
         Map<String, String> properties = new HashMap<>();
 
         // URL
         String url;
         try {
-            url = this.portalUrlFactory.getStartPortletUrl(portalControllerContext, SearchFiltersService.PORTLET_INSTANCE, properties, PortalUrlType.MODAL);
+            url = this.portalUrlFactory.getStartPortletUrl(portalControllerContext, instance, properties, PortalUrlType.MODAL);
         } catch (PortalException e) {
             throw new PortletException(e);
         }

@@ -1,5 +1,6 @@
 package fr.index.cloud.ens.search.portlet.controller;
 
+import fr.index.cloud.ens.search.common.portlet.controller.SearchCommonController;
 import fr.index.cloud.ens.search.portlet.model.SearchForm;
 import fr.index.cloud.ens.search.portlet.service.SearchService;
 import org.apache.commons.lang.StringUtils;
@@ -20,10 +21,11 @@ import java.io.IOException;
  * Search portlet controller.
  *
  * @author Cédric Krommenhoek
+ * @see SearchCommonController
  */
 @Controller
 @RequestMapping("VIEW")
-public class SearchController {
+public class SearchController extends SearchCommonController {
 
     /**
      * Portlet context.

@@ -18,6 +18,10 @@ public enum SearchView {
      */
     BUTTON,
     /**
+     * Home settings button.
+     */
+    HOME_SETTINGS_BUTTON,
+    /**
      * Autosubmit view.
      */
     AUTOSUBMIT,
@@ -47,7 +51,7 @@ public enum SearchView {
      * Constructor.
      */
     SearchView() {
-        this.id = StringUtils.lowerCase(this.name());
+        this.id = StringUtils.lowerCase(StringUtils.replace(this.name(), "_", "-"));
         this.key = "SEARCH_VIEW_" + StringUtils.upperCase(this.name());
     }
 

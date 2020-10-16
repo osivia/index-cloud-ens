@@ -485,10 +485,6 @@ return nuxeoRequest.toString();</value>
                             <name>osivia.cms.maxItems</name>
                             <value>8</value>
                         </property>
-                        <property>
-                            <name>osivia.style</name>
-                            <value>title-icon-share</value>
-                        </property>
                     </properties>
                     <height>0</height>
                 </window>

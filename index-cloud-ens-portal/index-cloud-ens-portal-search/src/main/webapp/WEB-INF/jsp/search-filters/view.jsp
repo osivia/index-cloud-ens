@@ -88,7 +88,7 @@
         </div>
 
         <%--Location--%>
-        <c:if test="${not form.mutualizedSpace}">
+        <c:if test="${form.view.id eq 'default'}">
             <div class="form-group row">
                 <form:label path="location" cssClass="col-md-3 col-form-label"><op:translate
                         key="SEARCH_FILTERS_LOCATION_LABEL"/></form:label>

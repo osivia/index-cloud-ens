@@ -1,5 +1,6 @@
 package fr.index.cloud.ens.search.eraser.portlet.controller;
 
+import fr.index.cloud.ens.search.common.portlet.controller.SearchCommonController;
 import fr.index.cloud.ens.search.eraser.portlet.service.SearchEraserService;
 import org.osivia.portal.api.context.PortalControllerContext;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,10 +18,11 @@ import javax.portlet.PortletException;
  * Search eraser portlet controller.
  *
  * @author Cédric Krommenhoek
+ * @see SearchCommonController
  */
 @Controller
 @RequestMapping("VIEW")
-public class SearchEraserController {
+public class SearchEraserController extends SearchCommonController {
 
     /**
      * Portlet context.

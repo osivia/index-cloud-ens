@@ -6,6 +6,10 @@
 
 
 <div class="list-mutualization-space-summary">
+    <c:if test="${empty documents}">
+        <span class="text-muted"><op:translate key="DOCUMENT_NO_MUTUALIZATION" /></span>
+    </c:if>
+
     <c:forEach var="document" items="${documents}">
         <div class="card card-custom card-custom-border-left card-custom-hover card-custom-${document.properties['mtz:enable'] ? 'orange' : 'green'} mb-3">
             <div class="card-body py-3">

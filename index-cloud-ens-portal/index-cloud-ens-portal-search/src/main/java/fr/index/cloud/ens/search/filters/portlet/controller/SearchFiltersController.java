@@ -1,13 +1,19 @@
 package fr.index.cloud.ens.search.filters.portlet.controller;
 
-import fr.index.cloud.ens.search.filters.portlet.model.*;
+import fr.index.cloud.ens.search.common.portlet.controller.SearchCommonController;
+import fr.index.cloud.ens.search.filters.portlet.model.SearchFiltersDateRange;
+import fr.index.cloud.ens.search.filters.portlet.model.SearchFiltersForm;
+import fr.index.cloud.ens.search.filters.portlet.model.SearchFiltersSizeRange;
+import fr.index.cloud.ens.search.filters.portlet.model.SearchFiltersSizeUnit;
 import fr.index.cloud.ens.search.filters.portlet.model.converter.SearchFiltersDatePropertyEditor;
 import fr.index.cloud.ens.search.filters.portlet.service.SearchFiltersService;
-import net.sf.json.JSONArray;
 import org.osivia.portal.api.context.PortalControllerContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.portlet.bind.PortletRequestDataBinder;
 import org.springframework.web.portlet.bind.annotation.ActionMapping;
@@ -16,7 +22,6 @@ import org.springframework.web.portlet.bind.annotation.ResourceMapping;
 
 import javax.portlet.*;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -25,11 +30,12 @@ import java.util.List;
  * Search filters portlet controller.
  *
  * @author Cédric Krommenhoek
+ * @see SearchCommonController
  */
 @Controller
 @RequestMapping("VIEW")
 @SessionAttributes("form")
-public class SearchFiltersController {
+public class SearchFiltersController extends SearchCommonController {
 
     /**
      * Portlet context.
@@ -127,34 +133,6 @@ public class SearchFiltersController {
         // Redirection
         String url = this.service.saveSearch(portalControllerContext, form);
         response.sendRedirect(url);
-    }
-
-
-    /**
-     * Load levels select2 vocabulary resource mapping.
-     *
-     * @param request        resource request
-     * @param response       resource response
-     * @param vocabularyName vocabulary name request parameter
-     * @param filter         select2 filter request parameter
-     */
-    @ResourceMapping("load-vocabulary")
-    public void loadLevels(ResourceRequest request, ResourceResponse response, @RequestParam("vocabulary") String vocabularyName, @RequestParam(name = "filter", required = false) String filter) throws PortletException, IOException {
-        // Portal controller context
-        PortalControllerContext portalControllerContext = new PortalControllerContext(portletContext, request, response);
-
-        // Vocabulary
-        SearchFiltersVocabulary vocabulary = SearchFiltersVocabulary.fromVocabularyName(vocabularyName);
-        // Select2 results
-        JSONArray results = this.service.loadVocabulary(portalControllerContext, vocabulary, filter);
-
-        // Content type
-        response.setContentType("application/json");
-
-        // Content
-        PrintWriter printWriter = new PrintWriter(response.getPortletOutputStream());
-        printWriter.write(results.toString());
-        printWriter.close();
     }
 
 

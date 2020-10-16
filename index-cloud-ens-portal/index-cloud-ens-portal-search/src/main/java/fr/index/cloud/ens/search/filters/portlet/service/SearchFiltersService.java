@@ -2,12 +2,9 @@ package fr.index.cloud.ens.search.filters.portlet.service;
 
 import fr.index.cloud.ens.search.common.portlet.service.SearchCommonService;
 import fr.index.cloud.ens.search.filters.portlet.model.SearchFiltersForm;
-import fr.index.cloud.ens.search.filters.portlet.model.SearchFiltersVocabulary;
-import net.sf.json.JSONArray;
 import org.osivia.portal.api.context.PortalControllerContext;
 
 import javax.portlet.PortletException;
-import java.io.IOException;
 import java.util.Date;
 
 /**
@@ -22,6 +19,11 @@ public interface SearchFiltersService extends SearchCommonService {
      * Search filters portlet instance.
      */
     String PORTLET_INSTANCE = "index-cloud-ens-search-filters-instance";
+
+    /**
+     * Home settings indicator window property.
+     */
+    String HOME_SETTINGS_WINDOW_PROPERTY = "osivia.search.home-settings";
 
 
     /**
@@ -60,17 +62,6 @@ public interface SearchFiltersService extends SearchCommonService {
      * @return URL
      */
     String saveSearch(PortalControllerContext portalControllerContext, SearchFiltersForm form) throws PortletException;
-
-
-    /**
-     * Load select2 vocabulary.
-     *
-     * @param portalControllerContext portal controller context
-     * @param vocabulary              vocabulary
-     * @param filter                  select2 filter
-     * @return select2 results JSON array
-     */
-    JSONArray loadVocabulary(PortalControllerContext portalControllerContext, SearchFiltersVocabulary vocabulary, String filter) throws PortletException, IOException;
 
 
     /**
