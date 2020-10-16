@@ -13,7 +13,7 @@
 
         <%--Title--%>
         <div class="flex-shrink-1 mr-2 text-truncate">
-            <strong>${document.title}</strong>
+            <strong>${document.displayTitle}</strong>
         </div>
 
         <%--Size--%>

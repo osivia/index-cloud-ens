@@ -16,20 +16,54 @@
 		</c:when>
 
 		<c:otherwise>
-			<c:forEach var="message" items="${unreadMessages.items}">
-				<div class="card mb-2 home-fixed-block-item">
-					<div class="card-body">
+			<c:forEach var="message" items="${unreadMessages.items}" varStatus="counter">
+			
+			<c:choose>
+		        <c:when test="${counter.index mod 2 == 0}">
+		            <c:set var="style" value="left" />
+		        </c:when>
+		        <c:otherwise>
+		            <c:set var="style" value="right" />
+		        </c:otherwise>
+		    </c:choose> 
+			
+			
 
-						<h3 class="card-title h5 mb-1 text-truncate">
+	
+	           <div class="card card-custom mb-3 home-fixed-block-item rounded-pill triangle-${style} }">
+                    <div class="card-body p-2">
+                        <div class="d-flex align-items-center">
+                            <div class="mr-3">
+                                <%--Icon--%>
+                                <div class="card-custom-icon">
+                                    <c:if test="${not empty message.task.publicationDTO}">       
+                                        <ttc:icon document="${message.task.publicationDTO}" />
+                                    </c:if> 
+                                    <c:if test="${empty message.task.publicationDTO}">
+                                          <div class="avatar">
+                                                <ttc:user name="${message.task.properties['author']}" hideDisplayName="true" linkable="false" />
+                                           </div>
+                                    </c:if> 
+                                </div>
+                            </div>
+                            <div class="flex-grow-1 flex-shrink-1">
+                                <%--Title--%>
+                                <h3 class="card-title mb-0 text-truncate">
+                                    <a href="${message.url}" class="stretched-link text-black text-decoration-none no-ajax-link">
+                                        <span>${message.task.properties['discussionTitle']}</span>
+                                    </a>                                        
+                                </h3>
+                                <div class="card-text text-truncate"><small>${message.task.properties['message']}</small></div>
+                            </div>
+                        </div>
+                     </div>
+                  </div>
+                     
 
-							<a href="${message.url}" class="stretched-link no-ajax-link"> <span>${message.task.properties['pubTitle']}</span>
-							</a>
-
-						</h3>
-
-						<p class="text-truncate card-text">${message.task.properties['message']}</p>
-					</div>
-				</div>
+			
+			
+			
+			
 			</c:forEach>
 		</c:otherwise>
 	</c:choose>

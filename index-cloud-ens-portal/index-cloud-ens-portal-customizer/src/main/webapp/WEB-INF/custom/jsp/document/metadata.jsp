@@ -340,12 +340,15 @@
         <div class="card card-custom card-custom-border-left card-custom-orange mb-3">
             <div class="card-body p-3">
                 <div class="d-flex">
-                    <div class="flex-shrink-0 mr-3">
-                            <%--Icon--%>
-                        <div class="card-custom-icon">
-                            <ttc:icon document="${document}"/>
-                        </div>
-                    </div>
+                
+                    <c:if test="${not empty publicationDocument}">
+ 	                    <div class="flex-shrink-0 mr-3">
+	                            <%--Icon--%>
+	                        <div class="card-custom-icon">
+	                            <ttc:icon document="${publicationDocument}"/>
+	                        </div>
+	                    </div>
+                    </c:if>
 
                     <div class="flex-grow-1 flex-shrink-1">
                             <%--Title--%>
@@ -356,11 +359,13 @@
                         </div>
 
                             <%--Format--%>
-                        <div class="mb-1">
-                            <small class="text-secondary"><op:translate
-                                    key="DOCUMENT_MUTUALIZATION_FORMAT"/></small>
-                            <span>&ndash;</span>
-                        </div>
+                        <c:if test="${not empty publicationFormat}">
+	                        <div class="mb-1">
+	                            <small class="text-secondary"><op:translate
+	                                    key="DOCUMENT_MUTUALIZATION_FORMAT"/></small>
+	                            <strong>${publicationFormat}<strong>
+	                        </div>
+	                    </c:if>
 
                             <%--Keywords--%>
                         <div class="mb-3">
@@ -407,13 +412,15 @@
                             </li>
                         </ul>
 
-                        <div>
-                            <c:set var="discussionUrl"><ttc:discussion publicationId="${document.properties['ttc:webid']}"/></c:set>
-                            <a href="${discussionUrl}" class="btn btn-link btn-link-hover-orange btn-sm text-orange-dark no-ajax-link">
-                                <i class="glyphicons glyphicons-basic-refresh"></i>
-                                <span><op:translate key="DOCUMENT_MUTUALIZATION_CONTACT_READERS"/></span>
-                            </a>
-                        </div>
+                        <c:if test="${document.properties['mtz:downloads'] ge 1}">
+	                        <div>
+	                            <c:set var="discussionUrl"><ttc:discussion publicationId="${document.properties['ttc:webid']}"/></c:set>
+	                            <a href="${discussionUrl}" class="btn btn-link btn-link-hover-orange btn-sm text-orange-dark no-ajax-link">
+	                                <i class="glyphicons glyphicons-basic-refresh"></i>
+	                                <span><op:translate key="DOCUMENT_MUTUALIZATION_CONTACT_READERS"/></span>
+	                            </a>
+	                        </div>
+                        </c:if>	                        
 
                             <%--Desynchronized indicator--%>
                         <c:if test="${desynchronized}">
@@ -468,7 +475,7 @@
         </div>
     </c:if>
 
-    <c:if test="${readOnly}">
+    <c:if test="${readOnly and contactAuthor}">
         <div class="card card-custom card-custom-border-left card-custom-orange mb-3">
             <div class="card-body py-3">
  

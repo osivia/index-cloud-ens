@@ -245,7 +245,7 @@ public class DiscussionRepositoryImpl implements DiscussionRepository {
                 for (Document publication : publicationsTitle) {
                     DocumentDTO documentDto = this.documentDao.toDTO(publication);
                     
-                    PublicationInfos use = new PublicationInfos(publication.getProperties().getString("ttc:webid"), documentDto.getDisplayTitle(), publication);
+                    PublicationInfos use = new PublicationInfos(publication.getProperties().getString("ttc:webid"), documentDto.getDisplayTitle(), publication, documentDto);
                     
                     String copiedWebId = publication.getProperties().getString("ttc:webid");
                     if( copiedWebId != null)    {
@@ -366,12 +366,39 @@ public class DiscussionRepositoryImpl implements DiscussionRepository {
             if (newAuthor != null) {
                 Map<String, String> properties = new HashMap<String, String>();
                 properties.put("author", newAuthor);
-                properties.put("message", lastMessage);
+                // only the first line wille be displayed
+                String firstLine;
+                int secundLine = lastMessage.indexOf ("<br");
+                if( secundLine != -1)
+                    firstLine = lastMessage.substring(0, secundLine);
+                else
+                    firstLine = lastMessage;
+                properties.put("message", firstLine);
                 properties.put("pubTitle", discussion.getTitle());
                 properties.put("pubTarget", discussion.getTarget());
                 properties.put("pubType", discussion.getType());
+                
 
-                tasks.add(new CustomTask(discussion.getDocument().getTitle(), discussion.getDocument(), properties));
+                
+                String title = "";
+                
+                if (discussion.getTitle() != null) {
+                    title = discussion.getTitle();
+                } else  {
+                    Person person = personService.getPerson(newAuthor);
+                    if (person != null) {
+                        title = StringUtils.defaultIfBlank(person.getDisplayName(), "");
+                    }
+                } 
+                
+                properties.put("discussionTitle", title);
+               
+                
+                DocumentDTO dto = null;
+                if( discussion.getPublication() != null)    
+                    dto = discussion.getPublication().getTargetDTO();
+
+                tasks.add(new CustomTask(discussion.getDocument().getTitle(), discussion.getDocument(), properties, dto));
             }
 
 

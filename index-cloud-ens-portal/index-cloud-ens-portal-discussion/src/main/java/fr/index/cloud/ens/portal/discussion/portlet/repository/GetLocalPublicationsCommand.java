@@ -60,7 +60,7 @@ public class GetLocalPublicationsCommand implements INuxeoCommand {
 
         // Operation request
         OperationRequest request = nuxeoSession.newRequest("Document.QueryES");
-        request.set(Constants.HEADER_NX_SCHEMAS, "dublincore, toutatice, mutualization");
+        request.set(Constants.HEADER_NX_SCHEMAS, "dublincore, toutatice, file, mutualization");
         request.set("query", filteredRequest);
 
         return request.execute();

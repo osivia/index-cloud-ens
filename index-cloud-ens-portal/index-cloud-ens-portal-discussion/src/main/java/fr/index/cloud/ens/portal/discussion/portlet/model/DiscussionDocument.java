@@ -69,7 +69,6 @@ public class DiscussionDocument {
     /** The publication. */
     private PublicationInfos publication;
 
-  
 
 
     /** The messages. */

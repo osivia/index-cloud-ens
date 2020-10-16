@@ -7,6 +7,20 @@
 	<display-name>Cloud Web Service App</display-name>
 
 
+    <filter>
+        <filter-name>monitoring</filter-name>
+        <filter-class>net.bull.javamelody.AdaptedMonitoringFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>monitoring</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+    <listener>
+        <listener-class>net.bull.javamelody.SessionListener</listener-class>
+    </listener>
+
+
+
 	<filter>
 		<filter-name>SecurityFilter</filter-name>
 		<filter-class>fr.index.cloud.oauth.config.SecurityFilter</filter-class>
@@ -61,6 +75,7 @@
 		<url-pattern>/rest/*</url-pattern>
 	</servlet-mapping>
     
+
 
 
 </web-app>
