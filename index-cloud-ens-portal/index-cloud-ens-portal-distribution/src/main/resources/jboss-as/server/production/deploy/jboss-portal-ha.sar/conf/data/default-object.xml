@@ -445,6 +445,51 @@ return nuxeoRequest.toString();</value>
                 </window>
 
                 <window>
+                    <window-name>index-cloud-ens-search-instance_1602752437030</window-name>
+                    <instance-ref>index-cloud-ens-search-instance</instance-ref>
+                    <region>col-2-aux</region>
+                    <properties>
+                        <property>
+                            <name>portal.windowContentType</name>
+                            <value>portlet</value>
+                        </property>
+                        <property>
+                            <name>osivia.title</name>
+                            <value>Paramétrage</value>
+                        </property>
+                        <property>
+                            <name>osivia.hideTitle</name>
+                            <value>1</value>
+                        </property>
+                        <property>
+                            <name>theme.order</name>
+                            <value>0</value>
+                        </property>
+                        <property>
+                            <name>osivia.search.view</name>
+                            <value>home-settings-button</value>
+                        </property>
+                        <property>
+                            <name>osivia.ajaxLink</name>
+                            <value>1</value>
+                        </property>
+                        <property>
+                            <name>osivia.style</name>
+                            <value>mb-0</value>
+                        </property>
+                        <property>
+                            <name>osivia.hideDecorators</name>
+                            <value>1</value>
+                        </property>
+                        <property>
+                            <name>theme.dyna.partial_refresh_enabled</name>
+                            <value>true</value>
+                        </property>
+                    </properties>
+                    <height>0</height>
+                </window>
+
+                <window>
                     <window-name>toutatice-portail-cms-nuxeo-viewListPortletInstance_1579022231583</window-name>
                     <instance-ref>toutatice-portail-cms-nuxeo-viewListPortletInstance</instance-ref>
                     <region>col-2</region>
@@ -466,12 +511,32 @@ return nuxeoRequest.toString();</value>
                             <value>1</value>
                         </property>
                         <property>
-                            <name>osivia.hideDecorators</name>
+                            <name>osivia.hideTitle</name>
                             <value>1</value>
                         </property>
                         <property>
                             <name>osivia.nuxeoRequest</name>
-                            <value>ecm:path STARTSWITH '/default-domain/communaute' ORDER BY dc:modified DESC</value>
+                            <value>import org.apache.commons.lang.StringUtils;&#13;
+import org.apache.commons.collections.CollectionUtils;&#13;
+&#13;
+StringBuilder nuxeoRequest = new StringBuilder();&#13;
+nuxeoRequest.append("ecm:path STARTSWITH '/default-domain/communaute' ");&#13;
+&#13;
+&#13;
+// Levels&#13;
+List levels = params.get("levels");&#13;
+if (CollectionUtils.isNotEmpty(levels)) {&#13;
+boolean first = true;&#13;
+nuxeoRequest.append("AND (");&#13;
+for (String level : levels) {&#13;
+first ? first = false : nuxeoRequest.append("OR ");&#13;
+nuxeoRequest.append("idxcl:levelsTree STARTSWITH '").append(level).append("' ");&#13;
+}&#13;
+nuxeoRequest.append(") ");&#13;
+}&#13;
+&#13;
+nuxeoRequest.append("ORDER BY dc:modified DESC");&#13;
+return nuxeoRequest.toString();</value>
                         </property>
                         <property>
                             <name>osivia.cms.style</name>
