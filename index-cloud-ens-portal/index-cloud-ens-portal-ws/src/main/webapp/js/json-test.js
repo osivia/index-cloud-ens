@@ -817,7 +817,7 @@ $JQry(function() {
 								$JQry.notify("Error #"+jsonData.returnCode+ " "+ jsonData.errorMessage, "error");
 							else{
 								$JQry.notify("Utilisateur créé", "success");
-								window.open(jsonData.url,"signup","menubar=no, status=no, scrollbars=no, menubar=no, width=1000, height=600");
+								window.open(jsonData.url,"signup");
 							}
 
 						},

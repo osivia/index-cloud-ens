@@ -18,7 +18,7 @@ $JQry(function() {
                     
                     $placeholder.popover('show');
                 	
-                }, 500);
+                }, 1000);
             });
 
             $element.data("loaded", true);
