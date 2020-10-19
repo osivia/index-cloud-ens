@@ -1513,7 +1513,7 @@ return nuxeoRequest.toString();</value>
                         </property>
                         <property>
                             <name>theme.order</name>
-                            <value>1</value>
+                            <value>2</value>
                         </property>
                     </properties>
                     <height>0</height>
@@ -1953,6 +1953,88 @@ return nuxeoRequest.toString();</value>
                             <property>
                                 <name>osivia.selector.allLabel</name>
                                 <value>Toutes les matières</value>
+                            </property>
+                        </properties>
+                        <height>0</height>
+                    </window>
+
+                    <window>
+                        <window-name>index-cloud-ens-search-instance_1603100899213</window-name>
+                        <instance-ref>index-cloud-ens-search-instance</instance-ref>
+                        <region>nav-1</region>
+                        <properties>
+                            <property>
+                                <name>portal.windowContentType</name>
+                                <value>portlet</value>
+                            </property>
+                            <property>
+                                <name>osivia.title</name>
+                                <value>Recherche avancée</value>
+                            </property>
+                            <property>
+                                <name>osivia.hideTitle</name>
+                                <value>1</value>
+                            </property>
+                            <property>
+                                <name>theme.order</name>
+                                <value>5</value>
+                            </property>
+                            <property>
+                                <name>osivia.search.view</name>
+                                <value>button</value>
+                            </property>
+                            <property>
+                                <name>osivia.ajaxLink</name>
+                                <value>1</value>
+                            </property>
+                            <property>
+                                <name>osivia.hideDecorators</name>
+                                <value>1</value>
+                            </property>
+                            <property>
+                                <name>theme.dyna.partial_refresh_enabled</name>
+                                <value>true</value>
+                            </property>
+                        </properties>
+                        <height>0</height>
+                    </window>
+
+                    <window>
+                        <window-name>index-cloud-ens-saved-searches-instance_1603101704229</window-name>
+                        <instance-ref>index-cloud-ens-saved-searches-instance</instance-ref>
+                        <region>nav-2</region>
+                        <properties>
+                            <property>
+                                <name>portal.windowContentType</name>
+                                <value>portlet</value>
+                            </property>
+                            <property>
+                                <name>osivia.title</name>
+                                <value>Mes filtres</value>
+                            </property>
+                            <property>
+                                <name>osivia.search.category-id</name>
+                                <value>mutualized</value>
+                            </property>
+                            <property>
+                                <name>osivia.hideTitle</name>
+                                <value>1</value>
+                            </property>
+                            <property>
+                                <name>theme.order</name>
+                                <value>0</value>
+                            </property>
+                            <property>
+                                <name>osivia.ajaxLink</name>
+                                <value>1</value>
+                            </property>
+                            <property>
+                                <name>osivia.hideDecorators</name>
+                                <value>1</value>
+                            </property>
+                            <property>
+                                <name>theme.dyna.partial_refresh_enabled</name>
+                                <value>true</value>
                             </property>
                         </properties>
                         <height>0</height>
