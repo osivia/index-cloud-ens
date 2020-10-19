@@ -516,27 +516,7 @@ return nuxeoRequest.toString();</value>
                         </property>
                         <property>
                             <name>osivia.nuxeoRequest</name>
-                            <value>import org.apache.commons.lang.StringUtils;&#13;
-import org.apache.commons.collections.CollectionUtils;&#13;
-&#13;
-StringBuilder nuxeoRequest = new StringBuilder();&#13;
-nuxeoRequest.append("ecm:path STARTSWITH '/default-domain/communaute' ");&#13;
-&#13;
-&#13;
-// Levels&#13;
-List levels = params.get("levels");&#13;
-if (CollectionUtils.isNotEmpty(levels)) {&#13;
-boolean first = true;&#13;
-nuxeoRequest.append("AND (");&#13;
-for (String level : levels) {&#13;
-first ? first = false : nuxeoRequest.append("OR ");&#13;
-nuxeoRequest.append("idxcl:levelsTree STARTSWITH '").append(level).append("' ");&#13;
-}&#13;
-nuxeoRequest.append(") ");&#13;
-}&#13;
-&#13;
-nuxeoRequest.append("ORDER BY dc:modified DESC");&#13;
-return nuxeoRequest.toString();</value>
+                            <value>ecm:path STARTSWITH '/default-domain/communaute' ORDER BY dc:modified DESC</value>
                         </property>
                         <property>
                             <name>osivia.cms.style</name>
