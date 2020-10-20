@@ -144,9 +144,16 @@ public class DiscussionRepositoryImpl implements DiscussionRepository {
      * @throws PortalException the portal exception
      */
     @Override
-    public Map<String, PublicationInfos> getLocalPublicationDiscussionsWebId(PortalControllerContext portalControllerContext, String singleWebId) throws PortalException {
+    public Map<String, PublicationInfos> getDiscussionsPubInfosByCopy(PortalControllerContext portalControllerContext) throws PortalException {
         // Tasks count
 
+        return getDiscussionPubInfosByPublication(portalControllerContext, null);
+    }
+    
+    
+
+
+    public Map<String, PublicationInfos> getDiscussionPubInfosByPublication(PortalControllerContext portalControllerContext, String singleWebId) {
         HttpSession session = portalControllerContext.getHttpServletRequest().getSession();
 
         @SuppressWarnings("unchecked")
@@ -217,25 +224,26 @@ public class DiscussionRepositoryImpl implements DiscussionRepository {
             // Search local copy of publications
             Map<String, Date> webIds = new HashMap<String, Date>();
 
+            if (singleWebId == null) {
 
-            Documents publications = (Documents) nuxeoController.executeNuxeoCommand(new GetLocalPublicationsCommand(rootPath));
-            for (Document document : publications) {
-                String webId;
+                Documents publications = (Documents) nuxeoController.executeNuxeoCommand(new GetLocalPublicationsCommand(rootPath));
+                for (Document document : publications) {
+                    String webId;
 
-                // for author
-                webId = document.getProperties().getString("ttc:webid");
-                webIds.put(webId, null);
+                    // for author
+                    webId = document.getProperties().getString("ttc:webid");
+                    webIds.put(webId, null);
 
-                // for reader
-                String sourceId = document.getProperties().getString("mtz:sourceWebId");
-                if (StringUtils.isNotEmpty(sourceId)) {
-                    saveWebIdAndOlderCopyDate(webIds, sourceId, document.getProperties().getDate("dc:created"));
+                    // for reader
+                    String sourceId = document.getProperties().getString("mtz:sourceWebId");
+                    if (StringUtils.isNotEmpty(sourceId)) {
+                        saveWebIdAndOlderCopyDate(webIds, sourceId, document.getProperties().getDate("dc:created"));
+                    }
+
                 }
-   
-            }
-
-            if (singleWebId != null)
+            } else {
                 webIds.put(singleWebId, null);
+            }
 
             // Build titles
             publicationsInfo = new ConcurrentHashMap<String, PublicationInfos>();
@@ -268,7 +276,10 @@ public class DiscussionRepositoryImpl implements DiscussionRepository {
 
 
     private String getCacheName(String singleWebId) {
-        return DiscussionHelper.ATTR_LOCAL_PUBLICATION_CACHE + "/" + singleWebId;
+        String cacheName = DiscussionHelper.ATTR_LOCAL_PUBLICATION_CACHE;
+        if( singleWebId != null)
+            cacheName+= "/" + singleWebId;
+        return cacheName;
     }
 
 
@@ -287,7 +298,7 @@ public class DiscussionRepositoryImpl implements DiscussionRepository {
         List<DiscussionDocument> discussions;
 
         try {
-             Map<String, PublicationInfos> webIds = getLocalPublicationDiscussionsWebId(portalControllerContext, null);
+             Map<String, PublicationInfos> webIds = getDiscussionsPubInfosByCopy(portalControllerContext);
             NuxeoController nuxeoController = getNuxeoController(portalControllerContext);
 
 
@@ -636,7 +647,7 @@ public class DiscussionRepositoryImpl implements DiscussionRepository {
         Map<String, PublicationInfos> publications;
         try {
             // Search on local copies
-            publications = getLocalPublicationDiscussionsWebId(portalControllerContext, null);
+            publications = getDiscussionsPubInfosByCopy(portalControllerContext);
 
 
             PublicationInfos pubUse = publications.get(publicationId);
@@ -644,7 +655,7 @@ public class DiscussionRepositoryImpl implements DiscussionRepository {
 
             if (pubUse == null) {
                 // Search per instance
-                publications = getLocalPublicationDiscussionsWebId(portalControllerContext, publicationId);
+                publications = getDiscussionPubInfosByPublication(portalControllerContext, publicationId);
                 pubUse = publications.get(publicationId);
             }
 

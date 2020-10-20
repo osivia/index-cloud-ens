@@ -259,7 +259,7 @@ public class DiscussionServiceImpl implements DiscussionService, ApplicationCont
             
             if( StringUtils.equals(doc.getType(), DiscussionDocument.TYPE_USER_COPY)    ) {
                 try {
-                    if(this.repository.getLocalPublicationDiscussionsWebId(portalControllerContext, null).containsKey(doc.getTarget())) {
+                    if(this.repository.getDiscussionsPubInfosByCopy(portalControllerContext).containsKey(doc.getTarget())) {
                         checked = true;
                     }
                 } catch (PortalException e) {

@@ -154,16 +154,28 @@ public interface DiscussionRepository {
 
 
 
+
+
     /**
-     * Gets the local publication discussions web id for the current user
+     * Gets the discussion linked to a publication.
+     *
+     * @param portalControllerContext the portal controller context
+     * @param webId the web id
+     * @return the discussion by publication
+     * @throws PortalException the portal exception
+     */
+    Map<String, PublicationInfos> getDiscussionPubInfosByPublication(PortalControllerContext portalControllerContext, String webId) throws PortalException;
+
+
+    /**
+     * Gets the local publication discussions for the current user
      *
      * @param portalControllerContext the portal controller context
      * @return the local publication discussions web id
      * @throws PortalException the portal exception
      */
 
-
-    Map<String, PublicationInfos> getLocalPublicationDiscussionsWebId(PortalControllerContext portalControllerContext, String adminModeId) throws PortalException;
+    Map<String, PublicationInfos> getDiscussionsPubInfosByCopy(PortalControllerContext portalControllerContext) throws PortalException;
 
 
 
