@@ -2,6 +2,8 @@ package fr.index.cloud.ens.filebrowser.commons.portlet.model;
 
 import org.osivia.services.workspace.filebrowser.portlet.model.FileBrowserForm;
 
+import java.util.List;
+
 /**
  * File browser form java-bean abstract super-class.
  *
@@ -9,10 +11,8 @@ import org.osivia.services.workspace.filebrowser.portlet.model.FileBrowserForm;
  */
 public abstract class AbstractFileBrowserForm extends FileBrowserForm {
 
-    /**
-     * Customized column.
-     */
-    private AbstractFileBrowserSortField customizedColumn;
+    /** Columns. */
+    private List<AbstractFileBrowserColumn> columns;
 
 
     /**
@@ -23,12 +23,11 @@ public abstract class AbstractFileBrowserForm extends FileBrowserForm {
     }
 
 
-    public AbstractFileBrowserSortField getCustomizedColumn() {
-        return customizedColumn;
+    public List<AbstractFileBrowserColumn> getColumns() {
+        return columns;
     }
 
-    public void setCustomizedColumn(AbstractFileBrowserSortField customizedColumn) {
-        this.customizedColumn = customizedColumn;
+    public void setColumns(List<AbstractFileBrowserColumn> columns) {
+        this.columns = columns;
     }
-
 }

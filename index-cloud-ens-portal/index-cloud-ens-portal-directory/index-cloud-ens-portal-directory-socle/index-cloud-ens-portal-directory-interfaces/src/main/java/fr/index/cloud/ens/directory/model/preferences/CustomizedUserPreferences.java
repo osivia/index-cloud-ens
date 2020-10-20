@@ -2,6 +2,9 @@ package fr.index.cloud.ens.directory.model.preferences;
 
 import org.osivia.directory.v2.model.preferences.UserPreferences;
 
+import java.util.List;
+import java.util.Map;
+
 /**
  * User preferences customized interface.
  *
@@ -11,18 +14,18 @@ import org.osivia.directory.v2.model.preferences.UserPreferences;
 public interface CustomizedUserPreferences extends UserPreferences {
 
     /**
-     * Get file browser customized column identifier.
+     * Get file browser preferences.
      *
-     * @return identifier
+     * @return preferences
      */
-    String getCustomizedColumn();
+    Map<String, CustomizedFileBrowserPreferences> getFileBrowserPreferences();
 
 
     /**
-     * Set file browser customized column identifier.
+     * Set file browser preferences.
      *
-     * @param id identifier
+     * @param preferences file browser preferences
      */
-    void setCustomizedColumn(String id);
+    void setFileBrowserPreferences(Map<String, CustomizedFileBrowserPreferences> preferences);
 
 }

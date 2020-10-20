@@ -1,27 +1,35 @@
 package fr.index.cloud.ens.filebrowser.commons.portlet.service;
 
+import fr.index.cloud.ens.directory.model.preferences.CustomizedFileBrowserColumn;
+import fr.index.cloud.ens.directory.model.preferences.CustomizedFileBrowserPreferences;
 import fr.index.cloud.ens.directory.model.preferences.CustomizedUserPreferences;
 import fr.index.cloud.ens.directory.service.preferences.CustomizedUserPreferencesService;
+import fr.index.cloud.ens.filebrowser.columns.configuration.portlet.service.FileBrowserColumnsConfigurationService;
+import fr.index.cloud.ens.filebrowser.commons.portlet.model.AbstractFileBrowserColumn;
 import fr.index.cloud.ens.filebrowser.commons.portlet.model.AbstractFileBrowserForm;
 import fr.index.cloud.ens.filebrowser.commons.portlet.model.AbstractFileBrowserItem;
-import fr.index.cloud.ens.filebrowser.commons.portlet.model.AbstractFileBrowserSortField;
+import fr.index.cloud.ens.filebrowser.commons.portlet.model.CustomizedFileBrowserSortField;
+import fr.index.cloud.ens.filebrowser.mutualized.portlet.model.MutualizedFileBrowserSortEnum;
+import fr.index.cloud.ens.filebrowser.mutualized.portlet.service.MutualizedFileBrowserService;
 import fr.index.cloud.ens.filebrowser.portlet.model.CustomizedFileBrowserForm;
+import fr.index.cloud.ens.filebrowser.portlet.model.CustomizedFileBrowserSortEnum;
+import fr.index.cloud.ens.filebrowser.portlet.service.CustomizedFileBrowserService;
 import fr.toutatice.portail.cms.nuxeo.api.cms.NuxeoDocumentContext;
 import fr.toutatice.portail.cms.nuxeo.api.domain.DocumentDTO;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.nuxeo.ecm.automation.client.model.Document;
 import org.osivia.portal.api.PortalException;
 import org.osivia.portal.api.context.PortalControllerContext;
-import org.osivia.services.workspace.filebrowser.portlet.model.FileBrowserSortField;
+import org.osivia.portal.api.urls.IPortalUrlFactory;
+import org.osivia.portal.api.urls.PortalUrlType;
 import org.osivia.services.workspace.filebrowser.portlet.repository.FileBrowserRepository;
 import org.osivia.services.workspace.filebrowser.portlet.service.FileBrowserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 
 import javax.portlet.PortletException;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 /**
  * File browser portlet service implementation abstract super-class.
@@ -50,6 +58,12 @@ public abstract class AbstractFileBrowserServiceImpl extends FileBrowserServiceI
     @Autowired
     private CustomizedUserPreferencesService userPreferencesService;
 
+    /**
+     * Portal URL factory.
+     */
+    @Autowired
+    private IPortalUrlFactory portalUrlFactory;
+
 
     /**
      * Constructor.
@@ -74,26 +88,9 @@ public abstract class AbstractFileBrowserServiceImpl extends FileBrowserServiceI
                 throw new PortletException(e);
             }
 
-            // Customized column
-            AbstractFileBrowserSortField customizedColumn = null;
-            if (StringUtils.isNotEmpty(userPreferences.getCustomizedColumn())) {
-                // Enum values
-                List<FileBrowserSortField> values = this.getAllSortFields();
-
-                Iterator<FileBrowserSortField> iterator = values.iterator();
-                while ((customizedColumn == null) && iterator.hasNext()) {
-                    AbstractFileBrowserSortField value = (AbstractFileBrowserSortField) iterator.next();
-
-                    if (value.isCustomizable() && StringUtils.equals(userPreferences.getCustomizedColumn(), value.getId())) {
-                        customizedColumn = value;
-                    }
-                }
-            }
-            if (customizedColumn == null) {
-                // Default value
-                customizedColumn = this.getDefaultCustomizedColumn();
-            }
-            form.setCustomizedColumn(customizedColumn);
+            // Columns
+            List<AbstractFileBrowserColumn> columns = this.getFileBrowserColumns(portalControllerContext, userPreferences);
+            form.setColumns(columns);
 
             // Current document title
             String path = form.getPath();
@@ -112,6 +109,66 @@ public abstract class AbstractFileBrowserServiceImpl extends FileBrowserServiceI
         }
 
         return form;
+    }
+
+
+    /**
+     * Get file browser columns.
+     *
+     * @return columns
+     */
+    protected abstract List<AbstractFileBrowserColumn> getFileBrowserColumns(PortalControllerContext portalControllerContext, CustomizedUserPreferences userPreferences);
+
+
+    /**
+     * Get file browser preferences.
+     *
+     * @param userPreferences user preferences
+     * @return file browser preferences
+     */
+    protected CustomizedFileBrowserPreferences getFileBrowserPreferences(CustomizedUserPreferences userPreferences) {
+        Map<String, CustomizedFileBrowserPreferences> preferences = userPreferences.getFileBrowserPreferences();
+        if (preferences == null) {
+            preferences = new HashMap<>(1);
+            userPreferences.setFileBrowserPreferences(preferences);
+        }
+
+        String fileBrowserId = this.getFileBrowserId();
+
+        CustomizedFileBrowserPreferences fileBrowserPreferences = preferences.get(fileBrowserId);
+        if (fileBrowserPreferences == null) {
+            fileBrowserPreferences = this.userPreferencesService.generateFileBrowserPreferences(fileBrowserId);
+            preferences.put(fileBrowserId, fileBrowserPreferences);
+
+            // Default configuration
+            List<CustomizedFileBrowserSortField> defaultConfiguration;
+            if (StringUtils.equals(CustomizedFileBrowserService.FILE_BROWSER_ID, fileBrowserId)) {
+                defaultConfiguration = CustomizedFileBrowserSortEnum.DEFAULT_CONFIGURATION;
+            } else if (StringUtils.equals(MutualizedFileBrowserService.FILE_BROWSER_ID, fileBrowserId)) {
+                defaultConfiguration = MutualizedFileBrowserSortEnum.DEFAULT_CONFIGURATION;
+            } else {
+                defaultConfiguration = null;
+            }
+
+            // Default columns
+            if (CollectionUtils.isNotEmpty(defaultConfiguration)) {
+                List<CustomizedFileBrowserColumn> defaultColumns = new ArrayList<>(defaultConfiguration.size());
+                for (int i = 0; i < defaultConfiguration.size(); i++) {
+                    CustomizedFileBrowserSortField field = defaultConfiguration.get(i);
+
+                    CustomizedFileBrowserColumn column = this.userPreferencesService.generateFileBrowserColumn(field.getId());
+                    column.setOrder(i);
+                    column.setVisible(true);
+
+                    defaultColumns.add(column);
+                }
+                fileBrowserPreferences.setColumns(defaultColumns);
+
+                userPreferences.setUpdated(true);
+            }
+        }
+
+        return fileBrowserPreferences;
     }
 
 
@@ -170,66 +227,27 @@ public abstract class AbstractFileBrowserServiceImpl extends FileBrowserServiceI
 
 
     @Override
-    public List<AbstractFileBrowserSortField> getCustomizedColumns(PortalControllerContext portalControllerContext) {
-        // Customized columns
-        List<AbstractFileBrowserSortField> customizedColumns = new ArrayList<>();
+    public String getColumnsConfigurationUrl(PortalControllerContext portalControllerContext) throws PortletException {
+        String instance = FileBrowserColumnsConfigurationService.PORTLET_INSTANCE;
+        Map<String, String> properties = new HashMap<>();
+        properties.put(FileBrowserColumnsConfigurationService.FILE_BROWSER_ID_WINDOW_PROPERTY, this.getFileBrowserId());
 
-        for (FileBrowserSortField value : this.getAllSortFields()) {
-            AbstractFileBrowserSortField sortField = (AbstractFileBrowserSortField) value;
-
-            if (sortField.isCustomizable()) {
-                customizedColumns.add(sortField);
-            }
-        }
-
-        return customizedColumns;
-    }
-
-
-    /**
-     * Get default customized column.
-     *
-     * @return column
-     */
-    protected abstract AbstractFileBrowserSortField getDefaultCustomizedColumn();
-
-
-    @Override
-    public void changeCustomizedColumn(PortalControllerContext portalControllerContext, AbstractFileBrowserForm form, List<FileBrowserSortField> sortFields, String id) throws PortletException {
-        List<FileBrowserSortField> values = this.getAllSortFields();
-
-        // Customized column
-        AbstractFileBrowserSortField customizedColumn = null;
-        Iterator<FileBrowserSortField> iterator = values.iterator();
-        while ((customizedColumn == null) && iterator.hasNext()) {
-            AbstractFileBrowserSortField value = (AbstractFileBrowserSortField) iterator.next();
-
-            if (StringUtils.equals(id, value.getId())) {
-                customizedColumn = value;
-            }
-        }
-
-        if (customizedColumn == null) {
-            // Default result
-            customizedColumn = this.getDefaultCustomizedColumn();
-        }
-
-        // Update model
-        form.setCustomizedColumn(customizedColumn);
-        sortFields.clear();
-        sortFields.addAll(this.getSortFields(portalControllerContext));
-
-        // User preferences
-        CustomizedUserPreferences userPreferences;
+        String url;
         try {
-            userPreferences = this.userPreferencesService.getUserPreferences(portalControllerContext);
+            url = this.portalUrlFactory.getStartPortletUrl(portalControllerContext, instance, properties, PortalUrlType.MODAL);
         } catch (PortalException e) {
             throw new PortletException(e);
         }
 
-        // Update user preferences
-        userPreferences.setCustomizedColumn(customizedColumn.getId());
-        userPreferences.setUpdated(true);
+        return url;
     }
+
+
+    /**
+     * Get file browser identifier.
+     *
+     * @return identifier
+     */
+    protected abstract String getFileBrowserId();
 
 }

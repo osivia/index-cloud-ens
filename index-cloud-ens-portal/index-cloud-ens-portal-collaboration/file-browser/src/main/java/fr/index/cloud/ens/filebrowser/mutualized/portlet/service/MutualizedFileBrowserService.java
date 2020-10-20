@@ -22,6 +22,11 @@ public interface MutualizedFileBrowserService extends AbstractFileBrowserService
      */
     String PORTLET_INSTANCE = "index-cloud-ens-mutualized-file-browser-instance";
 
+    /**
+     * File browser identifier.
+     */
+    String FILE_BROWSER_ID = "mutualized";
+
 
     /**
      * Page size window property.

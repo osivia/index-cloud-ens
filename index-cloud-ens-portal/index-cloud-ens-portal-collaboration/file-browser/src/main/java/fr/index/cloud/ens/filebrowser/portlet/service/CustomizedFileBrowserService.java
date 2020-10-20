@@ -15,9 +15,15 @@ import javax.portlet.PortletException;
 public interface CustomizedFileBrowserService extends AbstractFileBrowserService {
 
     /**
+     * File browser identifier.
+     */
+    String FILE_BROWSER_ID = "default";
+
+    /**
      * Selectors parameter.
      */
     String SELECTORS_PARAMETER = "selectors";
+
     /**
      * Keywords selector identifier.
      */

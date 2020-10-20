@@ -1,7 +1,12 @@
 package fr.index.cloud.ens.directory.repository.preferences;
 
+import fr.index.cloud.ens.directory.model.preferences.CustomizedFileBrowserColumn;
+import fr.index.cloud.ens.directory.model.preferences.CustomizedFileBrowserPreferences;
 import fr.index.cloud.ens.directory.model.preferences.CustomizedUserPreferences;
-import org.apache.commons.lang.StringUtils;
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.collections.MapUtils;
 import org.nuxeo.ecm.automation.client.model.PropertyMap;
 import org.osivia.directory.v2.repository.preferences.UpdateUserPreferencesCommand;
 import org.springframework.beans.factory.config.BeanDefinition;
@@ -21,9 +26,9 @@ import org.springframework.stereotype.Component;
 public class UpdateCustomizedUserPreferencesCommand extends UpdateUserPreferencesCommand {
 
     /**
-     * Customized column XPath.
+     * Customized file browser preferences.
      */
-    public static final String CUSTOMIZED_COLUMN_XPATH = "idxup:customizedColumn";
+    public static final String CUSTOMIZED_FILE_BROWSER_PREFERENCES_XPATH = "idxup:fileBrowserPreferences";
 
 
     // User preferences
@@ -45,9 +50,34 @@ public class UpdateCustomizedUserPreferencesCommand extends UpdateUserPreference
     protected PropertyMap getProperties() {
         PropertyMap properties = super.getProperties();
 
-        // File browser customized column
-        String customizedColumn = StringUtils.trimToNull(this.preferences.getCustomizedColumn());
-        properties.set(CUSTOMIZED_COLUMN_XPATH, customizedColumn);
+        // Customized file browser preferences
+        String property;
+        if (MapUtils.isEmpty(this.preferences.getFileBrowserPreferences())) {
+            property = null;
+        } else {
+            JSONArray fileBrowsers = new JSONArray();
+
+            for (CustomizedFileBrowserPreferences fileBrowserPreferences : this.preferences.getFileBrowserPreferences().values()) {
+                JSONObject fileBrowser = new JSONObject();
+                fileBrowser.put("fileBrowserId", fileBrowserPreferences.getId());
+
+                JSONArray columns = new JSONArray();
+                if (CollectionUtils.isNotEmpty(fileBrowserPreferences.getColumns())) {
+                    for (CustomizedFileBrowserColumn fileBrowserColumn : fileBrowserPreferences.getColumns()) {
+                        JSONObject column = new JSONObject();
+                        column.put("columnId", fileBrowserColumn.getId());
+                        column.put("order", fileBrowserColumn.getOrder());
+                        column.put("visible", fileBrowserColumn.isVisible());
+
+                        columns.add(column);
+                    }
+                }
+                fileBrowser.put("fileBrowserColumns", columns);
+            }
+
+            property = fileBrowsers.toString();
+        }
+        properties.set(CUSTOMIZED_FILE_BROWSER_PREFERENCES_XPATH, property);
 
         return properties;
     }

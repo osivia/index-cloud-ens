@@ -7,19 +7,8 @@
 
 <c:set var="checkboxTitle"><op:translate key="TABLE_CHECKBOX_TITLE"/></c:set>
 
-<c:choose>
-    <c:when test="${form.customizedColumn.id eq 'document-type'}">
-        <c:set var="vocabularyName" value="idx_document_type" scope="request"/>
-    </c:when>
-    <c:when test="${form.customizedColumn.id eq 'level'}">
-        <c:set var="vocabularyName" value="idx_level" scope="request"/>
-    </c:when>
-    <c:when test="${form.customizedColumn.id eq 'subject'}">
-        <c:set var="vocabularyName" value="idx_subject" scope="request"/>
-    </c:when>
-</c:choose>
 
-
+<%--@elvariable id="form" type="fr.index.cloud.ens.filebrowser.portlet.model.CustomizedFileBrowserForm"--%>
 <c:choose>
     <c:when test="${empty form.items}">
         <div class="text-center">
@@ -37,22 +26,42 @@
                      data-accepted-types="${item.acceptedTypes}"
                      data-double-click-target=".file-browser-draggable a"
                      data-pronote="${item.pronote}" data-mutualized="${item.mutualized}">
-                        <%--Checkbox--%>
+                    <%--Checkbox--%>
                     <%@ include file="table-body-checkbox.jspf" %>
 
-                        <%--Title--%>
+                    <%--Title--%>
                     <%@ include file="table-body-title.jspf" %>
 
-                        <%--Customized column--%>
-                    <%@ include file="table-body-customized-column.jspf" %>
+                    <c:forEach var="column" items="${form.columns}">
+                        <c:choose>
+                            <c:when test="${column.id eq 'document-type'}">
+                                <%--Document type--%>
+                                <%@ include file="table-body-document-type.jspf"%>
+                            </c:when>
 
-                        <%--Last modification--%>
-                    <%@ include file="table-body-last-modification.jspf" %>
+                            <c:when test="${column.id eq 'level'}">
+                                <%--Level--%>
+                                <%@ include file="table-body-level.jspf"%>
+                            </c:when>
 
-                        <%--File size--%>
-                    <%@ include file="table-body-file-size.jspf" %>
+                            <c:when test="${column.id eq 'subject'}">
+                                <%--Subject--%>
+                                <%@ include file="table-body-subject.jspf"%>
+                            </c:when>
 
-                        <%--Draggable--%>
+                            <c:when test="${column.id eq 'last-modification'}">
+                                <%--Last modification--%>
+                                <%@ include file="table-body-last-modification.jspf" %>
+                            </c:when>
+
+                            <c:when test="${column.id eq 'file-size'}">
+                                <%--File size--%>
+                                <%@ include file="table-body-file-size.jspf" %>
+                            </c:when>
+                        </c:choose>
+                    </c:forEach>
+
+                    <%--Draggable--%>
                     <c:if test="${item.document.type.editable}">
                         <div class="file-browser-draggable file-browser-draggable-shadowbox"></div>
                     </c:if>

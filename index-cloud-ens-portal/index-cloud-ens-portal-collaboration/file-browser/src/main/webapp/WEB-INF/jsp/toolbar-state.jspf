@@ -10,10 +10,20 @@
     </c:choose>
 
     <div class="text-secondary-light mb-1">
-        <span class="text-green mr-2">
-            <i class="glyphicons glyphicons-basic-folder"></i>
-        </span>
-        <strong class="text-green-dark">${form.title}</strong>
+        <c:choose>
+            <c:when test="${form.listMode}">
+                <span class="mr-2">
+                    <i class="glyphicons glyphicons-basic-search"></i>
+                </span>
+                <strong class="text-primary-dark"><op:translate key="FILE_BROWSER_TOOLBAR_TITLE_SEARCH"/></strong>
+            </c:when>
+            <c:otherwise>
+                <span class="text-green mr-2">
+                    <i class="glyphicons glyphicons-basic-folder"></i>
+                </span>
+                <strong class="text-primary-dark">${form.title}</strong>
+            </c:otherwise>
+        </c:choose>
         <span>-</span>
         <span>${text}</span>
     </div>

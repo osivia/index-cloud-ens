@@ -1,7 +1,11 @@
 package fr.index.cloud.ens.filebrowser.mutualized.portlet.model;
 
-import fr.index.cloud.ens.filebrowser.commons.portlet.model.AbstractFileBrowserSortField;
+import fr.index.cloud.ens.filebrowser.commons.portlet.model.CustomizedFileBrowserSortField;
+import fr.index.cloud.ens.filebrowser.portlet.model.CustomizedFileBrowserSortEnum;
 import org.apache.commons.lang.StringUtils;
+
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * Mutualized file browser sorts enumeration.
@@ -14,11 +18,11 @@ public enum MutualizedFileBrowserSortEnum implements MutualizedFileBrowserSortFi
     /**
      * Relevance sort.
      */
-    RELEVANCE("relevance", null),
+    RELEVANCE("relevance", false, null),
     /**
      * Title sort.
      */
-    TITLE("title", "mtz:title"),
+    TITLE("title", false, "mtz:title"),
     /**
      * Document type sort.
      */
@@ -34,9 +38,29 @@ public enum MutualizedFileBrowserSortEnum implements MutualizedFileBrowserSortFi
     /**
      * Last modification sort.
      */
-    LAST_MODIFICATION("last-modification", "dc:modified"),
-    /** Author sort. */
-    AUTHOR("author", "dc:lastContributor");
+    LAST_MODIFICATION("last-modification", true, "dc:modified"),
+    /**
+     * Author sort.
+     */
+    AUTHOR("author", true, "dc:lastContributor"),
+    /**
+     * File size sort.
+     */
+    FILE_SIZE("file-size", true, "common:size"),
+    /**
+     * Views.
+     */
+    VIEWS("views", true, ""), // FIXME NXQL field
+    /**
+     * Downloads.
+     */
+    DOWNLOADS("downloads", true, "field"); // FIXME NXQL field
+
+
+    /**
+     * Default configuration.
+     */
+    public static final List<CustomizedFileBrowserSortField> DEFAULT_CONFIGURATION = Arrays.asList(MutualizedFileBrowserSortEnum.DOCUMENT_TYPE, MutualizedFileBrowserSortEnum.LAST_MODIFICATION, MutualizedFileBrowserSortEnum.AUTHOR, MutualizedFileBrowserSortEnum.VIEWS, MutualizedFileBrowserSortEnum.DOWNLOADS, MutualizedFileBrowserSortEnum.FILE_SIZE);
 
 
     /**
@@ -48,9 +72,9 @@ public enum MutualizedFileBrowserSortEnum implements MutualizedFileBrowserSortFi
      */
     private final String key;
     /**
-     * Customizable indicator.
+     * Configurable indicator.
      */
-    private final boolean customizable;
+    private final boolean configurable;
     /**
      * NXQL field.
      */
@@ -61,25 +85,31 @@ public enum MutualizedFileBrowserSortEnum implements MutualizedFileBrowserSortFi
      * Constructor.
      *
      * @param id           identifier
-     * @param customizable customizable indicator
+     * @param configurable configurable indicator
      * @param field        NXQL field
      */
-    MutualizedFileBrowserSortEnum(String id, boolean customizable, String field) {
+    MutualizedFileBrowserSortEnum(String id, boolean configurable, String field) {
         this.id = id;
         this.key = "FILE_BROWSER_SORT_FIELD_" + StringUtils.upperCase(this.name());
-        this.customizable = customizable;
+        this.configurable = configurable;
         this.field = field;
     }
 
 
     /**
-     * Constructor.
+     * Get sort from identifier
      *
-     * @param id    identifier
-     * @param field NXQL field
+     * @param id identifier
+     * @return sort
      */
-    MutualizedFileBrowserSortEnum(String id, String field) {
-        this(id, false, field);
+    public static MutualizedFileBrowserSortEnum fromId(String id) {
+        MutualizedFileBrowserSortEnum result = null;
+        for (MutualizedFileBrowserSortEnum value : MutualizedFileBrowserSortEnum.values()) {
+            if (StringUtils.equals(id, value.id)) {
+                result = value;
+            }
+        }
+        return result;
     }
 
 
@@ -102,8 +132,8 @@ public enum MutualizedFileBrowserSortEnum implements MutualizedFileBrowserSortFi
 
 
     @Override
-    public boolean isCustomizable() {
-        return this.customizable;
+    public boolean isConfigurable() {
+        return this.configurable;
     }
 
 
