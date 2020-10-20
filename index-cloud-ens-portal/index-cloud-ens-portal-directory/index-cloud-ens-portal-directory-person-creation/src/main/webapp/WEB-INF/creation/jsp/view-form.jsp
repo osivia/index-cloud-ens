@@ -19,10 +19,10 @@
 <div class="create-account">
     <div class="row">
         <div class="col-lg-8  m-auto">
-            <div class="card bg-blue-lighter shadow-lg create-account">
+            <div class="card bg-light shadow-lg cloud-ens-form">
                 <div class="card-body">
-                    <h3 class="card-title text-center text-uppercase font-weight-bold"><op:translate
-                            key="createaccount.title"/></h3>
+                    <div class="card-title text-center font-weight-bold"><op:translate
+                            key="createaccount.title"/></div>
 
                     <form:form action="${submitFormUrl}" method="post" modelAttribute="form" role="form">
                         <div class="row">
@@ -30,10 +30,11 @@
                                     <%--Nickname--%>
                                 <spring:bind path="nickname">
                                     <div class="form-group required">
-                                        <form:label path="nickname" cssClass="text-secondary"><op:translate
-                                                key="createaccount.form.nickname"/></form:label>
+                                     
+                                        <c:set var = "placeholder"> <op:translate
+                                                key="createaccount.form.nickname"/></c:set>
                                         <form:input path="nickname" cssClass="form-control"
-                                                    cssErrorClass="form-control is-invalid"/>
+                                                    cssErrorClass="form-control is-invalid" placeholder="${placeholder}" />
                                         <form:errors path="nickname" cssClass="invalid-feedback"/>
                                     </div>
                                 </spring:bind>
@@ -41,10 +42,10 @@
                                     <%--Lastname--%>
                                 <spring:bind path="lastname">
                                     <div class="form-group required">
-                                        <form:label path="lastname" cssClass="text-secondary"><op:translate
-                                                key="createaccount.form.lastname"/></form:label>
+                                        <c:set var = "placeholder"> <op:translate
+                                                key="createaccount.form.lastname"/></c:set>                                                
                                         <form:input path="lastname" cssClass="form-control"
-                                                    cssErrorClass="form-control is-invalid"/>
+                                                    cssErrorClass="form-control is-invalid" placeholder="${placeholder}" />
                                         <form:errors path="lastname" cssClass="invalid-feedback"/>
                                     </div>
                                 </spring:bind>
@@ -52,10 +53,10 @@
                                     <%--Firstname--%>
                                 <spring:bind path="firstname">
                                     <div class="form-group required">
-                                        <form:label path="firstname" cssClass="text-secondary"><op:translate
-                                                key="createaccount.form.firstname"/></form:label>
+                                        <c:set var = "placeholder"> <op:translate
+                                                key="createaccount.form.firstname"/></c:set>                                           
                                         <form:input path="firstname" cssClass="form-control"
-                                                    cssErrorClass="form-control is-invalid"/>
+                                                    cssErrorClass="form-control is-invalid" placeholder="${placeholder}"/>
                                         <form:errors path="firstname" cssClass="invalid-feedback"/>
                                     </div>
                                 </spring:bind>
@@ -65,10 +66,11 @@
                                     <%--Mail--%>
                                 <spring:bind path="mail">
                                     <div class="form-group required">
-                                        <form:label path="mail" cssClass="text-secondary"><op:translate
-                                                key="createaccount.form.mail"/></form:label>
+                                        <c:set var = "placeholder"> <op:translate
+                                                key="createaccount.form.mail"/></c:set>                                           
+                                                
                                         <form:input path="mail" type="email" cssClass="form-control"
-                                                    cssErrorClass="form-control is-invalid"/>
+                                                    cssErrorClass="form-control is-invalid" placeholder="${placeholder}" />
                                         <form:errors path="mail" cssClass="invalid-feedback"/>
                                     </div>
                                 </spring:bind>
@@ -77,10 +79,11 @@
                                 <spring:bind path="newpassword">
                                     <div class="form-group required password-control">
                                         <div class="mb-2">
-                                            <form:label path="newpassword" cssClass="text-secondary"><op:translate
-                                                    key="createaccount.form.newpassword"/></form:label>
+  
+                                            <c:set var = "placeholder"> <op:translate
+                                                key="createaccount.form.newpassword"/></c:set>                                                          
                                             <form:password path="newpassword" showPassword="true" cssClass="form-control"
-                                                           cssErrorClass="form-control is-invalid" data-password-control-url="${passwordInformationUrl}"/>
+                                                           cssErrorClass="form-control is-invalid" placeholder="${placeholder}" data-password-control-url="${passwordInformationUrl}"/>
                                             <form:errors path="newpassword" cssClass="invalid-feedback"/>
                                         </div>
                
@@ -90,10 +93,10 @@
                                     <%--Password confirmation--%>
                                 <spring:bind path="confirmpassword">
                                     <div class="form-group required">
-                                        <form:label path="confirmpassword" cssClass="text-secondary"><op:translate
-                                                key="createaccount.form.confirmpassword"/></form:label>
+                                         <c:set var = "placeholder"> <op:translate
+                                                key="createaccount.form.confirmpassword"/></c:set>                                                      
                                         <form:password path="confirmpassword" showPassword="true" cssClass="form-control"
-                                                       cssErrorClass="form-control is-invalid"/>
+                                                       cssErrorClass="form-control is-invalid" placeholder="${placeholder}" />
                                         <form:errors path="confirmpassword" cssClass="invalid-feedback"/>
                                     </div>
                                 </spring:bind>
@@ -152,7 +155,7 @@
                             <div class="col-md-auto align-self-end">
                                     <%--Buttons--%>
                                 <div class="text-right mt-2">
-                                    <button type="submit" name="save" class="btn btn-secondary">
+                                    <button type="submit" name="save" class="btn btn-primary rounded-pill">
                                         <span class="text-uppercase font-weight-bold"><op:translate
                                                 key="createaccount.submit"/></span>
                                     </button>
@@ -169,7 +172,7 @@
             <div class="row">
                 <div class="col-auto d-flex">
                     <%--RGPD--%>
-                    <div class="d-flex my-auto">
+                    <div class="d-flex my-auto rgpd">
                         <h2 class="d-flex align-items-center h4 bg-blue-dark py-1 px-2 mb-3">
                             <span class="text-blue-light font-weight-bolder mr-2">RGPD</span>
                             <span class="text-white">
@@ -180,7 +183,7 @@
                 </div>
                 <div class="col-md">
                     <p class="mb-1"><strong>Utiliser le Cloud PRONOTE c'est&nbsp;:</strong></p>
-                    <ul class="pl-3">
+                    <ul class="pl-3 text-green-dark small">
                         <li class="mb-1">avoir la garantie de rester propri&eacute;taire de vos documents</li>
                         <li class="mb-1">pouvoir cl&ocirc;turer votre compte &agrave; tout moment</li>
                         <li class="mb-1">&ecirc;tre assur&eacute; que vos donn&eacute;es personnelles ne seront pas

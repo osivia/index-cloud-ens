@@ -3,9 +3,10 @@
 
 <div class="row">
     <div class="col-md-6 offset-md-3 col-lg-4 offset-lg-4">
-        <div class="card bg-blue-lighter shadow-lg">
+        <div class="card bg-light shadow-lg">
             <div class="card-body">
-                <h3 class="card-title h5"><op:translate key="createaccount.send.title"/></h3>
+
+               <div class="card-title text-center font-weight-bold"><op:translate key="createaccount.send.title"/></div>                
 
                 <p class="card-text"><op:translate key="createaccount.send.message"/></p>
 

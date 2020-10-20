@@ -1,0 +1,32 @@
+.cloud-ens-form {
+    .form-control {
+    height: 3rem;
+
+    padding: {
+      top: .75rem;
+      bottom: .75rem;
+    }
+
+    border-style: none;
+
+    &::placeholder {
+      font-size: $small-font-size;
+    }
+  }
+  
+  label  {
+    font-size: $small-font-size;
+  }
+
+
+
+}
+
+
+.text-blue-light {
+ color: #67B2EE;
+}
+
+.bg-blue-dark   {
+  background-color: #242860;
+}

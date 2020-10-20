@@ -2,31 +2,51 @@ $JQry(function() {
     var passwordRulesInformationTimer;
     var passwordRulesInformationXhr;
 
+
     $JQry(".create-account input[name=newpassword]").each(function(index, element) {
         var $element = $JQry(element);
 
         if (!$element.data("loaded")) {
 
+        	var $controlPasswrod = $JQry(".password-control");
+        	
+        	// Initialisation
+            passwordRulesInformationTimer = setTimeout(function()	{
+            	updatePasswordRulesInformation( true);
+            }, 100);
 
             $element.on("input", function(event) {
                 // Clear timer
                 clearTimeout(passwordRulesInformationTimer);
 
                 passwordRulesInformationTimer = setTimeout(function()	{
-                    var $controlPasswrod = $JQry(".password-control");
-                    var $placeholder = $controlPasswrod.find("[data-password-control-url]");
-                    
-                    $placeholder.popover('show');
-                	
-                }, 500);
+                	updatePasswordRulesInformation( false);
+                }, 100);
             });
+            
+            
+           // popover
+            $controlPasswrod.find("[data-password-control-url]").popover({
+    			content: function () {
+    				var result = $element.data("popover-content");
+    				return result;
+    			},
+    			html: true,
+    			placement: function () {
+    				if( window.innerWidth < 768)
+    					return "auto";
+    				else
+    					return "left";
+    			},
+    			trigger: "focus"
+    		});
 
             $element.data("loaded", true);
         }
     });
 
 
-    function updatePasswordRulesInformation() {
+    function updatePasswordRulesInformation( initialization) {
         var $controlPasswrod = $JQry(".password-control");
         var $placeholder = $controlPasswrod.find("[data-password-control-url]");
         var $input = $JQry(".create-account input[name=newpassword]");
@@ -37,7 +57,7 @@ $JQry(function() {
         }
 
         passwordRulesInformationXhr = jQuery.ajax({
-            url: $placeholder.data("url"),
+            url: $placeholder.data("password-control-url"),
             type: "POST",
             async: true,
             cache: false,
@@ -46,60 +66,16 @@ $JQry(function() {
             },
             dataType: "html",
             success : function(data, status, xhr) {
-                $placeholder.data('bs.popover').options.content = data;
-            }
+            	$placeholder.data("popover-content", data);
+            	if( initialization == false)
+            		$placeholder.popover('show');
+             }
         });
     }
 
 });
 
 
-
-$JQry(function() {
-	var $controlPasswrod = $JQry(".password-control");
-	var $input = $JQry(".create-account input[name=newpassword]");
-
-	if (!$controlPasswrod.data("loaded")) {
-		// Location popover
-		$controlPasswrod.find("[data-password-control-url]").popover({
-			content: function () {
-				var $this = $JQry(this);
-				var result;
-				
-				jQuery.ajax({
-					url: $this.data("password-control-url"),
-					async: false,
-					cache: true,
-					headers: {
-						"Cache-Control": "max-age=0, public"
-					},
-					data: {
-						password: $input.val()
-					},
-					dataType: "html",
-					success: function (data, status, xhr) {
-						result = data;
-					}
-				});
-
-				return result;
-			},
-			html: true,
-			placement: function () {
-				if( window.innerWidth < 768)
-					return "auto";
-				else
-					return "left";
-			},
-			trigger: "focus"
-		});
-
-
-		// Loaded indicator
-		$controlPasswrod.data("loaded", true);
-	}
-
-});
 
 
 
