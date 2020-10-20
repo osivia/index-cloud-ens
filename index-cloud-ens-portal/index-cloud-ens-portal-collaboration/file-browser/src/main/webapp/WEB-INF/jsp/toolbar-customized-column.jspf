@@ -1,20 +1,9 @@
-<div class="dropdown d-none d-lg-block ml-2">
-    <button type="button" class="btn btn-link btn-link-hover-green btn-sm text-secondary bg-white dropdown-toggle" data-toggle="dropdown">
+<c:set var="title"><op:translate key="FILE_BROWSER_COLUMNS_CONFIGURATION_TITLE"/></c:set>
+
+<div class="d-none d-lg-block ml-2">
+    <button type="button" class="btn btn-link btn-link-hover-primary btn-sm text-secondary bg-white"
+            data-target="#osivia-modal" data-load-url="${columnsConfigurationUrl}" data-title="${title}">
         <i class="glyphicons glyphicons-basic-cogwheel"></i>
-        <span class="sr-only"><op:translate key="FILE_BROWSER_TOOLBAR_CUSTOMIZED_COLUMNS_HEADER"/></span>
+        <span class="sr-only">${title}</span>
     </button>
-
-    <div class="dropdown-menu dropdown-menu-right">
-        <h6 class="dropdown-header"><op:translate key="FILE_BROWSER_TOOLBAR_CUSTOMIZED_COLUMNS_HEADER"/></h6>
-
-        <c:forEach var="column" items="${customizedColumns}">
-            <portlet:actionURL name="change-column" var="url" copyCurrentRenderParameters="true">
-                <portlet:param name="column" value="${column.id}"/>
-            </portlet:actionURL>
-
-            <a href="${url}" class="dropdown-item ${form.customizedColumn.id eq column.id ? 'active' : ''}">
-                <span><op:translate key="${column.key}"/></span>
-            </a>
-        </c:forEach>
-    </div>
 </div>

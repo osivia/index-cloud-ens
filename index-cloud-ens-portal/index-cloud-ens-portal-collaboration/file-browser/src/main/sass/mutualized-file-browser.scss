@@ -1,27 +1,20 @@
 @import "../../../../../index-cloud-ens-portal-charte/src/main/sass/cloud-ens/variables";
 
 
-@include media-breakpoint-down("md") {
-  [data-column="last-modification"] {
-    display: flex !important;
-    width: 160px !important;
-  }
+[data-column="author"] {
+  width: 150px;
 
-  [data-column="author"] {
-    display: none !important;
-  }
-}
-
-@include media-breakpoint-between("md", "xl") {
-  [data-column="author"] {
-    width: 150px;
-  }
-}
-
-@include media-breakpoint-up("xl") {
-  [data-column="author"] {
+  @include media-breakpoint-up("xl") {
     width: 200px;
   }
+}
+
+[data-column="views"] {
+  width: 100px;
+}
+
+[data-column="downloads"] {
+  width: 120px;
 }
 
 

@@ -5,6 +5,7 @@ import fr.index.cloud.ens.filebrowser.mutualized.portlet.model.MutualizedFileBro
 import fr.index.cloud.ens.filebrowser.mutualized.portlet.service.MutualizedFileBrowserService;
 import org.apache.commons.lang.math.NumberUtils;
 import org.osivia.portal.api.context.PortalControllerContext;
+import org.osivia.services.workspace.filebrowser.portlet.controller.FileBrowserController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Controller;

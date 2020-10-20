@@ -1,11 +1,15 @@
 package fr.index.cloud.ens.directory.model.preferences;
 
-import fr.index.cloud.ens.directory.model.preferences.CustomizedUserPreferences;
 import org.osivia.directory.v2.model.preferences.UserPreferencesImpl;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.BeanDefinition;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Primary;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
+import java.util.Map;
 
 /**
  * User preferences customized implementation.
@@ -20,9 +24,9 @@ import org.springframework.stereotype.Component;
 public class CustomizedUserPreferencesImpl extends UserPreferencesImpl implements CustomizedUserPreferences {
 
     /**
-     * Customized column identifier.
+     * File browser preferences.
      */
-    private String customizedColumnId;
+    private Map<String, CustomizedFileBrowserPreferences> fileBrowserPreferences;
 
 
     /**
@@ -30,20 +34,21 @@ public class CustomizedUserPreferencesImpl extends UserPreferencesImpl implement
      *
      * @param documentId document identifier
      */
+    @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
     public CustomizedUserPreferencesImpl(String documentId) {
         super(documentId);
     }
 
 
     @Override
-    public String getCustomizedColumn() {
-        return this.customizedColumnId;
+    public Map<String, CustomizedFileBrowserPreferences> getFileBrowserPreferences() {
+        return this.fileBrowserPreferences;
     }
 
 
     @Override
-    public void setCustomizedColumn(String id) {
-        this.customizedColumnId = id;
+    public void setFileBrowserPreferences(Map<String, CustomizedFileBrowserPreferences> preferences) {
+        this.fileBrowserPreferences = preferences;
     }
 
 }

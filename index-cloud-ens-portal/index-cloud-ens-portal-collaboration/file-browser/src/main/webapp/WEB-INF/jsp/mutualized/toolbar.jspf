@@ -8,7 +8,7 @@
             <%--<%@ include file="toolbar-view.jspf" %>--%>
 
             <%--Customized column--%>
-            <%@ include file="toolbar-customized-column.jspf" %>
+            <%@ include file="../toolbar-customized-column.jspf" %>
         </div>
     </div>
 </div>

@@ -1,6 +1,11 @@
 package fr.index.cloud.ens.filebrowser.portlet.service;
 
-import fr.index.cloud.ens.filebrowser.commons.portlet.model.AbstractFileBrowserSortField;
+import fr.index.cloud.ens.directory.model.preferences.CustomizedFileBrowserColumn;
+import fr.index.cloud.ens.directory.model.preferences.CustomizedFileBrowserPreferences;
+import fr.index.cloud.ens.directory.model.preferences.CustomizedUserPreferences;
+import fr.index.cloud.ens.directory.service.preferences.CustomizedUserPreferencesService;
+import fr.index.cloud.ens.filebrowser.commons.portlet.model.AbstractFileBrowserColumn;
+import fr.index.cloud.ens.filebrowser.commons.portlet.model.CustomizedFileBrowserSortField;
 import fr.index.cloud.ens.filebrowser.commons.portlet.service.AbstractFileBrowserServiceImpl;
 import fr.index.cloud.ens.filebrowser.portlet.model.CustomizedFileBrowserForm;
 import fr.index.cloud.ens.filebrowser.portlet.model.CustomizedFileBrowserItem;
@@ -17,6 +22,8 @@ import org.osivia.portal.api.context.PortalControllerContext;
 import org.osivia.portal.api.html.DOM4JUtils;
 import org.osivia.services.workspace.filebrowser.portlet.model.FileBrowserSortField;
 import org.osivia.services.workspace.filebrowser.portlet.model.FileBrowserWindowProperties;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 
@@ -42,6 +49,13 @@ public class CustomizedFileBrowserServiceImpl extends AbstractFileBrowserService
 
 
     /**
+     * Application context.
+     */
+    @Autowired
+    private ApplicationContext applicationContext;
+
+
+    /**
      * Constructor.
      */
     public CustomizedFileBrowserServiceImpl() {
@@ -52,6 +66,34 @@ public class CustomizedFileBrowserServiceImpl extends AbstractFileBrowserService
     @Override
     public CustomizedFileBrowserForm getForm(PortalControllerContext portalControllerContext) throws PortletException {
         return (CustomizedFileBrowserForm) super.getForm(portalControllerContext);
+    }
+
+
+    @Override
+    protected List<AbstractFileBrowserColumn> getFileBrowserColumns(PortalControllerContext portalControllerContext, CustomizedUserPreferences userPreferences) {
+        CustomizedFileBrowserPreferences fileBrowserPreferences = this.getFileBrowserPreferences(userPreferences);
+
+        // Columns
+        List<AbstractFileBrowserColumn> columns;
+        if (CollectionUtils.isEmpty(fileBrowserPreferences.getColumns())) {
+            columns = null;
+        } else {
+            columns = new ArrayList<>();
+            for (CustomizedFileBrowserColumn fileBrowserColumn : fileBrowserPreferences.getColumns()) {
+                CustomizedFileBrowserSortEnum type = CustomizedFileBrowserSortEnum.fromId(fileBrowserColumn.getId());
+
+                if ((type != null) && type.isConfigurable() && fileBrowserColumn.isVisible()) {
+                    AbstractFileBrowserColumn column = this.applicationContext.getBean(AbstractFileBrowserColumn.class);
+                    column.setId(type.getId());
+                    column.setOrder(fileBrowserColumn.getOrder());
+
+                    columns.add(column);
+                }
+            }
+            Collections.sort(columns);
+        }
+
+        return columns;
     }
 
 
@@ -72,7 +114,7 @@ public class CustomizedFileBrowserServiceImpl extends AbstractFileBrowserService
                 listMode = CollectionUtils.isNotEmpty(selectors.get(id));
             }
         }
-        
+
         return listMode;
     }
 
@@ -96,6 +138,12 @@ public class CustomizedFileBrowserServiceImpl extends AbstractFileBrowserService
 
 
     @Override
+    protected String getFileBrowserId() {
+        return FILE_BROWSER_ID;
+    }
+
+
+    @Override
     public List<FileBrowserSortField> getSortFields(PortalControllerContext portalControllerContext) throws PortletException {
         CustomizedFileBrowserSortEnum[] values = CustomizedFileBrowserSortEnum.values();
 
@@ -108,7 +156,7 @@ public class CustomizedFileBrowserServiceImpl extends AbstractFileBrowserService
         // Filtered sort fields
         List<FileBrowserSortField> filteredFields = new ArrayList<>();
         for (CustomizedFileBrowserSortEnum value : values) {
-            if ((form.isListMode() || !value.isListMode()) && (!value.isCustomizable() || value.equals(form.getCustomizedColumn())) && !(StringUtils.equals(CustomizedFileBrowserSortEnum.RELEVANCE.getId(), value.getId()) && ((defaultSortField == null) || !StringUtils.equals(CustomizedFileBrowserSortEnum.RELEVANCE.getId(), defaultSortField.getId())))) {
+            if ((form.isListMode() || !value.isListMode()) && !(StringUtils.equals(CustomizedFileBrowserSortEnum.RELEVANCE.getId(), value.getId()) && ((defaultSortField == null) || !StringUtils.equals(CustomizedFileBrowserSortEnum.RELEVANCE.getId(), defaultSortField.getId())))) {
                 filteredFields.add(value);
             }
         }
@@ -187,12 +235,6 @@ public class CustomizedFileBrowserServiceImpl extends AbstractFileBrowserService
         item.add(text);
 
         toolbar.add(item);
-    }
-
-
-    @Override
-    protected AbstractFileBrowserSortField getDefaultCustomizedColumn() {
-        return CustomizedFileBrowserSortEnum.DOCUMENT_TYPE;
     }
 
 }

@@ -1,44 +1,54 @@
 package fr.index.cloud.ens.filebrowser.portlet.model;
 
-import fr.index.cloud.ens.filebrowser.commons.portlet.model.AbstractFileBrowserSortField;
+import fr.index.cloud.ens.filebrowser.commons.portlet.model.CustomizedFileBrowserSortField;
 import org.apache.commons.lang.StringUtils;
+import org.osivia.services.workspace.filebrowser.portlet.model.FileBrowserSortField;
+
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * File browser customized portlet sort enumeration.
  *
  * @author Cédric Krommenhoek
- * @see AbstractFileBrowserSortField
+ * @see CustomizedFileBrowserSortField
  */
-public enum CustomizedFileBrowserSortEnum implements AbstractFileBrowserSortField {
+public enum CustomizedFileBrowserSortEnum implements CustomizedFileBrowserSortField {
 
     /**
      * Relevance sort.
      */
-    RELEVANCE("relevance", true),
+    RELEVANCE(false, true),
     /**
      * Title sort.
      */
-    TITLE("title"),
+    TITLE,
     /**
      * Document type sort.
      */
-    DOCUMENT_TYPE("document-type", false, true),
+    DOCUMENT_TYPE(true),
     /**
      * Level sort.
      */
-    LEVEL("level", false, true),
+    LEVEL(true),
     /**
      * Subject sort.
      */
-    SUBJECT("subject", false, true),
+    SUBJECT(true),
     /**
      * Last modification sort.
      */
-    LAST_MODIFICATION("last-modification"),
+    LAST_MODIFICATION(true),
     /**
      * File size sort.
      */
-    FILE_SIZE("file-size");
+    FILE_SIZE(true);
+
+
+    /**
+     * Default configuration.
+     */
+    public static final List<CustomizedFileBrowserSortField> DEFAULT_CONFIGURATION = Arrays.asList(CustomizedFileBrowserSortEnum.DOCUMENT_TYPE, CustomizedFileBrowserSortEnum.LEVEL, CustomizedFileBrowserSortEnum.LAST_MODIFICATION, CustomizedFileBrowserSortEnum.FILE_SIZE);
 
 
     /**
@@ -50,46 +60,59 @@ public enum CustomizedFileBrowserSortEnum implements AbstractFileBrowserSortFiel
      */
     private final String key;
     /**
+     * Configurable indicator.
+     */
+    private final boolean configurable;
+    /**
      * List mode restriction indicator.
      */
     private final boolean listMode;
-    /**
-     * Customizable indicator.
-     */
-    private final boolean customizable;
 
 
     /**
      * Constructor.
      *
-     * @param id           identifier
+     * @param configurable configurable indicator
      * @param listMode     list mode restriction indicator
-     * @param customizable customizable indicator
      */
-    CustomizedFileBrowserSortEnum(String id, boolean listMode, boolean customizable) {
-        this.id = id;
+    CustomizedFileBrowserSortEnum(boolean configurable, boolean listMode) {
+        this.id = StringUtils.lowerCase(StringUtils.replace(this.name(), "_", "-"));
         this.key = "FILE_BROWSER_SORT_FIELD_" + StringUtils.upperCase(this.name());
+        this.configurable = configurable;
         this.listMode = listMode;
-        this.customizable = customizable;
     }
 
     /**
      * Constructor.
      *
-     * @param id       identifier
-     * @param listMode list mode restriction indicator
+     * @param configurable configurable indicator
      */
-    CustomizedFileBrowserSortEnum(String id, boolean listMode) {
-        this(id, listMode, false);
+    CustomizedFileBrowserSortEnum(boolean configurable) {
+        this(configurable, false);
     }
 
     /**
      * Constructor.
+     */
+    CustomizedFileBrowserSortEnum() {
+        this(false);
+    }
+
+
+    /**
+     * Get sort from identifier
      *
      * @param id identifier
+     * @return sort
      */
-    CustomizedFileBrowserSortEnum(String id) {
-        this(id, false, false);
+    public static CustomizedFileBrowserSortEnum fromId(String id) {
+        CustomizedFileBrowserSortEnum result = null;
+        for (CustomizedFileBrowserSortEnum value : CustomizedFileBrowserSortEnum.values()) {
+            if (StringUtils.equals(id, value.id)) {
+                result = value;
+            }
+        }
+        return result;
     }
 
 
@@ -112,8 +135,8 @@ public enum CustomizedFileBrowserSortEnum implements AbstractFileBrowserSortFiel
 
 
     @Override
-    public boolean isCustomizable() {
-        return this.customizable;
+    public boolean isConfigurable() {
+        return configurable;
     }
 
 }

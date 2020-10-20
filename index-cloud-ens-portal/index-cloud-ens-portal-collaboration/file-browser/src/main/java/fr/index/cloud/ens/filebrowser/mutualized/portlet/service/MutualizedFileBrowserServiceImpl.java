@@ -1,14 +1,19 @@
 package fr.index.cloud.ens.filebrowser.mutualized.portlet.service;
 
-import fr.index.cloud.ens.filebrowser.commons.portlet.model.AbstractFileBrowserSortField;
+import fr.index.cloud.ens.directory.model.preferences.CustomizedFileBrowserColumn;
+import fr.index.cloud.ens.directory.model.preferences.CustomizedFileBrowserPreferences;
+import fr.index.cloud.ens.directory.model.preferences.CustomizedUserPreferences;
+import fr.index.cloud.ens.filebrowser.commons.portlet.model.AbstractFileBrowserColumn;
 import fr.index.cloud.ens.filebrowser.commons.portlet.service.AbstractFileBrowserServiceImpl;
 import fr.index.cloud.ens.filebrowser.mutualized.portlet.model.MutualizedFileBrowserForm;
 import fr.index.cloud.ens.filebrowser.mutualized.portlet.model.MutualizedFileBrowserItem;
 import fr.index.cloud.ens.filebrowser.mutualized.portlet.model.MutualizedFileBrowserSortEnum;
 import fr.index.cloud.ens.filebrowser.mutualized.portlet.model.MutualizedFileBrowserWindowProperties;
 import fr.index.cloud.ens.filebrowser.mutualized.portlet.repository.MutualizedFileBrowserRepository;
+import fr.index.cloud.ens.filebrowser.portlet.model.CustomizedFileBrowserSortEnum;
 import fr.toutatice.portail.cms.nuxeo.api.domain.DocumentDTO;
 import fr.toutatice.portail.cms.nuxeo.api.services.dao.DocumentDAO;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.math.NumberUtils;
 import org.nuxeo.ecm.automation.client.model.Document;
 import org.nuxeo.ecm.automation.client.model.PaginableDocuments;
@@ -114,6 +119,34 @@ public class MutualizedFileBrowserServiceImpl extends AbstractFileBrowserService
     @Override
     public MutualizedFileBrowserForm getForm(PortalControllerContext portalControllerContext) throws PortletException {
         return (MutualizedFileBrowserForm) super.getForm(portalControllerContext);
+    }
+
+
+    @Override
+    protected List<AbstractFileBrowserColumn> getFileBrowserColumns(PortalControllerContext portalControllerContext, CustomizedUserPreferences userPreferences) {
+        CustomizedFileBrowserPreferences fileBrowserPreferences = this.getFileBrowserPreferences(userPreferences);
+
+        // Columns
+        List<AbstractFileBrowserColumn> columns;
+        if (CollectionUtils.isEmpty(fileBrowserPreferences.getColumns())) {
+            columns = null;
+        } else {
+            columns = new ArrayList<>();
+            for (CustomizedFileBrowserColumn fileBrowserColumn : fileBrowserPreferences.getColumns()) {
+                MutualizedFileBrowserSortEnum type = MutualizedFileBrowserSortEnum.fromId(fileBrowserColumn.getId());
+
+                if ((type != null) && type.isConfigurable() && fileBrowserColumn.isVisible()) {
+                    AbstractFileBrowserColumn column = this.applicationContext.getBean(AbstractFileBrowserColumn.class);
+                    column.setId(type.getId());
+                    column.setOrder(fileBrowserColumn.getOrder());
+
+                    columns.add(column);
+                }
+            }
+            Collections.sort(columns);
+        }
+
+        return columns;
     }
 
 
@@ -233,6 +266,12 @@ public class MutualizedFileBrowserServiceImpl extends AbstractFileBrowserService
 
 
     @Override
+    protected String getFileBrowserId() {
+        return FILE_BROWSER_ID;
+    }
+
+
+    @Override
     public void sortItems(PortalControllerContext portalControllerContext, FileBrowserForm form, FileBrowserSortField field, boolean alt) throws PortletException {
         // Window properties
         MutualizedFileBrowserWindowProperties windowProperties = this.getWindowProperties(portalControllerContext);
@@ -251,21 +290,8 @@ public class MutualizedFileBrowserServiceImpl extends AbstractFileBrowserService
 
 
     @Override
-    public List<FileBrowserSortField> getSortFields(PortalControllerContext portalControllerContext) throws PortletException {
-        MutualizedFileBrowserSortEnum[] values = MutualizedFileBrowserSortEnum.values();
-
-        // Form
-        MutualizedFileBrowserForm form = this.getForm(portalControllerContext);
-
-        // Filtered sort fields
-        List<FileBrowserSortField> filteredFields = new ArrayList<>();
-        for (MutualizedFileBrowserSortEnum value : values) {
-            if (!value.isCustomizable() || value.equals(form.getCustomizedColumn())) {
-                filteredFields.add(value);
-            }
-        }
-
-        return filteredFields;
+    public List<FileBrowserSortField> getSortFields(PortalControllerContext portalControllerContext) {
+        return this.getAllSortFields();
     }
 
 
@@ -281,12 +307,6 @@ public class MutualizedFileBrowserServiceImpl extends AbstractFileBrowserService
     @Override
     protected FileBrowserSortField getDefaultSortField(PortalControllerContext portalControllerContext) {
         return MutualizedFileBrowserSortEnum.RELEVANCE;
-    }
-
-
-    @Override
-    protected AbstractFileBrowserSortField getDefaultCustomizedColumn() {
-        return MutualizedFileBrowserSortEnum.DOCUMENT_TYPE;
     }
 
 
