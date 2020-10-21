@@ -4,6 +4,7 @@ import fr.index.cloud.ens.taskbar.portlet.model.Taskbar;
 import fr.index.cloud.ens.taskbar.portlet.model.TaskbarSearchForm;
 import fr.index.cloud.ens.taskbar.portlet.service.TaskbarService;
 import net.sf.json.JSONArray;
+import org.apache.commons.lang.BooleanUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.math.NumberUtils;
 import org.osivia.portal.api.context.PortalControllerContext;
@@ -148,6 +149,24 @@ public class TaskbarViewController {
         // Redirection
         String url = this.service.getSavedSearchUrl(portalControllerContext, searchForm, NumberUtils.toInt(id));
         response.sendRedirect(url);
+    }
+
+
+    /**
+     * Save collapse state action mapping.
+     *
+     * @param request  action request
+     * @param response action response
+     * @param id       collapse identifier request parameter
+     * @param show     collapse show indicator request parameter
+     * @param taskbar  taskbar model attribute
+     */
+    @ActionMapping("save-collapse-state")
+    public void saveCollapseState(ActionRequest request, ActionResponse response, @RequestParam("id") String id, @RequestParam("show") String show, @ModelAttribute("taskbar") Taskbar taskbar) throws PortletException {
+        // Portal controller context
+        PortalControllerContext portalControllerContext = new PortalControllerContext(this.portletContext, request, response);
+
+        this.service.saveCollapseState(portalControllerContext, taskbar, id, BooleanUtils.toBoolean(show));
     }
 
 

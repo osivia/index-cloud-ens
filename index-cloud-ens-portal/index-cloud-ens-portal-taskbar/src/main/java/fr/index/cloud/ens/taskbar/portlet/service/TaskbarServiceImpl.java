@@ -7,6 +7,7 @@ import fr.toutatice.portail.cms.nuxeo.api.PageSelectors;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang.BooleanUtils;
 import org.apache.commons.lang.CharEncoding;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang.StringUtils;
@@ -36,6 +37,8 @@ import org.springframework.stereotype.Service;
 import javax.portlet.ActionResponse;
 import javax.portlet.PortletException;
 import javax.portlet.PortletRequest;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
@@ -130,6 +133,11 @@ public class TaskbarServiceImpl implements TaskbarService {
     public Taskbar getTaskbar(PortalControllerContext portalControllerContext) throws PortletException, IOException {
         // Portlet request
         PortletRequest request = portalControllerContext.getRequest();
+        // HTTP servlet request
+        HttpServletRequest httpServletRequest = portalControllerContext.getHttpServletRequest();
+        // HTTP session
+        HttpSession session = httpServletRequest.getSession();
+
         // Internationalization bundle
         Bundle bundle = this.bundleFactory.getBundle(request.getLocale());
 
@@ -205,6 +213,8 @@ public class TaskbarServiceImpl implements TaskbarService {
         // Taskbar
         Taskbar taskbar = this.applicationContext.getBean(Taskbar.class);
         taskbar.setTasks(tasks);
+        taskbar.setShowSearch(BooleanUtils.isNotFalse((Boolean) session.getAttribute(COLLAPSE_SEARCH_SHOW_ATTRIBUTE)));
+        taskbar.setShowFilters(BooleanUtils.isNotFalse((Boolean) session.getAttribute(COLLAPSE_FILTERS_SHOW_ATTRIBUTE)));
 
         return taskbar;
     }
@@ -518,8 +528,43 @@ public class TaskbarServiceImpl implements TaskbarService {
         request.setAttribute("osivia.ajax.preventRefresh", true);
         // Refresh other portlet model attributes
         PageProperties.getProperties().setRefreshingPage(true);
-        
+
         request.setAttribute(Constants.PORTLET_ATTR_UNSET_MAX_MODE, String.valueOf(true));
+    }
+
+
+    @Override
+    public void saveCollapseState(PortalControllerContext portalControllerContext, Taskbar taskbar, String id, boolean show) {
+        // Portlet request
+        PortletRequest request = portalControllerContext.getRequest();
+        // HTTP servlet request
+        HttpServletRequest httpServletRequest = portalControllerContext.getHttpServletRequest();
+        // HTTP session
+        HttpSession session = httpServletRequest.getSession();
+
+        // Sessions attribute name
+        String name;
+        if (StringUtils.equals("search", id)) {
+            name = COLLAPSE_SEARCH_SHOW_ATTRIBUTE;
+        } else if (StringUtils.equals("filters", id)) {
+            name = COLLAPSE_FILTERS_SHOW_ATTRIBUTE;
+        } else {
+            name = null;
+        }
+
+        if (StringUtils.isNotEmpty(name)) {
+            session.setAttribute(name, show);
+        }
+
+        // Update model
+        if (StringUtils.equals("search", id)) {
+            taskbar.setShowSearch(show);
+        } else if (StringUtils.equals("filters", id)) {
+            taskbar.setShowFilters(show);
+        }
+
+        // Prevent Ajax refresh
+        request.setAttribute("osivia.ajax.preventRefresh", true);
     }
 
 

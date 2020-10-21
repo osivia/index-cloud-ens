@@ -53,6 +53,15 @@ public interface TaskbarService {
      */
     String ACTIVE_SAVED_SEARCH_ID = "activeSavedSearch";
 
+    /**
+     * Search collapse show indicator attribute.
+     */
+    String COLLAPSE_SEARCH_SHOW_ATTRIBUTE = "taskbar.collapse.search.show";
+    /**
+     * Filters collapse show indicator attribute.
+     */
+    String COLLAPSE_FILTERS_SHOW_ATTRIBUTE = "taskbar.collapse.filters.show";
+
 
     /**
      * Get window properties.
@@ -116,6 +125,17 @@ public interface TaskbarService {
      * @param searchForm              search form
      */
     void search(PortalControllerContext portalControllerContext, TaskbarSearchForm searchForm) throws PortletException;
+
+
+    /**
+     * Save collapse state.
+     *
+     * @param portalControllerContext portal controller context
+     * @param taskbar                 taskbar
+     * @param id                      collapse identifier
+     * @param show                    collapse show indicator
+     */
+    void saveCollapseState(PortalControllerContext portalControllerContext, Taskbar taskbar, String id, boolean show) throws PortletException;
 
 
     /**

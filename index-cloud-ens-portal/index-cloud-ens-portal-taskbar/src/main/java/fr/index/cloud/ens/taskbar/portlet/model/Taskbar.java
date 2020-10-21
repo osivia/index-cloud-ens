@@ -19,6 +19,14 @@ public class Taskbar {
      * Tasks.
      */
     private List<Task> tasks;
+    /**
+     * Show search indicator.
+     */
+    private boolean showSearch;
+    /**
+     * Show filters indicator.
+     */
+    private boolean showFilters;
 
 
     /**
@@ -37,4 +45,19 @@ public class Taskbar {
         this.tasks = tasks;
     }
 
+    public boolean isShowSearch() {
+        return showSearch;
+    }
+
+    public void setShowSearch(boolean showSearch) {
+        this.showSearch = showSearch;
+    }
+
+    public boolean isShowFilters() {
+        return showFilters;
+    }
+
+    public void setShowFilters(boolean showFilters) {
+        this.showFilters = showFilters;
+    }
 }

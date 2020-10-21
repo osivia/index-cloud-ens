@@ -10,6 +10,7 @@
 
 <portlet:actionURL name="drop" var="dropUrl"/>
 <portlet:actionURL name="search" var="searchUrl"/>
+<portlet:actionURL name="save-collapse-state" var="saveCollapseStateUrl"/>
 
 <portlet:resourceURL id="lazy-loading" var="lazyLoadingUrl"/>
 
@@ -92,7 +93,7 @@
                                         key="TASKBAR_FILTERS"/></strong>
                             </a>
 
-                            <div id="${namespace}-filters" class="collapse show ml-4">
+                            <div id="${namespace}-filters" class="collapse ${taskbar.showFilters ? 'show' : ''} ml-4" data-url="${saveCollapseStateUrl}" data-id="filters">
                                 <c:choose>
                                     <c:when test="${empty task.savedSearches}">
                                         <p class="my-3 text-secondary"><op:translate
@@ -137,7 +138,7 @@
                                         key="TASKBAR_SEARCH"/></strong>
                             </a>
 
-                            <div id="${namespace}-search" class="collapse show">
+                            <div id="${namespace}-search" class="collapse ${taskbar.showSearch ? 'show' : ''}" data-url="${saveCollapseStateUrl}" data-id="search">
                                 <%--Reset--%>
                                 <portlet:actionURL var="resetUrl" name="reset"/>
                                 <div class="d-flex justify-content-end my-3">

@@ -169,6 +169,37 @@ $JQry(function() {
             });
 
 
+            // Save collapse state
+            $JQry(".taskbar .collapse[data-url]").on("show.bs.collapse", function() {
+                var $this = $JQry(this);
+
+                jQuery.ajax({
+                    url: $this.data("url"),
+                    type: "POST",
+                    async: true,
+                    cache: false,
+                    data: {
+                        id: $this.data("id"),
+                        show: true
+                    }
+                });
+            });
+            $JQry(".taskbar .collapse[data-url]").on("hide.bs.collapse", function() {
+                var $this = $JQry(this);
+
+                jQuery.ajax({
+                    url: $this.data("url"),
+                    type: "POST",
+                    async: true,
+                    cache: false,
+                    data: {
+                        id: $this.data("id"),
+                        show: false
+                    }
+                });
+            });
+
+
             $taskbar.data("loaded", true);
         }
     });
