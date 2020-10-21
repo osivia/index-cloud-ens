@@ -17,8 +17,13 @@ import fr.index.cloud.ens.filebrowser.portlet.service.CustomizedFileBrowserServi
 import fr.toutatice.portail.cms.nuxeo.api.cms.NuxeoDocumentContext;
 import fr.toutatice.portail.cms.nuxeo.api.domain.DocumentDTO;
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.collections.MapUtils;
+import org.apache.commons.collections.Predicate;
+import org.apache.commons.collections.functors.EqualPredicate;
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.math.NumberUtils;
 import org.nuxeo.ecm.automation.client.model.Document;
+import org.osivia.directory.v2.model.preferences.UserSavedSearch;
 import org.osivia.portal.api.PortalException;
 import org.osivia.portal.api.context.PortalControllerContext;
 import org.osivia.portal.api.urls.IPortalUrlFactory;
@@ -29,6 +34,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 
 import javax.portlet.PortletException;
+import javax.portlet.PortletRequest;
 import java.util.*;
 
 /**
@@ -75,6 +81,10 @@ public abstract class AbstractFileBrowserServiceImpl extends FileBrowserServiceI
 
     @Override
     public AbstractFileBrowserForm getForm(PortalControllerContext portalControllerContext) throws PortletException {
+        // Portlet request
+        PortletRequest request = portalControllerContext.getRequest();
+
+        // Form
         AbstractFileBrowserForm form = this.applicationContext.getBean(AbstractFileBrowserForm.class);
 
         if (!form.isInitialized()) {
@@ -92,13 +102,46 @@ public abstract class AbstractFileBrowserServiceImpl extends FileBrowserServiceI
             List<AbstractFileBrowserColumn> columns = this.getFileBrowserColumns(portalControllerContext, userPreferences);
             form.setColumns(columns);
 
+            // Search filter title
+            String searchFilterTitle;
+            String searchFilterParameter = request.getParameter(SEARCH_FILTER_PARAMETER);
+            if (StringUtils.isEmpty(searchFilterParameter)) {
+                searchFilterTitle = null;
+            } else {
+                int id = NumberUtils.toInt(searchFilterParameter);
+                Map<String, List<UserSavedSearch>> categorizedSavedSearches = userPreferences.getCategorizedSavedSearches();
+                if (MapUtils.isEmpty(categorizedSavedSearches)) {
+                    searchFilterTitle = null;
+                } else {
+                    Predicate predicate;
+                    try {
+                        predicate = EqualPredicate.getInstance(this.userPreferencesService.createUserSavedSearch(portalControllerContext, id));
+                    } catch (PortalException e) {
+                        throw new PortletException(e);
+                    }
+
+                    UserSavedSearch savedSearch = null;
+                    Iterator<List<UserSavedSearch>> iterator = categorizedSavedSearches.values().iterator();
+                    while ((savedSearch == null) && iterator.hasNext()) {
+                        List<UserSavedSearch> savedSearches = iterator.next();
+                        savedSearch = (UserSavedSearch) CollectionUtils.find(savedSearches, predicate);
+                    }
+
+                    if (savedSearch == null) {
+                        searchFilterTitle = null;
+                    } else {
+                        searchFilterTitle = savedSearch.getDisplayName();
+                    }
+                }
+            }
+            form.setSearchFilterTitle(searchFilterTitle);
+
             // Current document title
-            String path = form.getPath();
-            if ((form instanceof CustomizedFileBrowserForm) && StringUtils.isNotEmpty(path)) {
+            if ((form instanceof CustomizedFileBrowserForm) && StringUtils.isNotEmpty(form.getPath()) && StringUtils.isEmpty(searchFilterTitle) && !form.isListMode()) {
                 CustomizedFileBrowserForm customizedForm = (CustomizedFileBrowserForm) form;
 
                 // Current document context
-                NuxeoDocumentContext documentContext = this.repository.getDocumentContext(portalControllerContext, path);
+                NuxeoDocumentContext documentContext = this.repository.getDocumentContext(portalControllerContext, form.getPath());
 
                 String title = documentContext.getDocument().getTitle();
                 customizedForm.setTitle(title);

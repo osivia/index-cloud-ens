@@ -40,6 +40,14 @@ public interface CustomizedFileBrowserService extends AbstractFileBrowserService
      * Subjects selector identifier.
      */
     String SUBJECTS_SELECTOR_ID = "subjects";
+    /**
+     * Computed size selector identifier.
+     */
+    String COMPUTED_SIZE_SELECTOR_ID = "size";
+    /**
+     * Computed date selector identifier.
+     */
+    String COMPUTED_DATE_SELECTOR_ID = "date";
 
 
     @Override

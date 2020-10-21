@@ -26,6 +26,10 @@ public interface TaskbarService {
      * Selectors parameter.
      */
     String SELECTORS_PARAMETER = "selectors";
+    /**
+     * Search filter parameter.
+     */
+    String SEARCH_FILTER_PARAMETER = "search-filter";
 
     /**
      * Keywords selector identifier.

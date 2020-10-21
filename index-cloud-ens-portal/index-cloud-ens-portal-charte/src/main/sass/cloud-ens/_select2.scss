@@ -1,4 +1,14 @@
 .select2-container--bootstrap4 {
+  .select2-selection {
+    &.select2-selection--multiple {
+      .select2-search__field {
+        &:not([placeholder=""]) {
+          width: auto !important;
+        }
+      }
+    }
+  }
+
   .select2-search__field {
     margin: {
       top: .25rem !important;
@@ -7,10 +17,6 @@
 
     &::placeholder {
       font-size: $small-font-size;
-    }
-
-    &:not([placeholder=""]) {
-      width: auto !important;
     }
   }
 

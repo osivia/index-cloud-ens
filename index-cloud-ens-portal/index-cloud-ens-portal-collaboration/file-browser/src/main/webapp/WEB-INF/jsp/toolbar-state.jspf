@@ -11,6 +11,12 @@
 
     <div class="text-secondary-light mb-1">
         <c:choose>
+            <c:when test="${not empty form.searchFilterTitle}">
+                <span class="mr-2">
+                    <i class="glyphicons glyphicons-basic-search"></i>
+                </span>
+                <strong class="text-primary-dark">${form.searchFilterTitle}</strong>
+            </c:when>
             <c:when test="${form.listMode}">
                 <span class="mr-2">
                     <i class="glyphicons glyphicons-basic-search"></i>

@@ -11,8 +11,14 @@ import java.util.List;
  */
 public abstract class AbstractFileBrowserForm extends FileBrowserForm {
 
-    /** Columns. */
+    /**
+     * Columns.
+     */
     private List<AbstractFileBrowserColumn> columns;
+    /**
+     * Search filter title.
+     */
+    private String searchFilterTitle;
 
 
     /**
@@ -29,5 +35,13 @@ public abstract class AbstractFileBrowserForm extends FileBrowserForm {
 
     public void setColumns(List<AbstractFileBrowserColumn> columns) {
         this.columns = columns;
+    }
+
+    public String getSearchFilterTitle() {
+        return searchFilterTitle;
+    }
+
+    public void setSearchFilterTitle(String searchFilterTitle) {
+        this.searchFilterTitle = searchFilterTitle;
     }
 }

@@ -33,6 +33,7 @@
         
         <supported-public-render-parameter>dnd-update</supported-public-render-parameter>
         <supported-public-render-parameter>selectors</supported-public-render-parameter>
+        <supported-public-render-parameter>search-filter</supported-public-render-parameter>
     </portlet>
     
     
@@ -44,6 +45,11 @@
     <public-render-parameter>
         <identifier>selectors</identifier>
         <name>selectors</name>
+    </public-render-parameter>
+
+    <public-render-parameter>
+        <identifier>search-filter</identifier>
+        <name>search-filter</name>
     </public-render-parameter>
 
 </portlet-app>

@@ -487,6 +487,7 @@ public class TaskbarServiceImpl implements TaskbarService {
 
         // Reset selectors
         response.setRenderParameter(SELECTORS_PARAMETER, StringUtils.EMPTY);
+        response.removePublicRenderParameter(SEARCH_FILTER_PARAMETER);
 
         // Refresh other portlet model attributes
         PageProperties.getProperties().setRefreshingPage(true);
@@ -523,6 +524,7 @@ public class TaskbarServiceImpl implements TaskbarService {
         selectors.remove(ACTIVE_SAVED_SEARCH_ID);
 
         response.setRenderParameter(SELECTORS_PARAMETER, PageSelectors.encodeProperties(selectors));
+        response.removePublicRenderParameter(SEARCH_FILTER_PARAMETER);
 
         // Prevent Ajax refresh
         request.setAttribute("osivia.ajax.preventRefresh", true);
@@ -628,6 +630,7 @@ public class TaskbarServiceImpl implements TaskbarService {
                 }
 
                 parameters.put(SELECTORS_PARAMETER, PageSelectors.encodeProperties(selectors));
+                parameters.put(SEARCH_FILTER_PARAMETER, String.valueOf(id));
 
                 // Update model
                 this.fillTaskbarSearchForm(searchForm, selectors);

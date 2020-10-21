@@ -175,6 +175,7 @@ public class SavedSearchesServiceImpl extends SearchCommonServiceImpl implements
                 }
 
                 parameters.put(SELECTORS_PARAMETER, selectors);
+                parameters.put(SEARCH_FILTER_PARAMETER, String.valueOf(id));
             }
 
             // Path

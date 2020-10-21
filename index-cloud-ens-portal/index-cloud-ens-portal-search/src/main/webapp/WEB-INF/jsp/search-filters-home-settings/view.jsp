@@ -20,7 +20,9 @@
     <%--Form mode--%>
     <div class="form-check">
         <form:radiobutton id="${namespace}-mode-form" path="mode" cssClass="form-check-input" value="FORM"/>
-        <form:label for="${namespace}-mode-form" path="mode"><op:translate key="SEARCH_FILTERS_HOME_SETTINGS_MODE_FORM"/></form:label>
+        <form:label for="${namespace}-mode-form" path="mode">
+            <strong><op:translate key="SEARCH_FILTERS_HOME_SETTINGS_MODE_FORM"/></strong>
+        </form:label>
     </div>
 
     <%--Levels--%>
@@ -54,7 +56,9 @@
     <%--Filter mode--%>
     <div class="form-check">
         <form:radiobutton id="${namespace}-mode-filter" path="mode" cssClass="form-check-input" value="FILTER"/>
-        <form:label for="${namespace}-mode-filter" path="mode"><op:translate key="SEARCH_FILTERS_HOME_SETTINGS_MODE_FILTER"/></form:label>
+        <form:label for="${namespace}-mode-filter" path="mode">
+            <strong><op:translate key="SEARCH_FILTERS_HOME_SETTINGS_MODE_FILTER"/></strong>
+        </form:label>
     </div>
 
     <%--User saved search--%>

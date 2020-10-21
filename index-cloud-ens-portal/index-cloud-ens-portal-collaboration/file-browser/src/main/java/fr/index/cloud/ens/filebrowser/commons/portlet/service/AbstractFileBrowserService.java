@@ -14,6 +14,12 @@ import javax.portlet.PortletException;
  */
 public interface AbstractFileBrowserService extends FileBrowserService {
 
+    /**
+     * Search filter parameter.
+     */
+    String SEARCH_FILTER_PARAMETER = "search-filter";
+
+
     @Override
     AbstractFileBrowserForm getForm(PortalControllerContext portalControllerContext) throws PortletException;
 
