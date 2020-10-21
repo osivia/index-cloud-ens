@@ -16,6 +16,48 @@ import org.springframework.stereotype.Component;
 @Primary
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class MutualizedFileBrowserItem extends AbstractFileBrowserItem {
+    
+    /** The views. */
+    public Long views;
+    
+    /** The downloads. */
+    public Long downloads;
+    
+    
+    /**
+     * Getter for views.
+     * @return the views
+     */
+    public Long getViews() {
+        return views;
+    }
+
+    
+    /**
+     * Setter for views.
+     * @param views the views to set
+     */
+    public void setViews(Long views) {
+        this.views = views;
+    }
+
+    
+    /**
+     * Getter for download.
+     * @return the download
+     */
+    public Long getDownloads() {
+        return downloads;
+    }
+
+    
+    /**
+     * Setter for download.
+     * @param download the download to set
+     */
+    public void setDownloads(Long downloads) {
+        this.downloads = downloads;
+    }
 
     /**
      * Constructor.
@@ -23,5 +65,7 @@ public class MutualizedFileBrowserItem extends AbstractFileBrowserItem {
     public MutualizedFileBrowserItem() {
         super();
     }
+    
+    
 
 }

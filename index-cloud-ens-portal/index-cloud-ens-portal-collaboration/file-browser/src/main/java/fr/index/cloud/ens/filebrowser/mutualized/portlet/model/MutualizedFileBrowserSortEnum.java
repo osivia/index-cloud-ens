@@ -50,11 +50,11 @@ public enum MutualizedFileBrowserSortEnum implements MutualizedFileBrowserSortFi
     /**
      * Views.
      */
-    VIEWS("views", true, ""), // FIXME NXQL field
+    VIEWS("views", true, "mtz:liveviews"), 
     /**
      * Downloads.
      */
-    DOWNLOADS("downloads", true, "field"); // FIXME NXQL field
+    DOWNLOADS("downloads", true, "mtz:livedownloads"); 
 
 
     /**

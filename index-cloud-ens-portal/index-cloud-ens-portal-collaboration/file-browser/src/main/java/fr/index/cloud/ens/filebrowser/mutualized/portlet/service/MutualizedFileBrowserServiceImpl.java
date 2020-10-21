@@ -260,6 +260,16 @@ public class MutualizedFileBrowserServiceImpl extends AbstractFileBrowserService
         if (date != null) {
             item.setLastModification(date);
         }
+        
+        Long views = nuxeoDocument.getLong("mtz:liveviews");       
+        if( views != null)  {
+            item.setViews(views);
+        }
+        
+        Long downloads = nuxeoDocument.getLong("mtz:livedownloads");       
+        if( downloads != null)  {
+            item.setDownloads(downloads);
+        }
 
         return item;
     }
