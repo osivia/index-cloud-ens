@@ -10,7 +10,6 @@ import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.MapUtils;
 import org.apache.commons.collections.Predicate;
 import org.apache.commons.collections.functors.EqualPredicate;
-import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.math.NumberUtils;
 import org.osivia.directory.v2.model.preferences.UserPreferences;
 import org.osivia.directory.v2.model.preferences.UserSavedSearch;
@@ -24,7 +23,6 @@ import org.springframework.stereotype.Service;
 
 import javax.portlet.ActionResponse;
 import javax.portlet.PortletException;
-import javax.portlet.PortletRequest;
 import java.io.IOException;
 import java.util.*;
 
@@ -76,7 +74,7 @@ public class SearchFiltersHomeSettingsServiceImpl extends SearchCommonServiceImp
         }
 
         // Data
-        Map<String, List<String>> data = this.getData(portalControllerContext, userPreferences);
+        Map<String, List<String>> data = this.getData(userPreferences);
 
         // Form
         SearchFiltersHomeSettingsForm form = this.applicationContext.getBean(SearchFiltersHomeSettingsForm.class);
@@ -110,11 +108,10 @@ public class SearchFiltersHomeSettingsServiceImpl extends SearchCommonServiceImp
     /**
      * Get data.
      *
-     * @param portalControllerContext portal controller context
      * @param userPreferences         user preferences
      * @return data
      */
-    private Map<String, List<String>> getData(PortalControllerContext portalControllerContext, UserPreferences userPreferences) throws PortletException {
+    private Map<String, List<String>> getData(UserPreferences userPreferences) {
         // Saved searches
         List<UserSavedSearch> savedSearches = userPreferences.getSavedSearches(HOME_SETTINGS_CATEGORY_ID);
 
@@ -231,7 +228,7 @@ public class SearchFiltersHomeSettingsServiceImpl extends SearchCommonServiceImp
 
         UserSavedSearch result = null;
         if (MapUtils.isNotEmpty(categorizedSavedSearches)) {
-            Predicate predicate = null;
+            Predicate predicate;
             try {
                 predicate = EqualPredicate.getInstance(this.userPreferencesService.createUserSavedSearch(portalControllerContext, id));
             } catch (PortalException e) {
@@ -260,7 +257,7 @@ public class SearchFiltersHomeSettingsServiceImpl extends SearchCommonServiceImp
         }
 
         // User saved searches
-        List<UserSavedSearch> savedSearches = userPreferences.getSavedSearches();
+        List<UserSavedSearch> savedSearches = userPreferences.getSavedSearches(MUTUALIZED_SAVED_SEARCHES_CATEGORY_ID);
 
         JSONArray array = new JSONArray();
         if (CollectionUtils.isNotEmpty(savedSearches)) {
