@@ -1,0 +1,17 @@
+@import "../../../../../index-cloud-ens-portal-charte/src/main/sass/cloud-ens/variables";
+@import "../../../../../index-cloud-ens-portal-charte/src/main/sass/osivia/glyphicons/mixins";
+
+
+.portal-table-row {
+  &, &.ui-selecting, &.ui-selected {
+    .portal-table-cell {
+      &[data-column="document"] {
+        font-size: $font-size-base;
+
+        a {
+          color: $black !important;
+        }
+      }
+    }
+  }
+}

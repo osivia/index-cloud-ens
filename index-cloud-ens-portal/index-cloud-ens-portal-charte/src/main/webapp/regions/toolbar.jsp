@@ -83,7 +83,7 @@
 
                     <%--User--%>
                     <li class="nav-item mr-md-2">
-                        <a href="${requestScope['osivia.my-account.url']}" class="nav-link d-flex align-items-center text-light">
+                        <a href="${requestScope['osivia.my-account.url']}" class="nav-link d-flex align-items-center py-0 text-light">
                             <c:choose>
                                 <c:when test="${empty requestScope['osivia.toolbar.person']}">
                                     <i class="glyphicons glyphicons-basic-user h4 mb-0 mr-2 align-middle"></i>

@@ -32,6 +32,14 @@
             <type>war</type>
         </dependency>
 
+        <!-- Trash -->
+        <dependency>
+            <groupId>fr.index.cloud.ens.portal.collaboration</groupId>
+            <artifactId>index-cloud-ens-portal-trash</artifactId>
+            <version>${project.version}</version>
+            <type>war</type>
+        </dependency>
+
         <!-- Document edition -->
         <dependency>
             <groupId>org.osivia.services</groupId>
@@ -64,13 +72,7 @@
             <type>war</type>
         </dependency>
 
-        <!-- Workspace -->
-        <dependency>
-            <groupId>org.osivia.services.workspace</groupId>
-            <artifactId>osivia-services-workspace-trash</artifactId>
-            <version>${collaboration.version}</version>
-            <type>war</type>
-        </dependency>
+        <!-- Workspace quota -->
         <dependency>
             <groupId>org.osivia.services.workspace</groupId>
             <artifactId>osivia-services-workspace-quota</artifactId>
@@ -105,6 +107,13 @@
                             <contextRoot>/index-cloud-ens-portal-mutualization</contextRoot>
                         </webModule>
 
+                        <!--Trash-->
+                        <webModule>
+                            <groupId>fr.index.cloud.ens.portal.collaboration</groupId>
+                            <artifactId>index-cloud-ens-portal-trash</artifactId>
+                            <contextRoot>/index-cloud-ens-portal-trash</contextRoot>
+                        </webModule>
+
                         <!-- Document edition -->
                         <webModule>
                             <groupId>org.osivia.services</groupId>
@@ -133,12 +142,7 @@
                             <contextRoot>/osivia-services-widgets</contextRoot>
                         </webModule>
 
-                        <!-- Workspace -->
-                        <webModule>
-                            <groupId>org.osivia.services.workspace</groupId>
-                            <artifactId>osivia-services-workspace-trash</artifactId>
-                            <contextRoot>/osivia-services-workspace-trash</contextRoot>
-                        </webModule>
+                        <!-- Workspace quota -->
                         <webModule>
                             <groupId>org.osivia.services.workspace</groupId>
                             <artifactId>osivia-services-workspace-quota</artifactId>

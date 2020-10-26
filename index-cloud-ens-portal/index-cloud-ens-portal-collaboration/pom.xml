@@ -18,6 +18,7 @@
     <modules>
         <module>file-browser</module>
         <module>mutualization</module>
+        <module>trash</module>
 
         <module>ear</module>
     </modules>
