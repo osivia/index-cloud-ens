@@ -538,7 +538,7 @@ public class DiscussionServiceImpl implements DiscussionService, ApplicationCont
         // URL
         String url = "#" + id;
         // HTML classes
-        String htmlClass = "btn btn-primary btn-sm ml-1 no-ajax-link";
+        String htmlClass = "btn btn-link btn-link-hover-primary text-primary-dark btn-sm mr-1 no-ajax-link";
 
         // Button
         Element button = DOM4JUtils.generateLinkElement(url, null, null, htmlClass, null, icon);

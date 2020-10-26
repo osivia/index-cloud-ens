@@ -5,6 +5,16 @@
 
 <%--Header--%>
 <div class="portal-table-header-group">
+    <%--Checkbox--%>
+    <div class="portal-table-cell" data-column="checkbox">
+        <div class="portal-table-checkbox">
+            <c:set var="title"><op:translate key="TABLE_SELECT_ALL_CHECKBOX_TITLE"/></c:set>
+            <a href="javascript:" class="no-ajax-link" title="${title}">
+                <i class="glyphicons glyphicons-basic-square-empty"></i>
+            </a>
+        </div>
+    </div>
+
     <%--Document--%>
     <div class="portal-table-cell" data-column="document">
         <portlet:actionURL name="sort" var="url" copyCurrentRenderParameters="true">
@@ -39,16 +49,5 @@
                 </small>
             </c:if>
         </a>
-    </div>
-
-
-    <%--Checkbox--%>
-    <div class="portal-table-cell" data-column="checkbox">
-        <div class="portal-table-checkbox">
-            <c:set var="title"><op:translate key="TABLE_SELECT_ALL_CHECKBOX_TITLE"/></c:set>
-            <a href="javascript:" class="no-ajax-link" title="${title}">
-                <i class="glyphicons glyphicons-basic-square-empty"></i>
-            </a>
-        </div>
     </div>
 </div>
