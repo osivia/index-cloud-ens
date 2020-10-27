@@ -73,6 +73,8 @@ public class UpdateCustomizedUserPreferencesCommand extends UpdateUserPreference
                     }
                 }
                 fileBrowser.put("fileBrowserColumns", columns);
+
+                fileBrowsers.add(fileBrowser);
             }
 
             property = fileBrowsers.toString();
