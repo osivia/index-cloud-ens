@@ -19,15 +19,15 @@
     <div class="portal-table-cell" data-column="document">
         <portlet:actionURL name="sort" var="url" copyCurrentRenderParameters="true">
             <portlet:param name="sortId" value="document"/>
-            <portlet:param name="alt" value="${discussionsForm.sort.id eq 'document' and not discussionsForm.alt}"/>
+            <portlet:param name="alt" value="${trashForm.sort.id eq 'document' and not trashForm.alt}"/>
         </portlet:actionURL>
 
         <a href="${url}">
-            <span><op:translate key="DISCUSSION_HEADER_TITLE"/></span>
+            <span><op:translate key="TRASH_HEADER_DOCUMENT"/></span>
 
-            <c:if test="${discussionsForm.sort.id eq 'document'}">
+            <c:if test="${trashForm.sort.id eq 'document'}">
                 <small class="d-inline-block align-text-bottom">
-                    <i class="glyphicons glyphicons-basic-arrow-${discussionsForm.alt ? 'up' : 'down'}"></i>
+                    <i class="glyphicons glyphicons-basic-arrow-${trashForm.alt ? 'up' : 'down'}"></i>
                 </small>
             </c:if>
         </a>
@@ -37,15 +37,33 @@
     <div class="portal-table-cell" data-column="date">
         <portlet:actionURL name="sort" var="url" copyCurrentRenderParameters="true">
             <portlet:param name="sortId" value="date"/>
-            <portlet:param name="alt" value="${discussionsForm.sort.id eq 'date' and not discussionsForm.alt}"/>
+            <portlet:param name="alt" value="${trashForm.sort.id eq 'date' and not trashForm.alt}"/>
         </portlet:actionURL>
 
         <a href="${url}">
-            <span><op:translate key="DISCUSSION_HEADER_DATE"/></span>
+            <span><op:translate key="TRASH_HEADER_DATE"/></span>
 
-            <c:if test="${discussionsForm.sort.id eq 'date'}">
+            <c:if test="${trashForm.sort.id eq 'date'}">
                 <small class="d-inline-block align-text-bottom">
-                    <i class="glyphicons glyphicons-basic-arrow-${discussionsForm.alt ? 'up' : 'down'}"></i>
+                    <i class="glyphicons glyphicons-basic-arrow-${trashForm.alt ? 'up' : 'down'}"></i>
+                </small>
+            </c:if>
+        </a>
+    </div>
+
+    <%--Location--%>
+    <div class="portal-table-cell" data-column="location">
+        <portlet:actionURL name="sort" var="url" copyCurrentRenderParameters="true">
+            <portlet:param name="sortId" value="location"/>
+            <portlet:param name="alt" value="${trashForm.sort.id eq 'location' and not trashForm.alt}"/>
+        </portlet:actionURL>
+
+        <a href="${url}">
+            <span><op:translate key="TRASH_HEADER_LOCATION"/></span>
+
+            <c:if test="${trashForm.sort.id eq 'location'}">
+                <small class="d-inline-block align-text-bottom">
+                    <i class="glyphicons glyphicons-basic-arrow-${trashForm.alt ? 'up' : 'down'}"></i>
                 </small>
             </c:if>
         </a>

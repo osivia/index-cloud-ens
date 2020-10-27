@@ -20,6 +20,10 @@
     }
   }
 
+  .select2-selection__placeholder {
+    font-size: $small-font-size;
+  }
+
   .select2-selection__choice {
     display: flex;
     align-items: center;
