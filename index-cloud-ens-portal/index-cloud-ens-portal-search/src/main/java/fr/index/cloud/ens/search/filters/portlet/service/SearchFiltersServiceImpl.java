@@ -146,6 +146,12 @@ public class SearchFiltersServiceImpl extends SearchCommonServiceImpl implements
             form.setLocationPath(navigationPath);
             this.updateLocation(portalControllerContext, form);
         }
+        
+        String format = this.getSelectorValue(selectors, FORMAT_SELECTORID);
+        form.setFormat(format);
+        
+        String shared = this.getSelectorValue(selectors, SHARED_SELECTOR_ID);
+        form.setShared(shared);
 
         // Size range
         String sizeRangeSelector = this.getSelectorValue(selectors, SIZE_RANGE_SELECTOR_ID);
@@ -384,6 +390,14 @@ public class SearchFiltersServiceImpl extends SearchCommonServiceImpl implements
             selectors.put(LOCATION_SELECTOR_ID, Collections.singletonList(location.getPath()));
         }
 
+        if (StringUtils.isNotEmpty(form.getFormat())) {
+            selectors.put(FORMAT_SELECTORID, Collections.singletonList(form.getFormat()));
+        }
+        
+        if (StringUtils.isNotEmpty(form.getShared())) {
+            selectors.put(SHARED_SELECTOR_ID, Collections.singletonList(form.getShared()));
+        }
+        
         // Size range
         selectors.put(SIZE_RANGE_SELECTOR_ID, Collections.singletonList(form.getSizeRange().name()));
 

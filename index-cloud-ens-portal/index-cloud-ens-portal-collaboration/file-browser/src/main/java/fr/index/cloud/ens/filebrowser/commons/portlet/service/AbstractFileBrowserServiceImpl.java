@@ -233,6 +233,10 @@ public abstract class AbstractFileBrowserServiceImpl extends FileBrowserServiceI
         // Subjects
         List<String> subjects = this.getPropertyListValues(documentDto, "idxcl:subjects");
         item.setSubjects(subjects);
+        
+        // Format
+        Object format = documentDto.getProperties().get("idxcl:formatText");
+        item.setFormat((String) format);
 
         return item;
     }

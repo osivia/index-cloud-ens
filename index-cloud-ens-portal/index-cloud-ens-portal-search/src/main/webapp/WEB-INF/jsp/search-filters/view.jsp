@@ -19,6 +19,12 @@
 <portlet:resourceURL id="load-vocabulary" var="loadDocumentTypesUrl">
     <portlet:param name="vocabulary" value="idx_document_type"/>
 </portlet:resourceURL>
+<portlet:resourceURL id="load-vocabulary" var="loadFileFormatsUrl">
+    <portlet:param name="vocabulary" value="idx_file_format"/>
+</portlet:resourceURL>
+<portlet:resourceURL id="load-vocabulary" var="loadSharedUrl">
+    <portlet:param name="vocabulary" value="idx_shared"/>
+</portlet:resourceURL>
 <portlet:resourceURL id="save-search-popover" var="saveSearchPopoverUrl"/>
 
 
@@ -86,6 +92,9 @@
                 </form:select>
             </div>
         </div>
+        
+        
+
 
         <%--Location--%>
         <c:if test="${form.view.id eq 'default'}">
@@ -100,6 +109,34 @@
                 <form:hidden path="locationPath"/>
             </div>
         </c:if>
+
+         <%--Format--%>
+        <div class="form-group row">
+            <form:label path="format" cssClass="col-md-3 col-form-label"><op:translate
+                    key="SEARCH_FILTERS_FORMAT_LABEL"/></form:label>
+            <div class="col-md-6">
+                <form:select path="format" cssClass="form-control select2 select2-default" data-url="${loadFileFormatsUrl}" data-searching="${select2Searching}" data-no-results="${select2NoResults}">
+                    <c:forEach var="format" items="${form.format}">
+                        <form:option value="${format}"><ttc:vocabularyLabel name="idx_file_format" key="${format}"/></form:option>
+                    </c:forEach>
+                </form:select>
+            </div>
+        </div>      
+        
+         <%--Partage--%>
+        <c:if test="${form.view.id eq 'default'}">         
+	        <div class="form-group row">
+	            <form:label path="shared" cssClass="col-md-3 col-form-label"><op:translate
+	                    key="SEARCH_FILTERS_SHARED_LABEL"/></form:label>
+	            <div class="col-md-6">
+	                <form:select path="shared" cssClass="form-control select2 select2-default" data-url="${loadSharedUrl}" data-searching="${select2Searching}" data-no-results="${select2NoResults}">
+	                    <c:forEach var="shared" items="${form.shared}">
+	                        <form:option value="${format.shared}"><ttc:vocabularyLabel name="idx_shared" key="${shared}"/></form:option>
+	                    </c:forEach>
+	                </form:select>
+	            </div>
+	        </div>       
+        </c:if>               
 
         <%--Size--%>
         <div class="form-group row">
@@ -127,6 +164,8 @@
                 </div>
             </div>
         </div>
+        
+  
 
         <%--Date--%>
         <div class="form-group row">

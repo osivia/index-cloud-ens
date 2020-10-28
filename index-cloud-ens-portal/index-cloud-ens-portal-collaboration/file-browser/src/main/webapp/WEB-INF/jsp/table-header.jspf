@@ -22,6 +22,11 @@
                 <%--Subject--%>
                 <%@ include file="table-header-subject.jspf"%>
             </c:when>
+            
+             <c:when test="${column.id eq 'format'}">
+                <%--Format--%>
+                <%@ include file="table-header-format.jspf"%>
+            </c:when>
 
             <c:when test="${column.id eq 'last-modification'}">
                 <%--Last modification--%>

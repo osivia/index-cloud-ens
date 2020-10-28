@@ -46,6 +46,13 @@
   }
 }
 
+[data-column="format"] {
+  width: 100px;
+
+  @include media-breakpoint-up("xl") {
+    width: 120px;
+  }
+}
 
 .portal-table-header-group {
   .portal-table-cell {

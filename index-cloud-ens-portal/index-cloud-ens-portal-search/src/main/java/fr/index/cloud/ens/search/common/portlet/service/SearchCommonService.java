@@ -41,6 +41,7 @@ public interface SearchCommonService {
      * Document types selector identifier.
      */
     String DOCUMENT_TYPES_SELECTOR_ID = "documentTypes";
+
     /**
      * Levels selector identifier.
      */
@@ -73,6 +74,16 @@ public interface SearchCommonService {
      * Date range selector identifier.
      */
     String DATE_RANGE_SELECTOR_ID = "date-range";
+    
+    /**
+     * Format selector identifier.
+     */
+    String FORMAT_SELECTORID = "format";
+    /**
+     * File format selector identifier.
+     */
+    String SHARED_SELECTOR_ID = "shared";
+    
     /**
      * Customized date selector identifier.
      */

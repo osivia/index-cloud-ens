@@ -72,6 +72,16 @@ public class SearchFiltersForm {
      * Saved search display name.
      */
     private String savedSearchDisplayName;
+    
+    /** The format. */
+    private String format;
+    
+    /** The share. */
+    private String shared;
+
+
+    
+
 
 
     /**
@@ -185,4 +195,34 @@ public class SearchFiltersForm {
     public void setSavedSearchDisplayName(String savedSearchDisplayName) {
         this.savedSearchDisplayName = savedSearchDisplayName;
     }
+    
+
+    public String getFormat() {
+        return format;
+    }
+
+
+    public void setFormat(String format) {
+        this.format = format;
+    }
+
+    
+    /**
+     * Getter for share.
+     * @return the share
+     */
+    public String getShared() {
+        return shared;
+    }
+
+
+    
+    /**
+     * Setter for share.
+     * @param share the share to set
+     */
+    public void setShared(String shared) {
+        this.shared = shared;
+    }
+    
 }
