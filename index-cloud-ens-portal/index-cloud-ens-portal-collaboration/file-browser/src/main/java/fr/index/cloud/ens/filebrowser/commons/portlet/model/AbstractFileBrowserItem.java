@@ -23,6 +23,13 @@ public abstract class AbstractFileBrowserItem extends FileBrowserItem {
      * Subjects.
      */
     private List<String> subjects;
+    
+    /**
+     *  Format.
+     */
+    private String format;
+
+
 
 
     /**
@@ -56,4 +63,14 @@ public abstract class AbstractFileBrowserItem extends FileBrowserItem {
     public void setSubjects(List<String> subjects) {
         this.subjects = subjects;
     }
+    
+
+    public String getFormat() {
+        return format;
+    }
+
+    public void setFormat(String format) {
+        this.format = format;
+    }
+
 }

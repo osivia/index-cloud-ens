@@ -64,7 +64,16 @@ public class CustomizedFileBrowserItemComparator extends FileBrowserItemComparat
             } else if (CustomizedFileBrowserSortEnum.SUBJECT.equals(this.criteria.getField())) {
                 result = this.compareLists(customizedItem1.getSubjects(), customizedItem2.getSubjects());
                 customizedComparison = true;
-            } else {
+            } else if (CustomizedFileBrowserSortEnum.FORMAT.equals(this.criteria.getField())) {
+                if( customizedItem1.getFormat() == null)
+                    result = -1;
+                else if (customizedItem2.getFormat() == null)
+                    result =  1;
+                else
+                    result = customizedItem1.getFormat().compareTo(customizedItem2.getFormat());
+                customizedComparison = true;
+            } 
+            else {
                 result = super.compare(item1, item2);
                 customizedComparison = false;
             }

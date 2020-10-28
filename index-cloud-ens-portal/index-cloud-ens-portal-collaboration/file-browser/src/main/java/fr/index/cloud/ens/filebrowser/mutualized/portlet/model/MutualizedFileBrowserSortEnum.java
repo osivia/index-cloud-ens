@@ -36,6 +36,10 @@ public enum MutualizedFileBrowserSortEnum implements MutualizedFileBrowserSortFi
      */
     SUBJECT("subject", true, "idxcl:subjects"),
     /**
+     * Subject sort.
+     */
+    FORMAT("format", true, "idxcl:formatText"),
+    /**
      * Last modification sort.
      */
     LAST_MODIFICATION("last-modification", true, "dc:modified"),

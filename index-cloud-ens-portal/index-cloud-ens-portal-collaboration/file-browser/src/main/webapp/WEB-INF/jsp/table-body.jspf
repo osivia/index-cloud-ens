@@ -48,6 +48,11 @@
                                 <%--Subject--%>
                                 <%@ include file="table-body-subject.jspf"%>
                             </c:when>
+                            
+                            <c:when test="${column.id eq 'format'}">
+                                <%--Subject--%>
+                                <%@ include file="table-body-format.jspf"%>
+                            </c:when>                            
 
                             <c:when test="${column.id eq 'last-modification'}">
                                 <%--Last modification--%>

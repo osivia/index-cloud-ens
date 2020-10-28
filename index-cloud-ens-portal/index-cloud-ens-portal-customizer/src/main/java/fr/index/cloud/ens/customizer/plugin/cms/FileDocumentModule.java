@@ -394,7 +394,7 @@ public class FileDocumentModule extends PortletModule {
             }
             
             NuxeoDocumentContext mutualizedDocumentContext = nuxeoController.getDocumentContext(publishedDocumentPath);
-            Document mutualizedDoc = mutualizedDocumentContext.getDocument();
+            Document mutualizedDoc = mutualizedDocumentContext.getDenormalizedDocument();
             
             
             if(!StringUtils.equals(getDigest(document.getDocument()),getDigest( mutualizedDoc))) {
@@ -402,27 +402,10 @@ public class FileDocumentModule extends PortletModule {
             }
 
             /* Get format */
-             
-            
-            // CMS customizer
-            INuxeoCustomizer customizer = nuxeoController.getNuxeoCMSService().getCMSCustomizer();
+    
+            publicationFormat = mutualizedDoc.getProperties().getString("idxcl:formatText");
 
-            // Format
-            PropertyMap fileContent;
-            fileContent = mutualizedDoc.getProperties().getMap("file:content");
 
-            // File MIME type
-            if (fileContent != null) {
-                FileMimeType fileMimeType;
-                try {
-                    fileMimeType = customizer.getFileMimeType(fileContent.getString("mime-type"));
-                    if( fileMimeType != null)
-                        publicationFormat = fileMimeType.getDescription();                    
-                } catch (IOException e) {
-                    throw new PortletException (e);
-                }
-             }
-            
             publicationDocument = this.documentDao.toDTO(mutualizedDoc);
          }
         

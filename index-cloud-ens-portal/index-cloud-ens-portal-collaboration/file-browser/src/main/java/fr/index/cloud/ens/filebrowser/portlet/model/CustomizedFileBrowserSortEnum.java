@@ -38,6 +38,10 @@ public enum CustomizedFileBrowserSortEnum implements CustomizedFileBrowserSortFi
     /**
      * Last modification sort.
      */
+    FORMAT(true),    
+    /**
+     * Last modification sort.
+     */
     LAST_MODIFICATION(true),
     /**
      * File size sort.

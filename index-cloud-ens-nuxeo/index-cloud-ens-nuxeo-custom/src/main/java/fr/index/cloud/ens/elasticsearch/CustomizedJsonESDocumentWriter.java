@@ -14,8 +14,10 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.codehaus.jackson.JsonGenerator;
+import org.nuxeo.ecm.core.api.DataModel;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.DocumentModelList;
+import org.nuxeo.ecm.core.api.blobholder.BlobHolder;
 import org.nuxeo.ecm.core.api.model.Property;
 import org.nuxeo.ecm.directory.DirectoryException;
 import org.nuxeo.ecm.directory.Session;
@@ -23,6 +25,7 @@ import org.nuxeo.ecm.directory.api.DirectoryService;
 import org.nuxeo.runtime.api.Framework;
 
 import fr.toutatice.ecm.es.customizer.writers.api.AbstractCustomJsonESWriter;
+import fr.toutatice.ecm.platform.core.constants.ToutaticeNuxeoStudioConst;
 
 /**
  * Customized JSON Elasticsearch document writer.
@@ -48,15 +51,29 @@ public class CustomizedJsonESDocumentWriter extends AbstractCustomJsonESWriter {
     private static final String SUBJECTS_DENORMALIZED_FIELD = "idxcl:subjectsTree";
     /** Subjects vocabulary name. */
     private static final String SUBJECTS_VOCABULARY_NAME = "idx_subject";
+    
+    
 
+    /** File format denormalized field. */
+    private static final String FILE_FORMAT_DENORMALIZED_FIELD = "idxcl:format";
+    /** File format  vocabulary name. */
+    private static final String FILE_FORMAT_VOCABULARY_NAME = "idx_file_format";
 
+    /** File format  vocabulary name. */
+    private static final String MIME_TYPE_VOCABULARY_NAME = "idx_mime_type_format";
+    
+     /** The file label. */
+    private static final String FILE_LABEL = "Fichier";
+    
     /** Vocabularies. */
     private Map<String, Map<String, VocabularyEntry>> vocabularies;
 
 
     /** Log. */
     private final Log log;
-
+    
+    
+   
 
     /**
      * Constructor.
@@ -66,6 +83,8 @@ public class CustomizedJsonESDocumentWriter extends AbstractCustomJsonESWriter {
 
         // Log
         this.log = LogFactory.getLog(this.getClass());
+        
+        
     }
 
 
@@ -88,9 +107,104 @@ public class CustomizedJsonESDocumentWriter extends AbstractCustomJsonESWriter {
 
         // Subjects
         this.writeTree(jsonGenerator, document, SUBJECTS_XPATH, SUBJECTS_DENORMALIZED_FIELD, SUBJECTS_VOCABULARY_NAME);
+        
+        
+        // FileFormat
+        this.writeFileFormat(jsonGenerator, document,  FILE_FORMAT_DENORMALIZED_FIELD,MIME_TYPE_VOCABULARY_NAME, FILE_FORMAT_VOCABULARY_NAME);
+ 
+        
     }
 
 
+    
+
+    /**
+     * Write file format.
+     *
+     * @param jsonGenerator the json generator
+     * @param document the document
+     * @param denormalizedField the denormalized field
+     * @param mimeTypeVocabularyName the mime type vocabulary name
+     * @param formatVocabularyName the format vocabulary name
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
+    private void writeFileFormat(JsonGenerator jsonGenerator, DocumentModel document, String denormalizedField, String mimeTypeVocabularyName,
+            String formatVocabularyName) throws IOException {
+
+
+        String mimeType = null;
+        String extension = null;
+
+        // Get mime type and extension
+        if (document.hasSchema(ToutaticeNuxeoStudioConst.CST_DOC_FILE_SCHEMA)) {
+            if (document != null) {
+                BlobHolder bHolder = document.getAdapter(BlobHolder.class);
+                mimeType = bHolder.getBlob().getMimeType();
+                int iExtension = bHolder.getBlob().getFilename().lastIndexOf('.');
+                if( iExtension != -1) {
+                    extension = bHolder.getBlob().getFilename().substring(iExtension+1);
+                }
+            }
+        }
+
+        if (StringUtils.isNotEmpty(mimeType)) {
+
+            // Get format code
+            String fileFormat = null;
+            Map<String, VocabularyEntry> mimeTypeVocabulary = this.getVocabulary(mimeTypeVocabularyName);
+            if (MapUtils.isNotEmpty(mimeTypeVocabulary)) {
+                // Search by full mime type
+                VocabularyEntry entry = mimeTypeVocabulary.get(mimeType);
+                if (entry != null) {
+                    fileFormat = entry.getLabel();
+                }   else    {
+                    // Search by type
+                    int iSlash = mimeType.indexOf('/');
+                    if( iSlash != -1)   {
+                        String type = mimeType.substring(0, iSlash+1);
+                        VocabularyEntry typeEntry = mimeTypeVocabulary.get(type);
+                        if (typeEntry != null) {
+                            fileFormat = typeEntry.getLabel();
+                        }
+                    }
+                }
+            }
+
+            String textDenormalization=null;
+            
+            if (StringUtils.isNotEmpty(fileFormat)) {
+
+                // write format
+                jsonGenerator.writeStringField(denormalizedField, fileFormat);
+
+                // Get format text
+                Map<String, VocabularyEntry> formatVocabulary = this.getVocabulary(formatVocabularyName);
+                if (MapUtils.isNotEmpty(formatVocabulary) && (StringUtils.isNotEmpty(fileFormat))) {
+                    // Vocabulary entry
+                    VocabularyEntry entry = formatVocabulary.get(fileFormat);
+
+                    if (entry != null) {
+                        String value = entry.getLabel();
+                        textDenormalization = value; 
+                    }
+                }
+            }
+            
+            
+            if( textDenormalization == null && StringUtils.isNotEmpty(extension)) {
+                textDenormalization = FILE_LABEL+ " " + extension.toUpperCase();
+            }   
+                
+            if( textDenormalization == null)    {
+                textDenormalization = FILE_LABEL;
+            }
+                    
+            
+            jsonGenerator.writeStringField(denormalizedField + "Text", textDenormalization);
+        }
+    }
+    
+    
     /**
      * Write tree.
      * 
@@ -166,7 +280,7 @@ public class CustomizedJsonESDocumentWriter extends AbstractCustomJsonESWriter {
             DirectoryService directoryService = Framework.getService(DirectoryService.class);
 
             // Vocabulary names
-            String[] vocabularyNames = new String[]{LEVELS_VOCABULARY_NAME, SUBJECTS_VOCABULARY_NAME};
+            String[] vocabularyNames = new String[]{LEVELS_VOCABULARY_NAME, SUBJECTS_VOCABULARY_NAME, FILE_FORMAT_VOCABULARY_NAME, MIME_TYPE_VOCABULARY_NAME};
 
             // Vocabularies
             this.vocabularies = new ConcurrentHashMap<>(vocabularyNames.length);
@@ -208,12 +322,14 @@ public class CustomizedJsonESDocumentWriter extends AbstractCustomJsonESWriter {
                 for (DocumentModel document : documents) {
                     String id = (String) document.getProperty(schema, "id");
                     String parent = (String) document.getProperty(schema, "parent");
+                    String label = (String) document.getProperty(schema, "label");
 
                     if (StringUtils.isNotEmpty(id)) {
                         // Vocabulary entry
                         VocabularyEntry entry = new VocabularyEntry();
                         entry.setId(id);
                         entry.setParent(parent);
+                        entry.setLabel(label);
 
                         vocabulary.put(id, entry);
                     }
@@ -244,6 +360,12 @@ public class CustomizedJsonESDocumentWriter extends AbstractCustomJsonESWriter {
 
         /** Identifier. */
         private String id;
+        
+        /** Label. */
+        private String label;
+        
+
+
         /** Parent. */
         private String parent;
 
@@ -290,6 +412,25 @@ public class CustomizedJsonESDocumentWriter extends AbstractCustomJsonESWriter {
          */
         public void setParent(String parent) {
             this.parent = parent;
+        }
+        
+        
+        /**
+         * Getter for label.
+         * @return the label
+         */
+        public String getLabel() {
+            return label;
+        }
+
+
+        
+        /**
+         * Setter for label.
+         * @param label the label to set
+         */
+        public void setLabel(String label) {
+            this.label = label;
         }
 
     }

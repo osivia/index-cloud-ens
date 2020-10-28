@@ -23,6 +23,11 @@
                 <%--Last modification--%>
                 <%@ include file="../table-header-last-modification.jspf" %>
             </c:when>
+            
+            <c:when test="${column.id eq 'format'}">
+                <%--Author--%>
+                <%@ include file="table-header-format.jspf" %>
+            </c:when>            
 
             <c:when test="${column.id eq 'author'}">
                 <%--Author--%>

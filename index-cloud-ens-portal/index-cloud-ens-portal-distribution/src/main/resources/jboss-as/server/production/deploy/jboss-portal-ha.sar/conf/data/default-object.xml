@@ -1675,6 +1675,13 @@ nuxeoRequest.append("idxcl:subjectsTree STARTSWITH '").append(subject).append("'
 nuxeoRequest.append(") ");&#13;
 }&#13;
 &#13;
+List format= params.get("format");&#13;
+if ((format!= null) &amp;&amp; !format.isEmpty()) {&#13;
+nuxeoRequest.append("AND (");&#13;
+nuxeoRequest.append("idxcl:format = '").append(format.get(0)).append("' ");&#13;
+nuxeoRequest.append(") ");&#13;
+}&#13;
+&#13;
 return nuxeoRequest.toString();</value>
                             </property>
                             <property>
@@ -2255,6 +2262,37 @@ if (CollectionUtils.isNotEmpty(dates)) {&#13;
 nuxeoRequest.append("AND dc:modified &gt;= DATE '").append(dates.get(0)).append("' ");&#13;
 }&#13;
 &#13;
+List format= params.get("format");&#13;
+if ((format!= null) &amp;&amp; !format.isEmpty()) {&#13;
+nuxeoRequest.append("AND (");&#13;
+nuxeoRequest.append("idxcl:format = '").append(format.get(0)).append("' ");&#13;
+nuxeoRequest.append(") ");&#13;
+}&#13;
+&#13;
+&#13;
+List shared= params.get("shared");&#13;
+if ((shared!= null) &amp;&amp; !shared.isEmpty()) {&#13;
+if( "MUTUALIZED".equals(shared.get(0))) {&#13;
+nuxeoRequest.append("AND (");&#13;
+nuxeoRequest.append("mtz:enable = 1 ");&#13;
+nuxeoRequest.append(") ");&#13;
+}&#13;
+if( "PRONOTE".equals(shared.get(0))) {&#13;
+nuxeoRequest.append("AND (");&#13;
+nuxeoRequest.append("rshr:targets/*/pubId IS NOT NULL");&#13;
+nuxeoRequest.append(") ");&#13;
+}&#13;
+if( "NOT_SHARED".equals(shared.get(0))) {&#13;
+nuxeoRequest.append("AND (");&#13;
+nuxeoRequest.append("mtz:enable &lt;&gt; 1 ");&#13;
+nuxeoRequest.append("AND rshr:targets/*/pubId IS NULL ");&#13;
+nuxeoRequest.append("AND ecm:mixinType &lt;&gt; 'Folderish'");&#13;
+nuxeoRequest.append(") ");&#13;
+}&#13;
+}&#13;
+&#13;
+
+
 return nuxeoRequest.toString();</value>
                             </property>
                             <property>
