@@ -242,13 +242,22 @@ public class TaskbarRepositoryImpl implements TaskbarRepository {
             dropdownItem = null;
         } else {
             // Display name
-            String displayName = bundle.getString(StringUtils.upperCase(type), documentType.getCustomizedClassLoader());
+            String displayName;
+            if (documentType.isFile()) {
+                displayName = bundle.getString("TASKBAR_ADD_FILES");
+            } else {
+                displayName = bundle.getString(StringUtils.upperCase(type), documentType.getCustomizedClassLoader());
+            }
 
             // Window properties
             Map<String, String> properties = new HashMap<>();
             properties.put("osivia.document.edition.base-path", nuxeoController.getBasePath());
             properties.put("osivia.document.edition.parent-path", parentPath);
             properties.put("osivia.document.edition.document-type", type);
+            if (documentType.isFile()) {
+                properties.put("osivia.document.edition.multiple-files", String.valueOf(true));
+            }
+            properties.put("osivia.document.edition.modal", String.valueOf(true));
             properties.put(DynaRenderOptions.PARTIAL_REFRESH_ENABLED, String.valueOf(true));
             properties.put("osivia.ajaxLink", "1");
 
@@ -261,7 +270,12 @@ public class TaskbarRepositoryImpl implements TaskbarRepository {
             }
 
             // Modal title
-            String modalTitle = bundle.getString("DOCUMENT_CREATION_" + StringUtils.upperCase(type));
+            String modalTitle;
+            if (documentType.isFile()) {
+                modalTitle = bundle.getString("TASKBAR_DOCUMENT_CREATION_FILES");
+            } else {
+                modalTitle = bundle.getString("DOCUMENT_CREATION_" + StringUtils.upperCase(type));
+            }
 
             // Task
             dropdownItem = this.applicationContext.getBean(AddDropdownItem.class);
@@ -368,7 +382,8 @@ public class TaskbarRepositoryImpl implements TaskbarRepository {
 
     /**
      * Generate folder children.
-     *  @param nuxeoController Nuxeo controller
+     *
+     * @param nuxeoController Nuxeo controller
      * @param basePath        base path
      * @param parent          parent folder
      */
