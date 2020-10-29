@@ -129,13 +129,6 @@ public abstract class SearchCommonServiceImpl implements SearchCommonService {
         } else {
             results = this.parseVocabulary(array, filter);
 
-            // All
-            JSONObject object = new JSONObject();
-            object.put("id", StringUtils.EMPTY);
-            object.put("text", bundle.getString(vocabulary.getAllKey()));
-            object.put("optgroup", false);
-            object.put("level", 1);
-            results.add(0, object);
         }
 
         return results;
