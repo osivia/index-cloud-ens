@@ -79,6 +79,10 @@
 
     border-radius: 50%;
     object-fit: contain;
+
+    &[src$=".svg"] {
+      background-color: currentColor;
+    }
   }
 }
 

@@ -1,5 +1,6 @@
 package fr.index.cloud.ens.customizer.plugin;
 
+import fr.index.cloud.ens.customizer.plugin.avatar.CloudEnsAvatarModule;
 import fr.index.cloud.ens.customizer.plugin.cms.CloudEnsNavigationAdapter;
 import fr.index.cloud.ens.customizer.plugin.cms.FileDocumentModule;
 import fr.index.cloud.ens.customizer.plugin.cms.MutualizationSpaceSummaryListModule;
@@ -7,6 +8,7 @@ import fr.index.cloud.ens.customizer.plugin.menubar.CloudEnsMenubarModule;
 import fr.index.cloud.ens.customizer.plugin.statistics.CloudEnsStatisticsModule;
 import fr.index.cloud.ens.customizer.plugin.tasks.CloudEnsTaskModule;
 import fr.index.cloud.ens.customizer.plugin.theming.CloudEnsTemplateAdapter;
+import fr.toutatice.portail.cms.nuxeo.api.avatar.AvatarModule;
 import fr.toutatice.portail.cms.nuxeo.api.domain.AbstractPluginPortlet;
 import fr.toutatice.portail.cms.nuxeo.api.domain.INavigationAdapterModule;
 import fr.toutatice.portail.cms.nuxeo.api.domain.ListTemplate;
@@ -111,6 +113,8 @@ public class CloudEnsPlugin extends AbstractPluginPortlet {
         this.customizeDocumentModules(customizationContext);
         // Statistics modules
         this.customizeStatisticsModules(customizationContext);
+        // Avatar modules
+        this.customizeAvatarModules(customizationContext);
     }
 
 
@@ -257,6 +261,24 @@ public class CloudEnsPlugin extends AbstractPluginPortlet {
 
         // Customized statistics module
         StatisticsModule module = new CloudEnsStatisticsModule(portletContext);
+        modules.add(module);
+    }
+
+
+    /**
+     * Customize avatar modules.
+     *
+     * @param customizationContext customization context
+     */
+    private void customizeAvatarModules(CustomizationContext customizationContext) {
+        // Portlet context
+        PortletContext portletContext = this.getPortletContext();
+
+        // Avatar modules
+        List<AvatarModule> modules = this.getAvatarModules(customizationContext);
+
+        // Customized avatar module
+        AvatarModule module = new CloudEnsAvatarModule(portletContext);
         modules.add(module);
     }
 

@@ -15,6 +15,10 @@
         radius: 50%;
       }
       object-fit: contain;
+
+      &[src$=".svg"] {
+        border-style: none;
+      }
     }
 
     @media (min-width: map_get($grid-breakpoints, "md")) {
