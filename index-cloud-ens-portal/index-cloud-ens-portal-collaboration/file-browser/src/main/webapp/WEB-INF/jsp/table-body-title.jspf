@@ -14,7 +14,7 @@
     <c:if test="${item.pronote}">
         <c:set var="title"><op:translate key="FILE_BROWSER_PRONOTE_INDICATOR"/></c:set>
         <div class="mx-2">
-            <img src="${contextPath}/img/pronote.png" alt="${title}" title="${title}" height="24">
+            <img src="/index-cloud-ens-charte/img/pronote-indicator.svg" alt="${title}" title="${title}" height="24">
         </div>
     </c:if>
 

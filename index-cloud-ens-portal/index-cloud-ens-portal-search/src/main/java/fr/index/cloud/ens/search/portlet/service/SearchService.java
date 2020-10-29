@@ -76,4 +76,11 @@ public interface SearchService extends SearchCommonService {
     String getSearchRedirectionUrl(PortalControllerContext portalControllerContext, SearchForm form) throws PortletException;
 
 
+    /**
+     * Reset search.
+     *
+     * @param portalControllerContext portal controller context
+     */
+    void reset(PortalControllerContext portalControllerContext) throws PortletException;
+
 }

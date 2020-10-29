@@ -47,12 +47,12 @@
                 <div class="row flex-lg-grow-1 flex-lg-nowrap">
                     <div class="col overflow-auto">
                         <div class="d-flex justify-content-between">
-							<div class="mt-1 mb-3 text-orange-dark">
+							<div class="mt-2 mb-3 text-orange-dark">
 								<i class="glyphicons glyphicons-basic-share"></i>
                             	<strong><op:translate key="LAYOUT_HOME_COL_2_TITLE"/></strong>
 							</div>
 
-							<div class="mb-3 ml-3">
+							<div class="mt-1 mb-3 ml-3">
                             	<p:region regionName="col-2-aux"/>
 							</div>
                         </div>

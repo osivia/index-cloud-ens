@@ -23,7 +23,7 @@
                 <div class="row flex-grow-1 flex-nowrap">
                     <div id="drawer" class="col d-flex flex-column overflow-auto bg-light shadow">
                         <div class="py-4 py-md-5">
-                            <p class="text-center">
+                            <p>
                                 <strong><op:translate key="LAYOUT_MUTUALIZATION_NAV_1_TITLE"/></strong>
                             </p>
 
@@ -31,7 +31,7 @@
 
                             <hr class="my-4">
 
-                            <p class="text-center">
+                            <p>
                                 <strong><op:translate key="LAYOUT_MUTUALIZATION_NAV_2_TITLE"/></strong>
                             </p>
 

@@ -98,4 +98,8 @@
 
 .portal-table-toolbar {
   justify-content: flex-start;
+
+  .btn-link {
+    font-weight: $font-weight-bold;
+  }
 }

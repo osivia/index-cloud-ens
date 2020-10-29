@@ -17,6 +17,8 @@ public enum SearchView {
      * Button view.
      */
     BUTTON,
+    /** Buttons search & reset view. */
+    BUTTONS_SEARCH_AND_RESET,
     /**
      * Home settings button.
      */

@@ -22,7 +22,7 @@
                     <div class="card-custom-badges">
                         <%--PRONOTE indicator--%>
                         <c:if test="${not empty document.properties['rshr:targets']}">
-                            <img src="/index-cloud-ens-charte/img/pronote-indicator.png" alt="PRONOTE" height="15">
+                            <img src="/index-cloud-ens-charte/img/pronote-indicator.svg" alt="PRONOTE" height="15">
                         </c:if>
 
                         <%--Mutualized document--%>

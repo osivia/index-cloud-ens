@@ -10,6 +10,7 @@ import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.MapUtils;
 import org.apache.commons.collections.Predicate;
 import org.apache.commons.collections.functors.EqualPredicate;
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.math.NumberUtils;
 import org.osivia.directory.v2.model.preferences.UserPreferences;
 import org.osivia.directory.v2.model.preferences.UserSavedSearch;
@@ -257,7 +258,7 @@ public class SearchFiltersHomeSettingsServiceImpl extends SearchCommonServiceImp
         }
 
         // User saved searches
-        List<UserSavedSearch> savedSearches = userPreferences.getSavedSearches(MUTUALIZED_SAVED_SEARCHES_CATEGORY_ID);
+        List<UserSavedSearch> savedSearches = userPreferences.getSavedSearches(StringUtils.EMPTY);
 
         JSONArray array = new JSONArray();
         if (CollectionUtils.isNotEmpty(savedSearches)) {

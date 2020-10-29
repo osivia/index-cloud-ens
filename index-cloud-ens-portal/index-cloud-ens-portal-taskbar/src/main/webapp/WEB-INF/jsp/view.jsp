@@ -31,7 +31,7 @@
                     <c:when test="${task.add}">
                         <c:if test="${not empty task.dropdownItems}">
                             <div class="dropdown mb-4">
-                                <button class="dropdown-toggle btn btn-green btn-block rounded-pill text-white text-truncate no-ajax-link"
+                                <button class="dropdown-toggle btn btn-primary btn-block rounded-pill text-white text-truncate no-ajax-link"
                                         data-toggle="dropdown"
                                         data-boundary="window">
                                     <i class="glyphicons glyphicons-basic-plus"></i>
@@ -99,7 +99,7 @@
                                     <portlet:actionURL name="advanced-search" var="url">
                                         <portlet:param name="titleKey" value="TASKBAR_SAVE_CURRENT_SEARCH"/>
                                     </portlet:actionURL>
-                                    <a href="${url}" class="btn btn-link btn-link-hover-green btn-sm text-secondary text-truncate no-ajax-link">
+                                    <a href="${url}" class="btn btn-link btn-link-hover-primary-light btn-sm text-secondary text-truncate no-ajax-link">
                                         <strong><op:translate key="TASKBAR_SAVE_CURRENT_SEARCH"/></strong>
                                     </a>
                                 </div>
@@ -119,7 +119,7 @@
                                                             <portlet:param name="id" value="${savedSearch.url}"/>
                                                         </portlet:actionURL>
                                                         <a href="${url}"
-                                                           class="stretched-link ${savedSearch.active ? 'text-green' : 'text-black'} text-decoration-none no-ajax-link">
+                                                           class="stretched-link ${savedSearch.active ? 'text-primary' : 'text-black'} text-decoration-none no-ajax-link">
                                                             <strong>${savedSearch.displayName}</strong>
                                                         </a>
                                                     </div>
@@ -157,7 +157,7 @@
                                     <%--Advanced search--%>
                                     <div class="d-flex justify-content-end mb-2 mr-2">
                                         <portlet:actionURL name="advanced-search" var="url"/>
-                                        <a href="${url}" class="btn btn-link btn-link-hover-green btn-sm text-secondary text-truncate no-ajax-link">
+                                        <a href="${url}" class="btn btn-link btn-link-hover-primary-light btn-sm text-secondary text-truncate no-ajax-link">
                                             <i class="glyphicons glyphicons-basic-plus"></i>
                                             <strong><op:translate key="TASKBAR_ADVANCED_SEARCH"/></strong>
                                         </a>
@@ -167,7 +167,7 @@
                                     <portlet:actionURL var="resetUrl" name="reset"/>
                                     <div class="d-flex justify-content-end mb-2 ml-auto">
                                         <a href="${resetUrl}"
-                                           class="btn btn-link btn-link-hover-green btn-sm text-secondary text-truncate">
+                                           class="btn btn-link btn-link-hover-primary-light btn-sm text-secondary text-truncate">
                                             <i class="glyphicons glyphicons-basic-reload"></i>
                                             <strong><op:translate key="TASKBAR_RESET_SEARCH"/></strong>
                                         </a>
@@ -256,7 +256,7 @@
 
                     <c:otherwise>
                         <a href="${task.url}"
-                           class="d-flex align-items-center mb-3 ml-4 ${task.active ? 'text-green' : 'text-secondary'} text-decoration-none text-truncate no-ajax-link">
+                           class="d-flex align-items-center mb-3 ml-4 ${task.active ? 'text-primary' : 'text-secondary'} text-decoration-none text-truncate no-ajax-link">
                             <i class="${task.icon}"></i>
                             <strong class="ml-2 text-black">${task.displayName}</strong>
                         </a>

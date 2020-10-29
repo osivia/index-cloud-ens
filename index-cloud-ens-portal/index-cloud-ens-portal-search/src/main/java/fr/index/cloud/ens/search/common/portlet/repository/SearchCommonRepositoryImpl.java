@@ -3,6 +3,7 @@ package fr.index.cloud.ens.search.common.portlet.repository;
 import fr.index.cloud.ens.search.common.portlet.repository.command.LoadVocabularyCommand;
 import fr.toutatice.portail.cms.nuxeo.api.INuxeoCommand;
 import fr.toutatice.portail.cms.nuxeo.api.NuxeoController;
+import fr.toutatice.portail.cms.nuxeo.api.cms.NuxeoDocumentContext;
 import fr.toutatice.portail.cms.nuxeo.api.services.NuxeoCommandContext;
 import net.sf.json.JSONArray;
 import org.apache.commons.collections.CollectionUtils;
@@ -63,6 +64,24 @@ public abstract class SearchCommonRepositoryImpl implements SearchCommonReposito
      */
     public SearchCommonRepositoryImpl() {
         super();
+    }
+
+
+    @Override
+    public String getNavigationPath(PortalControllerContext portalControllerContext) {
+        // Nuxeo controller
+        NuxeoController nuxeoController = new NuxeoController(portalControllerContext);
+
+        return nuxeoController.getNavigationPath();
+    }
+
+
+    @Override
+    public NuxeoDocumentContext getDocumentContext(PortalControllerContext portalControllerContext, String path) {
+        // Nuxeo controller
+        NuxeoController nuxeoController = new NuxeoController(portalControllerContext);
+
+        return nuxeoController.getDocumentContext(path);
     }
 
 

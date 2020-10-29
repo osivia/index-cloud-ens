@@ -296,7 +296,7 @@ public class CustomizedAttributesBundle implements IAttributesBundle {
         // User workspace nav item
         NavItem userWorkspaceNavItem = new NavItem();
         userWorkspaceNavItem.setUrl(userWorkspaceUrl);
-        userWorkspaceNavItem.setIcon("glyphicons glyphicons-basic-user-rounded");
+        userWorkspaceNavItem.setIcon("customized-icon customized-icon-user");
         userWorkspaceNavItem.setKey("TOOLBAR_USER_WORKSPACE");
         userWorkspaceNavItem.setColor("green");
         userWorkspaceNavItem.setActive((userWorkspace != null) && StringUtils.equals(basePath, userWorkspace.getCmsPath()));

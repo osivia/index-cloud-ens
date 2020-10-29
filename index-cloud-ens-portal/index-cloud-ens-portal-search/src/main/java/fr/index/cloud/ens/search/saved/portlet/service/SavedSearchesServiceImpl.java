@@ -137,6 +137,9 @@ public class SavedSearchesServiceImpl extends SearchCommonServiceImpl implements
         // Window properties
         SavedSearchesWindowProperties windowProperties = this.getWindowProperties(portalControllerContext);
 
+        // Navigation path
+        String navigationPath = this.repository.getNavigationPath(portalControllerContext);
+
         // Saved searches
         List<UserSavedSearch> savedSearches = form.getSavedSearches();
 
@@ -180,7 +183,7 @@ public class SavedSearchesServiceImpl extends SearchCommonServiceImpl implements
 
             // Path
             String path;
-            if (StringUtils.equals(MUTUALIZED_SAVED_SEARCHES_CATEGORY_ID, windowProperties.getCategoryId())) {
+            if (StringUtils.startsWith(navigationPath, MUTUALIZED_SPACE_PATH)) {
                 path = MUTUALIZED_SPACE_PATH;
             } else if (StringUtils.isEmpty(location)) {
                 path = this.repository.getUserWorkspacePath(portalControllerContext);

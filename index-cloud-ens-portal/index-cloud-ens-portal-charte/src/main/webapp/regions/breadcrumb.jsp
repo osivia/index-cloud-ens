@@ -21,13 +21,15 @@
 
                         <c:when test="${status.last}">
                             <li class="breadcrumb-item active">
-                                <span>${child.name}</span>
+                                <strong>${child.name}</strong>
                             </li>
                         </c:when>
 
                         <c:otherwise>
                             <li class="breadcrumb-item">
-                                <a href="${child.url}">${child.name}</a>
+                                <a href="${child.url}">
+                                    <strong>${child.name}</strong>
+                                </a>
                             </li>
                         </c:otherwise>
                     </c:choose>
@@ -36,7 +38,7 @@
 
             <c:otherwise>
                 <li class="breadcrumb-item active">
-                    <span>${activeSavedSearch}</span>
+                    <strong>${activeSavedSearch}</strong>
                 </li>
             </c:otherwise>
         </c:choose>

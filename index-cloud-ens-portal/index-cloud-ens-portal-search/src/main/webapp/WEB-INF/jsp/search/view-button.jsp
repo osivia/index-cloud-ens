@@ -8,8 +8,7 @@
 <portlet:actionURL var="url" name="search"/>
 
 <div class="d-flex justify-content-end">
-    <a href="${url}" class="btn btn-link btn-link-hover-primary btn-sm text-secondary text-truncate">
-        <i class="glyphicons glyphicons-basic-search"></i>
-        <strong><op:translate key="ADVANCED_SEARCH"/></strong>
+    <a href="${url}" class="btn btn-link btn-link-hover-primary-light btn-sm text-secondary text-truncate">
+        <strong><op:translate key="SEARCH_BUTTON_LABEL"/></strong>
     </a>
 </div>

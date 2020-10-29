@@ -13,16 +13,16 @@
         <div class="mb-1 mr-2">
             <c:choose>
                 <c:when test="${not empty form.searchFilterTitle}">
-                    <span class="mr-2 text-primary">
+                    <span class="mr-2 text-primary-light">
                         <i class="glyphicons glyphicons-basic-search"></i>
                     </span>
                     <strong class="text-primary-dark">${form.searchFilterTitle}</strong>
                 </c:when>
                 <c:otherwise>
-                    <span class="mr-2 text-primary">
+                    <span class="mr-2 text-primary-light">
                         <i class="glyphicons glyphicons-basic-search"></i>
                     </span>
-                    <strong class="text-primary-dark"><op:translate key="FILE_BROWSER_TOOLBAR_TITLE_SEARCH"/></strong>
+                    <strong class="text-primary"><op:translate key="FILE_BROWSER_TOOLBAR_TITLE_SEARCH"/></strong>
                 </c:otherwise>
             </c:choose>
         </div>
@@ -31,7 +31,7 @@
             <div class="mr-2">
                 <portlet:actionURL name="reset-search" var="url"/>
                 <c:set var="title"><op:translate key="FILE_BROWSER_TOOLBAR_RESET_SEARCH_TITLE"/></c:set>
-                <a href="${url}" class="btn btn-primary btn-sm rounded-pill" title="${title}">
+                <a href="${url}" class="btn btn-primary-light btn-sm rounded-pill" title="${title}">
                     <strong>
                         <c:choose>
                             <c:when test="${form.searchFiltersCounter eq 1}"><op:translate key="FILE_BROWSER_TOOLBAR_ONE_FILTER"/></c:when>
@@ -47,7 +47,7 @@
     </div>
 
     <div class="dropdown">
-        <a href="javascript:" class="btn btn-link btn-link-hover-orange btn-sm text-secondary-light bg-white mr-2 dropdown-toggle no-ajax-link" data-toggle="dropdown">
+        <a href="javascript:" class="btn btn-link btn-link-hover-primary-light btn-sm text-secondary-light bg-white mr-2 dropdown-toggle no-ajax-link" data-toggle="dropdown">
                 <span>
                     <c:choose>
                         <c:when test="${empty form.items or fn:length(form.items) eq 1}"><op:translate
@@ -65,7 +65,7 @@
                     <portlet:param name="alt" value="false"/>
                 </portlet:actionURL>
 
-                <a href="${url}" class="dropdown-item ${form.criteria.field eq field ? 'active' : ''}">
+                <a href="${url}" class="dropdown-item ${form.criteria.field eq field ? 'active text-black bg-primary-light' : ''}">
                     <span><op:translate key="${field.key}"/></span>
                 </a>
             </c:forEach>

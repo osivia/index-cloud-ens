@@ -34,22 +34,22 @@
         </c:if>
     </div>
 
-    <div class="d-flex justify-content-end flex-grow-1 flex-wrap mb-4">
+    <div class="d-flex justify-content-end flex-grow-1 flex-wrap mb-4 ml-1">
         <%--Mutualize--%>
         <c:if test="${not readOnly and not empty mutualizeUrl}">
             <c:set var="title"><op:translate key="DOCUMENT_FILE_TOOLBAR_MUTUALIZE"/></c:set>
-            <a href="javascript:" title="${title}" class="btn btn-link btn-link-hover-orange btn-sm mb-1 ml-2 text-orange-dark no-ajax-link" data-target="#osivia-modal" data-load-url="${mutualizeUrl}" data-title="${title}">
+            <a href="javascript:" title="${title}" class="btn btn-link btn-link-hover-orange btn-sm mb-1 ml-1 text-orange-dark no-ajax-link" data-target="#osivia-modal" data-load-url="${mutualizeUrl}" data-title="${title}">
                 <i class="glyphicons glyphicons-basic-share"></i>
-                <span class="d-none d-md-inline">${title}</span>
+                <strong class="d-none d-md-inline">${title}</strong>
             </a>
         </c:if>
 
         <%--Copy--%>
         <c:if test="${readOnly and not empty copyUrl}">
             <c:set var="title"><op:translate key="DOCUMENT_FILE_TOOLBAR_COPY"/></c:set>
-            <a href="javascript:" title="${title}" class="btn btn-link btn-link-hover-primary btn-sm mb-1 ml-2 text-primary-dark no-ajax-link" data-target="#osivia-modal" data-load-url="${copyUrl}" data-title="${title}">
+            <a href="javascript:" title="${title}" class="btn btn-link btn-link-hover-primary-light btn-sm mb-1 ml-1 text-primary-dark no-ajax-link" data-target="#osivia-modal" data-load-url="${copyUrl}" data-title="${title}">
                 <i class="glyphicons glyphicons-basic-copy-duplicate"></i>
-                <span class="d-none d-md-inline">${title}</span>
+                <strong class="d-none d-md-inline">${title}</strong>
             </a>
         </c:if>
 
@@ -71,9 +71,9 @@
                     <c:set var="title"><op:translate key="DOCUMENT_FILE_TOOLBAR_SHARED_LINK_ACTIVATE"/></c:set>
                 </c:otherwise>
             </c:choose>
-            <a href="${activationUrl}" title="${title}" class="btn btn-link btn-link-hover-primary btn-sm mb-1 ml-2 text-primary-dark">
+            <a href="${activationUrl}" title="${title}" class="btn btn-link btn-link-hover-primary-light btn-sm mb-1 ml-1 text-primary-dark">
                 <i class="${icon}"></i>
-                <span class="d-none d-md-inline">${title}</span>
+                <strong class="d-none d-md-inline">${title}</strong>
             </a>
         </c:if>
 
@@ -81,38 +81,38 @@
         <c:if test="${document.type.file}">
             <c:set var="url"><ttc:documentLink document="${document}" displayContext="download"/></c:set>
             <c:set var="title"><op:translate key="DOWNLOAD"/></c:set>
-            <a href="${url}" target="_blank" title="${title}" class="btn btn-link btn-link-hover-primary btn-sm mb-1 ml-2 text-primary-dark no-ajax-link">
+            <a href="${url}" target="_blank" title="${title}" class="btn btn-link btn-link-hover-primary-light btn-sm mb-1 ml-1 text-primary-dark no-ajax-link">
                 <i class="glyphicons glyphicons-basic-arrow-thin-down"></i>
-                <span class="d-none d-md-inline">${title}</span>
+                <strong class="d-none d-md-inline">${title}</strong>
             </a>
         </c:if>
 
         <%--Rename--%>
         <c:if test="${not readOnly and not empty renameUrl}">
             <c:set var="title"><op:translate key="DOCUMENT_RENAME"/></c:set>
-            <a href="javascript:" title="${title}" class="btn btn-link btn-link-hover-primary btn-sm mb-1 ml-2 text-primary-dark no-ajax-link" data-target="#osivia-modal"
+            <a href="javascript:" title="${title}" class="btn btn-link btn-link-hover-primary-light btn-sm mb-1 ml-1 text-primary-dark no-ajax-link" data-target="#osivia-modal"
                data-load-url="${renameUrl}" data-title="${title}">
                 <i class="glyphicons glyphicons-basic-square-edit"></i>
-                <span class="d-none d-md-inline">${title}</span>
+                <strong class="d-none d-md-inline">${title}</strong>
             </a>
         </c:if>
 
         <%--Edit--%>
         <c:if test="${not readOnly and not empty editUrl}">
             <c:set var="title"><op:translate key="DOCUMENT_EDIT"/></c:set>
-            <a href="javascript:" title="${title}" class="btn btn-link btn-link-hover-primary btn-sm mb-1 ml-2 text-primary-dark no-ajax-link" data-target="#osivia-modal"
+            <a href="javascript:" title="${title}" class="btn btn-link btn-link-hover-primary-light btn-sm mb-1 ml-1 text-primary-dark no-ajax-link" data-target="#osivia-modal"
                data-load-url="${editUrl}" data-title="${title}">
                 <i class="glyphicons glyphicons-basic-refresh"></i>
-                <span class="d-none d-md-inline">${title}</span>
+                <strong class="d-none d-md-inline">${title}</strong>
             </a>
         </c:if>
 
         <%--Delete--%>
         <c:if test="${not readOnly and not empty deleteUrl}">
             <c:set var="title"><op:translate key="DELETE"/></c:set>
-            <a href="javascript:" title="${title}" class="btn btn-link btn-link-hover-primary btn-sm mb-1 ml-2 text-primary-dark no-ajax-link" data-target="#osivia-modal" data-load-url="${deleteUrl}" data-title="${title}">
+            <a href="javascript:" title="${title}" class="btn btn-link btn-link-hover-primary-light btn-sm mb-1 ml-1 text-primary-dark no-ajax-link" data-target="#osivia-modal" data-load-url="${deleteUrl}" data-title="${title}">
                 <i class="glyphicons glyphicons-basic-bin"></i>
-                <span class="d-none d-md-inline">${title}</span>
+                <strong class="d-none d-md-inline">${title}</strong>
             </a>
         </c:if>
     </div>

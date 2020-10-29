@@ -1,5 +1,6 @@
 package fr.index.cloud.ens.search.common.portlet.repository;
 
+import fr.toutatice.portail.cms.nuxeo.api.cms.NuxeoDocumentContext;
 import net.sf.json.JSONArray;
 import org.osivia.directory.v2.model.preferences.UserSavedSearch;
 import org.osivia.portal.api.context.PortalControllerContext;
@@ -19,6 +20,25 @@ public interface SearchCommonRepository {
      * Search filters task identifier.
      */
     String SEARCH_FILTERS_TASK_ID = "SEARCH_FILTERS";
+
+
+    /**
+     * Get navigation path.
+     *
+     * @param portalControllerContext portal controller context
+     * @return navigation path
+     */
+    String getNavigationPath(PortalControllerContext portalControllerContext) throws PortletException;
+
+
+    /**
+     * Get document context.
+     *
+     * @param portalControllerContext portal controller context
+     * @param path                    document path
+     * @return document context
+     */
+    NuxeoDocumentContext getDocumentContext(PortalControllerContext portalControllerContext, String path) throws PortletException;
 
 
     /**

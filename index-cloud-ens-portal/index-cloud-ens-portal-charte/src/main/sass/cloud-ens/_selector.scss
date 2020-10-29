@@ -7,10 +7,13 @@
       bottom: .75rem;
     }
 
+    color: $body-color;
     border-style: none;
+    font-weight: $font-weight-bold;
 
     &::placeholder {
       font-size: $small-font-size;
+      font-weight: $font-weight-normal;
     }
   }
 

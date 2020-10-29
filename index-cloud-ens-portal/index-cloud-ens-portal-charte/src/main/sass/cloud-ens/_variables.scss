@@ -1,14 +1,14 @@
 @import "variables-base";
 
 
-$primary-light: $green-100;
-$primary: $green-500;
-$primary-dark: $green-700;
+$primary-lighter: $green-100;
+$primary-light: $green-500;
+$primary: $green-700;
 
 $theme-colors: map-merge(
                 (
-                        "primary-light": $primary-light,
-                        "primary-dark": $primary-dark
+                        "primary-lighter": $primary-lighter,
+                        "primary-light": $primary-light
                 ),
                 $theme-colors
 );

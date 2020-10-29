@@ -23,22 +23,4 @@ public class SearchFiltersRepositoryImpl extends SearchCommonRepositoryImpl impl
         super();
     }
 
-
-    @Override
-    public String getNavigationPath(PortalControllerContext portalControllerContext) {
-        // Nuxeo controller
-        NuxeoController nuxeoController = new NuxeoController(portalControllerContext);
-
-        return nuxeoController.getNavigationPath();
-    }
-
-
-    @Override
-    public NuxeoDocumentContext getDocumentContext(PortalControllerContext portalControllerContext, String path) {
-        // Nuxeo controller
-        NuxeoController nuxeoController = new NuxeoController(portalControllerContext);
-
-        return nuxeoController.getDocumentContext(path);
-    }
-
 }

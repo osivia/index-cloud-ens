@@ -4,11 +4,23 @@
 
 .search-filters-container {
   > form {
+    .col-form-label {
+      padding: {
+        top: map-get($spacers, 2);
+        bottom: map-get($spacers, 2);
+      }
+    }
+
     .form-control {
+      height: 2.5rem;
+
+      color: $body-color;
       border-style: none;
+      font-weight: $font-weight-bold;
 
       &::placeholder {
         font-size: $small-font-size;
+        font-weight: $font-weight-normal;
       }
     }
 
@@ -20,6 +32,7 @@
     .select2-container--bootstrap4 {
       .select2-selection {
         position: relative;
+        min-height: 2.5rem;
 
         padding-right: 1.75rem;
 
@@ -35,7 +48,7 @@
 
           display: flex;
           align-items: center;
-          height: 35px;
+          height: 2.5px;
           width: 1em;
 
           margin: {

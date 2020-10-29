@@ -42,7 +42,7 @@
                 <%--Login--%>
                 <div class="navbar-nav ml-md-auto">
                     <a href="${requestScope['osivia.toolbar.loginURL']}" class="nav-link text-light">
-                        <i class="glyphicons glyphicons-basic-user-rounded h4 mb-0 align-middle"></i>
+                        <i class="customized-icon customized-icon-user h4 mb-0 align-middle"></i>
                         <span><op:translate key="TOOLBAR_LOGIN"/></span>
                     </a>
                 </div>

@@ -270,14 +270,6 @@ public class SearchFiltersServiceImpl extends SearchCommonServiceImpl implements
     @Override
     public String saveSearch(PortalControllerContext portalControllerContext, SearchFiltersForm form) throws PortletException {
         if (StringUtils.isNotBlank(form.getSavedSearchDisplayName())) {
-            // Saved search category identifier
-            String categoryId;
-            if (SearchFiltersView.MUTUALIZED_SPACE.equals(form.getView())) {
-                categoryId = MUTUALIZED_SAVED_SEARCHES_CATEGORY_ID;
-            } else {
-                categoryId = StringUtils.EMPTY;
-            }
-
             // User preferences
             UserPreferences userPreferences;
             try {
@@ -286,7 +278,7 @@ public class SearchFiltersServiceImpl extends SearchCommonServiceImpl implements
                 throw new PortletException(e);
             }
             // Saved searches
-            List<UserSavedSearch> savedSearches = userPreferences.getSavedSearches(categoryId);
+            List<UserSavedSearch> savedSearches = userPreferences.getSavedSearches(StringUtils.EMPTY);
             if (CollectionUtils.isEmpty(savedSearches)) {
                 savedSearches = new ArrayList<>(1);
             }
@@ -314,7 +306,7 @@ public class SearchFiltersServiceImpl extends SearchCommonServiceImpl implements
             savedSearches.add(savedSearch);
 
             // Update user preferences
-            userPreferences.setSavedSearches(categoryId, savedSearches);
+            userPreferences.setSavedSearches(StringUtils.EMPTY, savedSearches);
             userPreferences.setUpdated(true);
         }
 

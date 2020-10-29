@@ -7,7 +7,7 @@
 <portlet:actionURL var="url" name="reset"/>
 
 <div class="d-flex justify-content-end">
-    <a href="${url}" class="btn btn-link btn-link-hover-primary btn-sm text-secondary text-truncate">
+    <a href="${url}" class="btn btn-link btn-link-hover-primary-light btn-sm text-secondary text-truncate">
         <i class="glyphicons glyphicons-basic-reload"></i>
         <strong><op:translate key="SEARCH_RESET"/></strong>
     </a>

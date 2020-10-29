@@ -4,16 +4,7 @@
        class="task-bell nav-link ${requestScope['osivia.toolbar.tasks.count'] gt 0 ? 'text-warning' : ''}"
        data-target="#osivia-modal" data-load-url="${requestScope['osivia.toolbar.tasks.url']}"
        data-load-callback-function="tasksModalCallback" data-title="${title}" data-footer="true">
-        <c:choose>
-            <c:when test="${requestScope['osivia.toolbar.tasks.count'] gt 0}">
-                <i class="glyphicons glyphicons-basic-bell-ringing"></i>
-            </c:when>
-
-            <c:otherwise>
-                <i class="glyphicons glyphicons-basic-bell"></i>
-            </c:otherwise>
-        </c:choose>
-
+        <i class="customized-icon customized-icon-butterfly"></i>
         <span class="d-md-none">${title}</span>
     </a>
 </c:if>

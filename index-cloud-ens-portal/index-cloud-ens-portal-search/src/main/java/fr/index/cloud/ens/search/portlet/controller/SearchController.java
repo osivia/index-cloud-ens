@@ -84,6 +84,21 @@ public class SearchController extends SearchCommonController {
 
 
     /**
+     * Reset search action mapping.
+     *
+     * @param request  action request
+     * @param response action response
+     */
+    @ActionMapping("reset")
+    public void reset(ActionRequest request, ActionResponse response) throws PortletException {
+        // Portal Controller context
+        PortalControllerContext portalControllerContext = new PortalControllerContext(this.portletContext, request, response);
+
+        this.service.reset(portalControllerContext);
+    }
+
+
+    /**
      * Search filters action mapping.
      *
      * @param request  action request

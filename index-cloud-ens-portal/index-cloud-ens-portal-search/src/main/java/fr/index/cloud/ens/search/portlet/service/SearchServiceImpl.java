@@ -234,9 +234,7 @@ public class SearchServiceImpl extends SearchCommonServiceImpl implements Search
                             if (StringUtils.isNotEmpty(display)) {
                                 reminder.add(display);
                             }
-                        } 
-                        
-                        else {
+                        } else {
                             // Selector vocabulary
                             String vocabulary;
                             if (LEVELS_SELECTOR_ID.equals(name)) {
@@ -245,9 +243,9 @@ public class SearchServiceImpl extends SearchCommonServiceImpl implements Search
                                 vocabulary = "idx_subject";
                             } else if (DOCUMENT_TYPES_SELECTOR_ID.equals(name)) {
                                 vocabulary = "idx_document_type";
-                            }  else if (FORMAT_SELECTORID.equals(name)) {
+                            } else if (FORMAT_SELECTORID.equals(name)) {
                                 vocabulary = "idx_file_format";
-                            } else  {
+                            } else {
                                 vocabulary = null;
                             }
 
@@ -399,13 +397,23 @@ public class SearchServiceImpl extends SearchCommonServiceImpl implements Search
             PageProperties.getProperties().setRefreshingPage(true);
 
             request.setAttribute("osivia.ajax.preventRefresh", Constants.PORTLET_VALUE_ACTIVATE);
-        } else if (SearchView.BUTTON.equals(currentWindowProperties.getView())) {
+        } else if (SearchView.BUTTON.equals(currentWindowProperties.getView()) || SearchView.BUTTONS_SEARCH_AND_RESET.equals(currentWindowProperties.getView())) {
+            // Title internationalization key
+            String titleKey;
+            if (SearchView.BUTTON.equals(currentWindowProperties.getView())) {
+                titleKey = "SEARCH_BUTTON_LABEL";
+            } else if (SearchView.BUTTONS_SEARCH_AND_RESET.equals(currentWindowProperties.getView())) {
+                titleKey = "SEARCH_BUTTONS_LABEL_1";
+            } else {
+                titleKey = null;
+            }
+
             // Portlet instance
             String portletInstance = "index-cloud-ens-search-filters-instance";
 
             // Window properties
             Map<String, String> windowProperties = new HashMap<>();
-            windowProperties.put("osivia.title", bundle.getString("ADVANCED_SEARCH"));
+            windowProperties.put("osivia.title", bundle.getString(titleKey));
             windowProperties.put(DynaRenderOptions.PARTIAL_REFRESH_ENABLED, String.valueOf(true));
             windowProperties.put("osivia.ajaxLink", String.valueOf(1));
             windowProperties.put("osivia.back.reset", String.valueOf(true));
@@ -420,6 +428,20 @@ public class SearchServiceImpl extends SearchCommonServiceImpl implements Search
         }
 
         return url;
+    }
+
+
+    @Override
+    public void reset(PortalControllerContext portalControllerContext) {
+        // Action response
+        ActionResponse response = (ActionResponse) portalControllerContext.getResponse();
+
+        // Reset selectors
+        response.setRenderParameter(SELECTORS_PARAMETER, StringUtils.EMPTY);
+        response.removePublicRenderParameter(SEARCH_FILTER_PARAMETER);
+
+        // Refresh other portlet model attributes
+        PageProperties.getProperties().setRefreshingPage(true);
     }
 
 }
