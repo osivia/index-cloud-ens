@@ -571,7 +571,7 @@ public class TaskbarServiceImpl implements TaskbarService {
 
 
     @Override
-    public String getAdvancedSearchUrl(PortalControllerContext portalControllerContext) throws PortletException {
+    public String getAdvancedSearchUrl(PortalControllerContext portalControllerContext, String titleKey) throws PortletException {
         // Portlet request
         PortletRequest request = portalControllerContext.getRequest();
         // Internationalization bundle
@@ -582,7 +582,7 @@ public class TaskbarServiceImpl implements TaskbarService {
 
         // Window properties
         Map<String, String> windowProperties = new HashMap<>();
-        windowProperties.put("osivia.title", bundle.getString("ADVANCED_SEARCH"));
+        windowProperties.put("osivia.title", bundle.getString(titleKey));
         windowProperties.put(DynaRenderOptions.PARTIAL_REFRESH_ENABLED, String.valueOf(true));
         windowProperties.put("osivia.ajaxLink", String.valueOf(1));
         windowProperties.put("osivia.back.reset", String.valueOf(true));

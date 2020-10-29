@@ -121,14 +121,15 @@ public class TaskbarViewController {
      *
      * @param request  action request
      * @param response action response
+     * @param titleKey title internationalization key request parameter
      */
     @ActionMapping("advanced-search")
-    public void advancedSearch(ActionRequest request, ActionResponse response) throws PortletException, IOException {
+    public void advancedSearch(ActionRequest request, ActionResponse response, @RequestParam(name = "titleKey", defaultValue = "TASKBAR_ADVANCED_SEARCH") String titleKey) throws PortletException, IOException {
         // Portal controller context
         PortalControllerContext portalControllerContext = new PortalControllerContext(this.portletContext, request, response);
 
         // Redirection
-        String url = this.service.getAdvancedSearchUrl(portalControllerContext);
+        String url = this.service.getAdvancedSearchUrl(portalControllerContext, titleKey);
         response.sendRedirect(url);
     }
 

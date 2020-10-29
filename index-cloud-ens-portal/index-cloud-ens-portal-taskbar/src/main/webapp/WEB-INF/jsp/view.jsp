@@ -85,15 +85,25 @@
                             <a href="#${namespace}-filters"
                                class="d-flex align-items-center text-secondary text-decoration-none no-ajax-link"
                                data-toggle="collapse">
-                                <small class="flex-shrink-0">
+                                <small class="flex-shrink-0 mr-1">
                                     <i class="glyphicons glyphicons-basic-set-down"></i>
                                 </small>
 
-                                <strong class="flex-grow-1 text-black text-center text-truncate"><op:translate
+                                <strong class="flex-grow-1 text-black text-truncate"><op:translate
                                         key="TASKBAR_FILTERS"/></strong>
                             </a>
 
                             <div id="${namespace}-filters" class="collapse ${taskbar.showFilters ? 'show' : ''} ml-4" data-url="${saveCollapseStateUrl}" data-id="filters">
+                                <%--Save current search--%>
+                                <div class="d-flex justify-content-end my-3 ml-auto">
+                                    <portlet:actionURL name="advanced-search" var="url">
+                                        <portlet:param name="titleKey" value="TASKBAR_SAVE_CURRENT_SEARCH"/>
+                                    </portlet:actionURL>
+                                    <a href="${url}" class="btn btn-link btn-link-hover-green btn-sm text-secondary text-truncate no-ajax-link">
+                                        <strong><op:translate key="TASKBAR_SAVE_CURRENT_SEARCH"/></strong>
+                                    </a>
+                                </div>
+
                                 <c:choose>
                                     <c:when test="${empty task.savedSearches}">
                                         <p class="my-3 text-secondary"><op:translate
@@ -130,110 +140,116 @@
                             <a href="#${namespace}-search"
                                class="d-flex align-items-center text-secondary text-decoration-none no-ajax-link"
                                data-toggle="collapse">
-                                <small class="flex-shrink-0">
+                                <small class="flex-shrink-0 mr-1">
                                     <i class="glyphicons glyphicons-basic-set-down"></i>
                                 </small>
 
-                                <strong class="flex-grow-1 text-black text-center text-truncate"><op:translate
-                                        key="TASKBAR_SEARCH"/></strong>
+                                <strong class="flex-grow-1 text-black text-truncate">
+                                    <span><op:translate key="TASKBAR_SEARCH"/></span>
+                                    <c:if test="${task.counter gt 0}">
+                                        <span>(${task.counter})</span>
+                                    </c:if>
+                                </strong>
                             </a>
 
                             <div id="${namespace}-search" class="collapse ${taskbar.showSearch ? 'show' : ''}" data-url="${saveCollapseStateUrl}" data-id="search">
-                                <%--Reset--%>
-                                <portlet:actionURL var="resetUrl" name="reset"/>
-                                <div class="d-flex justify-content-end my-3">
-                                    <a href="${resetUrl}"
-                                       class="btn btn-link btn-link-hover-green btn-sm text-secondary text-truncate">
-                                        <i class="glyphicons glyphicons-basic-reload"></i>
-                                        <strong><op:translate key="TASKBAR_RESET_SEARCH"/></strong>
-                                    </a>
+                                <div class="d-flex flex-wrap mt-3 mb-2">
+                                    <%--Advanced search--%>
+                                    <div class="d-flex justify-content-end mb-2 mr-2">
+                                        <portlet:actionURL name="advanced-search" var="url"/>
+                                        <a href="${url}" class="btn btn-link btn-link-hover-green btn-sm text-secondary text-truncate no-ajax-link">
+                                            <i class="glyphicons glyphicons-basic-plus"></i>
+                                            <strong><op:translate key="TASKBAR_ADVANCED_SEARCH"/></strong>
+                                        </a>
+                                    </div>
+
+                                    <%--Reset--%>
+                                    <portlet:actionURL var="resetUrl" name="reset"/>
+                                    <div class="d-flex justify-content-end mb-2 ml-auto">
+                                        <a href="${resetUrl}"
+                                           class="btn btn-link btn-link-hover-green btn-sm text-secondary text-truncate">
+                                            <i class="glyphicons glyphicons-basic-reload"></i>
+                                            <strong><op:translate key="TASKBAR_RESET_SEARCH"/></strong>
+                                        </a>
+                                    </div>
                                 </div>
 
                                 <%--@elvariable id="searchForm" type="fr.index.cloud.ens.taskbar.portlet.model.TaskbarSearchForm"--%>
-                                    <form:form action="${searchUrl}" method="post" modelAttribute="searchForm">
-                                        <%--Keywords--%>
-                                        <c:set var="placeholder"><op:translate key="TASKBAR_SEARCH_KEYWORDS"/></c:set>
-                                        <div class="form-group">
-                                            <form:label path="keywords" cssClass="sr-only">${placeholder}</form:label>
-                                            <div class="input-group">
-                                                <form:input path="keywords" type="search" cssClass="form-control"
-                                                            placeholder="${placeholder}"/>
-                                                <div class="input-group-append">
-                                                    <span class="input-group-text">
-                                                        <i class="glyphicons glyphicons-basic-search"></i>
-                                                    </span>
-                                                </div>
+                                <form:form action="${searchUrl}" method="post" modelAttribute="searchForm">
+                                    <%--Keywords--%>
+                                    <c:set var="placeholder"><op:translate key="TASKBAR_SEARCH_KEYWORDS"/></c:set>
+                                    <div class="form-group">
+                                        <form:label path="keywords" cssClass="sr-only">${placeholder}</form:label>
+                                        <div class="input-group">
+                                            <form:input path="keywords" type="search" cssClass="form-control"
+                                                        placeholder="${placeholder}"/>
+                                            <div class="input-group-append">
+                                                <span class="input-group-text">
+                                                    <i class="glyphicons glyphicons-basic-search"></i>
+                                                </span>
                                             </div>
                                         </div>
+                                    </div>
 
-                                        <%--Document type--%>
-                                        <portlet:resourceURL id="load-vocabulary" var="loadUrl">
-                                            <portlet:param name="vocabulary" value="idx_document_type"/>
-                                        </portlet:resourceURL>
-                                        <c:set var="placeholder"><op:translate
-                                                key="TASKBAR_SEARCH_DOCUMENT_TYPE"/></c:set>
-                                        <div class="form-group">
-                                            <form:label path="documentTypes"
-                                                        cssClass="sr-only">${placeholder}</form:label>
-                                            <form:select path="documentTypes"
-                                                         cssClass="form-control select2 select2-default"
-                                                         data-placeholder="${placeholder}" data-url="${loadUrl}"
-                                                         data-searching="${select2Searching}"
-                                                         data-no-results="${select2NoResults}">
-                                                <c:forEach var="item" items="${searchForm.documentTypes}">
-                                                    <form:option value="${item}"><ttc:vocabularyLabel
-                                                            name="idx_document_type" key="${item}"/></form:option>
-                                                </c:forEach>
-                                            </form:select>
-                                        </div>
+                                    <%--Document type--%>
+                                    <portlet:resourceURL id="load-vocabulary" var="loadUrl">
+                                        <portlet:param name="vocabulary" value="idx_document_type"/>
+                                    </portlet:resourceURL>
+                                    <c:set var="placeholder"><op:translate
+                                            key="TASKBAR_SEARCH_DOCUMENT_TYPE"/></c:set>
+                                    <div class="form-group">
+                                        <form:label path="documentTypes"
+                                                    cssClass="sr-only">${placeholder}</form:label>
+                                        <form:select path="documentTypes"
+                                                     cssClass="form-control select2 select2-default"
+                                                     data-placeholder="${placeholder}" data-url="${loadUrl}"
+                                                     data-searching="${select2Searching}"
+                                                     data-no-results="${select2NoResults}">
+                                            <c:forEach var="item" items="${searchForm.documentTypes}">
+                                                <form:option value="${item}"><ttc:vocabularyLabel
+                                                        name="idx_document_type" key="${item}"/></form:option>
+                                            </c:forEach>
+                                        </form:select>
+                                    </div>
 
-                                        <%--Level--%>
-                                        <portlet:resourceURL id="load-vocabulary" var="loadUrl">
-                                            <portlet:param name="vocabulary" value="idx_level"/>
-                                        </portlet:resourceURL>
-                                        <c:set var="placeholder"><op:translate key="TASKBAR_SEARCH_LEVEL"/></c:set>
-                                        <div class="form-group">
-                                            <form:label path="levels" cssClass="sr-only">${placeholder}</form:label>
-                                            <form:select path="levels" cssClass="form-control select2 select2-default"
-                                                         data-placeholder="${placeholder}" data-url="${loadUrl}"
-                                                         data-searching="${select2Searching}"
-                                                         data-no-results="${select2NoResults}">
-                                                <c:forEach var="item" items="${searchForm.levels}">
-                                                    <form:option value="${item}"><ttc:vocabularyLabel name="idx_level"
-                                                                                                      key="${item}"/></form:option>
-                                                </c:forEach>
-                                            </form:select>
-                                        </div>
+                                    <%--Level--%>
+                                    <portlet:resourceURL id="load-vocabulary" var="loadUrl">
+                                        <portlet:param name="vocabulary" value="idx_level"/>
+                                    </portlet:resourceURL>
+                                    <c:set var="placeholder"><op:translate key="TASKBAR_SEARCH_LEVEL"/></c:set>
+                                    <div class="form-group">
+                                        <form:label path="levels" cssClass="sr-only">${placeholder}</form:label>
+                                        <form:select path="levels" cssClass="form-control select2 select2-default"
+                                                     data-placeholder="${placeholder}" data-url="${loadUrl}"
+                                                     data-searching="${select2Searching}"
+                                                     data-no-results="${select2NoResults}">
+                                            <c:forEach var="item" items="${searchForm.levels}">
+                                                <form:option value="${item}"><ttc:vocabularyLabel name="idx_level"
+                                                                                                  key="${item}"/></form:option>
+                                            </c:forEach>
+                                        </form:select>
+                                    </div>
 
-                                        <%--Subject--%>
-                                        <portlet:resourceURL id="load-vocabulary" var="loadUrl">
-                                            <portlet:param name="vocabulary" value="idx_subject"/>
-                                        </portlet:resourceURL>
-                                        <c:set var="placeholder"><op:translate key="TASKBAR_SEARCH_SUBJECT"/></c:set>
-                                        <div class="form-group">
-                                            <form:label path="subjects" cssClass="sr-only">${placeholder}</form:label>
-                                            <form:select path="subjects" cssClass="form-control select2 select2-default"
-                                                         data-placeholder="${placeholder}" data-url="${loadUrl}"
-                                                         data-searching="${select2Searching}"
-                                                         data-no-results="${select2NoResults}">
-                                                <c:forEach var="item" items="${searchForm.subjects}">
-                                                    <form:option value="${item}"><ttc:vocabularyLabel name="idx_subject"
-                                                                                                      key="${item}"/></form:option>
-                                                </c:forEach>
-                                            </form:select>
-                                        </div>
+                                    <%--Subject--%>
+                                    <portlet:resourceURL id="load-vocabulary" var="loadUrl">
+                                        <portlet:param name="vocabulary" value="idx_subject"/>
+                                    </portlet:resourceURL>
+                                    <c:set var="placeholder"><op:translate key="TASKBAR_SEARCH_SUBJECT"/></c:set>
+                                    <div class="form-group">
+                                        <form:label path="subjects" cssClass="sr-only">${placeholder}</form:label>
+                                        <form:select path="subjects" cssClass="form-control select2 select2-default"
+                                                     data-placeholder="${placeholder}" data-url="${loadUrl}"
+                                                     data-searching="${select2Searching}"
+                                                     data-no-results="${select2NoResults}">
+                                            <c:forEach var="item" items="${searchForm.subjects}">
+                                                <form:option value="${item}"><ttc:vocabularyLabel name="idx_subject"
+                                                                                                  key="${item}"/></form:option>
+                                            </c:forEach>
+                                        </form:select>
+                                    </div>
 
-                                        <input type="submit" class="d-none">
-                                    </form:form>
-
-                                <%--Advanced search--%>
-                                <div class="d-flex justify-content-end">
-                                    <portlet:actionURL name="advanced-search" var="url"/>
-                                    <a href="${url}" class="btn btn-link btn-link-hover-green btn-sm text-secondary text-truncate no-ajax-link">
-                                        <i class="glyphicons glyphicons-basic-search"></i>
-                                        <strong><op:translate key="TASKBAR_ADVANCED_SEARCH"/></strong>
-                                    </a>
-                                </div>
+                                    <input type="submit" class="d-none">
+                                </form:form>
                             </div>
                         </div>
                     </c:when>

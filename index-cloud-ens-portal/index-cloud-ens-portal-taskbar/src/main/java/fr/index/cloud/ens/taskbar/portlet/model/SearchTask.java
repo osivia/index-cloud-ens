@@ -14,6 +14,10 @@ import org.springframework.stereotype.Component;
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class SearchTask extends Task {
 
+    /** Actives searches counter. */
+    private int counter;
+
+
     /**
      * Constructor.
      */
@@ -27,4 +31,12 @@ public class SearchTask extends Task {
         return true;
     }
 
+
+    public int getCounter() {
+        return counter;
+    }
+
+    public void setCounter(int counter) {
+        this.counter = counter;
+    }
 }
