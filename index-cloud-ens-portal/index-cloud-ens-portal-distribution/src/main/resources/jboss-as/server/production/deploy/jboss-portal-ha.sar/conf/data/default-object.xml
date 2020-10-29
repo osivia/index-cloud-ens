@@ -1853,7 +1853,7 @@ return nuxeoRequest.toString();</value>
                             </property>
                             <property>
                                 <name>osivia.selector.allLabel</name>
-                                <value>Toutes les catégories</value>
+                                <value>Catégorie</value>
                             </property>
                         </properties>
                         <height>0</height>
@@ -1906,7 +1906,7 @@ return nuxeoRequest.toString();</value>
                             </property>
                             <property>
                                 <name>osivia.selector.allLabel</name>
-                                <value>Tous niveaux</value>
+                                <value>Niveau</value>
                             </property>
                         </properties>
                         <height>0</height>
@@ -1959,7 +1959,7 @@ return nuxeoRequest.toString();</value>
                             </property>
                             <property>
                                 <name>osivia.selector.allLabel</name>
-                                <value>Toutes les matières</value>
+                                <value>Matière</value>
                             </property>
                         </properties>
                         <height>0</height>
