@@ -45,6 +45,12 @@ import java.util.*;
 public class MutualizedFileBrowserServiceImpl extends AbstractFileBrowserServiceImpl implements MutualizedFileBrowserService {
 
     /**
+     * Selector identifiers.
+     */
+    public static final List<String> SELECTOR_IDENTIFIERS = Arrays.asList(KEYWORDS_SELECTOR_ID, DOCUMENT_TYPES_SELECTOR_ID, LEVELS_SELECTOR_ID, SUBJECTS_SELECTOR_ID, COMPUTED_SIZE_SELECTOR_ID, COMPUTED_DATE_SELECTOR_ID, FORMAT_SELECTOR_ID);
+
+
+    /**
      * Application context.
      */
     @Autowired
@@ -147,6 +153,12 @@ public class MutualizedFileBrowserServiceImpl extends AbstractFileBrowserService
         }
 
         return columns;
+    }
+
+
+    @Override
+    protected List<String> getSupportedSelectors() {
+        return SELECTOR_IDENTIFIERS;
     }
 
 

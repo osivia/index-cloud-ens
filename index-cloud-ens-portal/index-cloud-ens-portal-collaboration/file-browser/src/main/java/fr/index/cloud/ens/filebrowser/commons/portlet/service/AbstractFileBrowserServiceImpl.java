@@ -14,6 +14,7 @@ import fr.index.cloud.ens.filebrowser.mutualized.portlet.service.MutualizedFileB
 import fr.index.cloud.ens.filebrowser.portlet.model.CustomizedFileBrowserForm;
 import fr.index.cloud.ens.filebrowser.portlet.model.CustomizedFileBrowserSortEnum;
 import fr.index.cloud.ens.filebrowser.portlet.service.CustomizedFileBrowserService;
+import fr.toutatice.portail.cms.nuxeo.api.PageSelectors;
 import fr.toutatice.portail.cms.nuxeo.api.cms.NuxeoDocumentContext;
 import fr.toutatice.portail.cms.nuxeo.api.domain.DocumentDTO;
 import org.apache.commons.collections.CollectionUtils;
@@ -28,11 +29,13 @@ import org.osivia.portal.api.PortalException;
 import org.osivia.portal.api.context.PortalControllerContext;
 import org.osivia.portal.api.urls.IPortalUrlFactory;
 import org.osivia.portal.api.urls.PortalUrlType;
+import org.osivia.portal.core.page.PageProperties;
 import org.osivia.services.workspace.filebrowser.portlet.repository.FileBrowserRepository;
 import org.osivia.services.workspace.filebrowser.portlet.service.FileBrowserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 
+import javax.portlet.ActionResponse;
 import javax.portlet.PortletException;
 import javax.portlet.PortletRequest;
 import java.util.*;
@@ -83,6 +86,8 @@ public abstract class AbstractFileBrowserServiceImpl extends FileBrowserServiceI
     public AbstractFileBrowserForm getForm(PortalControllerContext portalControllerContext) throws PortletException {
         // Portlet request
         PortletRequest request = portalControllerContext.getRequest();
+        // Selectors
+        Map<String, List<String>> selectors = PageSelectors.decodeProperties(request.getParameter(SELECTORS_PARAMETER));
 
         // Form
         AbstractFileBrowserForm form = this.applicationContext.getBean(AbstractFileBrowserForm.class);
@@ -136,6 +141,17 @@ public abstract class AbstractFileBrowserServiceImpl extends FileBrowserServiceI
             }
             form.setSearchFilterTitle(searchFilterTitle);
 
+            // Search filters counter
+            int counter = 0;
+            if (MapUtils.isNotEmpty(selectors)) {
+                for (String id : this.getSupportedSelectors()) {
+                    if (CollectionUtils.isNotEmpty(selectors.get(id))) {
+                        counter++;
+                    }
+                }
+            }
+            form.setSearchFiltersCounter(counter);
+
             // Current document title
             if ((form instanceof CustomizedFileBrowserForm) && StringUtils.isNotEmpty(form.getPath()) && StringUtils.isEmpty(searchFilterTitle) && !form.isListMode()) {
                 CustomizedFileBrowserForm customizedForm = (CustomizedFileBrowserForm) form;
@@ -161,6 +177,14 @@ public abstract class AbstractFileBrowserServiceImpl extends FileBrowserServiceI
      * @return columns
      */
     protected abstract List<AbstractFileBrowserColumn> getFileBrowserColumns(PortalControllerContext portalControllerContext, CustomizedUserPreferences userPreferences);
+
+
+    /**
+     * Get file browser supported selectors.
+     *
+     * @return selectors
+     */
+    protected abstract List<String> getSupportedSelectors();
 
 
     /**
@@ -233,7 +257,7 @@ public abstract class AbstractFileBrowserServiceImpl extends FileBrowserServiceI
         // Subjects
         List<String> subjects = this.getPropertyListValues(documentDto, "idxcl:subjects");
         item.setSubjects(subjects);
-        
+
         // Format
         Object format = documentDto.getProperties().get("idxcl:formatText");
         item.setFormat((String) format);
@@ -296,5 +320,19 @@ public abstract class AbstractFileBrowserServiceImpl extends FileBrowserServiceI
      * @return identifier
      */
     protected abstract String getFileBrowserId();
+
+
+    @Override
+    public void resetSearch(PortalControllerContext portalControllerContext, AbstractFileBrowserForm form) {
+        // Action response
+        ActionResponse response = (ActionResponse) portalControllerContext.getResponse();
+
+        // Reset selectors
+        response.setRenderParameter(SELECTORS_PARAMETER, StringUtils.EMPTY);
+        response.removePublicRenderParameter(SEARCH_FILTER_PARAMETER);
+
+        // Refresh other portlet model attributes
+        PageProperties.getProperties().setRefreshingPage(true);
+    }
 
 }

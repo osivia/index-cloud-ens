@@ -19,36 +19,6 @@ public interface CustomizedFileBrowserService extends AbstractFileBrowserService
      */
     String FILE_BROWSER_ID = "default";
 
-    /**
-     * Selectors parameter.
-     */
-    String SELECTORS_PARAMETER = "selectors";
-
-    /**
-     * Keywords selector identifier.
-     */
-    String KEYWORDS_SELECTOR_ID = "keywords";
-    /**
-     * Document types selector identifier.
-     */
-    String DOCUMENT_TYPES_SELECTOR_ID = "documentTypes";
-    /**
-     * Levels selector identifier.
-     */
-    String LEVELS_SELECTOR_ID = "levels";
-    /**
-     * Subjects selector identifier.
-     */
-    String SUBJECTS_SELECTOR_ID = "subjects";
-    /**
-     * Computed size selector identifier.
-     */
-    String COMPUTED_SIZE_SELECTOR_ID = "size";
-    /**
-     * Computed date selector identifier.
-     */
-    String COMPUTED_DATE_SELECTOR_ID = "date";
-
 
     @Override
     CustomizedFileBrowserForm getForm(PortalControllerContext portalControllerContext) throws PortletException;

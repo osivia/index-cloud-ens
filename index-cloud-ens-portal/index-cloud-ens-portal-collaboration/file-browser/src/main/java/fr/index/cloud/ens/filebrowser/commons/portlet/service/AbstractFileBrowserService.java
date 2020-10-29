@@ -15,6 +15,44 @@ import javax.portlet.PortletException;
 public interface AbstractFileBrowserService extends FileBrowserService {
 
     /**
+     * Selectors parameter.
+     */
+    String SELECTORS_PARAMETER = "selectors";
+
+    /**
+     * Keywords selector identifier.
+     */
+    String KEYWORDS_SELECTOR_ID = "keywords";
+    /**
+     * Document types selector identifier.
+     */
+    String DOCUMENT_TYPES_SELECTOR_ID = "documentTypes";
+    /**
+     * Levels selector identifier.
+     */
+    String LEVELS_SELECTOR_ID = "levels";
+    /**
+     * Subjects selector identifier.
+     */
+    String SUBJECTS_SELECTOR_ID = "subjects";
+    /**
+     * Computed size selector identifier.
+     */
+    String COMPUTED_SIZE_SELECTOR_ID = "size";
+    /**
+     * Computed date selector identifier.
+     */
+    String COMPUTED_DATE_SELECTOR_ID = "date";
+    /**
+     * Format selector identifier.
+     */
+    String FORMAT_SELECTOR_ID = "format";
+    /**
+     * Shared selector identifier.
+     */
+    String SHARED_SELECTOR_ID = "shared";
+
+    /**
      * Search filter parameter.
      */
     String SEARCH_FILTER_PARAMETER = "search-filter";
@@ -31,5 +69,14 @@ public interface AbstractFileBrowserService extends FileBrowserService {
      * @return URL
      */
     String getColumnsConfigurationUrl(PortalControllerContext portalControllerContext) throws PortletException;
+
+
+    /**
+     * Reset search.
+     *
+     * @param portalControllerContext portal controller context
+     * @param form                    form
+     */
+    void resetSearch(PortalControllerContext portalControllerContext, AbstractFileBrowserForm form) throws PortletException;
 
 }

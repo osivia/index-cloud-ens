@@ -9,27 +9,45 @@
                                                      args="${form.total}"/></c:set></c:otherwise>
     </c:choose>
 
-    <div class="text-secondary-light mb-1">
-        <c:choose>
-            <c:when test="${not empty form.searchFilterTitle}">
-                <span class="mr-2">
-                    <i class="glyphicons glyphicons-basic-search"></i>
-                </span>
-                <strong class="text-primary-dark">${form.searchFilterTitle}</strong>
-            </c:when>
-            <c:otherwise>
-                <span class="mr-2">
-                    <i class="glyphicons glyphicons-basic-search"></i>
-                </span>
-                <strong class="text-primary-dark"><op:translate key="FILE_BROWSER_TOOLBAR_TITLE_SEARCH"/></strong>
-            </c:otherwise>
-        </c:choose>
-        <span>-</span>
-        <span>${text}</span>
+    <div class="d-flex align-items-center flex-wrap text-secondary-light">
+        <div class="mb-1 mr-2">
+            <c:choose>
+                <c:when test="${not empty form.searchFilterTitle}">
+                    <span class="mr-2 text-primary">
+                        <i class="glyphicons glyphicons-basic-search"></i>
+                    </span>
+                    <strong class="text-primary-dark">${form.searchFilterTitle}</strong>
+                </c:when>
+                <c:otherwise>
+                    <span class="mr-2 text-primary">
+                        <i class="glyphicons glyphicons-basic-search"></i>
+                    </span>
+                    <strong class="text-primary-dark"><op:translate key="FILE_BROWSER_TOOLBAR_TITLE_SEARCH"/></strong>
+                </c:otherwise>
+            </c:choose>
+        </div>
+
+        <c:if test="${form.searchFiltersCounter gt 0}">
+            <div class="mr-2">
+                <portlet:actionURL name="reset-search" var="url"/>
+                <c:set var="title"><op:translate key="FILE_BROWSER_TOOLBAR_RESET_SEARCH_TITLE"/></c:set>
+                <a href="${url}" class="btn btn-primary btn-sm rounded-pill" title="${title}">
+                    <strong>
+                        <c:choose>
+                            <c:when test="${form.searchFiltersCounter eq 1}"><op:translate key="FILE_BROWSER_TOOLBAR_ONE_FILTER"/></c:when>
+                            <c:otherwise><op:translate key="FILE_BROWSER_TOOLBAR_N_FILTERS" args="${form.searchFiltersCounter}"/></c:otherwise>
+                        </c:choose>
+                    </strong>
+                    <i class="glyphicons glyphicons-basic-menu-close"></i>
+                </a>
+            </div>
+        </c:if>
+
+        <div class="mb-1 mr-2">${text}</div>
     </div>
 
     <div class="dropdown">
-        <a href="javascript:" class="btn btn-link btn-link-hover-orange btn-sm text-secondary-light bg-white ml-2 dropdown-toggle no-ajax-link" data-toggle="dropdown">
+        <a href="javascript:" class="btn btn-link btn-link-hover-orange btn-sm text-secondary-light bg-white mr-2 dropdown-toggle no-ajax-link" data-toggle="dropdown">
                 <span>
                     <c:choose>
                         <c:when test="${empty form.items or fn:length(form.items) eq 1}"><op:translate

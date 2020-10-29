@@ -45,7 +45,7 @@ public class CustomizedFileBrowserServiceImpl extends AbstractFileBrowserService
     /**
      * Selector identifiers.
      */
-    public static final List<String> SELECTOR_IDENTIFIERS = Arrays.asList(KEYWORDS_SELECTOR_ID, DOCUMENT_TYPES_SELECTOR_ID, LEVELS_SELECTOR_ID, SUBJECTS_SELECTOR_ID, COMPUTED_SIZE_SELECTOR_ID, COMPUTED_DATE_SELECTOR_ID);
+    public static final List<String> SELECTOR_IDENTIFIERS = Arrays.asList(KEYWORDS_SELECTOR_ID, DOCUMENT_TYPES_SELECTOR_ID, LEVELS_SELECTOR_ID, SUBJECTS_SELECTOR_ID, COMPUTED_SIZE_SELECTOR_ID, COMPUTED_DATE_SELECTOR_ID, FORMAT_SELECTOR_ID, SHARED_SELECTOR_ID);
 
 
     /**
@@ -94,6 +94,12 @@ public class CustomizedFileBrowserServiceImpl extends AbstractFileBrowserService
         }
 
         return columns;
+    }
+
+
+    @Override
+    protected List<String> getSupportedSelectors() {
+        return SELECTOR_IDENTIFIERS;
     }
 
 

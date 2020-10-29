@@ -19,6 +19,10 @@ public abstract class AbstractFileBrowserForm extends FileBrowserForm {
      * Search filter title.
      */
     private String searchFilterTitle;
+    /**
+     * Search filters counter.
+     */
+    private int searchFiltersCounter;
 
 
     /**
@@ -43,5 +47,13 @@ public abstract class AbstractFileBrowserForm extends FileBrowserForm {
 
     public void setSearchFilterTitle(String searchFilterTitle) {
         this.searchFilterTitle = searchFilterTitle;
+    }
+
+    public int getSearchFiltersCounter() {
+        return searchFiltersCounter;
+    }
+
+    public void setSearchFiltersCounter(int searchFiltersCounter) {
+        this.searchFiltersCounter = searchFiltersCounter;
     }
 }
