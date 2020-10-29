@@ -92,9 +92,6 @@
                 </form:select>
             </div>
         </div>
-        
-        
-
 
         <%--Location--%>
         <c:if test="${form.view.id eq 'default'}">
@@ -103,14 +100,14 @@
                         key="SEARCH_FILTERS_LOCATION_LABEL"/></form:label>
                 <div class="col-md-6">
                     <a href="javascript:" class="btn btn-link btn-link-hover-primary text-primary-dark bg-white" data-target="#osivia-modal" data-load-url="${locationUrl}" data-size="small">
-                        <span><ttc:title document="${form.location}" linkable="false" icon="true"/></span>
+                        <strong><ttc:title document="${form.location}" linkable="false" icon="true"/></strong>
                     </a>
                 </div>
                 <form:hidden path="locationPath"/>
             </div>
         </c:if>
 
-         <%--Format--%>
+        <%--Format--%>
         <div class="form-group row">
             <form:label path="format" cssClass="col-md-3 col-form-label"><op:translate
                     key="SEARCH_FILTERS_FORMAT_LABEL"/></form:label>
@@ -123,7 +120,7 @@
             </div>
         </div>      
         
-         <%--Partage--%>
+        <%--Partage--%>
         <c:if test="${form.view.id eq 'default'}">         
 	        <div class="form-group row">
 	            <form:label path="shared" cssClass="col-md-3 col-form-label"><op:translate
@@ -164,8 +161,6 @@
                 </div>
             </div>
         </div>
-        
-  
 
         <%--Date--%>
         <div class="form-group row">

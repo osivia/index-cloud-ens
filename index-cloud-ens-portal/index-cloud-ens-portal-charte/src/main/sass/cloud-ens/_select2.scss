@@ -1,5 +1,13 @@
 .select2-container--bootstrap4 {
   .select2-selection {
+    &.select2-selection--single {
+      display: flex;
+      align-items: center;
+
+      color: $body-color;
+      font-weight: $font-weight-bold;
+    }
+
     &.select2-selection--multiple {
       .select2-search__field {
         &:not([placeholder=""]) {
