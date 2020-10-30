@@ -19,12 +19,14 @@
 						<div class="card-custom-badges">
 							<%--PRONOTE indicator--%>
 							<c:if test="${not empty document.properties['rshr:targets']}">
-								<img src="/index-cloud-ens-charte/img/pronote-indicator.svg" alt="PRONOTE" height="15">
+								<c:set var="title"><op:translate key="TOOLTIP_PRONOTE"/></c:set>
+								<img src="/index-cloud-ens-charte/img/pronote-indicator.svg" alt="PRONOTE" title="${title}" height="16">
 							</c:if>
 
 							<%--Mutualized document--%>
 							<c:if test="${document.properties['mtz:enable']}">
-								<i class="glyphicons glyphicons-basic-share text-orange"></i>
+								<c:set var="title"><op:translate key="TOOLTIP_MUTUALIZED"/></c:set>
+								<i title="${title}" class="glyphicons glyphicons-basic-share text-orange"></i>
 							</c:if>
 						</div>
 

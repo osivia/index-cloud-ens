@@ -26,8 +26,9 @@
 
         <%--Mutualized indicator--%>
         <c:if test="${not readOnly and document.properties['mtz:enable']}">
+            <c:set var="title"><op:translate key="TOOLTIP_MUTUALIZED"/></c:set>
             <div class="flex-shrink-0 mr-2">
-                <span class="text-orange">
+                <span class="text-orange" title="${title}">
                     <i class="glyphicons glyphicons-basic-share"></i>
                 </span>
             </div>

@@ -12,16 +12,16 @@
 
     <%--PRONOTE indicator--%>
     <c:if test="${item.pronote}">
-        <c:set var="title"><op:translate key="FILE_BROWSER_PRONOTE_INDICATOR"/></c:set>
-        <div class="mx-2">
-            <img src="/index-cloud-ens-charte/img/pronote-indicator.svg" alt="${title}" title="${title}" height="24">
+        <c:set var="title"><op:translate key="TOOLTIP_PRONOTE"/></c:set>
+        <div class="ml-2">
+            <img src="/index-cloud-ens-charte/img/pronote-indicator.svg" alt="${title}" title="${title}" height="21">
         </div>
     </c:if>
 
     <%--Mutualized indicator--%>
     <c:if test="${item.mutualized}">
-        <c:set var="title"><op:translate key="FILE_BROWSER_MUTUALIZED_INDICATOR"/></c:set>
-        <div class="mx-2">
+        <c:set var="title"><op:translate key="TOOLTIP_MUTUALIZED"/></c:set>
+        <div class="ml-2">
             <span class="text-orange" title="${title}">
                 <i class="glyphicons glyphicons-basic-share"></i>
             </span>
