@@ -2,7 +2,6 @@ package fr.index.cloud.ens.filebrowser.portlet.model;
 
 import fr.index.cloud.ens.filebrowser.commons.portlet.model.CustomizedFileBrowserSortField;
 import org.apache.commons.lang.StringUtils;
-import org.osivia.services.workspace.filebrowser.portlet.model.FileBrowserSortField;
 
 import java.util.Arrays;
 import java.util.List;
@@ -38,7 +37,7 @@ public enum CustomizedFileBrowserSortEnum implements CustomizedFileBrowserSortFi
     /**
      * Last modification sort.
      */
-    FORMAT(true),    
+    FORMAT(true),
     /**
      * Last modification sort.
      */
@@ -46,13 +45,17 @@ public enum CustomizedFileBrowserSortEnum implements CustomizedFileBrowserSortFi
     /**
      * File size sort.
      */
-    FILE_SIZE(true);
+    FILE_SIZE(true),
+    /**
+     * Location sort.
+     */
+    LOCATION(true, true);
 
 
     /**
      * Default configuration.
      */
-    public static final List<CustomizedFileBrowserSortField> DEFAULT_CONFIGURATION = Arrays.asList(CustomizedFileBrowserSortEnum.DOCUMENT_TYPE, CustomizedFileBrowserSortEnum.LEVEL, CustomizedFileBrowserSortEnum.LAST_MODIFICATION, CustomizedFileBrowserSortEnum.FILE_SIZE);
+    public static final List<CustomizedFileBrowserSortField> DEFAULT_CONFIGURATION = Arrays.asList(CustomizedFileBrowserSortEnum.DOCUMENT_TYPE, CustomizedFileBrowserSortEnum.LEVEL, CustomizedFileBrowserSortEnum.LAST_MODIFICATION, CustomizedFileBrowserSortEnum.FILE_SIZE, CustomizedFileBrowserSortEnum.LOCATION);
 
 
     /**

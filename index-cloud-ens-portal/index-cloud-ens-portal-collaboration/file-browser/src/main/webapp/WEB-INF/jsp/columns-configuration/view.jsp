@@ -34,6 +34,9 @@
                                             <form:checkbox id="${namespace}-visibility-${status.index}" path="items[${status.index}].visible" cssClass="form-check-input"/>
                                             <form:label for="${namespace}-visibility-${status.index}" path="items[${status.index}].visible" cssClass="form-check-label">
                                                 <span><op:translate key="FILE_BROWSER_COLUMNS_CONFIGURATION_VISIBILITY_CHECKBOX_LABEL"/></span>
+                                                <c:if test="${item.listMode}">
+                                                    <small class="text-secondary"><op:translate key="FILE_BROWSER_COLUMNS_CONFIGURATION_VISIBILITY_LIST_MODE_HELP"/></small>
+                                                </c:if>
                                             </form:label>
                                         </div>
                                     </div>

@@ -21,6 +21,8 @@ public class FileBrowserColumnsConfigurationItem {
     private int order;
     /** Visible. */
     private boolean visible;
+    /** List mode indicator. */
+    private boolean listMode;
 
 
     /**
@@ -61,5 +63,13 @@ public class FileBrowserColumnsConfigurationItem {
 
     public void setVisible(boolean visible) {
         this.visible = visible;
+    }
+
+    public boolean isListMode() {
+        return listMode;
+    }
+
+    public void setListMode(boolean listMode) {
+        this.listMode = listMode;
     }
 }

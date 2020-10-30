@@ -50,9 +50,9 @@
                             </c:when>
                             
                             <c:when test="${column.id eq 'format'}">
-                                <%--Subject--%>
+                                <%--Format--%>
                                 <%@ include file="table-body-format.jspf"%>
-                            </c:when>                            
+                            </c:when>
 
                             <c:when test="${column.id eq 'last-modification'}">
                                 <%--Last modification--%>
@@ -62,6 +62,11 @@
                             <c:when test="${column.id eq 'file-size'}">
                                 <%--File size--%>
                                 <%@ include file="table-body-file-size.jspf" %>
+                            </c:when>
+
+                            <c:when test="${column.id eq 'location' and form.listMode}">
+                                <%--Location--%>
+                                <%@ include file="table-body-location.jspf"%>
                             </c:when>
                         </c:choose>
                     </c:forEach>

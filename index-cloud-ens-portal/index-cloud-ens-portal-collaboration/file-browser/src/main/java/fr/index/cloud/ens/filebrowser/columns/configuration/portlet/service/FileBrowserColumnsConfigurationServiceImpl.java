@@ -128,6 +128,7 @@ public class FileBrowserColumnsConfigurationServiceImpl implements FileBrowserCo
                 item.setTitle(bundle.getString(field.getKey()));
                 item.setOrder(order);
                 item.setVisible(visible);
+                item.setListMode(field.isListMode());
 
                 items.add(item);
             }
