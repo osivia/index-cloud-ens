@@ -256,7 +256,7 @@
 
                     <c:otherwise>
                         <a href="${task.url}"
-                           class="d-flex align-items-center mb-3 ml-4 ${task.active ? 'text-primary' : 'text-secondary'} text-decoration-none text-truncate no-ajax-link">
+                           class="d-flex align-items-center mb-3 ml-4 ${task.active ? 'text-primary-light' : 'text-secondary'} text-decoration-none text-truncate no-ajax-link">
                             <i class="${task.icon}"></i>
                             <strong class="ml-2 text-black">${task.displayName}</strong>
                         </a>
