@@ -8,7 +8,9 @@
 
     <div class="row flex-lg-grow-1 flex-lg-nowrap">
         <div class="col-lg-7 col-xl-8 d-lg-flex flex-column overflow-auto mb-4 mb-lg-0">
-            <ttc:include page="view-${dispatchJsp}.jsp"/>
+            <div class="d-flex flex-column flex-grow-1 flex-shrink-0 bg-white rounded">
+                <ttc:include page="view-${dispatchJsp}.jsp"/>
+            </div>
         </div>
 
         <div class="col-lg-5 col-xl-4 d-lg-flex flex-column overflow-auto">
