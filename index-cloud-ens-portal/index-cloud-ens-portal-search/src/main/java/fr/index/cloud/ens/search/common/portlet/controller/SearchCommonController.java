@@ -3,6 +3,8 @@ package fr.index.cloud.ens.search.common.portlet.controller;
 import fr.index.cloud.ens.search.common.portlet.service.SearchCommonService;
 import fr.index.cloud.ens.search.common.portlet.model.SearchFiltersVocabulary;
 import net.sf.json.JSONArray;
+
+import org.apache.commons.lang.BooleanUtils;
 import org.osivia.portal.api.context.PortalControllerContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -40,14 +42,18 @@ public abstract class SearchCommonController {
      * @param filter         select2 filter request parameter
      */
     @ResourceMapping("load-vocabulary")
-    public void loadVocabulary(ResourceRequest request, ResourceResponse response, @RequestParam("vocabulary") String vocabularyName, @RequestParam(name = "filter", required = false) String filter) throws PortletException, IOException {
+    public void loadVocabulary(ResourceRequest request, ResourceResponse response, @RequestParam("vocabulary") String vocabularyName, @RequestParam(name = "filter", required = false) String filter, @RequestParam(name = "addAll", required = false) String addAll) throws PortletException, IOException {
         // Portal controller context
         PortalControllerContext portalControllerContext = new PortalControllerContext(portletContext, request, response);
 
         // Vocabulary
         SearchFiltersVocabulary vocabulary = SearchFiltersVocabulary.fromVocabularyName(vocabularyName);
+        
+        
+        
         // Select2 results
-        JSONArray results = this.service.loadVocabulary(portalControllerContext, vocabulary, filter);
+        Boolean bAddAll = BooleanUtils.toBoolean(addAll);
+        JSONArray results = this.service.loadVocabulary(portalControllerContext, vocabulary, filter, bAddAll);
 
         // Content type
         response.setContentType("application/json");

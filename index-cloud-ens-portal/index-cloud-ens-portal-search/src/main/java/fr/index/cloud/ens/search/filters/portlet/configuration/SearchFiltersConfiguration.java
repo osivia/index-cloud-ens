@@ -1,6 +1,9 @@
 package fr.index.cloud.ens.search.filters.portlet.configuration;
 
 import fr.index.cloud.ens.search.common.portlet.configuration.SearchCommonConfiguration;
+
+import org.osivia.portal.api.locator.Locator;
+import org.osivia.portal.api.notifications.INotificationsService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -30,4 +33,15 @@ public class SearchFiltersConfiguration extends SearchCommonConfiguration {
         return "search-filters";
     }
 
+    /**
+     * Get notifications service.
+     * 
+     * @return notification service
+     */
+    @Bean
+    public INotificationsService getNotificationService() {
+        return Locator.findMBean(INotificationsService.class, INotificationsService.MBEAN_NAME);
+    }
+
+    
 }

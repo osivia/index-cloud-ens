@@ -8,8 +8,14 @@ import fr.index.cloud.ens.search.filters.portlet.model.SearchFiltersSizeUnit;
 import fr.index.cloud.ens.search.filters.portlet.model.converter.SearchFiltersDatePropertyEditor;
 import fr.index.cloud.ens.search.filters.portlet.service.SearchFiltersService;
 import org.osivia.portal.api.context.PortalControllerContext;
+import org.osivia.portal.api.internationalization.Bundle;
+import org.osivia.portal.api.internationalization.IBundleFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.StringUtils;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -55,6 +61,10 @@ public class SearchFiltersController extends SearchCommonController {
      */
     @Autowired
     private SearchFiltersDatePropertyEditor datePropertyEditor;
+    
+    /** Bundle factory. */
+    @Autowired
+    private IBundleFactory bundleFactory;
 
 
     /**
@@ -77,7 +87,7 @@ public class SearchFiltersController extends SearchCommonController {
      * @param sessionStatus session status
      */
     @ActionMapping(name = "submit", params = "search")
-    public void search(ActionRequest request, ActionResponse response, @ModelAttribute("form") SearchFiltersForm form, SessionStatus sessionStatus) throws PortletException, IOException {
+    public void search(ActionRequest request, ActionResponse response, @ModelAttribute("form") SearchFiltersForm form,  SessionStatus sessionStatus) throws PortletException, IOException {
         // Portal Controller context
         PortalControllerContext portalControllerContext = new PortalControllerContext(this.portletContext, request, response);
 
@@ -125,34 +135,23 @@ public class SearchFiltersController extends SearchCommonController {
      * @param response action response
      * @param form     search filters form model attribute
      */
-    @ActionMapping(name = "submit", params = "save-search-popover-callback")
-    public void saveSearch(ActionRequest request, ActionResponse response, @ModelAttribute("form") SearchFiltersForm form) throws PortletException, IOException {
+    @ActionMapping(name = "submit", params = "save-search")
+    public void saveSearch(ActionRequest request, ActionResponse response, @ModelAttribute("form") SearchFiltersForm form, BindingResult result)
+            throws PortletException, IOException {
         // Portal controller context
         PortalControllerContext portalControllerContext = new PortalControllerContext(portletContext, request, response);
 
-        // Redirection
-        String url = this.service.saveSearch(portalControllerContext, form);
-        response.sendRedirect(url);
-    }
-
-
-    /**
-     * Save search popover resource mapping.
-     *
-     * @param request  resource request
-     * @param response resource response
-     */
-    @ResourceMapping("save-search-popover")
-    public void saveSearchPopover(ResourceRequest request, ResourceResponse response) throws PortletException, IOException {
-        // Portal controller context
-        PortalControllerContext portalControllerContext = new PortalControllerContext(portletContext, request, response);
-
-        // View path
-        String path = this.service.resolveViewPath(portalControllerContext, "save-search-popover");
-
-        // Portlet request dispatcher
-        PortletRequestDispatcher dispatcher = this.portletContext.getRequestDispatcher(path);
-        dispatcher.include(request, response);
+        if (StringUtils.isEmpty(form.getSavedSearchDisplayName())) {
+            // Bundle
+            Bundle bundle = this.bundleFactory.getBundle(portalControllerContext.getRequest().getLocale());
+            
+            ObjectError error = new FieldError("savedSearchDisplayName", "savedSearchDisplayName", bundle.getString("SEARCH_FILTERS_MANDATORY_FILTER"));
+            result.addError(error);
+        } else {
+           // Redirection
+            String url = this.service.saveSearch(portalControllerContext, form);
+            response.sendRedirect(url);
+        }
     }
 
 

@@ -41,7 +41,7 @@
         <div class="form-group row">
             <form:label path="keywords" cssClass="col-md-3 col-form-label"><op:translate
                     key="SEARCH_FILTERS_KEYWORDS_LABEL"/></form:label>
-            <div class="col-md-9">
+            <div class="col-md-7">
                 <div class="input-group">
                     <c:set var="placeholder"><op:translate key="SEARCH_FILTERS_KEYWORDS_PLACEHOLDER"/></c:set>
                     <form:input path="keywords" cssClass="form-control" placeholder="${placeholder}"/>
@@ -58,7 +58,7 @@
         <div class="form-group row">
             <form:label path="documentTypes" cssClass="col-md-3 col-form-label"><op:translate
                     key="SEARCH_FILTERS_DOCUMENT_TYPE_LABEL"/></form:label>
-            <div class="col-md-6">
+            <div class="col-md-7">
                 <form:select path="documentTypes" cssClass="form-control select2 select2-default" data-url="${loadDocumentTypesUrl}" data-searching="${select2Searching}" data-no-results="${select2NoResults}">
                     <c:forEach var="documentType" items="${form.documentTypes}">
                         <form:option value="${documentType}"><ttc:vocabularyLabel name="idx_document_type" key="${documentType}"/></form:option>
@@ -71,7 +71,7 @@
         <div class="form-group row">
             <form:label path="levels" cssClass="col-md-3 col-form-label"><op:translate
                     key="SEARCH_FILTERS_LEVEL_LABEL"/></form:label>
-            <div class="col-md-6">
+            <div class="col-md-7">
                 <form:select path="levels" cssClass="form-control select2 select2-default" data-url="${loadLevelsUrl}" data-searching="${select2Searching}" data-no-results="${select2NoResults}">
                     <c:forEach var="level" items="${form.levels}">
                         <form:option value="${level}"><ttc:vocabularyLabel name="idx_level" key="${level}"/></form:option>
@@ -84,7 +84,7 @@
         <div class="form-group row">
             <form:label path="subjects" cssClass="col-md-3 col-form-label"><op:translate
                     key="SEARCH_FILTERS_SUBJECT_LABEL"/></form:label>
-            <div class="col-md-6">
+            <div class="col-md-7">
                 <form:select path="subjects" cssClass="form-control select2 select2-default" data-url="${loadSubjectsUrl}" data-searching="${select2Searching}" data-no-results="${select2NoResults}">
                     <c:forEach var="subject" items="${form.subjects}">
                         <form:option value="${subject}"><ttc:vocabularyLabel name="idx_subject" key="${subject}"/></form:option>
@@ -98,7 +98,7 @@
             <div class="form-group row">
                 <form:label path="location" cssClass="col-md-3 col-form-label"><op:translate
                         key="SEARCH_FILTERS_LOCATION_LABEL"/></form:label>
-                <div class="col-md-6">
+                <div class="col-md-7">
                     <a href="javascript:" class="btn btn-link btn-link-hover-primary text-primary-dark bg-white" data-target="#osivia-modal" data-load-url="${locationUrl}" data-size="small">
                         <strong><ttc:title document="${form.location}" linkable="false" icon="true"/></strong>
                     </a>
@@ -109,28 +109,28 @@
 
         <%--Format--%>
         <div class="form-group row">
-            <form:label path="format" cssClass="col-md-3 col-form-label"><op:translate
+            <form:label path="formats" cssClass="col-md-3 col-form-label"><op:translate
                     key="SEARCH_FILTERS_FORMAT_LABEL"/></form:label>
-            <div class="col-md-6">
-                <form:select path="format" cssClass="form-control select2 select2-default" data-url="${loadFileFormatsUrl}" data-searching="${select2Searching}" data-no-results="${select2NoResults}">
-                    <c:forEach var="format" items="${form.format}">
+            <div class="col-md-7">
+                <form:select path="formats" cssClass="form-control select2 select2-default" data-url="${loadFileFormatsUrl}" data-searching="${select2Searching}" data-no-results="${select2NoResults}">
+                    <c:forEach var="format" items="${form.formats}">
                         <form:option value="${format}"><ttc:vocabularyLabel name="idx_file_format" key="${format}"/></form:option>
                     </c:forEach>
-                </form:select>
+               </form:select>
             </div>
         </div>      
         
-        <%--Partage--%>
+        <%--Shared--%>
         <c:if test="${form.view.id eq 'default'}">         
 	        <div class="form-group row">
-	            <form:label path="shared" cssClass="col-md-3 col-form-label"><op:translate
+	            <form:label path="shareds" cssClass="col-md-3 col-form-label"><op:translate
 	                    key="SEARCH_FILTERS_SHARED_LABEL"/></form:label>
-	            <div class="col-md-6">
-	                <form:select path="shared" cssClass="form-control select2 select2-default" data-url="${loadSharedUrl}" data-searching="${select2Searching}" data-no-results="${select2NoResults}">
-	                    <c:forEach var="shared" items="${form.shared}">
-	                        <form:option value="${format.shared}"><ttc:vocabularyLabel name="idx_shared" key="${shared}"/></form:option>
-	                    </c:forEach>
-	                </form:select>
+	            <div class="col-md-7">
+                <form:select path="shareds" cssClass="form-control select2 select2-default" data-url="${loadSharedUrl}" data-searching="${select2Searching}" data-no-results="${select2NoResults}">
+                    <c:forEach var="share" items="${form.shareds}">
+                        <form:option value="${share}"><ttc:vocabularyLabel name="idx_shared" key="${share}"/></form:option>
+                    </c:forEach>
+               </form:select>
 	            </div>
 	        </div>       
         </c:if>               
@@ -139,19 +139,19 @@
         <div class="form-group row">
             <form:label path="sizeAmount" cssClass="col-md-3 col-form-label"><op:translate
                     key="SEARCH_FILTERS_SIZE_LABEL"/></form:label>
-            <div class="col-md-9">
+            <div class="col-md-7">
                 <div class="form-row">
-                    <div class="col-md-8">
+                    <div class="col-6">
                         <form:select path="sizeRange" cssClass="form-control">
                             <c:forEach var="range" items="${sizeRanges}">
                                 <form:option value="${range}"><op:translate key="${range.key}"/></form:option>
                             </c:forEach>
                         </form:select>
                     </div>
-                    <div class="col-md">
+                    <div class="col-3">
                         <form:input path="sizeAmount" type="number" min="0" step="0.1" cssClass="form-control"/>
                     </div>
-                    <div class="col-md">
+                    <div class="col-3">
                         <form:select path="sizeUnit" cssClass="form-control">
                             <c:forEach var="unit" items="${sizeUnits}">
                                 <form:option value="${unit}"><op:translate key="${unit.key}"/></form:option>
@@ -166,9 +166,9 @@
         <div class="form-group row">
             <form:label path="dateRange" cssClass="col-md-3 col-form-label"><op:translate
                     key="SEARCH_FILTERS_DATE_LABEL"/></form:label>
-            <div class="col-md-9">
+            <div class="col-md-7">
                 <div class="form-row">
-                    <div class="col-md-8">
+                    <div class="col-6">
                         <form:select path="dateRange" cssClass="form-control" data-change-submit="${namespace}-update">
                             <c:forEach var="range" items="${dateRanges}">
                                 <form:option value="${range}"><op:translate key="${range.key}"/></form:option>
@@ -176,7 +176,7 @@
                         </form:select>
                     </div>
                     <c:if test="${form.dateRange.customized}">
-                        <div class="col-md">
+                        <div class="col-6">
                             <form:input path="customizedDate" type="date" cssClass="form-control"/>
                         </div>
                     </c:if>
@@ -184,28 +184,43 @@
             </div>
         </div>
 
-        <%--Buttons--%>
-        <div class="row">
-            <div class="col-md-9 offset-md-3">
-                <div class="text-right">
-                    <%--Save search--%>
-                    <button type="button" class="btn btn-secondary"
-                            data-save-search-popover="${saveSearchPopoverUrl}">
-                        <span><op:translate key="SEARCH_FILTERS_SAVE"/></span>
-                    </button>
+     
 
-                    <%--Submit--%>
-                    <button type="submit" name="search" class="btn btn-primary">
-                        <span><op:translate key="SEARCH_FILTERS_SUBMIT"/></span>
-                    </button>
-                </div>
+
+		<div class="form-group row">
+			<div class="col-md-3"></div>
+
+			<div class="col-lg-7 col-md-9">
+				<div class="text-right">
+					<button type="submit" name="search" class="btn btn-secondary bt-200">
+						<span><op:translate key="SEARCH_FILTERS_SUBMIT"/></span>
+					</button>
+				</div>
+			</div>
+
+			<div></div>
+		</div>
+
+
+		<div class="form-group row">
+			<div class="col-md-3"></div>
+			<div class="col-lg-7 col-md-9">
+				<strong><span><op:translate key="SEARCH_FILTERS_SAVE_CRITERIAS" /></span> </strong>
+				<form:errors path="savedSearchDisplayName" cssClass="invalid-feedback d-block"/>
+				<div class="d-flex mt-2">
+				    <form:input path="savedSearchDisplayName" cssClass="form-control flex-shrink-1 mr-2  align-self-lg-center" />
+					<button type="submit" name="save-search" class="btn btn-primary bt-200 flex-shrink-0 align-self-lg-center">
+						<span> <op:translate key="SEARCH_FILTERS_SAVE" /></span>
+					</button>
+					
+				</div>
             </div>
         </div>
 
-        <input id="${namespace}-update" type="submit" name="update" class="d-none">
-        <input type="submit" name="update-location" class="d-none"/>
 
-        <form:hidden path="savedSearchDisplayName"/>
-        <input type="submit" name="save-search-popover-callback" class="d-none"/>
-    </form:form>
+
+
+				<input id="${namespace}-update" type="submit" name="update" class="d-none"> <input type="submit"
+					name="update-location" class="d-none" /> 
+	</form:form>
 </div>

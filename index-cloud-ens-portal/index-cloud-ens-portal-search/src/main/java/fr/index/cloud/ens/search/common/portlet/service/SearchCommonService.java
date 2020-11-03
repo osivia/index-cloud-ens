@@ -73,11 +73,11 @@ public interface SearchCommonService {
     /**
      * Format selector identifier.
      */
-    String FORMAT_SELECTORID = "format";
+    String FORMATS_SELECTORID = "formats";
     /**
      * File format selector identifier.
      */
-    String SHARED_SELECTOR_ID = "shared";
+    String SHAREDS_SELECTOR_ID = "shareds";
     
     /**
      * Customized date selector identifier.
@@ -108,5 +108,20 @@ public interface SearchCommonService {
      * @return select2 results JSON array
      */
     JSONArray loadVocabulary(PortalControllerContext portalControllerContext, SearchFiltersVocabulary vocabulary, String filter) throws PortletException, IOException;
+
+
+    /**
+     * Load vocabulary.
+     *
+     * @param portalControllerContext the portal controller context
+     * @param vocabulary the vocabulary
+     * @param filter the filter
+     * @param addAll the add all
+     * @return the JSON array
+     * @throws PortletException the portlet exception
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
+    JSONArray loadVocabulary(PortalControllerContext portalControllerContext, SearchFiltersVocabulary vocabulary, String filter, boolean addAll)
+            throws PortletException, IOException;
 
 }

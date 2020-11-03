@@ -168,7 +168,7 @@ public class SearchServiceImpl extends SearchCommonServiceImpl implements Search
                 reminder = new ArrayList<>();
 
                 // Displayed selectors
-                List<String> displayedSelectors = Arrays.asList(LEVELS_SELECTOR_ID, SUBJECTS_SELECTOR_ID, DOCUMENT_TYPES_SELECTOR_ID, SIZE_AMOUNT_SELECTOR_ID, DATE_RANGE_SELECTOR_ID, SHARED_SELECTOR_ID);
+                List<String> displayedSelectors = Arrays.asList(LEVELS_SELECTOR_ID, SUBJECTS_SELECTOR_ID, DOCUMENT_TYPES_SELECTOR_ID, SIZE_AMOUNT_SELECTOR_ID, DATE_RANGE_SELECTOR_ID, SHAREDS_SELECTOR_ID);
 
                 for (Map.Entry<String, List<String>> selector : selectors.entrySet()) {
                     // Selector name
@@ -243,7 +243,7 @@ public class SearchServiceImpl extends SearchCommonServiceImpl implements Search
                                 vocabulary = "idx_subject";
                             } else if (DOCUMENT_TYPES_SELECTOR_ID.equals(name)) {
                                 vocabulary = "idx_document_type";
-                            } else if (FORMAT_SELECTORID.equals(name)) {
+                            } else if (FORMATS_SELECTORID.equals(name)) {
                                 vocabulary = "idx_file_format";
                             } else {
                                 vocabulary = null;

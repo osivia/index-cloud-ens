@@ -49,6 +49,12 @@ public class MutualizationSpaceSummaryListModule extends PrivilegedPortletModule
      * Subjects selector identifier.
      */
     private static final String SUBJECTS_SELECTOR_ID = "subjects";
+    
+    /**
+     * Subjects selector identifier.
+     */
+    private static final String FORMATS_SELECTOR_ID = "formats";
+    
     /**
      * User saved search identifier selector identifier.
      */
@@ -233,6 +239,12 @@ public class MutualizationSpaceSummaryListModule extends PrivilegedPortletModule
             List<String> subjects = selectors.get(SUBJECTS_SELECTOR_ID);
             if (CollectionUtils.isNotEmpty(subjects)) {
                 filters.add("idxcl:subjectsTree STARTSWITH '" + StringUtils.join(subjects, "' OR idxcl:subjectsTree STARTSWITH '") + "'");
+            }
+            
+            // Subjects
+            List<String> formats = selectors.get(FORMATS_SELECTOR_ID);
+            if (CollectionUtils.isNotEmpty(formats)) {
+                filters.add("idxcl:format IN ('" + StringUtils.join(formats, "', '") + "')");
             }
         }
 

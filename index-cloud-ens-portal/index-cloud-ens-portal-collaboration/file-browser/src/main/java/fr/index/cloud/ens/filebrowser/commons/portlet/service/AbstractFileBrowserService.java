@@ -46,11 +46,11 @@ public interface AbstractFileBrowserService extends FileBrowserService {
     /**
      * Format selector identifier.
      */
-    String FORMAT_SELECTOR_ID = "format";
+    String FORMATS_SELECTOR_ID = "formats";
     /**
      * Shared selector identifier.
      */
-    String SHARED_SELECTOR_ID = "shared";
+    String SHAREDS_SELECTOR_ID = "shareds";
 
     /**
      * Search filter parameter.

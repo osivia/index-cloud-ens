@@ -23,10 +23,12 @@
 }
 
 
-.text-blue-light {
- color: #67B2EE;
-}
 
-.bg-blue-dark   {
-  background-color: #242860;
+.bg-light-green-block {
+    background-color: $green-200;
+    border-color: $green-500;    
+  }
+  
+.bt-200 {
+    width : 200px;
 }

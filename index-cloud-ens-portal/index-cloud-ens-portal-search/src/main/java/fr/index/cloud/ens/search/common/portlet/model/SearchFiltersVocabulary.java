@@ -25,11 +25,11 @@ public enum SearchFiltersVocabulary {
     /**
      * Document types.
      */
-    FILE_FORMATS("idx_file_format", "SEARCH_FILTERS_DOCUMENT_TYPE_ALL"),
+    FILE_FORMATS("idx_file_format", "SEARCH_FILTERS_FILE_FORMAT_ALL"),
     /**
      * Share.
      */
-    SHARED("idx_shared", "SEARCH_FILTERS_DOCUMENT_TYPE_ALL");
+    SHARED("idx_shared", "SEARCH_FILTERS_SHARED_ALL");
     
     /**
      * Vocabulary name.

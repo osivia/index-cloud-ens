@@ -1629,10 +1629,16 @@ nuxeoRequest.append("idxcl:subjectsTree STARTSWITH '").append(subject).append("'
 nuxeoRequest.append(") ");&#13;
 }&#13;
 &#13;
-// Format&#13;
-List formats = params.get("format");&#13;
-if ((formats != null) &amp;&amp; !formats.isEmpty()) {&#13;
-nuxeoRequest.append("AND idxcl:format = '").append(formats.get(0)).append("' ");&#13;
+// Subjects&#13;
+List formats= params.get("formats");&#13;
+if ((formats!= null) &amp;&amp; !formats.isEmpty()) {&#13;
+boolean first = true;&#13;
+nuxeoRequest.append("AND (");&#13;
+for (String format: formats) {&#13;
+first ? first = false : nuxeoRequest.append("OR ");&#13;
+nuxeoRequest.append("idxcl:format = '").append(format).append("' ");&#13;
+}&#13;
+nuxeoRequest.append(") ");&#13;
 }&#13;
 &#13;
 return nuxeoRequest.toString();</value>
@@ -1760,156 +1766,156 @@ return nuxeoRequest.toString();</value>
                         <instance-ref>toutatice-portail-cms-nuxeo-vocabulary-select2-instance</instance-ref>
                         <region>nav-1</region>
                         <properties>
-                            <property>
-                                <name>osivia.selector.id</name>
-                                <value>documentTypes</value>
-                            </property>
-                            <property>
-                                <name>portal.windowContentType</name>
-                                <value>portlet</value>
-                            </property>
-                            <property>
-                                <name>osivia.title</name>
-                                <value>Catégorie</value>
-                            </property>
-                            <property>
-                                <name>osivia.hideTitle</name>
-                                <value>1</value>
-                            </property>
-                            <property>
-                                <name>theme.order</name>
-                                <value>2</value>
-                            </property>
-                            <property>
-                                <name>osivia.selector.vocabulary</name>
-                                <value>idx_document_type</value>
-                            </property>
-                            <property>
-                                <name>osivia.ajaxLink</name>
-                                <value>1</value>
-                            </property>
-                            <property>
-                                <name>osivia.hideDecorators</name>
-                                <value>1</value>
-                            </property>
-                            <property>
-                                <name>theme.dyna.partial_refresh_enabled</name>
-                                <value>true</value>
-                            </property>
-                            <property>
-                                <name>osivia.selector.monoValued</name>
-                                <value>true</value>
-                            </property>
-                            <property>
-                                <name>osivia.selector.allLabel</name>
-                                <value>Catégorie</value>
-                            </property>
+                          <property>
+                            <name>osivia.selector.id</name>
+                            <value>documentTypes</value>
+                          </property>
+                          <property>
+                            <name>portal.windowContentType</name>
+                            <value>portlet</value>
+                          </property>
+                          <property>
+                            <name>osivia.title</name>
+                            <value>Catégorie</value>
+                          </property>
+                          <property>
+                            <name>osivia.selector.monoValued</name>
+                            <value>false</value>
+                          </property>
+                          <property>
+                            <name>osivia.hideTitle</name>
+                            <value>1</value>
+                          </property>
+                          <property>
+                            <name>theme.order</name>
+                            <value>2</value>
+                          </property>
+                          <property>
+                            <name>osivia.selector.vocabulary</name>
+                            <value>idx_document_type</value>
+                          </property>
+                          <property>
+                            <name>osivia.ajaxLink</name>
+                            <value>1</value>
+                          </property>
+                          <property>
+                            <name>osivia.hideDecorators</name>
+                            <value>1</value>
+                          </property>
+                          <property>
+                            <name>osivia.selector.allLabel</name>
+                            <value>Catégorie</value>
+                          </property>
+                          <property>
+                            <name>theme.dyna.partial_refresh_enabled</name>
+                            <value>true</value>
+                          </property>
                         </properties>
                         <height>0</height>
-                    </window>
+                      </window>
 
                     <window>
                         <window-name>toutatice-portail-cms-nuxeo-vocabulary-select2-instance_1574421022476</window-name>
                         <instance-ref>toutatice-portail-cms-nuxeo-vocabulary-select2-instance</instance-ref>
                         <region>nav-1</region>
                         <properties>
-                            <property>
-                                <name>osivia.selector.id</name>
-                                <value>levels</value>
-                            </property>
-                            <property>
-                                <name>portal.windowContentType</name>
-                                <value>portlet</value>
-                            </property>
-                            <property>
-                                <name>osivia.title</name>
-                                <value>Niveau</value>
-                            </property>
-                            <property>
-                                <name>osivia.hideTitle</name>
-                                <value>1</value>
-                            </property>
-                            <property>
-                                <name>theme.order</name>
-                                <value>3</value>
-                            </property>
-                            <property>
-                                <name>osivia.selector.vocabulary</name>
-                                <value>idx_level</value>
-                            </property>
-                            <property>
-                                <name>osivia.ajaxLink</name>
-                                <value>1</value>
-                            </property>
-                            <property>
-                                <name>osivia.hideDecorators</name>
-                                <value>1</value>
-                            </property>
-                            <property>
-                                <name>theme.dyna.partial_refresh_enabled</name>
-                                <value>true</value>
-                            </property>
-                            <property>
-                                <name>osivia.selector.monoValued</name>
-                                <value>true</value>
-                            </property>
-                            <property>
-                                <name>osivia.selector.allLabel</name>
-                                <value>Niveau</value>
-                            </property>
+                          <property>
+                            <name>osivia.selector.id</name>
+                            <value>levels</value>
+                          </property>
+                          <property>
+                            <name>portal.windowContentType</name>
+                            <value>portlet</value>
+                          </property>
+                          <property>
+                            <name>osivia.title</name>
+                            <value>Niveau</value>
+                          </property>
+                          <property>
+                            <name>osivia.selector.monoValued</name>
+                            <value>false</value>
+                          </property>
+                          <property>
+                            <name>osivia.hideTitle</name>
+                            <value>1</value>
+                          </property>
+                          <property>
+                            <name>theme.order</name>
+                            <value>3</value>
+                          </property>
+                          <property>
+                            <name>osivia.selector.vocabulary</name>
+                            <value>idx_level</value>
+                          </property>
+                          <property>
+                            <name>osivia.ajaxLink</name>
+                            <value>1</value>
+                          </property>
+                          <property>
+                            <name>osivia.hideDecorators</name>
+                            <value>1</value>
+                          </property>
+                          <property>
+                            <name>osivia.selector.allLabel</name>
+                            <value>Niveau</value>
+                          </property>
+                          <property>
+                            <name>theme.dyna.partial_refresh_enabled</name>
+                            <value>true</value>
+                          </property>
                         </properties>
                         <height>0</height>
-                    </window>
+                      </window>
 
-                    <window>
+                     <window>
                         <window-name>toutatice-portail-cms-nuxeo-vocabulary-select2-instance_1574421386413</window-name>
                         <instance-ref>toutatice-portail-cms-nuxeo-vocabulary-select2-instance</instance-ref>
                         <region>nav-1</region>
                         <properties>
-                            <property>
-                                <name>osivia.selector.id</name>
-                                <value>subjects</value>
-                            </property>
-                            <property>
-                                <name>portal.windowContentType</name>
-                                <value>portlet</value>
-                            </property>
-                            <property>
-                                <name>osivia.title</name>
-                                <value>Matière</value>
-                            </property>
-                            <property>
-                                <name>osivia.hideTitle</name>
-                                <value>1</value>
-                            </property>
-                            <property>
-                                <name>theme.order</name>
-                                <value>4</value>
-                            </property>
-                            <property>
-                                <name>osivia.selector.vocabulary</name>
-                                <value>idx_subject</value>
-                            </property>
-                            <property>
-                                <name>osivia.ajaxLink</name>
-                                <value>1</value>
-                            </property>
-                            <property>
-                                <name>osivia.hideDecorators</name>
-                                <value>1</value>
-                            </property>
-                            <property>
-                                <name>theme.dyna.partial_refresh_enabled</name>
-                                <value>true</value>
-                            </property>
-                            <property>
-                                <name>osivia.selector.monoValued</name>
-                                <value>true</value>
-                            </property>
-                            <property>
-                                <name>osivia.selector.allLabel</name>
-                                <value>Matière</value>
-                            </property>
+                          <property>
+                            <name>osivia.selector.id</name>
+                            <value>subjects</value>
+                          </property>
+                          <property>
+                            <name>portal.windowContentType</name>
+                            <value>portlet</value>
+                          </property>
+                          <property>
+                            <name>osivia.title</name>
+                            <value>Matière</value>
+                          </property>
+                          <property>
+                            <name>osivia.selector.monoValued</name>
+                            <value>false</value>
+                          </property>
+                          <property>
+                            <name>osivia.hideTitle</name>
+                            <value>1</value>
+                          </property>
+                          <property>
+                            <name>theme.order</name>
+                            <value>4</value>
+                          </property>
+                          <property>
+                            <name>osivia.selector.vocabulary</name>
+                            <value>idx_subject</value>
+                          </property>
+                          <property>
+                            <name>osivia.ajaxLink</name>
+                            <value>1</value>
+                          </property>
+                          <property>
+                            <name>osivia.hideDecorators</name>
+                            <value>1</value>
+                          </property>
+                          <property>
+                            <name>osivia.selector.allLabel</name>
+                            <value>Matière</value>
+                          </property>
+                          <property>
+                            <name>theme.dyna.partial_refresh_enabled</name>
+                            <value>true</value>
+                          </property>
                         </properties>
                         <height>0</height>
                     </window>
@@ -2200,12 +2206,12 @@ List sizeRanges = params.get("size-range");&#13;
 // Date&#13;
 List dates = params.get("date");&#13;
 // Format&#13;
-List formats = params.get("format");&#13;
+List formats = params.get("formats");&#13;
 // Shared&#13;
-List sharedValues = params.get("shared");&#13;
+List shareds = params.get("shareds");&#13;
 &#13;
 StringBuilder nuxeoRequest = new StringBuilder();&#13;
-if (StringUtils.isEmpty(keywords) &amp;&amp; CollectionUtils.isEmpty(documentTypes) &amp;&amp; CollectionUtils.isEmpty(levels) &amp;&amp; CollectionUtils.isEmpty(subjects) &amp;&amp; CollectionUtils.isEmpty(sizes) &amp;&amp; CollectionUtils.isEmpty(sizeRanges) &amp;&amp; CollectionUtils.isEmpty(dates) &amp;&amp; CollectionUtils.isEmpty(formats) &amp;&amp; CollectionUtils.isEmpty(sharedValues)) {&#13;
+if (StringUtils.isEmpty(keywords) &amp;&amp; CollectionUtils.isEmpty(documentTypes) &amp;&amp; CollectionUtils.isEmpty(levels) &amp;&amp; CollectionUtils.isEmpty(subjects) &amp;&amp; CollectionUtils.isEmpty(sizes) &amp;&amp; CollectionUtils.isEmpty(sizeRanges) &amp;&amp; CollectionUtils.isEmpty(dates) &amp;&amp; CollectionUtils.isEmpty(formats) &amp;&amp; CollectionUtils.isEmpty(shareds )) {&#13;
 nuxeoRequest.append("ecm:parentId = '").append(navigationPubInfos.getLiveId()).append("' ");&#13;
 } else {&#13;
 nuxeoRequest.append("ecm:path STARTSWITH '").append(navigationPath).append("' ");&#13;
@@ -2249,18 +2255,33 @@ nuxeoRequest.append("AND dc:modified &gt;= DATE '").append(dates.get(0)).append(
 }&#13;
 &#13;
 if (CollectionUtils.isNotEmpty(formats)) {&#13;
-nuxeoRequest.append("AND idxcl:format = '").append(formats.get(0)).append("' ");&#13;
+boolean first = true;&#13;
+nuxeoRequest.append("AND (");&#13;
+for (String format: formats) {&#13;
+first ? first = false : nuxeoRequest.append("OR ");&#13;
+nuxeoRequest.append("idxcl:format = '").append(format).append("' ");&#13;
+}&#13;
+nuxeoRequest.append(") ");&#13;
 }&#13;
 &#13;
-if (CollectionUtils.isNotEmpty(sharedValues)) {&#13;
-if ("MUTUALIZED".equals(sharedValues.get(0))) {&#13;
-nuxeoRequest.append("AND mtz:enable = 1 ");&#13;
-} else if ("PRONOTE".equals(sharedValues.get(0))) {&#13;
-nuxeoRequest.append("AND rshr:targets/*/pubId IS NOT NULL ");&#13;
-} else if ("NOT_SHARED".equals(sharedValues.get(0))) {&#13;
-nuxeoRequest.append("AND mtz:enable &lt;&gt; 1 AND rshr:targets/*/pubId IS NULL AND ecm:mixinType &lt;&gt; 'Folderish' ");&#13;
+if (CollectionUtils.isNotEmpty(shareds)) {&#13;
+boolean first = true;&#13;
+nuxeoRequest.append("AND (");&#13;
+for (String shared: shareds) {&#13;
+first ? first = false : nuxeoRequest.append("OR ");&#13;
+if ("MUTUALIZED".equals(shared)) {&#13;
+nuxeoRequest.append("mtz:enable = 1 ");&#13;
+} else if ("PRONOTE".equals(shared)) {&#13;
+nuxeoRequest.append("rshr:targets/*/pubId IS NOT NULL ");&#13;
+} else if ("NOT_SHARED".equals(shared)) {&#13;
+nuxeoRequest.append("mtz:enable &lt;&gt; 1 AND rshr:targets/*/pubId IS NULL AND ecm:mixinType &lt;&gt; 'Folderish' ");&#13;
 }&#13;
 }&#13;
+nuxeoRequest.append(") ");&#13;
+}&#13;
+&#13;
+&#13;
+&#13;
 &#13;
 return nuxeoRequest.toString();</value>
                             </property>

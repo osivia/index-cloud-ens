@@ -20,6 +20,10 @@ import org.osivia.directory.v2.model.preferences.UserSavedSearch;
 import org.osivia.directory.v2.service.preferences.UserPreferencesService;
 import org.osivia.portal.api.PortalException;
 import org.osivia.portal.api.context.PortalControllerContext;
+import org.osivia.portal.api.internationalization.Bundle;
+import org.osivia.portal.api.internationalization.IBundleFactory;
+import org.osivia.portal.api.notifications.INotificationsService;
+import org.osivia.portal.api.notifications.NotificationsType;
 import org.osivia.portal.api.page.PageParametersEncoder;
 import org.osivia.portal.api.urls.IPortalUrlFactory;
 import org.osivia.portal.api.urls.PortalUrlType;
@@ -88,6 +92,14 @@ public class SearchFiltersServiceImpl extends SearchCommonServiceImpl implements
     private UserPreferencesService userPreferencesService;
 
 
+    /** Notifications service. */
+    @Autowired
+    private INotificationsService notificationsService;
+    
+    /** Bundle factory. */
+    @Autowired
+    private IBundleFactory bundleFactory;
+    
     /**
      * Constructor.
      */
@@ -147,11 +159,11 @@ public class SearchFiltersServiceImpl extends SearchCommonServiceImpl implements
             this.updateLocation(portalControllerContext, form);
         }
         
-        String format = this.getSelectorValue(selectors, FORMAT_SELECTORID);
-        form.setFormat(format);
+        List<String> formats = selectors.get(FORMATS_SELECTORID);
+        form.setFormats(formats);
         
-        String shared = this.getSelectorValue(selectors, SHARED_SELECTOR_ID);
-        form.setShared(shared);
+        List<String>  shareds = selectors.get( SHAREDS_SELECTOR_ID);
+        form.setShareds(shareds);
 
         // Size range
         String sizeRangeSelector = this.getSelectorValue(selectors, SIZE_RANGE_SELECTOR_ID);
@@ -270,6 +282,10 @@ public class SearchFiltersServiceImpl extends SearchCommonServiceImpl implements
     @Override
     public String saveSearch(PortalControllerContext portalControllerContext, SearchFiltersForm form) throws PortletException {
         if (StringUtils.isNotBlank(form.getSavedSearchDisplayName())) {
+            
+            // Bundle
+            Bundle bundle = this.bundleFactory.getBundle(portalControllerContext.getRequest().getLocale());
+            
             // User preferences
             UserPreferences userPreferences;
             try {
@@ -308,6 +324,12 @@ public class SearchFiltersServiceImpl extends SearchCommonServiceImpl implements
             // Update user preferences
             userPreferences.setSavedSearches(StringUtils.EMPTY, savedSearches);
             userPreferences.setUpdated(true);
+            
+            
+            // Notification
+            String message = bundle.getString("SEARCH_FILTER_MESSAGE_SUCCESS_ADD_FILTER");
+            this.notificationsService.addSimpleNotification(portalControllerContext, message, NotificationsType.SUCCESS);
+
         }
 
         return this.getSearchRedirectionUrl(portalControllerContext, form);
@@ -382,13 +404,18 @@ public class SearchFiltersServiceImpl extends SearchCommonServiceImpl implements
             selectors.put(LOCATION_SELECTOR_ID, Collections.singletonList(location.getPath()));
         }
 
-        if (StringUtils.isNotEmpty(form.getFormat())) {
-            selectors.put(FORMAT_SELECTORID, Collections.singletonList(form.getFormat()));
+
+        List<String> formats = form.getFormats();
+        if (CollectionUtils.isNotEmpty(formats)) {
+            selectors.put(FORMATS_SELECTORID, formats);
         }
         
-        if (StringUtils.isNotEmpty(form.getShared())) {
-            selectors.put(SHARED_SELECTOR_ID, Collections.singletonList(form.getShared()));
+        
+        List<String> shareds = form.getShareds();
+        if (CollectionUtils.isNotEmpty(shareds)) {
+            selectors.put(SHAREDS_SELECTOR_ID, shareds);
         }
+        
         
         // Size range
         selectors.put(SIZE_RANGE_SELECTOR_ID, Collections.singletonList(form.getSizeRange().name()));

@@ -103,7 +103,7 @@
 											</c:otherwise>
 										</c:choose>
 									</div>
-									<div class="border rounded mb-2 p-3 bg-primary">${message.content}</div>
+									<div class="border rounded mb-2 p-3 bg-light-green-block "><span>${message.content}</span></div>
 								</div>
 							</c:if>
 

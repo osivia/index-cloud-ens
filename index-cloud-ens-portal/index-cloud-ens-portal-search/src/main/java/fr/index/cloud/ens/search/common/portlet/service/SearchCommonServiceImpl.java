@@ -107,8 +107,13 @@ public abstract class SearchCommonServiceImpl implements SearchCommonService {
     }
 
 
-    @Override
     public JSONArray loadVocabulary(PortalControllerContext portalControllerContext, SearchFiltersVocabulary vocabulary, String filter) throws PortletException, IOException {
+        return loadVocabulary(portalControllerContext, vocabulary, filter, false);
+    }
+
+    
+    @Override
+    public JSONArray loadVocabulary(PortalControllerContext portalControllerContext, SearchFiltersVocabulary vocabulary, String filter, boolean addAll) throws PortletException, IOException {
         // Portlet request
         PortletRequest request = portalControllerContext.getRequest();
         // Internationalization bundle
@@ -128,6 +133,16 @@ public abstract class SearchCommonServiceImpl implements SearchCommonService {
             results = new JSONArray();
         } else {
             results = this.parseVocabulary(array, filter);
+            
+            if( addAll) {
+                // All
+                JSONObject object = new JSONObject();
+                object.put("id", StringUtils.EMPTY);
+                object.put("text", bundle.getString(vocabulary.getAllKey()));
+                object.put("optgroup", false);
+                object.put("level", 1);
+                results.add(0, object);
+            }
 
         }
 

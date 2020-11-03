@@ -23,19 +23,6 @@ function searchOptionsLoadCallback(formId) {
 }
 
 
-function saveSearch(popoverForm) {
-	var $popoverForm = $JQry(popoverForm);
-	var displayName = $popoverForm.find("input[type=text]").val();
-	var $container = $popoverForm.closest(".search-filters-container");
-	var $form = $container.children("form");
-
-	// Update hidden input
-	$form.find("input[type=hidden][name$=savedSearchDisplayName]").val(displayName);
-
-	// Submit form
-	$form.find("input[type=submit][name='save-search-popover-callback']").click();
-}
-
 
 $JQry(function() {
 	$JQry(".search.auto-submit").each(function(index, element) {
@@ -64,35 +51,6 @@ $JQry(function() {
 		}
 	});
 
-
-	$JQry("button[data-save-search-popover]").each(function(index, element) {
-		var $element = $JQry(element);
-
-		if (!$element.data("loaded")) {
-			$element.popover({
-				container: ".search-filters-container",
-				content: function() {
-					var result;
-
-					jQuery.ajax({
-						url: adaptAjaxRedirection($element.data("save-search-popover")),
-						async: false,
-						dataType: "html",
-						success: function(data, status, xhr) {
-							result = data.trim();
-						}
-					});
-
-					return result;
-				},
-				html: true,
-				placement: "bottom",
-				sanitize: false
-			});
-
-			$element.data("loaded", true);
-		}
-	});
 
 });
 
