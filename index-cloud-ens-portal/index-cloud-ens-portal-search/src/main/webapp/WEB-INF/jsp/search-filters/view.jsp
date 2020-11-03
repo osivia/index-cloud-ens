@@ -98,10 +98,13 @@
             <div class="form-group row">
                 <form:label path="location" cssClass="col-md-3 col-form-label"><op:translate
                         key="SEARCH_FILTERS_LOCATION_LABEL"/></form:label>
-                <div class="col-md-7">
-                    <a href="javascript:" class="btn btn-link btn-link-hover-primary text-primary-dark bg-white" data-target="#osivia-modal" data-load-url="${locationUrl}" data-size="small">
+                <div class="col-md-7 ">
+				  <div class=" d-flex btn btn-link  bg-white form-control">
+                    <a href="javascript:" class="float-left my-auto text-primary bg-white" data-target="#osivia-modal" data-load-url="${locationUrl}" data-size="small">
                         <strong><ttc:title document="${form.location}" linkable="false" icon="true"/></strong>
-                    </a>
+                    </a>				  
+				  </div>
+                    
                 </div>
                 <form:hidden path="locationPath"/>
             </div>
