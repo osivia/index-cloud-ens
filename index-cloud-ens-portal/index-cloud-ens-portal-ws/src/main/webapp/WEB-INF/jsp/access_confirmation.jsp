@@ -29,24 +29,24 @@
 
 </head>
 
-<body id="login" class="fullheight overflow-hidden d-flex flex-column uncluttered">
+<body id="login" class="fullheight overflow-hidden d-flex flex-column">
 
-	<div id="container" class="d-flex flex-column flex-grow-1 overflow-auto">
-		<header>
-			<div id='simple-toolbar'>
-				<div class=''>
+<header>
+    <div id='simple-toolbar'>
+            <nav class="navbar navbar-expand-md navbar-dark bg-dark">
+                <%--Brand--%>
+                <a href="/portal" class="navbar-brand mx-auto py-0">
+                    <img alt="Cloud PRONOTE"
+                         src="/index-cloud-ens-charte/img/logo-cloud-pronote-toolbar.png" height="45">
+                </a>
+            </nav>                    
+    </div>
+    
+</header>
+        
+<main class="d-flex flex-column flex-grow-1 overflow-auto bg-green-light background-clouds">
+    <div class="container d-flex flex-column flex-grow-1 flex-shrink-0 justify-content-center py-4">
 
-					<nav class="navbar navbar-expand navbar-light">
-
-						<a class="navbar-brand d-none d-md-inline-block mx-auto py-0" href="/portal"> <img alt="Cloud PRONOTE"
-							src="/index-cloud-ens-charte/img/logo-cloud-pronote-large.png" height="32">
-						</a>
-					</nav>
-				</div>
-			</div>
-		</header>
-		<main id="content" class="d-flex flex-column flex-grow-1 overflow-auto">
-		<div class="container my-auto py-4">
 			<authz:authorize access="hasAnyRole('ROLE_USER')">
 				<div class="box" id="login">
 					<div class="row">
@@ -93,7 +93,7 @@
 
 		                            <div class="col-md-auto align-self-end">
 		                                 <div class="text-right m-2">
-		                                    <button type="submit" name="submit" class="btn btn-secondary">
+		                                    <button type="submit" name="submit" class="btn btn-primary">
 		                                        <span class="text-uppercase font-weight-bold">Valider</span>
 		                                    </button>
 		                                </div>
@@ -107,9 +107,10 @@
 				</div>
 
 			</authz:authorize>
-		</div>
-		</main>
-	</div>
+    </div>
+    <!-- END #container -->
+
+</main>
 
 </body>
 

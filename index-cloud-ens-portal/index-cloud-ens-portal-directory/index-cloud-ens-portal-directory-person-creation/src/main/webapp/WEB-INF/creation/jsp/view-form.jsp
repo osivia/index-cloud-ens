@@ -17,6 +17,10 @@
 
 
 <div class="create-account">
+
+    <div class="row d-flex justify-content-center mb-5">
+        <img alt="Cloud PRONOTE" src="${renderRequest.contextPath}/img/logo-cloud-pronote.svg">
+    </div>
     <div class="row">
         <div class="col-lg-8  m-auto">
             <div class="card bg-light shadow-lg cloud-ens-form">
@@ -173,24 +177,19 @@
                 <div class="col-auto d-flex">
                     <%--RGPD--%>
                     <div class="d-flex my-auto rgpd">
-                        <h2 class="d-flex align-items-center h4 bg-blue-dark py-1 px-2 mb-3">
-                            <span class="text-blue-light font-weight-bolder mr-2">RGPD</span>
-                            <span class="text-white">
-                                <i class="glyphicons glyphicons-basic-shield-check"></i>
-                            </span>
-                        </h2>
+                        <img alt="RGPD" src="${renderRequest.contextPath}/img/rgpd.png">
                     </div>
                 </div>
                 <div class="col-md">
                     <p class="mb-1"><strong>Utiliser le Cloud PRONOTE c'est&nbsp;:</strong></p>
                     <ul class="pl-3 text-green-dark small">
-                        <li class="mb-1">avoir la garantie de rester propri&eacute;taire de vos documents</li>
-                        <li class="mb-1">pouvoir cl&ocirc;turer votre compte &agrave; tout moment</li>
-                        <li class="mb-1">&ecirc;tre assur&eacute; que vos donn&eacute;es personnelles ne seront pas
-                            exploit&eacute;es
+                        <li class="mb-1"><strong>avoir la garantie de rester propri&eacute;taire de vos documents</strong></li>
+                        <li class="mb-1"><strong>pouvoir cl&ocirc;turer votre compte &agrave; tout moment</strong></li>
+                        <li class="mb-1"><strong>&ecirc;tre assur&eacute; que vos donn&eacute;es personnelles ne seront pas
+                            exploit&eacute;es</strong>
                         </li>
-                        <li class="mb-1">pouvoir r&eacute;cup&eacute;rer tout ou partie de vos documents quand vous le
-                            souhaitez
+                        <li class="mb-1"><strong>pouvoir r&eacute;cup&eacute;rer tout ou partie de vos documents quand vous le
+                            souhaitez</strong>
                         </li>
                     </ul>
                 </div>

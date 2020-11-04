@@ -25,24 +25,26 @@
 
 </head>
 
-<body id="login" class="fullheight overflow-hidden d-flex flex-column uncluttered">
 
-    <div id="container" class="d-flex flex-column flex-grow-1 overflow-auto">
-        <header>
-            <div id='simple-toolbar'>
-                <div class=''>
+<body id="login" class="fullheight overflow-hidden d-flex flex-column">
 
-                    <nav class="navbar navbar-expand navbar-light">
+<header>
+    <div id='simple-toolbar'>
+            <nav class="navbar navbar-expand-md navbar-dark bg-dark">
+                <%--Brand--%>
+                <a href="/portal" class="navbar-brand mx-auto py-0">
+                    <img alt="Cloud PRONOTE"
+                         src="/index-cloud-ens-charte/img/logo-cloud-pronote-toolbar.png" height="45">
+                </a>
+            </nav>                    
+    </div>
+    
+</header>
+        
+<main class="d-flex flex-column flex-grow-1 overflow-auto bg-green-light background-clouds">
+    <div class="container d-flex flex-column flex-grow-1 flex-shrink-0 justify-content-center py-4">
 
-                        <a class="navbar-brand d-none d-md-inline-block mx-auto py-0" href="/portal"> <img alt="Cloud PRONOTE"
-                            src="/index-cloud-ens-charte/img/logo-cloud-pronote-large.png" height="32">
-                        </a>
-                    </nav>
-                </div>
-            </div>
-        </header>
-		<main id="content" class="d-flex flex-column flex-grow-1 overflow-auto">
-		  <div class="container my-auto py-4">
+
 
 
 
@@ -92,7 +94,7 @@
 
                                 <div class="col-md-auto align-self-end">
                                     <div class="text-right m-2">
-                                        <button type="submit" name="submit" class="btn btn-secondary">
+                                        <button type="submit" name="submit" class="btn btn-primary">
                                             <span class="text-uppercase font-weight-bold">Valider</span>
                                         </button>
                                     </div>
@@ -105,17 +107,12 @@
 				</div>
 			</div>
 
-
-
-
-		</div>
-		</main>
 		<!-- END #content -->
 
 	</div>
 	<!-- END #container -->
 
-
+</main>
 
 </body>
 
