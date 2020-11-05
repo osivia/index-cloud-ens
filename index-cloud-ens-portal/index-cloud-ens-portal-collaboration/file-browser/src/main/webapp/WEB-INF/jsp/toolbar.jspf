@@ -6,7 +6,7 @@
         <%--State--%>
         <%@ include file="toolbar-state.jspf" %>
 
-        <div class="d-flex">
+        <div class="d-none d-sm-flex">
             <%--View--%>
             <%@ include file="toolbar-view.jspf" %>
 

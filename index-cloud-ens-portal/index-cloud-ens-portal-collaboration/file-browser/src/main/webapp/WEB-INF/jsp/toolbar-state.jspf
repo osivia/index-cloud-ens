@@ -1,5 +1,5 @@
 <%--@elvariable id="form" type="fr.index.cloud.ens.filebrowser.portlet.model.CustomizedFileBrowserForm"--%>
-<div class="d-flex align-items-center">
+<div class="d-block d-lg-flex align-items-center">
     <c:choose>
         <c:when test="${empty form.items}"><c:set var="text"><op:translate
                 key="FILE_BROWSER_TOOLBAR_STATE_NO_ITEM"/></c:set></c:when>
