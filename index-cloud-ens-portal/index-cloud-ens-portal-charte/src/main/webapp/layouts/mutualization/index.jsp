@@ -19,7 +19,7 @@
 <main class="d-flex flex-column flex-grow-1 overflow-auto">
     <div class="container-fluid d-flex flex-column flex-grow-1">
         <div class="row flex-grow-1 flex-nowrap overflow-auto">
-            <op:resizable cssClass="col-auto d-md-flex flex-column" minWidth="250">
+            <op:resizable cssClass="col-auto d-md-flex flex-column" minWidth="290">
                 <div class="row flex-grow-1 flex-nowrap">
                     <div id="drawer" class="col d-flex flex-column overflow-auto bg-light shadow">
                         <div class="py-4 py-md-5">

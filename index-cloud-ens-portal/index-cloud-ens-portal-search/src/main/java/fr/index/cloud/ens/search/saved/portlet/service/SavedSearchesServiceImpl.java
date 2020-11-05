@@ -10,6 +10,10 @@ import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.osivia.directory.v2.model.preferences.UserSavedSearch;
 import org.osivia.portal.api.context.PortalControllerContext;
+import org.osivia.portal.api.internationalization.Bundle;
+import org.osivia.portal.api.internationalization.IBundleFactory;
+import org.osivia.portal.api.notifications.INotificationsService;
+import org.osivia.portal.api.notifications.NotificationsType;
 import org.osivia.portal.api.urls.IPortalUrlFactory;
 import org.osivia.portal.api.windows.PortalWindow;
 import org.osivia.portal.api.windows.WindowFactory;
@@ -59,6 +63,14 @@ public class SavedSearchesServiceImpl extends SearchCommonServiceImpl implements
     @Autowired
     private IPortalUrlFactory portalUrlFactory;
 
+    
+    /** Bundle factory. */
+    @Autowired
+    private IBundleFactory bundleFactory;
+    
+    /** Notifications service. */
+    @Autowired
+    private INotificationsService notificationsService;
 
     /**
      * Constructor.
@@ -203,12 +215,21 @@ public class SavedSearchesServiceImpl extends SearchCommonServiceImpl implements
 
     @Override
     public void deleteSavedSearch(PortalControllerContext portalControllerContext, int id) throws PortletException {
+ 
+        // Bundle
+        Bundle bundle = this.bundleFactory.getBundle(portalControllerContext.getRequest().getLocale());
+
         // Window properties
         SavedSearchesWindowProperties windowProperties = this.getWindowProperties(portalControllerContext);
         // Saved searches category identifier
         String categoryId = StringUtils.trimToEmpty(windowProperties.getCategoryId());
 
         this.repository.deleteSavedSearch(portalControllerContext, categoryId, id);
+        
+        
+        // Notification
+        String message = bundle.getString("SEARCH_FILTER_MESSAGE_SUCCESS_DELETE_FILTER");
+        this.notificationsService.addSimpleNotification(portalControllerContext, message, NotificationsType.SUCCESS);
 
         // Refresh other portlet model attributes
         PageProperties.getProperties().setRefreshingPage(true);

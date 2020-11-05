@@ -33,15 +33,5 @@ public class SearchFiltersConfiguration extends SearchCommonConfiguration {
         return "search-filters";
     }
 
-    /**
-     * Get notifications service.
-     * 
-     * @return notification service
-     */
-    @Bean
-    public INotificationsService getNotificationService() {
-        return Locator.findMBean(INotificationsService.class, INotificationsService.MBEAN_NAME);
-    }
-
     
 }

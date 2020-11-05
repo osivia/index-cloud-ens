@@ -9,7 +9,7 @@
 <portlet:actionURL var="resetUrl" name="reset"/>
 
 
-<div class="d-flex flex-wrap mt-3 mb-2">
+<div class="d-flex text-nowrap  mt-3 mb-2">
     <%--Advanced search--%>
     <div class="d-flex justify-content-end mb-2 mr-2">
         <a href="${searchUrl}" class="btn btn-link btn-link-hover-primary-light btn-sm text-secondary text-truncate no-ajax-link">

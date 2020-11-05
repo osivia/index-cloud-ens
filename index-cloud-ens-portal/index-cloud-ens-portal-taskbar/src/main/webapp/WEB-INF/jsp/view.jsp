@@ -188,9 +188,9 @@
                             </a>
 
                             <div id="${namespace}-search" class="collapse ${taskbar.showSearch ? 'show' : ''}" data-url="${saveCollapseStateUrl}" data-id="search">
-                                <div class="d-flex flex-wrap mt-3 mb-2">
+                                <div class="d-flex  overflow-hidden text-nowrap mt-3 mb-2">
                                     <%--Advanced search--%>
-                                    <div class="d-flex justify-content-end mb-2 mr-2">
+                                    <div class="d-flex justify-content-end mb-2">
                                         <portlet:actionURL name="advanced-search" var="url"/>
                                         <a href="${url}" class="btn btn-link btn-link-hover-primary-light btn-sm text-secondary text-truncate no-ajax-link">
                                             <i class="glyphicons glyphicons-basic-plus"></i>

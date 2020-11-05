@@ -7,6 +7,7 @@ import org.osivia.portal.api.directory.v2.DirServiceFactory;
 import org.osivia.portal.api.internationalization.IBundleFactory;
 import org.osivia.portal.api.internationalization.IInternationalizationService;
 import org.osivia.portal.api.locator.Locator;
+import org.osivia.portal.api.notifications.INotificationsService;
 import org.osivia.portal.api.path.IBrowserService;
 import org.osivia.portal.api.portlet.PortletAppUtils;
 import org.osivia.portal.api.taskbar.ITaskbarService;
@@ -167,6 +168,18 @@ public abstract class SearchCommonConfiguration extends CMSPortlet implements Po
     @Bean
     public UserPreferencesService getUserPreferencesService() {
         return DirServiceFactory.getService(UserPreferencesService.class);
+    }
+
+    
+
+    /**
+     * Get notifications service.
+     * 
+     * @return notification service
+     */
+    @Bean
+    public INotificationsService getNotificationService() {
+        return Locator.findMBean(INotificationsService.class, INotificationsService.MBEAN_NAME);
     }
 
 }

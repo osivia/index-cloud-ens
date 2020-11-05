@@ -26,5 +26,7 @@ public class SavedSearchesConfiguration extends SearchCommonConfiguration {
     protected String getJspFolder() {
         return "saved-searches";
     }
+    
+    
 
 }

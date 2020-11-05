@@ -1645,6 +1645,20 @@ nuxeoRequest.append("idxcl:format = '").append(format).append("' ");&#13;
 nuxeoRequest.append(") ");&#13;
 }&#13;
 &#13;
+List sizes = params.get("size");&#13;
+List sizeRanges = params.get("size-range");&#13;
+&#13;
+if ((sizes!= null) &amp;&amp; !sizes.isEmpty() &amp;&amp; (sizeRanges!= null) &amp;&amp; !sizeRanges.isEmpty()) {&#13;
+nuxeoRequest.append("AND file:content/length ").append("LESS".equals(sizeRanges.get(0)) ? "&lt;" : "&gt;").append(" ").append(sizes.get(0)).append(" ");&#13;
+}&#13;
+&#13;
+// Date&#13;
+List dates = params.get("date");&#13;
+if ((dates != null) &amp;&amp; !dates .isEmpty()) {&#13;
+nuxeoRequest.append("AND dc:modified &gt;= DATE '").append(dates.get(0)).append("' ");&#13;
+}&#13;
+&#13;
+&#13;
 return nuxeoRequest.toString();</value>
                             </property>
                             <property>
