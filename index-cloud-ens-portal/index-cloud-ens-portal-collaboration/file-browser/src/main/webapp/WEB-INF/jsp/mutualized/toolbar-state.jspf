@@ -16,7 +16,7 @@
                     <span class="mr-2 text-primary-light">
                         <i class="glyphicons glyphicons-basic-search"></i>
                     </span>
-                    <strong class="text-primary-dark">${form.searchFilterTitle}</strong>
+                    <strong class="text-primary">${form.searchFilterTitle}</strong>
                 </c:when>
                 <c:otherwise>
                     <span class="mr-2 text-primary-light">

@@ -28,6 +28,10 @@
 #drawer {
   @media (min-width: map_get($grid-breakpoints, "md")) {
     z-index: 1;
+
+    .modal-open & {
+      z-index: unset; // Fix drawer modal background
+    }
   }
 }
 

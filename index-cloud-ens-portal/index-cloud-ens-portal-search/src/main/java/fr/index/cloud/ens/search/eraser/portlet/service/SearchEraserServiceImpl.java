@@ -7,7 +7,6 @@ import org.osivia.portal.core.page.PageProperties;
 import org.springframework.stereotype.Service;
 
 import javax.portlet.ActionResponse;
-import javax.portlet.PortletRequest;
 
 /**
  * Search eraser portlet service implementation.
@@ -29,8 +28,6 @@ public class SearchEraserServiceImpl extends SearchCommonServiceImpl implements 
 
     @Override
     public void reset(PortalControllerContext portalControllerContext) {
-        // Portlet request
-        PortletRequest request = portalControllerContext.getRequest();
         // Action response
         ActionResponse response = (ActionResponse) portalControllerContext.getResponse();
 
