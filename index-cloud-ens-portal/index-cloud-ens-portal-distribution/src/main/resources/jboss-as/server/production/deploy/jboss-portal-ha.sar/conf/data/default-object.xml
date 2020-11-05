@@ -273,6 +273,10 @@
                             <value>Derniers documents modifiés</value>
                         </property>
                         <property>
+                            <name>osivia.cacheDeactivation</name>
+                            <value>1</value>
+                          </property>                        
+                        <property>
                             <name>theme.order</name>
                             <value>0</value>
                         </property>
@@ -306,7 +310,7 @@ return nuxeoRequest.toString();</value>
                         </property>
                         <property>
                             <name>osivia.cms.maxItems</name>
-                            <value>6</value>
+                            <value>4</value>
                         </property>
                         <property>
                             <name>osivia.beanShell</name>
