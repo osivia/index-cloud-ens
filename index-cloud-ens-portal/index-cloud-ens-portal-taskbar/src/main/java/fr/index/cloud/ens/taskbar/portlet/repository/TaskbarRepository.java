@@ -93,6 +93,15 @@ public interface TaskbarRepository {
 
 
     /**
+     * Delete saved search.
+     *
+     * @param portalControllerContext portal controller context
+     * @param id                      saved search identifier
+     */
+    void deleteSavedSearch(PortalControllerContext portalControllerContext, int id) throws PortletException;
+
+
+    /**
      * Move documents.
      *
      * @param portalControllerContext portal controller context

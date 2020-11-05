@@ -656,6 +656,15 @@ public class TaskbarServiceImpl implements TaskbarService {
     }
 
 
+    @Override
+    public void deleteSavedSearch(PortalControllerContext portalControllerContext, int id) throws PortletException {
+        this.repository.deleteSavedSearch(portalControllerContext, id);
+
+        // Refresh other portlet model attributes
+        PageProperties.getProperties().setRefreshingPage(true);
+    }
+
+
     /**
      * {@inheritDoc}
      */

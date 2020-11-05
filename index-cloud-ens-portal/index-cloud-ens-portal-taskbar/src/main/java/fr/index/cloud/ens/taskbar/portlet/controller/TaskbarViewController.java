@@ -154,6 +154,22 @@ public class TaskbarViewController {
 
 
     /**
+     * Delete saved search action mapping.
+     *
+     * @param request  action request
+     * @param response action response
+     * @param id       saved search identifier request parameter
+     */
+    @ActionMapping("delete-saved-search")
+    public void deleteSavedSearch(ActionRequest request, ActionResponse response, @RequestParam("id") String id) throws PortletException {
+        // Portal controller context
+        PortalControllerContext portalControllerContext = new PortalControllerContext(this.portletContext, request, response);
+
+        this.service.deleteSavedSearch(portalControllerContext, NumberUtils.toInt(id));
+    }
+
+
+    /**
      * Save collapse state action mapping.
      *
      * @param request  action request

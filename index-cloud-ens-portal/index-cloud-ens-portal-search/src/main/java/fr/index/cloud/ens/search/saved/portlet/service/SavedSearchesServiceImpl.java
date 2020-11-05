@@ -13,13 +13,17 @@ import org.osivia.portal.api.context.PortalControllerContext;
 import org.osivia.portal.api.urls.IPortalUrlFactory;
 import org.osivia.portal.api.windows.PortalWindow;
 import org.osivia.portal.api.windows.WindowFactory;
+import org.osivia.portal.core.page.PageProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
 
 import javax.portlet.PortletException;
 import javax.portlet.PortletRequest;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Saved searches portlet service implementation.
@@ -134,9 +138,6 @@ public class SavedSearchesServiceImpl extends SearchCommonServiceImpl implements
 
     @Override
     public String getSavedSearchUrl(PortalControllerContext portalControllerContext, SavedSearchesForm form, int id) throws PortletException {
-        // Window properties
-        SavedSearchesWindowProperties windowProperties = this.getWindowProperties(portalControllerContext);
-
         // Navigation path
         String navigationPath = this.repository.getNavigationPath(portalControllerContext);
 
@@ -197,6 +198,20 @@ public class SavedSearchesServiceImpl extends SearchCommonServiceImpl implements
         }
 
         return url;
+    }
+
+
+    @Override
+    public void deleteSavedSearch(PortalControllerContext portalControllerContext, int id) throws PortletException {
+        // Window properties
+        SavedSearchesWindowProperties windowProperties = this.getWindowProperties(portalControllerContext);
+        // Saved searches category identifier
+        String categoryId = StringUtils.trimToEmpty(windowProperties.getCategoryId());
+
+        this.repository.deleteSavedSearch(portalControllerContext, categoryId, id);
+
+        // Refresh other portlet model attributes
+        PageProperties.getProperties().setRefreshingPage(true);
     }
 
 }

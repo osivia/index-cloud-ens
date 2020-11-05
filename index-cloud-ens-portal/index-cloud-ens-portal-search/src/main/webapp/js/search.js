@@ -52,5 +52,27 @@ $JQry(function() {
 	});
 
 
+	$JQry(".saved-searches").each(function(index, element) {
+		var $element = $JQry(element);
+
+		if (!$element.data("loaded")) {
+			$element.find(".modal").on("show.bs.modal", function(event) {
+				var $button = $JQry(event.relatedTarget);
+				var $modal = $JQry(this);
+
+				$modal.find("input[type=hidden][name=id]").val($button.data("id"));
+			});
+
+
+			$element.find(".modal button[data-submit]").click(function(event) {
+				var $target = $JQry(event.target);
+
+				$target.closest("form").find("input[type=submit]").click();
+			});
+
+
+			$element.data("loaded", true);
+		}
+	});
 });
 

@@ -45,6 +45,10 @@
         <transaction>
             <trans-attribute>Required</trans-attribute>
         </transaction>
+
+        <header-content>
+            <link rel="stylesheet" href="/css/saved-searches.css" />
+        </header-content>
     </portlet>
 
 

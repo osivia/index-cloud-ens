@@ -146,7 +146,7 @@ public interface TaskbarService {
      * Get advanced search URL.
      *
      * @param portalControllerContext portal controller context
-     * @param titleKey title internationalization key
+     * @param titleKey                title internationalization key
      * @return URL
      */
     String getAdvancedSearchUrl(PortalControllerContext portalControllerContext, String titleKey) throws PortletException;
@@ -161,6 +161,15 @@ public interface TaskbarService {
      * @return URL
      */
     String getSavedSearchUrl(PortalControllerContext portalControllerContext, TaskbarSearchForm searchForm, int id) throws PortletException;
+
+
+    /**
+     * Delete saved search.
+     *
+     * @param portalControllerContext portal controller context
+     * @param id                      saved search identifier
+     */
+    void deleteSavedSearch(PortalControllerContext portalControllerContext, int id) throws PortletException;
 
 
     /**

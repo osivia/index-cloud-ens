@@ -561,6 +561,7 @@ public class TaskbarRepositoryImpl implements TaskbarRepository {
         } catch (PortalException e) {
             throw new PortletException(e);
         }
+
         // Saved searches
         List<UserSavedSearch> savedSearches = userPreferences.getSavedSearches();
 
@@ -577,6 +578,32 @@ public class TaskbarRepositoryImpl implements TaskbarRepository {
         }
 
         return savedSearch;
+    }
+
+
+    @Override
+    public void deleteSavedSearch(PortalControllerContext portalControllerContext, int id) throws PortletException {
+        // User preferences
+        UserPreferences userPreferences;
+        try {
+            userPreferences = this.userPreferencesService.getUserPreferences(portalControllerContext);
+        } catch (PortalException e) {
+            throw new PortletException(e);
+        }
+
+        // Saved searches
+        List<UserSavedSearch> savedSearches = userPreferences.getSavedSearches();
+
+        if (CollectionUtils.isNotEmpty(savedSearches)) {
+            try {
+                savedSearches.remove(this.userPreferencesService.createUserSavedSearch(portalControllerContext, id));
+            } catch (PortalException e) {
+                throw new PortletException(e);
+            }
+        }
+
+        userPreferences.setSavedSearches(savedSearches);
+        userPreferences.setUpdated(true);
     }
 
 

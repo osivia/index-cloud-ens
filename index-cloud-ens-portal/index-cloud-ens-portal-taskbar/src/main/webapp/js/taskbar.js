@@ -200,6 +200,21 @@ $JQry(function() {
             });
 
 
+            $taskbar.find(".modal").on("show.bs.modal", function(event) {
+                var $button = $JQry(event.relatedTarget);
+                var $modal = $JQry(this);
+
+                $modal.find("input[type=hidden][name=id]").val($button.data("id"));
+            });
+
+
+            $taskbar.find(".modal button[data-submit]").click(function(event) {
+                var $target = $JQry(event.target);
+
+                $target.closest("form").find("input[type=submit]").click();
+            });
+
+
             $taskbar.data("loaded", true);
         }
     });

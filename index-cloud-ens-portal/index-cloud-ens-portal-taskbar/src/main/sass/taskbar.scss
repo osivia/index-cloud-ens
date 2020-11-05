@@ -126,4 +126,23 @@
       }
     }
   }
+
+
+  .btn {
+    &.position-absolute {
+      top: 0;
+      right: 0;
+
+      padding: {
+        left: map-get($spacers, 2);
+        right: map-get($spacers, 2);
+      }
+
+      color: $white;
+
+      &:hover, &:focus {
+        color: $secondary;
+      }
+    }
+  }
 }

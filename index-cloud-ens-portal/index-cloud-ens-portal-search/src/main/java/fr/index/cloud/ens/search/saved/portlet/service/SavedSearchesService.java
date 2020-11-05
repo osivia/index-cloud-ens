@@ -67,4 +67,13 @@ public interface SavedSearchesService extends SearchCommonService {
      */
     String getSavedSearchUrl(PortalControllerContext portalControllerContext, SavedSearchesForm form, int id) throws PortletException;
 
+
+    /**
+     * Delete saved search.
+     *
+     * @param portalControllerContext portal controller context
+     * @param id                      saved search identifier
+     */
+    void deleteSavedSearch(PortalControllerContext portalControllerContext, int id) throws PortletException;
+
 }
