@@ -12,11 +12,11 @@
     <%@ include file="toolbar.jspf" %>
 
     <%--Table--%>
-    <div class="portal-table">
+    <div class="portal-table  overflow-x-hidden ">
         <%--Header--%>
         <%@ include file="table-header.jspf" %>
 
-        <div class="portlet-filler">
+        <div class="portlet-filler overflow-y-auto overflow-x-hidden">
             <%--Body--%>
             <%@ include file="table-body.jspf" %>
         </div>
