@@ -109,6 +109,9 @@ $JQry(function () {
                 var $bar = data.context.find(".progress-bar");
                 $bar.css("width", progress);
                 $bar.text(progress);
+        		if( data.loaded == data.total)	{
+                    data.context.addClass("d-none");
+        		}	                
             }
         });
 
