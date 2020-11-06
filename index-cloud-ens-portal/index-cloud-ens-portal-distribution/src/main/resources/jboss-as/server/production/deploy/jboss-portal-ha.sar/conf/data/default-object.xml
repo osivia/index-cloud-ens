@@ -195,46 +195,7 @@
                     </policy-permission>
                 </security-constraint>
 
-                <window>
-                    <window-name>toutatice-portail-cms-nuxeo-viewFragmentPortletInstance_1510733841224</window-name>
-                    <instance-ref>toutatice-portail-cms-nuxeo-viewFragmentPortletInstance</instance-ref>
-                    <region>col-1</region>
-                    <properties>
-                        <property>
-                            <name>osivia.title</name>
-                            <value>Note d'accueil</value>
-                        </property>
-                        <property>
-                            <name>osivia.propertyName</name>
-                            <value>note:note</value>
-                        </property>
-                        <property>
-                            <name>osivia.fragmentTypeId</name>
-                            <value>html_property</value>
-                        </property>
-                        <property>
-                            <name>osivia.cms.uri</name>
-                            <value>home-message</value>
-                        </property>
-                        <property>
-                            <name>portal.windowContentType</name>
-                            <value>portlet</value>
-                        </property>
-                        <property>
-                            <name>osivia.hideEmptyPortlet</name>
-                            <value>1</value>
-                        </property>
-                        <property>
-                            <name>theme.order</name>
-                            <value>0</value>
-                        </property>
-                        <property>
-                            <name>osivia.hideTitle</name>
-                            <value>1</value>
-                        </property>
-                    </properties>
-                    <height>0</height>
-                </window>
+              
             </page>
 
             <page>
