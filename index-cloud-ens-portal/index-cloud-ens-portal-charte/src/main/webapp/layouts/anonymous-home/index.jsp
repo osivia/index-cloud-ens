@@ -22,24 +22,30 @@
 
 
 	<main class="d-flex flex-column flex-grow-1 overflow-auto bg-green-light background-clouds">
-	<div class="container d-flex flex-row flex-grow-1 flex-shrink-0 justify-content-center py-4">
+	<div class="container d-flex flex-column flex-sm-row flex-grow-1 flex-shrink-0 justify-content-center py-4">
 
-		<div class="my-auto">
-			<img alt="Cloud PRONOTE" src="/index-cloud-ens-charte/img/logo-cloud-pronote.svg">
+		<div class="my-auto mx-auto mx-sm-0">
+			<img alt="Cloud PRONOTE" src="/index-cloud-ens-charte/img/logo-cloud-pronote.svg" height="200px">
 		</div>
-		<div class="ml-3 my-auto">
-
-			<p class="mb-1">
-				<strong>Utiliser le Cloud PRONOTE c'est&nbsp;:</strong>
+		
+		<div class="ml-5 my-auto">
+			<p class="mb-3">
+				<strong>Ce Cloud est destin&eacute; &agrave; l'ensemble des enseignants</strong>
 			</p>
-			<ul class="pl-3 text-green-dark small">
-				<li class="mb-1"><strong>avoir la garantie de rester propri&eacute;taire de vos documents</strong></li>
-				<li class="mb-1"><strong>pouvoir cl&ocirc;turer votre compte &agrave; tout moment</strong></li>
-				<li class="mb-1"><strong>&ecirc;tre assur&eacute; que vos donn&eacute;es personnelles ne seront pas
-						exploit&eacute;es</strong></li>
-				<li class="mb-1"><strong>pouvoir r&eacute;cup&eacute;rer tout ou partie de vos documents quand vous le
-						souhaitez</strong></li>
+
+			<p class="mb-2 text-green-dark"><small>Il permet &agrave; chaque enseignant&nbsp;:</small></p>
+
+			<ul class="pl-5 text-green-dark ">
+				<li class="mb-1"><small>de stocker ses documents &agrave; usage p&eacute;dagogique</small></li>
+				<li class="mb-1"><small>d'y acc&eacute;der &agrave; partir de tout poste de travail, tablette et
+						smartphone chez lui ou dans son &eacute;tablissement</small></li>
+				<li class="mb-1"><small>de publier ses documents directement depuis PRONOTE</small></li>
+				<li class="mb-1"><small>d'acc&eacute;der &agrave; un r&eacute;f&eacute;rentiel mutualis&eacute; de
+						ressources p&eacute;dagogiques qu'il pourra &eacute;galement alimenter</small></li>
 			</ul>
+
+			<p class="text-green-dark mb-0"><small>Vous pouvez cr&eacute;er votre compte Cloud depuis PRONOTE.</small></p>
+
 		</div>
 
 	</div>
