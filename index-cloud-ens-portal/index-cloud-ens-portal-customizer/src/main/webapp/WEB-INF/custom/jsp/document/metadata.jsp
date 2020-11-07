@@ -268,15 +268,37 @@
                                 <i class="glyphicons glyphicons-basic-paired"></i>
                                 <span><op:translate key="SHARED_LINK"/></span>
                             </a>
-
-                            <portlet:actionURL name="link-activation" var="deactivationUrl">
-                                <portlet:param name="activate" value="false"/>
-                            </portlet:actionURL>
-                            <a href="${deactivationUrl}"
-                               class="btn btn-link btn-link-hover-green btn-sm text-secondary text-truncate">
-                                <i class="glyphicons glyphicons-basic-paired-off"></i>
-                                <span><op:translate key="SHARED_LINK_DEACTIVATE"/></span>
-                            </a>
+                           
+                            <c:set var="targets" value="${document.properties['rshr:targets']}"/>    
+				            <c:choose>
+				                <c:when test="${not empty targets}">       
+				                    <a title="${title}" class="btn btn-link btn-link-hover-green btn-sm text-secondary text-truncate  no-ajax-link" href="#deactivateShareLinkModalId" data-toggle="modal">
+				                        <i class="glyphicons glyphicons-basic-paired-off"></i>
+				                        <span><op:translate key="SHARED_LINK_DEACTIVATE"/></span>
+				                    </a>
+				                 </c:when>
+				                <c:otherwise>
+		                            <portlet:actionURL name="link-activation" var="deactivationUrl">
+		                                <portlet:param name="activate" value="false"/>
+		                            </portlet:actionURL>
+		                            <a href="${deactivationUrl}"
+		                               class="btn btn-link btn-link-hover-green btn-sm text-secondary text-truncate">
+		                                <i class="glyphicons glyphicons-basic-paired-off"></i>
+		                                <span><op:translate key="SHARED_LINK_DEACTIVATE"/></span>
+		                            </a>
+				                 </c:otherwise>          
+				            </c:choose>
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
                         </p>
 
                         <%--Format--%>

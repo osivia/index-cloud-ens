@@ -33,18 +33,18 @@
 				<strong>Ce Cloud est destin&eacute; &agrave; l'ensemble des enseignants</strong>
 			</p>
 
-			<p class="mb-2 text-green-dark"><small>Il permet &agrave; chaque enseignant&nbsp;:</small></p>
+			<p class="mb-2 text-green-dark"><small><strong>Il permet &agrave; chaque enseignant&nbsp;:</strong></small></p>
 
 			<ul class="pl-5 text-green-dark ">
-				<li class="mb-1"><small>de stocker ses documents &agrave; usage p&eacute;dagogique</small></li>
-				<li class="mb-1"><small>d'y acc&eacute;der &agrave; partir de tout poste de travail, tablette et
-						smartphone chez lui ou dans son &eacute;tablissement</small></li>
-				<li class="mb-1"><small>de publier ses documents directement depuis PRONOTE</small></li>
-				<li class="mb-1"><small>d'acc&eacute;der &agrave; un r&eacute;f&eacute;rentiel mutualis&eacute; de
-						ressources p&eacute;dagogiques qu'il pourra &eacute;galement alimenter</small></li>
+				<li class="mb-1"><small><strong>de stocker ses documents &agrave; usage p&eacute;dagogique</strong></small></li>
+				<li class="mb-1"><small><strong>d'y acc&eacute;der &agrave; partir de tout poste de travail, tablette et
+						smartphone chez lui ou dans son &eacute;tablissement</strong></small></li>
+				<li class="mb-1"><small><strong>de publier ses documents directement depuis PRONOTE</strong></small></li>
+				<li class="mb-1"><small><strong>d'acc&eacute;der &agrave; un r&eacute;f&eacute;rentiel mutualis&eacute; de
+						ressources p&eacute;dagogiques qu'il pourra &eacute;galement alimenter</strong></small></li>
 			</ul>
 
-			<p class="text-green-dark mb-0"><small>Vous pouvez cr&eacute;er votre compte Cloud depuis PRONOTE.</small></p>
+			<p class="text-green-dark mb-0"><small><strong>Vous pouvez cr&eacute;er votre compte Cloud depuis PRONOTE.</strong></small></p>
 
 		</div>
 

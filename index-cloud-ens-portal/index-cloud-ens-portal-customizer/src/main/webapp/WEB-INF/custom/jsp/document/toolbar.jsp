@@ -4,6 +4,8 @@
 <%@ taglib prefix="ttc" uri="http://www.toutatice.fr/jsp/taglib/toutatice" %>
 
 
+
+
 <div class="d-flex justify-content-between flex-wrap">
     <div class="d-flex mt-1 mb-2">
         <%--Icon--%>
@@ -56,13 +58,20 @@
 
         <%--Share--%>
         <c:if test="${not readOnly}">
+        
+            <c:set var="confirmation" value="${false}" />
+        
             <c:choose>
                 <c:when test="${document.properties['rshr:enabledLink']}">
-                    <portlet:actionURL name="link-activation" var="activationUrl">
+                      <portlet:actionURL name="link-activation" var="activationUrl">
                         <portlet:param name="activate" value="false"/>
                     </portlet:actionURL>
                     <c:set var="icon" value="glyphicons glyphicons-basic-paired-off" />
                     <c:set var="title"><op:translate key="DOCUMENT_FILE_TOOLBAR_SHARED_LINK_DEACTIVATE"/></c:set>
+                    <c:set var="targets" value="${document.properties['rshr:targets']}"/>    
+                    <c:if test="${not empty targets}">    
+                        <c:set var="confirmation" value="${true}" />
+                    </c:if>
                 </c:when>
                 <c:otherwise>
                     <portlet:actionURL name="link-activation" var="activationUrl">
@@ -72,10 +81,24 @@
                     <c:set var="title"><op:translate key="DOCUMENT_FILE_TOOLBAR_SHARED_LINK_ACTIVATE"/></c:set>
                 </c:otherwise>
             </c:choose>
-            <a href="${activationUrl}" title="${title}" class="btn btn-link btn-link-hover-primary-light btn-sm mb-1 ml-1 text-primary-dark">
-                <i class="${icon}"></i>
-                <strong class="d-none d-md-inline">${title}</strong>
-            </a>
+            
+            
+             <c:choose>
+                <c:when test="${confirmation}">       
+                    <a title="${title}" class="btn btn-link btn-link-hover-primary-light btn-sm mb-1 ml-1 text-primary-dark  no-ajax-link" href="#deactivateShareLinkModalId" data-toggle="modal">
+                        <i class="${icon}"></i>
+                        <strong class="d-none d-md-inline">${title}</strong>
+                    </a>
+                 </c:when>
+                <c:otherwise>
+  		            <a href="${activationUrl}" title="${title}" class="btn btn-link btn-link-hover-primary-light btn-sm mb-1 ml-1 text-primary-dark">
+		                <i class="${icon}"></i>
+		                <strong class="d-none d-md-inline">${title}</strong>
+		            </a>
+                 </c:otherwise>          
+            </c:choose>
+
+            
         </c:if>
 
         <%--Download--%>
@@ -118,3 +141,39 @@
         </c:if>
     </div>
 </div>
+
+
+
+    <!-- Deactivate share link modal -->
+    <div id="deactivateShareLinkModalId" class="modal fade" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        <op:translate key="DEACTIVATION_DELETE_CURRENT_MODAL_BODY" />
+                    </h5>
+                    <button type="button" class="close" data-dismiss="modal">
+                        <span>&times;</span>
+                    </button>
+                </div>
+
+                <div class="modal-body">
+                    <p>
+                        <op:translate key="DEACTIVATION_DELETE_CURRENT_MODAL_MESSAGE" />
+                    </p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                        <span><op:translate key="CANCEL" /></span>
+                    </button>
+
+                    <a href="${activationUrl}" class="btn  btn-warning" data-dismiss="modal"> <span><op:translate
+                                key="CONFIRM" /></span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
