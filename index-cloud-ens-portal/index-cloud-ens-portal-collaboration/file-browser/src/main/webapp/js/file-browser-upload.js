@@ -97,6 +97,7 @@ $JQry(function () {
                 if (!$target.find("li").length) {
                     $target.addClass("d-none");
 
+                    $target.append('<li>Traitement des fichiers</li>');
                     // Refresh
                     updatePortletContent(this, $target.data("callback-url"));
                 }
@@ -106,12 +107,25 @@ $JQry(function () {
 
             progress: function (event, data) {
                 var progress = parseInt((data.loaded / data.total) * 100, 10) + "%";
-                var $bar = data.context.find(".progress-bar");
+                var $bar = data.context.closest(".progress-bar");
                 $bar.css("width", progress);
                 $bar.text(progress);
         		if( data.loaded == data.total)	{
-                    data.context.addClass("d-none");
-        		}	                
+        			
+         			
+         			// Do not hide last item
+        			var nbLines = 0;
+        			data.context.closest("ul").children('li').each(function () {
+        				var $line = $JQry(this);
+        			    if( ! $line.hasClass("d-none"))	{
+        			    	nbLines++;
+        			    }
+        			});         		
+        			
+         			if (nbLines > 1)	{
+         				data.context.addClass("d-none");
+         			}
+        		}                
             }
         });
 
