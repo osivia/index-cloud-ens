@@ -152,8 +152,7 @@
                   <argument>
                     <argumentName><![CDATA[body]]></argumentName>
                     <argumentType><![CDATA[TEXTAREA]]></argumentType>
-                    <argumentValue><![CDATA[${portal:translate("WORKFLOW_RENEW_PASSWORD_MSG")}
-${task:link(portal:translate("WORKFLOW_RENEW_PASSWORD_LINK"))}]]></argumentValue>
+                    <argumentValue><![CDATA[${portal:translate("WORKFLOW_RENEW_PASSWORD_MSG")}${task:link(portal:translate("WORKFLOW_RENEW_PASSWORD_LINK"))}${portal:translate("WORKFLOW_RENEW_PASSWORD_MSG_END")}]]></argumentValue>
                   </argument>
                   <argument>
                     <argumentName><![CDATA[mailFrom]]></argumentName>

@@ -77,7 +77,7 @@
 		                                                
 		                                                    <label> <c:choose>
 		                                                            <c:when test="${scope.key eq 'scope.drive'}">
-		                                                                J'autorise l'application <b><c:out value="${clientName}"/></b> &agrave; acc&eacute;der &agrave; mes fichiers
+		                                                                J'autorise le serveur PRONOTE de l'&eacute;tablissement <b><c:out value="${clientName}"/></b> &agrave; acc&eacute;der &agrave; mes fichiers
 		                                                            </c:when>
 		                                                            <c:otherwise>J'autorise l'application <b><c:out value="${clientName}"/></b> &agrave; ${scope.key}</c:otherwise>
 		                                                        </c:choose>

@@ -129,8 +129,17 @@ public class PersonCreationFormValidator implements Validator {
         searchByNickname.setDisplayName(form.getNickname());
         List<Person> findByNickname = personService.findByCriteria(searchByNickname);
         if (findByNickname.size() > 0) {
-            Person personFound = findByNickname.get(0);
-            if (personFound.getValidity() == null) {            
+            boolean duplicateNickName = false;
+            
+            for(Person personFound:findByNickname)  {
+                
+                // Exclude pending creations 
+                if (personFound.getValidity() == null) {         
+                    duplicateNickName = true;
+                }
+            }
+            
+            if( duplicateNickName) {
                 errors.rejectValue("nickname", "alreadyactive");
             }
         }

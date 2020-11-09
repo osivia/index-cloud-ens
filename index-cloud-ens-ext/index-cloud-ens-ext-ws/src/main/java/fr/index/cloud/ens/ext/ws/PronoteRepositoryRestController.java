@@ -37,7 +37,7 @@ public class PronoteRepositoryRestController {
 
         try {
 
-            returnObject.put("nom", "Etablissement. "+ id);
+            returnObject.put("nom",  id);
             
         } catch (Exception e) {
             returnObject.put("errorCode", 999);
