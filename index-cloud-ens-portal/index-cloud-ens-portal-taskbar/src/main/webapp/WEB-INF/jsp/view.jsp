@@ -99,7 +99,7 @@
                                     <portlet:actionURL name="advanced-search" var="url">
                                         <portlet:param name="titleKey" value="TASKBAR_SAVE_CURRENT_SEARCH"/>
                                     </portlet:actionURL>
-                                    <a href="${url}" class="btn btn-link btn-link-hover-primary-light btn-sm text-secondary text-truncate no-ajax-link">
+                                    <a href="${url}#new-filter" class="btn btn-link btn-link-hover-primary-light btn-sm text-secondary text-truncate no-ajax-link">
                                         <strong><op:translate key="TASKBAR_SAVE_CURRENT_SEARCH"/></strong>
                                     </a>
                                 </div>
