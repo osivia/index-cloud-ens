@@ -9,9 +9,6 @@
             <trans-attribute>Required</trans-attribute>
         </transaction>
 
-        <header-content>
-            <script type="text/javascript" src="/js/create-account.js"></script>
-        </header-content>
     </portlet>
 
     <portlet>
@@ -20,10 +17,7 @@
         <transaction>
             <trans-attribute>Required</trans-attribute>
         </transaction>
-        
-        <header-content>
-             <script type="text/javascript" src="/js/renew-pwd.js"></script>
-        </header-content>        
+    
     </portlet>
 
     <portlet>

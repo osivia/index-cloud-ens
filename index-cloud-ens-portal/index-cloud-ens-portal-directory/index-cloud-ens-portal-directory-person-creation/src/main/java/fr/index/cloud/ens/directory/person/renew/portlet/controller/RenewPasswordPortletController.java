@@ -187,7 +187,7 @@ public class RenewPasswordPortletController extends CMSPortlet {
      * @param password password
      */
     @ResourceMapping("password-information")
-    public void passwordInformation(ResourceRequest request, ResourceResponse response, @RequestParam(name = "newpassword", required = false) String newpassword) throws PortletException, IOException {
+    public void passwordInformation(ResourceRequest request, ResourceResponse response, @RequestParam(name = "password", required = false) String newpassword) throws PortletException, IOException {
         // Portal controller context
         PortalControllerContext portalControllerContext = new PortalControllerContext(this.portletContext, request, response);
 

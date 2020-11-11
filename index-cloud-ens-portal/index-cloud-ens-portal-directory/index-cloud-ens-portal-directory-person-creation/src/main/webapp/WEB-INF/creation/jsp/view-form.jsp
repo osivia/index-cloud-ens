@@ -110,13 +110,6 @@
                             </div>
                         </div>
 
-                        <div class="row">
-                            <div class="col-md">
-                                <div data-password-information-placeholder
-                                             data-url="${passwordInformationUrl}"></div>                        
-                            </div>
-                        </div>
-
 
                         <div class="row">
                             <div class="col-md">

@@ -32,19 +32,11 @@
 
             <!-- Update password value -->
             <spring:bind path="update">
-                <div class="form-group row required">
+                <div class="form-group row required password-control">
                     <form:label path="update" cssClass="col-sm-5 col-md-4 col-lg-3 col-form-label"><op:translate key="PERSON_CARD_PASSWORD_UPDATE" /></form:label>
                     <div class="col">
-                        <form:password path="update" cssClass="form-control ${status.error ? 'is-invalid' : ''}" />
+                        <form:password path="update" cssClass="form-control ${status.error ? 'is-invalid' : ''}"  data-password-control-url="${passwordInformationUrl}"/>
                         <form:errors path="update" cssClass="invalid-feedback" />
-
-                        <%--Password rules information--%>
-                        <div class="card mt-2">
-                            <div class="card-body">
-                                <p class="mb-1"><op:translate key="PASSWORD_INFORMATION_TITLE"/></p>
-                                <div data-password-information-placeholder data-url="${passwordInformationUrl}"></div>
-                            </div>
-                        </div>
                     </div>
                 </div>
             </spring:bind>

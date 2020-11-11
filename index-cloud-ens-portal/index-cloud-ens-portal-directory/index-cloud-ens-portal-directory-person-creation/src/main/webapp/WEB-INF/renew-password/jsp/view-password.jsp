@@ -26,16 +26,11 @@
 					</div>
 
 					<spring:bind path="newpassword">
-						<div class="form-group required">
+						<div class="form-group required password-control">
 							<form:label path="newpassword"><op:translate key="renew.password.password" /></form:label>
-							<form:password path="newpassword" cssClass="form-control" cssErrorClass="form-control is-invalid" />
+							<form:password path="newpassword" cssClass="form-control" cssErrorClass="form-control is-invalid"  data-password-control-url="${passwordInformationUrl}"/>
 							<form:errors path="newpassword" cssClass="invalid-feedback" />
-							<div class="card mt-2">
-								<div class="card-body">
-									<p><op:translate key="renew.password.rules"/></p>
-									<div data-password-information-placeholder data-url="${passwordInformationUrl}"></div>
-								</div>
-							</div>
+							
 						</div>
 					</spring:bind>
 

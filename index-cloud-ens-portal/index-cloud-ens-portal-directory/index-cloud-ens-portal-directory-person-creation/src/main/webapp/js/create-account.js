@@ -3,7 +3,7 @@ $JQry(function() {
     var passwordRulesInformationXhr;
 
 
-    $JQry(".create-account input[name=newpassword]").each(function(index, element) {
+    $JQry(".password-control input[data-password-control-url]").each(function(index, element) {
         var $element = $JQry(element);
 
         if (!$element.data("loaded")) {
@@ -49,7 +49,7 @@ $JQry(function() {
     function updatePasswordRulesInformation( initialization) {
         var $controlPasswrod = $JQry(".password-control");
         var $placeholder = $controlPasswrod.find("[data-password-control-url]");
-        var $input = $JQry(".create-account input[name=newpassword]");
+        var $input = $JQry(".password-control input[data-password-control-url]");
 
         // Abort previous AJAX request
         if (passwordRulesInformationXhr && passwordRulesInformationXhr.readyState !== 4) {
