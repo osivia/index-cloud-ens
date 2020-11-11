@@ -23,21 +23,22 @@
 	
 	<c:otherwise>
 
-	<div class="d-flex">	
-       	<span><op:translate key="DASHBOARD_NOTEMPTY_MESSAGE"/></span>
+	   <div class="d-flex">	
+       	    <span><op:translate key="DASHBOARD_NOTEMPTY_MESSAGE"/></span>
+       	</div>
 
 		<c:forEach var="application" items="${dashboard.applications}">
 			<portlet:actionURL name="revoke" var="revokeUrl">
     			<portlet:param name="clientId" value="${application.clientId}" />
 			</portlet:actionURL>
 
-	</div>
-	<div class="d-flex">
 
-		<input type="checkbox" checked onClick="openDashboardModal('${namespace}-revoke-modal', '${revokeUrl}');">
-		<span class="p-1" for="exampleCheck1">${application.clientName}</span>
-					 
-	</div>
+		    <div class="form-check ml-2">
+		
+		        <input type="checkbox" checked class="form-check-input" onClick="openDashboardModal('${namespace}-revoke-modal', '${revokeUrl}');">
+		        <label >${application.clientName}</label>
+		                     
+		    </div>
 
         </c:forEach>
     </c:otherwise>

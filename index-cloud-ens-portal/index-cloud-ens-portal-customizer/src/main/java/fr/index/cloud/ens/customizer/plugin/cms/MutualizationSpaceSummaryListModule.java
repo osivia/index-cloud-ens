@@ -113,7 +113,7 @@ public class MutualizationSpaceSummaryListModule extends PrivilegedPortletModule
                 selectors = data;
             }
 
-            filter = this.getFilter(selectors);
+            filter = this.getFilter(portalControllerContext.getRequest().getRemoteUser(), selectors);
         } catch (PortalException e) {
             filter = null;
             this.log.error(e.getMessage());
@@ -207,14 +207,20 @@ public class MutualizationSpaceSummaryListModule extends PrivilegedPortletModule
     }
 
 
+
     /**
-     * Get filter from selectors.
+     * Gets the filter.
      *
-     * @param selectors selectors
-     * @return filter
+     * @param userName the user name
+     * @param selectors the selectors
+     * @return the filter
      */
-    private String getFilter(Map<String, List<String>> selectors) {
+    private String getFilter(String userName, Map<String, List<String>> selectors) {
         List<String> filters = new ArrayList<>();
+        
+        if( userName != null)   {
+            filters.add("dc:lastContributor <> '" + userName+"'");
+         }
 
         if (MapUtils.isNotEmpty(selectors)) {
             // Keywords

@@ -146,7 +146,7 @@
 									</div>
 
 									<div class="border rounded mb-2 p-3 ${messageBackgroundColor}">
-									    <div class="font-weight-bold my-1 text-info">
+									    <div class="font-weight-bold my-1  text-green-dark">
                                             <ttc:user name="${message.author}" linkable="false" />
                                         </div>
 									

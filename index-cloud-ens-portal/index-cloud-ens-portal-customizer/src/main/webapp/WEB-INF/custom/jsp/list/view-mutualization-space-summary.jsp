@@ -62,9 +62,9 @@
                         <%--Views--%>
                         <li class="list-inline-item">
                             <i class="glyphicons glyphicons-basic-eye"></i>
-                            <strong class="text-black">${document.properties['mtz:views']}</strong>
+                            <strong class="text-black">${document.properties['mtz:liveviews']}</strong>
                             <c:choose>
-                                <c:when test="${empty document.properties['mtz:views'] or document.properties['mtz:views'] le 1}">
+                                <c:when test="${empty document.properties['mtz:liveviews'] or document.properties['mtz:liveviews'] le 1}">
                                     <span><op:translate key="DOCUMENT_MUTUALIZATION_VIEW" /></span>
                                 </c:when>
                                 <c:otherwise>
@@ -76,9 +76,9 @@
                         <%--Downloads--%>
                         <li class="list-inline-item">
                             <i class="glyphicons glyphicons-basic-cloud-download"></i>
-                            <strong class="text-black">${document.properties['mtz:downloads']}</strong>
+                            <strong class="text-black">${document.properties['mtz:livedownloads']}</strong>
                             <c:choose>
-                                <c:when test="${empty document.properties['mtz:downloads'] or document.properties['mtz:downloads'] le 1}">
+                                <c:when test="${empty document.properties['mtz:livedownloads'] or document.properties['mtz:livedownloads'] le 1}">
                                     <span><op:translate key="DOCUMENT_MUTUALIZATION_DOWNLOAD" /></span>
                                 </c:when>
                                 <c:otherwise>
