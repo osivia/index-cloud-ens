@@ -81,6 +81,26 @@ public class SearchController extends SearchCommonController {
             response.sendRedirect(url);
         }
     }
+    
+    
+    /**
+     * Search action mapping.
+     *
+     * @param request  action request
+     * @param response action response
+     * @param form     search form model attribute
+     */
+    @ActionMapping("search-new-filter")
+    public void searchNewFilter(ActionRequest request, ActionResponse response, @ModelAttribute("form") SearchForm form) throws PortletException, IOException {
+        // Portal Controller context
+        PortalControllerContext portalControllerContext = new PortalControllerContext(this.portletContext, request, response);
+
+        // Search redirection URL
+        String url = this.service.getSearchRedirectionUrl(portalControllerContext, form);
+        if (StringUtils.isNotEmpty(url)) {
+            response.sendRedirect(url+"#new-filter");
+        }
+    }
 
 
     /**

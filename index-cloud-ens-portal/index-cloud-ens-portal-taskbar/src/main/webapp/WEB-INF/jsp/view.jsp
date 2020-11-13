@@ -96,10 +96,10 @@
                             <div id="${namespace}-filters" class="collapse ${taskbar.showFilters ? 'show' : ''} ml-4" data-url="${saveCollapseStateUrl}" data-id="filters">
                                 <%--Save current search--%>
                                 <div class="d-flex justify-content-end my-3 ml-auto">
-                                    <portlet:actionURL name="advanced-search" var="url">
+                                    <portlet:actionURL name="advanced-search-new-filter" var="url">
                                         <portlet:param name="titleKey" value="TASKBAR_SAVE_CURRENT_SEARCH"/>
                                     </portlet:actionURL>
-                                    <a href="${url}#new-filter" class="btn btn-link btn-link-hover-primary-light btn-sm text-secondary text-truncate no-ajax-link">
+                                    <a href="${url}" class="btn btn-link btn-link-hover-primary-light btn-sm text-secondary text-truncate no-ajax-link">
                                         <strong><op:translate key="TASKBAR_SAVE_CURRENT_SEARCH"/></strong>
                                     </a>
                                 </div>
@@ -235,7 +235,7 @@
                                     <div class="form-group">
                                         <form:label path="documentTypes"
                                                     cssClass="sr-only">${placeholder}</form:label>
-                                        <form:select path="documentTypes"
+                                        <form:select id="${namespace}-documentTypes" path="documentTypes"
                                                      cssClass="form-control select2 select2-default"
                                                      data-placeholder="${placeholder}" data-url="${loadUrl}"
                                                      data-searching="${select2Searching}"
@@ -254,7 +254,7 @@
                                     <c:set var="placeholder"><op:translate key="TASKBAR_SEARCH_LEVEL"/></c:set>
                                     <div class="form-group">
                                         <form:label path="levels" cssClass="sr-only">${placeholder}</form:label>
-                                        <form:select path="levels" cssClass="form-control select2 select2-default"
+                                        <form:select id="${namespace}-levels" path="levels" cssClass="form-control select2 select2-default"
                                                      data-placeholder="${placeholder}" data-url="${loadUrl}"
                                                      data-searching="${select2Searching}"
                                                      data-no-results="${select2NoResults}">
@@ -272,7 +272,7 @@
                                     <c:set var="placeholder"><op:translate key="TASKBAR_SEARCH_SUBJECT"/></c:set>
                                     <div class="form-group">
                                         <form:label path="subjects" cssClass="sr-only">${placeholder}</form:label>
-                                        <form:select path="subjects" cssClass="form-control select2 select2-default"
+                                        <form:select id="${namespace}-subjects" path="subjects" cssClass="form-control select2 select2-default"
                                                      data-placeholder="${placeholder}" data-url="${loadUrl}"
                                                      data-searching="${select2Searching}"
                                                      data-no-results="${select2NoResults}">

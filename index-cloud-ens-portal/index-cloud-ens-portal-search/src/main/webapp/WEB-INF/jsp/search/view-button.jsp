@@ -5,10 +5,11 @@
 <%@ page isELIgnored="false" %>
 
 
-<portlet:actionURL var="url" name="search"/>
+
+<portlet:actionURL var="url" name="search-new-filter"/>
 
 <div class="d-flex justify-content-end">
-    <a href="${url}#new-filter" class="btn btn-link btn-link-hover-primary-light btn-sm text-secondary text-truncate">
+    <a href="${url}" class="btn btn-link btn-link-hover-primary-light btn-sm text-secondary text-truncate">
         <strong><op:translate key="SEARCH_BUTTON_LABEL"/></strong>
     </a>
 </div>
