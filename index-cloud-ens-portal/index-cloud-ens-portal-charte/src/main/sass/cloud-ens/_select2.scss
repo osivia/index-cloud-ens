@@ -119,7 +119,7 @@
             margin-right: map_get($spacers, 1);
         
             border-radius: 50%;
-            object-fit: contain;
+            object-fit: cover;
         
             &[src$=".svg"] {
               background-color: currentColor;

@@ -141,6 +141,8 @@
     color: $primary;
     font-style: italic;
 
+    outline: none;
+    
     // Placeholder
     &::placeholder {
       color: $input-placeholder-color;
