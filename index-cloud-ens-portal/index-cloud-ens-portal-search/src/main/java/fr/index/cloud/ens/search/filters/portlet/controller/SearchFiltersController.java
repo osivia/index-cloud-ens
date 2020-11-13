@@ -1,13 +1,21 @@
 package fr.index.cloud.ens.search.filters.portlet.controller;
 
 import fr.index.cloud.ens.search.common.portlet.controller.SearchCommonController;
+import fr.index.cloud.ens.search.filters.portlet.model.CustomPerson;
 import fr.index.cloud.ens.search.filters.portlet.model.SearchFiltersDateRange;
 import fr.index.cloud.ens.search.filters.portlet.model.SearchFiltersForm;
 import fr.index.cloud.ens.search.filters.portlet.model.SearchFiltersSizeRange;
 import fr.index.cloud.ens.search.filters.portlet.model.SearchFiltersSizeUnit;
+import fr.index.cloud.ens.search.filters.portlet.model.converter.PersonPropertyEditor;
 import fr.index.cloud.ens.search.filters.portlet.model.converter.SearchFiltersDatePropertyEditor;
 import fr.index.cloud.ens.search.filters.portlet.service.SearchFiltersService;
+import net.sf.json.JSONObject;
+
+import org.apache.commons.lang.BooleanUtils;
+import org.apache.commons.lang.math.NumberUtils;
+import org.osivia.directory.v2.model.CollabProfile;
 import org.osivia.portal.api.context.PortalControllerContext;
+import org.osivia.portal.api.directory.v2.model.Person;
 import org.osivia.portal.api.internationalization.Bundle;
 import org.osivia.portal.api.internationalization.IBundleFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +27,7 @@ import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.portlet.bind.PortletRequestDataBinder;
@@ -28,6 +37,7 @@ import org.springframework.web.portlet.bind.annotation.ResourceMapping;
 
 import javax.portlet.*;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -65,6 +75,10 @@ public class SearchFiltersController extends SearchCommonController {
     /** Bundle factory. */
     @Autowired
     private IBundleFactory bundleFactory;
+    
+    /** Person property editor. */
+    @Autowired
+    private PersonPropertyEditor personPropertyEditor;
 
 
     /**
@@ -155,6 +169,41 @@ public class SearchFiltersController extends SearchCommonController {
     }
 
 
+
+    
+    /**
+     * Search persons resource mapping.
+     *
+     * @param request resource request
+     * @param response resource response
+     * @param options options model attribute
+     * @param filter search filter request parameter
+     * @param page pagination page number request parameter
+     * @param tokenizer tokenizer indicator request parameter
+     * @throws PortletException
+     * @throws IOException
+     */
+    @ResourceMapping("search-member")
+    public void search(ResourceRequest request, ResourceResponse response,  @RequestParam(value = "filter", required = false) String filter, @RequestParam(value = "page", required = false) String page,
+            @RequestParam(value = "tokenizer", required = false) String tokenizer) throws PortletException, IOException {
+        // Portal controller context
+        PortalControllerContext portalControllerContext = new PortalControllerContext(this.portletContext, request, response);
+
+        // Search results
+        JSONObject results = this.service.searchPersons(portalControllerContext, filter, NumberUtils.toInt(page, 1),
+                BooleanUtils.toBoolean(tokenizer));
+
+        // Content type
+        response.setContentType("application/json");
+
+        // Content
+        PrintWriter printWriter = new PrintWriter(response.getPortletOutputStream());
+        printWriter.write(results.toString());
+        printWriter.close();
+    }
+
+
+
     /**
      * Get search filters form model attribute.
      *
@@ -179,6 +228,7 @@ public class SearchFiltersController extends SearchCommonController {
     @InitBinder("form")
     public void formInitBinder(PortletRequestDataBinder binder) {
         binder.registerCustomEditor(Date.class, this.datePropertyEditor);
+        binder.registerCustomEditor(CustomPerson.class, this.personPropertyEditor);
     }
 
 

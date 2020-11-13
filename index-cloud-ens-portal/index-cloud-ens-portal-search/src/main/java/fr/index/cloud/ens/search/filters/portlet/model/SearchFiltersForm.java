@@ -1,6 +1,8 @@
 package fr.index.cloud.ens.search.filters.portlet.model;
 
 import fr.toutatice.portail.cms.nuxeo.api.domain.DocumentDTO;
+
+import org.osivia.portal.api.directory.v2.model.Person;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -80,11 +82,14 @@ public class SearchFiltersForm {
     private List<String> shareds;
 
 
-    
+    /** The share. */
+    private List<CustomPerson> authors;
 
 
 
     
+
+
 
 
     /**
@@ -237,5 +242,25 @@ public class SearchFiltersForm {
         this.shareds = shareds;
     }
 
+    
+
+    
+    /**
+     * Getter for authors.
+     * @return the authors
+     */
+    public List<CustomPerson> getAuthors() {
+        return authors;
+    }
+
+
+    
+    /**
+     * Setter for authors.
+     * @param authors the authors to set
+     */
+    public void setAuthors(List<CustomPerson> authors) {
+        this.authors = authors;
+    }
 
 }

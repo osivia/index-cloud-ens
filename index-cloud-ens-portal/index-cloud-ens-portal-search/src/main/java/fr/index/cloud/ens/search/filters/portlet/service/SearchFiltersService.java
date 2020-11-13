@@ -2,6 +2,8 @@ package fr.index.cloud.ens.search.filters.portlet.service;
 
 import fr.index.cloud.ens.search.common.portlet.service.SearchCommonService;
 import fr.index.cloud.ens.search.filters.portlet.model.SearchFiltersForm;
+import net.sf.json.JSONObject;
+
 import org.osivia.portal.api.context.PortalControllerContext;
 
 import javax.portlet.PortletException;
@@ -89,5 +91,18 @@ public interface SearchFiltersService extends SearchCommonService {
      * @return date
      */
     Date parseDate(String source);
+
+
+    /**
+     * Search persons.
+     *
+     * @param portalControllerContext the portal controller context
+     * @param filter the filter
+     * @param page the page
+     * @param tokenizer the tokenizer
+     * @return the JSON object
+     * @throws PortletException the portlet exception
+     */
+    JSONObject searchPersons(PortalControllerContext portalControllerContext, String filter, int page, boolean tokenizer) throws PortletException;
 
 }

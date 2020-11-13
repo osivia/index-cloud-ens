@@ -105,4 +105,31 @@
       }
     }
   }
+  
+  .person   {
+    display: flex;
+  
+    .person-avatar {
+        align-self: center;
+        img {
+            height: 2.5rem; // 40px
+            width: 2.5rem; // 40px
+            vertical-align: middle;
+        
+            margin-right: map_get($spacers, 1);
+        
+            border-radius: 50%;
+            object-fit: contain;
+        
+            &[src$=".svg"] {
+              background-color: currentColor;
+            }   
+        }
+    }
+    
+    .person-title {
+        align-self: center;
+    }
+  
+  }
 }

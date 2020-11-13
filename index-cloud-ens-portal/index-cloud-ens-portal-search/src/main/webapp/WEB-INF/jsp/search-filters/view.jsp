@@ -136,7 +136,33 @@
                </form:select>
 	            </div>
 	        </div>       
-        </c:if>               
+        </c:if>      
+        
+        
+        <c:if test="${ form.view.id ne  'default'}">  
+
+             <c:set var="inputTooShort"><op:translate key="SELECT2_INPUT_TOO_SHORT" args="3" /></c:set>
+             <c:set var="noResults"><op:translate key="SELECT2_NO_RESULTS" /></c:set>
+             <c:set var="searching"><op:translate key="SELECT2_SEARCHING" /></c:set>
+             <c:set var="loadingMore"><op:translate key="SELECT2_LOADING_MORE"/></c:set>
+             
+             <portlet:resourceURL id="search-member" var="searchUrl" />
+ 
+             <div class="form-group row search-members">
+                 <form:label path="authors" cssClass="col-md-3 col-form-label"><op:translate key="SEARCH_FILTERS_AUTHOR_LABEL" /></form:label>
+                 <div class="col-md-7">
+	                 <form:select path="authors" cssClass="form-control select2 select2-person" data-url="${searchUrl}" data-input-too-short="${inputTooShort}" data-no-results="${noResults}" data-searching="${searching}" data-loading-more="${loadingMore}">
+	                     <c:forEach var="author" items="${form.authors}">
+	                         <form:option value="${author.id}" >${author.displayName}</form:option>
+	                     </c:forEach>
+	                 </form:select>
+                 </div>
+                 <form:errors path="authors" cssClass="help-block" />
+             </div>
+
+        </c:if> 
+        
+                 
 
         <%--Size--%>
         <div class="form-group row">

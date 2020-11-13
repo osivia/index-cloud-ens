@@ -9,6 +9,10 @@ import fr.toutatice.portail.cms.nuxeo.api.PageSelectors;
 import fr.toutatice.portail.cms.nuxeo.api.cms.NuxeoDocumentContext;
 import fr.toutatice.portail.cms.nuxeo.api.domain.DocumentDTO;
 import fr.toutatice.portail.cms.nuxeo.api.services.dao.DocumentDAO;
+import fr.toutatice.portail.cms.nuxeo.api.workspace.WorkspaceType;
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
+
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.BooleanUtils;
 import org.apache.commons.lang.StringUtils;
@@ -20,6 +24,7 @@ import org.osivia.directory.v2.model.preferences.UserSavedSearch;
 import org.osivia.directory.v2.service.preferences.UserPreferencesService;
 import org.osivia.portal.api.PortalException;
 import org.osivia.portal.api.context.PortalControllerContext;
+import org.osivia.portal.api.directory.v2.model.Person;
 import org.osivia.portal.api.internationalization.Bundle;
 import org.osivia.portal.api.internationalization.IBundleFactory;
 import org.osivia.portal.api.notifications.INotificationsService;
@@ -29,6 +34,7 @@ import org.osivia.portal.api.urls.IPortalUrlFactory;
 import org.osivia.portal.api.urls.PortalUrlType;
 import org.osivia.portal.api.windows.PortalWindow;
 import org.osivia.portal.api.windows.WindowFactory;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
@@ -54,6 +60,12 @@ public class SearchFiltersServiceImpl extends SearchCommonServiceImpl implements
      * Unit factor.
      */
     private static final double UNIT_FACTOR = 1024;
+    
+    /** Select2 max results. */
+    int SELECT2_MAX_RESULTS = 100;
+    
+    /** Select2 results page size. */
+    int SELECT2_RESULTS_PAGE_SIZE = 6;
 
 
     /**
@@ -164,6 +176,22 @@ public class SearchFiltersServiceImpl extends SearchCommonServiceImpl implements
         
         List<String>  shareds = selectors.get( SHAREDS_SELECTOR_ID);
         form.setShareds(shareds);
+   
+        List<String>  authorsId = selectors.get( AUTHORS_SELECTOR_ID);
+        List<CustomPerson> authors = new ArrayList<CustomPerson>();
+        if(CollectionUtils.isNotEmpty(authorsId))   {
+            for(String authorId: authorsId) {
+                Person author = repository.searchPersonById( authorId);
+                if( author != null) {
+                    authors.add(new CustomPerson(author));
+                }
+                
+            }
+        }
+        
+        form.setAuthors(authors);
+
+
 
         // Size range
         String sizeRangeSelector = this.getSelectorValue(selectors, SIZE_RANGE_SELECTOR_ID);
@@ -416,6 +444,13 @@ public class SearchFiltersServiceImpl extends SearchCommonServiceImpl implements
             selectors.put(SHAREDS_SELECTOR_ID, shareds);
         }
         
+        List<CustomPerson> authors = form.getAuthors();
+        List<String> authorIds = new ArrayList<>();
+        if (CollectionUtils.isNotEmpty(authors)) {
+            for( CustomPerson author: authors)
+                authorIds.add(author.getId());
+        }
+        selectors.put(AUTHORS_SELECTOR_ID, authorIds);
         
         // Size range
         selectors.put(SIZE_RANGE_SELECTOR_ID, Collections.singletonList(form.getSizeRange().name()));
@@ -524,4 +559,123 @@ public class SearchFiltersServiceImpl extends SearchCommonServiceImpl implements
         return date;
     }
 
+    /**
+     * Get search result JSON Object.
+     * 
+     * @param person person
+     * @param alreadyMember already member indicator
+     * @param existingRequest existing request indicator
+     * @param bundle internationalization bundle
+     * @return JSON object
+     */
+    protected JSONObject getSearchResult(Person person,  Bundle bundle) {
+        JSONObject object = new JSONObject();
+        object.put("id", person.getUid());
+
+        // Display name
+        String displayName;
+
+
+        if (StringUtils.isEmpty(person.getDisplayName())) {
+            displayName = person.getUid();
+        } else {
+            displayName = person.getDisplayName();
+
+        }
+
+        object.put("displayName", displayName);
+
+        object.put("avatar", person.getAvatar().getUrl());
+
+        return object;
+    }
+    
+    
+    
+    /**
+     * Get search results message.
+     * 
+     * @param portalControllerContext portal controller context
+     * @param total search results total
+     * @param bundle internationalization bundle
+     * @return message
+     * @throws PortletException
+     */
+    protected String getSearchResultsMessage(PortalControllerContext portalControllerContext, int total, Bundle bundle) throws PortletException {
+        String message;
+
+        if (total == 0) {
+            message = bundle.getString("SELECT2_NO_RESULTS");
+        } else if (total == 1) {
+            message = bundle.getString("SELECT2_ONE_RESULT");
+        } else if (total > SELECT2_MAX_RESULTS) {
+            message = bundle.getString("SELECT2_TOO_MANY_RESULTS", SELECT2_MAX_RESULTS);
+        } else {
+            message = bundle.getString("SELECT2_MULTIPLE_RESULTS", total);
+        }
+
+        return message;
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public JSONObject searchPersons(PortalControllerContext portalControllerContext, String filter, int page,
+            boolean tokenizer) throws PortletException {
+        // Internationalization bundle
+        Bundle bundle = this.bundleFactory.getBundle(portalControllerContext.getRequest().getLocale());
+
+        // JSON objects
+        List<JSONObject> objects = new ArrayList<>();
+        // Total results
+        int total = 0;
+        
+        // Persons
+        List<Person> persons = this.repository.searchPersons(portalControllerContext, filter, tokenizer);
+        for (Person person : persons) {
+
+            // Search result
+            JSONObject object = this.getSearchResult(person, bundle);
+
+            objects.add(object);
+            total++;
+        }
+
+
+        // Results JSON object
+        JSONObject results = new JSONObject();
+
+        // Items JSON array
+        JSONArray items = new JSONArray();
+        if (tokenizer) {
+            items.addAll(objects);
+        } else {
+            // Message
+            if (page == 1) {
+                String message = this.getSearchResultsMessage(portalControllerContext, total, bundle);
+                JSONObject object = new JSONObject();
+                object.put("message", message);
+                items.add(object);
+            }
+
+            // Paginated results
+            int begin = (page - 1) * SELECT2_RESULTS_PAGE_SIZE;
+            int end = Math.min(objects.size(), begin + SELECT2_RESULTS_PAGE_SIZE);
+            for (int i = begin; i < end; i++) {
+                JSONObject object = objects.get(i);
+                items.add(object);
+            }
+
+            // Pagination informations
+            results.put("page", page);
+            results.put("pageSize", SELECT2_RESULTS_PAGE_SIZE);
+        }
+        results.put("items", items);
+        results.put("total", objects.size());
+
+        return results;
+    }
+
+    
 }

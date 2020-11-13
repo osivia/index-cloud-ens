@@ -75,9 +75,13 @@ public interface SearchCommonService {
      */
     String FORMATS_SELECTORID = "formats";
     /**
-     * File format selector identifier.
+     * Shared selector identifier.
      */
     String SHAREDS_SELECTOR_ID = "shareds";
+    /**
+     * Author selector identifier.
+     */
+    String AUTHORS_SELECTOR_ID = "authors";
     
     /**
      * Customized date selector identifier.

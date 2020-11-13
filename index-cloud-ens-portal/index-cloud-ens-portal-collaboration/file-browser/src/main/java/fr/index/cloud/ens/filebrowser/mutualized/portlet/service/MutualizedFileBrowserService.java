@@ -37,6 +37,11 @@ public interface MutualizedFileBrowserService extends AbstractFileBrowserService
      * Page size default value.
      */
     int PAGE_SIZE_DEFAULT_VALUE = 50;
+    
+    /**
+     * Author selector identifier.
+     */
+    String AUTHORS_SELECTOR_ID = "authors";
 
 
     /**

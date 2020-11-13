@@ -2,6 +2,8 @@ package fr.index.cloud.ens.search.filters.portlet.configuration;
 
 import fr.index.cloud.ens.search.common.portlet.configuration.SearchCommonConfiguration;
 
+import org.osivia.directory.v2.service.PersonUpdateService;
+import org.osivia.portal.api.directory.v2.DirServiceFactory;
 import org.osivia.portal.api.locator.Locator;
 import org.osivia.portal.api.notifications.INotificationsService;
 import org.springframework.context.annotation.Bean;
@@ -33,5 +35,14 @@ public class SearchFiltersConfiguration extends SearchCommonConfiguration {
         return "search-filters";
     }
 
-    
+    /**
+     * Get person service.
+     *
+     * @return person service
+     */
+    @Bean
+    public PersonUpdateService getPersonService() {
+        return DirServiceFactory.getService(PersonUpdateService.class);
+    }
+
 }
