@@ -48,6 +48,21 @@
     .form-rounded {
         border-radius: 1rem;
     }   
+    
+    .avatar {
+        height: 2.5rem; // 40px
+        width: 2.5rem; // 40px
+        vertical-align: middle;
+        margin-right: .25rem;
+        border-radius: 50%;
+        object-fit: cover;
+        
+
+        &[src$=".svg"] {
+              background-color: currentColor;
+            }  
+    }
+     
 }   
 
 .my-messages .triangle-left:after {

@@ -14,7 +14,7 @@
         color: $white;
         radius: 50%;
       }
-      object-fit: contain;
+      object-fit: cover;
 
       &[src$=".svg"] {
         border-style: none;
