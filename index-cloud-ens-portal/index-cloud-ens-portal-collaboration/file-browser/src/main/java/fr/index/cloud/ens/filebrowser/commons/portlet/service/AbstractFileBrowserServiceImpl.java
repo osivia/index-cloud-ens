@@ -49,6 +49,8 @@ import java.util.*;
  */
 public abstract class AbstractFileBrowserServiceImpl extends FileBrowserServiceImpl implements AbstractFileBrowserService {
 
+    private static final String CMS_TASK_FILTER = "__CMS_TASK__";
+
     /**
      * Application context.
      */
@@ -112,7 +114,10 @@ public abstract class AbstractFileBrowserServiceImpl extends FileBrowserServiceI
             String searchFilterParameter = request.getParameter(SEARCH_FILTER_PARAMETER);
             if (StringUtils.isEmpty(searchFilterParameter)) {
                 searchFilterTitle = null;
-            } else {
+            } else if (searchFilterParameter.startsWith(CMS_TASK_FILTER)){
+                String title = searchFilterParameter.substring(CMS_TASK_FILTER.length());
+                searchFilterTitle = title;
+            } else  {
                 int id = NumberUtils.toInt(searchFilterParameter);
                 Map<String, List<UserSavedSearch>> categorizedSavedSearches = userPreferences.getCategorizedSavedSearches();
                 if (MapUtils.isEmpty(categorizedSavedSearches)) {

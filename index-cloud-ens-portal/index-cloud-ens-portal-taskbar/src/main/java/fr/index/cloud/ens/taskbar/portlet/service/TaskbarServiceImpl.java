@@ -425,8 +425,10 @@ public class TaskbarServiceImpl implements TaskbarService {
         } else if (StringUtils.isNotEmpty(navigationTask.getPath())) {
             // CMS URL
             String path = navigationTask.getPath();
+            Map<String, String> parameters = new HashMap<>(1);            
+            parameters.put(SEARCH_FILTER_PARAMETER, "__CMS_TASK__" + navigationTask.getTitle());
 
-            url = this.portalUrlFactory.getCMSUrl(portalControllerContext, null, path, null, null, "taskbar", null, null, "1", null);
+            url = this.portalUrlFactory.getCMSUrl(portalControllerContext, null, path, parameters, null, "taskbar", null, null, "1", null);
         } else {
             // Unknown case
             url = "#";
