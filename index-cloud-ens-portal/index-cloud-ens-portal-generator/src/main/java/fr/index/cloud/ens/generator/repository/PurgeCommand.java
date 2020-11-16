@@ -107,14 +107,28 @@ public class PurgeCommand implements INuxeoCommand {
                     
       
                     LOGGER.warn("deleting user " + p.getUid());
+                    
+                    boolean skipNuxeo = false;
       
-                    String profilePath = getUserProfile(nuxeoSession, p.getUid()).getPath();
+                    String profilePath=null;
+                    
+                    try {
+                         profilePath = getUserProfile(nuxeoSession, p.getUid()).getPath();
+                    } catch (Exception e){
+                        skipNuxeo = true;
+                        LOGGER.warn("no personal space for user " + p.getUid());
+                   }
+                    
+                    if( ! skipNuxeo)    {
+                    
+                    
                     String workspacePath = profilePath.substring(0, profilePath.lastIndexOf('/'));
                     
                     // Operation request
                     OperationRequest request = nuxeoSession.newRequest("Document.Delete");
                     request.setInput(new PathRef(workspacePath));
                     request.execute();
+                    }
                     
                     
                     personService.delete(p);

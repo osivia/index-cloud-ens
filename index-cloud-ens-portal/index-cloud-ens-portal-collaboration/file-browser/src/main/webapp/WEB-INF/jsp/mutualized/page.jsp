@@ -8,17 +8,6 @@
 <%@ page isELIgnored="false" %>
 
 
-<c:choose>
-    <c:when test="${form.customizedColumn.id eq 'document-type'}">
-        <c:set var="vocabularyName" value="idx_document_type" scope="request"/>
-    </c:when>
-    <c:when test="${form.customizedColumn.id eq 'level'}">
-        <c:set var="vocabularyName" value="idx_level" scope="request"/>
-    </c:when>
-    <c:when test="${form.customizedColumn.id eq 'subject'}">
-        <c:set var="vocabularyName" value="idx_subject" scope="request"/>
-    </c:when>
-</c:choose>
 
 
 <c:forEach var="item" items="${items}">
