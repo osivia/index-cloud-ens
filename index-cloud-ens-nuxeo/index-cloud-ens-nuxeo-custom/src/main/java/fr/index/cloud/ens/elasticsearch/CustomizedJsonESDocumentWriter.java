@@ -139,10 +139,12 @@ public class CustomizedJsonESDocumentWriter extends AbstractCustomJsonESWriter {
         if (document.hasSchema(ToutaticeNuxeoStudioConst.CST_DOC_FILE_SCHEMA)) {
             if (document != null) {
                 BlobHolder bHolder = document.getAdapter(BlobHolder.class);
-                mimeType = bHolder.getBlob().getMimeType();
-                int iExtension = bHolder.getBlob().getFilename().lastIndexOf('.');
-                if( iExtension != -1) {
-                    extension = bHolder.getBlob().getFilename().substring(iExtension+1);
+                if( bHolder != null && bHolder.getBlob() != null)    {
+                    mimeType = bHolder.getBlob().getMimeType();
+                    int iExtension = bHolder.getBlob().getFilename().lastIndexOf('.');
+                    if( iExtension != -1) {
+                        extension = bHolder.getBlob().getFilename().substring(iExtension+1);
+                    }
                 }
             }
         }
