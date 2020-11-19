@@ -217,7 +217,7 @@
                                         <form:label path="keywords" cssClass="sr-only">${placeholder}</form:label>
                                         <div class="input-group">
                                             <form:input path="keywords" type="search" cssClass="form-control"
-                                                        placeholder="${placeholder}"/>
+                                                        placeholder="${placeholder}" data-restore-normal-view-on-focus="true" />
                                             <div class="input-group-append">
                                                 <span class="input-group-text">
                                                     <i class="glyphicons glyphicons-basic-search"></i>

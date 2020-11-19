@@ -155,13 +155,7 @@ public class FileDocumentModule extends PortletModule {
                         request.setAttribute("desynchronizedFromSource", desynchronizeFromSource);
                     }   
 
-                    // Keywords
-                    PropertyList keywordsProperty = document.getProperties().getList("mtz:keywords");
-                    if ((keywordsProperty != null) && !keywordsProperty.isEmpty()) {
-                        String keywords = StringUtils.join(keywordsProperty.list(), ", ");
-                        request.setAttribute("keywords", keywords);
-                    }
-                }
+               }
 
                 
                 

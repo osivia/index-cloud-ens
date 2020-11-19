@@ -12,6 +12,8 @@
 
 <c:set var="namespace"><portlet:namespace/></c:set>
 
+<c:set var="searching"><op:translate key="DOCUMENT_METADATA_SELECT2_SEARCHING"/></c:set>
+<c:set var="noResults"><op:translate key="DOCUMENT_METADATA_SELECT2_NO_RESULTS"/></c:set>
 
 <div class="metadata">
     <div class="mb-3">
@@ -21,18 +23,47 @@
         </c:if>
 
         <%--Keywords--%>
-        <c:if test="${readOnly and not empty document.properties['mtz:keywords']}">
-            <p class="mb-2">
-                <strong><op:translate key="DOCUMENT_MUTUALIZATION_KEYWORDS"/></strong>
-            </p>
-            <ul class="list-inline">
-                <c:forEach var="keyword" items="${document.properties['mtz:keywords']}">
-                    <li class="list-inline-item">
-                        <span class="badge badge-pill badge-orange-dark">${keyword}</span>
-                    </li>
-                </c:forEach>
-            </ul>
-        </c:if>
+        <c:set var="keywords" value="${document.properties['idxcl:keywords']}"/>
+  
+        <c:choose>
+	        <c:when test="${readOnly}">
+	            <p class="mb-2">
+	                <strong><op:translate key="DOCUMENT_METADATA_KEYWORDS_LABEL"/></strong>
+	            </p>
+	            <ul class="list-inline">
+	                <c:forEach var="keyword" items="${document.properties['idxcl:keywords']}">
+	                    <li class="list-inline-item">
+	                        <span class="badge badge-pill badge-orange-dark">${keyword}</span>
+	                    </li>
+	                </c:forEach>
+	            </ul>
+           </c:when>
+            
+
+            <c:otherwise>
+                <c:set var="placeholder"><op:translate key="DOCUMENT_METADATA_KEYWORDS_PLACEHOLDER"/></c:set>
+                <portlet:actionURL name="inline-edition" var="submitUrl">
+                    <portlet:param name="property" value="idxcl:keywords"/>
+                    <portlet:param name="cancel-url" value="${cancelUrl}"/>
+                </portlet:actionURL>
+
+                <form action="${submitUrl}" method="post">
+                    <div class="form-group inline-edition">
+                        <label for="${namespace}-keywords">
+                            <strong><op:translate key="DOCUMENT_METADATA_KEYWORDS_LABEL"/></strong>
+                        </label>
+                        <select id="${namespace}-keywords" name="inline-values" multiple="multiple"
+                                class="form-control select2 select2-inline-edition" data-tags="true"  data-no-results="${noResults}" data-searching="${searching}"
+                                data-placeholder="${placeholder}">
+                            <c:forEach var="keyword" items="${keywords}">
+                                <option value="${keyword}" selected="selected">${keyword}</option>
+                            </c:forEach>
+                        </select>
+                    </div>
+                    <input type="submit" class="d-none">
+                </form>
+            </c:otherwise>           
+        </c:choose>        
 
         <%--Levels--%>
         <c:set var="levels" value="${document.properties['idxcl:levels']}"/>
@@ -67,7 +98,7 @@
                             <strong><op:translate key="DOCUMENT_METADATA_LEVEL_LABEL"/></strong>
                         </label>
                         <select id="${namespace}-levels" name="inline-values" multiple="multiple"
-                                class="form-control select2 select2-inline-edition" data-url="${select2Url}"
+                                class="form-control select2 select2-inline-edition" data-url="${select2Url}" data-no-results="${noResults}" data-searching="${searching}"
                                 data-placeholder="${placeholder}">
                             <c:forEach var="level" items="${levels}">
                                 <option value="${level}" selected="selected"><ttc:vocabularyLabel name="idx_level"
@@ -113,7 +144,7 @@
                             <strong><op:translate key="DOCUMENT_METADATA_SUBJECT_LABEL"/></strong>
                         </label>
                         <select id="${namespace}-subjects" name="inline-values" multiple="multiple"
-                                class="form-control select2 select2-inline-edition" data-url="${select2Url}"
+                                class="form-control select2 select2-inline-edition" data-url="${select2Url}" data-no-results="${noResults}" data-searching="${searching}"
                                 data-placeholder="${placeholder}">
                             <c:forEach var="subject" items="${subjects}">
                                 <option value="${subject}" selected="selected"><ttc:vocabularyLabel
@@ -160,7 +191,7 @@
                             <strong><op:translate key="DOCUMENT_METADATA_DOCUMENT_TYPE_LABEL"/></strong>
                         </label>
                         <select id="${namespace}-document-types" name="inline-values" multiple="multiple"
-                                class="form-control select2 select2-inline-edition" data-url="${select2Url}"
+                                class="form-control select2 select2-inline-edition" data-url="${select2Url}" data-no-results="${noResults}" data-searching="${searching}"
                                 data-placeholder="${placeholder}">
                             <c:forEach var="documentType" items="${documentTypes}">
                                 <option value="${documentType}" selected="selected"><ttc:vocabularyLabel

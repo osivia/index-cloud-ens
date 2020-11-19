@@ -82,7 +82,7 @@ public class MutualizationCopyDuplicateCommand extends MutualizationCopyCommand 
         }
         
         // Keywords
-        properties.set("mtz:keywords", this.getListProperty("mtz:keywords"));
+        properties.set("idxcl:keywords", this.getListProperty("idxcl:keywords"));
         // Document types
         properties.set("idxcl:documentTypes", this.getListProperty("idxcl:documentTypes"));
         // Levels

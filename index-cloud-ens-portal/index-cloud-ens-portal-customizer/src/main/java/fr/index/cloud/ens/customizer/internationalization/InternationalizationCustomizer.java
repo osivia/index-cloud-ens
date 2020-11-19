@@ -85,6 +85,7 @@ public class InternationalizationCustomizer extends GenericPortlet implements IC
         metadatas.setName(CUSTOMIZER_NAME);
         metadatas.setModule(this);
         metadatas.setCustomizationIDs(Arrays.asList(IInternationalizationService.CUSTOMIZER_ID));
+        metadatas.setOrder(9999);
         return metadatas;
     }
 

@@ -12,6 +12,18 @@ $JQry(function() {
                 theme : "bootstrap4",
                 width : "100%"
             };
+            
+            var tags = false;
+            
+            
+            if( $element.attr('data-tags') == "true")	{
+            	tags = true;
+            }
+            
+            if( tags == true)	{
+
+            	options["tokenSeparators"] = [','];
+            }
 
             if (url !== undefined) {
                 options["ajax"] = {
@@ -73,7 +85,38 @@ $JQry(function() {
                 };
             }
 
+            
+            // Internationalization
+            options["language"] = {};
+            if ($element.data("input-too-short") !== undefined) {
+                options["language"]["inputTooShort"] = function () {
+                    return $element.data("input-too-short");
+                }
+            }
+            if ($element.data("error-loading") !== undefined) {
+                options["language"]["errorLoading"] = function () {
+                    return $element.data("error-loading");
+                }
+            }
+            if ($element.data("loading-more") !== undefined) {
+                options["language"]["loadingMore"] = function () {
+                    return $element.data("loading-more");
+                }
+            }
+            if ($element.data("searching") !== undefined) {
+                options["language"]["searching"] = function () {
+                    return $element.data("searching");
+                }
+            }
+            if ($element.data("no-results") !== undefined) {
+                options["language"]["noResults"] = function () {
+                    return $element.data("no-results");
+                }
+            }
+
+            
             $element.select2(options);
+            
 
             // Close on unselect
             $element.on("select2:unselect", function (event) {
@@ -106,27 +149,37 @@ $JQry(function() {
             var timer;
 
             $element.change(function(event) {
-                // Clear timer
-                clearTimeout(timer);
-
+            	
                 var $target = $JQry(event.target);
-                var $form = $target.closest("form");
-                var $submit = $form.find("button[type=submit], input[type=submit]");
-
-                $submit.click();
+                if( $target.hasClass('select2-search__field') == false)	{
+            	
+	                // Clear timer
+	                clearTimeout(timer);
+	
+	                var $target = $JQry(event.target);
+	                var $form = $target.closest("form");
+	                var $submit = $form.find("button[type=submit], input[type=submit]");
+	
+	                $submit.click();
+                }
             });
 
             $element.keyup(function(event) {
-                // Clear timer
-                clearTimeout(timer);
-
-                timer = setTimeout(function() {
-                    var $target = $JQry(event.target);
-                    var $form = $target.closest("form");
-                    var $submit = $form.find("button[type=submit], input[type=submit]");
-
-                    $submit.click();
-                }, 500);
+            	
+                var $target = $JQry(event.target);
+                if( $target.hasClass('select2-search__field') == false)	{
+	            	
+	                // Clear timer
+	                clearTimeout(timer);
+	
+	                timer = setTimeout(function() {
+	                    var $target = $JQry(event.target);
+	                    var $form = $target.closest("form");
+	                    var $submit = $form.find("button[type=submit], input[type=submit]");
+	
+	                    $submit.click();
+	                }, 500);
+                }
             });
 
             $element.data("loaded", true);

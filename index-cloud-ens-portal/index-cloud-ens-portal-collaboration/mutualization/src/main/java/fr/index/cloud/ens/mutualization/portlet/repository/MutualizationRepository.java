@@ -26,7 +26,7 @@ public interface MutualizationRepository {
     /**
      * Keywords property.
      */
-    String KEYWORDS_PROPERTY = "mtz:keywords";
+    String KEYWORDS_PROPERTY = "idxcl:keywords";
     /**
      * Document types property.
      */
