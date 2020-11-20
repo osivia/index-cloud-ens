@@ -56,6 +56,16 @@ public class FileDenormalizationWriter extends AbstractCustomJsonESWriter {
 
                 Long downloads = (Long) liveDocument.getPropertyValue(DOWNLOAD_XPATH);
                 jsonGenerator.writeNumberField(DOWNLOAD_DENORMALIZED_FIELD, downloads);
+
+                Map<String, String> bmap = liveDocument.getBinaryFulltext();
+                if (bmap != null && !bmap.isEmpty()) {
+                    for (Map.Entry<String, String> item : bmap.entrySet()) {
+                        String value = item.getValue();
+                        if (value != null) {
+                            jsonGenerator.writeStringField("ecm:" + item.getKey(), value);
+                        }
+                    }
+                }
             }
         }
 
