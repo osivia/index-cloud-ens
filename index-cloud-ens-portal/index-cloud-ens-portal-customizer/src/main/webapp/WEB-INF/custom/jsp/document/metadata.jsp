@@ -12,8 +12,8 @@
 
 <c:set var="namespace"><portlet:namespace/></c:set>
 
-<c:set var="searching"><op:translate key="DOCUMENT_METADATA_SELECT2_SEARCHING"/></c:set>
-<c:set var="noResults"><op:translate key="DOCUMENT_METADATA_SELECT2_NO_RESULTS"/></c:set>
+<c:set var="searching"><op:translate key="SELECT2_SEARCHING"/></c:set>
+<c:set var="noResults"><op:translate key="SELECT2_NO_RESULTS"/></c:set>
 
 <div class="metadata">
     <div class="mb-3">
