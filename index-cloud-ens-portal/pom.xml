@@ -18,11 +18,10 @@
 
     <properties>
         <!-- Toutatice -->
-        <toutatice.version>4.9-SNAPSHOT</toutatice.version>
+        <toutatice.version>4.9.3-RC14</toutatice.version>
 
         <!-- Directory -->
-<!--         <directory.version>4.9.6</directory.version> -->
-        <directory.version>4.9-SNAPSHOT</directory.version>
+        <directory.version>4.9.7</directory.version>
         <!-- Collaboration -->
         <collaboration.version>4.9.3-RC9</collaboration.version>
 

@@ -66,6 +66,7 @@ import fr.index.cloud.ens.ws.commands.CreateFolderCommand;
 import fr.index.cloud.ens.ws.commands.FetchByPubIdCommand;
 import fr.index.cloud.ens.ws.commands.FetchByTitleCommand;
 import fr.index.cloud.ens.ws.commands.FolderGetChildrenCommand;
+import fr.index.cloud.ens.ws.commands.GetByPathCommand;
 import fr.index.cloud.ens.ws.commands.GetHierarchyCommand;
 import fr.index.cloud.ens.ws.commands.GetSharedUrlCommand;
 import fr.index.cloud.ens.ws.commands.GetUserProfileCommand;
@@ -413,7 +414,7 @@ public class DriveRestController {
             else
                 path = rootPath;
 
-            // Get durrent doc
+            // Get current doc
             Document currentDoc = wrapContentFetching(nuxeoController, path);
             PropertyList facets = currentDoc.getFacets();
 
@@ -421,12 +422,29 @@ public class DriveRestController {
             returnObject = initContent(request,rootPath, currentDoc, true, null);
 
             // Get hierarchy
-
+            
             List<Map<String, Object>> hierarchy = new ArrayList<>();
             String hierarchyPath = currentDoc.getPath().substring(0, currentDoc.getPath().lastIndexOf('/'));
 
+            // 1/ Get the list of parent path
+            List<String> hierarchyPathToLoad = new ArrayList<>();
             while (hierarchyPath.contains(rootPath)) {
-                Document hierarchyDoc = nuxeoController.getDocumentContext(hierarchyPath).getDocument();
+                hierarchyPathToLoad.add(hierarchyPath);
+                
+                // next parent
+                hierarchyPath = hierarchyPath.substring(0, hierarchyPath.lastIndexOf('/'));
+            }
+            
+            // 2/ Get the hierarchy docs
+            @SuppressWarnings("unchecked")
+            Map<String, Document> hierarchyDocs = (Map<String, Document>) nuxeoController.executeNuxeoCommand(new GetByPathCommand(hierarchyPathToLoad));
+            
+            
+            // 3/ Build hierarchy 
+            hierarchyPath = currentDoc.getPath().substring(0, currentDoc.getPath().lastIndexOf('/'));
+            
+            while (hierarchyPath.contains(rootPath)) {
+                Document hierarchyDoc = hierarchyDocs.get(hierarchyPath);
                 hierarchy.add(0, initContent(request, rootPath, hierarchyDoc));
 
                 // next parent

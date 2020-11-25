@@ -78,6 +78,7 @@
                 <exclude>custom/params/environnement_portail.properties.*</exclude>
                 <exclude>jboss-as/server/production/run.conf.*</exclude>
                 <exclude>jboss-as/server/production/conf/jboss-log4j.*</exclude>
+                <exclude>jboss-as/server/production/deploy/jboss-web.deployer/server.xml</exclude>                
                 <exclude>jboss-as/server/production/deploy/jboss-portal-ha.sar/conf/data/default-object.xml</exclude>
                 <exclude>jboss-as/server/production/deploy/jboss-portal-ha.sar/conf/identity/ldap_identity-config.xml</exclude>
                 <exclude>jboss-as/server/production/deploy/jboss-portal-ha.sar/conf/identity/profile-config.xml</exclude>
@@ -125,6 +126,11 @@
             <outputDirectory>${artifactId}-${dest-env}-${project.version}/jboss-as/server/production/conf</outputDirectory>
             <destName>jboss-log4j.xml</destName>
         </file>
+        <file>
+            <source>src/main/resources/jboss-as/server/production/deploy/jboss-web.deployer/server.xml</source>
+            <outputDirectory>${artifactId}-${dest-env}-${project.version}/jboss-as/server/production/deploy/jboss-web.deployer</outputDirectory>
+            <destName>server.xml</destName>
+        </file>        
     </files>
 
 </assembly>
