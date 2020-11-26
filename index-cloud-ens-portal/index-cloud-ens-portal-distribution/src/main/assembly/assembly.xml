@@ -111,6 +111,11 @@
             <destName>environnement_portail.properties</destName>
         </file>
         <file>
+            <source>src/main/resources/custom/params/logo-cloud-pronote-large.png</source>
+            <outputDirectory>${artifactId}-${dest-env}-${project.version}/custom/params</outputDirectory>
+            <destName>logo-cloud-pronote-large.png</destName>
+        </file>        
+        <file>
             <source>src/main/resources/custom/params/ldap-portlets.properties</source>
             <outputDirectory>${project.artifactId}-${dest-env}-${project.version}/custom/params</outputDirectory>
             <destName>ldap-portlets.properties</destName>

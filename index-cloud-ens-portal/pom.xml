@@ -18,7 +18,7 @@
 
     <properties>
         <!-- Toutatice -->
-        <toutatice.version>4.9.3-RC14</toutatice.version>
+        <toutatice.version>4.9-SNAPSHOT</toutatice.version>
 
         <!-- Directory -->
         <directory.version>4.9.7</directory.version>
@@ -28,8 +28,9 @@
         <!-- Other services -->
         <tasks.version>4.9.5</tasks.version>
         
-        <!-- <tasks.version>4.9.4</tasks.version>  -->      
-        <procedure.version>4.9.1</procedure.version>
+    
+        <procedure.version>4.9-SNAPSHOT</procedure.version>
+<!--        <procedure.version>4.9.1</procedure.version> -->
         <cgu.version>4.9.1</cgu.version>
         <document-creation.version>4.7.14-RC2</document-creation.version>
         <onlyoffice.version>4.7.14-RC2</onlyoffice.version>
