@@ -78,6 +78,7 @@
     <modules>
         <module>index-cloud-ens-portal-antivirus</module>
         <module>index-cloud-ens-portal-charte</module>
+        <module>index-cloud-ens-portal-cms-nuxeo-web</module>
         <module>index-cloud-ens-portal-customizer</module>
         <module>index-cloud-ens-portal-directory</module>
         <module>index-cloud-ens-portal-collaboration</module>

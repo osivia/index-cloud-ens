@@ -31,6 +31,12 @@
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
+            <artifactId>index-cloud-ens-portal-cms-nuxeo-web</artifactId>
+            <version>${project.version}</version>
+            <type>war</type>
+        </dependency>        
+        <dependency>
+            <groupId>${project.groupId}</groupId>
             <artifactId>index-cloud-ens-portal-customizer</artifactId>
             <version>${project.version}</version>
             <type>war</type>
@@ -103,13 +109,7 @@
         </dependency>        
                      
         
-        <!-- Toutatice CMS -->
-        <dependency>
-            <groupId>toutatice-portail.cms</groupId>
-            <artifactId>toutatice-portail-cms-nuxeo-web</artifactId>
-            <version>${toutatice.version}</version>
-            <type>war</type>
-        </dependency>
+
         
         <!-- Directory -->
         <dependency>
