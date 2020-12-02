@@ -13,7 +13,7 @@
     </c:when>
 
     <c:otherwise>
-        <script type="text/javascript" src="/toutatice-portail-cms-nuxeo/components/PDFViewer/preview.js"></script>
+        <script type="text/javascript" src="/index-cloud-ens-portal-cms-nuxeo/components/PDFViewer/preview.js"></script>
 
         <div class="document-file d-flex flex-column flex-grow-1">
             <c:set var="previewUrl"><ttc:filePreview document="${document}"/></c:set>
@@ -41,7 +41,7 @@
                     <%--Preview in iframe--%>
 					<div class="d-lg-flex flex-column flex-grow-1 px-4 px-md-0">
 						<div class="embed-responsive embed-responsive-4by3 embed-responsive-lg-0 d-lg-flex flex-column flex-grow-1">
-							<iframe src="/toutatice-portail-cms-nuxeo/components/PDFViewer/web/viewer.html"
+							<iframe src="/index-cloud-ens-portal-cms-nuxeo/components/PDFViewer/web/viewer.html"
 									webkitallowfullscreen=""
 									allowfullscreen="" class="pdf-preview-iframe embed-responsive-item d-none flex-grow-1"
 									data-preview-url="${previewUrl}"
