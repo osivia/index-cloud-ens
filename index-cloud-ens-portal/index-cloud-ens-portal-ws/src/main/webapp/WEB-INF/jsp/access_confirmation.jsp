@@ -2,7 +2,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib uri="http://www.osivia.org/jsp/taglib/osivia-portal" prefix="op"%>
 
-<% session.setAttribute("displayAuthorize", System.currentTimeMillis()); %>
 
 
 <!DOCTYPE html>

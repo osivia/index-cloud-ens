@@ -154,6 +154,16 @@ function refreshToken()	{
 }
 
 
+function initToken()	{
+
+
+		console.log("Init token");
+		oauth.params.token = null;
+		oauth.params.refreshToken = null;
+}
+
+
+
 function grant( code)	{
 	
 	var auth = oauth.grant( code);
@@ -638,7 +648,8 @@ $JQry(function() {
 		var $element = $JQry(element);
 		$element.click(function() {
 
-			var newLocation = oauth.params.authorizeUrl + "?client_id="+oauth.params.clientId+"&redirect_uri="+oauth.params.clientUrl+"&response_type=code&scope="+oauth.params.scope+"&state=Q2FyMc";
+			oauth.params.state = Math.floor(Math.random() * 10000); 
+			var newLocation = oauth.params.authorizeUrl + "?client_id="+oauth.params.clientId+"&redirect_uri="+oauth.params.clientUrl+"&response_type=code&scope="+oauth.params.scope+"&state="+oauth.params.state;
 			window.location.href = newLocation;
 		});
 	});
@@ -652,6 +663,15 @@ $JQry(function() {
 			refreshToken();
 
 
+		});
+	});
+	
+	
+	$JQry("#OAuth2initToken").each(function(index, element) {
+
+		var $element = $JQry(element);
+		$element.click(function() {
+			initToken();
 		});
 	});
 
