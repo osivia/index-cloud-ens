@@ -25,6 +25,12 @@
                             <c:set var="title"><op:translate key="TOOLTIP_PRONOTE"/></c:set>
                             <img src="/index-cloud-ens-charte/img/pronote-indicator.svg" alt="PRONOTE" title="${title}" height="16">
                         </c:if>
+                        
+                        <%--SHARED indicator--%>
+                        <c:if test="${ empty document.properties['rshr:targets'] and document.properties['rshr:enabledLink']}">
+                            <c:set var="title"><op:translate key="TOOLTIP_SHARED"/></c:set>
+                            <i class="glyphicons glyphicons-basic-paired customized-icon-shared-small" title="${title}"></i>
+                        </c:if>                        
 
                         <%--Mutualized document--%>
                         <c:if test="${document.properties['mtz:enable']}">

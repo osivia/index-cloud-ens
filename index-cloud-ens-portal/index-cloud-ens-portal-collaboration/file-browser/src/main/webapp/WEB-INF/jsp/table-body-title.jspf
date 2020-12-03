@@ -17,6 +17,14 @@
             <img src="/index-cloud-ens-charte/img/pronote-indicator.svg" alt="${title}" title="${title}" height="21">
         </div>
     </c:if>
+    
+        <%--PRONOTE indicator--%>
+    <c:if test="${item.shared and (not item.pronote)}">
+        <c:set var="title"><op:translate key="TOOLTIP_SHARED"/></c:set>
+        <div class="ml-2">
+            <i class="glyphicons glyphicons-basic-paired customized-icon-shared" title="${title}"></i>
+        </div>
+    </c:if>
 
     <%--Mutualized indicator--%>
     <c:if test="${item.mutualized}">

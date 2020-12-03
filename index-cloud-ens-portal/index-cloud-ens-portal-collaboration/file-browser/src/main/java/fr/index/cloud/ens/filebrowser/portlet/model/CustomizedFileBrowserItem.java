@@ -25,6 +25,31 @@ public class CustomizedFileBrowserItem extends AbstractFileBrowserItem {
      * Mutualized indicator.
      */
     private boolean mutualized;
+    
+    /**
+     * SHARED indicator.
+     */
+    private boolean shared;
+
+
+    
+    /**
+     * Getter for shared.
+     * @return the shared
+     */
+    public boolean isShared() {
+        return shared;
+    }
+
+
+    
+    /**
+     * Setter for shared.
+     * @param shared the shared to set
+     */
+    public void setShared(boolean shared) {
+        this.shared = shared;
+    }
 
 
     /**

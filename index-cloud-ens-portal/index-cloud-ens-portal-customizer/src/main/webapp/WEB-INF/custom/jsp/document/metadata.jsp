@@ -206,12 +206,14 @@
     </div>
 
 
-    <c:if test="${not readOnly}">
+	<c:set var="enabled" value="${document.properties['rshr:enabledLink']}" />
+	<c:set var="targets" value="${document.properties['rshr:targets']}" />
+
+
+	<c:if test="${not readOnly and ((not empty targets) or (enabled)) }">
         <div class="card card-custom mb-3">
             <div class="card-body p-3">
                 <c:set var="share" value="${document.properties['rshr:linkId']}"/>
-                <c:set var="enabled" value="${document.properties['rshr:enabledLink']}"/>
-                <c:set var="targets" value="${document.properties['rshr:targets']}"/>
 
                 <c:if test="${not empty targets}">
                     <p class="d-flex align-items-center">
@@ -293,12 +295,24 @@
 
                 <c:choose>
                     <c:when test="${enabled}">
-                        <p class="d-flex flex-wrap mb-0">
+                        <div class="d-flex flex-wrap mb-0">
                             <a href="/s/${share}"
                                class="btn btn-link btn-link-hover-green btn-sm text-secondary text-truncate">
                                 <i class="glyphicons glyphicons-basic-paired"></i>
                                 <span><op:translate key="SHARED_LINK"/></span>
                             </a>
+                            
+		                    
+		                    <div class="m-2 d-flex flex-grow-1 flex-row"> 
+                                <div  class="text-truncate flex-grow-1 flex-shrink-1 d-flex" >
+                                    <input id="${namespace}-link" readonly class="form-control form-control-sm align-self-center flex-grow-1" value="${baseUrl}/s/${share}">
+                                </div>
+                                
+                                <button type="button" class="btn-sm ml-1 p-0 btn-secondary pull-right" data-clipboard-target="#${namespace}-link" title="<op:translate key="DOCUMENT_METADATA_COPY_SHARE_LINK" />">
+                                        <i class="halflings halflings-copy"></i>
+                                </button>
+
+                            </div>
                            
                             <c:set var="targets" value="${document.properties['rshr:targets']}"/>    
 				            <c:choose>
@@ -319,18 +333,8 @@
 		                            </a>
 				                 </c:otherwise>          
 				            </c:choose>
-                            
-                            
-                            
-                            
-                            
-                            
-                            
-                            
-                            
-                            
-                            
-                        </p>
+                             
+                        </div>
 
                         <%--Format--%>
                         <c:if test="${document.pdfConvertible}">
@@ -369,19 +373,6 @@
                             </form>
                         </c:if>
                     </c:when>
-
-                    <c:otherwise>
-                        <p class="mb-0">
-                            <portlet:actionURL name="link-activation" var="activationUrl">
-                                <portlet:param name="activate" value="true"/>
-                            </portlet:actionURL>
-                            <a href="${activationUrl}"
-                               class="btn btn-link btn-link-hover-green btn-sm text-secondary text-truncate">
-                                <i class="glyphicons glyphicons-basic-paired"></i>
-                                <span><op:translate key="SHARED_LINK_ACTIVATE"/></span>
-                            </a>
-                        </p>
-                    </c:otherwise>
                 </c:choose>
             </div>
         </div>

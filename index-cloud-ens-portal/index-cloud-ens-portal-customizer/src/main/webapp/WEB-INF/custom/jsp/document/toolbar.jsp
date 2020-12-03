@@ -41,7 +41,9 @@
         <%--Mutualize--%>
         <c:if test="${not readOnly and not empty mutualizeUrl}">
             <c:set var="title"><op:translate key="DOCUMENT_FILE_TOOLBAR_MUTUALIZE"/></c:set>
-            <a href="javascript:" title="${title}" class="btn btn-link btn-link-hover-orange btn-sm mb-1 ml-1 text-orange-dark no-ajax-link" data-target="#osivia-modal" data-load-url="${mutualizeUrl}" data-title="${title}">
+            <c:set var="titleOver"><op:translate key="DOCUMENT_FILE_TOOLBAR_MUTUALIZE_OVER"/></c:set>
+            
+            <a href="javascript:" title="${titleOver}" class="btn btn-link btn-link-hover-orange btn-sm mb-1 ml-1 text-orange-dark no-ajax-link" data-target="#osivia-modal" data-load-url="${mutualizeUrl}" data-title="${title}">
                 <i class="glyphicons glyphicons-basic-share"></i>
                 <strong class="d-none d-md-inline">${title}</strong>
             </a>
@@ -68,6 +70,7 @@
                     </portlet:actionURL>
                     <c:set var="icon" value="glyphicons glyphicons-basic-paired-off" />
                     <c:set var="title"><op:translate key="DOCUMENT_FILE_TOOLBAR_SHARED_LINK_DEACTIVATE"/></c:set>
+                    <c:set var="titleOver"><op:translate key="DOCUMENT_FILE_TOOLBAR_SHARED_LINK_DEACTIVATE"/></c:set>
                     <c:set var="targets" value="${document.properties['rshr:targets']}"/>    
                     <c:if test="${not empty targets}">    
                         <c:set var="confirmation" value="${true}" />
@@ -79,19 +82,20 @@
                     </portlet:actionURL>
                     <c:set var="icon" value="glyphicons glyphicons-basic-paired" />
                     <c:set var="title"><op:translate key="DOCUMENT_FILE_TOOLBAR_SHARED_LINK_ACTIVATE"/></c:set>
+                    <c:set var="titleOver"><op:translate key="DOCUMENT_FILE_TOOLBAR_SHARED_LINK_ACTIVATE_OVER"/></c:set>
                 </c:otherwise>
             </c:choose>
             
             
              <c:choose>
                 <c:when test="${confirmation}">       
-                    <a title="${title}" class="btn btn-link btn-link-hover-primary-light btn-sm mb-1 ml-1 text-primary-dark  no-ajax-link" href="#deactivateShareLinkModalId" data-toggle="modal">
+                    <a title="${titleOver}" class="btn btn-link btn-link-hover-primary-light btn-sm mb-1 ml-1 text-primary-dark  no-ajax-link" href="#deactivateShareLinkModalId" data-toggle="modal">
                         <i class="${icon}"></i>
                         <strong class="d-none d-md-inline">${title}</strong>
                     </a>
                  </c:when>
                 <c:otherwise>
-  		            <a href="${activationUrl}" title="${title}" class="btn btn-link btn-link-hover-primary-light btn-sm mb-1 ml-1 text-primary-dark">
+  		            <a href="${activationUrl}" title="${titleOver}" class="btn btn-link btn-link-hover-primary-light btn-sm mb-1 ml-1 text-primary-dark">
 		                <i class="${icon}"></i>
 		                <strong class="d-none d-md-inline">${title}</strong>
 		            </a>

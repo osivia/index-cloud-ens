@@ -102,6 +102,9 @@ public class FileDocumentModule extends PortletModule {
                 Document document = documentContext.getDocument();
                 // Publication infos
                 NuxeoPublicationInfos publicationInfos = documentContext.getPublicationInfos();
+                
+                
+                request.setAttribute("baseUrl", "https://" + request.getServerName());
 
 
                 if (publicationInfos.isPublished()) {

@@ -133,6 +133,10 @@ public class CustomizedFileBrowserServiceImpl extends AbstractFileBrowserService
         PropertyList targets = nuxeoDocument.getProperties().getList("rshr:targets");
         boolean pronote = (targets != null) && !targets.isEmpty();
         item.setPronote(pronote);
+        
+        // SHARED indicator
+        boolean shared = BooleanUtils.isTrue(nuxeoDocument.getProperties().getBoolean("rshr:enabledLink"));
+        item.setShared(shared);
 
         // Mutualized indicator
         boolean mutualized = BooleanUtils.isTrue(nuxeoDocument.getProperties().getBoolean("mtz:enable"));
