@@ -17,7 +17,7 @@
             </c:choose>
 
             <div class="card card-custom card-custom-border-bottom card-custom-hover card-custom-${document.properties['mtz:enable'] ? 'orange' : 'green'} ${display} shadow">
-                <div class="card-body">
+                <div class="card-body d-flex flex-column pb-2">
                     <%--Badges--%>
                     <div class="card-custom-badges">
                         <%--PRONOTE indicator--%>
@@ -40,9 +40,31 @@
                     </div>
 
                     <%--Icon--%>
-                    <div class="card-custom-icon card-custom-icon-lg mb-3">
-                        <ttc:icon document="${document}" />
-                    </div>
+					<div class="my-1 flex-grow-1 d-flex justify-content-center align-items-center ">
+						<c:set var="vignetteUrl">
+							<ttc:pictureLink document="${document}" property="ttc:vignette" />
+						</c:set>
+						<c:choose>
+							<c:when test="${not empty vignetteUrl}">
+								<img src="${vignetteUrl}" alt="" class="p-0 img-thumbnail">
+							</c:when>
+
+							<c:when test="${document.type.name eq 'Picture'}">
+								<c:set var="pictureUrl">
+									<ttc:documentLink document="${document}" picture="true" displayContext="Small" />
+								</c:set>
+								<img src="${pictureUrl}" alt="" class="p-0 img-thumbnail">
+							</c:when>
+
+							<c:otherwise>
+								<div class="my-3 card-custom-icon card-custom-icon-lg">
+									<ttc:icon document="${document}" />
+								</div>
+							</c:otherwise>
+						</c:choose>
+					</div>
+
+
 
                     <%--Title--%>
                     <h3 class="card-title mb-0 text-truncate">

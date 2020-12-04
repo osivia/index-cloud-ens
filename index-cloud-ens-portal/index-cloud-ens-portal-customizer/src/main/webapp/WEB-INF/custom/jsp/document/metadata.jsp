@@ -295,12 +295,14 @@
 
                 <c:choose>
                     <c:when test="${enabled}">
-                        <div class="d-flex flex-wrap mb-0">
-                            <a href="/s/${share}"
-                               class="btn btn-link btn-link-hover-green btn-sm text-secondary text-truncate">
-                                <i class="glyphicons glyphicons-basic-paired"></i>
-                                <span><op:translate key="SHARED_LINK"/></span>
-                            </a>
+                        <div class="d-flex flex-wrap flex-column mb-0">
+                            <div>
+	                            <a href="/s/${share}"
+	                               class="btn btn-link btn-link-hover-green btn-sm text-secondary text-truncate">
+	                                <i class="glyphicons glyphicons-basic-paired"></i>
+	                                <span><op:translate key="SHARED_LINK"/></span>
+	                            </a>
+                            </div>
                             
 		                    
 		                    <div class="m-2 d-flex flex-grow-1 flex-row"> 
@@ -308,31 +310,33 @@
                                     <input id="${namespace}-link" readonly class="form-control form-control-sm align-self-center flex-grow-1" value="${baseUrl}/s/${share}">
                                 </div>
                                 
-                                <button type="button" class="btn-sm ml-1 p-0 btn-secondary pull-right" data-clipboard-target="#${namespace}-link" title="<op:translate key="DOCUMENT_METADATA_COPY_SHARE_LINK" />">
+                                <button type="button" class="btn-sm ml-1 p-0 btn-secondary pull-right" data-clipboard-target="#${namespace}-link" data-clipboard-message-success="<op:translate key="DOCUMENT_METADATA_SHARE_LINK_COPIED" />" title="<op:translate key="DOCUMENT_METADATA_COPY_SHARE_LINK" />">
                                         <i class="halflings halflings-copy"></i>
                                 </button>
 
                             </div>
                            
-                            <c:set var="targets" value="${document.properties['rshr:targets']}"/>    
-				            <c:choose>
-				                <c:when test="${not empty targets}">       
-				                    <a title="${title}" class="btn btn-link btn-link-hover-green btn-sm text-secondary text-truncate  no-ajax-link" href="#deactivateShareLinkModalId" data-toggle="modal">
-				                        <i class="glyphicons glyphicons-basic-paired-off"></i>
-				                        <span><op:translate key="SHARED_LINK_DEACTIVATE"/></span>
-				                    </a>
-				                 </c:when>
-				                <c:otherwise>
-		                            <portlet:actionURL name="link-activation" var="deactivationUrl">
-		                                <portlet:param name="activate" value="false"/>
-		                            </portlet:actionURL>
-		                            <a href="${deactivationUrl}"
-		                               class="btn btn-link btn-link-hover-green btn-sm text-secondary text-truncate">
-		                                <i class="glyphicons glyphicons-basic-paired-off"></i>
-		                                <span><op:translate key="SHARED_LINK_DEACTIVATE"/></span>
-		                            </a>
-				                 </c:otherwise>          
-				            </c:choose>
+                            <div>
+	                            <c:set var="targets" value="${document.properties['rshr:targets']}"/>    
+					            <c:choose>
+					                <c:when test="${not empty targets}">       
+					                    <a title="${title}" class="btn btn-link btn-link-hover-green btn-sm text-secondary text-truncate  no-ajax-link" href="#deactivateShareLinkModalId" data-toggle="modal">
+					                        <i class="glyphicons glyphicons-basic-paired-off"></i>
+					                        <span><op:translate key="SHARED_LINK_DEACTIVATE"/></span>
+					                    </a>
+					                 </c:when>
+					                <c:otherwise>
+			                            <portlet:actionURL name="link-activation" var="deactivationUrl">
+			                                <portlet:param name="activate" value="false"/>
+			                            </portlet:actionURL>
+			                            <a href="${deactivationUrl}"
+			                               class="btn btn-link btn-link-hover-green btn-sm text-secondary text-truncate">
+			                                <i class="glyphicons glyphicons-basic-paired-off"></i>
+			                                <span><op:translate key="SHARED_LINK_DEACTIVATE"/></span>
+			                            </a>
+					                 </c:otherwise>          
+					            </c:choose>
+				            </div>
                              
                         </div>
 

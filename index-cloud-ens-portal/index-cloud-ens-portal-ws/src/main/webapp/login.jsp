@@ -62,7 +62,7 @@
 											<span class="text-uppercase font-weight-bold">Authentification</span>
 										</legend>
 										<p class="text-center text-muted">
-											<span>L'authentification sur le Cloud PRONOTE est requise.
+											<span>Merci de renseigner votre identifiant et votre mot de passe du Cloud PRONOTE.
 											</span>
 										</p>
 

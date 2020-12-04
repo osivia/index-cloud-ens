@@ -15,12 +15,6 @@
             <div class="card-body py-3">
                 <%--Badges--%>
                 <div class="card-custom-badges">
-                    <%--PRONOTE indicator--%>
-                    <c:if test="${not empty document.properties['rshr:targets']}">
-                        <c:set var="title"><op:translate key="TOOLTIP_PRONOTE"/></c:set>
-                        <img src="/index-cloud-ens-charte/img/pronote-indicator.svg" alt="PRONOTE" title="${title}" height="16">
-                    </c:if>
-
                     <%--Mutualized document--%>
                     <c:if test="${document.properties['mtz:enable']}">
                         <c:set var="title"><op:translate key="TOOLTIP_MUTUALIZED"/></c:set>
@@ -40,8 +34,8 @@
                         <%--Title--%>
                         <h3 class="card-title mb-0 text-truncate">
                             <c:set var="url"><ttc:documentLink document="${document}" /></c:set>
-                            <a href="${url}" title="${document.title}" class="stretched-link text-black text-decoration-none no-ajax-link">
-                                <span>${document.title}</span>
+                            <a href="${url}" title="${document.displayTitle}" class="stretched-link text-black text-decoration-none no-ajax-link">
+                                <span>${document.displayTitle}</span>
                             </a>
                         </h3>
 

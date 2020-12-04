@@ -1,6 +1,6 @@
 "id","label","parent","obsolete"
-"CPLC_CahierDeTexteContenu","Contenu cahier de texte","","0"
-"CPLC_CahierDeTexteTravailAFaire","Travail cahier de texte","","0"
+"CPLC_CahierDeTexteContenu","Contenu cahier de textes","","0"
+"CPLC_CahierDeTexteTravailAFaire","Travail cahier de textes","","0"
 "CPLC_Agenda","Agenda","","0"
 "CPLC_InformationsSondage","Sondage","","0"
 "CPLC_Discussions","Discussion","","0"

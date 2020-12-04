@@ -50,8 +50,8 @@
 								<%--Title--%>
 								<h3 class="card-title mb-0 text-truncate">
 									<c:set var="url"><ttc:documentLink document="${document}" /></c:set>
-									<a href="${url}" title="${document.title}" class="stretched-link text-black text-decoration-none no-ajax-link">
-										<span>${document.title}</span>
+									<a href="${url}" title="${document.displayTitle}" class="stretched-link text-black text-decoration-none no-ajax-link">
+										<span>${document.displayTitle}</span>
 									</a>
 								</h3>
 
