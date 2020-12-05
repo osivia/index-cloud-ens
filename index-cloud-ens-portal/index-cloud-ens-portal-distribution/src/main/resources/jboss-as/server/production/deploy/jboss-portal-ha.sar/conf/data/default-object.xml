@@ -481,7 +481,7 @@ return nuxeoRequest.toString();</value>
                         </property>
                         <property>
                             <name>osivia.nuxeoRequest</name>
-                            <value>ecm:path STARTSWITH '/default-domain/communaute' ORDER BY dc:modified DESC</value>
+                            <value>ecm:path STARTSWITH '/default-domain/communaute' ORDER BY dc:issued DESC</value>
                         </property>
                         <property>
                             <name>osivia.cms.style</name>

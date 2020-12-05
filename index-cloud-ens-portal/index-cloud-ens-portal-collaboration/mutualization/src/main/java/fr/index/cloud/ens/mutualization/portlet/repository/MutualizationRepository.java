@@ -39,7 +39,10 @@ public interface MutualizationRepository {
      * Subjects property.
      */
     String SUBJECTS_PROPERTY = "idxcl:subjects";
-
+    /**
+     * Issued property.
+     */
+    String ISSUED_PROPERTY = "dc:issued";
 
     /**
      * Get document.

@@ -42,7 +42,7 @@ public enum MutualizedFileBrowserSortEnum implements MutualizedFileBrowserSortFi
     /**
      * Last modification sort.
      */
-    LAST_MODIFICATION("last-modification", true, "dc:modified"),
+    LAST_MODIFICATION("last-modification", true, "dc:issued"),
     /**
      * Author sort.
      */
