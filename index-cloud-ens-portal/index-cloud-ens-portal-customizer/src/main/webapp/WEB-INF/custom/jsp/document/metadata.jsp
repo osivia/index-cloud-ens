@@ -216,7 +216,7 @@
                 <c:set var="share" value="${document.properties['rshr:linkId']}"/>
 
                 <c:if test="${not empty targets}">
-                    <p class="d-flex align-items-center">
+                    <div class="d-flex align-items-center">
                         <span class="badge badge-pill badge-green-pronote flex-shrink-0 mr-2">${fn:length(targets)}</span>
                         <a href="javascript:" class="text-black no-ajax-link " data-toggle="modal"
                            data-target="#${namespace}-targets">
@@ -228,7 +228,7 @@
                                 </c:choose>
                             </strong>
                         </a>
-                    </p>
+                    </div>
 
                     <%--Target modal--%>
                     <div id="${namespace}-targets" class="modal fade" tabindex="-1" role="dialog">
@@ -295,7 +295,7 @@
 
                 <c:choose>
                     <c:when test="${enabled}">
-                        <div class="d-flex flex-wrap flex-column mb-0">
+                        <div class="d-flex flex-wrap flex-column my-1">
                             <div>
 	                            <a href="/s/${share}"
 	                               class="btn btn-link btn-link-hover-green btn-sm text-secondary text-truncate">
@@ -337,45 +337,51 @@
 					                 </c:otherwise>          
 					            </c:choose>
 				            </div>
+				            
+				            
+				            
+				            
+				            
+	                       <%--Format--%>
+	                        <c:if test="${document.pdfConvertible}">
+	                            <portlet:actionURL name="inline-edition" var="submitUrl">
+	                                <portlet:param name="property" value="rshr:format"/>
+	                                <portlet:param name="cancel-url" value="${cancelUrl}"/>
+	                            </portlet:actionURL>
+	                            <form action="${submitUrl}" method="post" class="mt-3">
+	                                <c:if test="${not empty targets}">
+	                                    <c:set var="value"><op:translate key="DOCUMENT_CHANGE_FORMAT_WARN_MESSAGE"/></c:set>
+	                                    <input type="hidden" name="warn-message" value="${value}">
+	                                </c:if>
+	
+	                                <div class="form-group inline-edition">
+	                                    <p class="mb-2">
+	                                        <strong><op:translate key="DOCUMENT_METADATA_FORMAT_LABEL"/></strong>
+	                                    </p>
+	
+	                                    <div class="form-check form-check-inline">
+	                                        <input id="${namespace}-format-pdf" type="radio" class="form-check-input"
+	                                               name="inline-values"
+	                                               value="pdf" ${empty document.properties['rshr:format'] or document.properties['rshr:format'] eq 'pdf' ? 'checked' : ''}>
+	                                        <label for="${namespace}-format-pdf" class="form-check-label"><op:translate
+	                                                key="SHARED_FORMAT_PDF"/></label>
+	                                    </div>
+	                                    <div class="form-check form-check-inline">
+	                                        <input id="${namespace}-format-native" type="radio" class="form-check-input"
+	                                               name="inline-values"
+	                                               value="native" ${document.properties['rshr:format'] eq 'native' ? 'checked' : ''}>
+	                                        <label for="${namespace}-format-native" class="form-check-label"><op:translate
+	                                                key="SHARED_FORMAT_NATIVE"/></label>
+	                                    </div>
+	                                </div>
+	
+	                                <input type="submit" class="d-none">
+	                            </form>
+	                        </c:if>				            
                              
                         </div>
 
-                        <%--Format--%>
-                        <c:if test="${document.pdfConvertible}">
-                            <portlet:actionURL name="inline-edition" var="submitUrl">
-                                <portlet:param name="property" value="rshr:format"/>
-                                <portlet:param name="cancel-url" value="${cancelUrl}"/>
-                            </portlet:actionURL>
-                            <form action="${submitUrl}" method="post" class="mt-3">
-                                <c:if test="${not empty targets}">
-                                    <c:set var="value"><op:translate key="DOCUMENT_CHANGE_FORMAT_WARN_MESSAGE"/></c:set>
-                                    <input type="hidden" name="warn-message" value="${value}">
-                                </c:if>
-
-                                <div class="form-group inline-edition">
-                                    <p class="mb-2">
-                                        <strong><op:translate key="DOCUMENT_METADATA_FORMAT_LABEL"/></strong>
-                                    </p>
-
-                                    <div class="form-check form-check-inline">
-                                        <input id="${namespace}-format-pdf" type="radio" class="form-check-input"
-                                               name="inline-values"
-                                               value="pdf" ${empty document.properties['rshr:format'] or document.properties['rshr:format'] eq 'pdf' ? 'checked' : ''}>
-                                        <label for="${namespace}-format-pdf" class="form-check-label"><op:translate
-                                                key="SHARED_FORMAT_PDF"/></label>
-                                    </div>
-                                    <div class="form-check form-check-inline">
-                                        <input id="${namespace}-format-native" type="radio" class="form-check-input"
-                                               name="inline-values"
-                                               value="native" ${document.properties['rshr:format'] eq 'native' ? 'checked' : ''}>
-                                        <label for="${namespace}-format-native" class="form-check-label"><op:translate
-                                                key="SHARED_FORMAT_NATIVE"/></label>
-                                    </div>
-                                </div>
-
-                                <input type="submit" class="d-none">
-                            </form>
-                        </c:if>
+                       
                     </c:when>
                 </c:choose>
             </div>

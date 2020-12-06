@@ -655,6 +655,19 @@ $JQry(function() {
 	});
 	
 	
+	$JQry("#OAuth2AuthorizeNoState").each(function(index, element) {
+
+		var $element = $JQry(element);
+		$element.click(function() {
+
+
+			var newLocation = oauth.params.authorizeUrl + "?client_id="+oauth.params.clientId+"&redirect_uri="+oauth.params.clientUrl+"&response_type=code&scope="+oauth.params.scope;
+			window.location.href = newLocation;
+		});
+	});
+	
+	
+	
 	$JQry("#OAuth2refreshToken").each(function(index, element) {
 
 		var $element = $JQry(element);

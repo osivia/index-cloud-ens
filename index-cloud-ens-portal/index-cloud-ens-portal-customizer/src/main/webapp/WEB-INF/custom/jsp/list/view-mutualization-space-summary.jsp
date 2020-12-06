@@ -39,14 +39,21 @@
                             </a>
                         </h3>
 
-                        <c:if test="${not empty document.properties['dc:issued']}">
-                            <div class="text-truncate">
-                                <small class="text-muted">
-                                    <span><op:translate key="LIST_TEMPLATE_QUICK_ACCESS_MODIFIED_ON"/></span>
-                                    <span><op:formatRelativeDate value="${document.properties['dc:issued']}" tooltip="false"/></span>
-                                </small>
-                            </div>
-                        </c:if>
+
+                        <div class="text-truncate">
+                            <small class="text-muted">
+                                <span><op:translate key="LIST_TEMPLATE_QUICK_ACCESS_MODIFIED_ON"/></span>
+                                <c:choose> 
+                                       <c:when test="${not empty document.properties['dc:issued']}"> 
+                                             <span><op:formatRelativeDate value="${document.properties['dc:issued']}" tooltip="false"/></span>
+									    </c:when> 
+									    <c:otherwise>           
+									       <span><op:formatRelativeDate value="${document.properties['dc:modified']}" tooltip="false"/></span>  
+									    </c:otherwise>   
+				                </c:choose>                   
+                            </small>
+                        </div>
+
                     </div>
                 </div>
 

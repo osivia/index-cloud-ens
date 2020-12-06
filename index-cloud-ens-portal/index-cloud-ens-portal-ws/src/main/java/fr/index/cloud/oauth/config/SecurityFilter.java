@@ -90,7 +90,12 @@ public class SecurityFilter implements Filter {
             // Default content type (web-services)
             String defaultContentType = "application/json";
             
-             
+            
+            /*
+             * Preserve http session security
+             * - by state
+             * - if no state, by timeout
+             */
             
 
             if( request.getRequestURI().endsWith("/oauth/authorize"))    {
@@ -101,17 +106,29 @@ public class SecurityFilter implements Filter {
                 // Thus we compare the state parameter with the stored state
                 
                 String requestState = (String) req.getParameter("state");
-                if( StringUtils.isNotEmpty(requestState))   {
+                
+                if (StringUtils.isNotEmpty(requestState)) {
                     String sessionState = (String) ((HttpServletRequest) req).getSession(true).getAttribute("oauth2.state");
-                    if(  StringUtils.isNotEmpty(sessionState)) {
-                        if( ! StringUtils.equals(requestState, sessionState))   {
+                    if (!StringUtils.equals(requestState, sessionState)) {
+                        ((HttpServletRequest) req).getSession(false).invalidate();
+                    }
+                } else {
+                    // Keep sure that session is not opened since more than 2 minutes
+                    // (in case the browser keeps opened)
+                    Long sessionTs = (Long) ((HttpServletRequest) req).getSession(true).getAttribute("oauth2.sessionTs");
+                    if (sessionTs != null) {
+                        if (System.currentTimeMillis() - sessionTs > 120000) {
                             ((HttpServletRequest) req).getSession(false).invalidate();
                         }
                     }
-                    // Store the request state
-                    ((HttpServletRequest) req).getSession(true).setAttribute("oauth2.state", requestState);
                 }
-            }      
+                
+                // Store the request state
+                ((HttpServletRequest) req).getSession(true).setAttribute("oauth2.state", requestState);
+
+                // Store the ts 
+                ((HttpServletRequest) req).getSession(true).setAttribute("oauth2.sessionTs", System.currentTimeMillis());                
+             }      
             
              
             

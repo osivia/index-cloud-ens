@@ -40,24 +40,24 @@
                     </div>
 
                     <%--Icon--%>
-					<div class="my-1 flex-grow-1 d-flex justify-content-center align-items-center ">
+					<div class="my-1 d-flex justify-content-center align-items-center" style="height: 160px">
 						<c:set var="vignetteUrl">
 							<ttc:pictureLink document="${document}" property="ttc:vignette" />
 						</c:set>
 						<c:choose>
 							<c:when test="${not empty vignetteUrl}">
-								<img src="${vignetteUrl}" alt="" class="p-0 img-thumbnail">
+								<img src="${vignetteUrl}" alt="" class="p-0 img-fluid mh-100">
 							</c:when>
 
 							<c:when test="${document.type.name eq 'Picture'}">
 								<c:set var="pictureUrl">
 									<ttc:documentLink document="${document}" picture="true" displayContext="Small" />
 								</c:set>
-								<img src="${pictureUrl}" alt="" class="p-0 img-thumbnail">
+								<img src="${pictureUrl}" alt="" class="p-0 img-fluid mh-100" >
 							</c:when>
 
 							<c:otherwise>
-								<div class="my-3 card-custom-icon card-custom-icon-lg">
+								<div class="card-custom-icon card-custom-icon-lg">
 									<ttc:icon document="${document}" />
 								</div>
 							</c:otherwise>
