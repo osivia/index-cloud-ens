@@ -27,7 +27,7 @@ public class BrowseDistrib {
     private static List<String> prefixsToRemove = Arrays.asList(new String[]{"fr.index.cloud.ens.portal.directory-", "org.osivia.services.directory.group-",
             "org.osivia.services.directory.person-", "org.osivia.services-", "org.osivia.services.workspace-", "fr.index.cloud.ens.portal.collaboration-"});
 
-    private static List<String> prefixsToIgnore = Arrays.asList(new String[]{"osivia-portal-custom-services", "index-cloud-ens-portal-cms-nuxeo-web",
+    private static List<String> prefixsToIgnore = Arrays.asList(new String[]{"osivia-portal-custom-services", "toutatice-portail-cms-nuxeo-web","index-cloud-ens-portal-cms-nuxeo-web",
             "index-cloud-ens-portal-ws/CONVERSION_ADMIN", "index-cloud-ens-portal-ws/APPLICATION", "osivia-services-procedure", "osivia-services-statistics",
             "osivia-services-contact", "osivia-services-workspace-sharing", "osivia-services-workspace-participants", "osivia-services-calendar",
             "osivia-services-editor-helpers", "osivia-services-pad", "osivia-services-workspace-file-browser/FILE_BROWSER_ADMIN", "index-cloud-ens-portal-file-browser/FILE_BROWSER_ADMIN", "osivia-services-versions",
