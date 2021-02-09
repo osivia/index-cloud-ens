@@ -33,7 +33,8 @@
 	<modules>
 		<module>index-cloud-ens-utils-conversion</module>
 		<module>index-cloud-ens-utils-icap</module>
-		<module>index-cloud-ens-utils-security</module>		
+		<module>index-cloud-ens-utils-security</module>
+		<module>index-cloud-ens-utils-ldap</module>		
 	</modules>
     
     
