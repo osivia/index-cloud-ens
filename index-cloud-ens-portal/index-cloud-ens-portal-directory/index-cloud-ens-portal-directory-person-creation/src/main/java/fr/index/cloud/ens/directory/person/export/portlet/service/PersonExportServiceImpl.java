@@ -73,6 +73,7 @@ public class PersonExportServiceImpl implements PersonExportService {
 		
 		Map<String, String> variables = new HashMap<>();
 		variables.put("userId", uid);
+
 		String taskPath = null;
 		
 		try {

@@ -99,6 +99,12 @@
             <artifactId>index-cloud-ens-portal-antivirus</artifactId>
             <version>${project.version}</version>
             <type>war</type>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>index-cloud-ens-portal-maintenance</artifactId>
+            <version>${project.version}</version>
+            <type>war</type>
         </dependency>   
         
         <dependency>

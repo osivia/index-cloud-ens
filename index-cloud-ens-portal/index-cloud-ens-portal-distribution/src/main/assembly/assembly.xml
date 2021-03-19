@@ -28,6 +28,7 @@
                 <include>${project.groupId}:index-cloud-ens-portal-highest-levels:war:${project.version}</include>
                 <include>${project.groupId}:index-cloud-ens-portal-search:war:${project.version}</include>
                 <include>${project.groupId}:index-cloud-ens-portal-antivirus:war:${project.version}</include>
+                <include>${project.groupId}:index-cloud-ens-portal-maintenance:war:${project.version}</include>                
                 <include>${project.groupId}:index-cloud-ens-portal-discussion:war:${project.version}</include>
                  <!-- Other services -->
                 <include>org.osivia.services:osivia-services-tasks:war:${tasks.version}</include>

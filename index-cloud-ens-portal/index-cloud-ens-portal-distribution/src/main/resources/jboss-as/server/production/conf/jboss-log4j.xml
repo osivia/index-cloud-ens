@@ -193,6 +193,24 @@
       </layout>
    </appender>
    
+   
+ <appender name="PORTAL_MAINTENANCE_APPENDER" class="org.jboss.logging.appender.DailyRollingFileAppender">
+      <errorHandler class="org.jboss.logging.util.OnlyOnceErrorHandler"/>
+      <param name="File" value="${jboss.server.log.dir}/portal_maintenance.log"/>
+      <param name="Append" value="true"/>
+ 
+
+      <!-- Rollover at midnight each day -->
+      <param name="DatePattern" value="'.'yyyy-MM-dd"/>
+
+
+
+      <layout class="org.apache.log4j.PatternLayout">
+         <!-- The default pattern: Date Priority [Category] Message\n -->
+         <param name="ConversionPattern" value="%d %-5p %m%n"/>
+      </layout>
+   </appender>
+    
    <!-- A time/date based rolling appender -->
    <appender name="PORTAL_CONVERSION_APPENDER" class="org.jboss.logging.appender.DailyRollingFileAppender">
       <errorHandler class="org.jboss.logging.util.OnlyOnceErrorHandler"/>
@@ -466,12 +484,16 @@
       <appender-ref ref="PORTAL_USER_ERROR_APPENDER"/>
    </category>
 
+   <category name="PORTAL_MAINTENANCE"  additivity="false">
+      <priority value="INFO"/>
+      <appender-ref ref="PORTAL_MAINTENANCE_APPENDER"/>
+   </category>
+
   <!-- paser en mode INFO pour faire du profiling -->
-  <category name="PORTAL_PROFILER"  additivity="false">
-	  
-<appender-ref ref="PORTAL_PROFILER_APPENDER"/>
- <priority value="WARN"/>
-      </category>
+    <category name="PORTAL_PROFILER" additivity="false">
+      <appender-ref ref="PORTAL_PROFILER_APPENDER" />
+      <priority value="WARN" />
+    </category>
 
   <category name="PORTAL_STATUS"  additivity="false">
       <priority value="INFO"/>
