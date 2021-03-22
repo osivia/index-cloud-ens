@@ -68,9 +68,17 @@ public class ConversionRepositoryImpl implements ConversionRepository {
     @Override
     public Document getConfigurationDocument() throws PortletException {
 
+       return getConfigurationDocument(true);
+    }
+
+    
+    
+    @Override
+    public Document getConfigurationDocument(boolean cache) throws PortletException {
+
         Document config;
         try {
-            config = getNuxeoController(true).getDocumentContext(getConfigurationPath()).getDocument();
+            config = getNuxeoController(cache).getDocumentContext(getConfigurationPath()).getDocument();
         } catch (NuxeoException e) {
             if (e.getErrorCode() == NuxeoException.ERROR_NOTFOUND) {
                 config = null;
@@ -79,7 +87,7 @@ public class ConversionRepositoryImpl implements ConversionRepository {
         }
         return config;
     }
-
+    
     
     @Override   
     public void updateConfiguration(PortalControllerContext portalControllerContext, File file, String name, String contentType)  throws PortletException {

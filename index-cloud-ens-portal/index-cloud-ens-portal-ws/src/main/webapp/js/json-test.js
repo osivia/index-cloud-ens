@@ -50,7 +50,6 @@ var oauth = {
 					method : 'POST',
 					dataType : 'text',
 					data : {
-						scope : 'drive',
 						grant_type: 'password',
 						username : username,
 						password: password
@@ -184,6 +183,35 @@ function grant( code)	{
 		console.error("Bad dredentials");
 	});
 }
+
+function supervise() {
+	var url = oauth.params.resourceUrl+"/Admin.supervise";
+
+	$JQry
+			.ajax({
+				type : "GET",
+				url : url,
+				headers : {
+					'Content-Type' : undefined,
+					"Authorization" : "Bearer " + oauth.getToken()
+				},
+				contentType : false,
+				cache : false,
+				timeout : 600000,
+				success : function(jsonData) {
+					if (jsonData.returnCode != 0)
+						$JQry.notify("Error #"+jsonData.returnCode, "error");
+					else {
+						$JQry('#serverInfos').html(JSON.stringify(jsonData));
+					}
+				},
+				error : function(xhr, status, e) {
+					alert(e);
+				}
+			});
+
+}
+
 
 
 
@@ -694,6 +722,15 @@ $JQry(function() {
 		$element.click(function() {
 
 			drive();
+		});
+	});
+	
+	$JQry("#btnSupervise").each(function(index, element) {
+
+		var $element = $JQry(element);
+		$element.click(function() {
+
+			supervise();
 		});
 	});
 	

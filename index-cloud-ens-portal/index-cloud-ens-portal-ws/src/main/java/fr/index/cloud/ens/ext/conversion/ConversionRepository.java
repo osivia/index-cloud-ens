@@ -61,4 +61,13 @@ public interface ConversionRepository {
      */
     void updateConfiguration(PortalControllerContext portalControllerContext, File file, String name, String contentType) throws PortletException;
 
+    /**
+     * Gets the configuration document.
+     *
+     * @param cache the cache
+     * @return the configuration document
+     * @throws PortletException the portlet exception
+     */
+    Document getConfigurationDocument(boolean cache) throws PortletException;
+
 }

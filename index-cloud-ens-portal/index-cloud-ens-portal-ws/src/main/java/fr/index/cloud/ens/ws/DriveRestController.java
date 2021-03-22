@@ -1,6 +1,10 @@
 package fr.index.cloud.ens.ws;
 
+import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.Date;
@@ -51,6 +55,9 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 
+import fr.index.cloud.ens.conversion.admin.ConversionAdminService;
+import fr.index.cloud.ens.ext.conversion.ConversionRecord;
+import fr.index.cloud.ens.ext.conversion.ConversionRepository;
 import fr.index.cloud.ens.ext.conversion.IConversionService;
 import fr.index.cloud.ens.ws.beans.CreateFolderBean;
 import fr.index.cloud.ens.ws.beans.CreateUserBean;
@@ -138,6 +145,9 @@ public class DriveRestController {
 
     @Autowired
     private ITokenService tokenService;
+    
+    @Autowired
+    ConversionRepository conversionRepository;
 
 
     @Autowired
@@ -1195,6 +1205,79 @@ public class DriveRestController {
             personUpdateService.create(person);
             personUpdateService.updatePassword(person, "osivia");
 
+
+        } catch (Exception e) {
+            returnObject = errorMgr.handleDefaultExceptions(wsCtx, e);
+        }
+        return returnObject;
+    }
+    
+    
+    @RequestMapping(value = "/Admin.supervise", method = RequestMethod.GET)
+    @ResponseStatus(HttpStatus.OK)
+    public Map<String, Object> supervisor(HttpServletRequest request, HttpServletResponse response, Principal principal)
+            throws Exception {
+
+
+        WSPortalControllerContext wsCtx = new WSPortalControllerContext(request, response, principal);
+
+        Map<String, Object> returnObject = new LinkedHashMap<>();
+        returnObject.put("returnCode", ErrorMgr.ERR_OK);
+
+        try {
+
+            // Test shared space
+            try {
+                String exportPath = (String) System.getProperties().get("exportaccount.path");
+
+                File testFile = File.createTempFile("supervisor-", ".tmp");
+                FileOutputStream outputStream = new FileOutputStream(testFile);
+                byte[] strToBytes = "this is juste a supervising test. Don't worry".getBytes();
+                outputStream.write(strToBytes);
+                outputStream.close();
+
+                String targetName = exportPath + "supervisor.test";
+
+                // Create and move a file
+                File existingFile = new File(targetName);
+                if (new File(targetName).exists())
+                    existingFile.delete();
+
+                Files.move(Paths.get(testFile.getAbsolutePath()), Paths.get(targetName));
+                
+                // Delete the file
+                new File(targetName).delete();
+
+                returnObject.put("exports.write", "ok");
+            } catch (Exception e) {
+                returnObject.put("exports.write", "KO - " + e.getMessage());
+            }
+            
+            // Test nuxeo + binaries
+            try {
+                Document configuration = conversionRepository.getConfigurationDocument(false);
+                 
+                PropertyMap map = configuration.getProperties().getMap(ConversionAdminService.XPATH);
+                 if( map == null)
+                    throw new Exception("No conversion file found");
+                returnObject.put("nuxeo.binaries", "ok");
+            } catch (Exception e) {
+                returnObject.put("nuxeo.binaries", "KO - " + e.getMessage());
+            } 
+            
+            
+            // Test ldap
+            try {
+                Person findPerson = personUpdateService.getEmptyPerson();
+                findPerson.setUid(principal.getName());
+                if (personUpdateService.findByCriteria(findPerson).size() == 1) {
+                    returnObject.put("nuxeo.ldap", "ok");
+                } else
+                    throw new Exception("No user with uid=" + principal.getName());
+            } catch (Exception e) {
+                returnObject.put("nuxeo.ldap", "KO - " + e.getMessage());
+            } 
+            
 
         } catch (Exception e) {
             returnObject = errorMgr.handleDefaultExceptions(wsCtx, e);
