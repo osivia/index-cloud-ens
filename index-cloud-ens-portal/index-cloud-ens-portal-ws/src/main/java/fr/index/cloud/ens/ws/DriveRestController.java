@@ -3,6 +3,7 @@ package fr.index.cloud.ens.ws;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.security.Principal;
@@ -68,6 +69,7 @@ import fr.index.cloud.ens.ws.beans.DocumentProperties;
 import fr.index.cloud.ens.ws.beans.UnpublishBean;
 import fr.index.cloud.ens.ws.beans.UpdatedProperties;
 import fr.index.cloud.ens.ws.beans.UploadBean;
+import fr.index.cloud.ens.ws.check.GlobalChecker;
 import fr.index.cloud.ens.ws.commands.AddPropertiesCommand;
 import fr.index.cloud.ens.ws.commands.CreateFolderCommand;
 import fr.index.cloud.ens.ws.commands.FetchByPubIdCommand;
@@ -1267,17 +1269,37 @@ public class DriveRestController {
             
             
             // Test ldap
+            if(principal != null && StringUtils.isNotEmpty(principal.getName())) {
+                try {
+                    Person findPerson = personUpdateService.getEmptyPerson();
+                    findPerson.setUid(principal.getName());
+                    if (personUpdateService.findByCriteria(findPerson).size() == 1) {
+                        returnObject.put("nuxeo.ldap", "ok");
+                    } else
+                        throw new Exception("No user with uid=" + principal.getName());
+                } catch (Exception e) {
+                    returnObject.put("nuxeo.ldap", "KO - " + e.getMessage());
+                    
+                } 
+            }
+           
+            // Test ssh
             try {
-                Person findPerson = personUpdateService.getEmptyPerson();
-                findPerson.setUid(principal.getName());
-                if (personUpdateService.findByCriteria(findPerson).size() == 1) {
-                    returnObject.put("nuxeo.ldap", "ok");
-                } else
-                    throw new Exception("No user with uid=" + principal.getName());
-            } catch (Exception e) {
-                returnObject.put("nuxeo.ldap", "KO - " + e.getMessage());
-            } 
+                File f = new File("/home/portal/supervise.xml");
+                if (f.exists()) {
+                    FileInputStream fis = new FileInputStream(f);
+                    try {
+                        returnObject.put("env",  new GlobalChecker().run(fis));
+                     } finally {
+                        fis.close();
+                    }
+                }
+            }
             
+            catch (Exception e) {
+                returnObject.put("ssh", "KO - " + e.getMessage());
+            }            
+           
 
         } catch (Exception e) {
             returnObject = errorMgr.handleDefaultExceptions(wsCtx, e);
