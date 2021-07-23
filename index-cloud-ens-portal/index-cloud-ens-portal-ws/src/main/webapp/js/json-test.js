@@ -518,7 +518,8 @@ $JQry(function() {
 						.click(function() {
 							var params = {};
 							params.contentId = $JQry('#contentId').val();
-							params.format = $JQry('#sharedFormat').val();									
+							params.format = $JQry('#sharedFormat').val();
+							params.publish =  $JQry('#sharedPublish').val();
 							$JQry
 									.ajax({
 										type : "POST",

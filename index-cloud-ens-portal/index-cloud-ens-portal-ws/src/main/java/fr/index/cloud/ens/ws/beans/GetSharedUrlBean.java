@@ -10,8 +10,12 @@ import java.util.Map;
 public class GetSharedUrlBean {
     private String contentId;
     private String format;    
-
+    private boolean publish;
  
+
+    
+   
+
 
     /**
      * Getter for format.
@@ -48,4 +52,21 @@ public class GetSharedUrlBean {
     }
     
 
+    /**
+     * Getter for publish.
+     * @return the publish
+     */
+    public boolean isPublish() {
+        return publish;
+    }
+
+    
+    /**
+     * Setter for publish.
+     * @param publish the publish to set
+     */
+    public void setPublish(boolean publish) {
+        this.publish = publish;
+    }
+    
 }

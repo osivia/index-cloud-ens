@@ -1022,7 +1022,7 @@ public class DriveRestController {
             } else {
 
                 // Execute publish
-                INuxeoCommand command = new GetSharedUrlCommand(currentDoc, sharedUrlBean.getFormat());
+                INuxeoCommand command = new GetSharedUrlCommand(currentDoc, sharedUrlBean.getFormat(), sharedUrlBean.isPublish());
 
                 @SuppressWarnings("unchecked")
                 Map<String, String> returnMap = (Map<String, String>) nuxeoController.executeNuxeoCommand(command);

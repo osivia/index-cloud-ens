@@ -33,15 +33,19 @@ public class GetSharedUrlCommand implements INuxeoCommand {
 
     /** publication format */
     String format;
+    
+    /** The publish. */
+    boolean publish;
 
 
     /**
      * Constructor.
      */
-    public GetSharedUrlCommand(Document doc, String format) {
+    public GetSharedUrlCommand(Document doc, String format, boolean publish) {
         super();
         this.doc = doc;
         this.format = format;
+        this.publish = publish;
     }
 
 
@@ -58,6 +62,13 @@ public class GetSharedUrlCommand implements INuxeoCommand {
         if (StringUtils.isEmpty(shareId)) {
             shareId = IDGenerator.generateId();
             properties.set("rshr:linkId", shareId);
+        }
+        
+        // The document must be visible
+        if( publish) {
+            Boolean enabledLink = doc.getProperties().getBoolean("rshr:enabledLink", false) ;
+            if( !enabledLink)
+                properties.set( "rshr:enabledLink", true);       
         }
 
         if (StringUtils.isNotEmpty(format))
