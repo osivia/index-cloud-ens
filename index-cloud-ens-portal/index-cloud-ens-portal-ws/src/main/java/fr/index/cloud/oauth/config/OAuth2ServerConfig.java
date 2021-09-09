@@ -157,8 +157,8 @@ public class OAuth2ServerConfig {
                         // 3 mn
                         details.setRefreshTokenValiditySeconds(180);                        
 */                        
-                        // 10 minutes
-                        details.setAccessTokenValiditySeconds(600);
+                        // 30 minutes
+                        details.setAccessTokenValiditySeconds(1800);
                         // default one year
                         details.setRefreshTokenValiditySeconds(60 * 60 * 24 * 365);
                         
