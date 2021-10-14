@@ -5,12 +5,12 @@
 	<parent>
         <groupId>fr.index.cloud.ens</groupId>
         <artifactId>index-cloud-ens-parent</artifactId>
-        <version>1.4-SNAPSHOT</version>
+        <version>1.4-RC12</version>
     </parent>
 	
     <groupId>fr.index.cloud.ens.ext</groupId>
     <artifactId>index-cloud-ens-ext-parent</artifactId>
-    <version>1.4-SNAPSHOT</version>
+    <version>1.4-RC12</version>
     <packaging>pom</packaging>
     
     <name>Cloud enseignant - Services externes</name>
