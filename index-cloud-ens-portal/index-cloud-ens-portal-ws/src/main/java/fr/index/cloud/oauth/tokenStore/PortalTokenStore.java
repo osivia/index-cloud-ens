@@ -1,10 +1,17 @@
 package fr.index.cloud.oauth.tokenStore;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.lang.ObjectUtils;
+import org.apache.commons.lang.StringUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.codehaus.jackson.JsonParseException;
+import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.nuxeo.ecm.automation.client.model.Document;
 import org.nuxeo.ecm.automation.client.model.Documents;
@@ -51,6 +58,9 @@ public class PortalTokenStore extends InMemoryTokenStore implements IPortalToken
         nuxeoController.setCacheType(CacheInfo.CACHE_SCOPE_NONE);
         return nuxeoController;
     }
+    
+    /** Logger. */
+    private static final Log logger = LogFactory.getLog(PortalTokenStore.class);
 
 
     @Override
@@ -67,14 +77,73 @@ public class PortalTokenStore extends InMemoryTokenStore implements IPortalToken
             Date date = null;
             if( refreshToken instanceof ExpiringOAuth2RefreshToken)
                 date = ((ExpiringOAuth2RefreshToken)refreshToken).getExpiration();
+            
+            
 
             nuxeoController.executeNuxeoCommand(new StoreRefreshTokenCommand(userWorkspace.getPath(), refreshToken.getValue(), date, jsonData));
+            
+          
+            // Clean old refresh tokens
+            // Due to DefaultTokenServices.createAccessToken            
+            //   if refreshed token is not stored on client side and the server is rebooted
+            //   this methode creates new refresh tokens
+            //   -> It may lead to new tokens
+            removeOlderRefreshTokens(nuxeoController, datas, userName);
             
 
         } catch (Exception e) {
             throw new RuntimeException("can't serialize refresh token", e);
         }
 
+    }
+
+
+    /**
+     * Removes the older refresh tokens.
+     *
+     * @param nuxeoController the nuxeo controller
+     * @param datas the datas
+     * @param userName the user name
+     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws JsonParseException the json parse exception
+     * @throws JsonMappingException the json mapping exception
+     */
+    private void removeOlderRefreshTokens(NuxeoController nuxeoController, PortalRefreshTokenAuthenticationDatas datas, String userName)
+            throws IOException, JsonParseException, JsonMappingException {
+        
+       
+        Document userWorkspace = (Document) nuxeoController.executeNuxeoCommand(new GetUserProfileCommand(userName));
+        PropertyList tokens = userWorkspace.getProperties().getList("oatk:tokens");      
+        
+        List<String> refreshTokens = new ArrayList<>();
+        
+        /* Search for tokens with same scope/client */
+        
+        for (int i = 0; i < tokens.size(); i++) {
+            PropertyMap tokenMap = tokens.getMap(i);
+            String value = tokenMap.getString("value");
+            String tokenJsonData = tokenMap.getString("authentication");
+            
+            if (tokenJsonData != null) {
+                PortalRefreshTokenAuthenticationDatas tokenDatas = new ObjectMapper().readValue(tokenJsonData, PortalRefreshTokenAuthenticationDatas.class);
+                if( ObjectUtils.equals(tokenDatas.getScope(),datas.getScope()))  {
+                    if( ObjectUtils.equals(tokenDatas.getClientId(),datas.getClientId()))   {
+                        refreshTokens.add(value);
+                    }
+                }
+            }
+        }
+        
+        /* If numbers of similar tokens > 10, Keep only 3 last refresh tokens  */
+            
+        
+        if( refreshTokens.size() > 3)  {
+            logger.info("purging refreshed tokens for user "+ userName);
+            for (int i=0 ; i< refreshTokens.size() - 3; i++) {
+                removeRefreshToken(refreshTokens.get(i));
+            }
+            
+        }
     }
 
 
@@ -224,7 +293,7 @@ public class PortalTokenStore extends InMemoryTokenStore implements IPortalToken
                     accessToken = null;
                 
             }
-        }
+        }  
         
         return accessToken;
     }
