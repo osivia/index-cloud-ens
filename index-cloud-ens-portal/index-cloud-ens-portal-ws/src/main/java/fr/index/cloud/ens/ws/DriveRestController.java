@@ -3,6 +3,7 @@ package fr.index.cloud.ens.ws;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -18,6 +19,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import javax.portlet.PortletContext;
+import javax.portlet.PortletException;
 import javax.servlet.ServletException;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
@@ -29,6 +31,7 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.codehaus.jackson.map.ObjectMapper;
+import org.nuxeo.ecm.automation.client.model.Blob;
 import org.nuxeo.ecm.automation.client.model.Document;
 import org.nuxeo.ecm.automation.client.model.Documents;
 import org.nuxeo.ecm.automation.client.model.PropertyList;
@@ -69,6 +72,7 @@ import fr.index.cloud.ens.ws.beans.DocumentProperties;
 import fr.index.cloud.ens.ws.beans.UnpublishBean;
 import fr.index.cloud.ens.ws.beans.UpdatedProperties;
 import fr.index.cloud.ens.ws.beans.UploadBean;
+import fr.index.cloud.ens.ws.beans.UserStorageBean;
 import fr.index.cloud.ens.ws.check.GlobalChecker;
 import fr.index.cloud.ens.ws.commands.AddPropertiesCommand;
 import fr.index.cloud.ens.ws.commands.CreateFolderCommand;
@@ -77,6 +81,7 @@ import fr.index.cloud.ens.ws.commands.FetchByTitleCommand;
 import fr.index.cloud.ens.ws.commands.FolderGetChildrenCommand;
 import fr.index.cloud.ens.ws.commands.GetByPathCommand;
 import fr.index.cloud.ens.ws.commands.GetHierarchyCommand;
+import fr.index.cloud.ens.ws.commands.GetQuotaCommand;
 import fr.index.cloud.ens.ws.commands.GetSharedUrlCommand;
 import fr.index.cloud.ens.ws.commands.GetUserProfileCommand;
 import fr.index.cloud.ens.ws.commands.PublishCommand;
@@ -84,6 +89,8 @@ import fr.index.cloud.ens.ws.commands.SearchCommand;
 import fr.index.cloud.ens.ws.commands.UnpublishCommand;
 import fr.index.cloud.ens.ws.commands.UploadFileCommand;
 import fr.index.cloud.oauth.config.SecurityFilter;
+import fr.index.cloud.oauth.tokenStore.AggregateRefreshTokenInfos;
+import fr.index.cloud.oauth.tokenStore.PortalRefreshTokenAuthenticationDatas;
 import fr.toutatice.portail.cms.nuxeo.api.INuxeoCommand;
 import fr.toutatice.portail.cms.nuxeo.api.NuxeoController;
 import fr.toutatice.portail.cms.nuxeo.api.NuxeoException;
@@ -93,6 +100,7 @@ import fr.toutatice.portail.cms.nuxeo.api.domain.DocumentDTO;
 import fr.toutatice.portail.cms.nuxeo.api.services.INuxeoService;
 import fr.toutatice.portail.cms.nuxeo.api.services.NuxeoCommandContext;
 import fr.toutatice.portail.cms.nuxeo.api.services.dao.DocumentDAO;
+import net.sf.json.JSONObject;
 
 
 /**
@@ -1214,6 +1222,122 @@ public class DriveRestController {
         return returnObject;
     }
     
+
+    
+    @RequestMapping(value = "/Admin.getStorage", method = RequestMethod.GET)
+    @ResponseStatus(HttpStatus.OK)
+    public Map<String, Object> storage(HttpServletRequest request, @RequestParam(value = "pageSize", required = false) String sPageSize, @RequestParam(value = "pageNumber", required = false) String sPageNumber ,HttpServletResponse response, Principal principal)
+            throws Exception {
+        WSPortalControllerContext wsCtx = new WSPortalControllerContext(request, response, principal);
+        
+        
+        NuxeoController nuxeoController = getNuxeocontroller(request, principal);
+        
+
+        Map<String, Object> returnObject = new LinkedHashMap<>();
+        returnObject.put("returnCode", ErrorMgr.ERR_OK);   
+        
+
+        
+        try {
+            // Page number
+            int pageNumber = 0;
+            if( sPageNumber != null)
+                pageNumber = Integer.parseInt(sPageNumber);  
+           
+            // Page size
+            int pageSize = 100;
+            if( sPageSize != null)
+                pageSize = Integer.parseInt(sPageSize);
+  
+            // Get persons from LDAP
+            Person findPerson = personUpdateService.getEmptyPerson();
+            List<Person> personsList = personUpdateService.findByCriteria(findPerson);
+            
+            
+            // Filter by page
+            List<Person> filteredList = new ArrayList<Person>();
+            for(int i=pageNumber*pageSize; i< (pageNumber+1)*pageSize ;i++) {
+                if( i < personsList.size())
+                    filteredList.add(personsList.get(i));
+            }
+           
+            // Display variables
+            returnObject.put("pageNumber", pageNumber);
+            returnObject.put("pageSize", pageSize); 
+            returnObject.put("totalUsersCount", personsList.size()); 
+            returnObject.put("pageUsersCount", filteredList.size());   
+            
+            List<UserStorageBean> userStorages = new ArrayList<>();
+
+            // Person
+            for(Person person: filteredList)   {
+                
+                UserStorageBean userStorage = new UserStorageBean();
+                userStorage.setUserId(person.getUid());
+                userStorage.setFirstName(person.getGivenName());
+                userStorage.setLastName(person.getSn());
+                userStorage.setMail(person.getMail());
+                
+                Document userWorkspace = (Document) nuxeoController.executeNuxeoCommand(new GetUserProfileCommand(person.getUid()));
+                if (userWorkspace != null) {
+
+                    PropertyList tokens = userWorkspace.getProperties().getList("oatk:tokens");
+                    for (int i = 0; i < tokens.size(); i++) {
+                        PropertyMap tokenMap = tokens.getMap(i);
+                        String jsonData = tokenMap.getString("authentication");
+                        if (jsonData != null) {
+                            PortalRefreshTokenAuthenticationDatas datas = new ObjectMapper().readValue(jsonData, PortalRefreshTokenAuthenticationDatas.class);
+                            String clientId = datas.getClientId();
+                            if( StringUtils.isNotEmpty(clientId))   {
+                                userStorage.getClientId().add(datas.getClientId());
+                            }
+                        }
+                    }
+                    
+                    String rootPath = userWorkspace.getPath().substring(0, userWorkspace.getPath().lastIndexOf('/'));
+                    INuxeoCommand command = new GetQuotaCommand(rootPath);
+
+                    long fileSize = 0;
+                    long quota = 0;
+                   
+                    
+                    Blob quotaInfos =  (Blob) nuxeoController.executeNuxeoCommand(command);        
+                    
+                    if (quotaInfos != null) {
+                        
+                        String quotaInfosContent;
+                        try {
+                            quotaInfosContent = IOUtils.toString(quotaInfos.getStream(), "UTF-8");
+                        } catch (IOException e) {
+                            throw new PortletException( e);
+                        }
+
+                        JSONObject quotaContent = JSONObject.fromObject(quotaInfosContent);
+                        
+                        fileSize = quotaContent.getLong("treesize");
+                        quota = quotaContent.getLong("quota");
+                     }
+                    
+                    userStorage.setFileSize(fileSize);
+                    userStorage.setQuota(quota);
+                }
+                
+
+                
+
+                userStorages.add(userStorage);
+                
+
+            }
+            returnObject.put("userStorages", userStorages);
+            
+        } catch (Exception e) {
+            returnObject = errorMgr.handleDefaultExceptions(wsCtx, e);
+        }
+        
+        return returnObject;
+    }
     
     @RequestMapping(value = "/Admin.supervise", method = RequestMethod.GET)
     @ResponseStatus(HttpStatus.OK)
