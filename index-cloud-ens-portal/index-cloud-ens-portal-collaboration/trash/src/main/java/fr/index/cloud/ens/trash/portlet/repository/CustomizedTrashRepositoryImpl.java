@@ -33,6 +33,9 @@ public class CustomizedTrashRepositoryImpl extends TrashRepositoryImpl implement
     @Override
     protected TrashedDocument getTrashedDocument(NuxeoController nuxeoController, Document document) throws CMSException {
         CustomizedTrashedDocument trashedDocument = (CustomizedTrashedDocument) super.getTrashedDocument(nuxeoController, document);
+        
+        if(trashedDocument == null)
+            return null;
 
         // Document type
         DocumentType type;
