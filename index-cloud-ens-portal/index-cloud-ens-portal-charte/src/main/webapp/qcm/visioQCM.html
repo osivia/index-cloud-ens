@@ -2,8 +2,9 @@
 
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-  <script type="text/javascript" src="visioQCM.js"></script>
-  <link rel="stylesheet" type="text/css" href="visioQCM.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script type="text/javascript" src="https://www.index-education.com/contenu/js/visio/visioQCM.js?t=2"></script>
+  <link rel="stylesheet" type="text/css" href="https://www.index-education.com/contenu/js/visio/visioQCM.css?t=3">
 
   <script type="text/javascript">
     var GTraductions = require('ObjetTraduction.js');
@@ -21,10 +22,10 @@
       var lXmlTemp = null;
       var lEle = null, lEleAns = null;
 
-      lXmlTemp = $.parseXML($(aXml).find('question[type="category"] > category > text').text().trim());
-      lQcm.Libelle = $(lXmlTemp).find('name').text().trim();
-      lQcm.matiere = new ObjetElement($(lXmlTemp).find('matiere').text().trim());
-      lQcm.niveau = new ObjetElement($(lXmlTemp).find('niveau').text().trim());
+      lXmlTemp = $(aXml).find('question[type="category"] > category > text').text().trim();
+      lQcm.Libelle = lXmlTemp.match(/<name>(.*?)<\/name>/)[1].trim();
+      lQcm.matiere = new ObjetElement(lXmlTemp.match(/<matiere>(.*?)<\/matiere>/)[1].trim());
+      lQcm.niveau = new ObjetElement(lXmlTemp.match(/<niveau>(.*?)<\/niveau>/)[1].trim());
       lQcm.typeNumerotation = 0;
       lQcm.nbQuestion = $(aXml).find('question[type!="category"]').length;
       lQcm.listeQuestions = new ObjetListeElements();
@@ -70,8 +71,11 @@
         lEle.editeur = new ObjetElement(null, 0);
         lEle.casesensitive = parseInt($(ele).find('usecase').text().trim());
         lEle.image = $(ele).find('image_base64 > text').text().trim();
-        lEle.mp3name = $(ele).find('mp3_base64 > text').text().trim();
-        lEle.url = $(ele).find('externallink > text').text().trim();
+        if($(ele).find('mp3_base64') && $(ele).find('mp3_base64').attr('filename')){
+          lEle.mp3 = $(ele).find('mp3_base64 > text').text().trim();
+          lEle.mp3name = $(ele).find('mp3_base64').attr('filename').trim();
+        }
+        lEle.url = $(ele).find('externallink').text().trim();
         lEle.listeReponses = new ObjetListeElements();
         $(ele).find('question > answer').each(function(ansindex, answ){
           lEleAns = new ObjetElement($(answ).children('text').text().trim());
@@ -95,7 +99,7 @@
           lEleAns.editionAvancee = $(answ).is('[format="html"]');
           lEleAns.feedback = $(answ).find('feedback > text').text().trim() || '';
           lEleAns.association = $(answ).find('answer > text').text().trim() || '';
-          lEleAns.bonneReponse = lEleAns.GetLibelle();
+          lEleAns.bonneReponse = $(answ).find('answer > text').text().trim() || '';
           lEle.listeReponses.AddElement(lEleAns);
         });
         if(lEle.Genre === TypeGenreExerciceDeQuestionnaire.GEQ_ClozeFixed
@@ -147,7 +151,7 @@
 
     function substituerContenu() {
       var ObjetVisuEleve_Espace = require('ObjetVisuEleveQCM_Espace.js');
-      var lSearchParam = location.search.substring(1).split('&').reduce(function(result, value) {
+      var lSearchParam = (location.search).substring(1).split('&').reduce(function(result, value) {
         var parts = value.split('=');
         if (parts[0]) result[decodeURIComponent(parts[0])] = decodeURIComponent(parts[1]);
         return result;
@@ -177,7 +181,7 @@
         lModalites.nombreDePointsTotal = lModalites.nombreDePoints;
         $.extend(lModalites, {
           "autoriserLaNavigation": true,
-          "modeDiffusionCorrige": $.isNumeric(parseInt(lSearchParam.corrige) % 3) ? (parseInt(lSearchParam.corrige) % 3) : TypeModeCorrectionQCM.FBQ_CorrigeALaFin,
+          "modeDiffusionCorrige": $.isNumeric(parseInt(lSearchParam.corrige) % 3) ? TypeModeCorrectionQCM.FBQ_CorrigeApresQuestion : (parseInt(lSearchParam.corrige) % 3),
           "nombreQuestionsSoumises": !!lSearchParam.correction ? lModalites.nbQuestionsTotal : 0,
           "avecQuestionsSoumises": !!lSearchParam.correction,
           "nbCompetencesTotal": 0,
@@ -206,7 +210,7 @@
 
     function evenementVisuEleve(aParam) {
       if (aParam.action === 'close') {
-        if(!!window.top.onFinish) window.top.onFinish();
+        window.close();///ajout close WZ
         return;
       }
       if (aParam.action === 'get') retourDonnees(jsonQCM);
@@ -257,7 +261,7 @@
     }
   </script>
 
-  <title></title>
+   <title></title>
   <style>
     html {
       overflow: auto;

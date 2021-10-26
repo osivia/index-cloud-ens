@@ -105,7 +105,8 @@ public class FileDocumentModule extends PortletModule {
                 
                 
                 request.setAttribute("baseUrl", "https://" + request.getServerName());
-
+                
+ 
 
                 if (publicationInfos.isPublished()) {
                     // Read only indicator
@@ -191,7 +192,23 @@ public class FileDocumentModule extends PortletModule {
                 String createFileLink = nuxeoController.createFileLink(document, "file:content");
                 try {
                     createFileLink = URLEncoder.encode(createFileLink, "UTF-8");
-                    request.setAttribute("QCMUrl", createFileLink);
+                    
+                    
+                    String QCMViewerBaseUrl;
+                    String crossUrl = System.getProperty("portal.cms.binaries.Access-Control-Allow-Origin");
+                    if( crossUrl != null) {
+                        // External Viewer 
+                        // Access-Control-Allow-Origin: https://www.index-education.com
+                        QCMViewerBaseUrl = crossUrl+"/contenu/js/visio/visioQCM.php?url=";
+                    }   else    {
+                        // Internal Viewer
+                        QCMViewerBaseUrl = "/index-cloud-ens-charte/qcm/visioQCM.html?url=";
+                    }
+                    
+                    request.setAttribute("qcmBaseUrl", QCMViewerBaseUrl);
+
+                    
+                    request.setAttribute("QCMUrl", QCMViewerBaseUrl + createFileLink);
                 } catch (UnsupportedEncodingException e) {
                     // Don't block on a link
                     LOGGER.error("Link on " + map.getString("name") + " generates " + e.getMessage());
