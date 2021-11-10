@@ -18,21 +18,20 @@
 
     <properties>
         <!-- Toutatice -->
-        <toutatice.version>4.9.3-RC17</toutatice.version>
+        <!-- <toutatice.version>4.9.3-RC17</toutatice.version> -->
+        <toutatice.version>4.9-SNAPSHOT</toutatice.version>
 
         <!-- Directory -->
         <directory.version>4.9.7</directory.version>
         <!-- Collaboration -->
-<!--        
-        <collaboration.version>4.9.3-RC9</collaboration.version>
-        -->
+
         <collaboration.version>4.9.3-RC10</collaboration.version>
         <!-- Other services -->
         <tasks.version>4.9.5</tasks.version>
         
     
         <procedure.version>4.9.2</procedure.version>
-<!--        <procedure.version>4.9.1</procedure.version> -->
+
         <cgu.version>4.9.1</cgu.version>
         <document-creation.version>4.7.14-RC2</document-creation.version>
         <onlyoffice.version>4.7.14-RC2</onlyoffice.version>

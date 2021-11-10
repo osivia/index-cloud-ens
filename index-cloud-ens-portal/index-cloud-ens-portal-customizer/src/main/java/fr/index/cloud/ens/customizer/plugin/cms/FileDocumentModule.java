@@ -197,9 +197,15 @@ public class FileDocumentModule extends PortletModule {
                     String QCMViewerBaseUrl;
                     String crossUrl = System.getProperty("portal.cms.binaries.Access-Control-Allow-Origin");
                     if( crossUrl != null) {
-                        // External Viewer 
+                        // External Viewer (ne marche pas !)
                         // Access-Control-Allow-Origin: https://www.index-education.com
+                        String host = System.getProperty("osivia.tasks.host");
+                        if( host == null)
+                            host = "";
                         QCMViewerBaseUrl = crossUrl+"/contenu/js/visio/visioQCM.php?url=";
+                        
+                        // Le host doit être absolu
+                        createFileLink = host + createFileLink;
                     }   else    {
                         // Internal Viewer
                         QCMViewerBaseUrl = "/index-cloud-ens-charte/qcm/visioQCM.html?url=";

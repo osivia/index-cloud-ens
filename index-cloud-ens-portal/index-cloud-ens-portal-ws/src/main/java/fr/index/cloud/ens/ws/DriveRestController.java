@@ -1275,9 +1275,6 @@ public class DriveRestController {
                 
                 UserStorageBean userStorage = new UserStorageBean();
                 userStorage.setUserId(person.getUid());
-                userStorage.setFirstName(person.getGivenName());
-                userStorage.setLastName(person.getSn());
-                userStorage.setMail(person.getMail());
                 
                 Document userWorkspace = (Document) nuxeoController.executeNuxeoCommand(new GetUserProfileCommand(person.getUid()));
                 if (userWorkspace != null) {
