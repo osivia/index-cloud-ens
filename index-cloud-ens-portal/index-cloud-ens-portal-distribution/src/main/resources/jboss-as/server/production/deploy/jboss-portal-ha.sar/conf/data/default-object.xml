@@ -1773,7 +1773,7 @@ return nuxeoRequest.toString();</value>
                           </property>
                           <property>
                             <name>osivia.title</name>
-                            <value>Catégorie</value>
+                            <value>Type</value>
                           </property>
                           <property>
                             <name>osivia.selector.monoValued</name>
@@ -1801,7 +1801,7 @@ return nuxeoRequest.toString();</value>
                           </property>
                           <property>
                             <name>osivia.selector.allLabel</name>
-                            <value>Catégorie</value>
+                            <value>Type</value>
                           </property>
                           <property>
                             <name>theme.dyna.partial_refresh_enabled</name>
