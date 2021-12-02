@@ -6,7 +6,7 @@
 	<parent>
     	<groupId>fr.index.cloud.ens.portal.directory</groupId>
     	<artifactId>index-cloud-ens-portal-directory-parent</artifactId>
-        <version>1.4-SNAPSHOT</version>
+        <version>1.4</version>
     </parent>
 
 
