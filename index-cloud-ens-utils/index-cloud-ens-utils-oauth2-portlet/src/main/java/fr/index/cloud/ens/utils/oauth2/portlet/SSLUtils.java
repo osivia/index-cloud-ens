@@ -1,9 +1,14 @@
-package fr.index.cloud.ens.utils.oauth2.common;
+package fr.index.cloud.ens.utils.oauth2.portlet;
 
 import javax.net.ssl.*;
 import java.security.*;
 import java.security.cert.X509Certificate;
 
+/**
+ * Performs ssl unckecks (for tests)
+ * 
+ * @author Jean-Sébastien
+ */
 public final class SSLUtils {
 
     private static final TrustManager[] UNQUESTIONING_TRUST_MANAGER = new TrustManager[]{

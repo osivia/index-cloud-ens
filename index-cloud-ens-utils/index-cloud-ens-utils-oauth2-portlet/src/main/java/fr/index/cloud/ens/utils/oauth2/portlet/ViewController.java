@@ -1,4 +1,7 @@
-package fr.index.cloud.ens.utils.oauth2.portlet.controller;
+package fr.index.cloud.ens.utils.oauth2.portlet;
+
+import java.security.KeyManagementException;
+import java.security.NoSuchAlgorithmException;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
@@ -32,6 +35,7 @@ import org.springframework.web.portlet.bind.annotation.RenderMapping;
 import org.springframework.web.portlet.context.PortletConfigAware;
 import org.springframework.web.portlet.context.PortletContextAware;
 
+import fr.index.cloud.ens.utils.oauth2.redirect.OAuth2PortletRedirectBean;
 import fr.toutatice.portail.cms.nuxeo.api.CMSPortlet;
 
 /**
@@ -44,7 +48,7 @@ import fr.toutatice.portail.cms.nuxeo.api.CMSPortlet;
  */
 @Controller
 @RequestMapping(value = "VIEW")
-public class ViewController extends CMSPortlet  {
+public class ViewController extends CMSPortlet {
 
 
     @Autowired
@@ -53,10 +57,10 @@ public class ViewController extends CMSPortlet  {
 
     @Autowired
     private PortletContext portletContext;
-    
-    @Autowired 
+
+    @Autowired
     private OAuth2RestOperations restTemplate;
-    
+
     @Autowired
     private IPortalUrlFactory portalUrlFactury;
 
@@ -77,6 +81,13 @@ public class ViewController extends CMSPortlet  {
     @PostConstruct
     public void postConstruct() throws PortletException {
         super.init(this.portletConfig);
+        
+        // For test only
+        try {
+            SSLUtils.turnOffSslChecking();
+        } catch (Exception e) {
+            throw new PortletException(e);
+        }
     }
 
 
@@ -98,7 +109,7 @@ public class ViewController extends CMSPortlet  {
      */
     @RenderMapping
     public String view(RenderRequest request, RenderResponse response) {
-         return "view";
+        return "view";
     }
 
 
@@ -110,22 +121,16 @@ public class ViewController extends CMSPortlet  {
      * @return error path
      * @throws PortletException
      */
-    @ExceptionHandler(UserRedirectRequiredException.class)
-    public String exceptionHandler(PortletRequest request, PortletResponse response) throws PortletException {
-        
-        PortalControllerContext portalControllerContext = new PortalControllerContext(portletContext, request, response);
-        PortletSession session = request.getPortletSession(true);
-        
+    @ExceptionHandler(PortletRedirectionException.class)
+    public String exceptionHandler(PortletRequest request, PortletResponse response, PortletRedirectionException exc) throws PortletException {
+
+         PortletSession session = request.getPortletSession(true);
+
         // Prepare redirection attributes
-        session.setAttribute("oauth2User", request.getRemoteUser(), PortletSession.APPLICATION_SCOPE);
-        session.setAttribute("oauth2OriginUrl", portalUrlFactury.getRefreshPageUrl(portalControllerContext), PortletSession.APPLICATION_SCOPE);
+        session.setAttribute("oauth2DirectBean", exc.getRedirectBean(), PortletSession.APPLICATION_SCOPE);
 
         return "goto-redirect";
     }
-
-
-
-
 
 
     /**
@@ -137,27 +142,23 @@ public class ViewController extends CMSPortlet  {
      * @throws PortletException
      */
     @ModelAttribute(value = "model")
-    public String getModel(PortletRequest request, PortletResponse response) throws PortletException {
-        // Portal controller context
-
-        Object resp = request.getPortletSession(true).getAttribute("oauth2Response",  PortletSession.APPLICATION_SCOPE);
-        if( resp != null)   {
-            // Remove response
-            request.getPortletSession(true).removeAttribute("oauth2Response",  PortletSession.APPLICATION_SCOPE);
-        }   else    {
-             // HTTP headers
-            HttpHeaders httpHeaders = new HttpHeaders();
-            httpHeaders.setContentType(MediaType.APPLICATION_JSON);
-            HttpEntity<String> httpEntity = new HttpEntity("hello world", httpHeaders);
-    
-    
-            this.restTemplate.exchange("https://cloud-ens.index-education.local/index-cloud-portal-ens-ws/rest/Drive.content", HttpMethod.GET, httpEntity, String.class);
-        }
+    public String getModel(PortletRequest request, PortletResponse response) throws PortletRedirectionException {
         
-        return resp.toString();
+        // Get response from oauth2 redirect servlet
+        OAuth2PortletRedirectBean redirectBean = (OAuth2PortletRedirectBean) request.getPortletSession(true).getAttribute("oauth2DirectBean", PortletSession.APPLICATION_SCOPE);
+        if (redirectBean != null && redirectBean.getResponse() != null) {
+            // Remove bean
+            request.getPortletSession(true).removeAttribute("oauth2DirectBean", PortletSession.APPLICATION_SCOPE);
+        } else {
+            // throw exception with informations to redirect
+            PortalControllerContext portalControllerContext = new PortalControllerContext(portletContext, request, response);
+            OAuth2PortletRedirectBean newRedirectBean = new OAuth2PortletRedirectBean( request.getRemoteUser(), portalUrlFactury.getRefreshPageUrl(portalControllerContext), new DriveOperation(restTemplate));
+            throw new PortletRedirectionException(newRedirectBean);
+        }
+
+        
+        return redirectBean.getResponse().toString();
     }
-
-
 
 
 }

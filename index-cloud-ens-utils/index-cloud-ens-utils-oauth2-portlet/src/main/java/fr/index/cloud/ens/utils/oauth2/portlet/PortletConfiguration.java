@@ -14,7 +14,7 @@ import org.springframework.web.servlet.view.JstlView;
  *
  */
 @Configuration
-@ComponentScan(basePackages = {"fr.index.cloud.ens.utils.oauth2.common","fr.index.cloud.ens.utils.oauth2.portlet"})
+@ComponentScan(basePackages = {"fr.index.cloud.ens.utils.oauth2.portlet"})
 public class PortletConfiguration {
 
 

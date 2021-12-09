@@ -26,11 +26,16 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import fr.index.cloud.ens.utils.oauth2.portlet.DriveOperation;
+
+/**
+ * Handles the OAuth2 calls
+ * 
+ * @author Jean-Sébastien
+ */
 @Controller
 public class RedirectController {
 
-    @Autowired
-    private OAuth2RestOperations restTemplate;
 
     @Autowired
     ServletContext context;
@@ -38,10 +43,14 @@ public class RedirectController {
 
     @PostConstruct
     public void init() {
-        MultiApplicationContextPortletUtils.servletContext = context;
+        MixedApplicationsPortlet.servletContext = context;
     }
 
 
+    /**
+     * Temporary spring authentication
+     * 
+     */
     public static class OAuth2User extends AbstractAuthenticationToken {
 
         private static final long serialVersionUID = 1L;
@@ -68,30 +77,25 @@ public class RedirectController {
     public String redirect(HttpServletRequest request) {
 
         // Get portlet user
-        String user = (String) request.getSession().getAttribute("oauth2User");
+       
+        OAuth2PortletRedirectBean redirectBean =  (OAuth2PortletRedirectBean) request.getSession().getAttribute("oauth2DirectBean");
         
         // Set as Spring authentication
-        Authentication auth = new OAuth2User(user, true);
-        SecurityContextHolder.getContext().setAuthentication(auth);
+        if( redirectBean.getUser() != null) {
+            Authentication auth = new OAuth2User(redirectBean.getUser(), true);
+            SecurityContextHolder.getContext().setAuthentication(auth);
+        }
 
 
-        // HTTP headers
-        HttpHeaders httpHeaders = new HttpHeaders();
-        List<MediaType> mediaTypes = new ArrayList<MediaType>();
-        mediaTypes.add(MediaType.APPLICATION_JSON);
+        // call the template
+        Object resp = redirectBean.getCall().execute();
         
-        httpHeaders.setAccept(mediaTypes);
-        HttpEntity<String> httpEntity = new HttpEntity(null, httpHeaders);
+        // set Response
+        redirectBean.setResponse( resp);
 
-
-        Object resp = this.restTemplate.exchange("https://cloud-ens.index-education.local/index-cloud-portal-ens-ws/rest/Drive.content", HttpMethod.GET, httpEntity,
-                String.class);
-
-
-        request.setAttribute("originUrl", (String) request.getSession().getAttribute("oauth2OriginUrl"));
-        
-        request.getSession().setAttribute("oauth2Response", resp);
-
+        // Prepare the redirection
+        request.setAttribute("originUrl", redirectBean.getOriginUrl());
+  
 
         return "return-to-portlet";
     }

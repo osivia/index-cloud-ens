@@ -30,7 +30,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         .antMatchers("/redirect**")
         .permitAll()
         .and()
-        .csrf().disable()
         .addFilterAfter(new OAuth2ClientContextFilter(), ExceptionTranslationFilter.class);
 
         // @formatter:on

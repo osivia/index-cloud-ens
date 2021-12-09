@@ -30,8 +30,8 @@
 
 
     <portlet>
-        <portlet-name>index-cloud-portal-ens-utils</portlet-name>
-        <portlet-class>fr.index.cloud.ens.utils.oauth2.redirect.MultiApplicationContextPortletUtils</portlet-class>
+        <portlet-name>index-cloud-portal-ens-mixed-portlet</portlet-name>
+        <portlet-class>fr.index.cloud.ens.utils.oauth2.redirect.MixedApplicationsPortlet</portlet-class>
 
         <supports>
             <mime-type>text/html</mime-type>
