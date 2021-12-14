@@ -1,6 +1,6 @@
 package fr.index.cloud.ens.customizer.plugin;
 
-import fr.index.cloud.ens.customizer.plugin.avatar.CloudEnsAvatarModule;
+
 import fr.index.cloud.ens.customizer.plugin.cms.CloudEnsNavigationAdapter;
 import fr.index.cloud.ens.customizer.plugin.cms.FileDocumentModule;
 import fr.index.cloud.ens.customizer.plugin.cms.MutualizationSpaceSummaryListModule;
@@ -113,8 +113,7 @@ public class CloudEnsPlugin extends AbstractPluginPortlet {
         this.customizeDocumentModules(customizationContext);
         // Statistics modules
         this.customizeStatisticsModules(customizationContext);
-        // Avatar modules
-        this.customizeAvatarModules(customizationContext);
+
     }
 
 
@@ -264,22 +263,5 @@ public class CloudEnsPlugin extends AbstractPluginPortlet {
         modules.add(module);
     }
 
-
-    /**
-     * Customize avatar modules.
-     *
-     * @param customizationContext customization context
-     */
-    private void customizeAvatarModules(CustomizationContext customizationContext) {
-        // Portlet context
-        PortletContext portletContext = this.getPortletContext();
-
-        // Avatar modules
-        List<AvatarModule> modules = this.getAvatarModules(customizationContext);
-
-        // Customized avatar module
-        AvatarModule module = new CloudEnsAvatarModule(portletContext);
-        modules.add(module);
-    }
 
 }
