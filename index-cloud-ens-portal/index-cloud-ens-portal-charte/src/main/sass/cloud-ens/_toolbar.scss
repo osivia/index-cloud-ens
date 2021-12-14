@@ -16,6 +16,8 @@
       }
       object-fit: cover;
 
+	  background-color: white;
+	  
       &[src$=".svg"] {
         border-style: none;
       }
