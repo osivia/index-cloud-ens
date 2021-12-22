@@ -78,6 +78,13 @@ public class SearchFiltersForm {
     /** The format. */
     private List<String> formats;
     
+    /** The licences. */
+    private List<String> licences;
+    
+    
+
+
+
     /** The share. */
     private List<String> shareds;
 
@@ -204,63 +211,42 @@ public class SearchFiltersForm {
         this.savedSearchDisplayName = savedSearchDisplayName;
     }
     
-    /**
-     * Getter for formats.
-     * @return the formats
-     */
+
     public List<String> getFormats() {
         return formats;
     }
 
-
-    
-    /**
-     * Setter for formats.
-     * @param formats the formats to set
-     */
     public void setFormats(List<String> formats) {
         this.formats = formats;
     }
 
 
-    
-    /**
-     * Getter for shareds.
-     * @return the shareds
-     */
     public List<String> getShareds() {
         return shareds;
     }
 
-
-    
-    /**
-     * Setter for shareds.
-     * @param shareds the shareds to set
-     */
     public void setShareds(List<String> shareds) {
         this.shareds = shareds;
     }
 
-    
 
-    
-    /**
-     * Getter for authors.
-     * @return the authors
-     */
     public List<CustomPerson> getAuthors() {
         return authors;
     }
 
 
-    
-    /**
-     * Setter for authors.
-     * @param authors the authors to set
-     */
     public void setAuthors(List<CustomPerson> authors) {
         this.authors = authors;
     }
+    
+    public List<String> getLicences() {
+        return licences;
+    }
+
+    
+    public void setLicences(List<String> licences) {
+        this.licences = licences;
+    }
+
 
 }

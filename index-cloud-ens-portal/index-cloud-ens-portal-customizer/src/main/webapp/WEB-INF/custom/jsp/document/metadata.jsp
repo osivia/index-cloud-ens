@@ -395,14 +395,6 @@
             <div class="card-body p-3">
                 <div class="d-flex">
                 
-                    <c:if test="${not empty publicationDocument}">
- 	                    <div class="flex-shrink-0 mr-3">
-	                            <%--Icon--%>
-	                        <div class="card-custom-icon">
-	                            <ttc:icon document="${publicationDocument}"/>
-	                        </div>
-	                    </div>
-                    </c:if>
 
                     <div class="flex-grow-1 flex-shrink-1">
                             <%--Title--%>
@@ -417,26 +409,38 @@
 	                        <div class="mb-1">
 	                            <small class="text-secondary"><op:translate
 	                                    key="DOCUMENT_MUTUALIZATION_FORMAT"/></small>
-	                            <strong>${publicationFormat}<strong>
+	                            <strong>${publicationFormat}</strong>
 	                        </div>
 	                    </c:if>
 
-                            <%--Keywords--%>
-                        <div class="mb-3">
-                            <small class="text-secondary"><op:translate
-                                    key="DOCUMENT_MUTUALIZATION_KEYWORDS"/></small>
-                            <c:choose>
-                                <c:when test="${empty keywords}">
-                                    <span>&ndash;</span>
-                                </c:when>
-
-                                <c:otherwise>
-                                    <strong>${keywords}</strong>
-                                </c:otherwise>
-                            </c:choose>
-                        </div>
-
-                        <ul class="d-flex flex-wrap list-inline text-secondary">
+						<c:if test="${not empty  document.properties['mtz:comment']}">
+ 	               			<div>
+		            			<span>
+		            				<small class="text-secondary">
+		            					<op:translate key="DOCUMENT_METADATA_AUTHOR_MY_COMMENT"/>
+		            				</small>
+		            			</span>
+	            			</div> 
+	            			
+	            			<div class="mb-1">
+		            			<span>
+		            				<strong>
+		            					${document.properties['mtz:comment']}
+		            				</strong>
+		            			</span>
+	            			</div>
+            			</c:if>
+            			
+            			
+            			<c:if test="${not empty  document.properties['mtz:licence']}">
+            				<div class="mb-1">
+	                            <small class="text-secondary"><op:translate key="DOCUMENT_METADATA_LICENCE"/></small>
+	                            <strong><ttc:vocabularyLabel name="idx_licence" key="${document.properties['mtz:licence']}"/></strong><strong>
+	                        </div>
+         				</c:if>
+            			
+   
+                        <ul class="mt-2 d-flex flex-wrap list-inline text-secondary">
                                 <%--Views--%>
                             <li class="list-inline-item text-truncate">
                                 <i class="glyphicons glyphicons-basic-eye"></i>
@@ -529,20 +533,68 @@
         </div>
     </c:if>
 
-    <c:if test="${readOnly and contactAuthor}">
+    <c:if test="${readOnly}">
         <div class="card card-custom card-custom-border-left card-custom-orange mb-3">
             <div class="card-body py-3">
- 
-                        <c:set var="discussionUrl"><ttc:discussion
-                                participant="${document.properties['dc:lastContributor']}"
-                                publicationId="${document.properties['ttc:webid']}"/></c:set>
-                        <p class="card-text">
-                            <a href="${discussionUrl}" class="btn btn-link btn-link-hover-orange btn-sm text-orange-dark">
-                                <span><op:translate key="DOCUMENT_COPIED_CONTACT_AUTHOR"/></span>
-                            </a>
-                        </p>
-                    
-
+            			<div>
+	            			<span class="text-primary">
+	            				<strong>
+	            					<op:translate key="DOCUMENT_METADATA_SHARE_BY"/> <ttc:user name="${document.properties['dc:lastContributor']}" linkable="false" hideAvatar="true" />
+	            				</strong>
+	            			</span>
+            			</div>
+            			
+             			
+            			<c:if test="${not empty  document.properties['mtz:comment']}">
+ 	               			<div class="text-muted mt-2">
+		            			<span>
+		            				<small>
+		            					<op:translate key="DOCUMENT_METADATA_AUTHOR_COMMENT"/>
+		            				</small>
+		            			</span>
+	            			</div> 
+	            			
+	            			<div>
+		            			<span>
+		            				<strong>
+		            					${document.properties['mtz:comment']}
+		            				</strong>
+		            			</span>
+	            			</div>
+            			</c:if>
+            			
+          				<c:if test="${not empty  document.properties['mtz:licence']}">
+							<div class="mt-2">
+		            			<span class="text-muted">
+		            				  <small><op:translate key="DOCUMENT_METADATA_LICENCE"/></small>
+		            			</span>
+		            			<span>
+		            					 <strong><ttc:vocabularyLabel name="idx_licence" key="${document.properties['mtz:licence']}"/></strong>
+		            			</span>
+		            			
+		            			
+		            			<span class="pull-right">
+		            			<c:set var="popupTitle"><op:translate key="LICENCE_CC_TITLE"/></c:set>
+		            			<a href="javascript:;" class="no-ajax-link html-popover border-0 p-0 m-0 text-secondary "  data-popover-style="popover-sized-image" data-popover-content="<img src='/index-cloud-ens-portal-mutualization/img/licences.png' >" data-popover-title="${popupTitle}">
+                                    <i class="glyphicons glyphicons-basic-circle-question"></i>
+                                    <span class="d-md-none"><op:translate key="HELP"/></span>
+                                    </a>
+                                </span>
+	            			</div> 
+          				</c:if>
+            			
+            			
+            
+            			<c:if test="${contactAuthor}">
+            				<div class="pull-right mt-2">
+	 	                        <c:set var="discussionUrl"><ttc:discussion
+	                                participant="${document.properties['dc:lastContributor']}"
+	                                publicationId="${document.properties['ttc:webid']}"/></c:set>
+		                            <a href="${discussionUrl}" class="btn btn-link btn-link-hover-orange btn-sm text-orange-dark">
+		                                <span><op:translate key="DOCUMENT_COPIED_CONTACT_AUTHOR"/></span>
+		                            </a>
+	                        </div>
+                         </c:if>
             </div>
         </div>
     </c:if>
