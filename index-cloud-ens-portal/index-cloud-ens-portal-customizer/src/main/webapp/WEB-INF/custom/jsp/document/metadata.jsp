@@ -564,21 +564,22 @@
             			</c:if>
             			
           				<c:if test="${not empty  document.properties['mtz:licence']}">
-							<div class="mt-2">
-		            			<span class="text-muted">
-		            				  <small><op:translate key="DOCUMENT_METADATA_LICENCE"/></small>
-		            			</span>
-		            			<span>
-		            					 <strong><ttc:vocabularyLabel name="idx_licence" key="${document.properties['mtz:licence']}"/></strong>
-		            			</span>
+							<div class="mt-2 d-flex align-items-center">
+							     <span class="text-truncate">
+			            			<span class="text-muted">
+			            		         <small><op:translate key="DOCUMENT_METADATA_LICENCE"/></small>
+			            			</span>
+			            			<span>
+			                             <strong><ttc:vocabularyLabel name="idx_licence" key="${document.properties['mtz:licence']}"/></strong>
+			            			</span>
+			            		</span>
 		            			
-		            			
-		            			<span class="pull-right">
-		            			<c:set var="popupTitle"><op:translate key="LICENCE_CC_TITLE"/></c:set>
-		            			<a href="javascript:;" class="no-ajax-link html-popover border-0 p-0 m-0 text-secondary "  data-popover-style="popover-sized-image" data-popover-content="<img src='/index-cloud-ens-portal-mutualization/img/licences.png' >" data-popover-title="${popupTitle}">
-                                    <i class="glyphicons glyphicons-basic-circle-question"></i>
-                                    <span class="d-md-none"><op:translate key="HELP"/></span>
-                                    </a>
+		            			<span class="ml-auto">
+			            			<c:set var="popupTitle"><op:translate key="LICENCE_CC_TITLE"/></c:set>
+			            			<a href="javascript:;" class="no-ajax-link html-popover border-0 p-0 m-0 text-secondary "  data-popover-style="popover-sized-image" data-popover-content="<img src='/index-cloud-ens-portal-mutualization/img/licences.png' >" data-popover-title="${popupTitle}">
+	                                    <i class="glyphicons glyphicons-basic-circle-question"></i>
+	                                    <span class="d-md-none"><op:translate key="HELP"/></span>
+	                                    </a>
                                 </span>
 	            			</div> 
           				</c:if>
