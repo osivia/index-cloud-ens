@@ -141,7 +141,16 @@ public class CustomizedFileBrowserServiceImpl extends AbstractFileBrowserService
         // Mutualized indicator
         boolean mutualized = BooleanUtils.isTrue(nuxeoDocument.getProperties().getBoolean("mtz:enable"));
         item.setMutualized(mutualized);
+
+        // Copied indicator
+        boolean copied = StringUtils.isNotEmpty(nuxeoDocument.getProperties().getString("mtz:sourceWebId"));
+        item.setCopied(copied);
+        
+        
         super.createItem(portalControllerContext, nuxeoDocument);
+        
+
+
 
         return item;
     }
