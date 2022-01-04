@@ -5,12 +5,12 @@
     <parent>
         <groupId>fr.index.cloud.ens</groupId>
         <artifactId>index-cloud-ens-parent</artifactId>
-        <version>4.9-SNAPSHOT</version>
+        <version>1.4.0</version>
     </parent>
 
     <groupId>fr.index.cloud.ens.portal</groupId>
     <artifactId>index-cloud-ens-portal-parent</artifactId>
-    <version>4.9-SNAPSHOT</version>
+    <version>1.4.0</version>
     <packaging>pom</packaging>
 
 
