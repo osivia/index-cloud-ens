@@ -19,8 +19,8 @@
 
     <properties>
         <!-- Toutatice -->
-        <!-- <toutatice.version>4.9.3-RC18</toutatice.version>-->
-		<toutatice.version>4.9-SNAPSHOT</toutatice.version>
+        <toutatice.version>4.9.0</toutatice.version>
+		<!-- <toutatice.version>4.9-SNAPSHOT</toutatice.version> -->
 
         <!-- Directory -->
         <directory.version>4.9.7</directory.version>
