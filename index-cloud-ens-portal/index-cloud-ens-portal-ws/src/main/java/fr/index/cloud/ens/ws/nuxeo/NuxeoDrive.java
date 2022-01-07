@@ -5,6 +5,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.URLDecoder;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.security.Principal;
@@ -17,6 +18,7 @@ import javax.portlet.PortletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.nuxeo.ecm.automation.client.model.Document;
 import org.nuxeo.ecm.automation.client.model.FileBlob;
 import org.nuxeo.ecm.automation.client.model.OperationInput;
 import org.osivia.portal.api.cache.services.CacheInfo;
@@ -53,6 +55,13 @@ public class NuxeoDrive {
     @RequestMapping(value = "/nuxeo/api/v1/upload/handlers", method = RequestMethod.GET)
     @ResponseStatus(HttpStatus.OK)
     public Map<String, Object> getUploadHandler( HttpServletRequest request, HttpServletResponse response,
+            Principal principal) throws Exception {
+        return new HashMap<String, Object>();
+    }
+    
+    @RequestMapping(value = "/nuxeo/site/api/v1/me", method = RequestMethod.GET)
+    @ResponseStatus(HttpStatus.OK)
+    public Map<String, Object> getMe( HttpServletRequest request, HttpServletResponse response,
             Principal principal) throws Exception {
         return new HashMap<String, Object>();
     }
@@ -159,7 +168,7 @@ public class NuxeoDrive {
         
 
      // Create path components to save the file
-        final String name = request.getHeader("X-File-Name");
+        final String name = URLDecoder.decode(request.getHeader("X-File-Name"),"UTF-8");
         final String contentType = request.getHeader("Content-Type");
          
 
@@ -212,6 +221,56 @@ public class NuxeoDrive {
         
         
         DriveUploadedFile uploadedFile =  uploadedFiles.get(batchId+"/"+idx);
+        FileBlob blob = getUploadedBlob(uploadedFile);
+        
+        GetProxyCommand proxyCommand = new GetProxyCommand("NuxeoDrive.CreateFile", requestBody);
+        Map<String,String> parameters = new HashMap<>();
+        parameters.put("name", uploadedFile.getName());
+        proxyCommand.setParameters(parameters);
+        proxyCommand.setOperationInput(blob);
+        
+        Object res = nuxeoController.executeNuxeoCommand(proxyCommand);
+        
+        FileBlob file = (FileBlob) res;
+        
+        String s = new String(Files.readAllBytes(Paths.get(file.getFile().getAbsolutePath())));
+        return s;
+
+    }
+
+    
+    @RequestMapping(value = "/nuxeo/api/v1/upload/{batchId}/{idx}/execute/NuxeoDrive.UpdateFile", method = RequestMethod.POST)
+    @ResponseStatus(HttpStatus.OK )
+    public String updateFile( HttpServletRequest request, HttpServletResponse response, 
+            Principal principal,  @PathVariable("batchId") String batchId, @PathVariable("idx") String idx, @RequestBody String requestBody) throws Exception {
+        
+        
+        Enumeration headers = request.getHeaderNames();
+        NuxeoController nuxeoController = new NuxeoController(portletContext);
+        nuxeoController.setServletRequest(request);
+        nuxeoController.setAuthType(NuxeoCommandContext.AUTH_TYPE_SUPERUSER);
+        nuxeoController.setCacheType(CacheInfo.CACHE_SCOPE_NONE);
+        
+        
+        DriveUploadedFile uploadedFile =  uploadedFiles.get(batchId+"/"+idx);
+        FileBlob blob = getUploadedBlob(uploadedFile);
+        
+        GetProxyCommand proxyCommand = new GetProxyCommand("NuxeoDrive.UpdateFile", requestBody);
+        Map<String,String> parameters = new HashMap<>();
+        parameters.put("name", uploadedFile.getName());
+        proxyCommand.setParameters(parameters);
+        proxyCommand.setOperationInput(blob);
+        
+        Object res = nuxeoController.executeNuxeoCommand(proxyCommand);
+        
+        FileBlob file = (FileBlob) res;
+        
+        String s = new String(Files.readAllBytes(Paths.get(file.getFile().getAbsolutePath())));
+        return s;
+
+    }
+    
+    private FileBlob getUploadedBlob(DriveUploadedFile uploadedFile) {
         if( uploadedFile == null)
             throw new NoContentException();
         
@@ -228,20 +287,7 @@ public class NuxeoDrive {
         }
         
         FileBlob blob = new FileBlob(uploadedFile.getFile(), name, contentType);
-        
-        GetProxyCommand proxyCommand = new GetProxyCommand("NuxeoDrive.CreateFile", requestBody);
-        Map<String,String> parameters = new HashMap<>();
-        parameters.put("name", uploadedFile.getName());
-        proxyCommand.setParameters(parameters);
-        proxyCommand.setOperationInput(blob);
-        
-        Object res = nuxeoController.executeNuxeoCommand(proxyCommand);
-        
-        FileBlob file = (FileBlob) res;
-        
-        String s = new String(Files.readAllBytes(Paths.get(file.getFile().getAbsolutePath())));
-        return s;
-
+        return blob;
     }
     
     
@@ -283,6 +329,7 @@ public class NuxeoDrive {
         // TODO : parseId from name ou better push name to request body
         //Object res = nuxeoController.executeNuxeoCommand(new GetChildrenCommand("org.nuxeo.drive.service.impl.DefaultTopLevelFolderItemFactory#"));
         Object res = nuxeoController.executeNuxeoCommand(new GetProxyCommand("NuxeoDrive.GetChildren",name));
+
         
         FileBlob file = (FileBlob) res;
         
@@ -290,7 +337,7 @@ public class NuxeoDrive {
         return s;
         }
 
-    @RequestMapping(value = "/nuxeo/site/automation/Document.fetch", method = RequestMethod.POST)
+    @RequestMapping(value = "/nuxeo/site/automation/Document.Fetch", method = RequestMethod.POST, produces = "application/json+nxautomation" )
     @ResponseStatus(HttpStatus.OK)
     public String fetch( HttpServletRequest request, HttpServletResponse response, @RequestBody String name,
             Principal principal) throws Exception {
@@ -298,11 +345,16 @@ public class NuxeoDrive {
         nuxeoController.setServletRequest(request);
         nuxeoController.setAuthType(NuxeoCommandContext.AUTH_TYPE_SUPERUSER);
         nuxeoController.setCacheType(CacheInfo.CACHE_SCOPE_NONE);
-        
+  
         // TODO : parseId from name ou better push name to request body
         //Object res = nuxeoController.executeNuxeoCommand(new GetChildrenCommand("org.nuxeo.drive.service.impl.DefaultTopLevelFolderItemFactory#"));
-        Object res = nuxeoController.executeNuxeoCommand(new GetProxyCommand("Document.fetch",name));
+        Object res = nuxeoController.executeNuxeoCommand(new GetProxyCommand("Document.Fetch", request, name));
+        response.setContentType("application/json+nxautomation");
+        // Minimal document
+        //{"entity-type":"document","repository":"default","uid":"cd2990c2-8df4-4edc-a39d-bfc28a1c2a63","path":"/default-domain/UserWorkspaces/a/d/m/admin/documents/ffffffff/cp22-copie/livraison-201-0-docx","type":"File","state":"project","parentRef":"324958ff-30b4-43c1-a84d-f586e6a43bd1","versionLabel":"0.1","isCheckedOut":false,"title":"Livraison%201.0.docx","lastModified":"2022-01-06T15:45:49.29Z","facets":["Versionable","Publishable","Commentable","HasRelatedText","Downloadable"],"changeToken":"1641483949290","contextParameters":{}}
+        //{"entity-type":"document","repository":"default","uid":"cd2990c2-8df4-4edc-a39d-bfc28a1c2a63","path":"/default-domain/UserWorkspaces/a/d/m/admin/documents/ffffffff/cp22-copie/livraison-201-0-docx","type":"File","state":"project","parentRef":"324958ff-30b4-43c1-a84d-f586e6a43bd1","versionLabel":"0.1","isCheckedOut":false,"title":"Livraison%201.0.docx","lastModified":"2022-01-06T15:45:49.29Z","facets":["Versionable","Publishable","Commentable","HasRelatedText","Downloadable"],"changeToken":"1641483949290","contextParameters":{}}
         
+//        String s =  "{"+"\"entity-type\":\"document\",\"repository\": \"default\","+"\"uid\": \""+res.getId()+"\", \"changeToken\": \""+res.getChangeToken()+"\", \"path\": \""+res.getPath()+"\", \"title\": \""+res.getTitle()+"\", \"versionlabel\" : \""+ res.getVersionLabel()+"\"}";
         FileBlob file = (FileBlob) res;
         
         String s = new String(Files.readAllBytes(Paths.get(file.getFile().getAbsolutePath())));
@@ -330,19 +382,15 @@ public class NuxeoDrive {
     
     @RequestMapping(value = "/nuxeo/site/automation/NuxeoDrive.Delete", method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.OK)
-    public String delete( HttpServletRequest request, HttpServletResponse response, @RequestBody String name,
+    public void delete( HttpServletRequest request, HttpServletResponse response, @RequestBody String name,
             Principal principal) throws Exception {
         NuxeoController nuxeoController = new NuxeoController(portletContext);
         nuxeoController.setServletRequest(request);
         nuxeoController.setAuthType(NuxeoCommandContext.AUTH_TYPE_SUPERUSER);
         nuxeoController.setCacheType(CacheInfo.CACHE_SCOPE_NONE);
         
-        Object res = nuxeoController.executeNuxeoCommand(new GetProxyCommand("NuxeoDrive.Delete",name));
+        nuxeoController.executeNuxeoCommand(new GetProxyCommand("NuxeoDrive.Delete",name));
         
-        FileBlob file = (FileBlob) res;
-        
-        String s = new String(Files.readAllBytes(Paths.get(file.getFile().getAbsolutePath())));
-        return s;
         }
     
     @RequestMapping(value = "/nuxeo/site/automation/NuxeoDrive.Rename", method = RequestMethod.POST)
@@ -362,7 +410,20 @@ public class NuxeoDrive {
         return s;
         }    
     
-    
+    @RequestMapping(value = "/nuxeo/site/automation/Document.Move", method = RequestMethod.POST)
+    @ResponseStatus(HttpStatus.OK)
+    public void moveDocument( HttpServletRequest request, HttpServletResponse response, @RequestBody String name,
+            Principal principal) throws Exception {
+        NuxeoController nuxeoController = new NuxeoController(portletContext);
+        nuxeoController.setServletRequest(request);
+        nuxeoController.setAuthType(NuxeoCommandContext.AUTH_TYPE_SUPERUSER);
+        nuxeoController.setCacheType(CacheInfo.CACHE_SCOPE_NONE);
+        
+
+        Object res = nuxeoController.executeNuxeoCommand(new GetProxyCommand("Document.Move",name));
+        
+
+        } 
     
     @RequestMapping(value = "/nuxeo/site/automation/NuxeoDrive.Move", method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.OK)
@@ -419,6 +480,8 @@ public class NuxeoDrive {
         FileBlob file = (FileBlob) res;
         
         String s = new String(Files.readAllBytes(Paths.get(file.getFile().getAbsolutePath())));
+        
+        System.out.println( s);
         return s;
         }
 
