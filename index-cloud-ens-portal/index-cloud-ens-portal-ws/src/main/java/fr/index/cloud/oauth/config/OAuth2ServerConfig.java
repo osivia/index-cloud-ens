@@ -5,6 +5,9 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.http.HttpStatus;
 import org.osivia.portal.api.locator.Locator;
 import org.osivia.portal.api.tokens.ITokenService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,6 +46,7 @@ import org.springframework.security.oauth2.provider.token.TokenStore;
 
 import fr.index.cloud.ens.application.api.Application;
 import fr.index.cloud.ens.application.api.IApplicationService;
+import fr.index.cloud.ens.ws.nuxeo.NuxeoDrive;
 import fr.index.cloud.oauth.authentication.PortalUserDetailService;
 import fr.index.cloud.oauth.enhancer.AccessTokenEnhancer;
 import fr.index.cloud.oauth.tokenStore.IPortalTokenStore;
@@ -51,6 +55,7 @@ import fr.index.cloud.oauth.tokenStore.PortalTokenStore;
 import fr.index.security.oauth.approval.PronoteApprovalHandler;
 import fr.index.security.oauth.approval.PronoteApprovalStore;
 import fr.index.security.oauth.services.mvc.AccessConfirmationController;
+import net.sf.json.JSONObject;
 
 
 
@@ -86,14 +91,31 @@ public class OAuth2ServerConfig {
                     // Since we want the protected resources to be accessible in the UI as well we need
                     // session creation to be allowed (it's disabled by default in 2.0.6)
                     .sessionManagement().sessionFixation().none().sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED).and().requestMatchers()
-                    .antMatchers("/rest/Drive.**", "/rest/Admin.**", "/rest/User.getProfile", "/oauth/users/**", "/oauth/clients/**", "/me").and().authorizeRequests()
+                    .antMatchers("/rest/Drive.**", "/rest/Admin.**", "/rest/User.getProfile", "/nuxeo/**", "/oauth/users/**", "/oauth/clients/**", "/me").and().authorizeRequests()
                     .antMatchers("/rest/User.getProfile").access("#oauth2.hasScope('drive')")
                     .antMatchers("/rest/Drive.**").access("#oauth2.hasScope('drive')")
                     .antMatchers("/rest/Admin.**").access("hasRole('ROLE_ADMIN')")
+                    .antMatchers("/nuxeo/site/automation/**").access("#oauth2.hasScope('"+NuxeoDrive.NUXEO_DRIVE_SCOPE+"')") 
                     .antMatchers("/rest/User.signUp").permitAll().antMatchers("/Viewer.fileInfos").permitAll();
 
 
             // @formatter:on
+            
+            http
+            .exceptionHandling()
+            .authenticationEntryPoint((request, response, e) -> 
+            {
+                // Nuxeo Drive exige un status 401 dans la réponse
+                
+                response.setContentType("application/json;charset=UTF-8");
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                JSONObject json = new JSONObject() ;
+                json.put("status", HttpStatus.SC_UNAUTHORIZED);
+                json.put("message", "Access denied");
+                String result = json.toString();
+                response.getWriter().write(result);
+            });
+            
         }
 
     }
