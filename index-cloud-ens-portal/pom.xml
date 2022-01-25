@@ -10,7 +10,6 @@
 
     <groupId>fr.index.cloud.ens.portal</groupId>
     <artifactId>index-cloud-ens-portal-parent</artifactId>
-    <version>1.4-SNAPSHOT</version>
     <packaging>pom</packaging>
 
 
@@ -19,8 +18,8 @@
 
     <properties>
         <!-- Toutatice -->
-        <toutatice.version>4.9.0</toutatice.version>
-		<!-- <toutatice.version>4.9-SNAPSHOT</toutatice.version> -->
+        <!-- <toutatice.version>4.9.0</toutatice.version>-->
+		<toutatice.version>4.9-SNAPSHOT</toutatice.version> 
 
         <!-- Directory -->
         <directory.version>4.9.7</directory.version>

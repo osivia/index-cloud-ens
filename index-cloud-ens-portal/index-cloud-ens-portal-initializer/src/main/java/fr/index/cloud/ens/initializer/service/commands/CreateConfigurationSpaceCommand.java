@@ -41,19 +41,31 @@ public class CreateConfigurationSpaceCommand implements INuxeoCommand {
         // Document service
         DocumentService documentService = nuxeoSession.getAdapter(DocumentService.class);
 
-        // Domain
-        Document domain = documentService.getDocument(new PathRef("/default-domain/workspaces"));
+        Document configurationSpace = null;
 
-        // Publication space
-        URL configurationSpaceUrl = this.getClass().getResource("/docs/configuration-space/export-configuration-space.zip");
-        File configurationSpaceFile = new File(configurationSpaceUrl.getFile());
-        Blob configurationSpaceBlob = new FileBlob(configurationSpaceFile);
+        try {
+            // configuration Space is NOT overwrited !!
+            configurationSpace = documentService.getDocument(new PathRef("/default-domain/workspaces/configuration"));
+        } catch (Exception e) {
+            //
+        }
 
-        OperationRequest operationRequest = nuxeoSession.newRequest("FileManager.Import").setInput(configurationSpaceBlob);
-        operationRequest.setContextProperty("currentDocument", domain);
-        operationRequest.set("overwite", String.valueOf(true));
-        operationRequest.execute();
+        if (configurationSpace == null) {
 
+            // Domain
+            Document domain = documentService.getDocument(new PathRef("/default-domain/workspaces"));
+
+
+            // Publication space
+            URL configurationSpaceUrl = this.getClass().getResource("/docs/configuration-space/export-configuration-space.zip");
+            File configurationSpaceFile = new File(configurationSpaceUrl.getFile());
+            Blob configurationSpaceBlob = new FileBlob(configurationSpaceFile);
+
+            OperationRequest operationRequest = nuxeoSession.newRequest("FileManager.Import").setInput(configurationSpaceBlob);
+            operationRequest.setContextProperty("currentDocument", domain);
+            operationRequest.set("overwite", String.valueOf(true));
+            operationRequest.execute();
+        }
 
 
         return null;
