@@ -35,7 +35,7 @@
 
         <ottc.jwt.version>4.7.17</ottc.jwt.version>
         <ottc.onlyoffice.version>4.7.17</ottc.onlyoffice.version>
-        <ottc.quota.version>4.9-SNAPSHOT</ottc.quota.version>
+        <ottc.quota.version>4.9.1</ottc.quota.version>
 
         <ottc.monitoring.version>2.1</ottc.monitoring.version>
 
