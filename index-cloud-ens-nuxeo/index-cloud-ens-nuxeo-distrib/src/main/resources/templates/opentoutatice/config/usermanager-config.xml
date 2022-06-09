@@ -6,7 +6,7 @@
 	<userManager>
 
 		<users>
-			<directory>userLdapDirectory</directory>
+			<directory>ldapUserDirectory</directory>
 			<!--searchFields append="true"> <searchField>username</searchField> <searchField>firstName</searchField> 
 				<searchField>lastName</searchField> <searchField>compagny</searchField> </searchFields> 
 				<listingMode>search_only</listingMode -->
@@ -19,7 +19,7 @@
 		</users>
 		
 		<groups>
-			<directory>groupLdapDirectory</directory>
+			<directory>ldapGroupDirectory</directory>
 		</groups>
 		
 		<defaultGroup>members</defaultGroup>
@@ -32,7 +32,7 @@
 		<userSortField>lastName</userSortField>
 
 		<!-- Override default cache -->
-		<userCacheName>default-ottc-user-cache</userCacheName>
+		<!--  <userCacheName>default-ottc-user-cache</userCacheName>-->
 
 	</userManager>
 </extension>

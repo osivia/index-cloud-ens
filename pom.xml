@@ -4,7 +4,7 @@
 
     <groupId>fr.index.cloud.ens</groupId>
     <artifactId>index-cloud-ens-parent</artifactId>
-    <version>1.4-SNAPSHOT</version>
+    <version>3.0-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <name>Index Education - Cloud enseignant</name>
@@ -16,9 +16,9 @@
 
 
     <modules>
-        <module>index-cloud-ens-portal</module>
+<!--        <module>index-cloud-ens-portal</module> -->
         <module>index-cloud-ens-nuxeo</module>
-        <module>index-cloud-ens-ext</module>
+<!--        <module>index-cloud-ens-ext</module> -->
     </modules>
 
 
