@@ -15,16 +15,13 @@
     <name>Cloud enseignant - Nuxeo</name>
 
 	<properties>
-        <nuxeo.version>10.10-HF61</nuxeo.version>
-<!--
-        <opentoutatice.version>4.9.2</opentoutatice.version>
-		<ottc.es.version>4.7.21</ottc.es.version>
-		<ottc.es.custom.version>4.7.17.1</ottc.es.custom.version>		
--->
+        <nuxeo.version>10.10-HF62</nuxeo.version>
+        <opentoutatice.version>5.0-SNAPSHOT</opentoutatice.version>
+<!---->
 	</properties>
 
     <modules>
-<!--        <module>index-cloud-ens-nuxeo-custom</module> -->
+        <!-- <module>index-cloud-ens-nuxeo-custom</module> -->
         <module>index-cloud-ens-nuxeo-distrib</module>
     </modules>
 

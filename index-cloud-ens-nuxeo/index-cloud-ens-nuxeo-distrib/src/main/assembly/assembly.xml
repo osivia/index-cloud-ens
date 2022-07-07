@@ -9,17 +9,19 @@
 	<includeBaseDirectory>false</includeBaseDirectory>
 
 	<dependencySets>
-<!-- 
+
 		<dependencySet>
 			<outputDirectory>/${artifactId}-${project.version}/nxserver/plugins
 			</outputDirectory>
 			<unpack>false</unpack>
 			<scope>runtime</scope>
 			<includes>
-
+				<!-- Opentoutatice -->
+				<include>fr.opentoutatice.platform:opentoutatice-core-type-enricher:jar:${opentoutatice.version}
+				</include>
 			</includes>
 		</dependencySet>
- -->
+
 		<dependencySet>
 			<outputDirectory>/${artifactId}-${project.version}/nxserver/bundles
 			</outputDirectory>
@@ -61,7 +63,7 @@
 			<!-- Surcharges -->
 			<excludes>
 				<exclude>lib/log4j2.xml</exclude>
-				<!-- <exclude>templates/common/config/blacklist.nxftl</exclude>-->
+				<exclude>templates/common/config/blacklist.nxftl</exclude>
 			</excludes> 
 		</fileSet>
 		

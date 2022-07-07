@@ -123,7 +123,7 @@
     <!-- Nuxeo Loggers -->
     <!-- ============= -->
 
-    <Logger name="org.nuxeo" level="debug" />
+    <Logger name="org.nuxeo" level="info" />
     <Logger name="org.nuxeo.ecm.core.management.statuses.HealthCheckResult">
       <!-- this filter allows to print 1 log (maxBurst) every minute (rate) -->
       <BurstFilter level="warn" rate="0.0166" maxBurst="1"/>
@@ -266,6 +266,11 @@
     <Logger name="STDERR" level="error" additivity="false">
       <AppenderRef ref="STDERR-FILE" />
     </Logger>
+    
+    
+    <Logger name="org.opentoutatice" level="debug" />
+    
+    
     <Root level="info">
       <AppenderRef ref="CONSOLE" />
       <AppenderRef ref="FILE" />
