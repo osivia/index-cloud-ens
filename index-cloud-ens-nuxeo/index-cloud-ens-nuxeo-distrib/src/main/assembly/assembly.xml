@@ -17,8 +17,8 @@
 			<scope>runtime</scope>
 			<includes>
 				<!-- Opentoutatice -->
-				<include>fr.opentoutatice.platform:opentoutatice-core-type-enricher:jar:${opentoutatice.version}
-				</include>
+				<include>fr.opentoutatice.platform:opentoutatice-core-type-enricher:jar:${opentoutatice.version}</include>
+				<include>fr.opentoutatice.platform:opentoutatice-ecm-platform-core:jar:${opentoutatice.version}</include>
 			</includes>
 		</dependencySet>
 

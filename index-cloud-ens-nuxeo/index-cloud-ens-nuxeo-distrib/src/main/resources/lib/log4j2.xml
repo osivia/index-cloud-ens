@@ -123,7 +123,16 @@
     <!-- Nuxeo Loggers -->
     <!-- ============= -->
 
-    <Logger name="org.nuxeo" level="info" />
+    <Logger name="org.nuxeo" level="debug" />
+    
+    <Logger name="org.nuxeo.common.logging" level="info" />
+    <Logger name="org.nuxeo.ecm.platform.actions" level="info" />
+    <Logger name="org.nuxeo.ecm.platform.forms" level="info" />
+    <Logger name="org.nuxeo.ecm.platform.ui" level="info" />
+    <Logger name="org.nuxeo.ecm.platform.web" level="info" />
+    <Logger name="org.nuxeo.ecm.core.storage" level="info" />
+    
+    
     <Logger name="org.nuxeo.ecm.core.management.statuses.HealthCheckResult">
       <!-- this filter allows to print 1 log (maxBurst) every minute (rate) -->
       <BurstFilter level="warn" rate="0.0166" maxBurst="1"/>
@@ -146,8 +155,9 @@
     <!-- Display INFO logs for automation traces when activated -->
     <!-- Add <appender-ref ref="AUTOMATION" /> if using AUTOMATION appender-->
     <Logger name="org.nuxeo.ecm.automation.core" level="debug" />
+    
     <!-- Display by default WARN logs for Automation Scripting -->
-    <Logger name="org.nuxeo.ecm.automation.scripting" level="warn" />
+    <Logger name="org.nuxeo.ecm.automation.scripting" level="debug" />
 
     <Logger name="org.nuxeo.runtime.reload" level="info" />
     <Logger name="org.nuxeo.runtime.osgi.OSGiRuntimeService" level="info" />

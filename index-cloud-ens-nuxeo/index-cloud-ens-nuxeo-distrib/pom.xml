@@ -134,6 +134,11 @@
 			<artifactId>opentoutatice-core-type-enricher</artifactId>
 			<version>${opentoutatice.version}</version>
         </dependency>
+        <dependency>
+        	<groupId>fr.opentoutatice.platform</groupId>
+			<artifactId>opentoutatice-ecm-platform-core</artifactId>
+			<version>${opentoutatice.version}</version>
+        </dependency>        
     </dependencies>
     
     
