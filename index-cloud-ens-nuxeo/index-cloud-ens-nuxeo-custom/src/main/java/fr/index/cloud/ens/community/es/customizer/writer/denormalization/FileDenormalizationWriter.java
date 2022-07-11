@@ -8,9 +8,10 @@ import java.util.Map;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.codehaus.jackson.JsonGenerator;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.PathRef;
+
+import com.fasterxml.jackson.core.JsonGenerator;
 
 import fr.toutatice.ecm.es.customizer.writers.api.AbstractCustomJsonESWriter;
 

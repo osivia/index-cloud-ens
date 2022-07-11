@@ -1,5 +1,7 @@
 package fr.index.cloud.ens.statistics.operation;
 
+import javax.security.auth.login.LoginException;
+
 import org.apache.commons.lang.BooleanUtils;
 import org.nuxeo.ecm.automation.core.Constants;
 import org.nuxeo.ecm.automation.core.annotations.Context;
@@ -54,9 +56,10 @@ public class UpdateDocumentStatisticsOperation {
      * Run operation.
      *
      * @param document document
+     * @throws LoginException 
      */
     @OperationMethod
-    public void run(DocumentModel document) {
+    public void run(DocumentModel document) throws LoginException {
         boolean incrementsViews = BooleanUtils.isTrue(this.incrementsViews);
         boolean incrementsDownloads = BooleanUtils.isTrue(this.incrementsDownloads);
 

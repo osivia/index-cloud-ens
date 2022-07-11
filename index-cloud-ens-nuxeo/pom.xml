@@ -21,7 +21,7 @@
 	</properties>
 
     <modules>
-        <!-- <module>index-cloud-ens-nuxeo-custom</module> -->
+        <module>index-cloud-ens-nuxeo-custom</module>
         <module>index-cloud-ens-nuxeo-distrib</module>
     </modules>
 

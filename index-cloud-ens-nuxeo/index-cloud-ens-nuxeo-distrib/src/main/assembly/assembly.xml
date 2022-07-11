@@ -16,6 +16,8 @@
 			<unpack>false</unpack>
 			<scope>runtime</scope>
 			<includes>
+				<!-- Custom cloud-ens -->
+				<include>${parent.groupId}:index-cloud-ens-nuxeo-custom:jar:${parent.version}</include>
 				<!-- Opentoutatice -->
 				<include>fr.opentoutatice.platform:opentoutatice-core-type-enricher:jar:${opentoutatice.version}</include>
 				<include>fr.opentoutatice.platform:opentoutatice-ecm-platform-core:jar:${opentoutatice.version}</include>

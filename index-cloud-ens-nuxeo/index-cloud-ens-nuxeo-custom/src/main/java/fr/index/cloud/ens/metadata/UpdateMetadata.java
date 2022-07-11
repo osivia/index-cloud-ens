@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.security.auth.login.LoginException;
 
 import org.nuxeo.ecm.automation.core.Constants;
 import org.nuxeo.ecm.automation.core.annotations.Context;
@@ -16,7 +17,6 @@ import org.nuxeo.ecm.automation.core.annotations.Param;
 import org.nuxeo.ecm.automation.core.collectors.DocumentModelCollector;
 import org.nuxeo.ecm.automation.core.util.DocumentHelper;
 import org.nuxeo.ecm.automation.core.util.Properties;
-import org.nuxeo.ecm.core.api.ClientException;
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentException;
 import org.nuxeo.ecm.core.api.DocumentModel;
@@ -84,9 +84,10 @@ public class UpdateMetadata {
      * @throws ClientException
      * @throws IOException
      * @throws DocumentException 
+     * @throws LoginException 
      */
 
-    protected DocumentModel execute(CoreSession session, DocumentModel document, Properties properties,  String targetAction, String targetIndex, Properties targetValue, boolean save) throws ClientException, IOException, DocumentException {
+    protected DocumentModel execute(CoreSession session, DocumentModel document, Properties properties,  String targetAction, String targetIndex, Properties targetValue, boolean save) throws IOException, DocumentException, LoginException {
 
         // In silent mode, Document must be checkouted explicitly
         // otherwise publication erases modification (probably during checking)
