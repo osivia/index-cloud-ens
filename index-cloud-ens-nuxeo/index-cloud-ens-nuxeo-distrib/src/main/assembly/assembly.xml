@@ -32,9 +32,12 @@
 			<scope>runtime</scope>
 			<includes>
 				<!-- Login & SSO -->
-				<include>org.nuxeo.ecm.platform:nuxeo-platform-login-portal-sso:jar:${nuxeo.version}
-				</include>
-
+				<include>org.nuxeo.ecm.platform:nuxeo-platform-login-portal-sso:jar:${nuxeo.version}</include>
+				<!-- Nuxeo drive -->
+				<include>org.nuxeo.ecm:nuxeo-drive-core:jar:${nuxeo.version}</include>
+				<include>org.nuxeo.ecm:nuxeo-drive-operations:jar:${nuxeo.version}</include>
+				<include>org.nuxeo.ecm:nuxeo-drive-jsf:jar:${nuxeo.version}</include>
+				<include>org.nuxeo.ecm:nuxeo-drive-elasticsearch:jar:${nuxeo.version}</include>
 			</includes>
 		</dependencySet>
 

@@ -123,7 +123,7 @@
     <!-- Nuxeo Loggers -->
     <!-- ============= -->
 
-    <Logger name="org.nuxeo" level="debug" />
+    <Logger name="org.nuxeo" level="info" />
     
     <Logger name="org.nuxeo.common.logging" level="info" />
     <Logger name="org.nuxeo.ecm.platform.actions" level="info" />

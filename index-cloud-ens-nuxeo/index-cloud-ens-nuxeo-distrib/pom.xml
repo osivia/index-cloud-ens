@@ -149,8 +149,32 @@
         	<groupId>fr.opentoutatice.platform</groupId>
 			<artifactId>opentoutatice-addon-elasticsearch-customizer</artifactId>
 			<version>${opentoutatice.version}</version>
-        </dependency>        
+        </dependency>
+        
+        <!-- Nuxeo drive -->
+        <dependency>
+        	<groupId>org.nuxeo.ecm</groupId>
+  			<artifactId>nuxeo-drive-core</artifactId>
+  			<version>${nuxeo.version}</version>
+        </dependency>
+        <dependency>
+        	<groupId>org.nuxeo.ecm</groupId>
+  			<artifactId>nuxeo-drive-operations</artifactId>
+  			<version>${nuxeo.version}</version>
+        </dependency>
+		<dependency>
+        	<groupId>org.nuxeo.ecm</groupId>
+  			<artifactId>nuxeo-drive-jsf</artifactId>
+  			<version>${nuxeo.version}</version>
+        </dependency>
+		<dependency>
+        	<groupId>org.nuxeo.ecm</groupId>
+  			<artifactId>nuxeo-drive-elasticsearch</artifactId>
+  			<version>${nuxeo.version}</version>
+        </dependency>
+        
     </dependencies>
+    
     
     
 </project>
