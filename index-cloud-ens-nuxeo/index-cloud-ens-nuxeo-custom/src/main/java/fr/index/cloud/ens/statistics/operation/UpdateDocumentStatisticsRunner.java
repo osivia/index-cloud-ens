@@ -4,7 +4,6 @@ import fr.toutatice.ecm.platform.core.helper.ToutaticeSilentProcessRunnerHelper;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.nuxeo.ecm.automation.core.util.DocumentHelper;
-import org.nuxeo.ecm.core.api.ClientException;
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.DocumentModelList;
@@ -73,7 +72,7 @@ public class UpdateDocumentStatisticsRunner extends ToutaticeSilentProcessRunner
 
 
     @Override
-    public void run() throws ClientException {
+    public void run() {
         // WebId
         String webId = this.document.getProperty(WEBID_XPATH).getValue(String.class);
 
@@ -95,10 +94,20 @@ public class UpdateDocumentStatisticsRunner extends ToutaticeSilentProcessRunner
             this.log.error("Unable to find live document for webId: '" + webId + "'.");
         } else {
             if (this.incrementsViews) {
-                this.increments(live, VIEWS_XPATH);
+                try {
+					this.increments(live, VIEWS_XPATH);
+				} catch (IOException e) {
+		            this.log.error("Unable to increments views for webId: '" + webId + "'.");
+
+				}
             }
             if (this.incrementsDownloads) {
-                this.increments(live, DOWNLOADS_XPATH);
+                try {
+					this.increments(live, DOWNLOADS_XPATH);
+				} catch (IOException e) {
+		            this.log.error("Unable to increments downloads for webId: '" + webId + "'.");
+
+				}
             }
 
             this.session.saveDocument(live);
@@ -111,16 +120,17 @@ public class UpdateDocumentStatisticsRunner extends ToutaticeSilentProcessRunner
      *
      * @param live  live document
      * @param xpath property XPath
+     * @throws IOException 
      */
-    private void increments(DocumentModel live, String xpath) {
+    private void increments(DocumentModel live, String xpath) throws IOException {
         Property property = live.getProperty(xpath);
         Integer value = property.getValue(Integer.class);
 
-        try {
+//        try {
             DocumentHelper.setProperty(this.session, live, xpath, String.valueOf(value + 1));
-        } catch (IOException e) {
-            throw new ClientException(e);
-        }
+//        } catch (IOException e) {
+//            throw new ClientException(e);
+//        }
     }
 
 }

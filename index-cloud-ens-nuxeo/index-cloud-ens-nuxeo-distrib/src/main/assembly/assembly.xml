@@ -9,17 +9,23 @@
 	<includeBaseDirectory>false</includeBaseDirectory>
 
 	<dependencySets>
-<!-- 
+
 		<dependencySet>
 			<outputDirectory>/${artifactId}-${project.version}/nxserver/plugins
 			</outputDirectory>
 			<unpack>false</unpack>
 			<scope>runtime</scope>
 			<includes>
-
+				<!-- Custom cloud-ens -->
+				<include>${parent.groupId}:index-cloud-ens-nuxeo-custom:jar:${parent.version}</include>
+				<!-- Opentoutatice -->
+				<include>fr.opentoutatice.platform:opentoutatice-core-type-enricher:jar:${opentoutatice.version}</include>
+				<include>fr.opentoutatice.platform:opentoutatice-ecm-platform-core:jar:${opentoutatice.version}</include>
+				<include>fr.opentoutatice.platform:opentoutatice-addon-elasticsearch:jar:${opentoutatice.version}</include>								
+				<include>fr.opentoutatice.platform:opentoutatice-addon-elasticsearch-customizer:jar:${opentoutatice.version}</include>				
 			</includes>
 		</dependencySet>
- -->
+
 		<dependencySet>
 			<outputDirectory>/${artifactId}-${project.version}/nxserver/bundles
 			</outputDirectory>
@@ -27,9 +33,12 @@
 			<scope>runtime</scope>
 			<includes>
 				<!-- Login & SSO -->
-				<include>org.nuxeo.ecm.platform:nuxeo-platform-login-portal-sso:jar:${nuxeo.version}
-				</include>
-
+				<include>org.nuxeo.ecm.platform:nuxeo-platform-login-portal-sso:jar:${nuxeo.version}</include>
+				<!-- Nuxeo drive -->
+				<include>org.nuxeo.ecm:nuxeo-drive-core:jar:${nuxeo.version}</include>
+				<include>org.nuxeo.ecm:nuxeo-drive-operations:jar:${nuxeo.version}</include>
+				<include>org.nuxeo.ecm:nuxeo-drive-jsf:jar:${nuxeo.version}</include>
+				<include>org.nuxeo.ecm:nuxeo-drive-elasticsearch:jar:${nuxeo.version}</include>
 			</includes>
 		</dependencySet>
 
@@ -61,7 +70,7 @@
 			<!-- Surcharges -->
 			<excludes>
 				<exclude>lib/log4j2.xml</exclude>
-				<!-- <exclude>templates/common/config/blacklist.nxftl</exclude>-->
+				<exclude>templates/common/config/blacklist.nxftl</exclude>
 			</excludes> 
 		</fileSet>
 		

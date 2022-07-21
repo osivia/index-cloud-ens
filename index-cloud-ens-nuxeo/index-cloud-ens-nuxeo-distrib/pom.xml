@@ -14,12 +14,6 @@
 
     <name>Cloud enseignant - Distribution Nuxeo</name>
 
-    <properties>
-
-        <nuxeo.version>10.10-HF61</nuxeo.version>
-
-    </properties>
-
     <build>
         <defaultGoal>package</defaultGoal>
 
@@ -134,7 +128,58 @@
            		</exclusion>
             </exclusions>
         </dependency>
+        
+        <dependency>
+        	<groupId>${parent.groupId}</groupId>
+    		<artifactId>index-cloud-ens-nuxeo-custom</artifactId>
+        	<version>${parent.version}</version>	
+        </dependency>
+        
+        <dependency>
+        	<groupId>fr.opentoutatice.platform</groupId>
+			<artifactId>opentoutatice-core-type-enricher</artifactId>
+			<version>${opentoutatice.version}</version>
+        </dependency>
+        <dependency>
+        	<groupId>fr.opentoutatice.platform</groupId>
+			<artifactId>opentoutatice-ecm-platform-core</artifactId>
+			<version>${opentoutatice.version}</version>
+        </dependency>
+        <dependency>
+        	<groupId>fr.opentoutatice.platform</groupId>
+			<artifactId>opentoutatice-addon-elasticsearch</artifactId>
+			<version>${opentoutatice.version}</version>
+        </dependency>        
+        <dependency>
+        	<groupId>fr.opentoutatice.platform</groupId>
+			<artifactId>opentoutatice-addon-elasticsearch-customizer</artifactId>
+			<version>${opentoutatice.version}</version>
+        </dependency>
+        
+        <!-- Nuxeo drive -->
+        <dependency>
+        	<groupId>org.nuxeo.ecm</groupId>
+  			<artifactId>nuxeo-drive-core</artifactId>
+  			<version>${nuxeo.version}</version>
+        </dependency>
+        <dependency>
+        	<groupId>org.nuxeo.ecm</groupId>
+  			<artifactId>nuxeo-drive-operations</artifactId>
+  			<version>${nuxeo.version}</version>
+        </dependency>
+		<dependency>
+        	<groupId>org.nuxeo.ecm</groupId>
+  			<artifactId>nuxeo-drive-jsf</artifactId>
+  			<version>${nuxeo.version}</version>
+        </dependency>
+		<dependency>
+        	<groupId>org.nuxeo.ecm</groupId>
+  			<artifactId>nuxeo-drive-elasticsearch</artifactId>
+  			<version>${nuxeo.version}</version>
+        </dependency>
+        
     </dependencies>
+    
     
     
 </project>
