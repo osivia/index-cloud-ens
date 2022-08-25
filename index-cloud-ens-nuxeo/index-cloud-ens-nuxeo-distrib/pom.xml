@@ -155,6 +155,11 @@
 			<artifactId>opentoutatice-addon-elasticsearch-customizer</artifactId>
 			<version>${opentoutatice.version}</version>
         </dependency>
+        <dependency>
+        	<groupId>fr.opentoutatice.platform</groupId>
+			<artifactId>opentoutatice-addon-procedures</artifactId>
+			<version>${opentoutatice.version}</version>
+        </dependency>        
         
         <!-- Nuxeo drive -->
         <dependency>

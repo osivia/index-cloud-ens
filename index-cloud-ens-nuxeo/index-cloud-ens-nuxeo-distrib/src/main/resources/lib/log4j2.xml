@@ -71,12 +71,13 @@
       <PatternLayout pattern="%d{ISO8601} %-5p [%t] [%c] %m%n" />
     </File>
     -->
+    
     <!-- Elasticsearch logging -->
-    <!--
+    <!-- 
     <File name="ELASTIC" fileName="${sys:nuxeo.log.dir}/elastic.log" append="false">
       <PatternLayout pattern="%d{ISO8601} %-5p [%t] [%c] %m%n" />
     </File>
-    -->
+ 	-->
 
     <!-- ====================== -->
     <!-- More Appender examples -->
@@ -279,6 +280,7 @@
     
     
     <Logger name="org.opentoutatice" level="debug" />
+    <Logger name="fr.toutatice" level="debug" />
     
     
     <Root level="info">
