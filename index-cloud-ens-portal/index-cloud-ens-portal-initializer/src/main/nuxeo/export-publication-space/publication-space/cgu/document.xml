@@ -23,7 +23,7 @@
   <schema xmlns:dc="http://www.nuxeo.org/ecm/schemas/dublincore/" name="dublincore">
     <dc:creator><![CDATA[admin]]></dc:creator>
     <dc:source/>
-    <dc:nature><![CDATA[]]></dc:nature>
+    <dc:nature/>
     <dc:contributors>
       <item><![CDATA[admin]]></item>
     </dc:contributors>
