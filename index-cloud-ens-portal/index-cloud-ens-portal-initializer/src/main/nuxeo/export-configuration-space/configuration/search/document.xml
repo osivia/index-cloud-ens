@@ -68,7 +68,6 @@
     <ttc:hideMetadatas><![CDATA[false]]></ttc:hideMetadatas>
     <ttc:publicationDate/>
     <ttc:modelVersion><![CDATA[]]></ttc:modelVersion>
-    <ttc:domainID><![CDATA[default-domain]]></ttc:domainID>
     <ttc:editorialTitle><![CDATA[]]></ttc:editorialTitle>
     <ttc:vignette/>
     <ttc:pageTemplate><![CDATA[/default/templates/search]]></ttc:pageTemplate>
