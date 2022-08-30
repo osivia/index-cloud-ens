@@ -55,7 +55,7 @@
   <schema xmlns:dc="http://www.nuxeo.org/ecm/schemas/dublincore/" name="dublincore">
     <dc:description><![CDATA[]]></dc:description>
     <dc:language><![CDATA[]]></dc:language>
-    <dc:coverage><![CDATA[]]></dc:coverage>
+    <dc:coverage/>
     <dc:valid/>
     <dc:creator><![CDATA[admin]]></dc:creator>
     <dc:modified><![CDATA[2019-08-02T08:16:36.88Z]]></dc:modified>
