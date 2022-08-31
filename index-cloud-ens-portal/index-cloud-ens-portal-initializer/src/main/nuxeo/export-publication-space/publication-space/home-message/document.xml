@@ -87,9 +87,6 @@
   <schema xmlns:relatedtext="http://www.nuxeo.org/ecm/schemas/relatedtext/" name="relatedtext">
     <relatedtext:relatedtextresources/>
   </schema>
-  <schema xmlns:ottcweb="http://www.nuxeo.org/ecm/project/schemas/opentoutatice/webmode" name="ottc_web">
-    <ottcweb:segment/>
-  </schema>
   <schema xmlns:note="http://www.nuxeo.org/ecm/schemas/note/" name="note">
     <note:mime_type/>
     <note:note><![CDATA[<p>Ce Cloud est destin&eacute; &agrave; l'ensemble des enseignants.</p>

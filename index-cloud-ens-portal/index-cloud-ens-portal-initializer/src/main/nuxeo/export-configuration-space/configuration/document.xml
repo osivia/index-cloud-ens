@@ -43,9 +43,7 @@
   <schema xmlns:ttcs="http://www.nuxeo.org/ecm/project/schemas/ACRENNES2/toutatice-space" name="toutatice_space">
     <ttcs:spaceCommentable><![CDATA[true]]></ttcs:spaceCommentable>
     <ttcs:visibility/>
-    <ttcs:catSpaceKey/>
     <ttcs:spaceMembers/>
-    <ttcs:lstPublicAuth/>
   </schema>
   <schema xmlns:ttc="http://www.nuxeo.org/ecm/project/schemas/ACRENNES2/toutatice" name="toutatice">
     <ttc:childrenPageTemplate/>

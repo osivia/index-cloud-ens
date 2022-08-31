@@ -64,9 +64,8 @@ public class CreatePublicationSpaceCommand implements INuxeoCommand {
 
             OperationRequest operationRequest = nuxeoSession.newRequest("FileManager.Import").setInput(publicationSpaceBlob);
             operationRequest.setContextProperty("currentDocument", domain);
-            operationRequest.set("overwite", String.valueOf(true));
+            //operationRequest.set("overwrite", String.valueOf(true));
             operationRequest.execute();
-
 
             // Mass publication
             Documents documents = documentService
