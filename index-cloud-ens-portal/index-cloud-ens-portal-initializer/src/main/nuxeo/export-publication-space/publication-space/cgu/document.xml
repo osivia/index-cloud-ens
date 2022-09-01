@@ -4,7 +4,7 @@
   <system>
     <type>Note</type>
     <path>cgu</path>
-    <lifecycle-state>approved</lifecycle-state>
+    <lifecycle-state>project</lifecycle-state>
     <lifecycle-policy>default</lifecycle-policy>
     <facet>TTCAttachableImages</facet>
     <facet>isLocalPublishLive</facet>
