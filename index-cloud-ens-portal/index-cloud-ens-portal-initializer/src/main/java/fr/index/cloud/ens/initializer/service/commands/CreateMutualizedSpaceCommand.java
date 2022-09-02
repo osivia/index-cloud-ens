@@ -61,7 +61,7 @@ public class CreateMutualizedSpaceCommand implements INuxeoCommand {
             Blob mutualizedSpaceBlob = new FileBlob(mutualizedSpaceFile);
     
             OperationRequest operationRequest = nuxeoSession.newRequest("FileManager.Import").setInput(mutualizedSpaceBlob);
-            operationRequest.setContextProperty("currentDocument", domain);
+            operationRequest.setContextProperty("currentDocument", new PathRef(domain.getPath()));
             operationRequest.set("overwite", String.valueOf(true));
             operationRequest.execute();
     

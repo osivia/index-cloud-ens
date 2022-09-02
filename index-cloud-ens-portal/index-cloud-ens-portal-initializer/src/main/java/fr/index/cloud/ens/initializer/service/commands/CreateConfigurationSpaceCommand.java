@@ -62,7 +62,7 @@ public class CreateConfigurationSpaceCommand implements INuxeoCommand {
             Blob configurationSpaceBlob = new FileBlob(configurationSpaceFile);
 
             OperationRequest operationRequest = nuxeoSession.newRequest("FileManager.Import").setInput(configurationSpaceBlob);
-            operationRequest.setContextProperty("currentDocument", domain);
+            operationRequest.setContextProperty("currentDocument", new PathRef(domain.getPath()));
             operationRequest.set("overwite", String.valueOf(true));
             operationRequest.execute();
         }
