@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <component name="demo.userworkspace">
 
-	<require>fr.toutatice.ecm.platform.core.userworkspace</require>
+	<require>org.nuxeo.ecm.platform.userworkspace.UserWorkspaceServiceImpl</require>
 
 	<extension target="org.nuxeo.ecm.platform.userworkspace.UserWorkspaceService"
 		point="userWorkspace">
