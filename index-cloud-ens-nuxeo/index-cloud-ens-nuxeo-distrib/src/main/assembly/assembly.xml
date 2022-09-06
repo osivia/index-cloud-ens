@@ -72,7 +72,8 @@
 			<excludes>
 				<exclude>lib/log4j2.xml</exclude>
 				<exclude>templates/common/config/blacklist.nxftl</exclude>
-				<exclude>templates/ommon-base/nxserver/config/elasticsearch-doc-mapping.json</exclude>
+				<exclude>templates/common-base/nxserver/config/elasticsearch-config.xml.nxftl</exclude>
+				<exclude>templates/common-base/nxserver/config/elasticsearch-doc-mapping.json</exclude>
 			</excludes> 
 		</fileSet>
 		
