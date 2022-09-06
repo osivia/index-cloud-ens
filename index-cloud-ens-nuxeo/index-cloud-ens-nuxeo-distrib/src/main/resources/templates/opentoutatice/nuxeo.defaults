@@ -1,2 +1,6 @@
 nuxeo.template.includes=common,postgresql
 
+##----------------------------------------------------------------------------
+## soffice user environments pool size
+##----------------------------------------------------------------------------
+ottc.converter.toutaticeAny2pdf.poolSize=10
