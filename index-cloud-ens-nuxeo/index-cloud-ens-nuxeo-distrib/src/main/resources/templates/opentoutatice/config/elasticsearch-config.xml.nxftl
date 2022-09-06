@@ -53,10 +53,7 @@
     point="elasticSearchIndex">
     <elasticSearchIndex name="${elasticsearch.indexName}" type="doc" repository="default" manageAlias="${elasticsearch.manageAlias.enabled}">
       <fetchFromSource>
-        <include>ecm:*</include>
-        <include>dc:*</include>
-        <include>file:*</include>
-        <include>ttc:*</include>
+        <include>*</include>
         <exclude>ecm:binarytext</exclude>
 
       </fetchFromSource>
