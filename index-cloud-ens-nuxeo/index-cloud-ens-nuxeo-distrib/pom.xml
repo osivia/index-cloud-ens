@@ -159,8 +159,13 @@
         	<groupId>fr.opentoutatice.platform</groupId>
 			<artifactId>opentoutatice-addon-procedures</artifactId>
 			<version>${opentoutatice.version}</version>
-        </dependency>        
-        
+        </dependency>
+        <dependency>
+            <groupId>fr.opentoutatice.platform</groupId>
+            <artifactId>opentoutatice-addon-quota</artifactId>
+            <version>${opentoutatice.version}</version>
+        </dependency>
+
         <!-- Nuxeo drive -->
         <dependency>
         	<groupId>org.nuxeo.ecm</groupId>

@@ -23,7 +23,8 @@
 				<include>fr.opentoutatice.platform:opentoutatice-ecm-platform-core:jar:${opentoutatice.version}</include>
 				<include>fr.opentoutatice.platform:opentoutatice-addon-elasticsearch:jar:${opentoutatice.version}</include>								
 				<include>fr.opentoutatice.platform:opentoutatice-addon-elasticsearch-customizer:jar:${opentoutatice.version}</include>
-				<include>fr.opentoutatice.platform:opentoutatice-addon-procedures:jar:${opentoutatice.version}</include>				
+				<include>fr.opentoutatice.platform:opentoutatice-addon-procedures:jar:${opentoutatice.version}</include>
+				<include>fr.opentoutatice.platform:opentoutatice-addon-quota:jar:${opentoutatice.version}</include>
 			</includes>
 		</dependencySet>
 
