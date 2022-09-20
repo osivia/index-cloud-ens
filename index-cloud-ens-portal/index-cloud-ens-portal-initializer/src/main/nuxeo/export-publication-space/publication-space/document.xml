@@ -4,7 +4,7 @@
   <system>
     <type>PortalSite</type>
     <path>publication-space</path>
-    <lifecycle-state>project</lifecycle-state>
+    <lifecycle-state>approved</lifecycle-state>
     <lifecycle-policy>default_toutatice</lifecycle-policy>
     <facet>TTCAttachableImages</facet>
     <facet>isLocalPublishLive</facet>
