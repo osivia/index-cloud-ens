@@ -1582,7 +1582,7 @@ boolean first = true;&#13;
 nuxeoRequest.append("AND (");&#13;
 for (String level : levels) {&#13;
 first ? first = false : nuxeoRequest.append("OR ");&#13;
-nuxeoRequest.append("idxcl:levelsTree STARTSWITH '").append(level).append("' OR idxcl:levelsTree = '").append(level).append("' );&#13;
+nuxeoRequest.append("idxcl:levelsTree STARTSWITH '").append(level).append("' OR idxcl:levelsTree = '").append(level).append("' ");&#13;
 }&#13;
 nuxeoRequest.append(") ");&#13;
 }&#13;
