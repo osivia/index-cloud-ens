@@ -6,6 +6,7 @@ package fr.index.cloud.ens.community.es.customizer.writer.denormalization;
 import java.io.IOException;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.nuxeo.ecm.core.api.DocumentModel;
@@ -62,7 +63,7 @@ public class FileDenormalizationWriter extends AbstractCustomJsonESWriter {
                 if (bmap != null && !bmap.isEmpty()) {
                     for (Map.Entry<String, String> item : bmap.entrySet()) {
                         String value = item.getValue();
-                        if (value != null) {
+                        if (!StringUtils.equals("binarytext", item.getKey()) && (value != null)) {
                             jsonGenerator.writeStringField("ecm:" + item.getKey(), value);
                         }
                     }
