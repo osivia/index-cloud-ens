@@ -41,20 +41,25 @@
 				<include>org.nuxeo.ecm:nuxeo-drive-operations:jar:${nuxeo.version}</include>
 				<include>org.nuxeo.ecm:nuxeo-drive-jsf:jar:${nuxeo.version}</include>
 				<include>org.nuxeo.ecm:nuxeo-drive-elasticsearch:jar:${nuxeo.version}</include>
+				<!-- Audio vidéo -->
+				<include>org.nuxeo.ecm.platform:nuxeo-platform-audio-core:jar:${nuxeo.version}</include>
+				<include>org.nuxeo.ecm.platform:nuxeo-platform-video-core:jar:${nuxeo.version}</include>
+				<include>org.nuxeo.ecm.platform:nuxeo-platform-video-api:jar:${nuxeo.version}</include>
+				<include>org.nuxeo.ecm.platform:nuxeo-platform-video-convert:jar:${nuxeo.version}</include>
+				<include>org.nuxeo.ecm.platform:nuxeo-platform-video-core:jar:${nuxeo.version}</include>
 			</includes>
 		</dependencySet>
 
-<!-- 
 		<dependencySet>
 			<outputDirectory>/${artifactId}-${project.version}/nxserver/lib
 			</outputDirectory>
 			<unpack>false</unpack>
 			<scope>runtime</scope>
 			<includes>
-
+				<!-- Audio vidéo -->
+				<include>org:jaudiotagger:jar:2.0.3</include>
 			</includes>
 		</dependencySet>
-		 -->
 	</dependencySets>
 
 
