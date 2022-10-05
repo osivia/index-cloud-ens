@@ -132,35 +132,38 @@ public class DiscussionDocument {
             PropertyList messagesProp = document.getProperties().getList("disc:messages");
             PropertyList removedMessagesProp = document.getProperties().getList("disc:removedMessages");
 
+            //TODO : refonte NX10
+            if( messagesProp != null) {
 
-            for (int i = 0; i < messagesProp.size(); i++) {
-
-                PropertyMap messageProp = messagesProp.getMap(i);
-
-                DiscussionMessage message = new DiscussionMessage();
-                String content = messageProp.getString("content");
-                message.setContent(content.replaceAll("\\n", "<br>"));
-                message.setDate(messageProp.getDate("date"));
-                message.setAuthor(messageProp.getString("author"));
-                message.setId(Integer.toString(i));
-
-
-                // Removed messages
-
-                for (int j = 0; j < removedMessagesProp.size(); j++) {
-                    PropertyMap removedMessageProp = removedMessagesProp.getMap(j);
-                    String removedId = removedMessageProp.getString("messageId");
-
-                    if (StringUtils.equalsIgnoreCase(message.getId(), removedId)) {
-                        message.setDeleted(true);
-                        message.setRemovalDate(removedMessageProp.getDate("date"));
-
-                        break;
-                    }
-                }
-
-                messages.add(message);
-
+	            for (int i = 0; i < messagesProp.size(); i++) {
+	
+	                PropertyMap messageProp = messagesProp.getMap(i);
+	
+	                DiscussionMessage message = new DiscussionMessage();
+	                String content = messageProp.getString("content");
+	                message.setContent(content.replaceAll("\\n", "<br>"));
+	                message.setDate(messageProp.getDate("date"));
+	                message.setAuthor(messageProp.getString("author"));
+	                message.setId(Integer.toString(i));
+	
+	
+	                // Removed messages
+	
+	                for (int j = 0; j < removedMessagesProp.size(); j++) {
+	                    PropertyMap removedMessageProp = removedMessagesProp.getMap(j);
+	                    String removedId = removedMessageProp.getString("messageId");
+	
+	                    if (StringUtils.equalsIgnoreCase(message.getId(), removedId)) {
+	                        message.setDeleted(true);
+	                        message.setRemovalDate(removedMessageProp.getDate("date"));
+	
+	                        break;
+	                    }
+	                }
+	
+	                messages.add(message);
+	
+	            }
             }
 
         }
