@@ -78,7 +78,6 @@
   <schema xmlns:common="http://www.nuxeo.org/ecm/schemas/common/" name="common">
     <common:icon><![CDATA[/icons/staple.jpg]]></common:icon>
     <common:icon-expanded><![CDATA[]]></common:icon-expanded>
-    <common:size/>
   </schema>
   <schema xmlns:stpl="http://www.nuxeo.org/ecm/project/schemas/ottc/staple" name="staple">
     <stpl:stapleId><![CDATA[]]></stpl:stapleId>

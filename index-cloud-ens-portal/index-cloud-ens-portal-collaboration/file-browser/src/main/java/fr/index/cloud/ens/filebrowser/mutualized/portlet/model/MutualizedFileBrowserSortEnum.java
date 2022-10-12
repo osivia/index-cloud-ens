@@ -54,7 +54,7 @@ public enum MutualizedFileBrowserSortEnum implements MutualizedFileBrowserSortFi
     /**
      * File size sort.
      */
-    FILE_SIZE("file-size", true, "common:size"),
+    FILE_SIZE("file-size", true, "file:content/length"),
     /**
      * Views.
      */

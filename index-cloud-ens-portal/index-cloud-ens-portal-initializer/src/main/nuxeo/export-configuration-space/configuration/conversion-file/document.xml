@@ -64,7 +64,6 @@
     <ttc:spaceID><![CDATA[1deea199-d50e-437d-bbf9-55cd35ec43f6]]></ttc:spaceID>
   </schema>
   <schema xmlns:common="http://www.nuxeo.org/ecm/schemas/common/" name="common">
-    <common:size><![CDATA[20340]]></common:size>
     <common:icon-expanded/>
     <common:icon><![CDATA[/icons/xls.png]]></common:icon>
   </schema>

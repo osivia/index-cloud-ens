@@ -314,11 +314,9 @@ public class DriveRestController {
                 String mimeType = fileContent.getString("mime-type");
                 contents.put("mimeType",mimeType);
             }
-
             
-            
-            if (doc.getProperties().get("common:size") != null) {
-                long size = doc.getProperties().getLong("common:size");
+            if (fileContent != null) {
+                long size = fileContent.getLong("length");
                 contents.put("fileSize", size);
             }            
 

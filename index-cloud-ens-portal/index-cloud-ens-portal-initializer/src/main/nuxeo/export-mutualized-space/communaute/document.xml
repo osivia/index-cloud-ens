@@ -41,7 +41,6 @@
     <schema xmlns:common="http://www.nuxeo.org/ecm/schemas/common/" name="common">
         <common:icon><![CDATA[/icons/portalsite.png]]></common:icon>
         <common:icon-expanded/>
-        <common:size/>
     </schema>
     <schema xmlns:listfgt="http://www.nuxeo.org/ecm/project/schemas/ACRENNES5/list_fragments" name="list_fragments">
         <listfgt:listFragment/>
